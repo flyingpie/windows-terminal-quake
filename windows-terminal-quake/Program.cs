@@ -30,6 +30,8 @@ namespace WindowsTerminalQuake
             var ok = User32.GetWindowRect(process.MainWindowHandle, ref rect);
             var isOpen = rect.Top >= bounds.Y;
 
+            var stepCount = 5;
+
             HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
             HotKeyManager.HotKeyPressed += (s, a) =>
             {
@@ -41,9 +43,9 @@ namespace WindowsTerminalQuake
                     User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
                     User32.SetForegroundWindow(process.MainWindowHandle);
 
-                    for (int i = 9; i >= 0; i--)
+                    for (int i = stepCount - 1; i >= 0; i--)
                     {
-                        User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / 10 * i)), bounds.Width, bounds.Height, true);
+                        User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
 
                         Task.Delay(1).GetAwaiter().GetResult();
                     }
@@ -56,9 +58,9 @@ namespace WindowsTerminalQuake
                     User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
                     User32.SetForegroundWindow(process.MainWindowHandle);
 
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= stepCount; i++)
                     {
-                        User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / 10 * i)), bounds.Width, bounds.Height, true);
+                        User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
 
                         Task.Delay(1).GetAwaiter().GetResult();
                     }
