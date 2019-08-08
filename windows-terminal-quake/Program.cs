@@ -20,19 +20,18 @@ namespace WindowsTerminalQuake
                 return;
             }
 
-            var screen = Screen.PrimaryScreen;
-            var bounds = screen.Bounds;
-
             // Hide from taskbar
             User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
 
             User32.Rect rect = default;
             var ok = User32.GetWindowRect(process.MainWindowHandle, ref rect);
-            var isOpen = rect.Top >= bounds.Y;
+            var isOpen = rect.Top >= GetScreenWithCursor().Bounds.Y;
 
             var stepCount = 5;
 
             HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
+            HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
+
             HotKeyManager.HotKeyPressed += (s, a) =>
             {
                 if (isOpen)
@@ -42,6 +41,8 @@ namespace WindowsTerminalQuake
 
                     User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
                     User32.SetForegroundWindow(process.MainWindowHandle);
+
+                    var bounds = GetScreenWithCursor().Bounds;
 
                     for (int i = stepCount - 1; i >= 0; i--)
                     {
@@ -58,6 +59,8 @@ namespace WindowsTerminalQuake
                     User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
                     User32.SetForegroundWindow(process.MainWindowHandle);
 
+                    var bounds = GetScreenWithCursor().Bounds;
+
                     for (int i = 1; i <= stepCount; i++)
                     {
                         User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
@@ -70,11 +73,23 @@ namespace WindowsTerminalQuake
             Console.WriteLine("Press any key to exit");
             Console.Read();
 
+            ResetTerminal(process);
+        }
+
+        private static void ResetTerminal(Process process)
+        {
+            var bounds = GetScreenWithCursor().Bounds;
+
             // Restore taskbar icon
             User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
 
             // Reset position
             User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+        }
+
+        public static Screen GetScreenWithCursor()
+        {
+            return Screen.AllScreens.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position));
         }
     }
 }
