@@ -27,10 +27,9 @@ namespace WindowsTerminalQuake
             var ok = User32.GetWindowRect(process.MainWindowHandle, ref rect);
             var isOpen = rect.Top >= GetScreenWithCursor().Bounds.Y;
 
-            var stepCount = 5;
+            var stepCount = 10;
 
             HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
-            HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
 
             HotKeyManager.HotKeyPressed += (s, a) =>
             {
@@ -45,7 +44,7 @@ namespace WindowsTerminalQuake
                     var bounds = GetScreenWithCursor().Bounds;
 
                     for (int i = stepCount - 1; i >= 0; i--)
-                    {
+                    {   
                         User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
 
                         Task.Delay(1).GetAwaiter().GetResult();
