@@ -30,6 +30,7 @@ namespace WindowsTerminalQuake
             var stepCount = 10;
 
             HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
+            HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
 
             HotKeyManager.HotKeyPressed += (s, a) =>
             {
