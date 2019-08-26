@@ -49,6 +49,7 @@ namespace WindowsTerminalQuake
 
                         Task.Delay(1).GetAwaiter().GetResult();
                     }
+                    User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
                 }
                 else
                 {
