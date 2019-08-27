@@ -36,7 +36,7 @@ namespace WindowsTerminalQuake
                 process.EnableRaisingEvents = true;
                 process.Exited += (sender, e) =>
                 {
-                    Environment.Exit(0);
+                    Close();
                 };
                 _toggler = new Toggler(process);
 
