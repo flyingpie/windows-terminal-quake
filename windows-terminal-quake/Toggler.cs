@@ -10,14 +10,10 @@ namespace WindowsTerminalQuake
     public class Toggler : IDisposable
     {
         private Process _process;
-
-        public Toggler()
+      
+        public Toggler(Process process)
         {
-            _process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
-            if (_process == null)
-            {
-                throw new Exception("No WindowsTerminal process found");
-            }
+            _process = process;
 
             // Hide from taskbar
             User32.SetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
@@ -25,6 +21,7 @@ namespace WindowsTerminalQuake
             User32.Rect rect = default;
             var ok = User32.GetWindowRect(_process.MainWindowHandle, ref rect);
             var isOpen = rect.Top >= GetScreenWithCursor().Bounds.Y;
+            User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
 
             var stepCount = 10;
 
@@ -67,6 +64,7 @@ namespace WindowsTerminalQuake
 
                         Task.Delay(1).GetAwaiter().GetResult();
                     }
+                    User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
                 }
             };
         }
