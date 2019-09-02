@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using WindowsTerminalQuake.UI;
 
@@ -15,7 +17,28 @@ namespace WindowsTerminalQuake
 
             try
             {
-                _toggler = new Toggler();
+                Process process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
+                if (process == null)
+                {
+                    process = new Process
+                    {
+                        StartInfo = new ProcessStartInfo
+                        {
+                            FileName = "wt",
+                            UseShellExecute = false,
+                            RedirectStandardOutput = true,
+                            WindowStyle = ProcessWindowStyle.Maximized
+                        }
+                    };
+                    process.Start();
+                }
+
+                process.EnableRaisingEvents = true;
+                process.Exited += (sender, e) =>
+                {
+                    Close();
+                };
+                _toggler = new Toggler(process);
 
                 _trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press CTRL+~ or CTRL+Q to toggle.");
             }
