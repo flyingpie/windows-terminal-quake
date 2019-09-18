@@ -46,7 +46,12 @@ namespace WindowsTerminalQuake
 
                         Task.Delay(1).GetAwaiter().GetResult();
                     }
+
+                    // Minimize, so the last window gets focus
                     User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
+
+                    // Hide, so the terminal windows doesn't linger on the desktop
+                    User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
                 }
                 else
                 {
@@ -88,6 +93,9 @@ namespace WindowsTerminalQuake
 
             // Reset position
             User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+
+            // Restore window
+            User32.ShowWindow(process.MainWindowHandle, NCmdShow.MAXIMIZE);
         }
     }
 }
