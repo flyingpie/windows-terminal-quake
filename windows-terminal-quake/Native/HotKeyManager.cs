@@ -23,7 +23,7 @@ namespace WindowsTerminalQuake.Native
         }
 
         private delegate void RegisterHotKeyDelegate(IntPtr hwnd, int id, uint modifiers, uint key);
-
+        
         private delegate void UnRegisterHotKeyDelegate(IntPtr hwnd, int id);
 
         private static void RegisterHotKeyInternal(IntPtr hwnd, int id, uint modifiers, uint key)

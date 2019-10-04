@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
 using WindowsTerminalQuake.UI;
 
 namespace WindowsTerminalQuake
@@ -13,11 +14,37 @@ namespace WindowsTerminalQuake
 
         public static void Main(string[] args)
         {
+            Application.ApplicationExit += (sender, e) =>
+            {
+                Close();
+            };
+
+            var config = new Config
+            {
+                Maximize = args.Contains("maximize"),
+                Center = args.Contains("center")
+            };
+
             _trayIcon = new TrayIcon((s, a) => Close());
 
             try
             {
-                Process process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
+                var processes = Process.GetProcessesByName("WindowsTerminal").Where(e => e.MainWindowHandle != default(IntPtr)).ToArray();
+                Process process = null;
+                int i = 0;
+                while (i < processes.Length)
+                {
+                    try
+                    {
+                        process = processes[i];
+                        bindProcessEvents(process);
+                        break;
+                    } catch (Exception)
+                    {
+                        i++;
+                    }
+                }
+
                 if (process == null)
                 {
                     process = new Process
@@ -27,18 +54,19 @@ namespace WindowsTerminalQuake
                             FileName = "wt",
                             UseShellExecute = false,
                             RedirectStandardOutput = true,
-                            WindowStyle = ProcessWindowStyle.Maximized
+                            WindowStyle = config.Maximize ? ProcessWindowStyle.Maximized : ProcessWindowStyle.Hidden,
                         }
                     };
                     process.Start();
+                    while (process.MainWindowTitle == ""  || process.MainWindowTitle == "DesktopWindowXamlSource")
+                    {
+                        Thread.Sleep(10);
+                        process.Refresh();
+                    }
+                    bindProcessEvents(process);
                 }
 
-                process.EnableRaisingEvents = true;
-                process.Exited += (sender, e) =>
-                {
-                    Close();
-                };
-                _toggler = new Toggler(process);
+                _toggler = new Toggler(process, config);
 
                 _trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press CTRL+~ or CTRL+Q to toggle.");
             }
@@ -50,6 +78,14 @@ namespace WindowsTerminalQuake
             }
         }
 
+        private static void bindProcessEvents(Process process)
+        {
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, e) =>
+            {
+                Close();
+            };
+        }
         private static void Close()
         {
             _toggler?.Dispose();
@@ -58,5 +94,6 @@ namespace WindowsTerminalQuake
             _trayIcon?.Dispose();
             _trayIcon = null;
         }
+
     }
 }
