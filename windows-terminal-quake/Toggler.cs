@@ -58,9 +58,19 @@ namespace WindowsTerminalQuake
             User32.GetWindowRect(_process.MainWindowHandle, ref rect);
             var terminalWindow = new TerminalWindow(rect, GetScreenWithCursor().Bounds);
 
-            if (terminalWindow.IsVisible() && terminalWindow.IsDocked())
+            var isVisible = terminalWindow.IsVisible();
+            var isDocked = terminalWindow.IsDocked();
+
+            var foregroundWindow = Native.User32.GetForegroundWindow();
+            var isForeground = foregroundWindow == _process.MainWindowHandle;
+
+            if (isVisible && isDocked && isForeground)
             {
                 HideTerminalWithEffects(terminalWindow);
+            }
+            else if (isVisible && isDocked)
+            {
+                User32.SetForegroundWindow(_process.MainWindowHandle);
             }
             else
             {
@@ -142,6 +152,17 @@ namespace WindowsTerminalQuake
 
                 Task.Delay(1).GetAwaiter().GetResult();
             }
+            User32.ShowWindow(_process.MainWindowHandle, NCmdShow.SHOW);
+        }
+        private void ShowProcessWindow(TerminalWindow terminalWindow) {
+            User32.MoveWindow(
+                 _process.MainWindowHandle,
+                 terminalWindow.ScreenX,
+                 terminalWindow.ScreenY,
+                 terminalWindow.Width,
+                 terminalWindow.Height,
+                 true
+            );
             User32.ShowWindow(_process.MainWindowHandle, NCmdShow.SHOW);
         }
 

@@ -23,6 +23,9 @@ namespace WindowsTerminalQuake.Native
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         public struct Rect
         {
             public int Left { get; set; }

@@ -141,5 +141,16 @@ namespace WindowsTerminalQuake
             }
             Top = 0;
         }
+        public void EnsureWillFitOnScreen()
+        {
+            if (Height > _bounds.Height)
+            {
+                Height = _bounds.Height;
+            }
+            if (Width > _bounds.Width)
+            {
+                Width = _bounds.Width;
+            }
+        }
     }
 }
