@@ -154,17 +154,6 @@ namespace WindowsTerminalQuake
             }
             User32.ShowWindow(_process.MainWindowHandle, NCmdShow.SHOW);
         }
-        private void ShowProcessWindow(TerminalWindow terminalWindow) {
-            User32.MoveWindow(
-                 _process.MainWindowHandle,
-                 terminalWindow.ScreenX,
-                 terminalWindow.ScreenY,
-                 terminalWindow.Width,
-                 terminalWindow.Height,
-                 true
-            );
-            User32.ShowWindow(_process.MainWindowHandle, NCmdShow.SHOW);
-        }
 
         private void HideProcessWindow() { 
             // Minimize, so the last window gets focus
