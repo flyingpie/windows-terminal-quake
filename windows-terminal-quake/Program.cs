@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
+using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
 
 namespace WindowsTerminalQuake
@@ -14,6 +15,13 @@ namespace WindowsTerminalQuake
 
         public static void Main(string[] args)
         {
+            // don't allow more than one instance to be running simultaneously
+            var existingProcesses = Process.GetProcessesByName("windows-terminal-quake").Count();
+            if (existingProcesses > 1)
+            {
+                return;
+            }
+
             Application.ApplicationExit += (sender, e) =>
             {
                 Close();
