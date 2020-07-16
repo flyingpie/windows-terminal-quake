@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,8 +26,30 @@ namespace WindowsTerminalQuake
 
             var stepCount = 10;
 
-            HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
-            HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
+            string keyBindingEnumCodesCSV = ConfigurationSettings.AppSettings.Get("KeyBindingEnumCodesCSV");
+
+            if (string.IsNullOrEmpty(keyBindingEnumCodesCSV))
+            {
+                // Default to using CTRL->Q and CTRL->~
+                HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
+                HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
+            }
+            else
+            {
+                string[] keyCodes = keyBindingEnumCodesCSV.Split(",".ToCharArray());
+                foreach (string code in keyCodes)
+                {
+                    try
+                    {
+                        Keys keyCode = (Keys)Enum.Parse(typeof(Keys), code);
+                        HotKeyManager.RegisterHotKey(keyCode, KeyModifiers.Control);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Invalid keycode '{code}' specified: {e.ToString()}");
+                    }
+                }
+            }
 
             HotKeyManager.HotKeyPressed += (s, a) =>
             {
