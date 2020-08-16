@@ -1,0 +1,86 @@
+﻿{
+	// The keys that can be used to toggle the terminal
+	"HotKeys": [
+		{
+			"Modifiers": "Control",
+			"Key": "OemTilde"
+		},
+		{
+			"Modifiers": "Control",
+			"Key": "Q"
+		}
+	],
+
+	// Whether to show notifications when the app starts and when the settings are reloaded
+	"Notifications": true,
+
+	// How long the toggle up/down takes in milliseconds
+	"ToggleDurationMs": 250
+
+	// HotKeys.Modifiers:
+	// Alt, Control, Shift, Windows
+	// HotKeys.Key:
+
+	// // Special keys
+	// Alt
+	// Back
+	// CapsLock
+	// Control
+	// Escape
+	// LControlKey
+	// LShiftKey
+	// LWin
+	// RControlKey
+	// RShiftKey
+	// RWin
+	// Shift
+	// Space
+	// Tab
+	// 
+	// // Middle part of the keyboard
+	// Delete
+	// End
+	// Home
+	// Insert
+	// PageDown
+	// PageUp
+	// PrintScreen
+	// 
+	// Down
+	// Left
+	// Right
+	// Up
+	// 
+	// // Number keys
+	// D0 - D9
+	// 
+	// // Letters
+	// A-Z
+	// 
+	// // Numpad
+	// NumPad0 - NumPad9
+	// Add
+	// Decimal
+	// Divide
+	// Multiply
+	// NumLock
+	// Separator
+	// Subtract
+	// 
+	// // Function keys
+	// F1 - F24
+	// 
+	// // Special characters
+	// OemBackslash
+	// OemCloseBrackets
+	// Oemcomma
+	// OemMinus
+	// OemOpenBrackets
+	// OemPeriod
+	// OemPipe
+	// Oemplus
+	// OemQuestion
+	// OemQuotes
+	// OemSemicolon
+	// Oemtilde
+}
