@@ -6,14 +6,14 @@ var sln = "windows-terminal-quake.sln";
 
 Task("Default").Does(() =>
 {
-    NuGetRestore(sln);
+	NuGetRestore(sln);
 
-    MSBuild(sln, new MSBuildSettings
-    {
-        Configuration = "Release",
-        Restore = true,
-        ToolPath = GetFiles(VSWhereLatest() + "/**/MSBuild.exe").FirstOrDefault()
-    });
+	MSBuild(sln, new MSBuildSettings
+	{
+		Configuration = "Release",
+		Restore = true,
+		ToolPath = GetFiles(VSWhereLatest() + "/**/MSBuild.exe").FirstOrDefault()
+	});
 });
 
 RunTarget("Default");
