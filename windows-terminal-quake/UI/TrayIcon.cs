@@ -8,10 +8,14 @@ namespace WindowsTerminalQuake.UI
 {
 	public class TrayIcon : IDisposable
 	{
+		public static TrayIcon Instance { get; private set; }
+
 		private NotifyIcon _notificationIcon;
 
 		public TrayIcon(Action<object, EventArgs> exitHandler)
 		{
+			Instance = this;
+
 			var waiter = new TaskCompletionSource<bool>();
 
 			var notifyThread = new Thread(delegate ()
@@ -56,7 +60,10 @@ namespace WindowsTerminalQuake.UI
 
 		public void Notify(ToolTipIcon type, string message)
 		{
-			_notificationIcon.ShowBalloonTip(3, $"Windows Terminal", message, type);
+			if (Settings.Instance.Notifications)
+			{
+				_notificationIcon.ShowBalloonTip(3, $"Windows Terminal", message, type);
+			}
 		}
 
 		private static Icon CreateIcon()
