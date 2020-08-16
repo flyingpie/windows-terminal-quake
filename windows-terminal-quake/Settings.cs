@@ -28,7 +28,8 @@ namespace WindowsTerminalQuake
 				new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Q }
 			},
 			Notifications = true,
-			ToggleDurationMs = 300
+			ToggleDurationMs = 250,
+			VerticalScreenCoverage = 100
 		};
 
 		private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
@@ -116,6 +117,8 @@ namespace WindowsTerminalQuake
 		public List<Hotkey> Hotkeys { get; set; }
 
 		public bool Notifications { get; set; }
+
+		public int VerticalScreenCoverage { get; set; }
 
 		public int ToggleDurationMs { get; set; }
 	}

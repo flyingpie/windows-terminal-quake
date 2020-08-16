@@ -15,7 +15,10 @@
 	"Notifications": true,
 
 	// How long the toggle up/down takes in milliseconds
-	"ToggleDurationMs": 250
+	"ToggleDurationMs": 250,
+
+	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
+	"VerticalScreenCoverage": 100
 
 	// HotKeys.Modifiers:
 	// Alt, Control, Shift, Windows

@@ -55,6 +55,7 @@ namespace WindowsTerminalQuake
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
 					var bounds = GetScreenWithCursor().Bounds;
+					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
 					for (int i = stepCount - 1; i >= 0; i--)
 					{
@@ -78,6 +79,7 @@ namespace WindowsTerminalQuake
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
 					var bounds = GetScreenWithCursor().Bounds;
+					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
 					for (int i = 1; i <= stepCount; i++)
 					{
@@ -85,7 +87,11 @@ namespace WindowsTerminalQuake
 
 						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 					}
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+
+					if (Settings.Instance.VerticalScreenCoverage == 100)
+					{
+						User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+					}
 				}
 			};
 		}
