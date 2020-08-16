@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "windows-terminal-quake", "w
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{26C4E007-EF0D-473D-BF72-51C785CB2E1A}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		build.cake = build.cake
 		build.ps1 = build.ps1
 	EndProjectSection
