@@ -4,7 +4,7 @@ Companion program for the new Windows Terminal that enables Quake-style drop dow
 ![Preview](https://files.flyingpie.nl/windows-terminal-quake.gif)
 
 - Runs alongside the new Windows Terminal
-- Toggle using CTRL+~ or CTRL+Q
+- Toggle using CTRL+~ or CTRL+Q (configurable)
 - Shows up on the screen where the mouse is (eg. multi-monitor and multi-workspace)
 
 ## Usage
