@@ -13,6 +13,8 @@ namespace WindowsTerminalQuake
 
 		public static void Main(string[] args)
 		{
+			Logging.Configure();
+
 			_trayIcon = new TrayIcon((s, a) => Close());
 
 			try
@@ -40,7 +42,9 @@ namespace WindowsTerminalQuake
 				};
 				_toggler = new Toggler(process);
 
-				_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press CTRL+~ or CTRL+Q to toggle.");
+				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
+
+				_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press {hks} to toggle.");
 			}
 			catch (Exception ex)
 			{
