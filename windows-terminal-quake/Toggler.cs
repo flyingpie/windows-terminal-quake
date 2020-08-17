@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Serilog;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +12,8 @@ namespace WindowsTerminalQuake
 	public class Toggler : IDisposable
 	{
 		private Process _process;
+
+		private readonly List<int> _registeredHotKeys = new List<int>();
 
 		public Toggler(Process process)
 		{
@@ -23,28 +27,41 @@ namespace WindowsTerminalQuake
 			var isOpen = rect.Top >= GetScreenWithCursor().Bounds.Y;
 			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
 
-			var stepCount = 10;
+			// Register hotkeys
+			Settings.Get(s =>
+			{
+				_registeredHotKeys.ForEach(hk => HotKeyManager.UnregisterHotKey(hk));
+				_registeredHotKeys.Clear();
 
-			HotKeyManager.RegisterHotKey(Keys.Oemtilde, KeyModifiers.Control);
-			HotKeyManager.RegisterHotKey(Keys.Q, KeyModifiers.Control);
+				s.Hotkeys.ForEach(hk =>
+				{
+					Log.Information($"Registering hot key {hk.Modifiers} + {hk.Key}");
+					var reg = HotKeyManager.RegisterHotKey(hk.Key, hk.Modifiers);
+					_registeredHotKeys.Add(reg);
+				});
+			});
 
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
+				var stepCount = (int)Math.Max(Math.Ceiling(Settings.Instance.ToggleDurationMs / 25f), 1f);
+				var stepDelayMs = Settings.Instance.ToggleDurationMs / stepCount;
+
 				if (isOpen)
 				{
 					isOpen = false;
-					Console.WriteLine("Close");
+					Log.Information("Close");
 
 					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
 					var bounds = GetScreenWithCursor().Bounds;
+					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
 					for (int i = stepCount - 1; i >= 0; i--)
 					{
 						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
 
-						Task.Delay(1).GetAwaiter().GetResult();
+						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 					}
 
 					// Minimize, so the last window gets focus
@@ -56,20 +73,25 @@ namespace WindowsTerminalQuake
 				else
 				{
 					isOpen = true;
-					Console.WriteLine("Open");
+					Log.Information("Open");
 
 					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
 					var bounds = GetScreenWithCursor().Bounds;
+					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
 					for (int i = 1; i <= stepCount; i++)
 					{
 						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
 
-						Task.Delay(1).GetAwaiter().GetResult();
+						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 					}
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+
+					if (Settings.Instance.VerticalScreenCoverage == 100)
+					{
+						User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+					}
 				}
 			};
 		}
