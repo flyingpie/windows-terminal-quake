@@ -1,0 +1,16 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'win'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: Cake@2
+  inputs:
+    script: 'build.cake'
+    target: 'Default'
+    verbosity: 'Verbose'
+    arguments: '-output="$(Build.StagingDirectory)"'
