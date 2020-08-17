@@ -4,7 +4,7 @@
 		<OutputPath>bin</OutputPath>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net472</TargetFramework>
-		<ApplicationIcon />
+		<ApplicationIcon>UI\icon.ico</ApplicationIcon>
 		<StartupObject />
 	</PropertyGroup>
 	<ItemGroup>
