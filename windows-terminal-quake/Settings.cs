@@ -28,6 +28,7 @@ namespace WindowsTerminalQuake
 				new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Q }
 			},
 			Notifications = true,
+			Opacity = 80,
 			ToggleDurationMs = 250,
 			VerticalScreenCoverage = 100
 		};
@@ -117,6 +118,8 @@ namespace WindowsTerminalQuake
 		public List<Hotkey> Hotkeys { get; set; }
 
 		public bool Notifications { get; set; }
+
+		public int Opacity { get; set; }
 
 		public int VerticalScreenCoverage { get; set; }
 
