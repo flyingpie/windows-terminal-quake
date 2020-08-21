@@ -22,7 +22,9 @@
 	"ToggleDurationMs": 250,
 
 	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
-	"VerticalScreenCoverage": 100
+	"VerticalScreenCoverage": 80,
+
+	"HorizontalScreenCoverage": 80
 
 	// HotKeys.Modifiers:
 	// Alt, Control, Shift, Windows

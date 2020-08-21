@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -45,6 +46,7 @@ namespace WindowsTerminalQuake
 			{
 				var stepCount = (int)Math.Max(Math.Ceiling(Settings.Instance.ToggleDurationMs / 25f), 1f);
 				var stepDelayMs = Settings.Instance.ToggleDurationMs / stepCount;
+				var screen = GetScreenWithCursor();
 
 				if (isOpen)
 				{
@@ -54,12 +56,11 @@ namespace WindowsTerminalQuake
 					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
-					var bounds = GetScreenWithCursor().Bounds;
-					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
-
 					for (int i = stepCount - 1; i >= 0; i--)
 					{
-						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
+						var bounds = GetBounds(screen, stepCount, i);
+
+						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
 
 						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 					}
@@ -78,22 +79,35 @@ namespace WindowsTerminalQuake
 					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 					User32.SetForegroundWindow(_process.MainWindowHandle);
 
-					var bounds = GetScreenWithCursor().Bounds;
-					bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
-
 					for (int i = 1; i <= stepCount; i++)
 					{
-						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y + (-bounds.Height + (bounds.Height / stepCount * i)), bounds.Width, bounds.Height, true);
+						var bounds = GetBounds(screen, stepCount, i);
+						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
 
 						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 					}
 
-					if (Settings.Instance.VerticalScreenCoverage == 100)
+					if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
 					{
 						User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
 					}
 				}
 			};
+		}
+
+		public Rectangle GetBounds(Screen screen, int stepCount, int step)
+		{
+			var bounds = screen.Bounds;
+
+			var scrWidth = bounds.Width;
+			var horWidthPct = (float)Settings.Instance.HorizontalScreenCoverage;
+
+			var horWidth = (int)Math.Ceiling(scrWidth / 100f * horWidthPct);
+			var x = (int)Math.Ceiling(scrWidth / 2f - horWidth / 2f);
+
+			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
+
+			return new Rectangle(bounds.X + x, bounds.Y + -bounds.Height + (bounds.Height / stepCount * step), horWidth, bounds.Height);
 		}
 
 		public void Dispose()
