@@ -30,7 +30,8 @@ namespace WindowsTerminalQuake
 			Notifications = true,
 			Opacity = 80,
 			ToggleDurationMs = 250,
-			VerticalScreenCoverage = 100
+			VerticalScreenCoverage = 100,
+			HorizontalScreenCoverage = 100
 		};
 
 		private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
@@ -121,7 +122,9 @@ namespace WindowsTerminalQuake
 
 		public int Opacity { get; set; }
 
-		public int VerticalScreenCoverage { get; set; }
+		public float VerticalScreenCoverage { get; set; }
+
+		public float HorizontalScreenCoverage { get; set; }
 
 		public int ToggleDurationMs { get; set; }
 	}
