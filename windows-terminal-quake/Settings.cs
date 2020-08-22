@@ -36,7 +36,7 @@ namespace WindowsTerminalQuake
 
 		private static readonly RetryPolicy Retry = Policy
 			.Handle<Exception>()
-			.WaitAndRetry(new[] { TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
+			.WaitAndRetry(new[] { TimeSpan.FromMilliseconds(250), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
 		;
 
 		private static readonly List<FileSystemWatcher> _fsWatchers;
