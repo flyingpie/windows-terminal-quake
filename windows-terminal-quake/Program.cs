@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
 
 namespace WindowsTerminalQuake
@@ -41,6 +42,12 @@ namespace WindowsTerminalQuake
 					Close();
 				};
 				_toggler = new Toggler(process);
+
+				// Transparency
+				Settings.Get(s =>
+				{
+					TransparentWindow.SetTransparent(process, s.Opacity);
+				});
 
 				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
 
