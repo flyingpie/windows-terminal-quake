@@ -58,7 +58,7 @@ Setting this to 0 makes the toggle instant.
 }
 ```
 
-## Transparency (v0.5 preview)
+## Transparency
 The terminal window can be made transparent through the "Opacity"-setting.
 Note that this controls the transparency of the entire window, including the title bar.
 
@@ -79,6 +79,18 @@ The vertical space that is taken up by the terminal window can be configured thr
 {
   // How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
   "VerticalScreenCoverage": 60
+}
+```
+
+## Horizontal Screen Coverage
+Should you want the terminal to not take the entire width of the screen, take a look at the "HorizontalScreenCoverage" setting.
+
+```jsonc
+{
+  // How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
+  // This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
+  // due to the terminal being bound to column widths (eg. try 100.5 or 101).
+  "HorizontalScreenCoverage": 80
 }
 ```
 
