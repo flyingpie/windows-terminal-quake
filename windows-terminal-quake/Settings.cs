@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Polly;
 using Polly.Retry;
 using Serilog;
@@ -20,19 +21,7 @@ namespace WindowsTerminalQuake
 			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).AbsolutePath), "windows-terminal-quake.json"),
 		};
 
-		public static SettingsDto Instance { get; private set; } = new SettingsDto() // Defaults
-		{
-			Hotkeys = new List<Hotkey>()
-			{
-				new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Oemtilde },
-				new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Q }
-			},
-			Notifications = true,
-			Opacity = 80,
-			ToggleDurationMs = 250,
-			VerticalScreenCoverage = 100,
-			HorizontalScreenCoverage = 100
-		};
+		public static SettingsDto Instance { get; private set; } = new SettingsDto();
 
 		private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
 
@@ -96,7 +85,13 @@ namespace WindowsTerminalQuake
 
 					try
 					{
-						Instance = JsonConvert.DeserializeObject<SettingsDto>(File.ReadAllText(pathToSettings));
+						var settingsJson = File.ReadAllText(pathToSettings);
+
+						Instance = JsonConvert
+							.DeserializeObject<JObject>(settingsJson)
+							.ToObject<SettingsDto>()
+						;
+
 						Log.Information($"Loaded settings from '{pathToSettings}'");
 						if (notify) TrayIcon.Instance.Notify(ToolTipIcon.Info, $"Loaded settings from '{pathToSettings}'");
 						break;
@@ -116,17 +111,23 @@ namespace WindowsTerminalQuake
 
 	public class SettingsDto
 	{
-		public List<Hotkey> Hotkeys { get; set; }
+		public List<Hotkey> Hotkeys { get; set; } = new List<Hotkey>()
+		{
+			new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Oemtilde },
+			new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Q }
+		};
 
-		public bool Notifications { get; set; }
+		public bool Notifications { get; set; } = true;
 
-		public int Opacity { get; set; }
+		public int Opacity { get; set; } = 80;
 
-		public float VerticalScreenCoverage { get; set; }
+		public float VerticalScreenCoverage { get; set; } = 100;
 
-		public float HorizontalScreenCoverage { get; set; }
+		public float HorizontalScreenCoverage { get; set; } = 100;
 
-		public int ToggleDurationMs { get; set; }
+		public int ToggleDurationMs { get; set; } = 250;
+
+		public bool Logging { get; set; } = false;
 	}
 
 	public class Hotkey
