@@ -24,6 +24,9 @@
 	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
 	"VerticalScreenCoverage": 80,
 
+	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
+	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
+	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
 	"HorizontalScreenCoverage": 80
 
 	// HotKeys.Modifiers:
@@ -45,7 +48,7 @@
 	// Shift
 	// Space
 	// Tab
-	// 
+	//
 	// // Middle part of the keyboard
 	// Delete
 	// End
@@ -54,18 +57,18 @@
 	// PageDown
 	// PageUp
 	// PrintScreen
-	// 
+	//
 	// Down
 	// Left
 	// Right
 	// Up
-	// 
+	//
 	// // Number keys
 	// D0 - D9
-	// 
+	//
 	// // Letters
 	// A-Z
-	// 
+	//
 	// // Numpad
 	// NumPad0 - NumPad9
 	// Add
@@ -75,10 +78,10 @@
 	// NumLock
 	// Separator
 	// Subtract
-	// 
+	//
 	// // Function keys
 	// F1 - F24
-	// 
+	//
 	// // Special characters
 	// OemBackslash
 	// OemCloseBrackets
