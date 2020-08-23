@@ -82,6 +82,8 @@ The vertical space that is taken up by the terminal window can be configured thr
 }
 ```
 
+![Transparency](https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png)
+
 ## Horizontal Screen Coverage
 Should you want the terminal to not take the entire width of the screen, take a look at the "HorizontalScreenCoverage" setting.
 
@@ -94,4 +96,4 @@ Should you want the terminal to not take the entire width of the screen, take a 
 }
 ```
 
-![Transparency](https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png)
+![Transparency](https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png)
