@@ -128,6 +128,8 @@ namespace WindowsTerminalQuake
 		public int ToggleDurationMs { get; set; } = 250;
 
 		public bool Logging { get; set; } = false;
+
+		public bool HideOnFocusLost { get; set; } = true;
 	}
 
 	public class Hotkey
