@@ -1,3 +1,4 @@
+
 # windows-terminal-quake
 Companion program for the new Windows Terminal that enables Quake-style drop down
 
@@ -21,6 +22,8 @@ Since v0.4, the app supports a JSON settings file.
 The file can be placed at either "C:\\Users\\(username)\\windows-terminal-quake.json", or next to the app .exe.
 
 Changing the file automatically results in the app reloading the settings.
+
+Suggested by [Mike F](https://github.com/mikef-nl)
 
 ## Hot Keys
 Multiple hot keys are supported, with an optional modifier.
@@ -58,6 +61,8 @@ Setting this to 0 makes the toggle instant.
 }
 ```
 
+Suggested by [Mike F](https://github.com/mikef-nl)
+
 ## Transparency
 The terminal window can be made transparent through the "Opacity"-setting.
 Note that this controls the transparency of the entire window, including the title bar.
@@ -72,6 +77,8 @@ Note that this controls the transparency of the entire window, including the tit
 
 ![Transparency](https://files.flyingpie.nl/windows-terminal-quake/transparency.png)
 
+Suggested by [ukWaqas](https://github.com/ukWaqas)
+
 ## Vertical Screen Coverage
 The vertical space that is taken up by the terminal window can be configured through "VerticalScreenCoverage".
 
@@ -82,7 +89,9 @@ The vertical space that is taken up by the terminal window can be configured thr
 }
 ```
 
-![Transparency](https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png)
+![Vertical Screen Coverage](https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png)
+
+Suggested by [ukWaqas](https://github.com/ukWaqas)
 
 ## Horizontal Screen Coverage
 Should you want the terminal to not take the entire width of the screen, take a look at the "HorizontalScreenCoverage" setting.
@@ -96,4 +105,19 @@ Should you want the terminal to not take the entire width of the screen, take a 
 }
 ```
 
-![Transparency](https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png)
+![Horizontal Coverage](https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png)
+
+Suggested by [baslas](https://github.com/baslas)
+
+## Hide on focus lost
+When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
+
+Defaults to "true".
+
+```jsonc
+{
+  "Hide
+}
+```
+
+Suggested by [Douglas Lara](https://github.com/douglara)
