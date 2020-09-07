@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
+using Serilog;
 
 namespace WindowsTerminalQuake
 {
@@ -30,10 +32,16 @@ namespace WindowsTerminalQuake
 							FileName = "wt",
 							UseShellExecute = false,
 							RedirectStandardOutput = true,
-							WindowStyle = ProcessWindowStyle.Maximized
+							WindowStyle = ProcessWindowStyle.Maximized,
+							CreateNoWindow = true,
 						}
 					};
 					process.Start();
+					process = Process.GetProcessesByName("WindowsTerminal").First();
+					process.WaitForInputIdle();
+					process.Refresh();
+					Log.Logger.Information("process was started from quake console (to be tested values)");
+					LogProcessInformation(process);
 				}
 
 				process.EnableRaisingEvents = true;
@@ -55,6 +63,7 @@ namespace WindowsTerminalQuake
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Warning($"T:ex: {ex.Message}\n{ex.StackTrace}");
 				_trayIcon.Notify(ToolTipIcon.Error, $"Cannot start: '{ex.Message}'.");
 
 				Close();
@@ -68,6 +77,23 @@ namespace WindowsTerminalQuake
 
 			_trayIcon?.Dispose();
 			_trayIcon = null;
+		}
+
+		private static void LogProcessInformation(Process process)
+		{
+			foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(process))
+			{
+				string name = descriptor.Name;
+				if (new[] {"ExitCode", "ExitTime", "BasePriority", "StandardInput", "StandardOutput", "StandardError"}.Any(x =>
+					x == name))
+				{
+					continue;
+				}
+
+				object value = descriptor.GetValue(process);
+
+				Log.Logger.Information("Process: {0}={1}", name, value);
+			}
 		}
 	}
 }
