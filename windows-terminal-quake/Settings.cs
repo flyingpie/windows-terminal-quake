@@ -111,11 +111,7 @@ namespace WindowsTerminalQuake
 
 	public class SettingsDto
 	{
-		public List<Hotkey> Hotkeys { get; set; } = new List<Hotkey>()
-		{
-			new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Oemtilde },
-			new Hotkey() { Modifiers = KeyModifiers.Control, Key = Keys.Q }
-		};
+		public List<Hotkey> Hotkeys { get; set; }
 
 		public bool Notifications { get; set; } = true;
 
