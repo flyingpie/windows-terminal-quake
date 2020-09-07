@@ -42,57 +42,73 @@ namespace WindowsTerminalQuake
 				});
 			});
 
-			HotKeyManager.HotKeyPressed += (s, a) =>
+			FocusTracker.OnFocusLost += (s, a) =>
 			{
-				var stepCount = (int)Math.Max(Math.Ceiling(Settings.Instance.ToggleDurationMs / 25f), 1f);
-				var stepDelayMs = Settings.Instance.ToggleDurationMs / stepCount;
-				var screen = GetScreenWithCursor();
-
-				if (isOpen)
+				if (Settings.Instance.HideOnFocusLost && isOpen)
 				{
 					isOpen = false;
-					Log.Information("Close");
-
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-					User32.SetForegroundWindow(_process.MainWindowHandle);
-
-					for (int i = stepCount - 1; i >= 0; i--)
-					{
-						var bounds = GetBounds(screen, stepCount, i);
-
-						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-
-						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
-					}
-
-					// Minimize, so the last window gets focus
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
-
-					// Hide, so the terminal windows doesn't linger on the desktop
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
-				}
-				else
-				{
-					isOpen = true;
-					Log.Information("Open");
-
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-					User32.SetForegroundWindow(_process.MainWindowHandle);
-
-					for (int i = 1; i <= stepCount; i++)
-					{
-						var bounds = GetBounds(screen, stepCount, i);
-						User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-
-						Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
-					}
-
-					if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
-					{
-						User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
-					}
+					Toggle(false, 0);
 				}
 			};
+
+			HotKeyManager.HotKeyPressed += (s, a) =>
+			{
+				Toggle(!isOpen, Settings.Instance.ToggleDurationMs);
+				isOpen = !isOpen;
+			};
+		}
+
+		public void Toggle(bool open, int durationMs)
+		{
+			var stepCount = (int)Math.Max(Math.Ceiling(durationMs / 25f), 1f);
+			var stepDelayMs = durationMs / stepCount;
+			var screen = GetScreenWithCursor();
+
+			// Close
+			if (!open)
+			{
+				Log.Information("Close");
+
+				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
+				User32.SetForegroundWindow(_process.MainWindowHandle);
+
+				for (int i = stepCount - 1; i >= 0; i--)
+				{
+					var bounds = GetBounds(screen, stepCount, i);
+
+					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+
+					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
+				}
+
+				// Minimize, so the last window gets focus
+				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
+
+				// Hide, so the terminal windows doesn't linger on the desktop
+				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
+			}
+			// Open
+			else
+			{
+				Log.Information("Open");
+				FocusTracker.FocusGained(_process);
+
+				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
+				User32.SetForegroundWindow(_process.MainWindowHandle);
+
+				for (int i = 1; i <= stepCount; i++)
+				{
+					var bounds = GetBounds(screen, stepCount, i);
+					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+
+					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
+				}
+
+				if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
+				{
+					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+				}
+			}
 		}
 
 		public Rectangle GetBounds(Screen screen, int stepCount, int step)
