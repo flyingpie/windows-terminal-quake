@@ -1,5 +1,6 @@
 ﻿{
-	// The keys that can be used to toggle the terminal
+	// The keys that can be used to toggle the terminal.
+	// See "HotKeys" bellow for possible values.
 	"HotKeys": [
 		{
 			"Modifiers": "Control",
@@ -11,88 +12,53 @@
 		}
 	],
 
-	// Whether to show notifications when the app starts and when the settings are reloaded
+	// Whether to show notifications when the app starts and when the settings are reloaded.
 	"Notifications": true,
 
-	// Make the window see-through (applies to the entire window, including the title bar)
+	// Make the window see-through (applies to the entire window, including the title bar).
 	// 0 (invisible) - 100 (opaque)
 	"Opacity": 80,
 
-	// How long the toggle up/down takes in milliseconds
+	// How long the toggle up/down takes in milliseconds.
 	"ToggleDurationMs": 250,
 
-	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
+	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
 	"VerticalScreenCoverage": 100,
 
 	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
 	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
 	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
-	"HorizontalScreenCoverage": 100
+	"HorizontalScreenCoverage": 100,
 
-	// HotKeys.Modifiers:
+	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
+	"HideOnFocusLost": true
+
+	// # HotKeys
+	// ## Modifiers
 	// Alt, Control, Shift, Windows
-	// HotKeys.Key:
-
-	// // Special keys
-	// Alt
-	// Back
-	// CapsLock
-	// Control
-	// Escape
-	// LControlKey
-	// LShiftKey
-	// LWin
-	// RControlKey
-	// RShiftKey
-	// RWin
-	// Shift
-	// Space
-	// Tab
 	//
-	// // Middle part of the keyboard
-	// Delete
-	// End
-	// Home
-	// Insert
-	// PageDown
-	// PageUp
-	// PrintScreen
+	// ## Key
+	// ### Special keys
+	// Alt, Back, CapsLock, Control, Escape, LControlKey, LShiftKey, LWin, RControlKey, RShiftKey, RWin, Shift, Space, Tab
 	//
-	// Down
-	// Left
-	// Right
-	// Up
+	// ### Middle part of the keyboard
+	// Delete, End, Home, Insert, PageDown, PageUp, PrintScreen
+	// Down, Left, Right, Up
 	//
-	// // Number keys
+	// ### Number keys
 	// D0 - D9
 	//
-	// // Letters
+	// ### Letters
 	// A-Z
 	//
-	// // Numpad
+	// ### Numpad
 	// NumPad0 - NumPad9
-	// Add
-	// Decimal
-	// Divide
-	// Multiply
-	// NumLock
-	// Separator
-	// Subtract
+	// Add, Decimal, Divide, Multiply, NumLock, Separator, Subtract
 	//
-	// // Function keys
+	// ### Function keys
 	// F1 - F24
 	//
-	// // Special characters
-	// OemBackslash
-	// OemCloseBrackets
-	// Oemcomma
-	// OemMinus
-	// OemOpenBrackets
-	// OemPeriod
-	// OemPipe
-	// Oemplus
-	// OemQuestion
-	// OemQuotes
-	// OemSemicolon
-	// Oemtilde
+	// ### Special characters
+	// OemBackslash, OemCloseBrackets, Oemcomma, OemMinus, OemOpenBrackets,
+	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
 }
