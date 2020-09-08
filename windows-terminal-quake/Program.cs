@@ -41,7 +41,7 @@ namespace WindowsTerminalQuake
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Warning($"T:ex: {ex.Message}\n{ex.StackTrace}");
+				Log.Logger.Warning($"Error: {ex.Message}\n{ex.StackTrace}");
 				_trayIcon.Notify(ToolTipIcon.Error, $"Cannot start: '{ex.Message}'.");
 
 				Close();
@@ -65,11 +65,6 @@ namespace WindowsTerminalQuake
 					}
 				};
 				process.Start();
-				
-				if (process == null || process.HasExited)
-				{
-					throw new Exception("Can not ensure exited process is accessible");
-				}
 
 				try
 				{
