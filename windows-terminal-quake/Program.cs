@@ -12,7 +12,6 @@ namespace WindowsTerminalQuake
 	{
 		private static Toggler _toggler;
 		private static TrayIcon _trayIcon;
-		private static Process _process;
 
 		public static void Main(string[] args)
 		{
@@ -22,34 +21,18 @@ namespace WindowsTerminalQuake
 
 			try
 			{
-				_process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
-				if (_process == null)
-				{
-					_process = new Process
-					{
-						StartInfo = new ProcessStartInfo
-						{
-							FileName = "wt",
-							UseShellExecute = false,
-							RedirectStandardOutput = true,
-							WindowStyle = ProcessWindowStyle.Maximized,
-						}
-					};
-					_process.Start();
-					EnsureThatProcessIsAccessible();
-				}
-
-				_process.EnableRaisingEvents = true;
-				_process.Exited += (sender, e) =>
+				var process = GetOrCreateWindowsTerminalProcess();
+				process.EnableRaisingEvents = true;
+				process.Exited += (sender, e) =>
 				{
 					Close();
 				};
-				_toggler = new Toggler(_process);
+				_toggler = new Toggler(process);
 
 				// Transparency
 				Settings.Get(s =>
 				{
-					TransparentWindow.SetTransparent(_process, s.Opacity);
+					TransparentWindow.SetTransparent(process, s.Opacity);
 				});
 
 				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
@@ -65,27 +48,46 @@ namespace WindowsTerminalQuake
 			}
 		}
 
-		private static void EnsureThatProcessIsAccessible()
+		private static Process GetOrCreateWindowsTerminalProcess()
 		{
-			if (_process == null || _process.HasExited)
-			{
-				throw new Exception("Can not ensure exited process is accessible");
-			}
+			var process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
 
-			try
+			if (process == null)
 			{
-				// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-				if (_process.MainWindowHandle == IntPtr.Zero)
+				process = new Process
 				{
-					throw new Exception("Can not access newly started process.");
+					StartInfo = new ProcessStartInfo
+					{
+						FileName = "wt",
+						UseShellExecute = false,
+						RedirectStandardOutput = true,
+						WindowStyle = ProcessWindowStyle.Maximized
+					}
+				};
+				process.Start();
+				
+				if (process == null || process.HasExited)
+				{
+					throw new Exception("Can not ensure exited process is accessible");
+				}
+
+				try
+				{
+					// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
+					if (process.MainWindowHandle == IntPtr.Zero)
+					{
+						throw new Exception("Can not access newly started process.");
+					}
+				}
+				catch (Exception)
+				{
+					process = Process.GetProcessesByName("WindowsTerminal").First();
+					// _process.WaitForInputIdle();
+					process.Refresh();
 				}
 			}
-			catch (Exception)
-			{
-				_process = Process.GetProcessesByName("WindowsTerminal").First();
-				// _process.WaitForInputIdle();
-				_process.Refresh();
-			}
+
+			return process;
 		}
 
 		private static void Close()
