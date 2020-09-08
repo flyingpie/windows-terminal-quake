@@ -20,22 +20,7 @@ namespace WindowsTerminalQuake
 
 			try
 			{
-				Process process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
-				if (process == null)
-				{
-					process = new Process
-					{
-						StartInfo = new ProcessStartInfo
-						{
-							FileName = "wt",
-							UseShellExecute = false,
-							RedirectStandardOutput = true,
-							WindowStyle = ProcessWindowStyle.Maximized
-						}
-					};
-					process.Start();
-				}
-
+				var process = GetOrCreateWindowsTerminalProcess();
 				process.EnableRaisingEvents = true;
 				process.Exited += (sender, e) =>
 				{
@@ -59,6 +44,47 @@ namespace WindowsTerminalQuake
 
 				Close();
 			}
+		}
+
+		private static Process GetOrCreateWindowsTerminalProcess()
+		{
+			var process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
+
+			if (process == null)
+			{
+				process = new Process
+				{
+					StartInfo = new ProcessStartInfo
+					{
+						FileName = "wt",
+						UseShellExecute = false,
+						RedirectStandardOutput = true,
+						WindowStyle = ProcessWindowStyle.Maximized
+					}
+				};
+				process.Start();
+			}
+
+			if (process == null || process.HasExited)
+			{
+				throw new Exception("Can not ensure exited process is accessible");
+			}
+
+			try
+			{
+				// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
+				if (process.MainWindowHandle == IntPtr.Zero)
+				{
+					throw new Exception("Can not access newly started process.");
+				}
+			}
+			catch (Exception)
+			{
+				process = Process.GetProcessesByName("WindowsTerminal").First();
+				process.Refresh();
+			}
+
+			return process;
 		}
 
 		private static void Close()
