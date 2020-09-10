@@ -41,7 +41,7 @@ namespace WindowsTerminalQuake
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Warning($"Error: {ex.Message}\n{ex.StackTrace}");
+				Log.Logger.Warning(ex, $"Error: {ex.Message}");
 				_trayIcon.Notify(ToolTipIcon.Error, $"Cannot start: '{ex.Message}'.");
 
 				Close();
