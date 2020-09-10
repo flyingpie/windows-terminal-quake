@@ -1,13 +1,20 @@
 ﻿[*]
-indent_style = tab
+indent_style=tab
 
-dotnet_diagnostic.CA1031.severity = none # CA1031: Do not catch general exception types
-dotnet_diagnostic.CA1034.severity = none # CA1034: Nested types should not be visible
-dotnet_diagnostic.CA1054.severity = none # CA1054: Uri parameters should not be strings
-dotnet_diagnostic.CA1303.severity = none # CA1303: Do not pass literals as localized parameters
-dotnet_diagnostic.CA1305.severity = none # CA1305: Specify IFormatProvider
-dotnet_diagnostic.CA1308.severity = none # CA1308: Normalize strings to uppercase
-dotnet_diagnostic.CA1819.severity = none # CA1819: Properties should not return arrays
-dotnet_diagnostic.CA2007.severity = none # CA2007: Consider calling ConfigureAwait on the awaited task
-dotnet_diagnostic.CA2229.severity = none # CA2229: Implement serialization constructors
-dotnet_diagnostic.CS1591.severity = none # CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.ca1031.severity=none # CA1031: Do not catch general exception types
+dotnet_diagnostic.ca1034.severity=none # CA1034: Nested types should not be visible
+dotnet_diagnostic.ca1054.severity=none # CA1054: Uri parameters should not be strings
+dotnet_diagnostic.ca1303.severity=none # CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.ca1305.severity=none # CA1305: Specify IFormatProvider
+dotnet_diagnostic.ca1308.severity=none # CA1308: Normalize strings to uppercase
+dotnet_diagnostic.ca1819.severity=none # CA1819: Properties should not return arrays
+dotnet_diagnostic.ca2007.severity=none # CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.ca2229.severity=none # CA2229: Implement serialization constructors
+dotnet_diagnostic.cs1591.severity=none # CS1591: Missing XML comment for publicly visible type or member
+
+# Microsoft .NET properties
+csharp_indent_braces=false
+csharp_new_line_before_open_brace=all
+
+# ReSharper properties
+resharper_csharp_case_block_braces=next_line
