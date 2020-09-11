@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
+using Serilog;
 
 namespace WindowsTerminalQuake
 {
@@ -40,6 +41,7 @@ namespace WindowsTerminalQuake
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Warning(ex, $"Error: {ex.Message}");
 				_trayIcon.Notify(ToolTipIcon.Error, $"Cannot start: '{ex.Message}'.");
 
 				Close();
@@ -63,25 +65,21 @@ namespace WindowsTerminalQuake
 					}
 				};
 				process.Start();
-			}
 
-			if (process == null || process.HasExited)
-			{
-				throw new Exception("Can not ensure exited process is accessible");
-			}
-
-			try
-			{
-				// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-				if (process.MainWindowHandle == IntPtr.Zero)
+				try
 				{
-					throw new Exception("Can not access newly started process.");
+					// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
+					if (process.MainWindowHandle == IntPtr.Zero)
+					{
+						throw new Exception("Can not access newly started process.");
+					}
 				}
-			}
-			catch (Exception)
-			{
-				process = Process.GetProcessesByName("WindowsTerminal").First();
-				process.Refresh();
+				catch (Exception)
+				{
+					process = Process.GetProcessesByName("WindowsTerminal").First();
+					// _process.WaitForInputIdle();
+					process.Refresh();
+				}
 			}
 
 			return process;
