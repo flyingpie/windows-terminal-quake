@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
@@ -65,6 +66,9 @@ namespace WindowsTerminalQuake
 					}
 				};
 				process.Start();
+
+				// Needed for the process to initialise and become accessible
+				Thread.Sleep(200);
 
 				try
 				{
