@@ -20,18 +20,14 @@ namespace WindowsTerminalQuake
 
 			try
 			{
-				var process = ProcessFactory.GetOrCreateWindowsTerminalProcess();
-				process.EnableRaisingEvents = true;
-				process.Exited += (sender, e) =>
-				{
-					Close();
-				};
-				_toggler = new Toggler(process);
+				TerminalProcess.OnExit(() => Close());
+
+				_toggler = new Toggler();
 
 				// Transparency
 				Settings.Get(s =>
 				{
-					TransparentWindow.SetTransparent(process, s.Opacity);
+					TransparentWindow.SetTransparent(TerminalProcess.Get(), s.Opacity);
 				});
 
 				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
