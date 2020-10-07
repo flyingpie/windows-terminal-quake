@@ -12,21 +12,19 @@ namespace WindowsTerminalQuake
 {
 	public class Toggler : IDisposable
 	{
-		private Process _process;
+		private Process _process => TerminalProcess.Get();
 
 		private readonly List<int> _registeredHotKeys = new List<int>();
 
-		public Toggler(Process process)
+		public Toggler()
 		{
-			_process = process;
-
 			// Hide from taskbar
 			User32.SetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
 
 			User32.Rect rect = default;
-			var ok = User32.GetWindowRect(_process.MainWindowHandle, ref rect);
-			var isOpen = rect.Top >= GetScreenWithCursor().Bounds.Y;
 			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+
+			var isOpen = true;
 
 			// Register hotkeys
 			Settings.Get(s =>
