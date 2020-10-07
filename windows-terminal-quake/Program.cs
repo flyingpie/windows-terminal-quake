@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Serilog;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
-using Serilog;
 
 namespace WindowsTerminalQuake
 {
@@ -21,18 +20,14 @@ namespace WindowsTerminalQuake
 
 			try
 			{
-				var process = GetOrCreateWindowsTerminalProcess();
-				process.EnableRaisingEvents = true;
-				process.Exited += (sender, e) =>
-				{
-					Close();
-				};
-				_toggler = new Toggler(process);
+				TerminalProcess.OnExit(() => Close());
+
+				_toggler = new Toggler();
 
 				// Transparency
 				Settings.Get(s =>
 				{
-					TransparentWindow.SetTransparent(process, s.Opacity);
+					TransparentWindow.SetTransparent(TerminalProcess.Get(), s.Opacity);
 				});
 
 				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
@@ -46,43 +41,6 @@ namespace WindowsTerminalQuake
 
 				Close();
 			}
-		}
-
-		private static Process GetOrCreateWindowsTerminalProcess()
-		{
-			var process = Process.GetProcessesByName("WindowsTerminal").FirstOrDefault();
-
-			if (process == null)
-			{
-				process = new Process
-				{
-					StartInfo = new ProcessStartInfo
-					{
-						FileName = "wt",
-						UseShellExecute = false,
-						RedirectStandardOutput = true,
-						WindowStyle = ProcessWindowStyle.Maximized
-					}
-				};
-				process.Start();
-
-				try
-				{
-					// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-					if (process.MainWindowHandle == IntPtr.Zero)
-					{
-						throw new Exception("Can not access newly started process.");
-					}
-				}
-				catch (Exception)
-				{
-					process = Process.GetProcessesByName("WindowsTerminal").First();
-					// _process.WaitForInputIdle();
-					process.Refresh();
-				}
-			}
-
-			return process;
 		}
 
 		private static void Close()
