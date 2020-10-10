@@ -119,6 +119,8 @@ namespace WindowsTerminalQuake
 
 		public float VerticalScreenCoverage { get; set; } = 100;
 
+		public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;
+
 		public float HorizontalScreenCoverage { get; set; } = 100;
 
 		public int ToggleDurationMs { get; set; } = 250;
@@ -133,5 +135,12 @@ namespace WindowsTerminalQuake
 		public KeyModifiers Modifiers { get; set; }
 
 		public Keys Key { get; set; }
+	}
+
+	public enum HorizontalAlign
+	{
+		Center = 0,
+		Left,
+		Right
 	}
 }

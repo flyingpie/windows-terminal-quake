@@ -119,6 +119,17 @@ namespace WindowsTerminalQuake
 			var horWidth = (int)Math.Ceiling(scrWidth / 100f * horWidthPct);
 			var x = (int)Math.Ceiling(scrWidth / 2f - horWidth / 2f);
 
+			switch (Settings.Instance.HorizontalAlign)
+			{
+				case HorizontalAlign.Left:
+					x = bounds.X;
+					break;
+
+				case HorizontalAlign.Right:
+					x = bounds.X + (bounds.Width - horWidth);
+					break;
+			}
+
 			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
 			return new Rectangle(bounds.X + x, bounds.Y + -bounds.Height + (bounds.Height / stepCount * step), horWidth, bounds.Height);
