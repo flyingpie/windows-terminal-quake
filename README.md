@@ -25,6 +25,15 @@ Changing the file automatically results in the app reloading the settings.
 
 Suggested by [Mike F](https://github.com/mikef-nl)
 
+- [Hot Keys](#hot-keys)
+- [Toggle Duration](#toggle-duration)
+- [Transparency](#transparency)
+- [Vertical Screen Coverage](#vertical-screen-coverage)
+- [Vertical Offset](#vertical-offset)
+- [Horizontal Screen Coverage](#horizontal-screen-coverage)
+- [Horizontal Align](#horizontal-align)
+- [Hide On Focus Lost](#hide-on-focus-lost)
+
 ## Hot Keys
 Multiple hot keys are supported, with an optional modifier.
 
@@ -123,7 +132,7 @@ Should you want the terminal to not take the entire width of the screen, take a 
 
 Suggested by [baslas](https://github.com/baslas)
 
-## Horizontal align
+## Horizontal Align
 When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
 
 ```jsonc
@@ -142,7 +151,7 @@ When "HorizontalScreenCoverage" is below 100, this setting determines where the 
 
 Suggested by [Rafael Pereira](https://github.com/bsides)
 
-## Hide on focus lost
+## Hide On Focus Lost
 When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
 
 Defaults to "true".
