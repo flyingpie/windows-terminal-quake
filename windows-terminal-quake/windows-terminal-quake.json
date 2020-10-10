@@ -59,6 +59,7 @@
 	// F1 - F24
 	//
 	// ### Special characters
-	// OemBackslash, OemCloseBrackets, Oemcomma, OemMinus, OemOpenBrackets,
+	// OemBackslash, OemClear, OemCloseBrackets, Oemcomma, OemMinus, OemOpenBrackets,
 	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
+	// Oem1 - Oem8, Oem102
 }
