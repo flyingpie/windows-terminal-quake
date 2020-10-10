@@ -93,6 +93,20 @@ The vertical space that is taken up by the terminal window can be configured thr
 
 Suggested by [ukWaqas](https://github.com/ukWaqas)
 
+## Vertical Offset
+How much room to leave between the top of the terminal and the top of the screen.
+
+```jsonc
+{
+  // How much room to leave between the top of the terminal and the top of the screen
+  "VerticalOffset": 50
+}
+```
+
+![Vertical Offset](https://user-images.githubusercontent.com/1295673/95657244-b9894f80-0b13-11eb-97d5-3f984f4de912.png)
+
+Suggested by [Neil Santos](https://github.com/nlsantos)
+
 ## Horizontal Screen Coverage
 Should you want the terminal to not take the entire width of the screen, take a look at the "HorizontalScreenCoverage" setting.
 
@@ -108,6 +122,25 @@ Should you want the terminal to not take the entire width of the screen, take a 
 ![Horizontal Coverage](https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png)
 
 Suggested by [baslas](https://github.com/baslas)
+
+## Horizontal align
+When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
+
+```jsonc
+{
+  // When "HorizontalScreenCoverage" is below 100, this setting determines whether the terminal is place horizontally.
+  // "Center", "Left" or "Right".
+  "HorizontalAlign": "Center"
+}
+```
+
+![Left](https://user-images.githubusercontent.com/1295673/95656847-467ed980-0b11-11eb-87a4-2bff809c30d0.png)
+
+![Center](https://user-images.githubusercontent.com/1295673/95656889-8645c100-0b11-11eb-8310-c829f41e76bc.png)
+
+![Right](https://user-images.githubusercontent.com/1295673/95656866-6d3d1000-0b11-11eb-9680-cb67d1c5cc6c.png)
+
+Suggested by [Rafael Pereira](https://github.com/bsides)
 
 ## Hide on focus lost
 When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
