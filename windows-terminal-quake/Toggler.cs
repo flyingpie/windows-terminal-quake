@@ -117,7 +117,7 @@ namespace WindowsTerminalQuake
 			var horWidthPct = (float)Settings.Instance.HorizontalScreenCoverage;
 
 			var horWidth = (int)Math.Ceiling(scrWidth / 100f * horWidthPct);
-			var x = (int)Math.Ceiling(scrWidth / 2f - horWidth / 2f);
+			var x = 0;
 
 			switch (Settings.Instance.HorizontalAlign)
 			{
@@ -128,11 +128,21 @@ namespace WindowsTerminalQuake
 				case HorizontalAlign.Right:
 					x = bounds.X + (bounds.Width - horWidth);
 					break;
+
+				case HorizontalAlign.Center:
+				default:
+					x = bounds.X + (int)Math.Ceiling(scrWidth / 2f - horWidth / 2f);
+					break;
 			}
 
 			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
 
-			return new Rectangle(bounds.X + x, bounds.Y + -bounds.Height + (bounds.Height / stepCount * step), horWidth, bounds.Height);
+			return new Rectangle(
+				x,
+				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step),
+				horWidth,
+				bounds.Height
+			);
 		}
 
 		public void Dispose()
