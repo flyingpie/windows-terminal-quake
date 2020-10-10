@@ -136,10 +136,11 @@ namespace WindowsTerminalQuake
 			}
 
 			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
+			bounds.Height += Settings.Instance.VerticalOffset;
 
 			return new Rectangle(
 				x,
-				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step),
+				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step) + Settings.Instance.VerticalOffset,
 				horWidth,
 				bounds.Height
 			);

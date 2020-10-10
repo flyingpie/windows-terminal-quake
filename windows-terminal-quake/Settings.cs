@@ -117,6 +117,8 @@ namespace WindowsTerminalQuake
 
 		public int Opacity { get; set; } = 80;
 
+		public int VerticalOffset { get; set; } = 0;
+
 		public float VerticalScreenCoverage { get; set; } = 100;
 
 		public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;
