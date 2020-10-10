@@ -158,7 +158,8 @@ Defaults to "true".
 
 ```jsonc
 {
-  "Hide
+  // When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
+  "HideOnFocusLost": true
 }
 ```
 
