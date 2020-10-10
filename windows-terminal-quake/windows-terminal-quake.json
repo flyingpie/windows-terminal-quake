@@ -28,7 +28,7 @@
 	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
 	"VerticalScreenCoverage": 80,
 
-	// When "HorizontalScreenCoverage" is below 100, this setting determines whether the terminal is place horizontally.
+	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
 	// "Center", "Left" or "Right".
 	"HorizontalAlign": "Center",
 
