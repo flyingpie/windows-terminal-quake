@@ -22,8 +22,15 @@
 	// How long the toggle up/down takes in milliseconds.
 	"ToggleDurationMs": 250,
 
+	// How much room to leave between the top of the terminal and the top of the screen
+	"VerticalOffset": 0,
+
 	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
-	"VerticalScreenCoverage": 100,
+	"VerticalScreenCoverage": 80,
+
+	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
+	// "Center", "Left" or "Right".
+	"HorizontalAlign": "Center",
 
 	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
 	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
