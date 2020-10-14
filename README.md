@@ -33,6 +33,7 @@ Suggested by [Mike F](https://github.com/mikef-nl)
 - [Horizontal Screen Coverage](#horizontal-screen-coverage)
 - [Horizontal Align](#horizontal-align)
 - [Hide On Focus Lost](#hide-on-focus-lost)
+- [Always On Top](#always-on-top)
 
 ## Hot Keys
 Multiple hot keys are supported, with an optional modifier.
@@ -164,3 +165,15 @@ Defaults to "true".
 ```
 
 Suggested by [Douglas Lara](https://github.com/douglara)
+
+## Always On Top
+Whether to keep the terminal window always on top (requires restart).
+
+```jsonc
+{
+  // Whether to keep the terminal window always on top (requires restart).
+  "AlwaysOnTop": true
+}
+```
+
+Suggested by [Adam](https://github.com/avere001)
