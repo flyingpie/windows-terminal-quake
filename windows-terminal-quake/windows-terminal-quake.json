@@ -41,7 +41,7 @@
 	"HideOnFocusLost": true,
 
 	// Whether to keep the terminal window always on top (requires restart)
-	"AlwaysOnTop": true
+	"AlwaysOnTop": false
 
 	// # HotKeys
 	// ## Modifiers
