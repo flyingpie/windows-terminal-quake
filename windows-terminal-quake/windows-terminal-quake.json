@@ -38,7 +38,10 @@
 	"HorizontalScreenCoverage": 100,
 
 	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
-	"HideOnFocusLost": true
+	"HideOnFocusLost": true,
+
+	// Whether to keep the terminal window always on top (requires restart)
+	"AlwaysOnTop": true
 
 	// # HotKeys
 	// ## Modifiers

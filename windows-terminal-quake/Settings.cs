@@ -130,6 +130,8 @@ namespace WindowsTerminalQuake
 		public bool Logging { get; set; } = false;
 
 		public bool HideOnFocusLost { get; set; } = true;
+
+		public bool AlwaysOnTop { get; set; }
 	}
 
 	public class Hotkey
