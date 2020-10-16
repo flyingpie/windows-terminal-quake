@@ -1,9 +1,11 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
@@ -19,7 +21,10 @@ namespace WindowsTerminalQuake
 		public Toggler()
 		{
 			// Hide from taskbar
-			User32.SetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
+			var windLong = User32.GetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE);
+			User32.ThrowIfError();
+
+			User32.SetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE, (windLong | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
 
 			User32.Rect rect = default;
 			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
@@ -75,6 +80,7 @@ namespace WindowsTerminalQuake
 					var bounds = GetBounds(screen, stepCount, i);
 
 					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+					User32.ThrowIfError();
 
 					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 				}
@@ -98,6 +104,7 @@ namespace WindowsTerminalQuake
 				{
 					var bounds = GetBounds(screen, stepCount, i);
 					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+					User32.ThrowIfError();
 
 					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
 				}
@@ -161,10 +168,15 @@ namespace WindowsTerminalQuake
 			var bounds = GetScreenWithCursor().Bounds;
 
 			// Restore taskbar icon
-			User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
+			var windLong = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
+			var getWindowLongErr = Marshal.GetLastWin32Error();
+			if (getWindowLongErr != 0)
+				throw new Win32Exception(getWindowLongErr);
+			User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (windLong | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
 
 			// Reset position
 			User32.MoveWindow(process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+			User32.ThrowIfError();
 
 			// Restore window
 			User32.ShowWindow(process.MainWindowHandle, NCmdShow.MAXIMIZE);

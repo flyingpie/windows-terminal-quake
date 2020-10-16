@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace WindowsTerminalQuake.Native
@@ -45,5 +46,12 @@ namespace WindowsTerminalQuake.Native
 		public const int WS_EX_APPWINDOW = 0x00040000;
 		public const int WS_EX_LAYERED = 0x80000;
 		public const int WS_EX_TOOLWINDOW = 0x00000080;
+
+		public static void ThrowIfError()
+		{
+			var err = Marshal.GetLastWin32Error();
+			if (err != 0)
+				throw new Win32Exception(err);
+		}
 	}
 }

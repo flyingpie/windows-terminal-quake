@@ -1,7 +1,9 @@
 ﻿using Polly;
 using Polly.Retry;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace WindowsTerminalQuake.Native
 {
@@ -19,6 +21,7 @@ namespace WindowsTerminalQuake.Native
 				if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Process handle zero");
 
 				var old = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
+				User32.ThrowIfError();
 				var old2 = User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, old | User32.WS_EX_LAYERED);
 
 				var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWA_ALPHA);
