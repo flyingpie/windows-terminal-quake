@@ -1,11 +1,9 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
@@ -169,9 +167,7 @@ namespace WindowsTerminalQuake
 
 			// Restore taskbar icon
 			var windLong = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
-			var getWindowLongErr = Marshal.GetLastWin32Error();
-			if (getWindowLongErr != 0)
-				throw new Win32Exception(getWindowLongErr);
+            User32.ThrowIfError();
 			User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (windLong | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
 
 			// Reset position

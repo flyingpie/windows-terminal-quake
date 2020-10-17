@@ -1,9 +1,7 @@
 ﻿using Polly;
 using Polly.Retry;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace WindowsTerminalQuake.Native
 {
