@@ -18,6 +18,9 @@ namespace WindowsTerminalQuake
 
 		public Toggler()
 		{
+			// Always on top
+			if (Settings.Instance.AlwaysOnTop) TopMostWindow.SetTopMost(_process);
+
 			// Hide from taskbar
 			User32.SetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE, (User32.GetWindowLong(_process.MainWindowHandle, User32.GWL_EX_STYLE) | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
 

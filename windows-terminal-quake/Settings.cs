@@ -46,19 +46,29 @@ namespace WindowsTerminalQuake
 			_fsWatchers = PathsToSettings
 				.Select(path =>
 				{
-					Log.Information($"Watching settings file '{path}' for changes");
-					var fsWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
-
-					fsWatcher.Changed += (s, a) =>
+					try
 					{
-						Log.Information($"Settings file '{a.FullPath}' changed");
-						Reload(true);
-					};
+						Log.Information($"Watching settings file '{path}' for changes");
+						var fsWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
 
-					fsWatcher.EnableRaisingEvents = true;
+						fsWatcher.Changed += (s, a) =>
+						{
+							Log.Information($"Settings file '{a.FullPath}' changed");
+							Reload(true);
+						};
 
-					return fsWatcher;
+						fsWatcher.EnableRaisingEvents = true;
+
+						return fsWatcher;
+					}
+					catch (Exception ex)
+					{
+						Log.Error(ex, $"Could not load settings file at location '{path}': {ex.Message}");
+						return null;
+					}
 				})
+				.Where(s => s != null)
+				.Select(s => s!)
 				.ToList()
 			;
 
@@ -130,6 +140,8 @@ namespace WindowsTerminalQuake
 		public bool Logging { get; set; } = false;
 
 		public bool HideOnFocusLost { get; set; } = true;
+
+		public bool AlwaysOnTop { get; set; }
 	}
 
 	public class Hotkey
