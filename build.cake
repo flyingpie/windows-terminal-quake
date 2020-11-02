@@ -3,7 +3,7 @@
 
 var configuration = Argument("configuration", "Release");
 var output = Argument("output", "artifacts");
-var version = Argument("version", "v0.10");
+var version = Argument("version", "v0.11");
 
 var sln = "windows-terminal-quake.sln";
 var bin = "./windows-terminal-quake/bin";

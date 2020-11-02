@@ -22,7 +22,7 @@
 	// How long the toggle up/down takes in milliseconds.
 	"ToggleDurationMs": 250,
 
-	// How much room to leave between the top of the terminal and the top of the screen
+	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,
 
 	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
@@ -38,7 +38,10 @@
 	"HorizontalScreenCoverage": 100,
 
 	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
-	"HideOnFocusLost": true
+	"HideOnFocusLost": true,
+
+	// Whether to keep the terminal window always on top (requires restart).
+	"AlwaysOnTop": false
 
 	// # HotKeys
 	// ## Modifiers

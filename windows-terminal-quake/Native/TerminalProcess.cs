@@ -97,6 +97,10 @@ namespace WindowsTerminalQuake.Native
 			// Make sure the process name equals "WindowsTerminal", otherwise WT might still be starting
 			if (process.ProcessName != "WindowsTerminal") throw new Exception("Process name is not 'WindowsTerminal' yet.");
 
+			// We need a proper window title before we can continue
+			if (process.MainWindowTitle == "")
+				throw new Exception($"Process still has temporary '' window title.");
+
 			// This is a way-too-specific check to further ensure the WT process is ready
 			if (process.MainWindowTitle == "DesktopWindowXamlSource")
 				throw new Exception($"Process still has temporary 'DesktopWindowXamlSource' window title.");
