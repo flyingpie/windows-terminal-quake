@@ -1,0 +1,9 @@
+site_name: Windows Terminal Quake
+
+docs_dir: 'docs'
+site_dir: '_build'
+
+nav:
+- Overview: stuff.md
+
+theme: readthedocs
