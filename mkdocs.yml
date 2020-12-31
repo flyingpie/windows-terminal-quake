@@ -1,7 +1,7 @@
 site_name: Windows Terminal Quake
 
 docs_dir: 'docs'
-site_dir: '_build'
+site_dir: 'build'
 
 nav:
 - Overview: stuff.md
