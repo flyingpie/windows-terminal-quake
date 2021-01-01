@@ -114,15 +114,19 @@ namespace WindowsTerminalQuake
 
 		public Rectangle GetBounds(Screen screen, int stepCount, int step)
 		{
+			if (screen == null) throw new ArgumentNullException(nameof(screen));
+
+			var settings = Settings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
+
 			var bounds = screen.Bounds;
 
 			var scrWidth = bounds.Width;
-			var horWidthPct = (float)Settings.Instance.HorizontalScreenCoverage;
+			var horWidthPct = (float)settings.HorizontalScreenCoverage;
 
 			var horWidth = (int)Math.Ceiling(scrWidth / 100f * horWidthPct);
 			var x = 0;
 
-			switch (Settings.Instance.HorizontalAlign)
+			switch (settings.HorizontalAlign)
 			{
 				case HorizontalAlign.Left:
 					x = bounds.X;
@@ -138,12 +142,12 @@ namespace WindowsTerminalQuake
 					break;
 			}
 
-			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * Settings.Instance.VerticalScreenCoverage);
-			bounds.Height += Settings.Instance.VerticalOffset;
+			bounds.Height = (int)Math.Ceiling((bounds.Height / 100f) * settings.VerticalScreenCoverage);
+			bounds.Height += settings.VerticalOffset;
 
 			return new Rectangle(
 				x,
-				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step) + Settings.Instance.VerticalOffset,
+				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step) + settings.VerticalOffset,
 				horWidth,
 				bounds.Height
 			);
@@ -156,7 +160,10 @@ namespace WindowsTerminalQuake
 
 		private static Screen GetScreenWithCursor()
 		{
-			return Screen.AllScreens.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position));
+			return Screen.AllScreens
+				.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))
+				?? Screen.PrimaryScreen
+			;
 		}
 
 		private static void ResetTerminal(Process process)
