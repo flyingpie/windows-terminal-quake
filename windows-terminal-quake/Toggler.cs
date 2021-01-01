@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.UI;
 
 namespace WindowsTerminalQuake
 {
@@ -32,6 +33,8 @@ namespace WindowsTerminalQuake
 			// Register hotkeys
 			Settings.Get(s =>
 			{
+				if (s.Hotkeys == null) return; // Hotkeys not loaded yet
+
 				_registeredHotKeys.ForEach(hk => HotKeyManager.UnregisterHotKey(hk));
 				_registeredHotKeys.Clear();
 
@@ -165,10 +168,42 @@ namespace WindowsTerminalQuake
 
 		private static Screen GetScreenWithCursor()
 		{
-			return Screen.AllScreens
-				.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))
-				?? Screen.PrimaryScreen
-			;
+			var settings = Settings.Instance;
+			if (settings == null) return Screen.PrimaryScreen; // Should not happen
+
+			var scr = Screen.AllScreens;
+
+			switch (settings.PreferMonitor)
+			{
+				// At Index
+				case PreferMonitor.AtIndex:
+					// Make sure the monitor index is within bounds
+					if (settings.MonitorIndex < 0)
+					{
+						TrayIcon.Instance.Notify(ToolTipIcon.Warning, $"Setting '{nameof(Settings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
+						return Screen.PrimaryScreen;
+					}
+
+					if (settings.MonitorIndex >= scr.Length)
+					{
+						TrayIcon.Instance.Notify(ToolTipIcon.Warning, $"Setting '{nameof(Settings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
+						return Screen.PrimaryScreen;
+					}
+
+					return scr[settings.MonitorIndex];
+
+				// Primary
+				case PreferMonitor.Primary:
+					return Screen.PrimaryScreen;
+
+				// With Cursor
+				default:
+				case PreferMonitor.WithCursor:
+					return Screen.AllScreens
+						.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))
+						?? Screen.PrimaryScreen
+					;
+			}
 		}
 
 		private static void ResetTerminal(Process process)
