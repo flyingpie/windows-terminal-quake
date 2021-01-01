@@ -1,4 +1,3 @@
-
 # windows-terminal-quake
 Companion program for the new Windows Terminal that enables Quake-style drop down
 
@@ -160,7 +159,6 @@ Defaults to "true".
 
 ```jsonc
 {
-  // When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
   "HideOnFocusLost": true
 }
 ```
@@ -170,11 +168,58 @@ Suggested by [Douglas Lara](https://github.com/douglara)
 ## Always On Top
 Whether to keep the terminal window always on top (requires restart).
 
+Defaults to "false".
+
 ```jsonc
 {
-  // Whether to keep the terminal window always on top (requires restart).
   "AlwaysOnTop": true
 }
 ```
 
 Suggested by [Adam](https://github.com/avere001)
+
+## Start Hidden
+Whether to hide the terminal window immediately after app start.
+
+Defaults to "false".
+
+```jsonc
+{
+  "StartHidden": true
+}
+```
+
+Suggested by [Christian Käser](https://github.com/dfyx)
+
+## Prefer Monitor
+What monitor to preferrably drop the terminal.
+
+Can be "WithCursor" (default), "Primary" or "AtIndex".
+
+If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+Zero based, eg. 0, 1, etc.
+
+Defaults to "WithCursor".
+
+```jsonc
+{
+  "PreferMonitor": "AtIndex",
+  "MonitorIndex": 1
+}
+```
+
+Suggested by [Christian Käser](https://github.com/dfyx)
+
+## Toggle Animation Frame Time
+How long each frame in the toggle animation takes in milliseconds.
+The lower this value, the smoother the animation, though values lower than 15 are not supported and will result in a toggle taking more than the configured.
+
+Defaults to "25".
+
+```jsonc
+{
+  "ToggleAnimationFrameTimeMs": "25"
+}
+```
+
+Suggested by [Raphael Mobis Tacla](https://github.com/rmobis)
