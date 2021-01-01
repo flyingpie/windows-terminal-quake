@@ -43,6 +43,7 @@ namespace WindowsTerminalQuake
 				});
 			});
 
+			// Hide on focus lost
 			FocusTracker.OnFocusLost += (s, a) =>
 			{
 				if (Settings.Instance.HideOnFocusLost && isOpen)
@@ -52,11 +53,15 @@ namespace WindowsTerminalQuake
 				}
 			};
 
+			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
 				Toggle(!isOpen, Settings.Instance.ToggleDurationMs);
 				isOpen = !isOpen;
 			};
+
+			// Start hidden?
+			if (Settings.Instance.StartHidden) Toggle(isOpen = false, 0);
 		}
 
 		public void Toggle(bool open, int durationMs)

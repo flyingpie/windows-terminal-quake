@@ -141,7 +141,9 @@ namespace WindowsTerminalQuake
 
 		public bool HideOnFocusLost { get; set; } = true;
 
-		public bool AlwaysOnTop { get; set; }
+		public bool AlwaysOnTop { get; set; } = false;
+
+		public bool StartHidden { get; set; } = false;
 	}
 
 	public class Hotkey
