@@ -68,6 +68,7 @@ namespace WindowsTerminalQuake.Native
 					StartInfo = new ProcessStartInfo
 					{
 						FileName = newProcessName,
+						UseShellExecute = false,
 						WindowStyle = ProcessWindowStyle.Maximized
 					}
 				};
