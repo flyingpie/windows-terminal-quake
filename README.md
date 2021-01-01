@@ -16,6 +16,7 @@ There are a couple of options:
 - Download the latest release from the [releases page](https://github.com/flyingpie/windows-terminal-quake/releases).
 - Clone/download the source and run **build.ps1** (uses [Cakebuild](https://cakebuild.net/)).
 - Clone/download the source and build using Visual Studio.
+- Via [scoop](https://scoop.sh): `scoop install https://github.com/flyingpie/windows-terminal-quake/blob/master/scoop/windows-terminal-quake.json`
 
 ## Settings
 Since v0.4, the app supports a JSON settings file.
