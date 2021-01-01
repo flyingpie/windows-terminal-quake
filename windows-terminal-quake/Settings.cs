@@ -144,6 +144,10 @@ namespace WindowsTerminalQuake
 		public bool AlwaysOnTop { get; set; } = false;
 
 		public bool StartHidden { get; set; } = false;
+
+		public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
+
+		public int MonitorIndex { get; set; }
 	}
 
 	public class Hotkey
@@ -158,5 +162,12 @@ namespace WindowsTerminalQuake
 		Center = 0,
 		Left,
 		Right
+	}
+
+	public enum PreferMonitor
+	{
+		WithCursor = 0,
+		AtIndex,
+		Primary,
 	}
 }

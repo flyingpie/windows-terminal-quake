@@ -44,7 +44,15 @@
 	"AlwaysOnTop": false,
 
 	// Whether to hide the terminal window immediately after app start.
-	"StartHidden": false
+	"StartHidden": false,
+
+	// What monitor to preferrably drop the terminal
+	// "WithCursor" (default), "Primary" or "AtIndex"
+	"PreferMonitor": "WithCursor",
+
+	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+	// Zero based, eg. 0, 1, etc.
+	"MonitorIndex": 1
 
 	// # HotKeys
 	// ## Modifiers
