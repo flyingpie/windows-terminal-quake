@@ -41,7 +41,10 @@
 	"HideOnFocusLost": true,
 
 	// Whether to keep the terminal window always on top (requires restart).
-	"AlwaysOnTop": false
+	"AlwaysOnTop": false,
+
+	// Whether to hide the terminal window immediately after app start.
+	"StartHidden": false
 
 	// # HotKeys
 	// ## Modifiers
