@@ -22,12 +22,19 @@ namespace WindowsTerminalQuake.UI
 			{
 				var contextMenu = new ContextMenu();
 
+				// Version
+				var mnuVersion = new MenuItem($"Version v{Program.GetVersion()}")
+				{
+					Enabled = false
+				};
+
 				// Exit
 				var mnuExit = new MenuItem("Exit");
 				mnuExit.Click += new EventHandler(exitHandler);
 
 				contextMenu.MenuItems.AddRange(new[]
 				{
+					mnuVersion,
 					mnuExit
 				});
 
