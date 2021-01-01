@@ -18,7 +18,7 @@ namespace WindowsTerminalQuake
 		public static readonly string[] PathsToSettings = new[]
 		{
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "windows-terminal-quake.json"),
-			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).AbsolutePath), "windows-terminal-quake.json"),
+			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).LocalPath), "windows-terminal-quake.json"),
 		};
 
 		public static SettingsDto Instance { get; private set; } = new SettingsDto();
