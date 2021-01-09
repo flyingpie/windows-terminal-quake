@@ -39,12 +39,12 @@ namespace WindowsTerminalQuake
 			{
 				TerminalProcess.OnExit(() => Close());
 
-				_toggler = new Toggler();
+				_toggler = new Toggler(args);
 
 				// Transparency
 				Settings.Get(s =>
 				{
-					TransparentWindow.SetTransparent(TerminalProcess.Get(), s.Opacity);
+					TransparentWindow.SetTransparent(TerminalProcess.Get(args), s.Opacity);
 				});
 
 				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
