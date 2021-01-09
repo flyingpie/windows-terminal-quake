@@ -40,7 +40,7 @@ namespace WindowsTerminalQuake.Native
 			_onExit.ForEach(a => a());
 		}
 
-		public static Process Get()
+		public static Process Get(string[] args)
 		{
 			return Retry.Execute(() =>
 			{
@@ -48,14 +48,14 @@ namespace WindowsTerminalQuake.Native
 
 				if (_process == null || _process.HasExited)
 				{
-					_process = GetOrCreate();
+					_process = GetOrCreate(args);
 				}
 
 				return _process;
 			});
 		}
 
-		private static Process GetOrCreate()
+		private static Process GetOrCreate(string[] args)
 		{
 			const string existingProcessName = "WindowsTerminal";
 			const string newProcessName = "wt.exe";
@@ -68,6 +68,7 @@ namespace WindowsTerminalQuake.Native
 					StartInfo = new ProcessStartInfo
 					{
 						FileName = newProcessName,
+						Arguments = string.Join(" ", args),
 						UseShellExecute = false,
 						WindowStyle = ProcessWindowStyle.Maximized
 					}

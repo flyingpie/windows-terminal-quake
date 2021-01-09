@@ -13,12 +13,15 @@ namespace WindowsTerminalQuake
 {
 	public class Toggler : IDisposable
 	{
-		private Process _process => TerminalProcess.Get();
+		private Process _process => TerminalProcess.Get(_args);
 
+		private string[] _args;
 		private readonly List<int> _registeredHotKeys = new List<int>();
 
-		public Toggler()
+		public Toggler(string[] args)
 		{
+			_args = args;
+
 			// Always on top
 			if (Settings.Instance.AlwaysOnTop) TopMostWindow.SetTopMost(_process);
 
