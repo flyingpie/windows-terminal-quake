@@ -23,7 +23,8 @@
 	"ToggleDurationMs": 250,
 
 	// How long each frame in the toggle animation takes in milliseconds.
-	// The lower this value, the smoother the animation, though values lower than 15 are not supported and will result in a toggle taking more than the configured ToggleDurationMs.
+	// The lower this value, the smoother the animation, though values lower than 15 are not supported.
+	// This value should be higher than or equal to "ToggleDurationMs" (capped otherwise).
 	"ToggleAnimationFrameTimeMs": 25,
 
 	// How much room to leave between the top of the terminal and the top of the screen.

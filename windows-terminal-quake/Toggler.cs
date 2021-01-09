@@ -73,7 +73,7 @@ namespace WindowsTerminalQuake
 		public void Toggle(bool open, int durationMs)
 		{
 			var stepDelayMs = Settings.Instance.ToggleAnimationFrameTimeMs;
-			var stepCount = durationMs / stepDelayMs;
+			var stepCount = Math.Max(1, durationMs / stepDelayMs); // Minimum step count 1
 
 			var screen = GetScreenWithCursor();
 
