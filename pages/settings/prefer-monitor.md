@@ -2,17 +2,21 @@
 
 What monitor to preferrably drop the terminal.
 
-Can be "WithCursor" (default), "Primary" or "AtIndex".
+Can be:
 
-If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
-Zero based, eg. 0, 1, etc.
+- WithCursor (default)
+- Primary
+- AtIndex
 
-Defaults to "WithCursor".
+If ```PreferMonitor``` is set to ```AtIndex```, the ```MonitorIndex``` setting determines what monitor to choose.
+Zero based, eg. ```0```, ```1```, etc.
+
+Defaults to ```WithCursor```.
 
 ```json
 {
-  "PreferMonitor": "AtIndex",
-  "MonitorIndex": 1
+	"PreferMonitor": "AtIndex",
+	"MonitorIndex": 1
 }
 ```
 

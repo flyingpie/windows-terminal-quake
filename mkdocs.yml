@@ -6,8 +6,7 @@ site_dir: 'docs'
 
 nav:
 - Getting Started:
-  - Download Binary: 'getting-started/download-binary.md'
-  - Download Auto-Updater: 'getting-started/download-auto-updater.md'
+  - Direct Download: 'getting-started/direct-download.md'
   - Get From Scoop: 'getting-started/get-from-scoop.md'
   - Build (Cake): 'getting-started/build-cake.md'
   - Build (Visual Studio): 'getting-started/build-vs.md'

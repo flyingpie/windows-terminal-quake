@@ -2,11 +2,11 @@
 
 Whether to hide the terminal window immediately after app start.
 
-Defaults to "false".
+Defaults to ```false```.
 
 ```json
 {
-  "StartHidden": true
+	"StartHidden": true
 }
 ```
 
