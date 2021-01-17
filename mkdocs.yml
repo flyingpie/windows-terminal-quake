@@ -1,9 +1,63 @@
 site_name: Windows Terminal Quake
+site_author: flyingpie
 
 docs_dir: 'pages'
 site_dir: 'docs'
 
 nav:
-- Overview: stuff.md
+- Getting Started:
+  - Download Binary: 'getting-started/download-binary.md'
+  - Download Auto-Updater: 'getting-started/download-auto-updater.md'
+  - Get From Scoop: 'getting-started/get-from-scoop.md'
+  - Build (Cake): 'getting-started/build-cake.md'
+  - Build (Visual Studio): 'getting-started/build-vs.md'
 
-theme: readthedocs
+- Settings:
+  - Always On Top: settings/always-on-top.md
+  - Hide On Focus Lost: settings/hide-on-focus-lost.md
+  - Horizontal Align: settings/horizontal-align.md
+  - Horizontal Screen Coverage: settings/horizontal-screen-coverage.md
+  - Hotkeys: settings/hotkeys.md
+  - Prefer Monitor: settings/prefer-monitor.md
+  - Start Hidden: settings/start-hidden.md
+  - Toggle Duration: settings/toggle-duration.md
+  - Transparency: settings/transparency.md
+  - Vertical Offset: settings/vertical-offset.md
+  - Vertical Screen Coverage: settings/vertical-screen-coverage.md
+
+- Misc:
+  - Changelog: misc/changelog.md
+  - Reporting Issues: misc/reporting-issues.md
+
+theme:
+  name: material
+  custom_dir: overrides
+  favicon: assets/favicon.ico
+  features:
+    - navigation.sections
+  font: false
+  highlightjs: true
+  hljs_languages:
+    - bash
+    - powershell
+  icon:
+    repo: fontawesome/brands/github
+  logo: assets/favicon.png
+  palette:
+    scheme: slate
+    primary: blue
+
+repo_name: windows-terminal-quake
+repo_url: http://github.com/flyingpie/windows-terminal-quake
+
+extra_javascript:
+  - assets/highlight/highlight.pack.js
+  - assets/config.js
+extra_css:
+  - assets/highlight/styles/vs2015.css
+  - assets/styles.css
+
+markdown_extensions:
+  - sane_lists
+  - pymdownx.highlight:
+      use_pygments: false
