@@ -13,6 +13,7 @@ nav:
 
 - Settings:
   - Always On Top: settings/always-on-top.md
+  - Command Line Parameters: settings/command-line-parameters.md
   - Hide On Focus Lost: settings/hide-on-focus-lost.md
   - Horizontal Align: settings/horizontal-align.md
   - Horizontal Screen Coverage: settings/horizontal-screen-coverage.md

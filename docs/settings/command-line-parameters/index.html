@@ -16,7 +16,7 @@
     
     
       
-        <title>Prefer Monitor - Windows Terminal Quake</title>
+        <title>Command Line Parameters - Windows Terminal Quake</title>
       
     
     
@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prefer-monitor" class="md-skip">
+        <a href="#command-line-parameters" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
             
-              Prefer Monitor
+              Command Line Parameters
             
           </span>
         </div>
@@ -318,11 +318,20 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../command-line-parameters/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Command Line Parameters
       </a>
+      
     </li>
   
 
@@ -378,20 +387,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../prefer-monitor/" class="md-nav__link">
         Prefer Monitor
       </a>
-      
     </li>
   
 
@@ -548,28 +548,17 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="http://github.com/flyingpie/windows-terminal-quake/edit/master/docs/settings/prefer-monitor.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="http://github.com/flyingpie/windows-terminal-quake/edit/master/docs/settings/command-line-parameters.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="prefer-monitor">Prefer Monitor</h1>
-<p>What monitor to preferrably drop the terminal.</p>
-<p>Can be:</p>
-<ul>
-<li>WithCursor (default)</li>
-<li>Primary</li>
-<li>AtIndex</li>
-</ul>
-<p>If <code>PreferMonitor</code> is set to <code>AtIndex</code>, the <code>MonitorIndex</code> setting determines what monitor to choose.
-Zero based, eg. <code>0</code>, <code>1</code>, etc.</p>
-<p>Defaults to <code>WithCursor</code>.</p>
-<pre><code class="language-json">{
-    &quot;PreferMonitor&quot;: &quot;AtIndex&quot;,
-    &quot;MonitorIndex&quot;: 1
-}
+                <h1 id="command-line-parameters">Command Line Parameters</h1>
+<p>Windows Terminal supports a <a href="https://docs.microsoft.com/en-us/windows/terminal/command-line-arguments?tabs=windows">set of command line parameters</a>, for example to start with multiple tabs or panes.</p>
+<p>Any arguments passed to windows-terminal-quake are passed to Windows Terminal, eg:</p>
+<pre><code class="language-powershell">windows-terminal-quake.exe split-pane
 </code></pre>
-<p><span class="by">Suggested by <a href="https://github.com/dfyx">Christian Käser</a></span></p>
+<p><span class="by">Suggested by <a href="https://github.com/NikhilSaini38">NikhilSaini38</a>.</span></p>
                 
               
               
@@ -591,7 +580,7 @@ Zero based, eg. <code>0</code>, <code>1</code>, etc.</p>
 
 			<!-- Link to previous page -->
 			
-			<a href="../hotkeys/" class="md-footer-nav__link md-footer-nav__link--prev"
+			<a href="../always-on-top/" class="md-footer-nav__link md-footer-nav__link--prev"
 				rel="prev">
 				<div class="md-footer-nav__button md-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -601,7 +590,7 @@ Zero based, eg. <code>0</code>, <code>1</code>, etc.</p>
 						<span class="md-footer-nav__direction">
 							Previous
 						</span>
-						Hotkeys
+						Always On Top
 					</div>
 				</div>
 			</a>
@@ -609,13 +598,13 @@ Zero based, eg. <code>0</code>, <code>1</code>, etc.</p>
 
 			<!-- Link to next page -->
 			
-			<a href="../start-hidden/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+			<a href="../hide-on-focus-lost/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
 				<div class="md-footer-nav__title">
 					<div class="md-ellipsis">
 						<span class="md-footer-nav__direction">
 							Next
 						</span>
-						Start Hidden
+						Hide On Focus Lost
 					</div>
 				</div>
 				<div class="md-footer-nav__button md-icon">
