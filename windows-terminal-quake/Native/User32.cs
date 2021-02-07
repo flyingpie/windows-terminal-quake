@@ -55,8 +55,8 @@ namespace WindowsTerminalQuake.Native
 		public const UInt32 SWP_NOSIZE = 0x0001;
 		public const UInt32 SWP_NOMOVE = 0x0002;
 		public const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-    
-    public static void ThrowIfError()
+
+		public static void ThrowIfError()
 		{
 			var err = Marshal.GetLastWin32Error();
 			if (err != 0)

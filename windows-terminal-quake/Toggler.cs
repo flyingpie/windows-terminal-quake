@@ -223,7 +223,7 @@ namespace WindowsTerminalQuake
 
 			// Restore taskbar icon
 			var windLong = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
-            User32.ThrowIfError();
+			User32.ThrowIfError();
 			User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, (windLong | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
 
 			// Reset position
