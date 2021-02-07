@@ -30,6 +30,10 @@ namespace WindowsTerminalQuake.Native
 		[DllImport("user32.dll")]
 		public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
 		public struct Rect
 		{
 			public int Left { get; set; }
@@ -47,7 +51,12 @@ namespace WindowsTerminalQuake.Native
 		public const int WS_EX_LAYERED = 0x80000;
 		public const int WS_EX_TOOLWINDOW = 0x00000080;
 
-		public static void ThrowIfError()
+		public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+		public const UInt32 SWP_NOSIZE = 0x0001;
+		public const UInt32 SWP_NOMOVE = 0x0002;
+		public const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+    
+    public static void ThrowIfError()
 		{
 			var err = Marshal.GetLastWin32Error();
 			if (err != 0)

@@ -40,7 +40,7 @@ namespace WindowsTerminalQuake.Native
 			_onExit.ForEach(a => a());
 		}
 
-		public static Process Get()
+		public static Process Get(string[] args)
 		{
 			return Retry.Execute(() =>
 			{
@@ -48,14 +48,14 @@ namespace WindowsTerminalQuake.Native
 
 				if (_process == null || _process.HasExited)
 				{
-					_process = GetOrCreate();
+					_process = GetOrCreate(args);
 				}
 
 				return _process;
 			});
 		}
 
-		private static Process GetOrCreate()
+		private static Process GetOrCreate(string[] args)
 		{
 			const string existingProcessName = "WindowsTerminal";
 			const string newProcessName = "wt.exe";
@@ -68,6 +68,8 @@ namespace WindowsTerminalQuake.Native
 					StartInfo = new ProcessStartInfo
 					{
 						FileName = newProcessName,
+						Arguments = string.Join(" ", args),
+						UseShellExecute = false,
 						WindowStyle = ProcessWindowStyle.Maximized
 					}
 				};
@@ -96,6 +98,10 @@ namespace WindowsTerminalQuake.Native
 
 			// Make sure the process name equals "WindowsTerminal", otherwise WT might still be starting
 			if (process.ProcessName != "WindowsTerminal") throw new Exception("Process name is not 'WindowsTerminal' yet.");
+
+			// We need a proper window title before we can continue
+			if (process.MainWindowTitle == "")
+				throw new Exception($"Process still has temporary '' window title.");
 
 			// This is a way-too-specific check to further ensure the WT process is ready
 			if (process.MainWindowTitle == "DesktopWindowXamlSource")

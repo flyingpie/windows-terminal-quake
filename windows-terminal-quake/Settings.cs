@@ -18,7 +18,7 @@ namespace WindowsTerminalQuake
 		public static readonly string[] PathsToSettings = new[]
 		{
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "windows-terminal-quake.json"),
-			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).AbsolutePath), "windows-terminal-quake.json"),
+			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).LocalPath), "windows-terminal-quake.json"),
 		};
 
 		public static SettingsDto Instance { get; private set; } = new SettingsDto();
@@ -46,19 +46,29 @@ namespace WindowsTerminalQuake
 			_fsWatchers = PathsToSettings
 				.Select(path =>
 				{
-					Log.Information($"Watching settings file '{path}' for changes");
-					var fsWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
-
-					fsWatcher.Changed += (s, a) =>
+					try
 					{
-						Log.Information($"Settings file '{a.FullPath}' changed");
-						Reload(true);
-					};
+						Log.Information($"Watching settings file '{path}' for changes");
+						var fsWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
 
-					fsWatcher.EnableRaisingEvents = true;
+						fsWatcher.Changed += (s, a) =>
+						{
+							Log.Information($"Settings file '{a.FullPath}' changed");
+							Reload(true);
+						};
 
-					return fsWatcher;
+						fsWatcher.EnableRaisingEvents = true;
+
+						return fsWatcher;
+					}
+					catch (Exception ex)
+					{
+						Log.Error(ex, $"Could not load settings file at location '{path}': {ex.Message}");
+						return null;
+					}
 				})
+				.Where(s => s != null)
+				.Select(s => s!)
 				.ToList()
 			;
 
@@ -127,9 +137,19 @@ namespace WindowsTerminalQuake
 
 		public int ToggleDurationMs { get; set; } = 250;
 
+		public int ToggleAnimationFrameTimeMs { get; set; } = 25;
+
 		public bool Logging { get; set; } = false;
 
 		public bool HideOnFocusLost { get; set; } = true;
+
+		public bool AlwaysOnTop { get; set; } = false;
+
+		public bool StartHidden { get; set; } = false;
+
+		public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
+
+		public int MonitorIndex { get; set; }
 	}
 
 	public class Hotkey
@@ -144,5 +164,12 @@ namespace WindowsTerminalQuake
 		Center = 0,
 		Left,
 		Right
+	}
+
+	public enum PreferMonitor
+	{
+		WithCursor = 0,
+		AtIndex,
+		Primary,
 	}
 }

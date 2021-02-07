@@ -3,7 +3,7 @@
 
 var configuration = Argument("configuration", "Release");
 var output = Argument("output", "artifacts");
-var version = Argument("version", "v0.10");
+var version = Argument("version", "1.1.1");
 
 var sln = "windows-terminal-quake.sln";
 var bin = "./windows-terminal-quake/bin";
@@ -23,7 +23,12 @@ Task("Build")
 			Configuration = "Release",
 			Restore = true,
 			ToolPath = GetFiles(VSWhereLatest() + "/**/MSBuild.exe").FirstOrDefault()
-		});
+		}
+			.WithProperty("AssemblyVersion", version)
+			.WithProperty("FileVersion", version)
+			.WithProperty("InformationalVersion", version)
+			.WithProperty("PackageVersion", version)
+		);
 	});
 
 Task("Artifact.Regular")
