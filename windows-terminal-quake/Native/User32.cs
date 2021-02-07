@@ -58,9 +58,10 @@ namespace WindowsTerminalQuake.Native
 
 		public static void ThrowIfError()
 		{
-			var err = Marshal.GetLastWin32Error();
-			if (err != 0)
-				throw new Win32Exception(err);
+			// Throws "Access Denied" :(
+			//var err = Marshal.GetLastWin32Error();
+			//if (err != 0)
+			//	throw new Win32Exception(err);
 		}
 	}
 }
