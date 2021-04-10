@@ -73,66 +73,121 @@ namespace WindowsTerminalQuake
 			if (Settings.Instance.StartHidden) Toggle(isOpen = false, 0);
 		}
 
-		public void Toggle(bool open, int durationMs)
+		public double CubicBezier()
 		{
-			// StepDelayMS needs to be at least 15, due to the resolution of Task.Delay()
-			var stepDelayMs = Math.Max(15, Settings.Instance.ToggleAnimationFrameTimeMs);
+			return 0;
+		}
 
-			var stepCount = durationMs / stepDelayMs;
+		public void Toggle(bool open, int durationMs) {
+			durationMs = 150;
 
+			Log.Information(open?"Open":"Close");
 			var screen = GetScreenWithCursor();
+			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
+			User32.SetForegroundWindow(_process.MainWindowHandle);
 
-			// Close
-			if (!open)
+			Stopwatch stopWatch = new Stopwatch();
+			stopWatch.Start();
+			TimeSpan ts = stopWatch.Elapsed;
+
+			// Run the open/close animation
+			while (ts.Milliseconds < durationMs)
 			{
-				Log.Information("Close");
+				ts = stopWatch.Elapsed;
+				var curMs = (double)ts.Milliseconds;
+				var animationPosition = open ? (curMs / durationMs) : (1.0 - (curMs / durationMs));
+				var bounds = GetBounds(screen, animationPosition);
+				User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+				User32.ThrowIfError();
+			}
+			stopWatch.Stop();
 
-				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-				User32.SetForegroundWindow(_process.MainWindowHandle);
+			// Just to ensure sure we end up in exactly the correct final position
+			var finalBounds = GetBounds(screen, open?1.0:0.0);
+			User32.MoveWindow(_process.MainWindowHandle, finalBounds.X, finalBounds.Y, finalBounds.Width, finalBounds.Height, true);
+			User32.ThrowIfError();
 
-				for (int i = stepCount - 1; i >= 0; i--)
+
+			if (open) {
+				if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
 				{
-					var bounds = GetBounds(screen, stepCount, i);
-
-					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-					User32.ThrowIfError();
-
-					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
+					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
 				}
-
+			} else {
 				// Minimize, so the last window gets focus
 				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
 
 				// Hide, so the terminal windows doesn't linger on the desktop
 				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
 			}
-			// Open
-			else
-			{
-				Log.Information("Open");
-				FocusTracker.FocusGained(_process);
-
-				User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-				User32.SetForegroundWindow(_process.MainWindowHandle);
-
-				for (int i = 1; i <= stepCount; i++)
-				{
-					var bounds = GetBounds(screen, stepCount, i);
-					User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-					User32.ThrowIfError();
-
-					Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
-				}
-
-				if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
-				{
-					User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
-				}
-			}
 		}
 
-		public Rectangle GetBounds(Screen screen, int stepCount, int step)
-		{
+		//public void Toggle_Old(bool open, int durationMs)
+		//{
+		//	// StepDelayMS needs to be at least 15, due to the resolution of Task.Delay()
+		//	// var stepDelayMs = Math.Max(15, Settings.Instance.ToggleAnimationFrameTimeMs);
+		//	var stepDelayMs = 15;
+
+		//	var stepCount = durationMs / stepDelayMs;
+
+		//	var screen = GetScreenWithCursor();
+
+		//	// Close
+		//	if (!open)
+		//	{
+		//		Log.Information("Close");
+
+		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
+		//		User32.SetForegroundWindow(_process.MainWindowHandle);
+
+		//		for (int i = stepCount - 1; i >= 0; i--)
+		//		{
+		//			var bounds = GetBounds(screen, stepCount, i);
+
+		//			User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+		//			User32.ThrowIfError();
+
+		//			Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
+		//		}
+
+		//		// Minimize, so the last window gets focus
+		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
+
+		//		// Hide, so the terminal windows doesn't linger on the desktop
+		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
+		//	}
+		//	// Open
+		//	else
+		//	{
+		//		Log.Information("Open");
+		//		FocusTracker.FocusGained(_process);
+
+		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
+		//		User32.SetForegroundWindow(_process.MainWindowHandle);
+
+		//		for (int i = 1; i <= stepCount; i++)
+		//		{
+		//			var bounds = GetBounds(screen, stepCount, i);
+		//			User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
+		//			User32.ThrowIfError();
+
+		//			Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
+		//		}
+
+		//		if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
+		//		{
+		//			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
+		//		}
+		//	}
+		//}
+
+		/**
+		 * <summary>Determine the window size & position during a toggle animation.</summary>
+		 * <param name="animationPosition">value between 0.0 and 1.0 to indicate where we are in the animation;
+		 *	at 0.0 the window is completely hidden; at 1.0 it is fully visible/opened.</param>
+		 */
+		public Rectangle GetBounds(Screen screen, double animationPosition)
+		{			
 			if (screen == null) throw new ArgumentNullException(nameof(screen));
 
 			var settings = Settings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
@@ -166,7 +221,7 @@ namespace WindowsTerminalQuake
 
 			return new Rectangle(
 				x,
-				bounds.Y + -bounds.Height + (bounds.Height / stepCount * step) + settings.VerticalOffset,
+				bounds.Y + -bounds.Height + (int)(bounds.Height * animationPosition) + settings.VerticalOffset,
 				horWidth,
 				bounds.Height
 			);
