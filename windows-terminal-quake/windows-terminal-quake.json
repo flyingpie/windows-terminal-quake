@@ -22,9 +22,10 @@
 	// How long the toggle up/down takes in milliseconds.
 	"ToggleDurationMs": 250,
 
-	// How long each frame in the toggle animation takes in milliseconds.
-	// The lower this value, the smoother the animation, though values lower than 15 are not supported.
-	"ToggleAnimationFrameTimeMs": 25,
+	// Which animation type is used during toggle up/down.
+	// Examples: "linear", "easeInCubic", "easeOutCubic", "easeInQuart", "easeOutQuart", ... 
+	// (See also: https://easings.net/ ; note that not all of these functions are currently implemented.)
+	"ToggleAnimationType": "linear",
 
 	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
@@ -73,13 +72,8 @@ namespace WindowsTerminalQuake
 			if (Settings.Instance.StartHidden) Toggle(isOpen = false, 0);
 		}
 
-		public double CubicBezier()
-		{
-			return 0;
-		}
-
 		public void Toggle(bool open, int durationMs) {
-			durationMs = 150;
+			var animationFn = AnimationFunction(Settings.Instance.ToggleAnimationType);
 
 			Log.Information(open?"Open":"Close");
 			var screen = GetScreenWithCursor();
@@ -91,18 +85,18 @@ namespace WindowsTerminalQuake
 			TimeSpan ts = stopWatch.Elapsed;
 
 			// Run the open/close animation
-			while (ts.Milliseconds < durationMs)
+			while (ts.TotalMilliseconds < durationMs)
 			{
 				ts = stopWatch.Elapsed;
-				var curMs = (double)ts.Milliseconds;
-				var animationPosition = open ? (curMs / durationMs) : (1.0 - (curMs / durationMs));
-				var bounds = GetBounds(screen, animationPosition);
+				var curMs = (double)ts.TotalMilliseconds;
+				var animationX = open ? (curMs / durationMs) : (1.0 - (curMs / durationMs));
+				var bounds = GetBounds(screen, animationFn(animationX));
 				User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
 				User32.ThrowIfError();
 			}
 			stopWatch.Stop();
 
-			// Just to ensure sure we end up in exactly the correct final position
+			// To ensure sure we end up in exactly the correct final position
 			var finalBounds = GetBounds(screen, open?1.0:0.0);
 			User32.MoveWindow(_process.MainWindowHandle, finalBounds.X, finalBounds.Y, finalBounds.Width, finalBounds.Height, true);
 			User32.ThrowIfError();
@@ -122,68 +116,9 @@ namespace WindowsTerminalQuake
 			}
 		}
 
-		//public void Toggle_Old(bool open, int durationMs)
-		//{
-		//	// StepDelayMS needs to be at least 15, due to the resolution of Task.Delay()
-		//	// var stepDelayMs = Math.Max(15, Settings.Instance.ToggleAnimationFrameTimeMs);
-		//	var stepDelayMs = 15;
-
-		//	var stepCount = durationMs / stepDelayMs;
-
-		//	var screen = GetScreenWithCursor();
-
-		//	// Close
-		//	if (!open)
-		//	{
-		//		Log.Information("Close");
-
-		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-		//		User32.SetForegroundWindow(_process.MainWindowHandle);
-
-		//		for (int i = stepCount - 1; i >= 0; i--)
-		//		{
-		//			var bounds = GetBounds(screen, stepCount, i);
-
-		//			User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-		//			User32.ThrowIfError();
-
-		//			Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
-		//		}
-
-		//		// Minimize, so the last window gets focus
-		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MINIMIZE);
-
-		//		// Hide, so the terminal windows doesn't linger on the desktop
-		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.HIDE);
-		//	}
-		//	// Open
-		//	else
-		//	{
-		//		Log.Information("Open");
-		//		FocusTracker.FocusGained(_process);
-
-		//		User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
-		//		User32.SetForegroundWindow(_process.MainWindowHandle);
-
-		//		for (int i = 1; i <= stepCount; i++)
-		//		{
-		//			var bounds = GetBounds(screen, stepCount, i);
-		//			User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
-		//			User32.ThrowIfError();
-
-		//			Task.Delay(TimeSpan.FromMilliseconds(stepDelayMs)).GetAwaiter().GetResult();
-		//		}
-
-		//		if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
-		//		{
-		//			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.MAXIMIZE);
-		//		}
-		//	}
-		//}
-
 		/**
 		 * <summary>Determine the window size & position during a toggle animation.</summary>
-		 * <param name="animationPosition">value between 0.0 and 1.0 to indicate where we are in the animation;
+		 * <param name="animationPosition">value between 0.0 and 1.0 to indicate the desired position of the window;
 		 *	at 0.0 the window is completely hidden; at 1.0 it is fully visible/opened.</param>
 		 */
 		public Rectangle GetBounds(Screen screen, double animationPosition)
@@ -221,10 +156,42 @@ namespace WindowsTerminalQuake
 
 			return new Rectangle(
 				x,
-				bounds.Y + -bounds.Height + (int)(bounds.Height * animationPosition) + settings.VerticalOffset,
+				bounds.Y + -bounds.Height + (int)Math.Round(bounds.Height * animationPosition) + settings.VerticalOffset,
 				horWidth,
 				bounds.Height
 			);
+		}
+
+		/**
+		 * <summary>Returns a mathematical function that can be used for "easing" animations.
+		 * Such functions are typically given an X value (representing time) between 0.0 and 1.0,
+		 * and return a Y value between 0.0 and 1.0 (representing the position of what we're animating).</summary>
+		 * <param name="name">Name of the easing function; we use the same names as https://easings.net/ </param>
+		 */
+		public Func<double, double> AnimationFunction(string name)
+		{
+			switch (name)
+			{
+				case "linear":
+					return (x) => x;
+				case "easeInCubic":
+					return (x) => Math.Pow(x, 3);
+				case "easeOutCubic":
+					return (x) => 1.0 - Math.Pow(1.0 - x, 3);
+				case "easeInOutSine":
+					return (x) => -(Math.Cos(Math.PI * x) - 1.0) / 2.0;
+				case "easeInQuart":
+					return (x) => Math.Pow(x, 4);
+				case "easeOutQuart":
+					return (x) => 1.0 - Math.Pow(1.0 - x, 4);
+				case "easeInBack":
+					return (x) => 2.70158 * x * x * x - 1.70158 * x * x;
+				case "easeOutBack":
+					return (x) => 1.0 + 2.70158 * Math.Pow(x - 1.0, 3) + 1.70158 * Math.Pow(x - 1.0, 2);
+				default:
+					Log.Warning("Invalid animation type \"" + name + "\"; falling back to linear.");
+					return (x) => x;
+			}
 		}
 
 		public void Dispose()
