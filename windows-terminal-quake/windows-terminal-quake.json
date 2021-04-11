@@ -22,6 +22,10 @@
 	// How long the toggle up/down takes in milliseconds.
 	"ToggleDurationMs": 250,
 
+	// How many milliseconds to wait between each frame in the animation.
+	// The lower this value, the smoother the animation. (can be 0)
+	"ToggleAnimationFrameTimeMs": 8,
+
 	// Which animation type is used during toggle up/down.
 	// Examples: "linear", "easeInCubic", "easeOutCubic", "easeInQuart", "easeOutQuart", ... 
 	// (See also: https://easings.net/ ; note that not all of these functions are currently implemented.)

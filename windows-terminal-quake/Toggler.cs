@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
@@ -74,6 +75,7 @@ namespace WindowsTerminalQuake
 
 		public void Toggle(bool open, int durationMs) {
 			var animationFn = AnimationFunction(Settings.Instance.ToggleAnimationType);
+			var sleepMs = Settings.Instance.ToggleAnimationFrameTimeMs;
 
 			Log.Information(open?"Open":"Close");
 			var screen = GetScreenWithCursor();
@@ -87,6 +89,7 @@ namespace WindowsTerminalQuake
 			// Run the open/close animation
 			while (ts.TotalMilliseconds < durationMs)
 			{
+				Thread.Sleep(sleepMs);
 				ts = stopWatch.Elapsed;
 				var curMs = (double)ts.TotalMilliseconds;
 				var animationX = open ? (curMs / durationMs) : (1.0 - (curMs / durationMs));
