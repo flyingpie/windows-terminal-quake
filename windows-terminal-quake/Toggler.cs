@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
@@ -75,27 +77,36 @@ namespace WindowsTerminalQuake
 
 		public void Toggle(bool open, int durationMs) {
 			var animationFn = AnimationFunction(Settings.Instance.ToggleAnimationType);
-			var sleepMs = Settings.Instance.ToggleAnimationFrameTimeMs;
+			var frameTimeMs = Settings.Instance.ToggleAnimationFrameTimeMs;
 
 			Log.Information(open?"Open":"Close");
 			var screen = GetScreenWithCursor();
 			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 			User32.SetForegroundWindow(_process.MainWindowHandle);
 
+			// Used to accurately measure how far we are in the animation
 			Stopwatch stopWatch = new Stopwatch();
 			stopWatch.Start();
 			TimeSpan ts = stopWatch.Elapsed;
+			var curMs = ts.TotalMilliseconds;
 
 			// Run the open/close animation
-			while (ts.TotalMilliseconds < durationMs)
+			while (curMs < durationMs)
 			{
-				Thread.Sleep(sleepMs);
-				ts = stopWatch.Elapsed;
-				var curMs = (double)ts.TotalMilliseconds;
+				// Asynchronously start the timer for this frame (unless frameTimeMs is 0)
+				TaskAwaiter frameTimer = (frameTimeMs == 0)? new TaskAwaiter(): Task.Delay(TimeSpan.FromMilliseconds(frameTimeMs)).GetAwaiter();
+				
+				// Render the next frame of animation
 				var animationX = open ? (curMs / durationMs) : (1.0 - (curMs / durationMs));
 				var bounds = GetBounds(screen, animationFn(animationX));
 				User32.MoveWindow(_process.MainWindowHandle, bounds.X, bounds.Y, bounds.Width, bounds.Height, true);
 				User32.ThrowIfError();
+
+				ts = stopWatch.Elapsed;
+				curMs = (double)ts.TotalMilliseconds;
+				if (frameTimeMs != 0) {
+					frameTimer.GetResult(); // Wait for the timer to end
+				}
 			}
 			stopWatch.Stop();
 
