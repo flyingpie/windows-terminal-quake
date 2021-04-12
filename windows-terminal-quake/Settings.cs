@@ -150,6 +150,8 @@ namespace WindowsTerminalQuake
 		public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
 
 		public int MonitorIndex { get; set; }
+
+		public bool DisableOnFullscreenWindow { get; set; } = true;
 	}
 
 	public class Hotkey
