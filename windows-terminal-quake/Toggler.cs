@@ -80,6 +80,9 @@ namespace WindowsTerminalQuake
 			var frameTimeMs = Settings.Instance.ToggleAnimationFrameTimeMs;
 
 			Log.Information(open?"Open":"Close");
+			if (open) {
+				FocusTracker.FocusGained(_process);
+			}
 			var screen = GetScreenWithCursor();
 			User32.ShowWindow(_process.MainWindowHandle, NCmdShow.RESTORE);
 			User32.SetForegroundWindow(_process.MainWindowHandle);
