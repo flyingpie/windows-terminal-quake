@@ -146,6 +146,8 @@ namespace WindowsTerminalQuake
 		public bool AlwaysOnTop { get; set; } = false;
 
 		public bool StartHidden { get; set; } = false;
+		
+		public List<string> IgnoreHotKeyWindows { get; set; }
 
 		public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
 
