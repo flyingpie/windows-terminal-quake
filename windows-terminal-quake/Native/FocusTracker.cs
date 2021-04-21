@@ -1,6 +1,8 @@
 ﻿using Serilog;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace WindowsTerminalQuake.Native
@@ -52,6 +54,38 @@ namespace WindowsTerminalQuake.Native
 					}
 				}
 			});
+		}
+
+		public static bool GetCurrentFocusWindow()
+		{
+			var currentWindowHandle = User32.GetForegroundWindow();
+			var stringBuilder = new StringBuilder(256);
+			if (User32.GetWindowText(currentWindowHandle, stringBuilder, 256) > 0)
+			{
+				var allProcesses = Process.GetProcesses();
+				foreach (var window in allProcesses)
+				{
+					try
+					{
+						var mwHandle = window.MainWindowHandle;
+						if (mwHandle == currentWindowHandle)
+						{
+							// This is the current open handles window
+							if(Settings.Instance.IgnoreHotKeyWindows.Any(i => i == window.ProcessName))
+							{
+								return true;
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine(e);
+						// TODO: Better Error Handling
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 }

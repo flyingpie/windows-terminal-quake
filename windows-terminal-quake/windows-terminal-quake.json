@@ -67,7 +67,10 @@
 	"DisableWhenActiveAppIsInFullscreen": false,
 
 	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
-	"WindowsTerminalCommand": "wt.exe"
+	"WindowsTerminalCommand": "wt.exe",
+  
+  	// Ignore processes
+  	"IgnoreHotKeyWindows": ["Code.exe"]
 
 	// # HotKeys
 	// ## Modifiers
