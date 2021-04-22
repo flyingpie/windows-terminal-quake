@@ -56,46 +56,45 @@ namespace WindowsTerminalQuake.Native
 			});
 		}
 
+		// Checks to see if the current window in focus should ignore hotkey
 		public static bool CheckFocusIgnoreHotKey()
 		{
 			var currentWindowHandle = User32.GetForegroundWindow();
-			var stringBuilder = new StringBuilder(256);
-			if (User32.GetWindowText(currentWindowHandle, stringBuilder, 256) > 0)
+			var allProcesses = Process.GetProcesses();
+			
+			foreach (var window in allProcesses)
 			{
-				var allProcesses = Process.GetProcesses();
-				foreach (var window in allProcesses)
+				try
 				{
-					try
+					var mwHandle = window.MainWindowHandle;
+					if (mwHandle == currentWindowHandle)
 					{
-						var mwHandle = window.MainWindowHandle;
-						if (mwHandle == currentWindowHandle)
-						{
 
-							string mainModuleName;
-							try
-							{
-								mainModuleName = window.MainModule.ModuleName;
-							}
-							catch (Exception e)
-							{
-								Log.Error("Unable to determine module name from current focus window");
-								return false;
-							}
-							// This is the current open handles window
-							if (!String.IsNullOrEmpty(mainModuleName))
-							{
-								if(Settings.Instance.IgnoreHotKeyWindows.Any(i => i == mainModuleName))
-								{
-									return true;
-								}
-							}
+						string mainModuleName;
+						try
+						{
+							mainModuleName = window.MainModule.ModuleName;
+						}
+						catch (Exception e)
+						{
+							Log.Error("Unable to determine module name from current focus window");
 							return false;
 						}
+						// This is the current open handles window
+						if (!String.IsNullOrEmpty(mainModuleName))
+						{
+							if(Settings.Instance.IgnoreHotKeyWindows.Any(i => i == mainModuleName))
+							{
+								// This window should ignore the hotkey
+								return true;
+							}
+						}
+						return false;
 					}
-					catch (Exception e)
-					{
-						Log.Error("Exception occured when attempting to determine current window focus module");
-					}
+				}
+				catch (Exception e)
+				{
+					Log.Error("Exception occured when attempting to determine current window focus module");
 				}
 			}
 			return false;
