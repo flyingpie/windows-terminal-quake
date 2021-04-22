@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace WindowsTerminalQuake.Native
 {
@@ -21,14 +19,6 @@ namespace WindowsTerminalQuake.Native
 
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-		
-		
-		[DllImport("user32.dll", SetLastError = true)]
-		public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int Count);
-		
-		
-		[DllImport("user32.dll", SetLastError = true)]
-		public static extern int GetWindowThreadProcessId(IntPtr hWnd, Nullable<IntPtr> ProcessId);
 
 		[DllImport("user32.dll")]
 		public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
