@@ -139,6 +139,8 @@ namespace WindowsTerminalQuake
 
 		public int ToggleAnimationFrameTimeMs { get; set; } = 25;
 
+		public string ToggleAnimationType { get; set; } = "linear";
+
 		public bool Logging { get; set; } = false;
 
 		public bool HideOnFocusLost { get; set; } = true;
