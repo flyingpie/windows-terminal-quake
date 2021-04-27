@@ -14,13 +14,7 @@ namespace WindowsTerminalQuake
 				.MinimumLevel.Is(Serilog.Events.LogEventLevel.Information)
 			;
 
-			var enableLogging = Settings.Instance.Logging;
-
-#if DEBUG
-			enableLogging = true;
-#endif
-
-			if (enableLogging)
+			if (Settings.Instance.Logging)
 			{
 				builder.WriteTo.File(
 					path: Path.Combine(here, "logs/.txt"),

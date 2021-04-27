@@ -15,10 +15,12 @@ namespace WindowsTerminalQuake
 {
 	public class Settings
 	{
+		public static readonly string SettingsFile = "windows-terminal-quake.json";
+
 		public static readonly string[] PathsToSettings = new[]
 		{
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "windows-terminal-quake.json"),
-			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).LocalPath), "windows-terminal-quake.json"),
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingsFile),
+			Path.Combine(Path.GetDirectoryName(new Uri(typeof(Settings).Assembly.Location).LocalPath), SettingsFile),
 		};
 
 		public static SettingsDto Instance { get; private set; } = new SettingsDto();
@@ -129,7 +131,15 @@ namespace WindowsTerminalQuake
 
 		public int VerticalOffset { get; set; } = 0;
 
+		/// <summary>
+		/// Vertical screen coverage as a percentage (0-100).
+		/// </summary>
 		public float VerticalScreenCoverage { get; set; } = 100;
+
+		/// <summary>
+		/// Vertical screen coverage as an index (0 - 1).
+		/// </summary>
+		public float VerticalScreenCoverageIndex => VerticalScreenCoverage / 100f;
 
 		public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;
 
@@ -179,6 +189,7 @@ namespace WindowsTerminalQuake
 	public enum HorizontalAlign
 	{
 		Center = 0,
+
 		Left,
 		Right
 	}
@@ -186,6 +197,7 @@ namespace WindowsTerminalQuake
 	public enum PreferMonitor
 	{
 		WithCursor = 0,
+
 		AtIndex,
 		Primary,
 	}

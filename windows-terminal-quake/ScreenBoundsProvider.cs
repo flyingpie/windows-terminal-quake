@@ -1,0 +1,56 @@
+﻿using Serilog;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace WindowsTerminalQuake
+{
+	public interface IScreenBoundsProvider
+	{
+		Rectangle GetTargetScreenBounds();
+	}
+
+	public class ScreenBoundsProvider : IScreenBoundsProvider
+	{
+		public Rectangle GetTargetScreenBounds()
+		{
+			var settings = Settings.Instance;
+			if (settings == null) return Screen.PrimaryScreen.Bounds; // Should not happen
+
+			var scr = Screen.AllScreens;
+
+			switch (settings.PreferMonitor)
+			{
+				// At Index
+				case PreferMonitor.AtIndex:
+					// Make sure the monitor index is within bounds
+					if (settings.MonitorIndex < 0)
+					{
+						Log.Warning($"Setting '{nameof(Settings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
+						return Screen.PrimaryScreen.Bounds;
+					}
+
+					if (settings.MonitorIndex >= scr.Length)
+					{
+						Log.Warning($"Setting '{nameof(Settings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
+						return Screen.PrimaryScreen.Bounds;
+					}
+
+					return scr[settings.MonitorIndex].Bounds;
+
+				// Primary
+				case PreferMonitor.Primary:
+					return Screen.PrimaryScreen.Bounds;
+
+				// With Cursor
+				default:
+				case PreferMonitor.WithCursor:
+					return Screen.AllScreens
+						.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))
+						?.Bounds
+						?? Screen.PrimaryScreen.Bounds
+					;
+			}
+		}
+	}
+}
