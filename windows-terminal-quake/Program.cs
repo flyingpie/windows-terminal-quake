@@ -51,7 +51,8 @@ namespace WindowsTerminalQuake
 			catch (Exception ex)
 			{
 				Log.Logger.Warning(ex, $"Error: {ex.Message}");
-				_trayIcon.Notify(ToolTipIcon.Error, $"Cannot start: '{ex.Message}'.");
+
+				MessageBox.Show($"Error starting Windows Terminal Quake: {ex.Message}", "Ah nej :(");
 
 				Close();
 			}

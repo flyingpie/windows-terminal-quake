@@ -5,6 +5,11 @@ namespace WindowsTerminalQuake
 {
 	public interface IAnimationTypeProvider
 	{
+		/// <summary>
+		/// Returns a mathematical function that can be used for "easing" animations.
+		/// Such functions are typically given an X value(representing time) between 0.0 and 1.0,
+		/// and return a Y value between 0.0 and 1.0 (representing the position of what we're animating).
+		/// </summary>
 		Func<double, double> GetAnimationFunction();
 
 		/// <summary>
@@ -18,11 +23,13 @@ namespace WindowsTerminalQuake
 
 	public class AnimationTypeProvider : IAnimationTypeProvider
 	{
+		/// <inheritdoc/>
 		public Func<double, double> GetAnimationFunction()
 		{
 			return GetAnimationFunction(Settings.Instance.ToggleAnimationType);
 		}
 
+		/// <inheritdoc/>
 		public Func<double, double> GetAnimationFunction(AnimationType type)
 		{
 			switch (type)

@@ -7,11 +7,16 @@ namespace WindowsTerminalQuake
 {
 	public interface IScreenBoundsProvider
 	{
+		/// <summary>
+		/// Returns a bounding box for the screen where the terminal should be position on.
+		/// </summary>
 		Rectangle GetTargetScreenBounds();
 	}
 
 	public class ScreenBoundsProvider : IScreenBoundsProvider
 	{
+		/// <inheritdoc/>
+
 		public Rectangle GetTargetScreenBounds()
 		{
 			var settings = Settings.Instance;
@@ -23,6 +28,8 @@ namespace WindowsTerminalQuake
 			{
 				// At Index
 				case PreferMonitor.AtIndex:
+					Log.Information($"Selecting screen at index '{settings.MonitorIndex}'.");
+
 					// Make sure the monitor index is within bounds
 					if (settings.MonitorIndex < 0)
 					{
@@ -40,11 +47,15 @@ namespace WindowsTerminalQuake
 
 				// Primary
 				case PreferMonitor.Primary:
+					Log.Information($"Selecting primary screen.");
+
 					return Screen.PrimaryScreen.Bounds;
 
 				// With Cursor
 				default:
 				case PreferMonitor.WithCursor:
+					Log.Information($"Selecting screen with cursor.");
+
 					return Screen.AllScreens
 						.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))
 						?.Bounds

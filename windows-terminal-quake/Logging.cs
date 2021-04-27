@@ -14,15 +14,14 @@ namespace WindowsTerminalQuake
 				.MinimumLevel.Is(Serilog.Events.LogEventLevel.Information)
 			;
 
-			if (Settings.Instance.Logging)
-			{
-				builder.WriteTo.File(
+			builder
+				.MinimumLevel.Is(Settings.Instance.LogLevel)
+				.WriteTo.File(
 					path: Path.Combine(here, "logs/.txt"),
 					fileSizeLimitBytes: 10_000_000,
 					rollingInterval: RollingInterval.Day,
 					retainedFileCountLimit: 3
 				);
-			}
 
 			Log.Logger = builder.CreateLogger();
 

@@ -102,7 +102,7 @@ namespace WindowsTerminalQuake.Native
 
 			// Make sure we can access the main window handle
 			// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Main window handle no accessible.");
+			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Main window handle not accessible.");
 
 			// Make sure the process name equals "WindowsTerminal", otherwise WT might still be starting
 			if (process.ProcessName != "WindowsTerminal") throw new Exception("Process name is not 'WindowsTerminal' yet.");

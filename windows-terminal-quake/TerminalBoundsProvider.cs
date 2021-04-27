@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Drawing;
 
 namespace WindowsTerminalQuake
@@ -25,34 +26,41 @@ namespace WindowsTerminalQuake
 		{
 			var settings = Settings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
-			var scrWidth = screenBounds.Width;
-			var horWidthPct = (float)settings.HorizontalScreenCoverage;
+			// Calculate terminal size
+			var termWidth = screenBounds.Width * settings.HorizontalScreenCoverageIndex;
+			var termHeight = screenBounds.Height * settings.VerticalScreenCoverageIndex;
 
-			var horWidth = (int)Math.Ceiling(scrWidth / 100f * horWidthPct);
+			// Calculate horizontal position, based on the terminal alignment and the alignment
 			var x = settings.HorizontalAlign switch
 			{
+				// Left
 				HorizontalAlign.Left => screenBounds.X,
-				HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - horWidth),
-				_ => screenBounds.X + (int)Math.Ceiling(scrWidth / 2f - horWidth / 2f),
+
+				// Right
+				HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
+
+				// Center
+				_ => screenBounds.X + (int)Math.Ceiling(screenBounds.Width / 2f - termWidth / 2f),
 			};
 
-			screenBounds.Height = (int)Math.Ceiling(screenBounds.Height * settings.VerticalScreenCoverageIndex);
-			screenBounds.Height += settings.VerticalOffset;
-
-			return new Rectangle
+			var res = new Rectangle
 			(
 				// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
-				x,
+				(int)x,
 
-				// Y, always top of the screen
-				screenBounds.Y,
+				// Y, top of the screen + offset
+				screenBounds.Y + settings.VerticalOffset,
 
 				// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
-				horWidth,
+				(int)termWidth,
 
 				// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
-				(int)(screenBounds.Height * progress * settings.VerticalScreenCoverageIndex) + settings.VerticalOffset
+				(int)(termHeight * progress)
 			);
+
+			Log.Information($"Terminal bounds: {res}");
+
+			return res;
 		}
 	}
 }

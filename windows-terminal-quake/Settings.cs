@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Polly;
 using Polly.Retry;
 using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +39,11 @@ namespace WindowsTerminalQuake
 
 		private static readonly RetryPolicy Retry = Policy
 			.Handle<Exception>()
-			.WaitAndRetry(new[] { TimeSpan.FromMilliseconds(250), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
+			.WaitAndRetry(new[] {
+				TimeSpan.FromMilliseconds(250),
+				TimeSpan.FromSeconds(1),
+				TimeSpan.FromSeconds(1)
+			})
 		;
 
 		private static readonly List<FileSystemWatcher> _fsWatchers;
@@ -81,41 +86,49 @@ namespace WindowsTerminalQuake
 
 		public static void Reload(bool notify)
 		{
-			Retry.Execute(() =>
+			try
 			{
-				Log.Information("Reloading settings");
-
-				foreach (var pathToSettings in PathsToSettings)
+				Retry.Execute(() =>
 				{
-					if (!File.Exists(pathToSettings))
+					Log.Information("Reloading settings");
+
+					foreach (var pathToSettings in PathsToSettings)
 					{
-						Log.Warning($"Settings file at '{pathToSettings}' does not exist");
-						continue;
+						if (!File.Exists(pathToSettings))
+						{
+							Log.Warning($"Settings file at '{pathToSettings}' does not exist");
+							continue;
+						}
+
+						Log.Information($"Found settings file at '{pathToSettings}'");
+
+						try
+						{
+							var settingsJson = File.ReadAllText(pathToSettings);
+
+							Instance = JsonConvert
+								.DeserializeObject<JObject>(settingsJson)
+								.ToObject<SettingsDto>()
+							;
+
+							Log.Information($"Loaded settings from '{pathToSettings}'");
+							if (notify) TrayIcon.Instance.Notify(ToolTipIcon.Info, $"Reloaded settings");
+							break;
+						}
+						catch (Exception ex)
+						{
+							Log.Error($"Could not load settings from file '{pathToSettings}': {ex.Message}", ex);
+							throw;
+						}
 					}
 
-					Log.Information($"Found settings file at '{pathToSettings}'");
-
-					try
-					{
-						var settingsJson = File.ReadAllText(pathToSettings);
-
-						Instance = JsonConvert
-							.DeserializeObject<JObject>(settingsJson)
-							.ToObject<SettingsDto>()
-						;
-
-						Log.Information($"Loaded settings from '{pathToSettings}'");
-						if (notify) TrayIcon.Instance.Notify(ToolTipIcon.Info, $"Loaded settings from '{pathToSettings}'");
-						break;
-					}
-					catch (Exception ex)
-					{
-						Log.Error($"Could not load settings from file '{pathToSettings}': {ex.Message}", ex);
-					}
-				}
-
-				_listeners.ForEach(l => l(Instance));
-			});
+					_listeners.ForEach(l => l(Instance));
+				});
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Error (re)loading settings: {ex.Message}. See the log for more information.");
+			}
 		}
 
 		#endregion Loading & Reloading
@@ -143,7 +156,15 @@ namespace WindowsTerminalQuake
 
 		public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;
 
+		/// <summary>
+		/// Horizontal screen coverage, as a percentage.
+		/// </summary>
 		public float HorizontalScreenCoverage { get; set; } = 100;
+
+		/// <summary>
+		/// Horizontal screen coverage as an index (0 - 1).
+		/// </summary>
+		public float HorizontalScreenCoverageIndex => HorizontalScreenCoverage / 100f;
 
 		public int ToggleDurationMs { get; set; } = 250;
 
@@ -151,7 +172,7 @@ namespace WindowsTerminalQuake
 
 		public AnimationType ToggleAnimationType { get; set; } = AnimationType.Linear;
 
-		public bool Logging { get; set; } = false;
+		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Information;
 
 		public bool HideOnFocusLost { get; set; } = true;
 

@@ -32,11 +32,6 @@ namespace WindowsTerminalQuake.Native
 			_wnd.Invoke(new UnRegisterHotKeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
 		}
 
-		private static void OnHotKeyPressed(HotKeyEventArgs e)
-		{
-			HotKeyPressed?.Invoke(null, e);
-		}
-
 		private static volatile MessageWindow _wnd;
 		private static volatile IntPtr _hwnd;
 		private static ManualResetEvent _windowReadyEvent = new ManualResetEvent(false);
@@ -69,7 +64,7 @@ namespace WindowsTerminalQuake.Native
 				if (m.Msg == WM_HOTKEY)
 				{
 					HotKeyEventArgs e = new HotKeyEventArgs(m.LParam);
-					OnHotKeyPressed(e);
+					HotKeyPressed?.Invoke(null, e);
 				}
 
 				base.WndProc(ref m);
