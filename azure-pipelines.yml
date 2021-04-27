@@ -5,12 +5,9 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
 - task: Cake@2
   inputs:
     script: 'build.cake'
     target: 'Default'
     verbosity: 'Verbose'
-    arguments: '-output="$(Build.StagingDirectory)"'
+    arguments: '--output="$(Build.StagingDirectory)"'
