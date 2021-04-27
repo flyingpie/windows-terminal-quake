@@ -15,6 +15,8 @@
 	// Whether to show notifications when the app starts and when the settings are reloaded.
 	"Notifications": true,
 
+	"Logging": true,
+
 	// Make the window see-through (applies to the entire window, including the title bar).
 	// 0 (invisible) - 100 (opaque)
 	"Opacity": 80,

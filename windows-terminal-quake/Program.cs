@@ -10,8 +10,8 @@ namespace WindowsTerminalQuake
 {
 	public class Program
 	{
-		private static Toggler _toggler;
-		private static TrayIcon _trayIcon;
+		private static Toggler? _toggler;
+		private static TrayIcon? _trayIcon;
 
 		public static string GetVersion()
 		{
@@ -42,14 +42,11 @@ namespace WindowsTerminalQuake
 				_toggler = new Toggler(args);
 
 				// Transparency
-				Settings.Get(s =>
-				{
-					TransparentWindow.SetTransparent(TerminalProcess.Get(args), s.Opacity);
-				});
+				Settings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
 
-				var hks = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
+				var hotkeys = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
 
-				_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press {hks} to toggle.");
+				_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press {hotkeys} to toggle.");
 			}
 			catch (Exception ex)
 			{
@@ -63,10 +60,7 @@ namespace WindowsTerminalQuake
 		private static void Close()
 		{
 			_toggler?.Dispose();
-			_toggler = null;
-
 			_trayIcon?.Dispose();
-			_trayIcon = null;
 		}
 	}
 }

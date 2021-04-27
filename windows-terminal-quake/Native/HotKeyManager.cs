@@ -1,46 +1,40 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace WindowsTerminalQuake.Native
 {
+	/// <summary>
+	/// Wrapper around Windows Forms global hot key functionality. Surfaces an delegate to handle the hot key being pressed.
+	/// </summary>
 	public static class HotKeyManager
 	{
+		/// <summary>
+		/// Fired when the registered hot key is pressed. Note that <see cref="RegisterHotKey"/> needs to be called first.
+		/// </summary>
 		public static event EventHandler<HotKeyEventArgs> HotKeyPressed;
-
-		public static int RegisterHotKey(Keys key, KeyModifiers modifiers)
-		{
-			_windowReadyEvent.WaitOne();
-			int id = Interlocked.Increment(ref _id);
-			_wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint)modifiers, (uint)key);
-			return id;
-		}
-
-		public static void UnregisterHotKey(int id)
-		{
-			_wnd.Invoke(new UnRegisterHotKeyDelegate(UnRegisterHotKeyInternal), _hwnd, id);
-		}
 
 		private delegate void RegisterHotKeyDelegate(IntPtr hwnd, int id, uint modifiers, uint key);
 
 		private delegate void UnRegisterHotKeyDelegate(IntPtr hwnd, int id);
 
-		private static void RegisterHotKeyInternal(IntPtr hwnd, int id, uint modifiers, uint key)
+		public static int RegisterHotKey(Keys key, KeyModifiers modifiers)
 		{
-			RegisterHotKey(hwnd, id, modifiers, key);
-			User32.ThrowIfError();
+			_windowReadyEvent.WaitOne();
+			int id = Interlocked.Increment(ref _id);
+			_wnd.Invoke(new RegisterHotKeyDelegate((hwnd, id, modifiers, key) => User32.RegisterHotKey(hwnd, id, modifiers, key)), _hwnd, id, (uint)modifiers, (uint)key);
+
+			return id;
 		}
 
-		private static void UnRegisterHotKeyInternal(IntPtr hwnd, int id)
+		public static void UnregisterHotKey(int id)
 		{
-			UnregisterHotKey(_hwnd, id);
-			User32.ThrowIfError();
+			_wnd.Invoke(new UnRegisterHotKeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
 		}
 
 		private static void OnHotKeyPressed(HotKeyEventArgs e)
 		{
-			HotKeyManager.HotKeyPressed?.Invoke(null, e);
+			HotKeyPressed?.Invoke(null, e);
 		}
 
 		private static volatile MessageWindow _wnd;
@@ -58,12 +52,15 @@ namespace WindowsTerminalQuake.Native
 			messageLoop.Start();
 		}
 
+		/// <summary>
+		/// We need a window to catch the global hot key event.
+		/// </summary>
 		private class MessageWindow : Form
 		{
 			public MessageWindow()
 			{
 				_wnd = this;
-				_hwnd = this.Handle;
+				_hwnd = Handle;
 				_windowReadyEvent.Set();
 			}
 
@@ -86,12 +83,6 @@ namespace WindowsTerminalQuake.Native
 
 			private const int WM_HOTKEY = 0x312;
 		}
-
-		[DllImport("user32", SetLastError = true)]
-		private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-		[DllImport("user32", SetLastError = true)]
-		private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
 		private static int _id = 0;
 	}

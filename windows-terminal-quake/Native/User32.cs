@@ -27,6 +27,9 @@ namespace WindowsTerminalQuake.Native
 		public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
 		[DllImport("user32.dll", SetLastError = true)]
+		public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+		[DllImport("user32.dll", SetLastError = true)]
 		public static extern IntPtr SetForegroundWindow(IntPtr hWnd);
 
 		[DllImport("user32.dll", SetLastError = true)]
@@ -38,6 +41,9 @@ namespace WindowsTerminalQuake.Native
 
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern bool ShowWindow(IntPtr hWnd, NCmdShow nCmdShow);
+
+		[DllImport("user32.dll", SetLastError = true)]
+		public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
 		public struct Rect
 		{

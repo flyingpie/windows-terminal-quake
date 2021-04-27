@@ -51,7 +51,7 @@ namespace WindowsTerminalQuake
 				horWidth,
 
 				// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
-				(int)((screenBounds.Height * progress) * settings.VerticalScreenCoverageIndex) + settings.VerticalOffset
+				(int)(screenBounds.Height * progress * settings.VerticalScreenCoverageIndex) + settings.VerticalOffset
 			);
 		}
 	}
