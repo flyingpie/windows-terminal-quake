@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake
 {
@@ -24,17 +25,17 @@ namespace WindowsTerminalQuake
 			_args = args ?? Array.Empty<string>();
 
 			// Always on top
-			if (Settings.Instance.AlwaysOnTop) Process.SetAlwaysOnTop();
+			if (QSettings.Instance.AlwaysOnTop) Process.SetAlwaysOnTop();
 
 			// Hide from taskbar
 			Process.ToggleTaskbarIconVisibility(false);
 
-			User32.ShowWindow(Process.MainWindowHandle, NCmdShow.MAXIMIZE);
-
+			// Used to keep track of the current toggle state.
+			// The terminal is always assumed to be open on app start.
 			var isOpen = true;
 
 			// Register hotkeys
-			Settings.Get(s =>
+			QSettings.Get(s =>
 			{
 				if (s.Hotkeys == null) return; // Hotkeys not loaded yet
 
@@ -52,7 +53,7 @@ namespace WindowsTerminalQuake
 			// Hide on focus lost
 			FocusTracker.OnFocusLost += (s, a) =>
 			{
-				if (Settings.Instance.HideOnFocusLost && isOpen)
+				if (QSettings.Instance.HideOnFocusLost && isOpen)
 				{
 					isOpen = false;
 					Toggle(false, 0);
@@ -62,23 +63,26 @@ namespace WindowsTerminalQuake
 			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
-				if (Settings.Instance.DisableOnFullscreenWindow && ActiveWindowIsInFullscreen())
+				if (QSettings.Instance.DisableWhenActiveAppIsInFullscreen && ActiveWindowIsInFullscreen())
 				{
 					return;
 				}
 
-				Toggle(!isOpen, Settings.Instance.ToggleDurationMs);
 				isOpen = !isOpen;
+
+				Toggle(isOpen, QSettings.Instance.ToggleDurationMs);
 			};
 
 			// Start hidden?
-			if (Settings.Instance.StartHidden) Toggle(isOpen = false, 0);
+			if (QSettings.Instance.StartHidden) Toggle(isOpen = false, 0);
+			// Otherwise, call toggle once to setup the correct size and position
+			else Toggle(isOpen = true, 0);
 		}
 
 		public void Toggle(bool open, int durationMs)
 		{
 			var animationFn = _animTypeProvider.GetAnimationFunction();
-			var frameTimeMs = Settings.Instance.ToggleAnimationFrameTimeMs;
+			var frameTimeMs = QSettings.Instance.ToggleAnimationFrameTimeMs;
 
 			Log.Information(open ? "Open" : "Close");
 
@@ -128,18 +132,18 @@ namespace WindowsTerminalQuake
 			if (open)
 			{
 				// If vertical- and horizontal screen coverage is set to 100, maximize the window to make it actually fullscreen
-				if (Settings.Instance.VerticalScreenCoverage >= 100 && Settings.Instance.HorizontalScreenCoverage >= 100)
+				if (QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
 				{
-					User32.ShowWindow(Process.MainWindowHandle, NCmdShow.MAXIMIZE);
+					Process.SetWindowState(NCmdShow.MAXIMIZE);
 				}
 			}
 			else
 			{
-				// Minimize, so the last window gets focus
-				User32.ShowWindow(Process.MainWindowHandle, NCmdShow.MINIMIZE);
+				// Minimize first, so the last window gets focus
+				Process.SetWindowState(NCmdShow.MINIMIZE);
 
-				// Hide, so the terminal windows doesn't linger on the desktop
-				User32.ShowWindow(Process.MainWindowHandle, NCmdShow.HIDE);
+				// Then hide, so the terminal windows doesn't linger on the desktop
+				Process.SetWindowState(NCmdShow.HIDE);
 			}
 		}
 

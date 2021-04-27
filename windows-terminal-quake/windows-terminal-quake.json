@@ -1,4 +1,6 @@
 ﻿{
+	"$schema": "./windows-terminal-quake.schema.json",
+
 	// The keys that can be used to toggle the terminal.
 	// See "HotKeys" bellow for possible values.
 	"HotKeys": [
@@ -64,8 +66,8 @@
 	// Zero based, eg. 0, 1, etc.
 	"MonitorIndex": 1,
 
-	// Disables toggling of the terminal window if active application is running in fullscreen mode on primary monitor
-	"DisableOnFullscreenWindow": true
+	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
+	"DisableWhenActiveAppIsInFullscreen": false
 
 	// # HotKeys
 	// ## Modifiers

@@ -6,7 +6,7 @@ var output = Argument("output", "artifacts");
 var version = Argument("version", "1.2.0");
 
 var sln = "windows-terminal-quake.sln";
-var bin = "./windows-terminal-quake/bin";
+var bin = $"./windows-terminal-quake/bin/{configuration}/net472";
 
 Task("Clean")
 	.Does(() =>
@@ -52,7 +52,7 @@ Task("Artifact.SingleExe")
 		ILRepack(
 			art + "/windows-terminal-quake.exe",		// Output file
 			bin + "/windows-terminal-quake.exe",		// Primary assembly
-			deps,															// Assembly paths
+			deps,										// Assembly paths
 			new ILRepackSettings()
 		);
 

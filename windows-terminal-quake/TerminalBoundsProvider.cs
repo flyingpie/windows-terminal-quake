@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Drawing;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake
 {
@@ -24,7 +25,7 @@ namespace WindowsTerminalQuake
 		/// </returns>
 		public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
 		{
-			var settings = Settings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
+			var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
 			// Calculate terminal size
 			var termWidth = screenBounds.Width * settings.HorizontalScreenCoverageIndex;
@@ -58,7 +59,7 @@ namespace WindowsTerminalQuake
 				(int)(termHeight * progress)
 			);
 
-			Log.Information($"Terminal bounds: {res}");
+			Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
 
 			return res;
 		}

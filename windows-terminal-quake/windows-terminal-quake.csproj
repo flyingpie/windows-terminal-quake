@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="windows-terminal-quake.json">
+		<None Update="*.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

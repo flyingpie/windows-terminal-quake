@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake
 {
@@ -26,7 +27,7 @@ namespace WindowsTerminalQuake
 		/// <inheritdoc/>
 		public Func<double, double> GetAnimationFunction()
 		{
-			return GetAnimationFunction(Settings.Instance.ToggleAnimationType);
+			return GetAnimationFunction(QSettings.Instance.ToggleAnimationType);
 		}
 
 		/// <inheritdoc/>

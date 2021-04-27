@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake
 {
@@ -19,7 +20,7 @@ namespace WindowsTerminalQuake
 
 		public Rectangle GetTargetScreenBounds()
 		{
-			var settings = Settings.Instance;
+			var settings = QSettings.Instance;
 			if (settings == null) return Screen.PrimaryScreen.Bounds; // Should not happen
 
 			var scr = Screen.AllScreens;
@@ -33,13 +34,13 @@ namespace WindowsTerminalQuake
 					// Make sure the monitor index is within bounds
 					if (settings.MonitorIndex < 0)
 					{
-						Log.Warning($"Setting '{nameof(Settings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
+						Log.Warning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
 						return Screen.PrimaryScreen.Bounds;
 					}
 
 					if (settings.MonitorIndex >= scr.Length)
 					{
-						Log.Warning($"Setting '{nameof(Settings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
+						Log.Warning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
 						return Screen.PrimaryScreen.Bounds;
 					}
 

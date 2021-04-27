@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake.UI
 {
@@ -67,7 +68,7 @@ namespace WindowsTerminalQuake.UI
 
 		public void Notify(ToolTipIcon type, string message)
 		{
-			if (Settings.Instance.Notifications)
+			if (QSettings.Instance.Notifications)
 			{
 				_notificationIcon.ShowBalloonTip(3, $"Windows Terminal", message, type);
 			}

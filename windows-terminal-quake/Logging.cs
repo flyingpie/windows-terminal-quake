@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.IO;
+using WindowsTerminalQuake.Settings;
 
 namespace WindowsTerminalQuake
 {
@@ -15,7 +16,7 @@ namespace WindowsTerminalQuake
 			;
 
 			builder
-				.MinimumLevel.Is(Settings.Instance.LogLevel)
+				.MinimumLevel.Is(QSettings.Instance.LogLevel)
 				.WriteTo.File(
 					path: Path.Combine(here, "logs/.txt"),
 					fileSizeLimitBytes: 10_000_000,

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.Settings;
 using WindowsTerminalQuake.UI;
 
 namespace WindowsTerminalQuake
@@ -42,9 +43,9 @@ namespace WindowsTerminalQuake
 				_toggler = new Toggler(args);
 
 				// Transparency
-				Settings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
+				QSettings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
 
-				var hotkeys = string.Join(" or ", Settings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
+				var hotkeys = string.Join(" or ", QSettings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
 
 				_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press {hotkeys} to toggle.");
 			}

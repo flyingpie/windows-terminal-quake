@@ -49,7 +49,7 @@ namespace System.Diagnostics
 			process.MoveWindow(bounds);
 
 			// Restore window
-			User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
+			process.SetWindowState(NCmdShow.RESTORE);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace System.Diagnostics
 		{
 			if (process == null) throw new ArgumentNullException(nameof(process));
 
-			User32.ShowWindow(process.MainWindowHandle, NCmdShow.RESTORE);
+			process.SetWindowState(NCmdShow.RESTORE);
 			User32.SetForegroundWindow(process.MainWindowHandle);
 		}
 
@@ -101,6 +101,13 @@ namespace System.Diagnostics
 				var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWA_ALPHA);
 				if (!isSet) throw new Exception("Could not set window opacity");
 			});
+		}
+
+		public static void SetWindowState(this Process process, NCmdShow state)
+		{
+			if (process == null) throw new ArgumentNullException(nameof(process));
+
+			User32.ShowWindow(process.MainWindowHandle, state);
 		}
 
 		/// <summary>
