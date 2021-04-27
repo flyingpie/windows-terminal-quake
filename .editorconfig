@@ -1,5 +1,6 @@
 ﻿[*]
 indent_style=tab
+indent_size=4
 
 dotnet_diagnostic.ca1031.severity=none # CA1031: Do not catch general exception types
 dotnet_diagnostic.ca1034.severity=none # CA1034: Nested types should not be visible
