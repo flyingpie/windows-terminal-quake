@@ -27,9 +27,8 @@
 	"ToggleAnimationFrameTimeMs": 25,
 
 	// Which animation type is used during toggle up/down.
-	// Examples: "linear", "easeInCubic", "easeOutCubic", "easeInQuart", "easeOutQuart", ... 
-	// (See also: https://easings.net/ ; note that not all of these functions are currently implemented.)
-	"ToggleAnimationType": "linear",
+	// "Linear", "EaseInBack", "EaseInCubic", "EaseInOutSine", "EaseInQuart", "EaseOutBack", "EaseOutCubic" or "EaseOutQuart".
+	"ToggleAnimationType": "Linear",
 
 	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,

@@ -139,7 +139,7 @@ namespace WindowsTerminalQuake
 
 		public int ToggleAnimationFrameTimeMs { get; set; } = 25;
 
-		public string ToggleAnimationType { get; set; } = "linear";
+		public AnimationType ToggleAnimationType { get; set; } = AnimationType.Linear;
 
 		public bool Logging { get; set; } = false;
 
@@ -161,6 +161,19 @@ namespace WindowsTerminalQuake
 		public KeyModifiers Modifiers { get; set; }
 
 		public Keys Key { get; set; }
+	}
+
+	public enum AnimationType
+	{
+		Linear = 0,
+
+		EaseInBack,
+		EaseInCubic,
+		EaseInOutSine,
+		EaseInQuart,
+		EaseOutBack,
+		EaseOutCubic,
+		EaseOutQuart,
 	}
 
 	public enum HorizontalAlign

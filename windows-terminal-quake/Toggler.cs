@@ -144,7 +144,7 @@ namespace WindowsTerminalQuake
 		 *	at 0.0 the window is completely hidden; at 1.0 it is fully visible/opened.</param>
 		 */
 		public Rectangle GetBounds(Screen screen, double animationPosition)
-		{			
+		{
 			if (screen == null) throw new ArgumentNullException(nameof(screen));
 
 			var settings = Settings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
@@ -188,30 +188,39 @@ namespace WindowsTerminalQuake
 		 * <summary>Returns a mathematical function that can be used for "easing" animations.
 		 * Such functions are typically given an X value (representing time) between 0.0 and 1.0,
 		 * and return a Y value between 0.0 and 1.0 (representing the position of what we're animating).</summary>
-		 * <param name="name">Name of the easing function; we use the same names as https://easings.net/ </param>
+		 * <param name="type">Name of the easing function; we use the same names as https://easings.net/ </param>
 		 */
-		public Func<double, double> AnimationFunction(string name)
+
+		public Func<double, double> AnimationFunction(AnimationType type)
 		{
-			switch (name)
+			switch (type)
 			{
-				case "linear":
+				case AnimationType.Linear:
 					return (x) => x;
-				case "easeInCubic":
+
+				case AnimationType.EaseInCubic:
 					return (x) => Math.Pow(x, 3);
-				case "easeOutCubic":
+
+				case AnimationType.EaseOutCubic:
 					return (x) => 1.0 - Math.Pow(1.0 - x, 3);
-				case "easeInOutSine":
+
+				case AnimationType.EaseInOutSine:
 					return (x) => -(Math.Cos(Math.PI * x) - 1.0) / 2.0;
-				case "easeInQuart":
+
+				case AnimationType.EaseInQuart:
 					return (x) => Math.Pow(x, 4);
-				case "easeOutQuart":
+
+				case AnimationType.EaseOutQuart:
 					return (x) => 1.0 - Math.Pow(1.0 - x, 4);
-				case "easeInBack":
+
+				case AnimationType.EaseInBack:
 					return (x) => 2.70158 * x * x * x - 1.70158 * x * x;
-				case "easeOutBack":
+
+				case AnimationType.EaseOutBack:
 					return (x) => 1.0 + 2.70158 * Math.Pow(x - 1.0, 3) + 1.70158 * Math.Pow(x - 1.0, 2);
+
 				default:
-					Log.Warning("Invalid animation type \"" + name + "\"; falling back to linear.");
+					Log.Warning("Invalid animation type \"" + type + "\"; falling back to linear.");
 					return (x) => x;
 			}
 		}
