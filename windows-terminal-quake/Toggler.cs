@@ -67,6 +67,11 @@ namespace WindowsTerminalQuake
 			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
+				if (Settings.Instance.DisableOnFullscreenWindow && ActiveWindowIsInFullscreen())
+				{
+					return;
+				}
+
 				Toggle(!isOpen, Settings.Instance.ToggleDurationMs);
 				isOpen = !isOpen;
 			};
@@ -271,6 +276,23 @@ namespace WindowsTerminalQuake
 
 			// Restore window
 			User32.ShowWindow(process.MainWindowHandle, NCmdShow.MAXIMIZE);
+		}
+
+		private static bool ActiveWindowIsInFullscreen()
+		{
+			IntPtr fgWindow = User32.GetForegroundWindow();
+			User32.Rect appBounds = new User32.Rect();
+			User32.Rect screen = new User32.Rect();
+			User32.GetWindowRect(User32.GetDesktopWindow(), ref screen);
+
+			if (fgWindow != User32.GetDesktopWindow() && fgWindow != User32.GetShellWindow())
+			{
+				if(User32.GetWindowRect(fgWindow, ref appBounds))
+				{
+					return appBounds.Equals(screen);
+				}
+			}
+			return false;
 		}
 	}
 }
