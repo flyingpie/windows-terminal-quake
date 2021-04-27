@@ -39,7 +39,7 @@ namespace WindowsTerminalQuake.UI {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("windows-terminal-quake.UI._Resources", typeof(_Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindowsTerminalQuake.UI._Resources", typeof(_Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

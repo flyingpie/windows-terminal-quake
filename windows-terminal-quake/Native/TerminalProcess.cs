@@ -8,8 +8,31 @@ using System.Linq;
 
 namespace WindowsTerminalQuake.Native
 {
+	/// <summary>
+	/// Wrapper around the Windows Terminal process. Contains stuff to actually capture the process,
+	/// which turns out to be tricky in some cases.
+	/// </summary>
 	public static class TerminalProcess
 	{
+		/// <summary>
+		/// Returns the instance of the running Windows Terminal. Creates one if none is running yet.
+		/// </summary>
+		/// <param name="args">Any command-line arguments to pass to the terminal process if we're starting it.</param>
+		public static Process Get(string[] args)
+		{
+			return Retry.Execute(() =>
+			{
+				if (_isExitting) return _process!;
+
+				if (_process == null || _process.HasExited)
+				{
+					_process = GetOrCreate(args);
+				}
+
+				return _process;
+			});
+		}
+
 		private static readonly RetryPolicy Retry = Policy
 			.Handle<Exception>()
 			.WaitAndRetry(new[]
@@ -38,21 +61,6 @@ namespace WindowsTerminalQuake.Native
 			_isExitting = true;
 
 			_onExit.ForEach(a => a());
-		}
-
-		public static Process Get(string[] args)
-		{
-			return Retry.Execute(() =>
-			{
-				if (_isExitting) return _process!;
-
-				if (_process == null || _process.HasExited)
-				{
-					_process = GetOrCreate(args);
-				}
-
-				return _process;
-			});
 		}
 
 		private static Process GetOrCreate(string[] args)
@@ -94,7 +102,7 @@ namespace WindowsTerminalQuake.Native
 
 			// Make sure we can access the main window handle
 			// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Main window handle no accessible.");
+			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Main window handle not accessible.");
 
 			// Make sure the process name equals "WindowsTerminal", otherwise WT might still be starting
 			if (process.ProcessName != "WindowsTerminal") throw new Exception("Process name is not 'WindowsTerminal' yet.");
