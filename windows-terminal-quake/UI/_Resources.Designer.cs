@@ -69,5 +69,26 @@ namespace WindowsTerminalQuake.UI {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace WindowsTerminalQuake.UI
+        ///{
+        ///    class windows_terminal_quake
+        ///    {
+        ///    }
+        ///}
+        ///.
+        /// </summary>
+        internal static string windows_terminal_quake_example {
+            get {
+                return ResourceManager.GetString("windows_terminal_quake_example", resourceCulture);
+            }
+        }
     }
 }

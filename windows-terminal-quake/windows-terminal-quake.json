@@ -1,5 +1,6 @@
 ﻿{
-	"$schema": "./windows-terminal-quake.schema.json",
+	//"$schema": "https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json",
+	//"$schema": "../schema/windows-terminal-quake.schema.1.json",
 
 	// The keys that can be used to toggle the terminal.
 	// See "HotKeys" bellow for possible values.

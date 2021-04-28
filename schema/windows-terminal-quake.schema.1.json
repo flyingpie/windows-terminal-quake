@@ -1,0 +1,411 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema",
+	"$id": "windows-terminal-quake-schema-1",
+	"type": "object",
+	"title": "Windows Terminal Quake settings schema.",
+	"properties": {
+		"AlwaysOnTop": {
+			"$id": "#/properties/AlwaysOnTop",
+			"type": "boolean",
+			"title": "Always on top",
+			"description": "Whether to keep the terminal window always on top (requires restart).",
+			"default": false
+		},
+
+		"DisableWhenActiveAppIsInFullscreen": {
+			"$id": "#/properties/DisableWhenActiveAppIsInFullscreen",
+			"type": "boolean",
+			"title": "Disable when active app is in fullscreen",
+			"description": "When the foreground window is in fullscreen, on the primary monitor, disable the hotkey toggle. This is useful for situations such as games where the terminal should be disabled.",
+			"default": false
+		},
+
+		"HideOnFocusLost": {
+			"$id": "#/properties/HideOnFocusLost",
+			"type": "boolean",
+			"title": "Hide on focus lost",
+			"description": "Whether the terminal should toggle off the screen when another window gains focus.",
+			"default": false
+		},
+
+		"HorizontalAlign": {
+			"$id": "#/properties/HorizontalAlign",
+			"title": "Horizontal alignment",
+			"description": "When \"HorizontalScreenCoverage\" is below 100, this setting determines where the terminal is place horizontally.",
+			"default": "Center",
+			"enum": [
+				"Center",
+				"Left",
+				"Right"
+			]
+		},
+
+		"HorizontalScreenCoverage": {
+			"$id": "#/properties/HorizontalScreenCoverage",
+			"type": "integer",
+			"title": "Horizontal screen coverage",
+			"description": "",
+			"default": 100
+		},
+
+		"Hotkeys": {
+			"$id": "#/properties/Hotkeys",
+			"type": "array",
+			"title": "Hotkeys",
+			"description": "Keys or key combinations which toggle the terminal.",
+			"default": [
+				{
+					"Modifiers": "Control",
+					"Key": "Oemtilde"
+				},
+				{
+					"Modifiers": "Control",
+					"Key": "Q"
+				}
+			],
+			"examples": [
+				[]
+			],
+			"items": {
+				"$id": "#/properties/Hotkeys/items",
+				"anyOf": [
+					{
+						"$id": "#/properties/Hotkeys/items/anyOf/0",
+						"type": "object",
+						"title": "Hotkeys",
+						"description": "Keyboard combinations for when to toggle the terminal.",
+
+						"required": [ "Modifiers", "Key" ],
+						"properties": {
+							"Modifiers": {
+								"$id": "#/properties/Hotkeys/items/anyOf/0/properties/Modifiers",
+								"title": "Modifiers",
+								"description": "Key modifiers, such as control, shift or alt",
+								"enum": [
+									"Alt",
+									"Control",
+									"Shift",
+									"Windows",
+									"NoRepeat"
+								]
+							},
+							"Key": {
+								"$id": "#/properties/Hotkeys/items/anyOf/0/properties/Key",
+								"title": "Key",
+								"description": "Key, such as a letter, a number or a symbol.",
+								"enum": [
+									"A",
+									"B",
+									"C",
+									"D",
+									"E",
+									"F",
+									"G",
+									"H",
+									"I",
+									"J",
+									"K",
+									"L",
+									"M",
+									"N",
+									"O",
+									"P",
+									"Q",
+									"R",
+									"S",
+									"T",
+									"U",
+									"V",
+									"W",
+									"X",
+									"Y",
+									"Z",
+
+									"D0",
+									"D1",
+									"D2",
+									"D3",
+									"D4",
+									"D5",
+									"D6",
+									"D7",
+									"D8",
+									"D9",
+
+									"F1",
+									"F2",
+									"F3",
+									"F4",
+									"F5",
+									"F6",
+									"F7",
+									"F8",
+									"F9",
+									"F10",
+									"F11",
+									"F12",
+									"F13",
+									"F14",
+									"F15",
+									"F16",
+									"F17",
+									"F18",
+									"F19",
+									"F20",
+									"F21",
+									"F22",
+									"F23",
+									"F24",
+
+									"NumPad0",
+									"NumPad1",
+									"NumPad2",
+									"NumPad3",
+									"NumPad4",
+									"NumPad5",
+									"NumPad6",
+									"NumPad7",
+									"NumPad8",
+									"NumPad9",
+
+									"CapsLock",
+									"Enter",
+									"Escape",
+									"Space",
+									"Tab",
+
+									"BrowserBack",
+									"BrowserFavorites",
+									"BrowserForward",
+									"BrowserHome",
+									"BrowserRefresh",
+									"BrowserSearch",
+									"BrowserStop",
+
+									"Oem1",
+									"Oem2",
+									"Oem3",
+									"Oem4",
+									"Oem5",
+									"Oem6",
+									"Oem7",
+									"Oem8",
+									"Oem102",
+									"OemBackslash",
+									"OemClear",
+									"OemCloseBrackets",
+									"Oemcomma",
+									"OemMinus",
+									"OemOpenBrackets",
+									"OemPeriod",
+									"OemPipe",
+									"Oemplus",
+									"OemQuestion",
+									"OemQuotes",
+									"OemSemicolon",
+									"Oemtilde",
+
+									"Alt",
+									"Control",
+									"ControlKey",
+									"LControlKey",
+									"LMenu",
+									"LShiftKey",
+									"LWin",
+									"RControlKey",
+									"RMenu",
+									"RShiftKey",
+									"RWin",
+									"Shift",
+									"ShiftKey",
+
+									"Delete",
+									"End",
+									"Home",
+									"Insert",
+									"PageDown",
+									"PageUp",
+
+									"LButton",
+									"MButton",
+									"RButton",
+
+									"Down",
+									"Left",
+									"Right",
+									"Up",
+
+									"Add",
+									"Clear",
+									"Divide",
+									"Multiply",
+									"Subtract",
+
+									"MediaNextTrack",
+									"MediaPlayPause",
+									"MediaPreviousTrack",
+									"MediaStop",
+
+									"Apps",
+									"Attn",
+									"Back",
+									"Cancel",
+									"Capital",
+									"Crsel",
+									"Decimal",
+									"EraseEof",
+									"Execute",
+									"Exsel",
+									"FinalMode",
+									"HanguelMode",
+									"HangulMode",
+									"HanjaMode",
+									"Help",
+									"IMEAccept",
+									"IMEAceept",
+									"IMEConvert",
+									"IMEModeChange",
+									"IMENonconvert",
+									"JunjaMode",
+									"KanaMode",
+									"KanjiMode",
+									"KeyCode",
+									"LaunchApplication1",
+									"LaunchApplication2",
+									"LaunchMail",
+									"LineFeed",
+									"Menu",
+									"Modifiers",
+									"Next",
+									"NoName",
+									"None",
+									"NumLock",
+									"Pa1",
+									"Packet",
+									"Pause",
+									"Play",
+									"Print",
+									"PrintScreen",
+									"Prior",
+									"ProcessKey",
+									"Return",
+									"Scroll",
+									"Select",
+									"SelectMedia",
+									"Separator",
+									"Sleep",
+									"Snapshot",
+									"VolumeDown",
+									"VolumeMute",
+									"VolumeUp",
+									"XButton1",
+									"XButton2",
+									"Zoom"
+								]
+							}
+						}
+					}
+				]
+			}
+		},
+
+		"LogLevel": {
+			"$id": "#/properties/LogLevel",
+			"title": "Log level",
+			"description": "Minimum level of events that are logged.",
+			"enum": [
+				"Verbose",
+				"Debug",
+				"Information",
+				"Warning",
+				"Error",
+				"Fatal"
+			],
+			"default": "Fatal"
+		},
+
+		"MonitorIndex": {
+			"$id": "#/properties/MonitorIndex",
+			"title": "Monitor index",
+			"description": "",
+			"type": "integer",
+			"default": 0
+		},
+
+		"Notifications": {
+			"$id": "#/properties/Notifications",
+			"type": "boolean",
+			"title": "Toggle notifications",
+			"description": "Enable Windows taskbar notifications on events such as settings reload.",
+			"default": true
+		},
+
+		"Opacity": {
+			"$id": "#/properties/Opacity",
+			"title": "Window opacity",
+			"description": "Static window opacity, note that this applies to the entire window, including the tabs bar.",
+			"type": "integer",
+			"default": 100
+		},
+
+		"PreferMonitor": {
+			"$id": "#/properties/PreferMonitor",
+			"title": "Prefer monitor",
+			"description": "",
+			"enum": [
+				"WithCursor",
+				"Primary",
+				"AtIndex"
+			],
+			"default": "WithCursor"
+		},
+
+		"StartHidden": {
+			"$id": "#/properties/StartHidden",
+			"title": "Start hidden",
+			"description": "",
+			"type": "boolean",
+			"default": false
+		},
+
+		"ToggleAnimationFrameTimeMs": {
+			"$id": "#/properties/ToggleAnimationFrameTimeMs",
+			"type": "boolean",
+			"title": "Toggle animation frame time ms",
+			"description": "",
+			"default": false
+		},
+
+		"ToggleAnimationType": {
+			"$id": "#/properties/ToggleAnimationType",
+			"type": "boolean",
+			"title": "Toggle animation type",
+			"description": "",
+			"default": false
+		},
+
+		"ToggleDurationMs": {
+			"$id": "#/properties/ToggleDurationMs",
+			"type": "boolean",
+			"title": "Toggle duration ms",
+			"description": "",
+			"default": false
+		},
+
+		"VerticalOffset": {
+			"$id": "#/properties/VerticalOffset",
+			"type": "boolean",
+			"title": "Vertical offset",
+			"description": "",
+			"default": false
+		},
+
+		"VerticalScreenCoverage": {
+			"$id": "#/properties/VerticalScreenCoverage",
+			"type": "boolean",
+			"title": "Vertical screen coverage",
+			"description": "",
+			"default": false
+		}
+	}
+}
