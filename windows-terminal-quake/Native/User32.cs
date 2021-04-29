@@ -40,7 +40,7 @@ namespace WindowsTerminalQuake.Native
 		public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
 		[DllImport("user32.dll", SetLastError = true)]
-		public static extern bool ShowWindow(IntPtr hWnd, NCmdShow nCmdShow);
+		public static extern bool ShowWindow(IntPtr hWnd, WindowShowStyle nCmdShow);
 
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern bool UnregisterHotKey(IntPtr hWnd, int id);

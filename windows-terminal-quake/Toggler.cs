@@ -28,7 +28,22 @@ namespace WindowsTerminalQuake
 			if (QSettings.Instance.AlwaysOnTop) Process.SetAlwaysOnTop();
 
 			// Hide from taskbar
-			Process.ToggleTaskbarIconVisibility(false);
+			void Upd(SettingsDto settings)
+			{
+				if (settings.TaskBarIconVisibility == TaskBarIconVisibility.AlwaysHidden)
+				{
+					Process.ToggleTaskbarIconVisibility(false);
+				}
+				else
+				{
+					Process.ToggleTaskbarIconVisibility(true);
+				}
+			}
+
+			// TODO: Perhaps fire all listeners once after settings init, so we don't have to do the double call here.
+			Upd(QSettings.Instance);
+
+			QSettings.Get(s => Upd(s));
 
 			// Used to keep track of the current toggle state.
 			// The terminal is always assumed to be open on app start.
@@ -134,16 +149,17 @@ namespace WindowsTerminalQuake
 				// If vertical- and horizontal screen coverage is set to 100, maximize the window to make it actually fullscreen
 				if (QSettings.Instance.MaximizeAfterToggle && QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
 				{
-					Process.SetWindowState(NCmdShow.MAXIMIZE);
+					Process.SetWindowState(WindowShowStyle.Maximize);
 				}
 			}
 			else
 			{
 				// Minimize first, so the last window gets focus
-				Process.SetWindowState(NCmdShow.MINIMIZE);
+				Process.SetWindowState(WindowShowStyle.Minimize);
 
 				// Then hide, so the terminal windows doesn't linger on the desktop
-				Process.SetWindowState(NCmdShow.HIDE);
+				if (QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
+					Process.SetWindowState(WindowShowStyle.Hide);
 			}
 		}
 

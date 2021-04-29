@@ -4,27 +4,34 @@
 	"type": "object",
 	"title": "Windows Terminal Quake settings schema.",
 	"properties": {
+
 		"AlwaysOnTop": {
 			"$id": "#/properties/AlwaysOnTop",
-			"type": "boolean",
+
 			"title": "Always on top",
 			"description": "Whether to keep the terminal window always on top (requires restart).",
+
+			"type": "boolean",
 			"default": false
 		},
 
 		"DisableWhenActiveAppIsInFullscreen": {
 			"$id": "#/properties/DisableWhenActiveAppIsInFullscreen",
-			"type": "boolean",
+
 			"title": "Disable when active app is in fullscreen",
 			"description": "When the foreground window is in fullscreen, on the primary monitor, disable the hotkey toggle. This is useful for situations such as games where the terminal should be disabled.",
+
+			"type": "boolean",
 			"default": false
 		},
 
 		"HideOnFocusLost": {
 			"$id": "#/properties/HideOnFocusLost",
-			"type": "boolean",
+
 			"title": "Hide on focus lost",
 			"description": "Whether the terminal should toggle off the screen when another window gains focus.",
+
+			"type": "boolean",
 			"default": false
 		},
 
@@ -32,27 +39,32 @@
 			"$id": "#/properties/HorizontalAlign",
 			"title": "Horizontal alignment",
 			"description": "When \"HorizontalScreenCoverage\" is below 100, this setting determines where the terminal is place horizontally.",
-			"default": "Center",
+
 			"enum": [
 				"Center",
 				"Left",
 				"Right"
-			]
+			],
+			"default": "Center"
 		},
 
 		"HorizontalScreenCoverage": {
 			"$id": "#/properties/HorizontalScreenCoverage",
-			"type": "integer",
+
 			"title": "Horizontal screen coverage",
 			"description": "",
+
+			"type": "integer",
 			"default": 100
 		},
 
 		"Hotkeys": {
 			"$id": "#/properties/Hotkeys",
-			"type": "array",
+
 			"title": "Hotkeys",
 			"description": "Keys or key combinations which toggle the terminal.",
+
+			"type": "array",
 			"default": [
 				{
 					"Modifiers": "Control",
@@ -64,7 +76,22 @@
 				}
 			],
 			"examples": [
-				[]
+				[
+					{
+						"Modifiers": "Control",
+						"Key": "Q"
+					}
+				],
+				[
+					{
+						"Modifiers": "Control",
+						"Key": "Oemtilde"
+					},
+					{
+						"Modifiers": "Control",
+						"Key": "Q"
+					}
+				]
 			],
 			"items": {
 				"$id": "#/properties/Hotkeys/items",
@@ -311,8 +338,10 @@
 
 		"LogLevel": {
 			"$id": "#/properties/LogLevel",
+
 			"title": "Log level",
 			"description": "Minimum level of events that are logged.",
+
 			"enum": [
 				"Verbose",
 				"Debug",
@@ -321,37 +350,55 @@
 				"Error",
 				"Fatal"
 			],
-			"default": "Fatal"
+			"default": "Error"
+		},
+
+		"MaximizeAfterToggle": {
+			"$id": "#/properties/MaximizeAfterToggle",
+
+			"title": "Maximize after toggle",
+			"description": "Whether to maximize the terminal after it has toggled into view.\nNote that this only applies when both HorizontalScreenCoverage and VerticalScreenCoverage are at least 100.",
+
+			"type": "boolean",
+			"default": true
 		},
 
 		"MonitorIndex": {
 			"$id": "#/properties/MonitorIndex",
+
 			"title": "Monitor index",
 			"description": "",
+
 			"type": "integer",
 			"default": 0
 		},
 
 		"Notifications": {
 			"$id": "#/properties/Notifications",
-			"type": "boolean",
+
 			"title": "Toggle notifications",
 			"description": "Enable Windows taskbar notifications on events such as settings reload.",
+
+			"type": "boolean",
 			"default": true
 		},
 
 		"Opacity": {
 			"$id": "#/properties/Opacity",
+
 			"title": "Window opacity",
 			"description": "Static window opacity, note that this applies to the entire window, including the tabs bar.",
+
 			"type": "integer",
 			"default": 100
 		},
 
 		"PreferMonitor": {
 			"$id": "#/properties/PreferMonitor",
+
 			"title": "Prefer monitor",
 			"description": "",
+
 			"enum": [
 				"WithCursor",
 				"Primary",
@@ -362,50 +409,71 @@
 
 		"StartHidden": {
 			"$id": "#/properties/StartHidden",
+
 			"title": "Start hidden",
 			"description": "",
+
 			"type": "boolean",
 			"default": false
 		},
 
 		"ToggleAnimationFrameTimeMs": {
 			"$id": "#/properties/ToggleAnimationFrameTimeMs",
-			"type": "boolean",
+
 			"title": "Toggle animation frame time ms",
 			"description": "",
-			"default": false
+
+			"type": "integer",
+			"default": 25
 		},
 
 		"ToggleAnimationType": {
 			"$id": "#/properties/ToggleAnimationType",
-			"type": "boolean",
+
 			"title": "Toggle animation type",
 			"description": "",
-			"default": false
+
+			"enum": [
+				"Linear",
+				"EaseInBack",
+				"EaseInCubic",
+				"EaseInOutSine",
+				"EaseInQuart",
+				"EaseOutBack",
+				"EaseOutCubic",
+				"EaseOutQuart"
+			],
+			"default": "Linear"
 		},
 
 		"ToggleDurationMs": {
 			"$id": "#/properties/ToggleDurationMs",
-			"type": "boolean",
+
 			"title": "Toggle duration ms",
 			"description": "",
-			"default": false
+
+			"type": "integer",
+			"default": 250
 		},
 
 		"VerticalOffset": {
 			"$id": "#/properties/VerticalOffset",
-			"type": "boolean",
+
 			"title": "Vertical offset",
 			"description": "",
-			"default": false
+
+			"type": "integer",
+			"default": 0
 		},
 
 		"VerticalScreenCoverage": {
 			"$id": "#/properties/VerticalScreenCoverage",
-			"type": "boolean",
+
 			"title": "Vertical screen coverage",
 			"description": "",
-			"default": false
+
+			"type": "integer",
+			"default": 100
 		}
 	}
 }

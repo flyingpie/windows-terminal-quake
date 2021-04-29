@@ -60,7 +60,7 @@ namespace WindowsTerminalQuake.Settings
 		/// Minimum level of events that are logged.<br/>
 		/// "Verbose", "Debug", "Information", "Warning", "Error", "Fatal".
 		/// </summary>
-		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Information;
+		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Error;
 
 		/// <summary>
 		/// Whether to maximize the terminal after it has toggled into view.<br/>
@@ -95,6 +95,11 @@ namespace WindowsTerminalQuake.Settings
 		/// Whether to hide the terminal window immediately after app start.
 		/// </summary>
 		public bool StartHidden { get; set; } = false;
+
+		/// <summary>
+		/// When to show the terminal window icon on the taskbar.
+		/// </summary>
+		public TaskBarIconVisibility TaskBarIconVisibility { get; set; } = TaskBarIconVisibility.AlwaysHidden;
 
 		/// <summary>
 		/// Target time between animation frames.
