@@ -27,8 +27,11 @@ namespace WindowsTerminalQuake
 			// Always on top
 			if (QSettings.Instance.AlwaysOnTop) Process.SetAlwaysOnTop();
 
-			// Hide from taskbar
-			Process.ToggleTaskbarIconVisibility(false);
+			// Taskbar icon visibility
+			QSettings.Get(s =>
+			{
+				Process.ToggleTaskbarIconVisibility(s.TaskBarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
+			});
 
 			// Used to keep track of the current toggle state.
 			// The terminal is always assumed to be open on app start.
@@ -143,7 +146,8 @@ namespace WindowsTerminalQuake
 				Process.SetWindowState(WindowShowStyle.Minimize);
 
 				// Then hide, so the terminal windows doesn't linger on the desktop
-				Process.SetWindowState(WindowShowStyle.Hide);
+				if (QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
+					Process.SetWindowState(WindowShowStyle.Hide);
 			}
 		}
 

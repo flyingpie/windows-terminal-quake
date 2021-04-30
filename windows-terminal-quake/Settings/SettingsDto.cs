@@ -97,6 +97,11 @@ namespace WindowsTerminalQuake.Settings
 		public bool StartHidden { get; set; } = false;
 
 		/// <summary>
+		/// When to show the terminal window icon on the taskbar.
+		/// </summary>
+		public TaskBarIconVisibility TaskBarIconVisibility { get; set; } = TaskBarIconVisibility.AlwaysHidden;
+
+		/// <summary>
 		/// Target time between animation frames.
 		///
 		/// The lower this is, the smoother the animation will be, but can also add a bit more load to the system.
