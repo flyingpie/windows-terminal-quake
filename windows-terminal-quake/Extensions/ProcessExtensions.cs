@@ -49,7 +49,7 @@ namespace System.Diagnostics
 			process.MoveWindow(bounds);
 
 			// Restore window
-			process.SetWindowState(NCmdShow.RESTORE);
+			process.SetWindowState(WindowShowStyle.Restore);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace System.Diagnostics
 		{
 			if (process == null) throw new ArgumentNullException(nameof(process));
 
-			process.SetWindowState(NCmdShow.RESTORE);
+			process.SetWindowState(WindowShowStyle.Restore);
 			User32.SetForegroundWindow(process.MainWindowHandle);
 		}
 
@@ -103,7 +103,7 @@ namespace System.Diagnostics
 			});
 		}
 
-		public static void SetWindowState(this Process process, NCmdShow state)
+		public static void SetWindowState(this Process process, WindowShowStyle state)
 		{
 			if (process == null) throw new ArgumentNullException(nameof(process));
 
