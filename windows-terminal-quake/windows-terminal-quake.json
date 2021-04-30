@@ -63,8 +63,11 @@
 	// Zero based, eg. 0, 1, etc.
 	"MonitorIndex": 1,
 
-	// Disables toggling of the terminal window if active application is running in fullscreen mode on primary monitor
-	"DisableOnFullscreenWindow": true
+	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
+	"DisableWhenActiveAppIsInFullscreen": false,
+
+	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
+	"WindowsTerminalCommand": "wt.exe"
 
 	// # HotKeys
 	// ## Modifiers
