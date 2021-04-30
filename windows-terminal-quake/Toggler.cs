@@ -134,16 +134,16 @@ namespace WindowsTerminalQuake
 				// If vertical- and horizontal screen coverage is set to 100, maximize the window to make it actually fullscreen
 				if (QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
 				{
-					Process.SetWindowState(NCmdShow.MAXIMIZE);
+					Process.SetWindowState(WindowShowStyle.Maximize);
 				}
 			}
 			else
 			{
 				// Minimize first, so the last window gets focus
-				Process.SetWindowState(NCmdShow.MINIMIZE);
+				Process.SetWindowState(WindowShowStyle.Minimize);
 
 				// Then hide, so the terminal windows doesn't linger on the desktop
-				Process.SetWindowState(NCmdShow.HIDE);
+				Process.SetWindowState(WindowShowStyle.Hide);
 			}
 		}
 
