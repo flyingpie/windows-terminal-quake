@@ -69,5 +69,23 @@ namespace WindowsTerminalQuake.UI {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	// If your editor supports it, you should get auto-completion in this file.
+        ///	// See https://flyingpie.github.io/windows-terminal-quake/ for available options.
+        ///
+        ///	&quot;$schema&quot;: &quot;https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json&quot;,
+        ///
+        ///	&quot;Hotkeys&quot;: [
+        ///		{  }
+        ///	]
+        ///}.
+        /// </summary>
+        internal static string windows_terminal_quake_example {
+            get {
+                return ResourceManager.GetString("windows_terminal_quake_example", resourceCulture);
+            }
+        }
     }
 }
