@@ -143,6 +143,11 @@ namespace WindowsTerminalQuake.Settings
 		/// </summary>
 		internal float VerticalScreenCoverageIndex => VerticalScreenCoverage / 100f;
 
+		/// <summary>
+		/// The command/file path to execute when the app starts and Windows Terminal is not yet running.
+		/// </summary>
+		public string WindowsTerminalCommand { get; set; } = "wt.exe";
+
 		public static SettingsDto ParseFile(string pathToSettings)
 		{
 			if (string.IsNullOrWhiteSpace(pathToSettings)) throw new ArgumentNullException(nameof(pathToSettings));
@@ -165,7 +170,7 @@ namespace WindowsTerminalQuake.Settings
 			// Parse JSON contents
 			try
 			{
-				return SettingsDto.ParseJson(settingsJson);
+				return ParseJson(settingsJson);
 			}
 			catch (Exception ex)
 			{
