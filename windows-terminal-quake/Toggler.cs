@@ -132,7 +132,7 @@ namespace WindowsTerminalQuake
 			if (open)
 			{
 				// If vertical- and horizontal screen coverage is set to 100, maximize the window to make it actually fullscreen
-				if (QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
+				if (QSettings.Instance.MaximizeAfterToggle && QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
 				{
 					Process.SetWindowState(WindowShowStyle.Maximize);
 				}
