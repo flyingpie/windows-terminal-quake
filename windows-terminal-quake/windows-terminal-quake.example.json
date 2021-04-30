@@ -1,0 +1,14 @@
+﻿{
+	// If your editor supports it, you should get auto-completion in this file.
+	// See https://flyingpie.github.io/windows-terminal-quake/ for available options.
+
+	// TODO: Enable schema
+	//"$schema": "https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json",
+
+	"Hotkeys": [
+		{
+			"Modifiers": "Control",
+			"Key": "OemTilde"
+		}
+	]
+}
