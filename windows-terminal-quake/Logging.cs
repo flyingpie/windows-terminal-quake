@@ -22,7 +22,7 @@ namespace WindowsTerminalQuake
 				.CreateLogger()
 			;
 
-			Log.Information("Windows Terminal Quake started");
+			Log.Information($"Setting log level to '{QSettings.Instance.LogLevel}'.");
 		}
 	}
 }

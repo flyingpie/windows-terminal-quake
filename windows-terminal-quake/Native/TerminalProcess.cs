@@ -77,8 +77,7 @@ namespace WindowsTerminalQuake.Native
 					{
 						FileName = newProcessName,
 						Arguments = string.Join(" ", args),
-						UseShellExecute = false,
-						WindowStyle = ProcessWindowStyle.Maximized
+						UseShellExecute = false
 					}
 				};
 

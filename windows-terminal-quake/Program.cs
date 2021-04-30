@@ -34,6 +34,8 @@ namespace WindowsTerminalQuake
 		{
 			Logging.Configure();
 
+			Log.Information("Windows Terminal Quake started");
+
 			_trayIcon = new TrayIcon((s, a) => Close());
 
 			try

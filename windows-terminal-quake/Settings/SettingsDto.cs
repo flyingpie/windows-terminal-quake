@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
 
@@ -13,6 +15,12 @@ namespace WindowsTerminalQuake.Settings
 		{
 			new Hotkey() { Key = Keys.Oemtilde, Modifiers = KeyModifiers.Control },
 		};
+
+		/// <summary>
+		/// The location of the file where the current settings were loaded from.
+		/// Can be null if these are defaults.
+		/// </summary>
+		public string? PathToSettings { get; set; }
 
 		/// <summary>
 		/// Whether to keep the terminal window always on top (requires restart).
@@ -52,7 +60,7 @@ namespace WindowsTerminalQuake.Settings
 		/// Minimum level of events that are logged.<br/>
 		/// "Verbose", "Debug", "Information", "Warning", "Error", "Fatal".
 		/// </summary>
-		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Information;
+		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Error;
 
 		/// <summary>
 		/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
@@ -124,7 +132,38 @@ namespace WindowsTerminalQuake.Settings
 		/// </summary>
 		internal float VerticalScreenCoverageIndex => VerticalScreenCoverage / 100f;
 
-		public static SettingsDto Parse(string settingsJson)
+		public static SettingsDto ParseFile(string pathToSettings)
+		{
+			if (string.IsNullOrWhiteSpace(pathToSettings)) throw new ArgumentNullException(nameof(pathToSettings));
+
+			// Load the file from disk
+			string? settingsJson;
+
+			try
+			{
+				settingsJson = File.ReadAllText(pathToSettings);
+			}
+			catch (IOException ex)
+			{
+				Log.Error($"Could not load settings from file '{pathToSettings}' {ex.GetType().FullName}: {ex.Message}", ex);
+				throw;
+			}
+
+			Log.Information($"Loaded settings from '{pathToSettings}'.");
+
+			// Parse JSON contents
+			try
+			{
+				return SettingsDto.ParseJson(settingsJson);
+			}
+			catch (Exception ex)
+			{
+				Log.Error($"Error parsing settings file '{pathToSettings}':\n\n{ex.Message}");
+				throw;
+			}
+		}
+
+		public static SettingsDto ParseJson(string settingsJson)
 		{
 			var newSettings = JsonConvert.DeserializeObject<SettingsDto>(settingsJson)
 				?? throw new Exception("Something went wrong while loading the settings file (deserialization returned null).")
