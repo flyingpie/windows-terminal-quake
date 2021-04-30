@@ -27,23 +27,11 @@ namespace WindowsTerminalQuake
 			// Always on top
 			if (QSettings.Instance.AlwaysOnTop) Process.SetAlwaysOnTop();
 
-			// Hide from taskbar
-			void Upd(SettingsDto settings)
+			// Taskbar icon visibility
+			QSettings.Get(s =>
 			{
-				if (settings.TaskBarIconVisibility == TaskBarIconVisibility.AlwaysHidden)
-				{
-					Process.ToggleTaskbarIconVisibility(false);
-				}
-				else
-				{
-					Process.ToggleTaskbarIconVisibility(true);
-				}
-			}
-
-			// TODO: Perhaps fire all listeners once after settings init, so we don't have to do the double call here.
-			Upd(QSettings.Instance);
-
-			QSettings.Get(s => Upd(s));
+				Process.ToggleTaskbarIconVisibility(s.TaskBarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
+			});
 
 			// Used to keep track of the current toggle state.
 			// The terminal is always assumed to be open on app start.
