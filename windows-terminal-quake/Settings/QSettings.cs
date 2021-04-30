@@ -16,8 +16,11 @@ namespace WindowsTerminalQuake.Settings
 
 		public static readonly string[] PathsToSettings = new[]
 		{
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingsFile),
+			// C:/path/to/windows-terminal-quake.json
 			Path.Combine(Path.GetDirectoryName(new Uri(typeof(QSettings).Assembly.Location).LocalPath), SettingsFile),
+
+			// C:/Users/username/windows-terminal-quake.json
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingsFile),
 		};
 
 		private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
@@ -36,7 +39,7 @@ namespace WindowsTerminalQuake.Settings
 		private static readonly List<FileSystemWatcher> _fsWatchers;
 
 		private static readonly RetryPolicy Retry = Policy
-			.Handle<IOException>()
+			.Handle<Exception>()
 			.WaitAndRetry(new[] {
 				TimeSpan.FromMilliseconds(250),
 				TimeSpan.FromSeconds(1),
@@ -73,33 +76,11 @@ namespace WindowsTerminalQuake.Settings
 
 						Log.Information($"Found settings file at '{pathToSettings}'");
 
-						// Load the file from disk
-						string? settingsJson = null;
-						try
-						{
-							settingsJson = File.ReadAllText(pathToSettings);
-						}
-						catch (IOException ex)
-						{
-							Log.Error($"Could not load settings from file '{pathToSettings}' {ex.GetType().FullName}: {ex.Message}", ex);
-							throw;
-						}
+						var newSettings = SettingsDto.ParseFile(pathToSettings)
+							?? throw new Exception($"Settings was null after parsing, this is probably a bug.")
+						;
 
-						Log.Information($"Loaded settings from '{pathToSettings}'.");
-
-						SettingsDto? newSettings = null;
-
-						try
-						{
-							newSettings = SettingsDto.Parse(settingsJson);
-						}
-						catch (Exception ex)
-						{
-							MessageBox.Show($"Error parsing settings file '{pathToSettings}':\n\n{ex.Message}");
-							break;
-						}
-
-						if (newSettings == null) throw new Exception($"Settings was null after parsing, this is probably a bug.");
+						newSettings.PathToSettings = pathToSettings;
 
 						Log.Information($"Parsed settings  from '{pathToSettings}'.");
 
