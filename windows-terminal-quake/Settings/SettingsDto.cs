@@ -63,6 +63,12 @@ namespace WindowsTerminalQuake.Settings
 		public LogEventLevel LogLevel { get; set; } = LogEventLevel.Error;
 
 		/// <summary>
+		/// Whether to maximize the terminal after it has toggled into view.<br/>
+		/// Note that this only applies when both <see cref="HorizontalScreenCoverage"/> and <see cref="VerticalScreenCoverage"/> are at least 100.
+		/// </summary>
+		public bool MaximizeAfterToggle { get; set; } = true;
+
+		/// <summary>
 		/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
 		/// Zero based, eg. 0, 1, etc.
 		/// </summary>
