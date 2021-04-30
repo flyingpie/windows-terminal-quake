@@ -71,19 +71,16 @@ namespace WindowsTerminalQuake.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///using System.Collections.Generic;
-        ///using System.Linq;
-        ///using System.Text;
-        ///using System.Threading.Tasks;
+        ///   Looks up a localized string similar to {
+        ///	// If your editor supports it, you should get auto-completion in this file.
+        ///	// See https://flyingpie.github.io/windows-terminal-quake/ for available options.
         ///
-        ///namespace WindowsTerminalQuake.UI
-        ///{
-        ///    class windows_terminal_quake
-        ///    {
-        ///    }
-        ///}
-        ///.
+        ///	&quot;$schema&quot;: &quot;https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json&quot;,
+        ///
+        ///	&quot;Hotkeys&quot;: [
+        ///		{  }
+        ///	]
+        ///}.
         /// </summary>
         internal static string windows_terminal_quake_example {
             get {
