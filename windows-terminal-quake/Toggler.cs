@@ -66,7 +66,7 @@ namespace WindowsTerminalQuake
 			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
-				if (FocusTracker.GetCurrentFocusWindow())
+				if (FocusTracker.HotKeySuppressedForCurrentFocusedProcess())
 				{
 					return;
 				}

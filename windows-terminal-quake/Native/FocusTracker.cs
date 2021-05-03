@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsTerminalQuake.Settings;
 using Serilog.Core;
 
 namespace WindowsTerminalQuake.Native
@@ -65,7 +66,7 @@ namespace WindowsTerminalQuake.Native
 			var currentWindowHandle = User32.GetForegroundWindow();
 			
 			List<Process> processes = new List<Process>();
-			foreach (var suppressedProcess in Settings.Instance.SuppressHotKeyForProcesses)
+			foreach (var suppressedProcess in QSettings.Instance.SuppressHotKeyForProcesses)
 			{
 				// Clean up the name of the processes
 				var processNameClean = suppressedProcess.Remove(
