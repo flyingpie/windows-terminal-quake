@@ -1,9 +1,12 @@
 ﻿using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog.Core;
 
 namespace WindowsTerminalQuake.Native
 {
@@ -44,44 +47,46 @@ namespace WindowsTerminalQuake.Native
 		}
 
 		// Checks to see if the current window in focus should ignore hotkey
-		public static bool CheckFocusIgnoreHotKey()
+		public static bool HotKeySupressedForCurrentFocusedProcess()
 		{
 			var currentWindowHandle = User32.GetForegroundWindow();
-			var allProcesses = Process.GetProcesses();
 			
-			foreach (var window in allProcesses)
+			List<Process> processes = new List<Process>();
+			foreach (var suppressedProcess in Settings.Instance.SuppressHotKeyForProcesses)
 			{
-				try
+				// need to remove the .exe
+				var processNameClean = suppressedProcess.Remove(
+					suppressedProcess.IndexOf(".exe", StringComparison.InvariantCultureIgnoreCase)
+					);
+				var processesFound = Process.GetProcessesByName(processNameClean);
+				if (processesFound.Any())
+					processes.AddRange(processesFound);
+				// found no processes with the names for supressed -> return false (no ignore)
+				else 
+					return false;
+			}
+			
+			// Check if the current window was this one
+			var currentWindow = processes.FirstOrDefault(x => x.MainWindowHandle == currentWindowHandle) ?? null;
+			// There wil only ever be one "current window" (as in from foreground)
+			string mainModuleName = "";
+			try
+			{
+				if (currentWindow == null) return false;
+				if (currentWindow.MainModule != null) mainModuleName = currentWindow.MainModule.ModuleName;
+			}
+			catch (Exception e)
+			{
+				Log.Error("Unable to determine module name from current focus window", e);
+				return false;
+			}
+			if (!String.IsNullOrEmpty(mainModuleName))
+			{
+				if(Settings.Instance.SuppressHotKeyForProcesses.Any(
+					i => String.Compare(mainModuleName, i, comparisonType: StringComparison.InvariantCultureIgnoreCase) == 0))
 				{
-					var mwHandle = window.MainWindowHandle;
-					if (mwHandle == currentWindowHandle)
-					{
-
-						string mainModuleName;
-						try
-						{
-							mainModuleName = window.MainModule.ModuleName;
-						}
-						catch (Exception e)
-						{
-							Log.Error("Unable to determine module name from current focus window");
-							return false;
-						}
-						// This is the current open handles window
-						if (!String.IsNullOrEmpty(mainModuleName))
-						{
-							if(Settings.Instance.IgnoreHotKeyWindows.Any(i => i == mainModuleName))
-							{
-								// This window should ignore the hotkey
-								return true;
-							}
-						}
-						return false;
-					}
-				}
-				catch (Exception e)
-				{
-					Log.Error("Exception occured when attempting to determine current window focus module");
+					// This window should ignore the hotkey
+					return true;
 				}
 			}
 			return false;

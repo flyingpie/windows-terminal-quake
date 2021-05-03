@@ -66,7 +66,7 @@ namespace WindowsTerminalQuake
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
 				// If the current focus'd window is ignored, return (do nothing)
-				if (FocusTracker.CheckFocusIgnoreHotKey()) return;
+				if (FocusTracker.HotKeySupressedForCurrentFocusedProcess()) return;
 				
 				Toggle(!isOpen, Settings.Instance.ToggleDurationMs);
 				isOpen = !isOpen;

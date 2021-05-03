@@ -59,7 +59,7 @@
 	"MonitorIndex": 1,
   
   	// Ignore processes
-  	"IgnoreHotKeyWindows": ["Code.exe"]
+  	"SuppressHotKeyForProcesses": ["Code.exe"]
 
 	// # HotKeys
 	// ## Modifiers
