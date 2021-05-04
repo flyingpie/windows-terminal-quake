@@ -56,6 +56,12 @@ namespace WindowsTerminalQuake.Settings
 		/// </summary>
 		public List<Hotkey> Hotkeys { get; set; }
 
+
+		/// <summary>
+		/// The processes that suppress the hotkey bind.
+		/// </summary>
+		public List<string> SuppressHotKeyForProcesses { get; set; } = new List<string>();
+
 		/// <summary>
 		/// Minimum level of events that are logged.<br/>
 		/// "Verbose", "Debug", "Information", "Warning", "Error", "Fatal".
