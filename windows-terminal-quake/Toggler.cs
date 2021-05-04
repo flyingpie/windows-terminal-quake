@@ -66,6 +66,11 @@ namespace WindowsTerminalQuake
 			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
+				if (FocusTracker.HotKeySuppressedForCurrentFocusedProcess())
+				{
+					return;
+				}
+				
 				if (QSettings.Instance.DisableWhenActiveAppIsInFullscreen && ActiveWindowIsInFullscreen())
 				{
 					return;
