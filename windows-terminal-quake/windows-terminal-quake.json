@@ -27,9 +27,14 @@
 	"ToggleAnimationFrameTimeMs": 25,
 
 	// Which animation type is used during toggle up/down.
-	// Examples: "linear", "easeInCubic", "easeOutCubic", "easeInQuart", "easeOutQuart", ... 
-	// (See also: https://easings.net/ ; note that not all of these functions are currently implemented.)
-	"ToggleAnimationType": "linear",
+	// "Linear", "EaseInBack", "EaseInCubic", "EaseInOutSine", "EaseInQuart", "EaseOutBack", "EaseOutCubic" or "EaseOutQuart".
+	"ToggleAnimationType": "EaseOutQuart",
+
+	/// How the terminal actually gets toggled on- and off the screen.
+	/// "Resize" (default) or "Move".
+	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
+	/// "Move" keeps the size of the terminal constant, but moves the terminal off-screen to the top, which won't work great with vertically stacked monitors.
+	"ToggleMode": "Resize",
 
 	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,
@@ -68,9 +73,9 @@
 
 	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
 	"WindowsTerminalCommand": "wt.exe",
-  
-  	// Ignore processes
-  	"SuppressHotKeyForProcesses": ["Code.exe"]
+
+	// Ignore processes
+	"SuppressHotKeyForProcesses": [ "someprocess.exe" ]
 
 	// # HotKeys
 	// ## Modifiers
