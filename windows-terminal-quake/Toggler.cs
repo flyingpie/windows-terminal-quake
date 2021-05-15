@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.Settings;
+using WindowsTerminalQuake.TerminalBoundsProviders;
 
 namespace WindowsTerminalQuake
 {
@@ -18,7 +19,7 @@ namespace WindowsTerminalQuake
 
 		private readonly IAnimationTypeProvider _animTypeProvider = new AnimationTypeProvider();
 		private readonly IScreenBoundsProvider _scrBoundsProvider = new ScreenBoundsProvider();
-		private readonly ITerminalBoundsProvider _termBoundsProvider = new TerminalBoundsProvider();
+		private ITerminalBoundsProvider _termBoundsProvider = new ResizingTerminalBoundsProvider();
 
 		public Toggler(string[] args)
 		{
@@ -53,6 +54,15 @@ namespace WindowsTerminalQuake
 				});
 			});
 
+			QSettings.Get(s =>
+			{
+				_termBoundsProvider = s.ToggleMode switch
+				{
+					ToggleMode.Move => new MovingTerminalBoundsProvider(),
+					_ => new ResizingTerminalBoundsProvider()
+				};
+			});
+
 			// Hide on focus lost
 			FocusTracker.OnFocusLost += (s, a) =>
 			{
@@ -66,6 +76,11 @@ namespace WindowsTerminalQuake
 			// Toggle on hotkey(s)
 			HotKeyManager.HotKeyPressed += (s, a) =>
 			{
+				if (FocusTracker.HotKeySuppressedForCurrentFocusedProcess())
+				{
+					return;
+				}
+
 				if (QSettings.Instance.DisableWhenActiveAppIsInFullscreen && ActiveWindowIsInFullscreen())
 				{
 					return;

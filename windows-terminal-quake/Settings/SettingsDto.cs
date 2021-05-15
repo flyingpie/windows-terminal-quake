@@ -57,6 +57,11 @@ namespace WindowsTerminalQuake.Settings
 		public List<Hotkey> Hotkeys { get; set; }
 
 		/// <summary>
+		/// The processes that suppress the hotkey bind.
+		/// </summary>
+		public List<string> SuppressHotKeyForProcesses { get; set; } = new List<string>();
+
+		/// <summary>
 		/// Minimum level of events that are logged.<br/>
 		/// "Verbose", "Debug", "Information", "Warning", "Error", "Fatal".
 		/// </summary>
@@ -122,6 +127,12 @@ namespace WindowsTerminalQuake.Settings
 		/// How long the toggle up/down takes in milliseconds.
 		/// </summary>
 		public int ToggleDurationMs { get; set; } = 250;
+
+		/// <summary>
+		/// How the terminal actually gets toggled on- and off the screen.
+		/// "Resize" (default) or "Move".
+		/// </summary>
+		public ToggleMode ToggleMode { get; set; } = ToggleMode.Resize;
 
 		/// <summary>
 		/// How much room to leave between the top of the terminal and the top of the screen.
