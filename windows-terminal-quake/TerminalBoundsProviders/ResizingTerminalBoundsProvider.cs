@@ -3,26 +3,11 @@ using System;
 using System.Drawing;
 using WindowsTerminalQuake.Settings;
 
-namespace WindowsTerminalQuake
+namespace WindowsTerminalQuake.TerminalBoundsProviders
 {
-	public interface ITerminalBoundsProvider
+	public class ResizingTerminalBoundsProvider : ITerminalBoundsProvider
 	{
-		Rectangle GetTerminalBounds(Rectangle screenBounds, double progress);
-	}
-
-	public class TerminalBoundsProvider : ITerminalBoundsProvider
-	{
-		/// <summary>
-		/// Determine the window size & position during a toggle animation.
-		/// </summary>
-		/// <param name="progress">
-		/// Value between 0.0 and 1.0 to indicate the desired position of the window;
-		/// at 0.0 the window is completely hidden; at 1.0 it is fully visible/opened.
-		/// </param>
-		/// </summary>
-		/// <returns>
-		/// A <see cref="Rectangle"/> representing where the terminal should be positioned.
-		/// </returns>
+		/// <inheritdoc/>
 		public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
 		{
 			var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
