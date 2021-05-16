@@ -14,16 +14,14 @@ nav:
 
 - Settings:
   - Always On Top: settings/always-on-top.md
+  - Disable When Active App Is In Fullscreen: settings/disable-when-active-app-is-in-fullscreen.md
   - Hide On Focus Lost: settings/hide-on-focus-lost.md
-  - Horizontal Align: settings/horizontal-align.md
-  - Horizontal Screen Coverage: settings/horizontal-screen-coverage.md
   - Hotkeys: settings/hotkeys.md
+  - Opacity: settings/opacity.md
   - Prefer Monitor: settings/prefer-monitor.md
+  - Size and Align: settings/size-and-align.md
   - Start Hidden: settings/start-hidden.md
-  - Toggle Duration: settings/toggle-duration.md
-  - Transparency: settings/transparency.md
-  - Vertical Offset: settings/vertical-offset.md
-  - Vertical Screen Coverage: settings/vertical-screen-coverage.md
+  - Toggle Animation: settings/toggle-animation.md
 
 - Misc:
   - Changelog: misc/changelog.md

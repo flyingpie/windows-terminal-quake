@@ -1,4 +1,4 @@
-# Transparency
+# Opacity
 
 The terminal window can be made transparent through the "Opacity"-setting.
 Note that this controls the transparency of the entire window, including the title bar.
