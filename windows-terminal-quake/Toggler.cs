@@ -31,7 +31,7 @@ namespace WindowsTerminalQuake
 			// Taskbar icon visibility
 			QSettings.Get(s =>
 			{
-				Process.ToggleTaskbarIconVisibility(s.TaskBarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
+				Process.ToggleTaskbarIconVisibility(s.TaskbarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
 			});
 
 			// Used to keep track of the current toggle state.
@@ -161,7 +161,7 @@ namespace WindowsTerminalQuake
 				Process.SetWindowState(WindowShowStyle.Minimize);
 
 				// Then hide, so the terminal windows doesn't linger on the desktop
-				if (QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskBarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
+				if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
 					Process.SetWindowState(WindowShowStyle.Hide);
 			}
 		}

@@ -9,6 +9,7 @@
 		<OutputType>WinExe</OutputType>
 
 		<ApplicationIcon>UI\icon.ico</ApplicationIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
