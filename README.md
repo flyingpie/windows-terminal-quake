@@ -1,7 +1,7 @@
 # windows-terminal-quake [![Build Status](https://dev.azure.com/marco0738/windows-terminal-quake/_apis/build/status/flyingpie.windows-terminal-quake?branchName=master)](https://dev.azure.com/marco0738/windows-terminal-quake/_build/latest?definitionId=2&branchName=master)
 Companion program for the new Windows Terminal that enables Quake-style drop down
 
-![Preview](https://files.flyingpie.nl/windows-terminal-quake/main.gif)
+![Preview](https://github.com/flyingpie/windows-terminal-quake/raw/docs/pages/assets/img/main.gif)
 
 - Runs alongside the new [Windows Terminal](https://github.com/microsoft/terminal)
 - Toggle using CTRL+~ or CTRL+Q (configurable, see below)
