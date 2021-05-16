@@ -22,7 +22,10 @@ nav:
   - Prefer Monitor: settings/prefer-monitor.md
   - Size and Align: settings/size-and-align.md
   - Start Hidden: settings/start-hidden.md
+  - Suppress Hotkey for Processes: settings/suppress-hotkey-for-processes.md
+  - Taskbar Icon Visibility: settings/taskbar-icon-visibility.md
   - Toggle Animation: settings/toggle-animation.md
+  - Windows Terminal Command: settings/windows-terminal-command.md
 
 - Misc:
   - Changelog: misc/changelog.md
