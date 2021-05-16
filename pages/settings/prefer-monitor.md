@@ -15,8 +15,8 @@ Defaults to ```WithCursor```.
 
 ```json
 {
-  "PreferMonitor": "AtIndex",
-  "MonitorIndex": 1
+	"PreferMonitor": "AtIndex",
+	"MonitorIndex": 1
 }
 ```
 
