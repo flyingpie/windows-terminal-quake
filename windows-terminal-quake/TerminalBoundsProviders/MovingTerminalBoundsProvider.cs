@@ -13,8 +13,8 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders
 			var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
 			// Calculate terminal size
-			var termWidth = screenBounds.Width * settings.HorizontalScreenCoverageIndex;
-			var termHeight = screenBounds.Height * settings.VerticalScreenCoverageIndex;
+			var termWidth = (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
+			var termHeight = (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
 
 			// Calculate horizontal position, based on the terminal alignment and the alignment
 			var x = settings.HorizontalAlign switch
@@ -32,16 +32,16 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders
 			var res = new Rectangle
 			(
 				// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
-				(int)x,
+				x,
 
 				// Y, top of the screen + offset
 				screenBounds.Y + -screenBounds.Height + (int)Math.Round(screenBounds.Height * progress) + settings.VerticalOffset,
 
 				// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
-				(int)termWidth,
+				termWidth,
 
 				// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
-				screenBounds.Height
+				termHeight
 			);
 
 			Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
