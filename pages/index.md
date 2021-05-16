@@ -23,4 +23,4 @@ The file can be placed at either (in order):
 
 Changing the file automatically results in the app reloading the settings.
 
-Settings feature Suggested by [Mike F](https://github.com/mikef-nl).
+<span class="by">Settings feature Suggested by [Mike F](https://github.com/mikef-nl).</span>

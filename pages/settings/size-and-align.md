@@ -2,7 +2,7 @@
 
 ## Horizontal Align
 
-When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
+When ```HorizontalScreenCoverage``` is below 100, this setting determines where the terminal is place horizontally.
 
 Possible values:
 

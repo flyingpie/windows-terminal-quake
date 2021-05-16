@@ -6,17 +6,18 @@ site_dir: 'docs'
 
 nav:
 - Getting Started:
-  - Download Binary: 'getting-started/download-binary.md'
-  - Download Auto-Updater: 'getting-started/download-auto-updater.md'
+  - Direct Download: 'getting-started/direct-download.md'
   - Get From Scoop: 'getting-started/get-from-scoop.md'
   - Build (Cake): 'getting-started/build-cake.md'
   - Build (Visual Studio): 'getting-started/build-vs.md'
 
 - Settings:
   - Always On Top: settings/always-on-top.md
+  - Command Line Parameters: settings/command-line-parameters.md
   - Disable When Active App Is In Fullscreen: settings/disable-when-active-app-is-in-fullscreen.md
   - Hide On Focus Lost: settings/hide-on-focus-lost.md
   - Hotkeys: settings/hotkeys.md
+  - Notifications: settings/notifications.md
   - Opacity: settings/opacity.md
   - Prefer Monitor: settings/prefer-monitor.md
   - Size and Align: settings/size-and-align.md

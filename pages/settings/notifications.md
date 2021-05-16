@@ -6,6 +6,6 @@ Defaults to ```true```.
 
 ```json
 {
-	"MaximizeAfterToggle": true
+	"Notifications": true
 }
 ```
