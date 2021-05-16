@@ -57,6 +57,7 @@ Task("Artifact.SingleExe")
 		);
 
 		CopyFile(bin + "/windows-terminal-quake.json", art + "/windows-terminal-quake.json");
+		CopyFile(bin + "/windows-terminal-quake.schema.1.json", art + "/windows-terminal-quake.schema.1.json");
 		DeleteFile(art + "/windows-terminal-quake.exe.config");
 	});
 

@@ -72,19 +72,19 @@ namespace WindowsTerminalQuake.UI {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///	// If your editor supports it, you should get auto-completion in this file.
-        ///	// See https://flyingpie.github.io/windows-terminal-quake/ for available options.
+        ///	&quot;$schema&quot;: &quot;./windows-terminal-quake.schema.1.json&quot;,
         ///
-        ///	&quot;$schema&quot;: &quot;https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json&quot;,
+        ///	// If your editor supports it, this file should be editable with auto-completion through the included JSON schema.
+        ///	// Also, see https://flyingpie.github.io/windows-terminal-quake/ for more information.
+        ///	// Please report bugs and/or feature requests at https://github.com/flyingpie/windows-terminal-quake/issues.
         ///
-        ///	&quot;Hotkeys&quot;: [
-        ///		{  }
-        ///	]
-        ///}.
+        ///	////////////////////////////////////////////////////////////////////////////////////
+        ///	/// Hotkeys &amp; Suppression
+        ///	///////////////// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string windows_terminal_quake_example {
+        internal static string windows_terminal_quake {
             get {
-                return ResourceManager.GetString("windows_terminal_quake_example", resourceCulture);
+                return ResourceManager.GetString("windows_terminal_quake", resourceCulture);
             }
         }
     }
