@@ -98,7 +98,7 @@ namespace WindowsTerminalQuake.Settings
 		public bool StartHidden { get; set; } = false;
 
 		/// <summary>
-		/// <para>The processes that suppress the hotkey bind.</para>
+		/// <para>Temporarily disable the toggle hotkeys when any of these processes has focus.</para>
 		/// <para>Defaults to no processes.</para>
 		/// </summary>
 		public List<string> SuppressHotkeyForProcesses { get; set; } = new List<string>();

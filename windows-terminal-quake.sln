@@ -5,12 +5,19 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "windows-terminal-quake", "windows-terminal-quake\windows-terminal-quake.csproj", "{96A07892-69EC-49FB-84C4-3AE678EE3EDE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{26C4E007-EF0D-473D-BF72-51C785CB2E1A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1C9CDE72-0E19-42DC-BF4A-D1399AB6AEED}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
 		build.cake = build.cake
 		build.ps1 = build.ps1
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schema", "Schema", "{2A5D241E-3682-411C-8463-3F67346ACFA7}"
+	ProjectSection(SolutionItems) = preProject
+		schema\windows-terminal-quake.schema.1.json = schema\windows-terminal-quake.schema.1.json
 	EndProjectSection
 EndProject
 Global

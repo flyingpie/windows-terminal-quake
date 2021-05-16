@@ -88,7 +88,7 @@ namespace WindowsTerminalQuake.UI
 					if (!File.Exists(path))
 					{
 						Log.Information($"Creating example file at '{path}'.");
-						File.WriteAllText(path, _Resources.windows_terminal_quake_example);
+						File.WriteAllText(path, _Resources.windows_terminal_quake);
 					}
 				}
 
