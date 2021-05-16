@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1C9CDE72
 		azure-pipelines.yml = azure-pipelines.yml
 		build.cake = build.cake
 		build.ps1 = build.ps1
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schema", "Schema", "{2A5D241E-3682-411C-8463-3F67346ACFA7}"

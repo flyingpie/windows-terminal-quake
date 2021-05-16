@@ -1,92 +1,22 @@
 ﻿{
-	//"$schema": "https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/resize-toggle/schema/windows-terminal-quake.schema.1.json",
-	//"$schema": "https://files.flyingpie.nl/wtq/windows-terminal-quake.schema.1.json",
-	//"$schema": "../schema/windows-terminal-quake.schema.1.json",
 	"$schema": "./windows-terminal-quake.schema.1.json",
 
+	// If your editor supports it, this file should be editable with auto-completion through the included JSON schema.
+	// Also, see https://flyingpie.github.io/windows-terminal-quake/ for more information.
+	// Please report bugs and/or feature requests at https://github.com/flyingpie/windows-terminal-quake/issues.
+
+	////////////////////////////////////////////////////////////////////////////////////
+	/// Hotkeys & Suppression
+	////////////////////////////////////////////////////////////////////////////////////
+
 	// The keys that can be used to toggle the terminal.
-	// See "HotKeys" bellow for possible values.
-	"HotKeys": [
+	// See "Hotkeys" bellow for possible values.
+	"Hotkeys": [
 		{
 			"Modifiers": "Control",
 			"Key": "OemTilde"
-		},
-		{
-			"Modifiers": "None",
-			"Key": "F12"
 		}
 	],
-
-	// Whether to show notifications when the app starts and when the settings are reloaded.
-	"Notifications": true,
-
-	"LogLevel": "Error",
-
-	// Make the window see-through (applies to the entire window, including the title bar).
-	// 0 (invisible) - 100 (opaque)
-	"Opacity": 80,
-
-	// When the terminal window taskbar icon should be visible.
-	// "AlwaysHidden", "AlwaysVisible", "WhenTerminalVisible".
-	"TaskBarIconVisibility": "AlwaysHidden",
-
-	// How long the toggle up/down takes in milliseconds.
-	"ToggleDurationMs": 250,
-
-	// How long each frame in the toggle animation takes in milliseconds.
-	// The lower this value, the smoother the animation. (If set to 0, the frame rate limiter is removed.)
-	"ToggleAnimationFrameTimeMs": 25,
-
-	// Which animation type is used during toggle up/down.
-	// "Linear", "EaseInBack", "EaseInCubic", "EaseInOutSine", "EaseInQuart", "EaseOutBack", "EaseOutCubic" or "EaseOutQuart".
-	"ToggleAnimationType": "EaseOutQuart",
-
-	/// How the terminal actually gets toggled on- and off the screen.
-	/// "Resize" (default) or "Move".
-	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
-	/// "Move" keeps the size of the terminal constant, but moves the terminal off-screen to the top, which won't work great with vertically stacked monitors.
-	"ToggleMode": "Resize",
-
-	// How much room to leave between the top of the terminal and the top of the screen.
-	"VerticalOffset": 0,
-
-	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
-	"VerticalScreenCoverage": 80,
-
-	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
-	// "Center", "Left" or "Right".
-	"HorizontalAlign": "Center",
-
-	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
-	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
-	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
-	"HorizontalScreenCoverage": 100,
-
-	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
-	"HideOnFocusLost": false,
-
-	// Whether to keep the terminal window always on top (requires restart).
-	"AlwaysOnTop": false,
-
-	// Whether to hide the terminal window immediately after app start.
-	"StartHidden": false,
-
-	// What monitor to preferrably drop the terminal
-	// "WithCursor" (default), "Primary" or "AtIndex"
-	"PreferMonitor": "WithCursor",
-
-	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
-	// Zero based, eg. 0, 1, etc.
-	"MonitorIndex": 1,
-
-	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
-	"DisableWhenActiveAppIsInFullscreen": false,
-
-	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
-	"WindowsTerminalCommand": "wt.exe",
-
-	// Ignore processes
-	"SuppressHotKeyForProcesses": [ "someprocess.exe" ]
 
 	// # HotKeys
 	// ## Modifiers
@@ -117,4 +47,96 @@
 	// OemBackslash, OemClear, OemCloseBrackets, Oemcomma, OemMinus, OemOpenBrackets,
 	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
 	// Oem1 - Oem8, Oem102
+
+	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
+	"DisableWhenActiveAppIsInFullscreen": false,
+
+	// Temporarily disable the toggle hotkeys when any of these processes has focus.
+	"SuppressHotKeyForProcesses": [ "someprocess.exe" ],
+
+	////////////////////////////////////////////////////////////////////////////////////
+	/// Size & Align
+	////////////////////////////////////////////////////////////////////////////////////
+
+	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
+	// "Center", "Left" or "Right".
+	"HorizontalAlign": "Center",
+
+	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
+	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
+	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
+	"HorizontalScreenCoverage": 100,
+
+	// How much room to leave between the top of the terminal and the top of the screen.
+	"VerticalOffset": 0,
+
+	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
+	"VerticalScreenCoverage": 80,
+
+	// Whether to maximize the terminal after it has toggled into view.
+	// Note that this only applies when both "HorizontalScreenCoverage" and "VerticalScreenCoverage" are at least 100.
+	"MaximizeAfterToggle": true,
+
+	////////////////////////////////////////////////////////////////////////////////////
+	/// Toggle Animation
+	////////////////////////////////////////////////////////////////////////////////////
+
+	// Make the window see-through (applies to the entire window, including the title bar).
+	// 0 (invisible) - 100 (opaque)
+	"Opacity": 80,
+
+	// When the terminal window taskbar icon should be visible.
+	// "AlwaysHidden", "AlwaysVisible", "WhenTerminalVisible".
+	"TaskBarIconVisibility": "AlwaysHidden",
+
+	// How long each frame in the toggle animation takes in milliseconds.
+	// The lower this value, the smoother the animation. (If set to 0, the frame rate limiter is removed.)
+	"ToggleAnimationFrameTimeMs": 25,
+
+	// How long the toggle up/down takes in milliseconds.
+	"ToggleDurationMs": 250,
+
+	// Which animation type is used during toggle up/down.
+	// "Linear", "EaseInBack", "EaseInCubic", "EaseInOutSine", "EaseInQuart", "EaseOutBack", "EaseOutCubic" or "EaseOutQuart".
+	"ToggleAnimationType": "EaseOutQuart",
+
+	/// How the terminal actually gets toggled on- and off the screen.
+	/// "Resize" (default) or "Move".
+	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
+	/// "Move" keeps the size of the terminal constant, but moves the terminal off-screen to the top, which won't work great with vertically stacked monitors.
+	"ToggleMode": "Resize",
+
+	////////////////////////////////////////////////////////////////////////////////////
+	/// Multi-Monitor
+	////////////////////////////////////////////////////////////////////////////////////
+
+	// What monitor to preferrably drop the terminal
+	// "WithCursor" (default), "Primary" or "AtIndex"
+	"PreferMonitor": "WithCursor",
+
+	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+	// Zero based, eg. 0, 1, etc.
+	"MonitorIndex": 1,
+
+	////////////////////////////////////////////////////////////////////////////////////
+	/// Misc
+	////////////////////////////////////////////////////////////////////////////////////
+
+	// Whether to keep the terminal window always on top (requires restart).
+	"AlwaysOnTop": false,
+
+	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
+	"HideOnFocusLost": true,
+
+	// For troubleshooting purposes.
+	"LogLevel": "Error",
+
+	// Whether to show notifications when the app starts and when the settings are reloaded.
+	"Notifications": true,
+
+	// Whether to hide the terminal window immediately after app start.
+	"StartHidden": false,
+
+	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
+	"WindowsTerminalCommand": "wt.exe"
 }

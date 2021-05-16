@@ -4,7 +4,6 @@
 	"type": "object",
 	"title": "Windows Terminal Quake settings schema.",
 	"properties": {
-
 		"AlwaysOnTop": {
 			"$id": "#/properties/AlwaysOnTop",
 
@@ -32,7 +31,7 @@
 			"description": "Whether the terminal should toggle off the screen when another window gains focus.",
 
 			"type": "boolean",
-			"default": false
+			"default": true
 		},
 
 		"HorizontalAlign": {
@@ -52,7 +51,7 @@
 			"$id": "#/properties/HorizontalScreenCoverage",
 
 			"title": "Horizontal screen coverage",
-			"description": "",
+			"description": "Horizontal screen coverage, as a percentage.\n\nNote that since the terminal's size is fixed to character widths, a width of \"100\" might not cover the entire screen. To circumvent this, either use a value large than 100, or use \"MaximizeAfterToggle\".",
 
 			"type": "integer",
 			"default": 100
@@ -69,10 +68,6 @@
 				{
 					"Modifiers": "Control",
 					"Key": "Oemtilde"
-				},
-				{
-					"Modifiers": "Control",
-					"Key": "Q"
 				}
 			],
 			"examples": [
@@ -367,7 +362,7 @@
 			"$id": "#/properties/MonitorIndex",
 
 			"title": "Monitor index",
-			"description": "",
+			"description": "When \"PreferMonitor\" is set to \"AtIndex\", this setting controls what monitor to toggle on. 0-based, eg. \"0\", \"1\", etc.",
 
 			"type": "integer",
 			"default": 0
@@ -390,14 +385,14 @@
 			"description": "Static window opacity, note that this applies to the entire window, including the tabs bar.",
 
 			"type": "integer",
-			"default": 100
+			"default": 80
 		},
 
 		"PreferMonitor": {
 			"$id": "#/properties/PreferMonitor",
 
 			"title": "Prefer monitor",
-			"description": "",
+			"description": "What monitor the terminal should target when toggling on. When using \"AtIndex\" use the \"MonitorIndex\"-setting to determine the monitor.",
 
 			"enum": [
 				"WithCursor",
@@ -411,17 +406,41 @@
 			"$id": "#/properties/StartHidden",
 
 			"title": "Start hidden",
-			"description": "",
+			"description": "Whether to start the Windows Terminal app in the background, for use when eg. running on system boot.",
 
 			"type": "boolean",
 			"default": false
+		},
+
+		"SuppressHotkeyForProcesses": {
+			"$id": "#/properties/SuppressHotkeyForProcesses",
+
+			"title": "Suppress hotkeys for processes",
+			"description": "Temporarily disable the toggle hotkeys when any of these processes has focus.",
+
+			"type": "array",
+			"default": [ "someprocess.exe" ]
+		},
+
+		"TaskbarIconVisibility": {
+			"$id": "#/properties/TaskbarIconVisibility",
+
+			"title": "Taskbar icon visibility",
+			"description": "When to show the terminal window icon on the taskbar.",
+
+			"enum": [
+				"AlwaysHidden",
+				"AlwaysVisible",
+				"WhenTerminalVisible"
+			],
+			"default": "AlwaysHidden"
 		},
 
 		"ToggleAnimationFrameTimeMs": {
 			"$id": "#/properties/ToggleAnimationFrameTimeMs",
 
 			"title": "Toggle animation frame time ms",
-			"description": "",
+			"description": "Target time between animation frames.",
 
 			"type": "integer",
 			"default": 25
@@ -431,7 +450,7 @@
 			"$id": "#/properties/ToggleAnimationType",
 
 			"title": "Toggle animation type",
-			"description": "",
+			"description": "Which animation type is used during toggle up/down.",
 
 			"enum": [
 				"Linear",
@@ -443,24 +462,37 @@
 				"EaseOutCubic",
 				"EaseOutQuart"
 			],
-			"default": "Linear"
+			"default": "EaseOutQuart"
 		},
 
 		"ToggleDurationMs": {
 			"$id": "#/properties/ToggleDurationMs",
 
 			"title": "Toggle duration ms",
-			"description": "",
+			"description": "How long the toggle up/down takes in milliseconds.",
 
 			"type": "integer",
 			"default": 250
+		},
+
+		"ToggleMode": {
+			"$id": "#/properties/ToggleMode",
+
+			"title": "Toggle mode",
+			"description": "How the terminal actually gets toggled on- and off the screen.\n\nDefault \"Resize\" should work on any setup, but may cause character jumping due to the terminal changing shape.\n\n\"Move\" prevents this, but may not work with vertical monitor setups, pushing the terminal onto the northern monitor.",
+
+			"enum": [
+				"Move",
+				"Resize"
+			],
+			"default": "Resize"
 		},
 
 		"VerticalOffset": {
 			"$id": "#/properties/VerticalOffset",
 
 			"title": "Vertical offset",
-			"description": "",
+			"description": "How much room to leave between the top of the terminal and the top of the screen.",
 
 			"type": "integer",
 			"default": 0
@@ -470,7 +502,7 @@
 			"$id": "#/properties/VerticalScreenCoverage",
 
 			"title": "Vertical screen coverage",
-			"description": "",
+			"description": "Vertical screen coverage as a percentage (0-100).",
 
 			"type": "integer",
 			"default": 100
