@@ -66,7 +66,7 @@ namespace WindowsTerminalQuake.Native
 			var currentWindowHandle = User32.GetForegroundWindow();
 			
 			List<Process> processes = new List<Process>();
-			foreach (var suppressedProcess in QSettings.Instance.SuppressHotKeyForProcesses)
+			foreach (var suppressedProcess in QSettings.Instance.SuppressHotkeyForProcesses)
 			{
 				// Clean up the name of the processes
 				var processNameClean = suppressedProcess.Remove(
