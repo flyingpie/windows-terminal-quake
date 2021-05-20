@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.ProcessProviders;
 
 namespace WindowsTerminalQuake.Settings
 {
@@ -90,6 +91,11 @@ namespace WindowsTerminalQuake.Settings
 		/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 		/// </summary>
 		public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		public string ProcessProvider { get; set; } = nameof(WindowsTerminalProcessProvider);
 
 		/// <summary>
 		/// <para>Whether to hide the terminal window immediately after app start.</para>
