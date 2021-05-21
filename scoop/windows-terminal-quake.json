@@ -3,6 +3,12 @@
   "description": "Companion program for the new Windows Terminal that enables Quake-style drop down",
   "homepage": "https://github.com/flyingpie/windows-terminal-quake",
   "bin": "windows-terminal-quake.exe",
+  "shortcuts": [
+    [
+        "windows-terminal-quake.exe",
+        "Windows Terminal Quake"
+    ]
+],
   "persist": "windows-terminal-quake.json",
   "checkver": "github",
   "architecture": {
