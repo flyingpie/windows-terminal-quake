@@ -65,7 +65,7 @@
 	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
 	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
 	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
-	"HorizontalScreenCoverage": 100,
+	"HorizontalScreenCoverage": 80,
 
 	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,
