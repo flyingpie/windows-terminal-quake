@@ -44,7 +44,7 @@ namespace WindowsTerminalQuake.Settings
 		/// <para>Horizontal screen coverage, as a percentage.</para>
 		/// <para>Defaults to "100".</para>
 		/// </summary>
-		public int HorizontalScreenCoverage { get; set; } = 100;
+		public float HorizontalScreenCoverage { get; set; } = 100f;
 
 		/// <summary>
 		/// <para>The keys that can be used to toggle the terminal.</para>
@@ -140,7 +140,7 @@ namespace WindowsTerminalQuake.Settings
 		public ToggleMode ToggleMode { get; set; } = ToggleMode.Resize;
 
 		/// <summary>
-		/// <para>How much room to leave between the top of the terminal and the top of the screen.</para>
+		/// <para>How much room to leave between the top of the terminal and the top of the screen, in pixels.</para>
 		/// <para>Defaults to "0".</para>
 		/// </summary>
 		public int VerticalOffset { get; set; } = 0;
@@ -149,7 +149,7 @@ namespace WindowsTerminalQuake.Settings
 		/// <para>Vertical screen coverage as a percentage (0-100).</para>
 		/// <para>Defaults to "100".</para>
 		/// </summary>
-		public int VerticalScreenCoverage { get; set; } = 100;
+		public float VerticalScreenCoverage { get; set; } = 100f;
 
 		/// <summary>
 		/// <para>The command/file path to execute when the app starts and Windows Terminal is not yet running.</para>

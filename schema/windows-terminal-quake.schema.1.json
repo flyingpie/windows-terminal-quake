@@ -53,7 +53,7 @@
 			"title": "Horizontal screen coverage",
 			"description": "Horizontal screen coverage, as a percentage.\n\nNote that since the terminal's size is fixed to character widths, a width of \"100\" might not cover the entire screen. To circumvent this, either use a value large than 100, or use \"MaximizeAfterToggle\".",
 
-			"type": "integer",
+			"type": "number",
 			"default": 100
 		},
 
@@ -504,7 +504,7 @@
 			"title": "Vertical screen coverage",
 			"description": "Vertical screen coverage as a percentage (0-100).",
 
-			"type": "integer",
+			"type": "number",
 			"default": 100
 		}
 	}
