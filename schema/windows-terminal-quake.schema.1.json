@@ -485,7 +485,7 @@
 				"Move",
 				"Resize"
 			],
-			"default": "Resize"
+			"default": "Move"
 		},
 
 		"VerticalOffset": {

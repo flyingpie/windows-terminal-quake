@@ -137,7 +137,7 @@ namespace WindowsTerminalQuake.Settings
 		/// <para>How the terminal actually gets toggled on- and off the screen.</para>
 		/// <para>"Resize" (default) or "Move".</para>
 		/// </summary>
-		public ToggleMode ToggleMode { get; set; } = ToggleMode.Resize;
+		public ToggleMode ToggleMode { get; set; } = ToggleMode.Move;
 
 		/// <summary>
 		/// <para>How much room to leave between the top of the terminal and the top of the screen, in pixels.</para>
