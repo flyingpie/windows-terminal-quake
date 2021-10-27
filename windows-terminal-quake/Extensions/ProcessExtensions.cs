@@ -47,9 +47,6 @@ namespace System.Diagnostics
 
 			// Reset position
 			process.MoveWindow(bounds);
-
-			// Restore window
-			process.SetWindowState(WindowShowStyle.Restore);
 		}
 
 		/// <summary>

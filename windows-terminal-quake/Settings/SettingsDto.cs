@@ -29,6 +29,12 @@ namespace WindowsTerminalQuake.Settings
 		public bool DisableWhenActiveAppIsInFullscreen { get; set; } = false;
 
 		/// <summary>
+		/// <para>Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.</para>
+		/// <para>Defaults to "true".</para>
+		/// </summary>
+		public bool CloseTerminalOnExit { get; set; } = true;
+
+		/// <summary>
 		/// <para>When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.</para>
 		/// <para>Defaults to "true".</para>
 		/// </summary>

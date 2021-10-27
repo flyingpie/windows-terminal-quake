@@ -169,6 +169,11 @@ namespace WindowsTerminalQuake
 		public void Dispose()
 		{
 			Process.ResetBounds();
+
+			// Restore window
+			Process.SetWindowState(WindowShowStyle.ShowDefault);
+
+			// Make sure Windows Terminal is visible on the taskbar
 			Process.ToggleTaskbarIconVisibility(true);
 		}
 

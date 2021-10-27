@@ -36,6 +36,11 @@ namespace WindowsTerminalQuake
 
 			Log.Information("Windows Terminal Quake started");
 
+			Application.ApplicationExit += (s, a) =>
+			{
+				if (QSettings.Instance.CloseTerminalOnExit) TerminalProcess.Close();
+			};
+
 			_trayIcon = new TrayIcon((s, a) => Close());
 
 			try
