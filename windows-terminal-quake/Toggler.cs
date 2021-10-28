@@ -31,7 +31,7 @@ namespace WindowsTerminalQuake
 			// Taskbar icon visibility
 			QSettings.Get(s =>
 			{
-				Process.ToggleTaskbarIconVisibility(s.TaskbarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
+				Process.SetTaskbarIconVisibility(s.TaskbarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
 			});
 
 			// Used to keep track of the current toggle state.
@@ -168,13 +168,18 @@ namespace WindowsTerminalQuake
 
 		public void Dispose()
 		{
-			Process.ResetBounds();
+			if (QSettings.Instance.CloseTerminalOnExit)
+			{
+				TerminalProcess.Close();
+			}
+			else
+			{
+				// Restore window
+				Toggle(true, 0);
 
-			// Restore window
-			Process.SetWindowState(WindowShowStyle.ShowDefault);
-
-			// Make sure Windows Terminal is visible on the taskbar
-			Process.ToggleTaskbarIconVisibility(true);
+				// Make sure Windows Terminal is visible on the taskbar
+				Process.SetTaskbarIconVisibility(true);
+			}
 		}
 
 		private static bool ActiveWindowIsInFullscreen()

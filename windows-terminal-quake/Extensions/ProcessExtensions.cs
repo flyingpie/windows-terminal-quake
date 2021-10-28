@@ -110,7 +110,7 @@ namespace System.Diagnostics
 		/// <summary>
 		/// Hides- or shows the taskbar icon of the specified process.
 		/// </summary>
-		public static void ToggleTaskbarIconVisibility(this Process process, bool isVisible)
+		public static void SetTaskbarIconVisibility(this Process process, bool isVisible)
 		{
 			if (process == null) throw new ArgumentNullException(nameof(process));
 
