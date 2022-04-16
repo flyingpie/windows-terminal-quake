@@ -16,8 +16,13 @@ Multiple hot keys are supported, with an optional modifier.
 		{
 			"Modifiers": "Control",
 			"Key": "Q"
-		}
+		},
 
+		// Multiple modifiers
+		{
+			"Modifiers": "Control,Shift",
+			"Key": "W"
+		}
 	]
 }
 ```
