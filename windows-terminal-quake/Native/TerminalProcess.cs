@@ -43,6 +43,21 @@ public static class TerminalProcess
 
 	private static bool _isExitting;
 
+	public static void Close()
+	{
+		try
+		{
+			if (_process != null)
+			{
+				_process.CloseMainWindow();
+			}
+		}
+		catch (Exception ex)
+		{
+			Log.Warning(ex, $"Error closing Windows Terminal process: {ex.Message}");
+		}
+	}
+
 	public static void OnExit(Action action)
 	{
 		_onExit.Add(action);

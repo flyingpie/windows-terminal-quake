@@ -25,7 +25,7 @@ public class Toggler : IDisposable
 		// Taskbar icon visibility
 		QSettings.Get(s =>
 		{
-			Process.ToggleTaskbarIconVisibility(s.TaskbarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
+			Process.SetTaskbarIconVisibility(s.TaskbarIconVisibility != TaskBarIconVisibility.AlwaysHidden);
 		});
 
 		// Used to keep track of the current toggle state.
@@ -162,8 +162,18 @@ public class Toggler : IDisposable
 
 	public void Dispose()
 	{
-		Process.ResetBounds();
-		Process.ToggleTaskbarIconVisibility(true);
+		if (QSettings.Instance.CloseTerminalOnExit)
+		{
+			TerminalProcess.Close();
+		}
+		else
+		{
+			// Restore window
+			Toggle(true, 0);
+
+			// Make sure Windows Terminal is visible on the taskbar
+			Process.SetTaskbarIconVisibility(true);
+		}
 	}
 
 	private static bool ActiveWindowIsInFullscreen()

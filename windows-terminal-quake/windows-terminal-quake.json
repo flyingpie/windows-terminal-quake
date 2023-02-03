@@ -48,6 +48,9 @@
 	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
 	// Oem1 - Oem8, Oem102
 
+	// Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.
+	"CloseTerminalOnExit": false,
+
 	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
 	"DisableWhenActiveAppIsInFullscreen": false,
 
