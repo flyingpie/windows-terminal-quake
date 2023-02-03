@@ -1,52 +1,48 @@
-﻿using Serilog;
-using System;
-using System.Drawing;
-using WindowsTerminalQuake.Settings;
+﻿using System.Drawing;
 
-namespace WindowsTerminalQuake.TerminalBoundsProviders
+namespace WindowsTerminalQuake.TerminalBoundsProviders;
+
+public class MovingTerminalBoundsProvider : ITerminalBoundsProvider
 {
-	public class MovingTerminalBoundsProvider : ITerminalBoundsProvider
+	/// <inheritdoc/>
+	public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
 	{
-		/// <inheritdoc/>
-		public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
+		var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
+
+		// Calculate terminal size
+		var termWidth = (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
+		var termHeight = (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
+
+		// Calculate horizontal position, based on the terminal alignment and the alignment
+		var x = settings.HorizontalAlign switch
 		{
-			var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
+			// Left
+			HorizontalAlign.Left => screenBounds.X,
 
-			// Calculate terminal size
-			var termWidth = (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
-			var termHeight = (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
+			// Right
+			HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
 
-			// Calculate horizontal position, based on the terminal alignment and the alignment
-			var x = settings.HorizontalAlign switch
-			{
-				// Left
-				HorizontalAlign.Left => screenBounds.X,
+			// Center
+			_ => screenBounds.X + (int)Math.Ceiling(screenBounds.Width / 2f - termWidth / 2f),
+		};
 
-				// Right
-				HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
+		var res = new Rectangle
+		(
+			// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
+			x,
 
-				// Center
-				_ => screenBounds.X + (int)Math.Ceiling(screenBounds.Width / 2f - termWidth / 2f),
-			};
+			// Y, top of the screen + offset
+			screenBounds.Y + -screenBounds.Height + (int)Math.Round(screenBounds.Height * progress) + settings.VerticalOffset,
 
-			var res = new Rectangle
-			(
-				// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
-				x,
+			// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
+			termWidth,
 
-				// Y, top of the screen + offset
-				screenBounds.Y + -screenBounds.Height + (int)Math.Round(screenBounds.Height * progress) + settings.VerticalOffset,
+			// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
+			termHeight
+		);
 
-				// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
-				termWidth,
+		Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
 
-				// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
-				termHeight
-			);
-
-			Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
-
-			return res;
-		}
+		return res;
 	}
 }
