@@ -4,7 +4,7 @@
 		<RootNamespace>WindowsTerminalQuake</RootNamespace>
 
 		<TargetFramework>net48</TargetFramework>
-		<LangVersion>8.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<OutputType>WinExe</OutputType>
 
@@ -12,14 +12,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Polly" Version="7.2.3" />
-		<PackageReference Include="Serilog" Version="2.11.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Polly" Version="7.2.3" />
+		<PackageReference Include="Serilog" Version="2.12.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

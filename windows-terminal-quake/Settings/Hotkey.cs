@@ -1,12 +1,10 @@
-﻿using System.Windows.Forms;
-using WindowsTerminalQuake.Native;
+﻿using WindowsTerminalQuake.Native;
 
-namespace WindowsTerminalQuake.Settings
+namespace WindowsTerminalQuake.Settings;
+
+public class Hotkey
 {
-	public class Hotkey
-	{
-		public Keys Key { get; set; }
+	public Keys Key { get; set; }
 
-		public KeyModifiers Modifiers { get; set; }
-	}
+	public KeyModifiers Modifiers { get; set; }
 }

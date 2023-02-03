@@ -1,10 +1,9 @@
-﻿namespace WindowsTerminalQuake.Settings
-{
-	public enum HorizontalAlign
-	{
-		Center = 0,
+﻿namespace WindowsTerminalQuake.Settings;
 
-		Left,
-		Right
-	}
+public enum HorizontalAlign
+{
+	Center = 0,
+
+	Left,
+	Right
 }

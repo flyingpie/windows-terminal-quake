@@ -1,12 +1,12 @@
-#tool "nuget:?package=vswhere&version=2.6.7"
+#tool "nuget:?package=vswhere&version=3.1.1"
 #tool "nuget:?package=ILRepack&version=2.0.18"
 
 var configuration = Argument("configuration", "Release");
 var output = Argument("output", "artifacts");
-var version = Argument("version", "1.3.0");
+var version = Argument("version", "1.4.0");
 
 var sln = "windows-terminal-quake.sln";
-var bin = $"./windows-terminal-quake/bin/{configuration}/net472";
+var bin = $"./windows-terminal-quake/bin/{configuration}/net48";
 
 Task("Clean")
 	.Does(() =>
