@@ -14,6 +14,16 @@
 			"default": false
 		},
 
+		"CloseTerminalOnExit": {
+			"$id": "#/properties/CloseTerminalOnExit",
+
+			"title": "Close terminal on exit",
+			"description": "Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.",
+
+			"type": "boolean",
+			"default": false
+		},
+
 		"DisableWhenActiveAppIsInFullscreen": {
 			"$id": "#/properties/DisableWhenActiveAppIsInFullscreen",
 

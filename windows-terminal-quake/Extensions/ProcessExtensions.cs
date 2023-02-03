@@ -44,9 +44,6 @@ public static class ProcessExtensions
 
 		// Reset position
 		process.MoveWindow(bounds);
-
-		// Restore window
-		process.SetWindowState(WindowShowStyle.Restore);
 	}
 
 	/// <summary>
@@ -110,7 +107,7 @@ public static class ProcessExtensions
 	/// <summary>
 	/// Hides- or shows the taskbar icon of the specified process.
 	/// </summary>
-	public static void ToggleTaskbarIconVisibility(this Process process, bool isVisible)
+	public static void SetTaskbarIconVisibility(this Process process, bool isVisible)
 	{
 		if (process == null) throw new ArgumentNullException(nameof(process));
 
