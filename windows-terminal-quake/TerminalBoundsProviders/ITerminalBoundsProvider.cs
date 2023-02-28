@@ -21,5 +21,5 @@ public interface ITerminalBoundsProvider
 	/// <returns>
 	/// A <see cref="Rectangle"/> representing where the terminal should be positioned.
 	/// </returns>
-	Rectangle GetTerminalBounds(Rectangle screenBounds, double progress);
+	Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress);
 }

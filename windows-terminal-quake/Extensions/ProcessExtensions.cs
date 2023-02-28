@@ -10,6 +10,20 @@ public static class ProcessExtensions
 		.WaitAndRetry(new[] { TimeSpan.FromMilliseconds(250), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
 	;
 
+	public static Rectangle GetBounds(this Process process)
+	{
+		var bounds = new User32.Rect();
+
+		User32.GetWindowRect(process.MainWindowHandle, ref bounds);
+
+		// TODO: Pull out conversions between Rectangle and Rect.
+		return new Rectangle(
+			x: bounds.Top,
+			y: bounds.Top,
+			width: bounds.Right - bounds.Left,
+			height: bounds.Bottom - bounds.Top);
+	}
+
 	/// <summary>
 	/// Sets the position and size of the process' main window.
 	/// </summary>

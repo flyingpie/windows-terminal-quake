@@ -341,6 +341,16 @@
 			}
 		},
 
+		"KeepOriginalSize": {
+			"$id": "#/properties/KeepOriginalSize",
+
+			"title": "Keep Original Size",
+			"description": "TODO",
+
+			"type": "boolean",
+			"default": false
+		},
+
 		"LogLevel": {
 			"$id": "#/properties/LogLevel",
 

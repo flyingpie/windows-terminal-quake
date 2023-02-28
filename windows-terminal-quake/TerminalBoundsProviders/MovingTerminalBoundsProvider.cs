@@ -5,13 +5,18 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 public class MovingTerminalBoundsProvider : ITerminalBoundsProvider
 {
 	/// <inheritdoc/>
-	public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
+	public Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress)
 	{
 		var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
 		// Calculate terminal size
-		var termWidth = (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
-		var termHeight = (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
+		var termWidth = settings.KeepOriginalSize
+			? currentTerminalBounds.Width
+			: (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
+
+		var termHeight = settings.KeepOriginalSize
+			? currentTerminalBounds.Height
+			: (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
 
 		// Calculate horizontal position, based on the terminal alignment and the alignment
 		var x = settings.HorizontalAlign switch

@@ -3,7 +3,7 @@
 
 var configuration = Argument("configuration", "Release");
 var output = Argument("output", "artifacts");
-var version = Argument("version", "1.4.0");
+var version = Argument("version", "1.5.0");
 
 var sln = "windows-terminal-quake.sln";
 var bin = $"./windows-terminal-quake/bin/{configuration}/net48";

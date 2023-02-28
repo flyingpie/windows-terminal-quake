@@ -126,7 +126,7 @@ public class Toggler : IDisposable
 				: (1.0 - (deltaMs / durationMs))
 			;
 
-			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(screen, animationFn(linearProgress));
+			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(screen, Process.GetBounds(), animationFn(linearProgress));
 
 			Process.MoveWindow(bounds: intermediateBounds);
 
@@ -138,7 +138,7 @@ public class Toggler : IDisposable
 		stopwatch.Stop();
 
 		// To ensure sure we end up in exactly the correct final position
-		var finalBounds = _termBoundsProvider.GetTerminalBounds(screen, open ? 1.0 : 0.0);
+		var finalBounds = _termBoundsProvider.GetTerminalBounds(screen, Process.GetBounds(), open ? 1.0 : 0.0);
 		Process.MoveWindow(bounds: finalBounds);
 
 		if (open)

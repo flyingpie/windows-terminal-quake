@@ -54,6 +54,11 @@ public class SettingsDto
 	public List<Hotkey>? Hotkeys { get; set; }
 
 	/// <summary>
+	/// TODO: Better name?
+	/// </summary>
+	public bool KeepOriginalSize { get; set; } = false;
+
+	/// <summary>
 	/// <para>Minimum level of events that are logged.</para>
 	/// <para>"Verbose", "Debug", "Information", "Warning", "Error" (default), "Fatal".</para>
 	/// </summary>
