@@ -6,9 +6,9 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 {
 	private Rectangle _initialBounds;
 
-	public InitialTerminalBoundsProvider(Process wtProcess)
+	public InitialTerminalBoundsProvider(Rectangle initialBounds)
 	{
-		_initialBounds = wtProcess?.GetBounds() ?? throw new ArgumentNullException(nameof(wtProcess));
+		_initialBounds = initialBounds;
 	}
 
 	public void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
@@ -23,10 +23,10 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 
 	public void OnToggle(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
 	{
+		// TODO: Handle manual reposition and resize.
+
 		if (!open && currentTerminalBounds.Width > 100 && currentTerminalBounds.Height > 100)
 		{
-			Log.Debug($"OnToggle(open: {open}, screenBounds: {screenBounds}, currentTerminalBounds: {currentTerminalBounds})");
-
 			_initialBounds = currentTerminalBounds;
 		}
 	}
@@ -40,7 +40,7 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 			_initialBounds.X,
 
 			// Y, top of the screen + offset
-			screenBounds.Y + -screenBounds.Height + (int)Math.Round(screenBounds.Height * progress) + _initialBounds.Y,
+			-currentTerminalBounds.Height + (int)Math.Round(currentTerminalBounds.Height * progress) + _initialBounds.Y,
 
 			// Horizontal Width
 			_initialBounds.Width,

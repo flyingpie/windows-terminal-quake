@@ -52,7 +52,7 @@ public class Toggler : IDisposable
 		{
 			_termBoundsProvider = s.ToggleMode switch
 			{
-				ToggleMode.Initial => new InitialTerminalBoundsProvider(Process),
+				ToggleMode.Initial => new InitialTerminalBoundsProvider(Process.GetBounds()),
 				ToggleMode.Move => new MovingTerminalBoundsProvider(),
 				_ => new ResizingTerminalBoundsProvider()
 			};
