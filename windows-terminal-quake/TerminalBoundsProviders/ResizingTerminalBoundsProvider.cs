@@ -4,6 +4,14 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
 public class ResizingTerminalBoundsProvider : ITerminalBoundsProvider
 {
+	public void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
+	{
+	}
+
+	public void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
+	{
+	}
+
 	/// <inheritdoc/>
 	public Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress)
 	{

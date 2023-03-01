@@ -52,6 +52,7 @@ public class Toggler : IDisposable
 		{
 			_termBoundsProvider = s.ToggleMode switch
 			{
+				ToggleMode.Initial => new InitialTerminalBoundsProvider(Process),
 				ToggleMode.Move => new MovingTerminalBoundsProvider(),
 				_ => new ResizingTerminalBoundsProvider()
 			};
@@ -104,6 +105,8 @@ public class Toggler : IDisposable
 		Process.BringToForeground();
 
 		var screen = _scrBoundsProvider.GetTargetScreenBounds();
+
+		_termBoundsProvider.OnToggleStart(open, screen, Process.GetBounds());
 
 		// Used to accurately measure how far we are in the animation
 		var stopwatch = new Stopwatch();
@@ -158,6 +161,8 @@ public class Toggler : IDisposable
 			if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
 				Process.SetWindowState(WindowShowStyle.Hide);
 		}
+
+		_termBoundsProvider.OnToggleEnd(open, screen, Process.GetBounds());
 	}
 
 	public void Dispose()

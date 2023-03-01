@@ -7,6 +7,10 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 /// </summary>
 public interface ITerminalBoundsProvider
 {
+	void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds);
+
+	void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds);
+
 	/// <summary>
 	/// Determine the window size & position during a toggle animation.
 	/// </summary>

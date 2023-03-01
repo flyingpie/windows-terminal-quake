@@ -18,7 +18,7 @@ public static class ProcessExtensions
 
 		// TODO: Pull out conversions between Rectangle and Rect.
 		return new Rectangle(
-			x: bounds.Top,
+			x: bounds.Left,
 			y: bounds.Top,
 			width: bounds.Right - bounds.Left,
 			height: bounds.Bottom - bounds.Top);
