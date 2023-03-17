@@ -23,8 +23,6 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 
 	public void OnToggle(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
 	{
-		// TODO: Handle manual reposition and resize.
-
 		if (!open && currentTerminalBounds.Width > 100 && currentTerminalBounds.Height > 100)
 		{
 			_initialBounds = currentTerminalBounds;
@@ -49,7 +47,7 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 			_initialBounds.Height
 		);
 
-		Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
+		Log.Debug("Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", screenBounds, res);
 
 		return res;
 	}

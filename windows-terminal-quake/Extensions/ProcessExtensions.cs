@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using WindowsTerminalQuake.Extensions;
 using WindowsTerminalQuake.Native;
 
 namespace System.Diagnostics;
@@ -12,16 +13,11 @@ public static class ProcessExtensions
 
 	public static Rectangle GetBounds(this Process process)
 	{
-		var bounds = new User32.Rect();
+		var bounds = new Rect();
 
 		User32.GetWindowRect(process.MainWindowHandle, ref bounds);
 
-		// TODO: Pull out conversions between Rectangle and Rect.
-		return new Rectangle(
-			x: bounds.Left,
-			y: bounds.Top,
-			width: bounds.Right - bounds.Left,
-			height: bounds.Bottom - bounds.Top);
+		return bounds.ToRectangle();
 	}
 
 	/// <summary>

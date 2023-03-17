@@ -18,13 +18,8 @@ public class MovingTerminalBoundsProvider : ITerminalBoundsProvider
 		var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
 		// Calculate terminal size
-		var termWidth = settings.KeepOriginalSize
-			? currentTerminalBounds.Width
-			: (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
-
-		var termHeight = settings.KeepOriginalSize
-			? currentTerminalBounds.Height
-			: (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
+		var termWidth = (int)(screenBounds.Width * settings.HorizontalScreenCoverageIndex);
+		var termHeight = (int)(screenBounds.Height * settings.VerticalScreenCoverageIndex);
 
 		// Calculate horizontal position, based on the terminal alignment and the alignment
 		var x = settings.HorizontalAlign switch
