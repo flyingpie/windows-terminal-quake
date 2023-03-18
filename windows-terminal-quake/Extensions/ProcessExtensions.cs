@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using WindowsTerminalQuake.Extensions;
 using WindowsTerminalQuake.Native;
 
 namespace System.Diagnostics;
@@ -9,6 +10,15 @@ public static class ProcessExtensions
 		.Handle<Exception>()
 		.WaitAndRetry(new[] { TimeSpan.FromMilliseconds(250), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
 	;
+
+	public static Rectangle GetBounds(this Process process)
+	{
+		var bounds = new Rect();
+
+		User32.GetWindowRect(process.MainWindowHandle, ref bounds);
+
+		return bounds.ToRectangle();
+	}
 
 	/// <summary>
 	/// Sets the position and size of the process' main window.

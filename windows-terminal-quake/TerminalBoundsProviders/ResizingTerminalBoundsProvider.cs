@@ -5,7 +5,11 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 public class ResizingTerminalBoundsProvider : ITerminalBoundsProvider
 {
 	/// <inheritdoc/>
-	public Rectangle GetTerminalBounds(Rectangle screenBounds, double progress)
+	public Rectangle GetTerminalBounds(
+		bool isOpening,
+		Rectangle screenBounds,
+		Rectangle currentTerminalBounds,
+		double progress)
 	{
 		var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 
