@@ -106,8 +106,6 @@ public class Toggler : IDisposable
 
 		var screen = _scrBoundsProvider.GetTargetScreenBounds();
 
-		_termBoundsProvider.OnToggleStart(open, screen, Process.GetBounds());
-
 		// Used to accurately measure how far we are in the animation
 		var stopwatch = new Stopwatch();
 		stopwatch.Start();
@@ -129,7 +127,7 @@ public class Toggler : IDisposable
 				: (1.0 - (deltaMs / durationMs))
 			;
 
-			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(screen, Process.GetBounds(), animationFn(linearProgress));
+			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(open, screen, Process.GetBounds(), animationFn(linearProgress));
 
 			Process.MoveWindow(bounds: intermediateBounds);
 
@@ -141,7 +139,7 @@ public class Toggler : IDisposable
 		stopwatch.Stop();
 
 		// To ensure sure we end up in exactly the correct final position
-		var finalBounds = _termBoundsProvider.GetTerminalBounds(screen, Process.GetBounds(), open ? 1.0 : 0.0);
+		var finalBounds = _termBoundsProvider.GetTerminalBounds(open, screen, Process.GetBounds(), open ? 1.0 : 0.0);
 		Process.MoveWindow(bounds: finalBounds);
 
 		if (open)
@@ -161,8 +159,6 @@ public class Toggler : IDisposable
 			if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
 				Process.SetWindowState(WindowShowStyle.Hide);
 		}
-
-		_termBoundsProvider.OnToggleEnd(open, screen, Process.GetBounds());
 	}
 
 	public void Dispose()

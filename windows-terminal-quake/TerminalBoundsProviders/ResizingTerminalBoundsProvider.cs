@@ -4,16 +4,12 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
 public class ResizingTerminalBoundsProvider : ITerminalBoundsProvider
 {
-	public void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
-	{
-	}
-
-	public void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
-	{
-	}
-
 	/// <inheritdoc/>
-	public Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress)
+	public Rectangle GetTerminalBounds(
+		bool isOpening,
+		Rectangle screenBounds,
+		Rectangle currentTerminalBounds,
+		double progress)
 	{
 		var settings = QSettings.Instance ?? throw new InvalidOperationException($"Settings.Instance was null");
 

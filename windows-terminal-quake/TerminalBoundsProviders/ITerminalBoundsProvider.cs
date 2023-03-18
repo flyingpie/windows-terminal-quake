@@ -7,15 +7,16 @@ namespace WindowsTerminalQuake.TerminalBoundsProviders;
 /// </summary>
 public interface ITerminalBoundsProvider
 {
-	void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds);
-
-	void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds);
-
 	/// <summary>
 	/// Determine the window size & position during a toggle animation.
 	/// </summary>
+	/// <param name="isOpening">
+	/// Whether the calling toggler is currently opening (true) or closing (false).
+	/// </param>
 	/// <param name="screenBounds">
 	/// The rectangle in which the terminal should appear/disappear (eg. target screen).
+	/// </param>
+	/// <param name="currentTerminalBounds">
 	/// </param>
 	/// <param name="progress">
 	/// Value between 0.0 and 1.0 to indicate the desired position of the window;
@@ -25,5 +26,9 @@ public interface ITerminalBoundsProvider
 	/// <returns>
 	/// A <see cref="Rectangle"/> representing where the terminal should be positioned.
 	/// </returns>
-	Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress);
+	Rectangle GetTerminalBounds(
+		bool isOpening,
+		Rectangle screenBounds,
+		Rectangle currentTerminalBounds,
+		double progress);
 }

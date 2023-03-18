@@ -2,6 +2,9 @@
 
 namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
+/// <summary>
+/// Moves the terminal from- and to where the user put it, maintaining both the original position and size.
+/// </summary>
 public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 {
 	private Rectangle _initialBounds;
@@ -13,15 +16,15 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 
 	public void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
 	{
-		OnToggle(open, screenBounds, currentTerminalBounds);
+		//OnToggle(open, currentTerminalBounds);
 	}
 
 	public void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
 	{
-		OnToggle(open, screenBounds, currentTerminalBounds);
+		//OnToggle(open, currentTerminalBounds);
 	}
 
-	public void OnToggle(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
+	public void OnToggle(bool open, Rectangle currentTerminalBounds)
 	{
 		if (!open && currentTerminalBounds.Width > 100 && currentTerminalBounds.Height > 100)
 		{
@@ -30,24 +33,38 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 	}
 
 	/// <inheritdoc/>
-	public Rectangle GetTerminalBounds(Rectangle screenBounds, Rectangle currentTerminalBounds, double progress)
+	public Rectangle GetTerminalBounds(
+		bool isOpening,
+		Rectangle screenBounds,
+		Rectangle currentTerminalBounds,
+		double progress)
 	{
+		if (!isOpening && progress >= 1)
+		{
+			_initialBounds = currentTerminalBounds;
+		}
+
 		var res = new Rectangle
 		(
-			// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
+			// Maintain initial X
 			_initialBounds.X,
 
-			// Y, top of the screen + offset
+			// Move to initial Y
 			-currentTerminalBounds.Height + (int)Math.Round(currentTerminalBounds.Height * progress) + _initialBounds.Y,
 
-			// Horizontal Width
+			// Initial width
 			_initialBounds.Width,
 
-			// Vertical Height
+			// Initial height
 			_initialBounds.Height
 		);
 
-		Log.Debug("Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", screenBounds, res);
+		Log.Debug("Progress: {Progress} Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", progress, screenBounds, res);
+
+		if (isOpening && progress >= 1)
+		{
+			_initialBounds = res;
+		}
 
 		return res;
 	}
