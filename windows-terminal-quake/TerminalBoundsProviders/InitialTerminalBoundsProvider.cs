@@ -14,24 +14,6 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 		_initialBounds = initialBounds;
 	}
 
-	public void OnToggleStart(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
-	{
-		//OnToggle(open, currentTerminalBounds);
-	}
-
-	public void OnToggleEnd(bool open, Rectangle screenBounds, Rectangle currentTerminalBounds)
-	{
-		//OnToggle(open, currentTerminalBounds);
-	}
-
-	public void OnToggle(bool open, Rectangle currentTerminalBounds)
-	{
-		if (!open && currentTerminalBounds.Width > 100 && currentTerminalBounds.Height > 100)
-		{
-			_initialBounds = currentTerminalBounds;
-		}
-	}
-
 	/// <inheritdoc/>
 	public Rectangle GetTerminalBounds(
 		bool isOpening,
