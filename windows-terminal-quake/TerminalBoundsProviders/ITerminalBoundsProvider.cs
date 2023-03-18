@@ -17,6 +17,7 @@ public interface ITerminalBoundsProvider
 	/// The rectangle in which the terminal should appear/disappear (eg. target screen).
 	/// </param>
 	/// <param name="currentTerminalBounds">
+	/// The bounds of the terminal at the moment the function was called.
 	/// </param>
 	/// <param name="progress">
 	/// Value between 0.0 and 1.0 to indicate the desired position of the window;
