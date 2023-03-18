@@ -492,6 +492,7 @@
 			"description": "How the terminal actually gets toggled on- and off the screen.\n\nDefault \"Resize\" should work on any setup, but may cause character jumping due to the terminal changing shape.\n\n\"Move\" prevents this, but may not work with vertical monitor setups, pushing the terminal onto the northern monitor.",
 
 			"enum": [
+				"Initial",
 				"Move",
 				"Resize"
 			],

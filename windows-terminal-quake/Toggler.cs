@@ -52,6 +52,7 @@ public class Toggler : IDisposable
 		{
 			_termBoundsProvider = s.ToggleMode switch
 			{
+				ToggleMode.Initial => new InitialTerminalBoundsProvider(Process.GetBounds()),
 				ToggleMode.Move => new MovingTerminalBoundsProvider(),
 				_ => new ResizingTerminalBoundsProvider()
 			};
@@ -126,7 +127,7 @@ public class Toggler : IDisposable
 				: (1.0 - (deltaMs / durationMs))
 			;
 
-			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(screen, animationFn(linearProgress));
+			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(open, screen, Process.GetBounds(), animationFn(linearProgress));
 
 			Process.MoveWindow(bounds: intermediateBounds);
 
@@ -138,7 +139,7 @@ public class Toggler : IDisposable
 		stopwatch.Stop();
 
 		// To ensure sure we end up in exactly the correct final position
-		var finalBounds = _termBoundsProvider.GetTerminalBounds(screen, open ? 1.0 : 0.0);
+		var finalBounds = _termBoundsProvider.GetTerminalBounds(open, screen, Process.GetBounds(), open ? 1.0 : 0.0);
 		Process.MoveWindow(bounds: finalBounds);
 
 		if (open)
@@ -179,8 +180,8 @@ public class Toggler : IDisposable
 	private static bool ActiveWindowIsInFullscreen()
 	{
 		IntPtr fgWindow = User32.GetForegroundWindow();
-		User32.Rect appBounds = new User32.Rect();
-		User32.Rect screen = new User32.Rect();
+		var appBounds = new Rect();
+		var screen = new Rect();
 		User32.GetWindowRect(User32.GetDesktopWindow(), ref screen);
 
 		if (fgWindow != User32.GetDesktopWindow() && fgWindow != User32.GetShellWindow())
