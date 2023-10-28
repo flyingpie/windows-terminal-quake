@@ -54,7 +54,8 @@ public class FocusTracker
 	{
 		var currentWindowHandle = User32.GetForegroundWindow();
 
-		List<Process> processes = new List<Process>();
+		List<Process> processes = new();
+
 		foreach (var suppressedProcess in QSettings.Instance.SuppressHotkeyForProcesses)
 		{
 			// Clean up the name of the processes
@@ -70,7 +71,7 @@ public class FocusTracker
 		}
 
 		// find if the foreground (current window) is in the list of suppressed processes
-		var currentWindow = processes.FirstOrDefault(x => x.MainWindowHandle == currentWindowHandle) ?? null;
+		var currentWindow = processes.Find(x => x.MainWindowHandle == currentWindowHandle) ?? null;
 		try
 		{
 			if (currentWindow == null) return false; // current window was not in the suppressed processes

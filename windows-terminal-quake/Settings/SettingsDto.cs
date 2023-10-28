@@ -6,7 +6,7 @@ namespace WindowsTerminalQuake.Settings;
 
 public class SettingsDto
 {
-	public static readonly List<Hotkey> DefaultHotkeys = new List<Hotkey>()
+	public static readonly IReadOnlyCollection<Hotkey> DefaultHotkeys = new List<Hotkey>()
 	{
 		new Hotkey() { Key = Keys.Oemtilde, Modifiers = KeyModifiers.Control },
 	};
@@ -51,7 +51,7 @@ public class SettingsDto
 	/// <para>The keys that can be used to toggle the terminal.</para>
 	/// <para>See "Hotkeys" for possible values.</para>
 	/// </summary>
-	public List<Hotkey>? Hotkeys { get; set; }
+	public IReadOnlyCollection<Hotkey>? Hotkeys { get; set; }
 
 	/// <summary>
 	/// <para>Minimum level of events that are logged.</para>

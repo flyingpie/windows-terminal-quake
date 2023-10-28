@@ -3,7 +3,7 @@
 
 var configuration = Argument("configuration", "Release");
 var output = Argument("output", "artifacts");
-var version = Argument("version", "1.5.0");
+var version = Argument("version", "1.6.0");
 
 var sln = "windows-terminal-quake.sln";
 var bin = $"./windows-terminal-quake/bin/{configuration}/net48";
@@ -54,6 +54,9 @@ Task("Artifact.SingleExe")
 			bin + "/windows-terminal-quake.exe",		// Primary assembly
 			deps,										// Assembly paths
 			new ILRepackSettings()
+			{
+				Internalize = true,
+			}
 		);
 
 		CopyFile(bin + "/windows-terminal-quake.json", art + "/windows-terminal-quake.json");
