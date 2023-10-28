@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using WindowsTerminalQuake.Native;
+﻿using WindowsTerminalQuake.Native;
 
 namespace WindowsTerminalQuake.Extensions;
 

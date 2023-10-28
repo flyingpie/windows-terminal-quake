@@ -9,7 +9,7 @@ public class Toggler : IDisposable
 	private Process Process => TerminalProcess.Get(_args);
 
 	private readonly string[] _args;
-	private readonly List<int> _registeredHotKeys = new List<int>();
+	private readonly List<int> _registeredHotKeys = new();
 
 	private readonly IAnimationTypeProvider _animTypeProvider = new AnimationTypeProvider();
 	private readonly IScreenBoundsProvider _scrBoundsProvider = new ScreenBoundsProvider();
@@ -40,12 +40,12 @@ public class Toggler : IDisposable
 			_registeredHotKeys.ForEach(hk => HotKeyManager.UnregisterHotKey(hk));
 			_registeredHotKeys.Clear();
 
-			s.Hotkeys.ForEach(hk =>
+			foreach (var hk in s.Hotkeys)
 			{
 				Log.Information($"Registering hot key {hk.Modifiers} + {hk.Key}");
 				var reg = HotKeyManager.RegisterHotKey(hk.Key, hk.Modifiers);
 				_registeredHotKeys.Add(reg);
-			});
+			}
 		});
 
 		QSettings.Get(s =>

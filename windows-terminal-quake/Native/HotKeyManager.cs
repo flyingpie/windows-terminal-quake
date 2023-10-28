@@ -28,29 +28,32 @@ public static class HotKeyManager
 		_wnd.Invoke(new UnRegisterHotKeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
 	}
 
-	private static readonly ManualResetEvent _windowReadyEvent = new ManualResetEvent(false);
+	private static readonly ManualResetEvent _windowReadyEvent = new(false);
 
 	private static volatile MessageWindow _wnd;
 	private static volatile IntPtr _hwnd;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 	static HotKeyManager()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	{
 		Thread messageLoop = new(delegate ()
 		{
 			Application.Run(new MessageWindow());
-		});
+		})
+		{
+			Name = "MessageLoopThread",
+			IsBackground = true
+		};
 
-		messageLoop.Name = "MessageLoopThread";
-		messageLoop.IsBackground = true;
 		messageLoop.Start();
 	}
 
 	/// <summary>
 	/// We need a window to catch the global hot key event.
 	/// </summary>
-	private class MessageWindow : Form
+	private sealed class MessageWindow : Form
 	{
 		public MessageWindow()
 		{
@@ -63,7 +66,7 @@ public static class HotKeyManager
 		{
 			if (m.Msg == WM_HOTKEY)
 			{
-				HotKeyEventArgs e = new HotKeyEventArgs(m.LParam);
+				HotKeyEventArgs e = new(m.LParam);
 				HotKeyPressed?.Invoke(null, e);
 			}
 

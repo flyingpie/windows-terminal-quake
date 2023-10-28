@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using WindowsTerminalQuake.Extensions;
+﻿using WindowsTerminalQuake.Extensions;
 using WindowsTerminalQuake.Native;
 
 namespace System.Diagnostics;
@@ -65,10 +64,10 @@ public static class ProcessExtensions
 
 		Retry.Execute(() =>
 		{
-			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Process handle zero");
+			if (process.MainWindowHandle == IntPtr.Zero) throw new WindowsTerminalQuakeException("Process handle zero");
 
 			var isSet = User32.SetWindowPos(process.MainWindowHandle, User32.HWND_TOPMOST, 0, 0, 0, 0, User32.TOPMOST_FLAGS);
-			if (!isSet) throw new Exception("Could not set window top most");
+			if (!isSet) throw new WindowsTerminalQuakeException("Could not set window top most");
 		});
 	}
 
@@ -93,7 +92,7 @@ public static class ProcessExtensions
 
 		Retry.Execute(() =>
 		{
-			if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Process handle zero");
+			if (process.MainWindowHandle == IntPtr.Zero) throw new WindowsTerminalQuakeException("Process handle zero");
 
 			// Get original window properties
 			var props = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
@@ -103,7 +102,7 @@ public static class ProcessExtensions
 
 			// Set transparency
 			var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWA_ALPHA);
-			if (!isSet) throw new Exception("Could not set window opacity");
+			if (!isSet) throw new WindowsTerminalQuakeException("Could not set window opacity");
 		});
 	}
 

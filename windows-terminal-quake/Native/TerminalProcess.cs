@@ -37,9 +37,9 @@ public static class TerminalProcess
 			},
 			onRetry: (ex, t) => Log.Error($"Error creating process: '{ex.Message}'"));
 
-	private static Process? _process;
+	private static readonly List<Action> _onExit = new();
 
-	private static List<Action> _onExit = new List<Action>();
+	private static Process? _process;
 
 	private static bool _isExitting;
 
@@ -47,10 +47,7 @@ public static class TerminalProcess
 	{
 		try
 		{
-			if (_process != null)
-			{
-				_process.CloseMainWindow();
-			}
+			_process?.CloseMainWindow();
 		}
 		catch (Exception ex)
 		{
@@ -94,12 +91,12 @@ public static class TerminalProcess
 			}
 			catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
 			{
-				throw new Exception($"Could not find the Windows Terminal exe at '{QSettings.Instance.WindowsTerminalCommand}'. Make sure it is installed, and see '{nameof(QSettings.Instance.WindowsTerminalCommand)}' setting for more information.");
+				throw new WindowsTerminalQuakeException($"Could not find the Windows Terminal exe at '{QSettings.Instance.WindowsTerminalCommand}'. Make sure it is installed, and see '{nameof(QSettings.Instance.WindowsTerminalCommand)}' setting for more information.");
 			}
 
 			// After starting the process, just throw an exception so the process search gets restarted.
 			// The "wt.exe" process does some stuff to ultimately fire up a "WindowsTerminal" process, so we can't actually use the Process instance we just created.
-			throw new Exception($"Started process");
+			throw new WindowsTerminalQuakeException($"Started process");
 		}
 
 		// Try the "nice way" of waiting for the process to become ready
@@ -110,22 +107,22 @@ public static class TerminalProcess
 			$"Got process with id '{process.Id}' and name '{process.ProcessName}' and title '{process.MainWindowTitle}'.");
 
 		// Make sure the process has not exited
-		if (process.HasExited) throw new Exception($"Process existing.");
+		if (process.HasExited) throw new WindowsTerminalQuakeException($"Process existing.");
 
 		// Make sure we can access the main window handle
 		// Note: Accessing mainWindowHandle already throws "Process has exited, so the requested information is not available."
-		if (process.MainWindowHandle == IntPtr.Zero) throw new Exception("Main window handle not accessible.");
+		if (process.MainWindowHandle == IntPtr.Zero) throw new WindowsTerminalQuakeException("Main window handle not accessible.");
 
 		// Make sure the process name equals "WindowsTerminal", otherwise WT might still be starting
-		if (process.ProcessName != "WindowsTerminal") throw new Exception("Process name is not 'WindowsTerminal' yet.");
+		if (process.ProcessName != "WindowsTerminal") throw new WindowsTerminalQuakeException("Process name is not 'WindowsTerminal' yet.");
 
 		// We need a proper window title before we can continue
 		if (process.MainWindowTitle == "")
-			throw new Exception($"Process still has temporary '' (empty) window title.");
+			throw new WindowsTerminalQuakeException($"Process still has temporary '' (empty) window title.");
 
 		// This is a way-too-specific check to further ensure the WT process is ready
 		if (process.MainWindowTitle == "DesktopWindowXamlSource")
-			throw new Exception($"Process still has temporary 'DesktopWindowXamlSource' window title.");
+			throw new WindowsTerminalQuakeException($"Process still has temporary 'DesktopWindowXamlSource' window title.");
 
 		process.EnableRaisingEvents = true;
 		process.Exited += (s, a) => FireOnExit();
