@@ -21,6 +21,8 @@ The file can be placed at either (in order):
 - File called "windows-terminal-quake.json", next to the app .exe
 - "C:\\Users\\(username)\\windows-terminal-quake.json"
 
+WTQ also supports the extensions **.jsonc** and **.json5**, which can be useful for automatic syntax highlighting support in editors.
+
 Changing the file automatically results in the app reloading the settings.
 
 <span class="by">Settings feature Suggested by [Mike F](https://github.com/mikef-nl).</span>
