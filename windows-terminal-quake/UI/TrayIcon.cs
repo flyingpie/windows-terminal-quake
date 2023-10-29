@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace WindowsTerminalQuake.UI;
+﻿namespace WindowsTerminalQuake.UI;
 
 public class TrayIcon : IDisposable
 {
@@ -74,7 +72,7 @@ public class TrayIcon : IDisposable
 				Log.Warning($"Settings file '{path}' not found, attempting to create an example file now and opening that.");
 
 				//  Open the first default path.
-				path = QSettings.PathsToSettings[0];
+				path = QSettings.Instance.PathToSettings;
 
 				// Make sure it doesn't already exist, and only then write some stub JSON.
 				// "path" here may not be equal to "path" earlier, since we grabbed a path from PathToSettings.

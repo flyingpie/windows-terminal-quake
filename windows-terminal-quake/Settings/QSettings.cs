@@ -4,16 +4,23 @@ namespace WindowsTerminalQuake.Settings;
 
 public class QSettings
 {
-	public const string SettingsFile = "windows-terminal-quake.json";
-
-	public static readonly string[] PathsToSettings = new[]
+	public static readonly string[] PathsToSettingsDirs = new[]
 	{
 		// C:/path/to/windows-terminal-quake.json
-		Path.Combine(Path.GetDirectoryName(new Uri(typeof(QSettings).Assembly.Location).LocalPath), SettingsFile),
+		Path.GetDirectoryName(new Uri(typeof(QSettings).Assembly.Location).LocalPath),
 
 		// C:/Users/username/windows-terminal-quake.json
-		Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingsFile),
+		Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
 	};
+
+	public static readonly string[] SettingsFileExtensions = new[]
+	{
+		".json",
+		".jsonc",
+		".json5",
+	};
+
+	public const string SettingsFileNameWithoutExtension = "windows-terminal-quake";
 
 	private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
 
@@ -46,6 +53,17 @@ public class QSettings
 		Reload(false);
 	}
 
+	public static IEnumerable<string> GetPathsToSettingsFiles()
+	{
+		foreach (var dir in PathsToSettingsDirs)
+		{
+			foreach (var ext in SettingsFileExtensions)
+			{
+				yield return Path.Combine(dir, SettingsFileNameWithoutExtension + ext);
+			}
+		}
+	}
+
 	public static void Reload(bool notify)
 	{
 		try
@@ -56,7 +74,7 @@ public class QSettings
 			{
 				Log.Information("Reloading settings");
 
-				foreach (var pathToSettings in PathsToSettings)
+				foreach (var pathToSettings in GetPathsToSettingsFiles())
 				{
 					// Make sure that the file exists
 					if (!File.Exists(pathToSettings))
@@ -99,7 +117,7 @@ public class QSettings
 	{
 		Application.ApplicationExit += (s, a) => _fsWatchers.ForEach(w => w.Dispose());
 
-		return PathsToSettings
+		return GetPathsToSettingsFiles()
 			.Select(path =>
 			{
 				try
