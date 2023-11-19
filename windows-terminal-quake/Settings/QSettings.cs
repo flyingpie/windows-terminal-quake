@@ -4,6 +4,8 @@ namespace WindowsTerminalQuake.Settings;
 
 public class QSettings
 {
+	public static readonly string DefaultPathToSettingsFile = Path.Combine(Path.GetDirectoryName(new Uri(typeof(QSettings).Assembly.Location).LocalPath), SettingsFileNameWithoutExtension + ".json");
+
 	public static readonly string[] PathsToSettingsDirs = new[]
 	{
 		// C:/path/to/windows-terminal-quake.json

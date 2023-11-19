@@ -167,7 +167,7 @@ public class SettingsDto
 	/// The location of the file where the current settings were loaded from.
 	/// Can be null if these are defaults.
 	/// </summary>
-	internal string? PathToSettings { get; set; }
+	internal string PathToSettings { get; set; } = QSettings.DefaultPathToSettingsFile;
 
 	/// <summary>
 	/// Vertical screen coverage as an index (0 - 1).
