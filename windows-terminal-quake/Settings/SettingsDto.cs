@@ -51,7 +51,7 @@ public class SettingsDto
 	/// <para>The keys that can be used to toggle the terminal.</para>
 	/// <para>See "Hotkeys" for possible values.</para>
 	/// </summary>
-	public IReadOnlyCollection<Hotkey>? Hotkeys { get; set; }
+	public IReadOnlyCollection<Hotkey>? Hotkeys { get; set; } = Array.Empty<Hotkey>();
 
 	/// <summary>
 	/// <para>Minimum level of events that are logged.</para>
