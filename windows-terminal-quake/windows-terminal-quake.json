@@ -14,7 +14,7 @@
 	"Hotkeys": [
 		{
 			"Modifiers": "Control",
-			"Key": "OemTilde"
+			"Key": "Oemtilde"
 		}
 	],
 
@@ -48,6 +48,9 @@
 	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
 	// Oem1 - Oem8, Oem102
 
+	// Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.
+	"CloseTerminalOnExit": false,
+
 	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
 	"DisableWhenActiveAppIsInFullscreen": false,
 
@@ -58,6 +61,10 @@
 	/// Size & Align
 	////////////////////////////////////////////////////////////////////////////////////
 
+	// Whether to maintain the current size of the terminal (as it was when first opened, and possible resizes done by the user).
+	// If "false", the terminal will be sized based on the settings below.
+	"KeepOriginalSize": false,
+
 	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
 	// "Center", "Left" or "Right".
 	"HorizontalAlign": "Center",
@@ -65,7 +72,7 @@
 	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
 	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
 	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
-	"HorizontalScreenCoverage": 100,
+	"HorizontalScreenCoverage": 80,
 
 	// How much room to leave between the top of the terminal and the top of the screen.
 	"VerticalOffset": 0,
@@ -104,7 +111,7 @@
 	/// "Resize" (default) or "Move".
 	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
 	/// "Move" keeps the size of the terminal constant, but moves the terminal off-screen to the top, which won't work great with vertically stacked monitors.
-	"ToggleMode": "Resize",
+	"ToggleMode": "Move",
 
 	////////////////////////////////////////////////////////////////////////////////////
 	/// Multi-Monitor

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿namespace WindowsTerminalQuake.ProcessProviders;
 
-namespace WindowsTerminalQuake.ProcessProviders
+public interface IProcessProvider
 {
-	public interface IProcessProvider
-	{
-		Process Get(string[] args);
+	Process Get(string[] args);
 
-		void OnExit(Action action);
-	}
+	void OnExit(Action action);
 }

@@ -14,6 +14,16 @@
 			"default": false
 		},
 
+		"CloseTerminalOnExit": {
+			"$id": "#/properties/CloseTerminalOnExit",
+
+			"title": "Close terminal on exit",
+			"description": "Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.",
+
+			"type": "boolean",
+			"default": false
+		},
+
 		"DisableWhenActiveAppIsInFullscreen": {
 			"$id": "#/properties/DisableWhenActiveAppIsInFullscreen",
 
@@ -53,7 +63,7 @@
 			"title": "Horizontal screen coverage",
 			"description": "Horizontal screen coverage, as a percentage.\n\nNote that since the terminal's size is fixed to character widths, a width of \"100\" might not cover the entire screen. To circumvent this, either use a value large than 100, or use \"MaximizeAfterToggle\".",
 
-			"type": "integer",
+			"type": "number",
 			"default": 100
 		},
 
@@ -482,10 +492,11 @@
 			"description": "How the terminal actually gets toggled on- and off the screen.\n\nDefault \"Resize\" should work on any setup, but may cause character jumping due to the terminal changing shape.\n\n\"Move\" prevents this, but may not work with vertical monitor setups, pushing the terminal onto the northern monitor.",
 
 			"enum": [
+				"Initial",
 				"Move",
 				"Resize"
 			],
-			"default": "Resize"
+			"default": "Move"
 		},
 
 		"VerticalOffset": {
@@ -504,7 +515,7 @@
 			"title": "Vertical screen coverage",
 			"description": "Vertical screen coverage as a percentage (0-100).",
 
-			"type": "integer",
+			"type": "number",
 			"default": 100
 		}
 	}
