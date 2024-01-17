@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Serilog.Events;
 using WindowsTerminalQuake.Native;
-using WindowsTerminalQuake.ProcessProviders;
+using WindowsTerminalQuake.TerminalProcessProviders;
 
 namespace WindowsTerminalQuake.Settings;
 
@@ -96,7 +96,8 @@ public class SettingsDto
 	/// <summary>
 	/// TODO
 	/// </summary>
-	public string ProcessProvider { get; set; } = nameof(WindowsTerminalProcessProvider);
+	//	public string ProcessProvider { get; set; } = nameof(WindowsTerminalProcessProvider);
+	public string ProcessProvider { get; set; } = nameof(GenericProcessProvider);
 
 	/// <summary>
 	/// <para>Whether to hide the terminal window immediately after app start.</para>
