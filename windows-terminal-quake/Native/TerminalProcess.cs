@@ -33,7 +33,10 @@ public static class TerminalProcess
 				TimeSpan.FromMilliseconds(50),
 				TimeSpan.FromMilliseconds(100),
 				TimeSpan.FromMilliseconds(250),
-				TimeSpan.FromMilliseconds(500)
+				TimeSpan.FromMilliseconds(500),
+				TimeSpan.FromMilliseconds(1000),
+				TimeSpan.FromMilliseconds(2000),
+				TimeSpan.FromMilliseconds(5000),
 			},
 			onRetry: (ex, t) => Log.Error($"Error creating process: '{ex.Message}'"));
 
