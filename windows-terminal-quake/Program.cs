@@ -1,63 +1,58 @@
-﻿using WindowsTerminalQuake.Native;
-using WindowsTerminalQuake.UI;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Wtq.Configuration;
+using Wtq.Services;
+using Wtq.Services.AnimationTypeProviders;
+using Wtq.Services.ScreenBoundsProviders;
+using Wtq.Services.TerminalBoundsProviders;
 
-namespace WindowsTerminalQuake;
+namespace Wtq;
 
-public class Program
+public static class Program
 {
-	private static Toggler? _toggler;
-	private static TrayIcon? _trayIcon;
-
-	public static string GetVersion()
+	public static async Task Main(string[] args)
 	{
-		try
-		{
-			var ass = typeof(Program).Assembly;
-			var ver = FileVersionInfo.GetVersionInfo(ass.Location);
+		Console.WriteLine("Hello, World!");
 
-			return ver.FileVersion;
-		}
-		catch (Exception ex)
-		{
-			Log.Error(ex, $"Could not get app version: {ex.Message}");
-			return "(could not get version)";
-		}
-	}
+		// Configuration.
+		var config = new ConfigurationBuilder()
+			.AddJsonFile(f =>
+			{
+				f.Optional = false;
+				f.Path = "windows-terminal-quake.jsonc";
+			})
+			.Build();
 
-	public static void Main(string[] args)
-	{
-		Logging.Configure();
+		// Logging.
+		Wtq.Utils.Log.Configure(config);
 
-		Log.Information("Windows Terminal Quake started");
+		await new HostBuilder()
+			.ConfigureAppConfiguration(opt =>
+			{
+				opt.AddConfiguration(config);
+			})
+			.ConfigureServices(opt =>
+			{
+				opt
+					.AddOptionsWithValidateOnStart<WtqOptions>()
+					.Bind(config);
 
-		_trayIcon = new TrayIcon((s, a) => Close());
+				opt
+					.AddSingleton<IAnimationTypeProvider, AnimationTypeProvider>()
+					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
+					.AddSingleton<ITerminalBoundsProvider, MovingTerminalBoundsProvider>()
 
-		try
-		{
-			TerminalProcess.OnExit(() => Close());
+					.AddSingleton<Toggler>()
+					.AddSingleton<IRetry, Retry>()
+					.AddSingleton<WtqAppMonitorService>()
 
-			_toggler = new Toggler(args);
-
-			// Transparency
-			QSettings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
-
-			var hotkeys = string.Join(" or ", QSettings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
-
-			_trayIcon.Notify(ToolTipIcon.Info, $"Windows Terminal Quake is running, press {hotkeys} to toggle.");
-		}
-		catch (Exception ex)
-		{
-			Log.Logger.Warning(ex, $"Error: {ex.Message}");
-
-			MessageBox.Show($"Error starting Windows Terminal Quake: {ex.Message}", "Ah nej :(");
-
-			Close();
-		}
-	}
-
-	private static void Close()
-	{
-		_toggler?.Dispose();
-		_trayIcon?.Dispose();
+					.AddHostedService(p => p.GetRequiredService<WtqAppMonitorService>())
+					.AddHostedService<WtqService>();
+			})
+			.UseSerilog()
+			.Build()
+			.RunAsync();
 	}
 }

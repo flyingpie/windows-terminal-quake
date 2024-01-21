@@ -1,9 +1,13 @@
-﻿namespace WindowsTerminalQuake.Native;
+﻿using System.Threading;
+using System.Windows.Forms;
+using Wtq.Native.Win32;
+
+namespace Wtq.Native;
 
 /// <summary>
 /// Wrapper around Windows Forms global hot key functionality. Surfaces an delegate to handle the hot key being pressed.
 /// </summary>
-public static class HotKeyManager
+public static class HotkeyManager
 {
 	/// <summary>
 	/// Fired when the registered hot key is pressed. Note that <see cref="RegisterHotKey"/> needs to be called first.
@@ -35,7 +39,7 @@ public static class HotKeyManager
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-	static HotKeyManager()
+	static HotkeyManager()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	{
 		Thread messageLoop = new(delegate ()

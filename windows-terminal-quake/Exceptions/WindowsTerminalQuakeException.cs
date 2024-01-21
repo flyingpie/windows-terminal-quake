@@ -1,4 +1,4 @@
-﻿namespace WindowsTerminalQuake.Exceptions;
+﻿namespace Wtq.Exceptions;
 
 public sealed class WindowsTerminalQuakeException : Exception
 {

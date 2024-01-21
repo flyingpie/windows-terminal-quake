@@ -1,4 +1,4 @@
-﻿namespace WindowsTerminalQuake.Native;
+﻿namespace Wtq.Native;
 
 [Flags]
 public enum KeyModifiers
@@ -9,5 +9,5 @@ public enum KeyModifiers
 	Control = 2,
 	Shift = 4,
 	Windows = 8,
-	NoRepeat = 0x4000
+	NoRepeat = 0x4000,
 }

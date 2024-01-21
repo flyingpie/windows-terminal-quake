@@ -1,51 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>windows-terminal-quake</AssemblyName>
-		<RootNamespace>WindowsTerminalQuake</RootNamespace>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RootNamespace>Wtq</RootNamespace>
 
-		<TargetFramework>net48</TargetFramework>
-		<LangVersion>11.0</LangVersion>
+		<OutputType>Exe</OutputType>
 		<Nullable>enable</Nullable>
-		<OutputType>WinExe</OutputType>
 
-		<ApplicationIcon>UI\icon.ico</ApplicationIcon>
+		<!--<PublishAot>true</PublishAot>-->
+		<!--<InvariantGlobalization>true</InvariantGlobalization>-->
+
+		<UseWindowsForms>true</UseWindowsForms>
+
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
+		<None Remove="NativeMethods.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Polly" Version="8.0.0" />
-		<PackageReference Include="Serilog" Version="3.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Serilog" Version="3.1.1" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="UI\_Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>_Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="UI\_Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>_Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="*.json">
+		<None Update="*.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="..\schema\windows-terminal-quake.schema.1.json" Link="windows-terminal-quake.schema.1.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
+	  <Folder Include="Exceptions\" />
 	</ItemGroup>
 </Project>
