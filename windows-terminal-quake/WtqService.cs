@@ -51,6 +51,9 @@ public sealed class WtqService(
 
 	private void ToggleStuff(HotKeyEventArgs args)
 	{
+		const int openTimeMs = 100;
+		const int switchTimeMs = 50;
+
 		_log.LogInformation("Pressed hot key ['{Modifiers}'] + '{HotKey}'", args.Modifiers, args.Key);
 
 		var app = _opts.Value.Apps.FirstOrDefault(a => a.HasHotkey(args.Key, args.Modifiers));
@@ -59,7 +62,7 @@ public sealed class WtqService(
 		{
 			if (open != null)
 			{
-				_toggler.Toggle(open.Process, false, 200);
+				_toggler.Toggle(open.Process, false, openTimeMs);
 				_lastOpen = open;
 				open = null;
 				return;
@@ -73,7 +76,7 @@ public sealed class WtqService(
 				}
 
 				open = _lastOpen;
-				_toggler.Toggle(open.Process, true, 200);
+				_toggler.Toggle(open.Process, true, openTimeMs);
 				return;
 			}
 
@@ -99,13 +102,14 @@ public sealed class WtqService(
 		{
 			if (open == process)
 			{
-				_toggler.Toggle(open.Process, false, 200);
+				_toggler.Toggle(open.Process, false, openTimeMs);
+				_lastOpen = open;
 				open = null;
 			}
 			else
 			{
-				_toggler.Toggle(open.Process, false, 100);
-				_toggler.Toggle(process.Process, true, 100);
+				_toggler.Toggle(open.Process, false, switchTimeMs);
+				_toggler.Toggle(process.Process, true, switchTimeMs);
 				open = process;
 			}
 
@@ -113,7 +117,7 @@ public sealed class WtqService(
 		}
 
 		_log.LogInformation("Toggling process {Process}", process);
-		_toggler.Toggle(process.Process, true, 200);
+		_toggler.Toggle(process.Process, true, openTimeMs);
 
 		open = process;
 	}

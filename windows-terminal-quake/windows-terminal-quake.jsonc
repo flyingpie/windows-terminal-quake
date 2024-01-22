@@ -3,34 +3,25 @@
 		{
 			"HotKeys": [ { "Modifiers": "Control", "Key": "1" } ],
 			"StartNew": {
+				// TODO: StartNew doesn't work yet.
 				"FileName": "wt.exe"
 			},
 			"FindExisting": {
-				//"ProcessName": "WindowsTerminal"
-				"ProcessName": "wezterm-gui"
+				"ProcessName": "WindowsTerminal"
 			}
 		},
 		{
-			"HotKeys": [
-				{
-					"Modifiers": "Control",
-					"Key": "2"
-				}
-			],
+			"HotKeys": [ { "Modifiers": "Control", "Key": "2" } ],
 			"StartNew": {
-				"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
+				// TODO: StartNew doesn't work yet.
+				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
 			},
 			"FindExisting": {
 				"ProcessName": "Q-Dir_x64"
 			}
 		},
 		{
-			"HotKeys": [
-				{
-					"Modifiers": "Control",
-					"Key": "3"
-				}
-			],
+			"HotKeys": [ { "Modifiers": "Control", "Key": "3" } ],
 			"StartNew": {
 				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
 			},
@@ -38,7 +29,7 @@
 				"ProcessName": "ProcessHacker"
 			}
 		},
-			{
+		{
 			"HotKeys": [ { "Modifiers": "Control", "Key": "4" } ],
 			"StartNew": {
 				"FileName": ""

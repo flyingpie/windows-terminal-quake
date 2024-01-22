@@ -30,6 +30,12 @@ public class Toggler(
 
 	public void Toggle(Process process, bool open, int durationMs)
 	{
+		// TODO: Change it so that this method doesn't even get called if we don't have a valid process.
+		if (process == null)
+		{
+			return;
+		}
+
 		var animationFn = _animTypeProvider.GetAnimationFunction();
 		//var frameTimeMs = QSettings.Instance.ToggleAnimationFrameTimeMs;
 		var frameTimeMs = 25;
@@ -75,9 +81,7 @@ public class Toggler(
 		}
 		stopwatch.Stop();
 
-
-
-		// To ensure sure we end up in exactly the correct final position
+		// To ensure we end up in exactly the correct final position
 		var finalBounds = _termBoundsProvider.GetTerminalBounds(open, screen, process.GetBounds(), open ? 1.0 : 0.0);
 		process.MoveWindow(bounds: finalBounds);
 
@@ -96,9 +100,9 @@ public class Toggler(
 			// Minimize first, so the last window gets focus
 			process.SetWindowState(WindowShowStyle.Minimize);
 
-			//// Then hide, so the terminal windows doesn't linger on the desktop
-			//if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
-			//	Process.SetWindowState(WindowShowStyle.Hide);
+			// Then hide, so the terminal windows doesn't linger on the desktop
+//			if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
+				process.SetWindowState(WindowShowStyle.Hide);
 		}
 	}
 

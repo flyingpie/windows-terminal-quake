@@ -17,8 +17,30 @@ public class WtqProcess : IDisposable
 	{
 		if (Process != null)
 		{
+			var bounds = Process.GetBounds(); // TODO: Restore to original position (when we got a hold of the process).
+			bounds.Width = 1280;
+			bounds.Height = 800;
+			bounds.X = 0;
+			bounds.Y = 0;
+
+			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
+
+			Process.SetWindowState(WindowShowStyle.Restore);
+			Process.MoveWindow(bounds);
 			Process.SetTaskbarIconVisibility(true);
-			Process.SetWindowState(WindowShowStyle.Maximize);
+		}
+	}
+
+	public string? ProcessDescription
+	{
+		get
+		{
+			if (Process == null)
+			{
+				return "<no process attached>";
+			}
+
+			return $"[{Process?.Id}] {Process?.ProcessName}";
 		}
 	}
 
@@ -28,7 +50,7 @@ public class WtqProcess : IDisposable
 
 	public override string ToString()
 	{
-		return $"[{App}] {(Process?.ProcessName ?? "<no process>")}";
+		return $"[App:{App}] [ProcessID:{Process?.Id}] {(Process?.ProcessName ?? "<no process>")}";
 	}
 
 	/// <summary>
@@ -36,6 +58,13 @@ public class WtqProcess : IDisposable
 	/// </summary>
 	public async Task UpdateAsync(IEnumerable<Process> processes)
 	{
+		// Check that if we have a process handle, the process is still active.
+		if (Process?.HasExited ?? false)
+		{
+			_log.LogInformation("Process with name '{ProcessName}' and id '{ProcessId}' exited, releasing handle", Process.ProcessName, Process.Id);
+			Process = null;
+		}
+
 		if (Process == null)
 		{
 			// TODO: Handle multiple processes coming back?
