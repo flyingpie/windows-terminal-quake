@@ -1,0 +1,49 @@
+{
+	"Apps": [
+		{
+			"Name": "Terminal",
+			"HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+			"StartNew": {
+				// TODO: StartNew doesn't work yet.
+				"FileName": "wt.exe"
+			},
+			"FindExisting": {
+				"ProcessName": "wezterm-gui"
+				//"ProcessName": "WindowsTerminal"
+				//"WindowTitle": "Can we do that?"
+			}
+		},
+		{
+			"Name": "QDir",
+			"HotKeys": [ { "Modifiers": "Control", "Key": "D2" } ],
+			"StartNew": {
+				// TODO: StartNew doesn't work yet.
+				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
+			},
+			"FindExisting": {
+				"ProcessName": "Q-Dir_x64"
+			}
+		},
+		{
+			"Name": "ProcessHacker",
+			"HotKeys": [ { "Modifiers": "Control", "Key": "D3" } ],
+			"StartNew": {
+				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
+			},
+			"FindExisting": {
+				"ProcessName": "ProcessHacker"
+			}
+		},
+		{
+			"Name": "Spotify",
+			"HotKeys": [ { "Modifiers": "Control", "Key": "D4" } ],
+			"StartNew": {
+				"FileName": ""
+			},
+			"FindExisting": {
+				"ProcessName": "Spotify"
+			}
+		}
+	],
+	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ]
+}

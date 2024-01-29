@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.WinForms</AssemblyName>
+		<RootNamespace>Wtq.WinForms</RootNamespace>
+
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wtq.Core\Wtq.Core.csproj" />
+		<ProjectReference Include="..\Wtq.Win32\Wtq.Win32.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Windows</AssemblyName>
+		<RootNamespace>Wtq.Windows</RootNamespace>
+
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\10-Core\Wtq.Core\wtq.jsonc" Link="wtq.jsonc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq.Core\Wtq.Core.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq.SharpHook\Wtq.SharpHook.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq.SimpleTrayIcon\Wtq.SimpleTrayIcon.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq.Win32\Wtq.Win32.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq.WinForms\Wtq.WinForms.csproj" />
+	</ItemGroup>
+</Project>

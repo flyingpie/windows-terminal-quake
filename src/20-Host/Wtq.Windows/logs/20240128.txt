@@ -1,0 +1,274 @@
+2024-01-28 21:57:51.686 +01:00 [INF] Updating app process
+2024-01-28 21:57:51.686 +01:00 [INF] Starting
+2024-01-28 21:57:51.721 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 21:57:51.728 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 21:57:51.730 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 21:57:51.731 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 21:57:51.734 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 21:57:52.219 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 21:57:52.222 +01:00 [INF] Hosting environment: Production
+2024-01-28 21:57:52.223 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 21:57:52.628 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 21:57:52.851 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 21:57:53.077 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 21:57:53.345 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 21:57:53.347 +01:00 [INF] Updated app process, took "00:00:01.6681441"
+2024-01-28 21:57:55.361 +01:00 [INF] Updating app process
+2024-01-28 21:57:55.381 +01:00 [INF] Updated app process, took "00:00:00.0203896"
+2024-01-28 21:57:57.395 +01:00 [INF] Updating app process
+2024-01-28 21:57:57.406 +01:00 [INF] Updated app process, took "00:00:00.0116000"
+2024-01-28 21:57:59.416 +01:00 [INF] Updating app process
+2024-01-28 21:57:59.427 +01:00 [INF] Updated app process, took "00:00:00.0114769"
+2024-01-28 21:58:00.456 +01:00 [INF] Application is shutting down...
+2024-01-28 21:58:00.460 +01:00 [INF] Stopping
+2024-01-28 21:58:00.465 +01:00 [INF] Restoring process '[23956] wezterm-gui' to its original bounds of 'Wtq.Core.Data.WtqRect'
+2024-01-28 21:58:00.485 +01:00 [INF] Restoring process '[43668] Q-Dir_x64' to its original bounds of 'Wtq.Core.Data.WtqRect'
+2024-01-28 21:58:00.507 +01:00 [INF] Restoring process '[45596] ProcessHacker' to its original bounds of 'Wtq.Core.Data.WtqRect'
+2024-01-28 21:58:00.512 +01:00 [INF] Restoring process '[42552] Spotify' to its original bounds of 'Wtq.Core.Data.WtqRect'
+2024-01-28 22:03:43.565 +01:00 [INF] Updating app process
+2024-01-28 22:03:43.565 +01:00 [INF] Starting
+2024-01-28 22:03:43.613 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:03:43.620 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:03:43.621 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:03:43.623 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:03:43.624 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:03:43.922 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:03:43.924 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:03:43.925 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:03:44.510 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:03:44.736 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:03:44.946 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:03:45.312 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:03:45.314 +01:00 [INF] Updated app process, took "00:00:01.7555801"
+2024-01-28 22:03:47.327 +01:00 [INF] Updating app process
+2024-01-28 22:03:47.347 +01:00 [INF] Updated app process, took "00:00:00.0197147"
+2024-01-28 22:03:48.237 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:03:49.349 +01:00 [INF] Updating app process
+2024-01-28 22:03:49.362 +01:00 [INF] Updated app process, took "00:00:00.0129250"
+2024-01-28 22:03:51.372 +01:00 [INF] Updating app process
+2024-01-28 22:03:51.383 +01:00 [INF] Updated app process, took "00:00:00.0114257"
+2024-01-28 22:03:51.389 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:03:53.111 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:03:53.384 +01:00 [INF] Updating app process
+2024-01-28 22:03:53.395 +01:00 [INF] Updated app process, took "00:00:00.0110857"
+2024-01-28 22:03:54.186 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:03:55.408 +01:00 [INF] Updating app process
+2024-01-28 22:03:55.419 +01:00 [INF] Updated app process, took "00:00:00.0110349"
+2024-01-28 22:03:57.428 +01:00 [INF] Updating app process
+2024-01-28 22:03:57.440 +01:00 [INF] Updated app process, took "00:00:00.0114490"
+2024-01-28 22:05:07.512 +01:00 [INF] Starting
+2024-01-28 22:05:07.512 +01:00 [INF] Updating app process
+2024-01-28 22:05:07.555 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:05:07.558 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:05:07.559 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:05:07.561 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:05:07.564 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:05:07.688 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:05:07.691 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:05:07.692 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:05:08.474 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:05:08.696 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:05:08.901 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:05:09.199 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:05:09.202 +01:00 [INF] Updated app process, took "00:00:01.6984899"
+2024-01-28 22:05:11.216 +01:00 [INF] Updating app process
+2024-01-28 22:05:11.236 +01:00 [INF] Updated app process, took "00:00:00.0207569"
+2024-01-28 22:05:13.248 +01:00 [INF] Updating app process
+2024-01-28 22:05:13.258 +01:00 [INF] Updated app process, took "00:00:00.0105528"
+2024-01-28 22:05:15.269 +01:00 [INF] Updating app process
+2024-01-28 22:05:15.280 +01:00 [INF] Updated app process, took "00:00:00.0110370"
+2024-01-28 22:05:17.296 +01:00 [INF] Updating app process
+2024-01-28 22:05:17.308 +01:00 [INF] Updated app process, took "00:00:00.0126708"
+2024-01-28 22:05:19.298 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:06:13.534 +01:00 [INF] Updating app process
+2024-01-28 22:06:13.534 +01:00 [INF] Starting
+2024-01-28 22:06:13.580 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:06:13.583 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:06:13.585 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:06:13.586 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:06:13.587 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:06:13.700 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:06:13.702 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:06:13.703 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:06:14.319 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:06:14.541 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:06:14.753 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:06:15.051 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:06:15.053 +01:00 [INF] Updated app process, took "00:00:01.5273206"
+2024-01-28 22:06:16.394 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:07:53.757 +01:00 [INF] Updating app process
+2024-01-28 22:07:53.757 +01:00 [INF] Starting
+2024-01-28 22:07:53.811 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:07:53.816 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:07:53.818 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:07:53.820 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:07:53.821 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:07:53.966 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:07:53.968 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:07:53.969 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:07:54.853 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:07:55.078 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:07:55.319 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:07:55.748 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:07:55.750 +01:00 [INF] Updated app process, took "00:00:02.0006385"
+2024-01-28 22:07:57.539 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:08:05.951 +01:00 [INF] Updating app process
+2024-01-28 22:38:44.131 +01:00 [INF] Updating app process
+2024-01-28 22:38:44.131 +01:00 [INF] Starting
+2024-01-28 22:38:44.184 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:38:44.187 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:38:44.189 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:38:44.190 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:38:44.192 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:40:40.827 +01:00 [INF] Starting
+2024-01-28 22:40:40.827 +01:00 [INF] Updating app process
+2024-01-28 22:40:40.871 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:40:40.875 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:40:40.879 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:40:40.880 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:40:40.882 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:41:08.072 +01:00 [INF] Starting
+2024-01-28 22:41:08.072 +01:00 [INF] Updating app process
+2024-01-28 22:41:08.138 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:41:08.141 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:41:08.143 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:41:08.144 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:41:08.146 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:45:50.674 +01:00 [INF] Updating app process
+2024-01-28 22:45:50.674 +01:00 [INF] Starting
+2024-01-28 22:45:50.730 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:45:50.733 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:45:50.735 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:45:50.736 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:45:50.737 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:46:09.947 +01:00 [INF] Updating app process
+2024-01-28 22:46:09.947 +01:00 [INF] Starting
+2024-01-28 22:46:09.994 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:46:09.997 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:46:09.998 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:46:09.999 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:46:10.001 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:46:54.453 +01:00 [INF] Updating app process
+2024-01-28 22:46:54.453 +01:00 [INF] Starting
+2024-01-28 22:46:54.506 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:46:54.509 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:46:54.511 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:46:54.512 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:46:54.514 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:47:27.419 +01:00 [INF] Starting
+2024-01-28 22:47:27.419 +01:00 [INF] Updating app process
+2024-01-28 22:47:27.469 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:47:27.472 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:47:27.474 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:47:27.475 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:47:27.477 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:47:47.522 +01:00 [INF] Starting
+2024-01-28 22:47:47.522 +01:00 [INF] Updating app process
+2024-01-28 22:47:47.577 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:47:47.580 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:47:47.582 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:47:47.584 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:47:47.585 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:47:47.925 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:47:47.927 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:47:47.929 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:47:48.505 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:47:48.713 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:47:48.926 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:47:49.337 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:47:49.339 +01:00 [INF] Updated app process, took "00:00:01.8244958"
+2024-01-28 22:47:51.347 +01:00 [INF] Updating app process
+2024-01-28 22:47:51.359 +01:00 [INF] Updated app process, took "00:00:00.0117180"
+2024-01-28 22:47:59.782 +01:00 [INF] Updating app process
+2024-01-28 22:47:59.782 +01:00 [INF] Starting
+2024-01-28 22:47:59.837 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:47:59.840 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:47:59.842 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:47:59.843 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:47:59.845 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:47:59.947 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:47:59.949 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:47:59.951 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:48:08.256 +01:00 [INF] Starting
+2024-01-28 22:48:08.256 +01:00 [INF] Updating app process
+2024-01-28 22:48:08.314 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 22:48:08.317 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 22:48:08.319 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 22:48:08.321 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 22:48:08.323 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 22:48:08.445 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 22:48:08.447 +01:00 [INF] Hosting environment: Production
+2024-01-28 22:48:08.448 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 22:48:09.210 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 22:48:09.478 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 22:48:09.680 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 22:48:09.970 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 22:48:09.972 +01:00 [INF] Updated app process, took "00:00:01.7240839"
+2024-01-28 22:48:11.820 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:48:22.528 +01:00 [INF] Updating app process
+2024-01-28 22:48:22.540 +01:00 [INF] Updated app process, took "00:00:00.0118233"
+2024-01-28 22:48:24.553 +01:00 [INF] Updating app process
+2024-01-28 22:48:24.564 +01:00 [INF] Updated app process, took "00:00:00.0111441"
+2024-01-28 22:48:25.404 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:48:26.577 +01:00 [INF] Updating app process
+2024-01-28 22:48:26.588 +01:00 [INF] Updated app process, took "00:00:00.0109599"
+2024-01-28 22:48:27.342 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 22:48:28.598 +01:00 [INF] Updating app process
+2024-01-28 22:48:28.609 +01:00 [INF] Updated app process, took "00:00:00.0109520"
+2024-01-28 23:21:33.177 +01:00 [INF] Updating app process
+2024-01-28 23:21:33.177 +01:00 [INF] Starting
+2024-01-28 23:21:33.234 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 23:21:33.237 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 23:21:33.238 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 23:21:33.239 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 23:21:33.241 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
+2024-01-28 23:21:33.492 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-01-28 23:21:33.493 +01:00 [INF] Hosting environment: Production
+2024-01-28 23:21:33.494 +01:00 [INF] Content root path: D:\workspace\flyingpie\windows-terminal-quake\windows-terminal-quake-v2\src\20-Host\Wtq.Windows\bin\Debug\net8.0-windows\
+2024-01-28 23:21:34.168 +01:00 [INF] Found process instance for app 'wezterm-gui' with name 'wezterm-gui' and Id '23956'
+2024-01-28 23:21:34.405 +01:00 [INF] Found process instance for app 'Q-Dir_x64' with name 'Q-Dir_x64' and Id '43668'
+2024-01-28 23:21:34.614 +01:00 [INF] Found process instance for app 'ProcessHacker' with name 'ProcessHacker' and Id '45596'
+2024-01-28 23:21:35.043 +01:00 [INF] Found process instance for app 'Spotify' with name 'Spotify' and Id '42552'
+2024-01-28 23:21:35.046 +01:00 [INF] Updated app process, took "00:00:01.8769597"
+2024-01-28 23:21:35.481 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 23:21:37.049 +01:00 [INF] Updating app process
+2024-01-28 23:21:37.071 +01:00 [INF] Updated app process, took "00:00:00.0222732"
+2024-01-28 23:21:37.210 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 23:21:39.082 +01:00 [INF] Updating app process
+2024-01-28 23:21:39.094 +01:00 [INF] Updated app process, took "00:00:00.0115150"
+2024-01-28 23:21:41.099 +01:00 [INF] Updating app process
+2024-01-28 23:21:41.111 +01:00 [INF] Updated app process, took "00:00:00.0114147"
+2024-01-28 23:21:43.119 +01:00 [INF] Updating app process
+2024-01-28 23:21:43.130 +01:00 [INF] Updated app process, took "00:00:00.0113696"
+2024-01-28 23:21:45.135 +01:00 [INF] Updating app process
+2024-01-28 23:21:45.146 +01:00 [INF] Updated app process, took "00:00:00.0104401"
+2024-01-28 23:21:47.152 +01:00 [INF] Updating app process
+2024-01-28 23:21:47.163 +01:00 [INF] Updated app process, took "00:00:00.0111560"
+2024-01-28 23:21:49.165 +01:00 [INF] Updating app process
+2024-01-28 23:21:49.177 +01:00 [INF] Updated app process, took "00:00:00.0117638"
+2024-01-28 23:21:51.180 +01:00 [INF] Updating app process
+2024-01-28 23:21:51.195 +01:00 [INF] Updated app process, took "00:00:00.0147815"
+2024-01-28 23:21:53.209 +01:00 [INF] Updating app process
+2024-01-28 23:21:53.220 +01:00 [INF] Updated app process, took "00:00:00.0106774"
+2024-01-28 23:21:55.224 +01:00 [INF] Updating app process
+2024-01-28 23:21:55.234 +01:00 [INF] Updated app process, took "00:00:00.0101254"
+2024-01-28 23:21:57.238 +01:00 [INF] Updating app process
+2024-01-28 23:21:57.248 +01:00 [INF] Updated app process, took "00:00:00.0094218"
+2024-01-28 23:21:59.262 +01:00 [INF] Updating app process
+2024-01-28 23:21:59.272 +01:00 [INF] Updated app process, took "00:00:00.0103636"
+2024-01-28 23:22:01.280 +01:00 [INF] Updating app process
+2024-01-28 23:22:01.291 +01:00 [INF] Updated app process, took "00:00:00.0114282"
+2024-01-28 23:22:03.299 +01:00 [INF] Updating app process
+2024-01-28 23:22:03.309 +01:00 [INF] Updated app process, took "00:00:00.0104449"
+2024-01-28 23:22:05.311 +01:00 [INF] Updating app process
+2024-01-28 23:22:05.321 +01:00 [INF] Updated app process, took "00:00:00.0104119"
+2024-01-28 23:22:07.332 +01:00 [INF] Updating app process
+2024-01-28 23:22:07.342 +01:00 [INF] Updated app process, took "00:00:00.0101750"
+2024-01-28 23:22:09.280 +01:00 [INF] Publishing event 'Wtq.Core.Services.WtqEvent'
+2024-01-28 23:59:25.865 +01:00 [INF] Updating app process
+2024-01-28 23:59:25.865 +01:00 [INF] Starting
+2024-01-28 23:59:25.917 +01:00 [INF] Registering global hotkey 'Wtq.Configuration.HotkeyOptions'
+2024-01-28 23:59:25.921 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'wezterm-gui'
+2024-01-28 23:59:25.923 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Q-Dir_x64'
+2024-01-28 23:59:25.925 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'ProcessHacker'
+2024-01-28 23:59:25.927 +01:00 [INF] Registering hotkey 'Wtq.Configuration.HotkeyOptions' for app 'Spotify'
