@@ -5,7 +5,7 @@
 
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 	</PropertyGroup>
 
 	<ItemGroup>

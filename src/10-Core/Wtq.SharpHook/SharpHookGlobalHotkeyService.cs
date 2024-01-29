@@ -25,7 +25,7 @@ public class SharpHookGlobalHotkeyService : IHostedService
 	private UioHookEvent? _last;
 
 	// TODO: Make specific to hotkey combinations.
-	private List<Func<HotkeyInfo, Task>> _registrations = [];
+	//private List<Func<HotkeyInfo, Task>> _registrations = [];
 
 	public SharpHookGlobalHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
@@ -103,7 +103,14 @@ public class SharpHookGlobalHotkeyService : IHostedService
 	{
 		//if (!Debugger.IsAttached)
 		{
-			_ = _hook.RunAsync();
+			//_ = _hook.RunAsync();
+			new Thread(() =>
+			{
+				_hook.Run();
+			})
+			{
+				Name = "SharpHook",
+			}.Start();
 		}
 
 		var wasAttached = false;

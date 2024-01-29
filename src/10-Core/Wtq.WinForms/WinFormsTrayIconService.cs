@@ -1,21 +1,28 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Wtq.WinForms;
 
 internal class WinFormsTrayIconService : IHostedService
 {
+	private readonly IHostApplicationLifetime _lifetime;
+	private TrayIcon? _icon;
+
+	public WinFormsTrayIconService(IHostApplicationLifetime lifetime)
+	{
+		_lifetime = lifetime ?? throw new ArgumentNullException(nameof(lifetime));
+	}
+
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		throw new NotImplementedException();
+		_icon = new TrayIcon((s, a) => _lifetime.StopApplication());
+
+		return Task.CompletedTask;
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		throw new NotImplementedException();
+		_icon?.Dispose();
+
+		return Task.CompletedTask;
 	}
 }

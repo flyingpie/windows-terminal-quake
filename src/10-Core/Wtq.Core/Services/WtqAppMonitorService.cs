@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Threading;
 using Wtq.Configuration;
-using Wtq.Core.Events;
 using Wtq.Core.Services;
 
 namespace Wtq.Services;
@@ -15,6 +14,7 @@ public class WtqAppMonitorService
 	private readonly IOptions<WtqOptions> _opts;
 	private readonly IWtqProcessFactory _wtqProcFactory;
 	private readonly IWtqProcessService _procService;
+	private readonly IWtqFocusTracker _focusTracker;
 	private readonly IWtqBus _bus;
 	private readonly IWtqAppRepo _apps;
 
@@ -28,12 +28,14 @@ public class WtqAppMonitorService
 		IOptions<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus,
+		IWtqFocusTracker focusTracker,
 		IWtqProcessService procService,
 		IWtqProcessFactory wtqProcFactory)
 	{
 		_apps = appRepo;
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 		_opts = opts ?? throw new ArgumentNullException(nameof(opts));
+		_focusTracker = focusTracker ?? throw new ArgumentNullException(nameof(focusTracker));
 		_wtqProcFactory = wtqProcFactory ?? throw new ArgumentNullException(nameof(wtqProcFactory));
 
 		_procService = procService
@@ -42,12 +44,12 @@ public class WtqAppMonitorService
 
 	public void DropFocus()
 	{
-		if (_lastNonWtqFocus != null)
+		if (_focusTracker.LastNonWtqForeground != null)
 		{
-			var p = Process.GetProcessById((int)_lastNonWtqFocus);
+			var p = Process.GetProcessById((int)_focusTracker.LastNonWtqForeground);
 			if (p == null)
 			{
-				_log.LogWarning("No foreground process found with id '{Id}'", _lastNonWtqFocus);
+				_log.LogWarning("No foreground process found with id '{Id}'", _focusTracker.LastNonWtqForeground);
 				return;
 			}
 
@@ -79,87 +81,11 @@ public class WtqAppMonitorService
 				await Task.Delay(TimeSpan.FromSeconds(2));
 			}
 		});
-
-		_ = Task.Run(async () =>
-		{
-			while (_isRunning)
-			{
-				try
-				{
-					await Task.Delay(TimeSpan.FromMilliseconds(250));
-
-					//var fg = User32.GetForegroundWindow();
-					var fgPid = _procService.GetForegroundProcessId();
-
-					var pr = _apps.Apps.FirstOrDefault(a => a.Process?.Id == fgPid);
-
-					if (pr == null)
-					{
-						_lastNonWtqFocus = fgPid;
-					}
-
-					// Nothing changed.
-					if (pr == _foreground)
-					{
-						continue;
-					}
-
-					// Did not have focus before, got focus now.
-					if (_foreground == null && pr != null)
-					{
-						// App gained focus.
-						_log.LogInformation("App '{App}' gained focus", pr);
-						_foreground = pr;
-						_bus.Publish(new WtqAppFocusEvent()
-						{
-							App = pr,
-							GainedFocus = true,
-						});
-						continue;
-					}
-
-					if (_foreground != null && _foreground != pr)
-					{
-						if (pr == null)
-						{
-							// App lost focus.
-							_log.LogInformation("App '{App}' lost focus", _foreground);
-
-							_bus.Publish(new WtqAppFocusEvent()
-							{
-								App = _foreground,
-								GainedFocus = false,
-							});
-
-							_foreground = null;
-
-							continue;
-						}
-						else
-						{
-							_log.LogInformation("Focus moved from app '{AppFrom}' to app '{AppTo}'", _foreground, pr);
-							_foreground = pr;
-							continue;
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error tracking focus: {Message}", ex.Message);
-				}
-			}
-		});
 	}
 
-	private WtqApp? _foreground;
-	private uint? _lastNonWtqFocus;
-
-	public async Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		foreach (var app in _apps.Apps)
-		{
-			app.Dispose();
-		}
+		return Task.CompletedTask;
 	}
 
 	private async Task UpdateAppProcessesAsync()

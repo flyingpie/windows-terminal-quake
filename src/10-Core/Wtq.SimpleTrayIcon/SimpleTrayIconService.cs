@@ -2,8 +2,7 @@
 using SimpleTrayIcon;
 using System.Threading;
 using System.Threading.Tasks;
-using Wtq.SimpleTrayIcon.Native;
-using Wtq.SimpleTrayIcon.Resources;
+using Wtq.Core.Resources;
 
 namespace Wtq.SimpleTrayIcon;
 
@@ -14,13 +13,13 @@ public class SimpleTrayIconService : IHostedService
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		//var icon = new System.Drawing.Icon(typeof(Program), "WtqS.Demo.tray-icon.ico"); // Load an icon for the tray
-		var icon = _Resources.icon;
-		using var menu = new TrayMenu(icon, "Tooltip", true);
-		var item = new TrayMenuItem { Content = "Item1" };
-		menu.Items.Add(item);
-		menu.Items.Add(new TrayMenuSeparator());
-		menu.Items.Add(new TrayMenuItem { Content = $"some content", IsChecked = true });
-		item.Click += (s, e) => ((TrayMenuItem)s).IsChecked = !((TrayMenuItem)s).IsChecked; // Attach an event
+		//var icon = Resources.icon;
+		//using var menu = new TrayMenu(icon, "Tooltip", true);
+		//var item = new TrayMenuItem { Content = "Item1" };
+		//menu.Items.Add(item);
+		//menu.Items.Add(new TrayMenuSeparator());
+		//menu.Items.Add(new TrayMenuItem { Content = $"some content", IsChecked = true });
+		//item.Click += (s, e) => ((TrayMenuItem)s).IsChecked = !((TrayMenuItem)s).IsChecked; // Attach an event
 
 		//_ = Task.Factory.StartNew(
 		//	() =>

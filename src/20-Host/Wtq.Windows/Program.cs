@@ -11,11 +11,12 @@ using Wtq.Services;
 using Wtq.Services.AnimationTypeProviders;
 using Wtq.Services.ScreenBoundsProviders;
 using Wtq.Services.TerminalBoundsProviders;
-using Wtq.SharpHook;
 using Wtq.SimpleTrayIcon;
 using Wtq.Utils;
 using Wtq.Win32;
-using Wtq.WinFomsrms;
+using Wtq.Win32.Native;
+using Wtq.Windows;
+using Wtq.WinForms;
 
 namespace Wtq;
 
@@ -23,6 +24,8 @@ public static class Program
 {
 	public static async Task Main(string[] args)
 	{
+		//Kernel32.AllocConsole();
+
 		Console.WriteLine("Hello, World!");
 
 		// Configuration.
@@ -35,7 +38,7 @@ public static class Program
 			.Build();
 
 		// Logging.
-		Wtq.Utils.Log.Configure(config);
+		Utils.Log.Configure(config);
 
 		await new HostBuilder()
 			.ConfigureAppConfiguration(opt =>
@@ -65,16 +68,15 @@ public static class Program
 					.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 					.AddHostedService<WtqHotkeyService>()
 
-					// Platform-specific
-					//.AddSingleton<IWtqProcessService, Win32ProcessService>()
-					//.AddSingleton<IWtqScreenCoordsProvider, WinFormsScreenCoordsProvider>()
+					.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
+
+					// Platform-specific.
 					.AddWin32ProcessService()
 					.AddWinFormsScreenCoordsProvider()
 					.AddWinFormsHotkeyService()
-					//.AddHostedService<SharpHookGlobalHotkeyService>()
-					//.AddHostedService<SimpleTrayIconService>()
+					.AddWinFormsTrayIcon()
 					//.AddSharpHookGlobalHotkeys()
-					.AddSimpleTrayIcon()
+					//.AddSimpleTrayIcon()
 					;
 			})
 			.UseSerilog()

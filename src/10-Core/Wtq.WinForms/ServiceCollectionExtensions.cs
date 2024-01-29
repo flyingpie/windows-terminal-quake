@@ -2,7 +2,7 @@
 using Wtq.Core.Services;
 using Wtq.Win32;
 
-namespace Wtq.WinFomsrms;
+namespace Wtq.WinForms;
 
 public static class ServiceCollectionExtensions
 {
@@ -16,5 +16,11 @@ public static class ServiceCollectionExtensions
 	{
 		return services
 			.AddSingleton<IWtqScreenCoordsProvider, WinFormsScreenCoordsProvider>();
+	}
+
+	public static IServiceCollection AddWinFormsTrayIcon(this IServiceCollection services)
+	{
+		return services
+			.AddHostedService<WinFormsTrayIconService>();
 	}
 }

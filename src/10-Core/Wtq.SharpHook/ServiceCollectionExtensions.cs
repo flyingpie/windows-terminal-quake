@@ -8,7 +8,5 @@ public static class ServiceCollectionExtensions
 	{
 		return services
 			.AddHostedService<SharpHookGlobalHotkeyService>();
-
-		return services;
 	}
 }
