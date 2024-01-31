@@ -10,7 +10,6 @@ using Nuke.Common.Tools.NerdbankGitVersioning;
 using Serilog;
 using System.IO;
 using System.IO.Compression;
-using System.Numerics;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
@@ -25,8 +24,6 @@ public sealed class Build : NukeBuild
 	[Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
 	private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-
-
 	[Required]
 	[GitRepository]
 	private readonly GitRepository GitRepository;
@@ -35,7 +32,7 @@ public sealed class Build : NukeBuild
 	//readonly GitVersion GitVersion;
 
 	[NerdbankGitVersioning]
-	readonly NerdbankGitVersioning NerdbankVersioning;
+	private readonly NerdbankGitVersioning NerdbankVersioning;
 
 	private AbsolutePath ArtifactsDirectory => RootDirectory / "_output" / "artifacts";
 
@@ -45,7 +42,9 @@ public sealed class Build : NukeBuild
 
 	//	AbsolutePath TestResultsDirectory => RootDirectory / "TestResults";
 
-	[Solution(GenerateProjects = true)]
+	GitHubActions GitHubActions => GitHubActions.Instance;
+
+	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
 	private Target Clean => _ => _
@@ -86,8 +85,8 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "net8.0-win_framework-dependent";
 			var pub = ArtifactsDirectory / "net8.0-win_framework-dependent.zip";
 
-//			var dir = ArtifactsDirectory / "net8.0-win_framework-dependent";
-//			var pub = ArtifactsDirectory / "pub";
+			//			var dir = ArtifactsDirectory / "net8.0-win_framework-dependent";
+			//			var pub = ArtifactsDirectory / "pub";
 
 			DotNetPublish(_ => _
 				//.SetBinaryLog("msbuild.binlog")
@@ -122,7 +121,8 @@ public sealed class Build : NukeBuild
 
 	private Target PublishAll => _ => _
 		.DependsOn(PublishNet8Win64FrameworkDependent)
-		//.DependsOn(PublishNet8Win64SelfContained)
+		.DependsOn(PublishNet8Win64SelfContained)
+		.Produces(ArtifactsDirectory / "*.*")
 		.Executes(() =>
 		{
 		});

@@ -33,3 +33,8 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: PublishAll'
         run: ./build.cmd PublishAll
+      - name: 'Publish: artifacts'
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: _output/artifacts
