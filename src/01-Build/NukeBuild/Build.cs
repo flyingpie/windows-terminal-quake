@@ -14,8 +14,9 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [GitHubActions(
 	"continuous",
 	GitHubActionsImage.WindowsLatest,
-	On = new[] { GitHubActionsTrigger.Push },
-	InvokedTargets = new[] { nameof(PublishAll) })]
+	FetchDepth = 0,
+	On = [GitHubActionsTrigger.Push],
+	InvokedTargets = [nameof(PublishAll)])]
 public sealed class Build : NukeBuild
 {
 	public static int Main() => Execute<Build>(x => x.PublishAll);
