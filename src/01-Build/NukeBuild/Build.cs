@@ -7,7 +7,6 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NerdbankGitVersioning;
-using Serilog;
 using System.IO;
 using System.IO.Compression;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -42,10 +41,14 @@ public sealed class Build : NukeBuild
 
 	//	AbsolutePath TestResultsDirectory => RootDirectory / "TestResults";
 
-	GitHubActions GitHubActions => GitHubActions.Instance;
+	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
+
+	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"{NerdbankVersioning?.NuGetPackageVersion}-win-x64_framework-dependent.zip";
+
+	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"{NerdbankVersioning?.NuGetPackageVersion}-win-x64_self-contained.zip";
 
 	private Target Clean => _ => _
 		.Executes(() =>
@@ -76,20 +79,13 @@ public sealed class Build : NukeBuild
 	//			.SetSelfContained(false));
 	//	});
 
-	private Target PublishNet8Win64FrameworkDependent => _ => _
+	private Target PublishWin64FrameworkDependent => _ => _
 		.DependsOn(Clean)
 		.Executes(() =>
 		{
-			Log.Information("NerdbankVersioning = {Value}", NerdbankVersioning.SimpleVersion);
-
-			var st = StagingDirectory / "net8.0-win_framework-dependent";
-			var pub = ArtifactsDirectory / "net8.0-win_framework-dependent.zip";
-
-			//			var dir = ArtifactsDirectory / "net8.0-win_framework-dependent";
-			//			var pub = ArtifactsDirectory / "pub";
+			var st = StagingDirectory / $"{NerdbankVersioning.NuGetPackageVersion}-win-x64_framework-dependent";
 
 			DotNetPublish(_ => _
-				//.SetBinaryLog("msbuild.binlog")
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Windows)
@@ -99,31 +95,39 @@ public sealed class Build : NukeBuild
 				.SetSelfContained(false));
 
 			st.ZipTo(
-				pub,
+				PathToWin64FrameworkDependentZip,
 				filter: x => x.HasExtension(".exe", ".jsonc"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: FileMode.CreateNew);
 		});
 
-	private Target PublishNet8Win64SelfContained => _ => _
+	private Target PublishWin64SelfContained => _ => _
 		.DependsOn(Restore)
 		.Executes(() =>
 		{
+			var staging = StagingDirectory / "win-x64_self-contained";
+
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Windows)
-				.SetOutput(ArtifactsDirectory / "net8.0-win_self-contained")
+				.SetOutput(staging)
 				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
+
+			staging.ZipTo(
+				PathToWin64SelfContainedZip,
+				filter: x => x.HasExtension(".exe", ".jsonc"),
+				compressionLevel: CompressionLevel.SmallestSize,
+				fileMode: FileMode.CreateNew);
 		});
 
 	private Target PublishAll => _ => _
-		.DependsOn(PublishNet8Win64FrameworkDependent)
-		.DependsOn(PublishNet8Win64SelfContained)
-		.Produces(ArtifactsDirectory / "*.*")
-		.Executes(() =>
-		{
-		});
+		.DependsOn(PublishWin64FrameworkDependent)
+		.DependsOn(PublishWin64SelfContained)
+		.Produces(
+			PathToWin64FrameworkDependentZip,
+			PathToWin64SelfContainedZip)
+		.Executes();
 }

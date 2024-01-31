@@ -33,8 +33,13 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: PublishAll'
         run: ./build.cmd PublishAll
-      - name: 'Publish: artifacts'
+      - name: 'Publish: -win-x64_framework-dependent.zip'
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
-          path: _output/artifacts
+          name: -win-x64_framework-dependent.zip
+          path: _output/artifacts/-win-x64_framework-dependent.zip
+      - name: 'Publish: -win-x64_self-contained.zip'
+        uses: actions/upload-artifact@v3
+        with:
+          name: -win-x64_self-contained.zip
+          path: _output/artifacts/-win-x64_self-contained.zip

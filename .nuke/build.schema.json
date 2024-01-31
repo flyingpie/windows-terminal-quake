@@ -74,8 +74,8 @@
             "enum": [
               "Clean",
               "PublishAll",
-              "PublishNet8Win64FrameworkDependent",
-              "PublishNet8Win64SelfContained",
+              "PublishWin64FrameworkDependent",
+              "PublishWin64SelfContained",
               "Restore"
             ]
           }
@@ -92,8 +92,8 @@
             "enum": [
               "Clean",
               "PublishAll",
-              "PublishNet8Win64FrameworkDependent",
-              "PublishNet8Win64SelfContained",
+              "PublishWin64FrameworkDependent",
+              "PublishWin64SelfContained",
               "Restore"
             ]
           }
