@@ -34,8 +34,8 @@ public sealed class Build : NukeBuild
 	//[GitVersion]
 	//readonly GitVersion GitVersion;
 
-	//[NerdbankGitVersioning]
-	//readonly NerdbankGitVersioning NerdbankVersioning;
+	[NerdbankGitVersioning]
+	readonly NerdbankGitVersioning NerdbankVersioning;
 
 	private AbsolutePath ArtifactsDirectory => RootDirectory / "_output" / "artifacts";
 
@@ -81,7 +81,7 @@ public sealed class Build : NukeBuild
 		.DependsOn(Clean)
 		.Executes(() =>
 		{
-			//Log.Information("NerdbankVersioning = {Value}", NerdbankVersioning.SimpleVersion);
+			Log.Information("NerdbankVersioning = {Value}", NerdbankVersioning.SimpleVersion);
 
 			var st = StagingDirectory / "net8.0-win_framework-dependent";
 			var pub = ArtifactsDirectory / "net8.0-win_framework-dependent.zip";

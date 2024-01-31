@@ -35,12 +35,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00-Sln", "00-Sln", "{79182C
 		..\stylecop.json = ..\stylecop.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NukeBuild", "..\01-Build\NukeBuild.csproj", "{24CF68A7-4150-4F4B-9716-5F87611582A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24CF68A7-4150-4F4B-9716-5F87611582A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24CF68A7-4150-4F4B-9716-5F87611582A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCFC9B65-12AD-43B1-864C-1CEC0FCCF330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DCFC9B65-12AD-43B1-864C-1CEC0FCCF330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCFC9B65-12AD-43B1-864C-1CEC0FCCF330}.Release|Any CPU.ActiveCfg = Release|Any CPU

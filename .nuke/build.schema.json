@@ -73,7 +73,9 @@
             "type": "string",
             "enum": [
               "Clean",
-              "Compile",
+              "PublishAll",
+              "PublishNet8Win64FrameworkDependent",
+              "PublishNet8Win64SelfContained",
               "Restore"
             ]
           }
@@ -89,7 +91,9 @@
             "type": "string",
             "enum": [
               "Clean",
-              "Compile",
+              "PublishAll",
+              "PublishNet8Win64FrameworkDependent",
+              "PublishNet8Win64SelfContained",
               "Restore"
             ]
           }
