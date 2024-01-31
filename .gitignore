@@ -329,3 +329,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /src/20-Host/Wtq.Windows/logs/20240130.txt
+
+_artifacts
+_output
