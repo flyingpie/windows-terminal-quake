@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Serilog.Events;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.TerminalProcessProviders;
 
 namespace WindowsTerminalQuake.Settings;
 
@@ -91,6 +92,12 @@ public class SettingsDto
 	/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 	/// </summary>
 	public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
+
+	/// <summary>
+	/// TODO
+	/// </summary>
+	//	public string ProcessProvider { get; set; } = nameof(WindowsTerminalProcessProvider);
+	public string ProcessProvider { get; set; } = nameof(GenericProcessProvider);
 
 	/// <summary>
 	/// <para>Whether to hide the terminal window immediately after app start.</para>

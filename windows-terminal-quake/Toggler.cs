@@ -165,7 +165,7 @@ public class Toggler : IDisposable
 	{
 		if (QSettings.Instance.CloseTerminalOnExit)
 		{
-			TerminalProcess.Close();
+			TerminalProcess.Get(_args).Close();
 		}
 		else
 		{
