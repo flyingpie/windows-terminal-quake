@@ -47,9 +47,9 @@ public sealed class Build : NukeBuild
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
-	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"{NerdbankVersioning?.NuGetPackageVersion}-win-x64_framework-dependent.zip";
+	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"win-x64_framework-dependent.zip";
 
-	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"{NerdbankVersioning?.NuGetPackageVersion}-win-x64_self-contained.zip";
+	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"win-x64_self-contained.zip";
 
 	private Target Clean => _ => _
 		.Executes(() =>
@@ -84,7 +84,7 @@ public sealed class Build : NukeBuild
 		.DependsOn(Clean)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / $"{NerdbankVersioning.NuGetPackageVersion}-win-x64_framework-dependent";
+			var st = StagingDirectory / "win-x64_framework-dependent";
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
