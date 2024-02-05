@@ -28,19 +28,14 @@ public sealed class Build : NukeBuild
 	[GitRepository]
 	private readonly GitRepository GitRepository;
 
-	//[GitVersion]
-	//readonly GitVersion GitVersion;
-
 	[NerdbankGitVersioning]
 	private readonly NerdbankGitVersioning NerdbankVersioning;
 
-	private AbsolutePath ArtifactsDirectory => RootDirectory / "_output" / "artifacts";
+	private AbsolutePath OutputDirectory => RootDirectory / "_output";
 
-	private AbsolutePath StagingDirectory => RootDirectory / "_output" / "staging";
+	private AbsolutePath ArtifactsDirectory => OutputDirectory / "artifacts";
 
-	//private AbsolutePath BuildDirectory => RootDirectory / "build";
-
-	//	AbsolutePath TestResultsDirectory => RootDirectory / "TestResults";
+	private AbsolutePath StagingDirectory => OutputDirectory / "staging";
 
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
@@ -54,8 +49,7 @@ public sealed class Build : NukeBuild
 	private Target Clean => _ => _
 		.Executes(() =>
 		{
-			ArtifactsDirectory.CreateOrCleanDirectory();
-			//BuildDirectory.CreateOrCleanDirectory();
+			OutputDirectory.CreateOrCleanDirectory();
 		});
 
 	private Target Restore => _ => _
@@ -63,22 +57,6 @@ public sealed class Build : NukeBuild
 		.Executes(() =>
 		{
 		});
-
-	//private Target Compile => _ => _
-	//	.DependsOn(Restore)
-	//	.Executes(() =>
-	//	{
-	//		DotNetBuild(_ => _
-	//			.SetBinaryLog("msbuild.binlog")
-	//			.SetConfiguration(Configuration)
-	//			.SetFramework("net8.0-windows")
-	//			.ProjectFile(Solution._0_Host.Wtq_Windows)
-	//			.SetOutput(ArtifactsDirectory / "net8.0-windows_framework-dependent")
-	//			.SetPublishSingleFile(true)
-	//			.SetRuntime("win-x64")
-	//			.SetPublishReadyToRun(true)
-	//			.SetSelfContained(false));
-	//	});
 
 	private Target PublishWin64FrameworkDependent => _ => _
 		.DependsOn(Clean)
