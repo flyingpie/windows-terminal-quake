@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<AssemblyName>Wtq.SimpleTrayIcon</AssemblyName>
+		<RootNamespace>Wtq.SimpleTrayIcon</RootNamespace>
+
 		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SimpleTrayIcon" Version="3.0.2" />
+		<PackageReference Include="SimpleTrayIcon" />
 	</ItemGroup>
 
 	<ItemGroup>

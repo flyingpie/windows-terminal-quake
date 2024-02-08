@@ -4,7 +4,6 @@
 		<RootNamespace>Wtq.Win32</RootNamespace>
 
 		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

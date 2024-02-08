@@ -4,24 +4,17 @@
 		<RootNamespace>Wtq.Core</RootNamespace>
 
 		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>12.0</LangVersion>
-		<Nullable>enable</Nullable>
-
-		<!--<PublishSingleFile>true</PublishSingleFile>-->
-		<!--<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
-		<!--<SelfContained>true</SelfContained>-->
-		<!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ardalis.GuardClauses" Version="4.4.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Serilog" Version="3.1.1" />
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+		<PackageReference Include="Ardalis.GuardClauses" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Serilog.Extensions.Hosting" />
+		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="System.Resources.Extensions" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,3 +1,6 @@
 ﻿[*]
 indent_style=tab
 indent_size=4
+
+dotnet_diagnostic.SA1600.severity = none # SA1600: Elements should be documented
+dotnet_diagnostic.SA1633.severity = none # SA1633: File should have header

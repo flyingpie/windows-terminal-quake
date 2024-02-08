@@ -7,6 +7,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NerdbankGitVersioning;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -17,6 +18,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	FetchDepth = 0,
 	On = [GitHubActionsTrigger.Push],
 	InvokedTargets = [nameof(PublishAll)])]
+[SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
 public sealed class Build : NukeBuild
 {
 	public static int Main() => Execute<Build>(x => x.PublishAll);
@@ -37,14 +39,14 @@ public sealed class Build : NukeBuild
 
 	private AbsolutePath StagingDirectory => OutputDirectory / "staging";
 
-	private GitHubActions GitHubActions => GitHubActions.Instance;
-
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
 	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"win-x64_framework-dependent.zip";
 
 	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"win-x64_self-contained.zip";
+
+	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	private Target Clean => _ => _
 		.Executes(() =>

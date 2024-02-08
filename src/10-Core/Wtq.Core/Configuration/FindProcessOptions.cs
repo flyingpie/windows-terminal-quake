@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Wtq.Configuration;
+﻿namespace Wtq.Configuration;
 
 public class FindProcessOptions
 {

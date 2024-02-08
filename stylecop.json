@@ -4,7 +4,6 @@
 	"settings": {
 		"documentationRules": {
 			"companyName": "",
-			"copyrightText": "",
 			"documentationCulture": "",
 			"documentExposedElements": true,
 			"documentInterfaces": true,
@@ -41,7 +40,7 @@
 			"blankLinesBetweenUsingGroups": "omit",
 			"elementOrder": [ "kind", "accessibility", "constant", "static", "readonly" ],
 			"systemUsingDirectivesFirst": true,
-			"usingDirectivesPlacement": "insideNamespace"
+			"usingDirectivesPlacement": "outsideNamespace"
 		},
 		"readabilityRules": {
 			"allowBuiltInTypeAliases": true
