@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>Wtq.Windows</AssemblyName>
+		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Windows</RootNamespace>
 
 		<TargetFramework>net8.0-windows</TargetFramework>
@@ -10,7 +10,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\10-Core\Wtq.Core\wtq.jsonc" Link="wtq.jsonc" />
+		<None Include="..\..\wtq.jsonc" Link="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

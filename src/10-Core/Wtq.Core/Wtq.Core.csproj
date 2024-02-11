@@ -18,12 +18,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="*.jsonc">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Resource Include="Resources\icon.ico" />
 	</ItemGroup>
 

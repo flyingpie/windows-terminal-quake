@@ -60,11 +60,16 @@ public sealed class TrayIcon : IDisposable
 	{
 		var mnuOpenSettings = new ToolStripMenuItem("Open settings")
 		{
-			Enabled = true
+			Enabled = true,
 		};
 
 		mnuOpenSettings.Click += (s, a) =>
 		{
+			// TODO: We need to restore the original multi-location configuration file support.
+			var pathToAppBin = new Uri(typeof(TrayIcon).Assembly.Location).LocalPath;
+			var pathToAppDir = Path.GetDirectoryName(pathToAppBin);
+			var pathToWtqConf = Path.Combine(pathToAppDir, "wtq.jsonc");
+
 			//var path = QSettings.Instance.PathToSettings;
 
 			//if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
@@ -83,7 +88,11 @@ public sealed class TrayIcon : IDisposable
 			//	}
 			//}
 
-			//Process.Start(path);
+			Process.Start(new ProcessStartInfo()
+			{
+				FileName = pathToWtqConf,
+				UseShellExecute = true,
+			});
 		};
 
 		return mnuOpenSettings;

@@ -34,7 +34,7 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
       - name: 'Run: PublishAll'
-        run: ./build.cmd PublishAll
+        run: ./src/build.cmd PublishAll
       - name: 'Publish: win-x64_framework-dependent.zip'
         uses: actions/upload-artifact@v3
         with:

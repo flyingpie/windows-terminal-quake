@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Extensions.Logging;
+using System.IO;
+using Wtq.Core;
 
 namespace Wtq.Utils;
 
@@ -16,7 +18,7 @@ public static class Log
 			.WriteTo.Console()
 
 			.WriteTo.File(
-				path: "logs/.txt",
+				path: Path.Combine(App.PathToAppDir, "logs", ".txt"),
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
 				retainedFileCountLimit: 3)

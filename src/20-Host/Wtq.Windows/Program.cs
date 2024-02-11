@@ -1,28 +1,31 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Threading.Tasks;
 using Wtq.Configuration;
+using Wtq.Core;
 using Wtq.Core.Service;
 using Wtq.Core.Services;
 using Wtq.Services;
 using Wtq.Services.AnimationTypeProviders;
 using Wtq.Services.ScreenBoundsProviders;
 using Wtq.Services.TerminalBoundsProviders;
-using Wtq.SimpleTrayIcon;
 using Wtq.Utils;
 using Wtq.Win32;
-using Wtq.Win32.Native;
 using Wtq.Windows;
 using Wtq.WinForms;
 
 namespace Wtq;
 
-public static class Program
+public sealed class Program
 {
-	public static async Task Main(string[] args)
+	private readonly IHost _host;
+	private readonly Microsoft.Extensions.Logging.ILogger _log;
+
+	public Program()
 	{
 		//Kernel32.AllocConsole();
 
@@ -30,17 +33,28 @@ public static class Program
 
 		// Configuration.
 		var config = new ConfigurationBuilder()
+			.SetBasePath(App.PathToAppDir)
 			.AddJsonFile(f =>
 			{
+				var path = "wtq.jsonc";
+
 				f.Optional = false;
-				f.Path = "wtq.jsonc";
+				f.Path = path;
+				f.OnLoadException = x =>
+				{
+					// TODO: Logging and configuration are currently kinda dependent on one another.
+					//_log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", path, x.Exception.Message);
+					Console.WriteLine($"Error loading configuration file '{path}': {x.Exception.Message}");
+				};
 			})
 			.Build();
 
 		// Logging.
 		Utils.Log.Configure(config);
 
-		await new HostBuilder()
+		_log = Wtq.Utils.Log.For(typeof(Program));
+
+		_host = new HostBuilder()
 			.ConfigureAppConfiguration(opt =>
 			{
 				opt.AddConfiguration(config);
@@ -80,7 +94,18 @@ public static class Program
 					;
 			})
 			.UseSerilog()
-			.Build()
-			.RunAsync();
+			.Build();
+	}
+
+	public async Task RunAsync()
+	{
+		await _host
+			.RunAsync()
+			.ConfigureAwait(false);
+	}
+
+	public static async Task Main(string[] args)
+	{
+		await new Program().RunAsync();
 	}
 }

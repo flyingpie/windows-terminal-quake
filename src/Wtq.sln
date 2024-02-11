@@ -25,14 +25,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00-Sln", "00-Sln", "{79182C
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
-		..\build.cmd = ..\build.cmd
-		..\build.ps1 = ..\build.ps1
-		..\build.sh = ..\build.sh
-		..\Directory.Build.props = ..\Directory.Build.props
-		..\Directory.Packages.props = ..\Directory.Packages.props
-		..\global.json = ..\global.json
-		..\stylecop.json = ..\stylecop.json
-		..\version.json = ..\version.json
+		build.cmd = build.cmd
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		stylecop.json = stylecop.json
+		version.json = version.json
+		wtq.jsonc = wtq.jsonc
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NukeBuild", "01-Build\NukeBuild\NukeBuild.csproj", "{36A15BA9-3AEF-49D6-9AE0-11E9F045EC55}"
