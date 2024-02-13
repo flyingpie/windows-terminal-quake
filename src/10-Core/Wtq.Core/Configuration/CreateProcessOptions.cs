@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+﻿namespace Wtq.Core.Configuration;
 
 public class CreateProcessOptions
 {

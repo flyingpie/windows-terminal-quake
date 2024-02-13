@@ -1,52 +1,36 @@
 {
+	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
+	// Docs: https://flyingpie.github.io/windows-terminal-quake/
+	// TODO: V2 Docs
+	// TODO: Schema
 	"Apps": [
 		{
 			"Name": "Terminal",
 			"HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
-			"StartNew": {
-				// TODO: StartNew doesn't work yet.
-				"FileName": "wt.exe"
-			},
 			"FindExisting": {
-				"ProcessName": "wezterm-gui"
-				//"ProcessName": "WindowsTerminal"
-				//"WindowTitle": "Can we do that?"
-			}
-		},
-		{
-			"Name": "QDir",
-			"HotKeys": [ { "Modifiers": "Control", "Key": "D2" } ],
-			"StartNew": {
-				// TODO: StartNew doesn't work yet.
-				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
+				"ProcessName": "powershell"
 			},
-			"FindExisting": {
-				"ProcessName": "Q-Dir_x64"
-			}
-		},
-		{
-			"Name": "ProcessHacker",
-			"HotKeys": [ { "Modifiers": "Control", "Key": "D3" } ],
-			"PreferMonitor": "Primary",
-			"StartNew": {
-				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
-			},
-			"FindExisting": {
-				"ProcessName": "ProcessHacker"
-			}
-		},
-		{
-			"Name": "Spotify",
-			"HotKeys": [ { "Modifiers": "Control", "Key": "D4" } ],
-			"PreferMonitor": "AtIndex",
-			"MonitorIndex": 0,
-			"StartNew": {
-				"FileName": ""
-			},
-			"FindExisting": {
-				"ProcessName": "Spotify"
-			}
+
+			// What monitor to preferably drop the terminal.
+			// "WithCursor" (default), "Primary" or "AtIndex".
+			"PreferMonitor": "WithCursor",
+
+			// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+			// Zero based, eg. 0, 1, etc.
+			// Defaults to "0".
+			"MonitorIndex": 0
 		}
 	],
-	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ]
+	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
+
+	// What monitor to preferably drop the terminal.
+	// "WithCursor" (default), "Primary" or "AtIndex".
+	// Can be overridden per app.
+	"PreferMonitor": "WithCursor",
+
+	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+	// Zero based, eg. 0, 1, etc.
+	// Defaults to "0".
+	// Can be overridden per app.
+	"MonitorIndex": 0
 }

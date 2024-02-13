@@ -1,7 +1,6 @@
-﻿using Wtq.Core.Configuration;
-using Wtq.Core.Data;
+﻿using Wtq.Core.Data;
 
-namespace Wtq.Configuration;
+namespace Wtq.Core.Configuration;
 
 public class WtqAppOptions
 {
@@ -23,13 +22,13 @@ public class WtqAppOptions
 	/// <para>Zero based, eg. 0, 1, etc.</para>
 	/// <para>Defaults to "0".</para>
 	/// </summary>
-	public int MonitorIndex { get; set; }
+	public int? MonitorIndex { get; set; }
 
 	/// <summary>
 	/// <para>What monitor to preferrably drop the terminal.</para>
 	/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 	/// </summary>
-	public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
+	public PreferMonitor? PreferMonitor { get; set; }
 
 	public bool HasHotkey(WtqKeys key, WtqKeyModifiers modifiers)
 	{

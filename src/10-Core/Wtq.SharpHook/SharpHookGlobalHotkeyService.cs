@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Wtq.Configuration;
+using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Services;
 using Wtq.Services;

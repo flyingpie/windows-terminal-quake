@@ -6,8 +6,8 @@ using Serilog;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Wtq.Configuration;
 using Wtq.Core;
+using Wtq.Core.Configuration;
 using Wtq.Core.Service;
 using Wtq.Core.Services;
 using Wtq.Services;
@@ -72,7 +72,7 @@ public sealed class Program
 
 					// Core App Logic
 					.AddSingleton<IAnimationProvider, AnimationProvider>()
-					.AddSingleton<IScreenBoundsProvider, ScreenWithCursorScreenBoundsProvider>()
+					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
 					.AddSingleton<ITerminalBoundsProvider, MovingTerminalBoundsProvider>()
 					.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()

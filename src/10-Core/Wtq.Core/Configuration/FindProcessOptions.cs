@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+﻿namespace Wtq.Core.Configuration;
 
 public class FindProcessOptions
 {
@@ -6,7 +6,7 @@ public class FindProcessOptions
 
 	public bool Filter(Process process)
 	{
-		if (process.MainWindowHandle == IntPtr.Zero)
+		if (process.MainWindowHandle == nint.Zero)
 		{
 			return false;
 		}

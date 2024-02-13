@@ -1,44 +1,52 @@
-﻿using Wtq.Core.Data;
+﻿using Wtq.Core.Configuration;
+using Wtq.Core.Data;
 using Wtq.Core.Services;
 
 namespace Wtq.Services.ScreenBoundsProviders;
 
-public class ScreenWithCursorScreenBoundsProvider
-	(IWtqScreenCoordsProvider screenCoordsProvider)
+public class ScreenBoundsProvider(
+	IOptionsMonitor<WtqOptions> opts,
+	IWtqScreenCoordsProvider screenCoordsProvider)
 	: IScreenBoundsProvider
 {
+	private readonly IOptionsMonitor<WtqOptions> _opts = opts
+		?? throw new ArgumentNullException(nameof(opts));
+
 	private readonly IWtqScreenCoordsProvider _screenCoordsProvider = screenCoordsProvider
 		?? throw new ArgumentNullException(nameof(screenCoordsProvider));
 
-	private readonly ILogger _log = Log.For<ScreenWithCursorScreenBoundsProvider>();
+	private readonly ILogger _log = Log.For<ScreenBoundsProvider>();
 
 	/// <inheritdoc/>
 	public WtqRect GetTargetScreenBounds(WtqApp app)
 	{
-		switch (app.App.PreferMonitor)
+		var prefMon = app.App.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
+		var monInd = app.App.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+
+		switch (prefMon)
 		{
-			case Core.Configuration.PreferMonitor.AtIndex:
+			case PreferMonitor.AtIndex:
 				{
 					var scrs = _screenCoordsProvider.GetScreenRects();
 
-					if (scrs.Length > app.App.MonitorIndex)
+					if (scrs.Length > monInd)
 					{
-						return scrs[app.App.MonitorIndex];
+						return scrs[monInd];
 					}
 
 					_log.LogWarning(
 						"Option '{OptionName}' was set to {MonitorIndex}, but only {MonitorCount} screens were found",
 						nameof(app.App.MonitorIndex),
-						app.App.MonitorIndex,
+						monInd,
 						scrs.Length);
 
 					return _screenCoordsProvider.GetPrimaryScreenRect();
 				}
 
-			case Core.Configuration.PreferMonitor.Primary:
+			case PreferMonitor.Primary:
 				return _screenCoordsProvider.GetPrimaryScreenRect();
 
-			case Core.Configuration.PreferMonitor.WithCursor:
+			case PreferMonitor.WithCursor:
 				{
 					// TODO: Make nicer.
 					_log.LogInformation("Selecting screen with cursor");
@@ -52,7 +60,7 @@ public class ScreenWithCursorScreenBoundsProvider
 				}
 
 			default:
-				_log.LogWarning("Unknown value '{OptionValue}' for option '{OptionName}'", app.App.PreferMonitor, nameof(app.App.PreferMonitor));
+				_log.LogWarning("Unknown value '{OptionValue}' for option '{OptionName}'", prefMon, nameof(app.App.PreferMonitor));
 				return _screenCoordsProvider.GetPrimaryScreenRect();
 		}
 	}

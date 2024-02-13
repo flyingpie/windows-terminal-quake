@@ -1,6 +1,6 @@
 ﻿using Wtq.Core.Data;
 
-namespace Wtq.Configuration;
+namespace Wtq.Core.Configuration;
 
 public class HotkeyOptions
 {
