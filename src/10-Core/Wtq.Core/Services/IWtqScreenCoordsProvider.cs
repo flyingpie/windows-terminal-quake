@@ -8,5 +8,5 @@ public interface IWtqScreenCoordsProvider
 
 	WtqRect GetPrimaryScreenRect();
 
-	IEnumerable<WtqRect> GetScreenRects();
+	WtqRect[] GetScreenRects();
 }

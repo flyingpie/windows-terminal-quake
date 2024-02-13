@@ -61,7 +61,7 @@ public class WtqAppToggleService(
 			app.BringToForeground();
 		}
 
-		var screen = _scrBoundsProvider.GetTargetScreenBounds();
+		var screen = _scrBoundsProvider.GetTargetScreenBounds(app);
 
 		// Used to accurately measure how far we are in the animation
 		var stopwatch = new Stopwatch();

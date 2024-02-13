@@ -28,7 +28,7 @@ public sealed class WinFormsScreenCoordsProvider : IWtqScreenCoordsProvider
 		return scr.Bounds.ToWtqRect();
 	}
 
-	public IEnumerable<WtqRect> GetScreenRects()
+	public WtqRect[] GetScreenRects()
 	{
 		return Screen
 			.AllScreens

@@ -27,6 +27,7 @@
 		{
 			"Name": "ProcessHacker",
 			"HotKeys": [ { "Modifiers": "Control", "Key": "D3" } ],
+			"PreferMonitor": "Primary",
 			"StartNew": {
 				//"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
 			},
@@ -37,6 +38,8 @@
 		{
 			"Name": "Spotify",
 			"HotKeys": [ { "Modifiers": "Control", "Key": "D4" } ],
+			"PreferMonitor": "AtIndex",
+			"MonitorIndex": 0,
 			"StartNew": {
 				"FileName": ""
 			},

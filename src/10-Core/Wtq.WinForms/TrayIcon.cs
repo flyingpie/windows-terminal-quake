@@ -1,4 +1,5 @@
-﻿using Wtq.Core.Resources;
+﻿using Wtq.Core;
+using Wtq.Core.Resources;
 using Wtq.Win32.Native;
 
 namespace Wtq.WinForms;
@@ -66,9 +67,6 @@ public sealed class TrayIcon : IDisposable
 		mnuOpenSettings.Click += (s, a) =>
 		{
 			// TODO: We need to restore the original multi-location configuration file support.
-			var pathToAppBin = new Uri(typeof(TrayIcon).Assembly.Location).LocalPath;
-			var pathToAppDir = Path.GetDirectoryName(pathToAppBin);
-			var pathToWtqConf = Path.Combine(pathToAppDir, "wtq.jsonc");
 
 			//var path = QSettings.Instance.PathToSettings;
 
@@ -90,7 +88,7 @@ public sealed class TrayIcon : IDisposable
 
 			Process.Start(new ProcessStartInfo()
 			{
-				FileName = pathToWtqConf,
+				FileName = App.PathToAppConf,
 				UseShellExecute = true,
 			});
 		};

@@ -5,7 +5,22 @@ namespace Wtq.Core;
 
 public static class App
 {
+	private static string? _pathToAppConf;
 	private static string? _pathToAppDir;
+	private static string? _pathToAppExe;
+
+	public static string PathToAppConf
+	{
+		get
+		{
+			if (_pathToAppConf == null)
+			{
+				_pathToAppConf = Path.Combine(PathToAppDir, "wtq.jsonc");
+			}
+
+			return _pathToAppConf;
+		}
+	}
 
 	public static string PathToAppDir
 	{
@@ -19,8 +34,6 @@ public static class App
 			return _pathToAppDir;
 		}
 	}
-
-	private static string? _pathToAppExe;
 
 	public static string PathToAppExe
 	{

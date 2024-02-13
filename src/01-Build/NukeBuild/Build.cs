@@ -46,6 +46,12 @@ public sealed class Build : NukeBuild
 
 	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"win-x64_self-contained.zip";
 
+	private AbsolutePath PathToWinGetManifestDir => ArtifactsDirectory / $"winget";
+
+	private AbsolutePath PathToScoopManifestDir => ArtifactsDirectory / $"scoop";
+
+	private AbsolutePath PathToPsOneLinerDir => ArtifactsDirectory / $"ps-one-liner";
+
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	private Target Clean => _ => _
@@ -62,6 +68,7 @@ public sealed class Build : NukeBuild
 
 	private Target PublishWin64FrameworkDependent => _ => _
 		.DependsOn(Clean)
+		.Produces(PathToWin64FrameworkDependentZip)
 		.Executes(() =>
 		{
 			var st = StagingDirectory / "win-x64_framework-dependent";
@@ -84,6 +91,7 @@ public sealed class Build : NukeBuild
 
 	private Target PublishWin64SelfContained => _ => _
 		.DependsOn(Restore)
+		.Produces(PathToWin64SelfContainedZip)
 		.Executes(() =>
 		{
 			var staging = StagingDirectory / "win-x64_self-contained";
@@ -104,11 +112,29 @@ public sealed class Build : NukeBuild
 				fileMode: FileMode.CreateNew);
 		});
 
+	private Target CreatePowerShellOneLiner => _ => _
+		.Executes(() =>
+		{
+			// TODO: PowerShell install one-liner
+		});
+
+	private Target CreateScoopManifest => _ => _
+		.Executes(() =>
+		{
+			// TODO: Scoop manifest
+		});
+
+	private Target CreateWinGetManifest => _ => _
+		.Executes(() =>
+		{
+			// TODO: WinGet manifest
+		});
+
 	private Target PublishAll => _ => _
 		.DependsOn(PublishWin64FrameworkDependent)
 		.DependsOn(PublishWin64SelfContained)
-		.Produces(
-			PathToWin64FrameworkDependentZip,
-			PathToWin64SelfContainedZip)
+		.Triggers(CreatePowerShellOneLiner)
+		.Triggers(CreateScoopManifest)
+		.Triggers(CreateWinGetManifest)
 		.Executes();
 }

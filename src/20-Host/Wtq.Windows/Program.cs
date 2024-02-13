@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Wtq.Configuration;
 using Wtq.Core;
@@ -36,7 +37,7 @@ public sealed class Program
 			.SetBasePath(App.PathToAppDir)
 			.AddJsonFile(f =>
 			{
-				var path = "wtq.jsonc";
+				var path = Path.GetFileName(App.PathToAppConf);
 
 				f.Optional = false;
 				f.Path = path;
@@ -99,9 +100,16 @@ public sealed class Program
 
 	public async Task RunAsync()
 	{
-		await _host
-			.RunAsync()
-			.ConfigureAwait(false);
+		try
+		{
+			await _host
+				.RunAsync()
+				.ConfigureAwait(false);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error running application: {ex}");
+		}
 	}
 
 	public static async Task Main(string[] args)

@@ -73,6 +73,9 @@
             "type": "string",
             "enum": [
               "Clean",
+              "CreatePowerShellOneLiner",
+              "CreateScoopManifest",
+              "CreateWinGetManifest",
               "PublishAll",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
@@ -91,6 +94,9 @@
             "type": "string",
             "enum": [
               "Clean",
+              "CreatePowerShellOneLiner",
+              "CreateScoopManifest",
+              "CreateWinGetManifest",
               "PublishAll",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
