@@ -6,6 +6,8 @@ public class FindProcessOptions
 
 	public bool Filter(Process process)
 	{
+		ArgumentNullException.ThrowIfNull(process);
+
 		if (process.MainWindowHandle == nint.Zero)
 		{
 			return false;

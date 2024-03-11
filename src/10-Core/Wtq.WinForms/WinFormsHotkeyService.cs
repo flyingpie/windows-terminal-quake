@@ -19,7 +19,7 @@ public class WinFormsHotkeyService : IHostedService
 	{
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 
-		_bus.OnAsync(
+		_bus.On(
 			e => e is WtqRegisterHotkeyEvent,
 			e =>
 			{
@@ -40,7 +40,7 @@ public class WinFormsHotkeyService : IHostedService
 			if (_lastKeyMod == a.Modifiers && _lastKey == a.Key)
 			{
 				// TODO: Reset on keyup or something.
-				//return;
+				// return;
 			}
 
 			_lastKeyMod = a.Modifiers;

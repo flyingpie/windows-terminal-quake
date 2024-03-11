@@ -24,7 +24,7 @@ public sealed class WtqFocusTracker(
 	private readonly IWtqBus _bus = bus ?? throw new ArgumentNullException(nameof(bus));
 	private readonly IWtqProcessService _procService = procService ?? throw new ArgumentNullException(nameof(procService));
 
-	private bool _isRunning = true;
+	private readonly bool _isRunning = true;
 
 	public WtqApp? ForegroundApp { get; private set; }
 
@@ -38,9 +38,9 @@ public sealed class WtqFocusTracker(
 			{
 				try
 				{
-					await Task.Delay(TimeSpan.FromMilliseconds(250));
+					await Task.Delay(TimeSpan.FromMilliseconds(250)).ConfigureAwait(false);
 
-					//var fg = User32.GetForegroundWindow();
+					// var fg = User32.GetForegroundWindow();
 					var fgPid = _procService.GetForegroundProcessId();
 
 					var pr = _appsRepo.Apps.FirstOrDefault(a => a.Process?.Id == fgPid);

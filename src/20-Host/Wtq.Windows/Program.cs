@@ -28,8 +28,7 @@ public sealed class Program
 
 	public Program()
 	{
-		//Kernel32.AllocConsole();
-
+		// Kernel32.AllocConsole();
 		Console.WriteLine("Hello, World!");
 
 		// Configuration.
@@ -44,7 +43,7 @@ public sealed class Program
 				f.OnLoadException = x =>
 				{
 					// TODO: Logging and configuration are currently kinda dependent on one another.
-					//_log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", path, x.Exception.Message);
+					// _log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", path, x.Exception.Message);
 					Console.WriteLine($"Error loading configuration file '{path}': {x.Exception.Message}");
 				};
 			})
@@ -67,6 +66,7 @@ public sealed class Program
 					.Bind(config);
 
 				opt
+
 					// Utils
 					.AddSingleton<IRetry, Retry>()
 
@@ -90,8 +90,9 @@ public sealed class Program
 					.AddWinFormsScreenCoordsProvider()
 					.AddWinFormsHotkeyService()
 					.AddWinFormsTrayIcon()
-					//.AddSharpHookGlobalHotkeys()
-					//.AddSimpleTrayIcon()
+
+					// .AddSharpHookGlobalHotkeys()
+					// .AddSimpleTrayIcon()
 					;
 			})
 			.UseSerilog()
@@ -114,6 +115,6 @@ public sealed class Program
 
 	public static async Task Main(string[] args)
 	{
-		await new Program().RunAsync();
+		await new Program().RunAsync().ConfigureAwait(false);
 	}
 }

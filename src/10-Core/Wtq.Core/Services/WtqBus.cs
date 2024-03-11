@@ -5,7 +5,7 @@ public class WtqBus : IWtqBus
 	private readonly ILogger _log = Log.For<WtqBus>();
 	private readonly List<EventRegistration> _registrations = [];
 
-	public void OnAsync(Func<IWtqEvent, bool> predicate, Func<IWtqEvent, Task> onEvent)
+	public void On(Func<IWtqEvent, bool> predicate, Func<IWtqEvent, Task> onEvent)
 	{
 		_registrations.Add(new EventRegistration()
 		{
@@ -24,7 +24,7 @@ public class WtqBus : IWtqBus
 			{
 				try
 				{
-					await reg.OnEvent(ev);
+					await reg.OnEvent(ev).ConfigureAwait(false);
 				}
 				catch (Exception ex)
 				{

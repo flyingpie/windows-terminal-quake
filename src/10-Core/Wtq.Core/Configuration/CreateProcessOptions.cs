@@ -6,5 +6,5 @@ public class CreateProcessOptions
 	[Required]
 	public string? FileName { get; set; }
 
-	public IEnumerable<string> Arguments { get; set; } = Array.Empty<string>();
+	public IEnumerable<string> Arguments { get; set; } = [];
 }

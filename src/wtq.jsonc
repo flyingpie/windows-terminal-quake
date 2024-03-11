@@ -3,12 +3,20 @@
 	// Docs: https://flyingpie.github.io/windows-terminal-quake/
 	// TODO: V2 Docs
 	// TODO: Schema
+	"$schema": "./wtq.schema.2.json",
 	"Apps": [
 		{
 			"Name": "Terminal",
+
 			"HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+
 			"FindExisting": {
 				"ProcessName": "powershell"
+			},
+
+			"StartNew": {
+				"FileName": "powershell",
+				"Arguments": ""
 			},
 
 			// What monitor to preferably drop the terminal.
@@ -21,6 +29,8 @@
 			"MonitorIndex": 0
 		}
 	],
+
+	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
 	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
 	// What monitor to preferably drop the terminal.

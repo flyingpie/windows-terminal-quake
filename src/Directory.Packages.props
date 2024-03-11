@@ -3,9 +3,9 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageVersion Include="Ardalis.GuardClauses" Version="4.4.0" />
+		<PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14" />
+		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.9.28" />
 		<PackageVersion Include="nbgv" Version="[3.6.133]" />
 		<PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
@@ -15,10 +15,10 @@
 		<PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
 		<PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageVersion Include="SharpHook" Version="5.2.3" />
+		<PackageVersion Include="SharpHook" Version="5.3.1" />
 		<PackageVersion Include="SimpleTrayIcon" Version="3.0.2" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.19.0.84025" />
-		<PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
+		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />
 		<PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
 	</ItemGroup>

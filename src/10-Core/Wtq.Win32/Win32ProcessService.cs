@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Wtq.Core.Data;
 using Wtq.Core.Exceptions;
 using Wtq.Core.Services;
@@ -57,8 +55,8 @@ public sealed class Win32ProcessService : IWtqProcessService
 
 		User32.MoveWindow(
 			hWnd: process.MainWindowHandle,
-			X: rect.X,
-			Y: rect.Y,
+			x: rect.X,
+			y: rect.Y,
 			nWidth: rect.Width,
 			nHeight: rect.Height,
 			bRepaint: repaint);
@@ -75,7 +73,7 @@ public sealed class Win32ProcessService : IWtqProcessService
 		//{
 		if (process.MainWindowHandle == IntPtr.Zero) throw new WtqException("Process handle zero");
 
-		var isSet = User32.SetWindowPos(process.MainWindowHandle, User32.HWND_TOPMOST, 0, 0, 0, 0, User32.TOPMOST_FLAGS);
+		var isSet = User32.SetWindowPos(process.MainWindowHandle, User32.HWNDTOPMOST, 0, 0, 0, 0, User32.TOPMOSTFLAGS);
 		if (!isSet) throw new WtqException("Could not set window top most");
 		//});
 	}
@@ -91,17 +89,17 @@ public sealed class Win32ProcessService : IWtqProcessService
 		var handle = process.MainWindowHandle;
 
 		// Get current window properties
-		var props = User32.GetWindowLong(handle, User32.GWL_EX_STYLE);
+		var props = User32.GetWindowLong(handle, User32.GWLEXSTYLE);
 
 		if (isVisible)
 		{
 			// Show
-			User32.SetWindowLong(handle, User32.GWL_EX_STYLE, (props | User32.WS_EX_TOOLWINDOW) & User32.WS_EX_APPWINDOW);
+			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & User32.WSEXAPPWINDOW);
 		}
 		else
 		{
 			// Hide
-			User32.SetWindowLong(handle, User32.GWL_EX_STYLE, (props | User32.WS_EX_TOOLWINDOW) & ~User32.WS_EX_APPWINDOW);
+			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & ~User32.WSEXAPPWINDOW);
 		}
 	}
 
@@ -118,13 +116,13 @@ public sealed class Win32ProcessService : IWtqProcessService
 		if (process.MainWindowHandle == IntPtr.Zero) throw new WtqException("Process handle zero");
 
 		// Get original window properties
-		var props = User32.GetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE);
+		var props = User32.GetWindowLong(process.MainWindowHandle, User32.GWLEXSTYLE);
 
 		// Add "WS_EX_LAYERED"-flag (required for transparency).
-		User32.SetWindowLong(process.MainWindowHandle, User32.GWL_EX_STYLE, props | User32.WS_EX_LAYERED);
+		User32.SetWindowLong(process.MainWindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
 
 		// Set transparency
-		var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWA_ALPHA);
+		var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWAALPHA);
 		if (!isSet) throw new WtqException("Could not set window opacity");
 		//});
 	}

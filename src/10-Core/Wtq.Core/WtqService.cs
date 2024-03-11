@@ -17,19 +17,21 @@ public sealed class WtqService(
 	IWtqBus bus)
 	: IHostedService
 {
-	private readonly ILogger<WtqService> _log = log ?? throw new ArgumentNullException(nameof(log));
-
 	private readonly WtqAppMonitorService _appMon = appMon ?? throw new ArgumentNullException(nameof(appMon));
 	private readonly IWtqAppRepo _appRepo = appRepo ?? throw new ArgumentNullException(nameof(appRepo));
 	private readonly IWtqBus _bus = bus ?? throw new ArgumentNullException(nameof(bus));
+	private readonly ILogger<WtqService> _log = log ?? throw new ArgumentNullException(nameof(log));
+
+	private WtqApp? _lastOpen;
+	private WtqApp? open;
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		_log.LogInformation("Starting");
 
-		_bus.OnAsync(e => e is WtqToggleAppEvent, ToggleStuffAsync);
+		_bus.On(e => e is WtqToggleAppEvent, ToggleStuffAsync);
 
-		_bus.OnAsync(
+		_bus.On(
 			e => e is WtqAppFocusEvent,
 			async e =>
 			{
@@ -37,7 +39,7 @@ public sealed class WtqService(
 
 				if (ev.App != null && ev.App == open && !ev.GainedFocus)
 				{
-					await open.CloseAsync();
+					await open.CloseAsync().ConfigureAwait(false);
 					open = null;
 				}
 			});
@@ -45,8 +47,12 @@ public sealed class WtqService(
 		return Task.CompletedTask;
 	}
 
-	private WtqApp? open = null;
-	private WtqApp? _lastOpen = null;
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		_log.LogInformation("Stopping");
+
+		return Task.CompletedTask;
+	}
 
 	private async Task ToggleStuffAsync(IWtqEvent ev)
 	{
@@ -57,7 +63,7 @@ public sealed class WtqService(
 		{
 			if (open != null)
 			{
-				await open.CloseAsync();
+				await open.CloseAsync().ConfigureAwait(false);
 				_lastOpen = open;
 				open = null;
 				_appMon.DropFocus();
@@ -71,15 +77,16 @@ public sealed class WtqService(
 					var first = _appRepo.Apps.FirstOrDefault();
 					if (first != null)
 					{
-						await first.OpenAsync();
+						await first.OpenAsync().ConfigureAwait(false);
 					}
+
 					open = first;
 					_lastOpen = first;
 					return;
 				}
 
 				open = _lastOpen;
-				await open.OpenAsync();
+				await open.OpenAsync().ConfigureAwait(false);
 				return;
 			}
 
@@ -97,15 +104,15 @@ public sealed class WtqService(
 		{
 			if (open == app)
 			{
-				await app.CloseAsync();
+				await app.CloseAsync().ConfigureAwait(false);
 				_lastOpen = open;
 				open = null;
 				_appMon.DropFocus();
 			}
 			else
 			{
-				await open.CloseAsync(ToggleModifiers.SwitchingApps);
-				await app.OpenAsync(ToggleModifiers.SwitchingApps);
+				await open.CloseAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
+				await app.OpenAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
 
 				open = app;
 			}
@@ -114,15 +121,8 @@ public sealed class WtqService(
 		}
 
 		_log.LogInformation("Toggling app {App}", app);
-		await app.OpenAsync();
+		await app.OpenAsync().ConfigureAwait(false);
 
 		open = app;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		_log.LogInformation("Stopping");
-
-		return Task.CompletedTask;
 	}
 }

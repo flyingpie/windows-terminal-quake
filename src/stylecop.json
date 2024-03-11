@@ -12,7 +12,7 @@
 			"documentPrivateFields": true,
 			"excludeFromPunctuationCheck": [],
 			"fileNamingConvention": "stylecop",
-			"headerDecoration": null,
+			"headerDecoration": "",
 			"variables": {},
 			"xmlHeader": true
 		},
@@ -39,7 +39,7 @@
 		"orderingRules": {
 			"blankLinesBetweenUsingGroups": "omit",
 			"elementOrder": [ "kind", "accessibility", "constant", "static", "readonly" ],
-			"systemUsingDirectivesFirst": true,
+			"systemUsingDirectivesFirst": false,
 			"usingDirectivesPlacement": "outsideNamespace"
 		},
 		"readabilityRules": {

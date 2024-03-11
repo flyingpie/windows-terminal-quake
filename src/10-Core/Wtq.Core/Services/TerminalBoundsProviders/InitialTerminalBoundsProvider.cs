@@ -41,8 +41,6 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 			Height = _initialBounds.Height,
 		};
 
-		//Log.Debug("Progress: {Progress} Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", progress, screenBounds, res);
-
 		if (isOpening && progress >= 1)
 		{
 			_initialBounds = res;

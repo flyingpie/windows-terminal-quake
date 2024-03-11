@@ -1,6 +1,7 @@
 ﻿namespace Wtq.Core.Data;
 
 [Flags]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "MvdO: Self-explanatory.")]
 public enum WtqKeyModifiers
 {
 	None = 0,

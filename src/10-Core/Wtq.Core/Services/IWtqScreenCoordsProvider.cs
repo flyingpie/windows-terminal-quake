@@ -4,7 +4,7 @@ namespace Wtq.Core.Services;
 
 public interface IWtqScreenCoordsProvider
 {
-	WtqVec2i GetCursorPos();
+	WtqVec2I GetCursorPos();
 
 	WtqRect GetPrimaryScreenRect();
 

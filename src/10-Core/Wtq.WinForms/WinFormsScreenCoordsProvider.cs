@@ -12,11 +12,9 @@ namespace Wtq.Win32;
 
 public sealed class WinFormsScreenCoordsProvider : IWtqScreenCoordsProvider
 {
-	private readonly ILogger _log = Log.For<WinFormsScreenCoordsProvider>();
-
-	public WtqVec2i GetCursorPos()
+	public WtqVec2I GetCursorPos()
 	{
-		return Cursor.Position.ToWtqVec2i();
+		return Cursor.Position.ToWtqVec2I();
 	}
 
 	public WtqRect GetPrimaryScreenRect()

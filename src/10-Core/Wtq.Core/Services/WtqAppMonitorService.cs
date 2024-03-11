@@ -19,9 +19,9 @@ public class WtqAppMonitorService
 	private readonly IWtqAppRepo _apps;
 
 	// TODO: Handle configuration changes?
-	//private readonly List<WtqApp> _apps;
+	// private readonly List<WtqApp> _apps;
 
-	private bool _isRunning = true;
+	private readonly bool _isRunning = true;
 
 	public WtqAppMonitorService(
 		ILogger<WtqAppMonitorService> log,
@@ -69,7 +69,7 @@ public class WtqAppMonitorService
 
 				try
 				{
-					await UpdateAppProcessesAsync();
+					await UpdateAppProcessesAsync().ConfigureAwait(false);
 
 					_log.LogInformation("Updated app process, took {Elapsed}", sw.Elapsed);
 				}
@@ -78,7 +78,7 @@ public class WtqAppMonitorService
 					_log.LogError(ex, "Error updating list of apps: {Message}", ex.Message);
 				}
 
-				await Task.Delay(TimeSpan.FromSeconds(2));
+				await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
 			}
 		});
 	}
@@ -91,12 +91,11 @@ public class WtqAppMonitorService
 	private async Task UpdateAppProcessesAsync()
 	{
 		// TODO: Handle modifications to apps on runtime (or just request restart?).
-
 		var processes = _procService.GetProcesses().OrderBy(p => p.ProcessName).ToList();
 
 		foreach (var app in _apps.Apps)
 		{
-			await app.UpdateAsync(processes);
+			await app.UpdateAsync(processes).ConfigureAwait(false);
 		}
 	}
 }

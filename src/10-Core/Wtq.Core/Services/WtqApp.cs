@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using Wtq.Core.Configuration;
+﻿using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Services;
 
 namespace Wtq.Services;
 
-public class WtqApp(
+public sealed class WtqApp(
 	IWtqProcessService procService,
 	IWtqAppToggleService toggler) : IDisposable
 {
@@ -15,30 +14,12 @@ public class WtqApp(
 
 	public WtqAppOptions App { get; set; }
 
-	public Process? Process { get; set; }
-
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
 	/// </summary>
 	public bool IsActive => Process != null;
 
-	public void Dispose()
-	{
-		if (Process != null)
-		{
-			var bounds = _procService.GetWindowRect(Process); // TODO: Restore to original position (when we got a hold of the process).
-			bounds.Width = 1280;
-			bounds.Height = 800;
-			bounds.X = 0;
-			bounds.Y = 0;
-
-			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
-
-			//Process.SetWindowState(WindowShowStyle.Restore);
-			_procService.MoveWindow(Process, bounds);
-			_procService.SetTaskbarIconVisibility(Process, true);
-		}
-	}
+	public Process? Process { get; set; }
 
 	public string? ProcessDescription
 	{
@@ -53,7 +34,7 @@ public class WtqApp(
 		}
 	}
 
-	public int GetTimeMs(ToggleModifiers mods)
+	public static int GetTimeMs(ToggleModifiers mods)
 	{
 		switch (mods)
 		{
@@ -69,13 +50,45 @@ public class WtqApp(
 		}
 	}
 
+	public void BringToForeground()
+	{
+		_procService.BringToForeground(Process);
+	}
+
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
 		var ms = GetTimeMs(mods);
 
 		_log.LogInformation("Closing app '{App}' in {Time}ms", this, ms);
 
-		await _toggler.ToggleAsync(this, false, ms);
+		await _toggler.ToggleAsync(this, false, ms).ConfigureAwait(false);
+	}
+
+	public void Dispose()
+	{
+		if (Process != null)
+		{
+			var bounds = _procService.GetWindowRect(Process); // TODO: Restore to original position (when we got a hold of the process).
+			bounds.Width = 1280;
+			bounds.Height = 800;
+			bounds.X = 0;
+			bounds.Y = 0;
+
+			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
+
+			_procService.MoveWindow(Process, bounds);
+			_procService.SetTaskbarIconVisibility(Process, true);
+		}
+	}
+
+	public WtqRect GetWindowRect()
+	{
+		return _procService.GetWindowRect(Process);
+	}
+
+	public void MoveWindow(WtqRect rect)
+	{
+		_procService.MoveWindow(Process, rect: rect);
 	}
 
 	public async Task OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -84,18 +97,18 @@ public class WtqApp(
 
 		_log.LogInformation("Opening app '{App}' in {Time}ms", this, ms);
 
-		await _toggler.ToggleAsync(this, true, ms);
+		await _toggler.ToggleAsync(this, true, ms).ConfigureAwait(false);
 	}
 
 	public override string ToString()
 	{
-		return $"[App:{App}] [ProcessID:{Process?.Id}] {(Process?.ProcessName ?? "<no process>")}";
+		return $"[App:{App}] [ProcessID:{Process?.Id}] {Process?.ProcessName ?? "<no process>"}";
 	}
 
 	/// <summary>
 	/// Updates the state of the <see cref="WtqApp"/> object to reflect running processes on the system.
 	/// </summary>
-	public async Task UpdateAsync(IEnumerable<Process> processes)
+	public Task UpdateAsync(IEnumerable<Process> processes)
 	{
 		// Check that if we have a process handle, the process is still active.
 		if (Process?.HasExited ?? false)
@@ -113,8 +126,9 @@ public class WtqApp(
 			if (Process == null)
 			{
 				_log.LogWarning("No process instances found for app '{App}'", App);
+
 				// TODO: Create process.
-				return;
+				return Task.CompletedTask;
 			}
 
 			// TODO: Configurable.
@@ -122,20 +136,7 @@ public class WtqApp(
 
 			_log.LogInformation("Found process instance for app '{App}' with name '{ProcessName}' and Id '{ProcessId}'", App, Process.ProcessName, Process.Id);
 		}
-	}
 
-	public void BringToForeground()
-	{
-		_procService.BringToForeground(Process);
-	}
-
-	public WtqRect GetWindowRect()
-	{
-		return _procService.GetWindowRect(Process);
-	}
-
-	public void MoveWindow(WtqRect rect)
-	{
-		_procService.MoveWindow(Process, rect: rect);
+		return Task.CompletedTask;
 	}
 }

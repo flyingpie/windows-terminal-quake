@@ -5,14 +5,36 @@
 /// </summary>
 internal static class HotkeyManager
 {
-	/// <summary>
-	/// Fired when the registered hot key is pressed. Note that <see cref="RegisterHotKey"/> needs to be called first.
-	/// </summary>
-	public static event EventHandler<HotKeyEventArgs> HotKeyPressed = delegate { };
+	private static readonly ManualResetEvent _windowReadyEvent = new(false);
+
+	private static volatile nint _hwnd;
+
+	private static int _id;
+
+	private static volatile MessageWindow _wnd;
+
+	static HotkeyManager()
+	{
+		Thread messageLoop = new(delegate ()
+		{
+			Application.Run(new MessageWindow());
+		})
+		{
+			Name = $"{nameof(Wtq)}.{nameof(WinForms)}.{nameof(HotkeyManager)}",
+			IsBackground = true,
+		};
+
+		messageLoop.Start();
+	}
 
 	private delegate void RegisterHotKeyDelegate(nint hwnd, int id, uint modifiers, uint key);
 
 	private delegate void UnRegisterHotKeyDelegate(nint hwnd, int id);
+
+	/// <summary>
+	/// Fired when the registered hot key is pressed. Note that <see cref="RegisterHotKey"/> needs to be called first.
+	/// </summary>
+	public static event EventHandler<HotKeyEventArgs> HotKeyPressed = (sender, e) => { };
 
 	public static int RegisterHotKey(Keys key, KeyModifiers modifiers)
 	{
@@ -28,47 +50,18 @@ internal static class HotkeyManager
 		_wnd.Invoke(new UnRegisterHotKeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
 	}
 
-	private static readonly ManualResetEvent _windowReadyEvent = new(false);
-
-	private static volatile MessageWindow _wnd;
-	private static volatile nint _hwnd;
-
-	static HotkeyManager()
-
-	{
-		Thread messageLoop = new(delegate ()
-		{
-			Application.Run(new MessageWindow());
-		})
-		{
-			Name = $"{nameof(Wtq)}.{nameof(WinForms)}.{nameof(HotkeyManager)}",
-			IsBackground = true
-		};
-
-		messageLoop.Start();
-	}
-
 	/// <summary>
 	/// We need a window to catch the global hot key event.
 	/// </summary>
 	private sealed class MessageWindow : Form
 	{
+		private const int WMHOTKEY = 0x312;
+
 		public MessageWindow()
 		{
 			_wnd = this;
 			_hwnd = Handle;
 			_windowReadyEvent.Set();
-		}
-
-		protected override void WndProc(ref Message m)
-		{
-			if (m.Msg == WM_HOTKEY)
-			{
-				HotKeyEventArgs e = new(m.LParam);
-				HotKeyPressed?.Invoke(null, e);
-			}
-
-			base.WndProc(ref m);
 		}
 
 		protected override void SetVisibleCore(bool value)
@@ -77,8 +70,15 @@ internal static class HotkeyManager
 			base.SetVisibleCore(false);
 		}
 
-		private const int WM_HOTKEY = 0x312;
-	}
+		protected override void WndProc(ref Message m)
+		{
+			if (m.Msg == WMHOTKEY)
+			{
+				HotKeyEventArgs e = new(m.LParam);
+				HotKeyPressed?.Invoke(null, e);
+			}
 
-	private static int _id = 0;
+			base.WndProc(ref m);
+		}
+	}
 }

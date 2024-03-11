@@ -18,10 +18,7 @@ public class WtqProcessFactory(
 
 	public WtqApp Create(WtqAppOptions app)
 	{
-		if (app == null)
-		{
-			throw new ArgumentNullException(nameof(app));
-		}
+		ArgumentNullException.ThrowIfNull(app);
 
 		return new WtqApp(_procService, _toggleService)
 		{

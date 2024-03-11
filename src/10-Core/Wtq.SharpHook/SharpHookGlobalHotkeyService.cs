@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Native;
-using SharpHook.Providers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -16,7 +14,7 @@ using Wtq.Services;
 
 namespace Wtq.SharpHook;
 
-public class SharpHookGlobalHotkeyService : IHostedService
+public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
 {
 	private readonly IGlobalHook _hook;
 	private readonly IWtqBus _bus;
@@ -25,14 +23,13 @@ public class SharpHookGlobalHotkeyService : IHostedService
 	private UioHookEvent? _last;
 
 	// TODO: Make specific to hotkey combinations.
-	//private List<Func<HotkeyInfo, Task>> _registrations = [];
-
+	// private List<Func<HotkeyInfo, Task>> _registrations = [];
 	public SharpHookGlobalHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqBus bus,
 		IWtqAppRepo appRepo)
 	{
-		//_hook = new TaskPoolGlobalHook();
+		// _hook = new TaskPoolGlobalHook();
 		_hook = new SimpleGlobalHook();
 
 		_bus = bus;
@@ -61,16 +58,16 @@ public class SharpHookGlobalHotkeyService : IHostedService
 					App = app,
 				});
 
-				//var inf = new HotkeyInfo()
-				//{
-				//	Key = WtqKeys.A,
-				//	Modifiers = WtqKeyModifiers.Alt,
-				//};
+				// var inf = new HotkeyInfo()
+				// {
+				// Key = WtqKeys.A,
+				// Modifiers = WtqKeyModifiers.Alt,
+				// };
 
-				//foreach (var r in _registrations)
-				//{
-				//	Task.Run(async () => await r(inf));
-				//}
+				// foreach (var r in _registrations)
+				// {
+				// Task.Run(async () => await r(inf));
+				// }
 			}
 
 			Console.WriteLine($"KEY PRESSED: [{a.RawEvent.Mask}] {a.Data.KeyCode}");
@@ -82,6 +79,11 @@ public class SharpHookGlobalHotkeyService : IHostedService
 		{
 			_last = null;
 		};
+	}
+
+	public void Dispose()
+	{
+		_hook.Dispose();
 	}
 
 	public WtqApp? GetAppForHotkey(WtqKeyModifiers keyMods, WtqKeys key)
@@ -97,13 +99,14 @@ public class SharpHookGlobalHotkeyService : IHostedService
 
 	public void OnHotkey(Func<HotkeyInfo, Task> onHotkey)
 	{
+		// Method intentionally left empty.
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		//if (!Debugger.IsAttached)
+		// if (!Debugger.IsAttached)
 		{
-			//_ = _hook.RunAsync();
+			// _ = _hook.RunAsync();
 			new Thread(() =>
 			{
 				_hook.Run();
@@ -120,7 +123,7 @@ public class SharpHookGlobalHotkeyService : IHostedService
 			{
 				if (Debugger.IsAttached)
 				{
-					//_hook.Dispose();
+					// _hook.Dispose();
 				}
 				else
 				{

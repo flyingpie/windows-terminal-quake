@@ -23,7 +23,6 @@ public interface ITerminalBoundsProvider
 	/// Value between 0.0 and 1.0 to indicate the desired position of the window;
 	/// at 0.0 the window is completely hidden; at 1.0 it is fully visible/opened.
 	/// </param>
-	/// </summary>
 	/// <returns>
 	/// A <see cref="Rectangle"/> representing where the terminal should be positioned.
 	/// </returns>

@@ -1,19 +1,10 @@
 ﻿namespace Wtq.Utils;
 
-public interface IRetry
-{
-	void Execute(Action action);
-
-	TResult Execute<TResult>(Func<TResult> action);
-
-	Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action);
-}
-
 public class Retry : IRetry
 {
-	public static IRetry Default { get; } = new Retry();
-
 	private static readonly ILogger _log = Log.For(typeof(Retry));
+
+	public static IRetry Default { get; } = new Retry();
 
 	public void Execute(Action action)
 	{
@@ -47,13 +38,14 @@ public class Retry : IRetry
 
 			try
 			{
-				return await action();
+				return await action().ConfigureAwait(false);
 			}
-			//catch (CancelRetryException ex)
-			//{
-			//	_log.LogWarning(ex, "Cancelling retry");
-			//	throw;
-			//}
+
+			// catch (CancelRetryException ex)
+			// {
+			// _log.LogWarning(ex, "Cancelling retry");
+			// throw;
+			// }
 			catch (Exception ex)
 			{
 				_log.LogWarning(ex, "[Attempt {CurrentAttempt}/{MaxAttempts}] Got exception {Message}", curAttempt, maxAttempts, ex.Message);
@@ -65,7 +57,7 @@ public class Retry : IRetry
 
 				var wait = TimeSpan.FromSeconds(2);
 				_log.LogInformation("Waiting '{Delay}' before next attempt", wait);
-				await Task.Delay(wait);
+				await Task.Delay(wait).ConfigureAwait(false);
 			}
 		}
 	}

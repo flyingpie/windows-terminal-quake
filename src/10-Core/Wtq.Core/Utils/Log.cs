@@ -13,8 +13,6 @@ public static class Log
 	public static void Configure(IConfiguration configuration)
 	{
 		Serilog.Log.Logger = new LoggerConfiguration()
-			//.MinimumLevel.Is(QSettings.Instance.LogLevel)
-
 			.WriteTo.Console()
 
 			.WriteTo.File(

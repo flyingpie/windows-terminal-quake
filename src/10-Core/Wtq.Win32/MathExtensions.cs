@@ -17,9 +17,9 @@ public static class MathExtensions
 		};
 	}
 
-	public static WtqVec2i ToWtqVec2i(this Point point)
+	public static WtqVec2I ToWtqVec2I(this Point point)
 	{
-		return new WtqVec2i()
+		return new WtqVec2I()
 		{
 			X = point.X,
 			Y = point.Y,
