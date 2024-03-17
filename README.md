@@ -4,7 +4,7 @@
 
 Windows Terminal Quake v2 is underway, featuring support for other terminals, other apps in general, and multiple apps simultaneously.
 
-Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119) to give us feedback, or take a look at a [prerelease](https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.0-pre2).
+Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119) to give us feedback, or take a look at a [prerelease](https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.0-pre5).
 
 # windows-terminal-quake [![Build Status](https://dev.azure.com/marco0738/windows-terminal-quake/_apis/build/status/flyingpie.windows-terminal-quake?branchName=master)](https://dev.azure.com/marco0738/windows-terminal-quake/_build/latest?definitionId=2&branchName=master)
 Companion program for the new Windows Terminal that enables Quake-style drop down
