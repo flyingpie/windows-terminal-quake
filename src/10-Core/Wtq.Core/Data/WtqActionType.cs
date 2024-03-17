@@ -4,7 +4,7 @@ public enum WtqActionType
 {
 	ToggleApp,
 
-	HotkeyPressed,
+	HotKeyPressed,
 
-	RegisterHotkeys,
+	RegisterHotKeys,
 }

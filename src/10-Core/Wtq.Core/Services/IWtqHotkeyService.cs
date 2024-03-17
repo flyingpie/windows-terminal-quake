@@ -1,6 +1,6 @@
 ﻿namespace Wtq.Core.Service;
 
-public interface IWtqHotkeyService
+public interface IWtqHotKeyService
 {
-	// void OnHotkey(Func<HotkeyInfo, Task> onHotkey);
+	// void OnHotKey(Func<HotKeyInfo, Task> onHotKey);
 }

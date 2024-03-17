@@ -74,24 +74,25 @@ public sealed class Program
 					.AddSingleton<IAnimationProvider, AnimationProvider>()
 					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
 					.AddSingleton<ITerminalBoundsProvider, MovingTerminalBoundsProvider>()
-					.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
+					.AddSingleton<IWtqAppFactory, WtqAppFactory>()
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 					.AddSingleton<WtqAppMonitorService>()
 					.AddSingleton<IWtqBus, WtqBus>()
 					.AddHostedService(p => p.GetRequiredService<WtqAppMonitorService>())
 					.AddHostedService<WtqService>()
 					.AddSingleton<IWtqAppRepo, WtqAppRepo>()
-					.AddHostedService<WtqHotkeyService>()
+					.AddHostedService<WtqHotKeyService>()
 
 					.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
+					.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
 
 					// Platform-specific.
 					.AddWin32ProcessService()
 					.AddWinFormsScreenCoordsProvider()
-					.AddWinFormsHotkeyService()
+					.AddWinFormsHotKeyService()
 					.AddWinFormsTrayIcon()
 
-					// .AddSharpHookGlobalHotkeys()
+					// .AddSharpHookGlobalHotKeys()
 					// .AddSimpleTrayIcon()
 					;
 			})

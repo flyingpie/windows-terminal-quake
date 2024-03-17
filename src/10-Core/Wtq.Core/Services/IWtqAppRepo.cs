@@ -3,7 +3,7 @@ using Wtq.Services;
 
 namespace Wtq.Core.Services;
 
-public interface IWtqAppRepo : IDisposable
+public interface IWtqAppRepo : IAsyncDisposable
 {
 	IReadOnlyCollection<WtqApp> Apps { get; }
 

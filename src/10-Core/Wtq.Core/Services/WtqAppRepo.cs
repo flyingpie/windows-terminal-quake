@@ -9,7 +9,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 	public WtqAppRepo(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqProcessFactory appFactory)
+		IWtqAppFactory appFactory)
 	{
 		Guard.Against.Null(opts);
 		Guard.Against.Null(appFactory);
@@ -26,11 +26,11 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		return _apps.Find(a => a.App.Name == app.Name);
 	}
 
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
 		foreach (var app in Apps)
 		{
-			app.Dispose();
+			await app.DisposeAsync();
 		}
 	}
 }

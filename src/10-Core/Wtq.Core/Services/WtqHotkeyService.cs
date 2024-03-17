@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
 using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Events;
@@ -8,13 +7,13 @@ using Wtq.Services;
 
 namespace Wtq.Core.Service;
 
-public class WtqHotkeyService : IHostedService, IWtqHotkeyService
+public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 
-	public WtqHotkeyService(
+	public WtqHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -26,15 +25,15 @@ public class WtqHotkeyService : IHostedService, IWtqHotkeyService
 		_opts.OnChange(SendRegisterEvents);
 
 		_bus.On(
-			e => e is WtqHotkeyPressedEvent,
+			e => e is WtqHotKeyPressedEvent,
 			e =>
 			{
-				var x = (WtqHotkeyPressedEvent)e;
+				var x = (WtqHotKeyPressedEvent)e;
 
 				_bus.Publish(new WtqToggleAppEvent()
 				{
 					ActionType = WtqActionType.ToggleApp,
-					App = GetAppForHotkey(x.Modifiers, x.Key),
+					App = GetAppForHotKey(x.Modifiers, x.Key),
 				});
 
 				return Task.CompletedTask;
@@ -46,9 +45,9 @@ public class WtqHotkeyService : IHostedService, IWtqHotkeyService
 		// _log
 		foreach (var app in opts.Apps)
 		{
-			foreach (var hk in app.Hotkeys)
+			foreach (var hk in app.HotKeys)
 			{
-				_bus.Publish(new WtqRegisterHotkeyEvent()
+				_bus.Publish(new WtqRegisterHotKeyEvent()
 				{
 					Key = hk.Key,
 					Modifiers = hk.Modifiers,
@@ -56,9 +55,9 @@ public class WtqHotkeyService : IHostedService, IWtqHotkeyService
 			}
 		}
 
-		foreach (var hk in opts.Hotkeys)
+		foreach (var hk in opts.HotKeys)
 		{
-			_bus.Publish(new WtqRegisterHotkeyEvent()
+			_bus.Publish(new WtqRegisterHotKeyEvent()
 			{
 				Key = hk.Key,
 				Modifiers = hk.Modifiers,
@@ -66,9 +65,9 @@ public class WtqHotkeyService : IHostedService, IWtqHotkeyService
 		}
 	}
 
-	public WtqApp? GetAppForHotkey(WtqKeyModifiers keyMods, WtqKeys key)
+	public WtqApp? GetAppForHotKey(WtqKeyModifiers keyMods, WtqKeys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
 		if (opt == null)
 		{
 			return null;

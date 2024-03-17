@@ -14,7 +14,7 @@ using Wtq.Services;
 
 namespace Wtq.SharpHook;
 
-public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
+public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 {
 	private readonly IGlobalHook _hook;
 	private readonly IWtqBus _bus;
@@ -22,9 +22,9 @@ public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
 	private readonly IWtqAppRepo _appRepo;
 	private UioHookEvent? _last;
 
-	// TODO: Make specific to hotkey combinations.
-	// private List<Func<HotkeyInfo, Task>> _registrations = [];
-	public SharpHookGlobalHotkeyService(
+	// TODO: Make specific to HotKey combinations.
+	// private List<Func<HotKeyInfo, Task>> _registrations = [];
+	public SharpHookGlobalHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqBus bus,
 		IWtqAppRepo appRepo)
@@ -44,21 +44,21 @@ public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
 				return;
 			}
 
-			var app = GetAppForHotkey(a.RawEvent.Mask.ToWtqKeyModifiers(), a.Data.KeyCode.ToWtqKeys());
+			var app = GetAppForHotKey(a.RawEvent.Mask.ToWtqKeyModifiers(), a.Data.KeyCode.ToWtqKeys());
 
 			if (a.RawEvent.Mask == ModifierMask.LeftCtrl && a.Data.KeyCode == KeyCode.Vc2)
 			{
 				a.SuppressEvent = true;
 				Console.WriteLine("SUPPRESS");
 
-				// TODO: Put something in between ingesting hotkeys and publishing functional events.
+				// TODO: Put something in between ingesting HotKeys and publishing functional events.
 				_bus.Publish(new WtqEvent()
 				{
 					ActionType = WtqActionType.ToggleApp,
 					App = app,
 				});
 
-				// var inf = new HotkeyInfo()
+				// var inf = new HotKeyInfo()
 				// {
 				// Key = WtqKeys.A,
 				// Modifiers = WtqKeyModifiers.Alt,
@@ -86,9 +86,9 @@ public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
 		_hook.Dispose();
 	}
 
-	public WtqApp? GetAppForHotkey(WtqKeyModifiers keyMods, WtqKeys key)
+	public WtqApp? GetAppForHotKey(WtqKeyModifiers keyMods, WtqKeys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
 		if (opt == null)
 		{
 			return null;
@@ -97,7 +97,7 @@ public sealed class SharpHookGlobalHotkeyService : IDisposable, IHostedService
 		return _appRepo.GetProcessForApp(opt);
 	}
 
-	public void OnHotkey(Func<HotkeyInfo, Task> onHotkey)
+	public void OnHotKey(Func<HotKeyInfo, Task> onHotKey)
 	{
 		// Method intentionally left empty.
 	}

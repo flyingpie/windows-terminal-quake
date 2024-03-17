@@ -60,4 +60,6 @@ public struct WtqRect : IEquatable<WtqRect>
 	{
 		return HashCode.Combine(Height, Width, X, Y);
 	}
+
+	public override readonly string ToString() => $"X:{X}, Y:{Y}, Width:{Width}, Height:{Height}";
 }

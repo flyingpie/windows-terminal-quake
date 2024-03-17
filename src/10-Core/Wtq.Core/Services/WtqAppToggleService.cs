@@ -74,7 +74,7 @@ public class WtqAppToggleService(
 				? deltaMs / durationMs
 				: 1.0 - (deltaMs / durationMs);
 
-			var wndRect = app.GetWindowRect();
+			var wndRect = app.GetWindowRect().Value;
 			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(open, screen, wndRect, animationFn(linearProgress));
 
 			app.MoveWindow(intermediateBounds);
@@ -88,7 +88,7 @@ public class WtqAppToggleService(
 		stopwatch.Stop();
 
 		// To ensure we end up in exactly the correct final position
-		var wndRect2 = app.GetWindowRect();
+		var wndRect2 = app.GetWindowRect().Value;
 		var finalBounds = _termBoundsProvider.GetTerminalBounds(open, screen, wndRect2, open ? 1.0 : 0.0);
 		app.MoveWindow(rect: finalBounds);
 
@@ -102,6 +102,8 @@ public class WtqAppToggleService(
 			// {
 			// Process.SetWindowState(WindowShowStyle.Maximize);
 			// }
+
+			app.BringToForeground();
 		}
 		else
 		{

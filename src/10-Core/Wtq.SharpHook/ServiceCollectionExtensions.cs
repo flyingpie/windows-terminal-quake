@@ -4,9 +4,9 @@ namespace Wtq.SharpHook;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddSharpHookGlobalHotkeys(this IServiceCollection services)
+	public static IServiceCollection AddSharpHookGlobalHotKeys(this IServiceCollection services)
 	{
 		return services
-			.AddHostedService<SharpHookGlobalHotkeyService>();
+			.AddHostedService<SharpHookGlobalHotKeyService>();
 	}
 }

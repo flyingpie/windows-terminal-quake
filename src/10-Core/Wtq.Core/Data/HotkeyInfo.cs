@@ -1,6 +1,6 @@
 ﻿namespace Wtq.Core.Data;
 
-public sealed class HotkeyInfo
+public sealed class HotKeyInfo
 {
 	public WtqKeys Key { get; set; }
 

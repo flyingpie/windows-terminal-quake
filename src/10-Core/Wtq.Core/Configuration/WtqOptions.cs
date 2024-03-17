@@ -5,8 +5,10 @@ public sealed class WtqOptions
 	[Required]
 	public IEnumerable<WtqAppOptions> Apps { get; set; } = [];
 
+	public AttachMode AttachMode { get; set; } = AttachMode.FindOrStart;
+
 	[Required]
-	public IEnumerable<HotkeyOptions> Hotkeys { get; set; } = [];
+	public IEnumerable<HotKeyOptions> HotKeys { get; set; } = [];
 
 	/// <summary>
 	/// <para>Gets or sets if "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.</para>

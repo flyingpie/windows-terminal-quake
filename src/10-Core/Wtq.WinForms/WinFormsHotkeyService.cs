@@ -7,35 +7,35 @@ using Wtq.WinForms.Native;
 
 namespace Wtq.Win32;
 
-public class WinFormsHotkeyService : IHostedService
+public class WinFormsHotKeyService : IHostedService
 {
-	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
+	private readonly ILogger _log = Log.For<WinFormsHotKeyService>();
 	private readonly IWtqBus _bus;
 
 	private KeyModifiers? _lastKeyMod;
 	private Keys? _lastKey;
 
-	public WinFormsHotkeyService(IWtqBus bus)
+	public WinFormsHotKeyService(IWtqBus bus)
 	{
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 
 		_bus.On(
-			e => e is WtqRegisterHotkeyEvent,
+			e => e is WtqRegisterHotKeyEvent,
 			e =>
 			{
-				var x = (WtqRegisterHotkeyEvent)e;
+				var x = (WtqRegisterHotKeyEvent)e;
 
 				var mods = (KeyModifiers)x.Modifiers;
 				var key = (Keys)x.Key;
 
-				_log.LogInformation("Registering hotkey [{Modifiers}] '{Key}'", mods, key);
+				_log.LogInformation("Registering HotKey [{Modifiers}] '{Key}'", mods, key);
 
-				HotkeyManager.RegisterHotKey(key, mods);
+				HotKeyManager.RegisterHotKey(key, mods);
 
 				return Task.CompletedTask;
 			});
 
-		HotkeyManager.HotKeyPressed += (s, a) =>
+		HotKeyManager.HotKeyPressed += (s, a) =>
 		{
 			if (_lastKeyMod == a.Modifiers && _lastKey == a.Key)
 			{
@@ -46,7 +46,7 @@ public class WinFormsHotkeyService : IHostedService
 			_lastKeyMod = a.Modifiers;
 			_lastKey = a.Key;
 
-			_bus.Publish(new WtqHotkeyPressedEvent()
+			_bus.Publish(new WtqHotKeyPressedEvent()
 			{
 				Key = a.Key.ToWtqKeys(),
 				Modifiers = a.Modifiers.ToWtqKeyModifiers(),

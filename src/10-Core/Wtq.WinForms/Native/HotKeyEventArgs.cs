@@ -11,9 +11,9 @@ internal class HotKeyEventArgs : EventArgs
 		Modifiers = modifiers;
 	}
 
-	public HotKeyEventArgs(nint hotKeyParam)
+	public HotKeyEventArgs(nint HotKeyParam)
 	{
-		uint param = (uint)hotKeyParam.ToInt64();
+		uint param = (uint)HotKeyParam.ToInt64();
 		Key = (Keys)((param & 0xffff0000) >> 16);
 		Modifiers = (KeyModifiers)(param & 0x0000ffff);
 	}

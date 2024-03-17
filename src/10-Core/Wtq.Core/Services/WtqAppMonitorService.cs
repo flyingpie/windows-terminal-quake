@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
-using System.Threading;
 using Wtq.Core.Configuration;
 using Wtq.Core.Services;
 
@@ -12,7 +9,7 @@ public class WtqAppMonitorService
 {
 	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
 	private readonly IOptions<WtqOptions> _opts;
-	private readonly IWtqProcessFactory _wtqProcFactory;
+	private readonly IWtqAppFactory _wtqProcFactory;
 	private readonly IWtqProcessService _procService;
 	private readonly IWtqFocusTracker _focusTracker;
 	private readonly IWtqBus _bus;
@@ -30,7 +27,7 @@ public class WtqAppMonitorService
 		IWtqBus bus,
 		IWtqFocusTracker focusTracker,
 		IWtqProcessService procService,
-		IWtqProcessFactory wtqProcFactory)
+		IWtqAppFactory wtqProcFactory)
 	{
 		_apps = appRepo;
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
@@ -91,11 +88,11 @@ public class WtqAppMonitorService
 	private async Task UpdateAppProcessesAsync()
 	{
 		// TODO: Handle modifications to apps on runtime (or just request restart?).
-		var processes = _procService.GetProcesses().OrderBy(p => p.ProcessName).ToList();
+		//var processes = _procService.GetProcesses().OrderBy(p => p.ProcessName).ToList();
 
 		foreach (var app in _apps.Apps)
 		{
-			await app.UpdateAsync(processes).ConfigureAwait(false);
+			await app.UpdateAsync().ConfigureAwait(false);
 		}
 	}
 }

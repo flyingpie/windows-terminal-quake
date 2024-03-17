@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using Wtq.Core.Data;
 using Wtq.Core.Exceptions;
 using Wtq.Core.Services;
+using Wtq.Utils;
 using Wtq.Win32.Native;
 
 namespace Wtq.Win32;
@@ -19,6 +21,25 @@ public sealed class Win32ProcessService : IWtqProcessService
 		//SetWindowState(WindowShowStyle.Restore);
 		User32.SetForegroundWindow(process.MainWindowHandle);
 		User32.ForcePaint(process.MainWindowHandle);
+		//User32.ShowWindow(process.MainWindowHandle, WindowShowStyle.Show);
+		//User32.SendMessage(process.MainWindowHandle, )
+	}
+
+	public Process? GetForegroundProcess()
+	{
+		try
+		{
+			var fg = GetForegroundProcessId();
+			if (fg > 0)
+			{
+				return Process.GetProcessById((int)fg);
+			}
+		}
+		catch (Exception ex)
+		{
+		}
+
+		return null;
 	}
 
 	public uint GetForegroundProcessId()
@@ -32,9 +53,25 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return pid;
 	}
 
+	private readonly object _procLock = new();
+	private IEnumerable<Process> _processes = [];
+	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
+	private TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
+	private readonly ILogger _log = Log.For<Win32ProcessService>();
+
 	public IEnumerable<Process> GetProcesses()
 	{
-		return Process.GetProcesses();
+		lock (_procLock)
+		{
+			if (_nextLookup < DateTimeOffset.UtcNow)
+			{
+				_log.LogDebug("Looking up list of processes");
+				_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
+				_processes = Process.GetProcesses();
+			}
+		}
+
+		return _processes;
 	}
 
 	public WtqRect GetWindowRect(Process process)
@@ -88,6 +125,8 @@ public sealed class Win32ProcessService : IWtqProcessService
 		// Get handle to the main window
 		var handle = process.MainWindowHandle;
 
+		_log.LogInformation("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
+
 		// Get current window properties
 		var props = User32.GetWindowLong(handle, User32.GWLEXSTYLE);
 
@@ -132,5 +171,31 @@ public sealed class Win32ProcessService : IWtqProcessService
 	//	if (process == null) throw new ArgumentNullException(nameof(process));
 
 	//	User32.ShowWindow(process.MainWindowHandle, state);
+	//}
+
+	//private static int GetParentProcess(int Id)
+	//{
+	//	int parentPid = 0;
+	//	using ManagementObject mo = new ManagementObject("win32_process.handle='" + Id.ToString() + "'");
+
+	//	mo.Get();
+	//	parentPid = Convert.ToInt32(mo["ParentProcessId"]);
+
+	//	return parentPid;
+	//}
+
+	//public string? GetProcessCommandLine(Process process)
+	//{
+	//	try
+	//	{
+	//		using var searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id);
+	//		using var objects = searcher.Get();
+
+	//		return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
+	//	}
+	//	catch
+	//	{
+	//		return null;
+	//	}
 	//}
 }

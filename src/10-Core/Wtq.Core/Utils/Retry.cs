@@ -1,4 +1,6 @@
-﻿namespace Wtq.Utils;
+﻿using Wtq.Core.Exceptions;
+
+namespace Wtq.Utils;
 
 public class Retry : IRetry
 {
@@ -29,7 +31,9 @@ public class Retry : IRetry
 
 	public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action)
 	{
-		var maxAttempts = 10;
+		Guard.Against.Null(action, nameof(action));
+
+		var maxAttempts = 5;
 		var curAttempt = 0;
 
 		while (true)
@@ -40,12 +44,11 @@ public class Retry : IRetry
 			{
 				return await action().ConfigureAwait(false);
 			}
-
-			// catch (CancelRetryException ex)
-			// {
-			// _log.LogWarning(ex, "Cancelling retry");
-			// throw;
-			// }
+			catch (CancelRetryException ex)
+			{
+				_log.LogWarning(ex, "Cancelling retry");
+				throw;
+			}
 			catch (Exception ex)
 			{
 				_log.LogWarning(ex, "[Attempt {CurrentAttempt}/{MaxAttempts}] Got exception {Message}", curAttempt, maxAttempts, ex.Message);
@@ -55,7 +58,7 @@ public class Retry : IRetry
 					throw;
 				}
 
-				var wait = TimeSpan.FromSeconds(2);
+				var wait = TimeSpan.FromMilliseconds(500);
 				_log.LogInformation("Waiting '{Delay}' before next attempt", wait);
 				await Task.Delay(wait).ConfigureAwait(false);
 			}

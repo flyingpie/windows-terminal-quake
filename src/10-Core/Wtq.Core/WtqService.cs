@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
 using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Events;
@@ -29,20 +28,8 @@ public sealed class WtqService(
 	{
 		_log.LogInformation("Starting");
 
-		_bus.On(e => e is WtqToggleAppEvent, ToggleStuffAsync);
-
-		_bus.On(
-			e => e is WtqAppFocusEvent,
-			async e =>
-			{
-				var ev = (WtqAppFocusEvent)e;
-
-				if (ev.App != null && ev.App == open && !ev.GainedFocus)
-				{
-					await open.CloseAsync().ConfigureAwait(false);
-					open = null;
-				}
-			});
+		_bus.On<WtqToggleAppEvent>(HandleToggleAppEvent);
+		_bus.On<WtqAppFocusEvent>(HandleAppFocusEventAsync);
 
 		return Task.CompletedTask;
 	}
@@ -54,7 +41,16 @@ public sealed class WtqService(
 		return Task.CompletedTask;
 	}
 
-	private async Task ToggleStuffAsync(IWtqEvent ev)
+	private async Task HandleAppFocusEventAsync(WtqAppFocusEvent ev)
+	{
+		if (ev.App != null && ev.App == open && !ev.GainedFocus)
+		{
+			await open.CloseAsync().ConfigureAwait(false);
+			open = null;
+		}
+	}
+
+	private async Task HandleToggleAppEvent(WtqToggleAppEvent ev)
 	{
 		var app = ev.App;
 
@@ -93,12 +89,12 @@ public sealed class WtqService(
 			return;
 		}
 
-		// We can't toggle apps that are not active.
-		if (!app.IsActive)
-		{
-			_log.LogWarning("WTQ process for app '{App}' does not have a process instance assigned", app);
-			return;
-		}
+		//// We can't toggle apps that are not active.
+		//if (!app.IsActive)
+		//{
+		//	_log.LogWarning("WTQ process for app '{App}' does not have a process instance assigned", app);
+		//	return;
+		//}
 
 		if (open != null)
 		{

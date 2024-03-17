@@ -14,6 +14,12 @@ public class WtqBus : IWtqBus
 		});
 	}
 
+	public void On<TEvent>(Func<TEvent, Task> onEvent)
+		where TEvent : IWtqEvent
+	{
+		On(ev => ev is TEvent, ev => onEvent((TEvent)ev));
+	}
+
 	public void Publish(IWtqEvent ev)
 	{
 		_log.LogInformation("Publishing event '[{Type}] {Event}'", ev.GetType().FullName, ev);

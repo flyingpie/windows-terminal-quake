@@ -2,7 +2,7 @@
 
 namespace Wtq.Core.Configuration;
 
-public class HotkeyOptions
+public class HotKeyOptions
 {
 	public WtqKeys Key { get; set; }
 

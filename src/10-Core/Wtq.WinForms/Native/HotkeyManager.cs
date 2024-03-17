@@ -3,7 +3,7 @@
 /// <summary>
 /// Wrapper around Windows Forms global hot key functionality. Surfaces a delegate to handle the hot key being pressed.
 /// </summary>
-internal static class HotkeyManager
+internal static class HotKeyManager
 {
 	private static readonly ManualResetEvent _windowReadyEvent = new(false);
 
@@ -13,14 +13,14 @@ internal static class HotkeyManager
 
 	private static volatile MessageWindow _wnd;
 
-	static HotkeyManager()
+	static HotKeyManager()
 	{
 		Thread messageLoop = new(delegate ()
 		{
 			Application.Run(new MessageWindow());
 		})
 		{
-			Name = $"{nameof(Wtq)}.{nameof(WinForms)}.{nameof(HotkeyManager)}",
+			Name = $"{nameof(Wtq)}.{nameof(WinForms)}.{nameof(HotKeyManager)}",
 			IsBackground = true,
 		};
 
@@ -55,7 +55,7 @@ internal static class HotkeyManager
 	/// </summary>
 	private sealed class MessageWindow : Form
 	{
-		private const int WMHOTKEY = 0x312;
+		private const int WMHotKey = 0x312;
 
 		public MessageWindow()
 		{
@@ -72,7 +72,7 @@ internal static class HotkeyManager
 
 		protected override void WndProc(ref Message m)
 		{
-			if (m.Msg == WMHOTKEY)
+			if (m.Msg == WMHotKey)
 			{
 				HotKeyEventArgs e = new(m.LParam);
 				HotKeyPressed?.Invoke(null, e);

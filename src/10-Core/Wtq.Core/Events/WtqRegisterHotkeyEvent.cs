@@ -4,7 +4,7 @@ using Wtq.Services;
 
 namespace Wtq.Core.Events;
 
-public sealed class WtqRegisterHotkeyEvent : IWtqEvent
+public sealed class WtqRegisterHotKeyEvent : IWtqEvent
 {
 	public WtqActionType ActionType { get; set; }
 

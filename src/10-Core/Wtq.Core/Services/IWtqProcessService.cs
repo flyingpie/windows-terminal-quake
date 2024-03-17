@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
-using Wtq.Core.Data;
+﻿using Wtq.Core.Data;
 
 namespace Wtq.Core.Services;
 
 public interface IWtqProcessService
 {
 	void BringToForeground(Process process);
+
+	Process? GetForegroundProcess();
 
 	uint GetForegroundProcessId();
 
@@ -20,4 +21,6 @@ public interface IWtqProcessService
 	void SetTransparency(Process process, int transparency);
 
 	IEnumerable<Process> GetProcesses();
+
+	//string? GetProcessCommandLine(Process process);
 }

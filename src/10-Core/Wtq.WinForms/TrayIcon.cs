@@ -1,4 +1,5 @@
-﻿using Wtq.Core;
+﻿using System.Runtime.InteropServices;
+using Wtq.Core;
 using Wtq.Core.Resources;
 using Wtq.Win32.Native;
 
@@ -16,17 +17,18 @@ public sealed class TrayIcon : IDisposable
 		{
 			var contextMenu = new ContextMenuStrip();
 
-			contextMenu.Items.AddRange(new[]
+			contextMenu.Items.AddRange(new ToolStripItem[]
 			{
-				// Version
 				CreateVersionItem(),
 
-				// Open settings file
+				new ToolStripSeparator(),
+
+				CreateOpenWebsiteItem(),
+
 				CreateOpenSettingsItem(),
 
 				CreateConsoleItem(),
 
-				// Exit
 				CreateExitItem(exitHandler),
 			});
 
@@ -49,12 +51,42 @@ public sealed class TrayIcon : IDisposable
 		waiter.Task.GetAwaiter().GetResult();
 	}
 
-	private static ToolStripMenuItem CreateVersionItem()
+	public void Dispose()
 	{
-		return new ToolStripMenuItem($"Version v2.x.x")
-		{
-			Enabled = false,
-		};
+		_notificationIcon?.Dispose();
+		_notificationIcon = null;
+
+		Application.Exit();
+	}
+
+	private static ToolStripMenuItem CreateConsoleItem()
+	{
+		var mnuExit = new ToolStripMenuItem("Pop Console");
+
+		mnuExit.Click += new EventHandler((s, a) => Kernel32.AllocConsole());
+
+		return mnuExit;
+	}
+
+	private static ToolStripMenuItem CreateExitItem(Action<object, EventArgs> exitHandler)
+	{
+		var mnuExit = new ToolStripMenuItem("Exit");
+
+		mnuExit.Click += new EventHandler(exitHandler);
+
+		return mnuExit;
+	}
+
+	private static Icon CreateIcon()
+	{
+		using var str = new MemoryStream(Resources.icon);
+		return new Icon(str);
+
+		// var bitmap = Resources.icon.ToBitmap();
+		// bitmap.MakeTransparent(Color.White);
+		// var icH = bitmap.GetHicon();
+		// var ico = Icon.FromHandle(icH);
+		// return ico;
 	}
 
 	private static ToolStripMenuItem CreateOpenSettingsItem()
@@ -95,41 +127,45 @@ public sealed class TrayIcon : IDisposable
 		return mnuOpenSettings;
 	}
 
-	private static ToolStripItem CreateConsoleItem()
+	private static ToolStripMenuItem CreateOpenWebsiteItem()
 	{
-		var mnuExit = new ToolStripMenuItem("Pop Console");
+		var item = new ToolStripMenuItem($"Open GitHub Project Website")
+		{
+			Enabled = true,
+		};
 
-		mnuExit.Click += new EventHandler((s, a) => Kernel32.AllocConsole());
+		item.Click += (s, a) =>
+		{
+			OpenBrowser("https://www.github.com/flyingpie/windows-terminal-quake");
+		};
 
-		return mnuExit;
+		return item;
 	}
 
-	private static ToolStripItem CreateExitItem(Action<object, EventArgs> exitHandler)
+	private static ToolStripMenuItem CreateVersionItem()
 	{
-		var mnuExit = new ToolStripMenuItem("Exit");
-
-		mnuExit.Click += new EventHandler(exitHandler);
-
-		return mnuExit;
+		return new ToolStripMenuItem($"Version v2.x.x")
+		{
+			Enabled = false,
+		};
 	}
 
-	public void Dispose()
+	public static void OpenBrowser(string url)
 	{
-		_notificationIcon?.Dispose();
-		_notificationIcon = null;
-
-		Application.Exit();
-	}
-
-	private static Icon CreateIcon()
-	{
-		using var str = new MemoryStream(Resources.icon);
-		return new Icon(str);
-
-		// var bitmap = Resources.icon.ToBitmap();
-		// bitmap.MakeTransparent(Color.White);
-		// var icH = bitmap.GetHicon();
-		// var ico = Icon.FromHandle(icH);
-		// return ico;
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); // Works ok on windows
+		}
+		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			Process.Start("xdg-open", url);  // Works ok on linux
+		}
+		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			Process.Start("open", url); // Not tested
+		}
+		else
+		{
+		}
 	}
 }
