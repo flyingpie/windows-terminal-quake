@@ -10,16 +10,15 @@ using Wtq.Core;
 using Wtq.Core.Configuration;
 using Wtq.Core.Service;
 using Wtq.Core.Services;
+using Wtq.Core.Services.AnimationTypeProviders;
+using Wtq.Core.Services.ScreenBoundsProviders;
+using Wtq.Core.Services.TerminalBoundsProviders;
 using Wtq.Services;
-using Wtq.Services.AnimationTypeProviders;
-using Wtq.Services.ScreenBoundsProviders;
-using Wtq.Services.TerminalBoundsProviders;
 using Wtq.Utils;
 using Wtq.Win32;
-using Wtq.Windows;
 using Wtq.WinForms;
 
-namespace Wtq;
+namespace Wtq.Windows;
 
 public sealed class Program
 {
@@ -38,6 +37,7 @@ public sealed class Program
 			{
 				var path = Path.GetFileName(App.PathToAppConf);
 
+				f.ReloadOnChange = true;
 				f.Optional = false;
 				f.Path = path;
 				f.OnLoadException = x =>
@@ -74,7 +74,7 @@ public sealed class Program
 					.AddSingleton<IAnimationProvider, AnimationProvider>()
 					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
 					.AddSingleton<ITerminalBoundsProvider, MovingTerminalBoundsProvider>()
-					.AddSingleton<IWtqAppFactory, WtqAppFactory>()
+					//.AddSingleton<IWtqAppFactory, WtqAppFactory>()
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 					.AddSingleton<WtqAppMonitorService>()
 					.AddSingleton<IWtqBus, WtqBus>()

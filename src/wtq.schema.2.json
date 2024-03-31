@@ -11,8 +11,9 @@
 			// "enum": [ "FindOrCreate", "Find", "Create" ],
 			"default": "FindOrStart",
 			"oneOf": [
-				{ "const": "FindOrStart",	"description": "Looks for an existing process first, and creates one if none was found." },
 				{ "const": "Find",			"description": "Only look for an existing process, don't create a new one." },
+				{ "const": "FindOrStart",	"description": "Looks for an existing process first, and creates one if none was found." },
+				{ "const": "Manual",		"description": "" },
 				{ "const": "Start",			"description": "Always create a new process." }
 			]
 		},
@@ -70,13 +71,20 @@
 					"Name": {
 						
 					},
+					"FileName": {
+
+					},
 					"HotKeys": {
 						"items": { "$ref": "#/$defs/HotKey" }
 					},
-					"StartNew": {
+					"MonitorIndex": {
+						"title": "",
+						"description": ""
+					},
+					"ProcessName": {
 
 					},
-					"FindExisting": {
+					"PreferMonitor": {
 
 					}
 				}

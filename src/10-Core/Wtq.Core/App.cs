@@ -1,7 +1,4 @@
-﻿using System.IO;
-using Wtq.Core.Exceptions;
-
-namespace Wtq.Core;
+﻿namespace Wtq.Core;
 
 public static class App
 {

@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using Wtq.Core.Configuration;
-using Wtq.Core.Exceptions;
 
 namespace Wtq.Core.Services;
 

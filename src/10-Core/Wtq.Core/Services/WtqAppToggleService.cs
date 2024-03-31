@@ -1,7 +1,6 @@
-﻿using Wtq.Services;
-using Wtq.Services.AnimationTypeProviders;
-using Wtq.Services.ScreenBoundsProviders;
-using Wtq.Services.TerminalBoundsProviders;
+﻿using Wtq.Core.Services.AnimationTypeProviders;
+using Wtq.Core.Services.ScreenBoundsProviders;
+using Wtq.Core.Services.TerminalBoundsProviders;
 
 namespace Wtq.Core.Services;
 
@@ -75,7 +74,7 @@ public class WtqAppToggleService(
 				: 1.0 - (deltaMs / durationMs);
 
 			var wndRect = app.GetWindowRect().Value;
-			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(open, screen, wndRect, animationFn(linearProgress));
+			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(app, open, screen, wndRect, animationFn(linearProgress));
 
 			app.MoveWindow(intermediateBounds);
 
@@ -89,7 +88,7 @@ public class WtqAppToggleService(
 
 		// To ensure we end up in exactly the correct final position
 		var wndRect2 = app.GetWindowRect().Value;
-		var finalBounds = _termBoundsProvider.GetTerminalBounds(open, screen, wndRect2, open ? 1.0 : 0.0);
+		var finalBounds = _termBoundsProvider.GetTerminalBounds(app, open, screen, wndRect2, open ? 1.0 : 0.0);
 		app.MoveWindow(rect: finalBounds);
 
 		_log.LogInformation("Moved window to {Bounds}", finalBounds);

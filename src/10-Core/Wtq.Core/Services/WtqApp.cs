@@ -1,8 +1,6 @@
-﻿using Wtq.Core.Configuration;
-using Wtq.Core.Data;
-using Wtq.Core.Services;
+﻿using Wtq.Core.Data;
 
-namespace Wtq.Services;
+namespace Wtq.Core.Services;
 
 /// <summary>
 /// An "app" represents a single process that can be toggled (such as Windows Terminal).<br/>
@@ -11,25 +9,31 @@ namespace Wtq.Services;
 public sealed class WtqApp : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<WtqApp>();
+
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
 	private readonly IWtqAppToggleService _toggler;
+	private readonly Func<WtqAppOptions> _optionsAccessor;
 
 	public WtqApp(
 		IWtqProcessFactory procFactory,
 		IWtqProcessService procService,
 		IWtqAppToggleService toggler,
-		IWtqBus bus,
-		WtqAppOptions opts)
+		Func<WtqAppOptions> optionsAccessor,
+		string name)
 	{
 		_procFactory = procFactory ?? throw new ArgumentNullException(nameof(procFactory));
 		_procService = procService ?? throw new ArgumentNullException(nameof(procService));
 		_toggler = toggler ?? throw new ArgumentNullException(nameof(toggler));
+		//_appRepo = Guard.Against.Null(appRepo, nameof(appRepo));
+		_optionsAccessor = Guard.Against.Null(optionsAccessor, nameof(optionsAccessor));
 
-		App = opts ?? throw new ArgumentNullException(nameof(opts));
+		Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
 	}
 
-	public WtqAppOptions App { get; }
+	public string Name { get; }
+
+	public WtqAppOptions Options => _optionsAccessor();
 
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
@@ -122,7 +126,7 @@ public sealed class WtqApp : IAsyncDisposable
 		_procService.MoveWindow(Process, rect: rect);
 	}
 
-	public async Task OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
+	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
 		// If we have an active process attached, toggle it open.
 		if (IsActive)
@@ -132,18 +136,24 @@ public sealed class WtqApp : IAsyncDisposable
 			_log.LogInformation("Opening app '{App}' in {Time}ms", this, ms);
 
 			await _toggler.ToggleAsync(this, true, ms).ConfigureAwait(false);
+
+			return true;
 		}
 
-		if (!IsActive && App.AttachMode == AttachMode.Manual)
+		if (!IsActive && Options.AttachMode == AttachMode.Manual)
 		{
 			var pr = _procService.GetForegroundProcess();
 			if (pr != null)
 			{
 				await AttachAsync(pr).ConfigureAwait(false);
+
+				return true;
 			}
 
 			_log.LogWarning("ATTACH?!");
 		}
+
+		return false;
 	}
 
 	public override string ToString()
@@ -151,11 +161,11 @@ public sealed class WtqApp : IAsyncDisposable
 		try
 		{
 			// TODO: Make extensions to safely pull process info without crashing.
-			return $"[App:{App}] [ProcessID:{Process?.Id}] {Process?.ProcessName ?? "<no process>"}";
+			return $"[App:{Options}] [ProcessID:{Process?.Id}] {Process?.ProcessName ?? "<no process>"}";
 		}
 		catch (Exception ex)
 		{
-			return $"[App:{App}] <no process>";
+			return $"[App:{Options}] <no process>";
 		}
 	}
 
@@ -173,11 +183,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 		if (Process == null)
 		{
-			var process = await _procFactory.GetProcessAsync(App).ConfigureAwait(false);
+			var process = await _procFactory.GetProcessAsync(Options).ConfigureAwait(false);
 
 			if (process == null)
 			{
-				_log.LogWarning("No process instances found for app '{App}'", App);
+				_log.LogWarning("No process instances found for app '{App}'", Options);
 				return;
 			}
 
@@ -194,6 +204,6 @@ public sealed class WtqApp : IAsyncDisposable
 
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
-		_log.LogInformation("Found process instance for app '{App}' with name '{ProcessName}' and Id '{ProcessId}'", App, process.ProcessName, process.Id);
+		_log.LogInformation("Found process instance for app '{App}' with name '{ProcessName}' and Id '{ProcessId}'", Options, process.ProcessName, process.Id);
 	}
 }

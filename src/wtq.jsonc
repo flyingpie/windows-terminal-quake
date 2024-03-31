@@ -34,5 +34,11 @@
 	// Zero based, eg. 0, 1, etc.
 	// Defaults to "0".
 	// Can be overridden per app.
-	"MonitorIndex": 0
+	"MonitorIndex": 0,
+
+	// Horizontal screen coverage, as a percentage (defaults to 95).
+	"HorizontalScreenCoverage": 95,
+
+	// Vertical screen coverage, as a percentage (defaults to 95).
+	"VerticalScreenCoverage": 95
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Extensions.Logging;
-using System.IO;
 using Wtq.Core;
 
 namespace Wtq.Utils;
@@ -13,6 +12,8 @@ public static class Log
 	public static void Configure(IConfiguration configuration)
 	{
 		Serilog.Log.Logger = new LoggerConfiguration()
+			.MinimumLevel.Verbose()
+
 			.WriteTo.Console()
 
 			.WriteTo.File(

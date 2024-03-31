@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Events;
 using Wtq.Core.Services;
-using Wtq.Services;
 
 namespace Wtq.Core.Service;
 
@@ -73,7 +71,7 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 			return null;
 		}
 
-		var res = _appRepo.GetProcessForApp(opt);
+		var res = _appRepo.GetAppByName(opt.Name);
 
 		return res;
 	}

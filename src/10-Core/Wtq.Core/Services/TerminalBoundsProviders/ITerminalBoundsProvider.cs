@@ -1,6 +1,6 @@
 ﻿using Wtq.Core.Data;
 
-namespace Wtq.Services.TerminalBoundsProviders;
+namespace Wtq.Core.Services.TerminalBoundsProviders;
 
 /// <summary>
 /// Determine the window size & position during a toggle animation.
@@ -27,6 +27,7 @@ public interface ITerminalBoundsProvider
 	/// A <see cref="Rectangle"/> representing where the terminal should be positioned.
 	/// </returns>
 	WtqRect GetTerminalBounds(
+		WtqApp app,
 		bool isOpening,
 		WtqRect screenBounds,
 		WtqRect currentTerminalBounds,

@@ -1,8 +1,6 @@
-﻿using Wtq.Core.Configuration;
-using Wtq.Core.Data;
-using Wtq.Core.Services;
+﻿using Wtq.Core.Data;
 
-namespace Wtq.Services.ScreenBoundsProviders;
+namespace Wtq.Core.Services.ScreenBoundsProviders;
 
 public class ScreenBoundsProvider(
 	IOptionsMonitor<WtqOptions> opts,
@@ -20,8 +18,8 @@ public class ScreenBoundsProvider(
 	/// <inheritdoc/>
 	public WtqRect GetTargetScreenBounds(WtqApp app)
 	{
-		var prefMon = app.App.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
-		var monInd = app.App.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+		var prefMon = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
+		var monInd = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
 
 		switch (prefMon)
 		{
@@ -36,7 +34,7 @@ public class ScreenBoundsProvider(
 
 					_log.LogWarning(
 						"Option '{OptionName}' was set to {MonitorIndex}, but only {MonitorCount} screens were found",
-						nameof(app.App.MonitorIndex),
+						nameof(app.Options.MonitorIndex),
 						monInd,
 						scrs.Length);
 
@@ -60,7 +58,7 @@ public class ScreenBoundsProvider(
 				}
 
 			default:
-				_log.LogWarning("Unknown value '{OptionValue}' for option '{OptionName}'", prefMon, nameof(app.App.PreferMonitor));
+				_log.LogWarning("Unknown value '{OptionValue}' for option '{OptionName}'", prefMon, nameof(app.Options.PreferMonitor));
 				return _screenCoordsProvider.GetPrimaryScreenRect();
 		}
 	}

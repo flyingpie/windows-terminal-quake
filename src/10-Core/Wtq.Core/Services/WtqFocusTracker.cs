@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
 using Wtq.Core.Events;
-using Wtq.Services;
 
 namespace Wtq.Core.Services;
 

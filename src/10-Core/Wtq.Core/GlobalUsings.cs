@@ -10,4 +10,6 @@ global using System.IO;
 global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
+global using Wtq.Core.Configuration;
+global using Wtq.Core.Exceptions;
 global using Wtq.Utils;

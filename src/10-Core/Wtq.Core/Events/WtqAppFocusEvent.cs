@@ -1,6 +1,5 @@
 ﻿using Wtq.Core.Data;
 using Wtq.Core.Services;
-using Wtq.Services;
 
 namespace Wtq.Core.Events;
 

@@ -1,6 +1,4 @@
-﻿using Wtq.Services;
-
-namespace Wtq.Core.Services;
+﻿namespace Wtq.Core.Services;
 
 public interface IWtqAppToggleService
 {

@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Wtq.Core.Configuration;
 using Wtq.Core.Services;
 
 namespace Wtq.Services;
 
+// TODO: Merge with IWtqAppRepo?
 public class WtqAppMonitorService
 	: IHostedService
 {
 	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
-	private readonly IOptions<WtqOptions> _opts;
-	private readonly IWtqAppFactory _wtqProcFactory;
+	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqProcessService _procService;
 	private readonly IWtqFocusTracker _focusTracker;
 	private readonly IWtqBus _bus;
@@ -21,22 +20,17 @@ public class WtqAppMonitorService
 	private readonly bool _isRunning = true;
 
 	public WtqAppMonitorService(
-		ILogger<WtqAppMonitorService> log,
-		IOptions<WtqOptions> opts,
+		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus,
 		IWtqFocusTracker focusTracker,
-		IWtqProcessService procService,
-		IWtqAppFactory wtqProcFactory)
+		IWtqProcessService procService)
 	{
 		_apps = appRepo;
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 		_opts = opts ?? throw new ArgumentNullException(nameof(opts));
 		_focusTracker = focusTracker ?? throw new ArgumentNullException(nameof(focusTracker));
-		_wtqProcFactory = wtqProcFactory ?? throw new ArgumentNullException(nameof(wtqProcFactory));
-
-		_procService = procService
-		?? throw new ArgumentNullException(nameof(procService));
+		_procService = procService ?? throw new ArgumentNullException(nameof(procService));
 	}
 
 	public void DropFocus()
@@ -66,6 +60,7 @@ public class WtqAppMonitorService
 
 				try
 				{
+					await _apps.UpdateAppsAsync().ConfigureAwait(false);
 					await UpdateAppProcessesAsync().ConfigureAwait(false);
 
 					_log.LogInformation("Updated app process, took {Elapsed}", sw.Elapsed);

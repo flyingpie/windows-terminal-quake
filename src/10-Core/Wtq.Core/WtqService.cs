@@ -116,9 +116,11 @@ public sealed class WtqService(
 			return;
 		}
 
+		// Open the specified app.
 		_log.LogInformation("Toggling app {App}", app);
-		await app.OpenAsync().ConfigureAwait(false);
-
-		open = app;
+		if (await app.OpenAsync().ConfigureAwait(false))
+		{
+			open = app;
+		}
 	}
 }

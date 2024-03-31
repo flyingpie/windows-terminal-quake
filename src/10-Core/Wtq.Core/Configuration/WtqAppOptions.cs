@@ -7,7 +7,8 @@ public class WtqAppOptions
 	public AttachMode? AttachMode { get; set; }
 
 	// TODO: Use dict key?
-	public string Name { get; set; }
+	[Required]
+	public string? Name { get; set; }
 
 	public IEnumerable<HotKeyOptions> HotKeys { get; set; } = [];
 
@@ -31,6 +32,30 @@ public class WtqAppOptions
 	/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 	/// </summary>
 	public PreferMonitor? PreferMonitor { get; set; }
+
+	#region Sizes
+
+	public HorizontalAlign? HorizontalAlign { get; set; }
+
+	/// <summary>
+	/// <para>How much room to leave between the top of the terminal and the top of the screen, in pixels.</para>
+	/// <para>Defaults to "0".</para>
+	/// </summary>
+	public int? VerticalOffset { get; set; }
+
+	/// <summary>
+	/// <para>Vertical screen coverage as a percentage (0-100).</para>
+	/// <para>Defaults to "100".</para>
+	/// </summary>
+	public float? VerticalScreenCoverage { get; set; }
+
+	/// <summary>
+	/// <para>Horizontal screen coverage, as a percentage.</para>
+	/// <para>Defaults to "100".</para>
+	/// </summary>
+	public float? HorizontalScreenCoverage { get; set; }
+
+	#endregion Sizes
 
 	public bool Filter(Process process, bool isStartedByWtq)
 	{

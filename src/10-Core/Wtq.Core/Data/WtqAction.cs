@@ -1,4 +1,4 @@
-﻿using Wtq.Services;
+﻿using Wtq.Core.Services;
 
 namespace Wtq.Core.Data;
 

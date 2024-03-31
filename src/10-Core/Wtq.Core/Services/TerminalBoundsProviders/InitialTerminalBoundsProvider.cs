@@ -1,6 +1,6 @@
 ﻿using Wtq.Core.Data;
 
-namespace Wtq.Services.TerminalBoundsProviders;
+namespace Wtq.Core.Services.TerminalBoundsProviders;
 
 /// <summary>
 /// Moves the terminal from- and to where the user put it, maintaining both the original position and size.
@@ -16,6 +16,7 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 
 	/// <inheritdoc/>
 	public WtqRect GetTerminalBounds(
+		WtqApp app,
 		bool isOpening,
 		WtqRect screenBounds,
 		WtqRect currentTerminalBounds,

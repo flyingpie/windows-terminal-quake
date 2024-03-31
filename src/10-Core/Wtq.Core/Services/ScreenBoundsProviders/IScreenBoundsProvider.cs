@@ -1,6 +1,6 @@
 ﻿using Wtq.Core.Data;
 
-namespace Wtq.Services.ScreenBoundsProviders;
+namespace Wtq.Core.Services.ScreenBoundsProviders;
 
 public interface IScreenBoundsProvider
 {

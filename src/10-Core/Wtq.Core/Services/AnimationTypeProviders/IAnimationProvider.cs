@@ -1,6 +1,6 @@
 ﻿using Wtq.Core.Data;
 
-namespace Wtq.Services.AnimationTypeProviders;
+namespace Wtq.Core.Services.AnimationTypeProviders;
 
 public interface IAnimationProvider
 {

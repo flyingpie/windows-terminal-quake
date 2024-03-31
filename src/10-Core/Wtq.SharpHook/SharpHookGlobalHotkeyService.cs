@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Wtq.Core.Configuration;
 using Wtq.Core.Data;
 using Wtq.Core.Services;
-using Wtq.Services;
 
 namespace Wtq.SharpHook;
 
@@ -94,7 +93,7 @@ public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 			return null;
 		}
 
-		return _appRepo.GetProcessForApp(opt);
+		return _appRepo.GetAppByNameRequired(opt.Name);
 	}
 
 	public void OnHotKey(Func<HotKeyInfo, Task> onHotKey)
