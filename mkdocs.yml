@@ -5,27 +5,31 @@ docs_dir: 'pages'
 site_dir: 'docs'
 
 nav:
-- Getting Started:
-  - Direct Download: 'getting-started/direct-download.md'
-  - Get From Scoop: 'getting-started/get-from-scoop.md'
-  - Build (Cake): 'getting-started/build-cake.md'
-  - Build (Visual Studio): 'getting-started/build-vs.md'
+- WTQ v2:
+  - Getting Started: v2/getting-started.md
 
-- Settings:
-  - Always On Top: settings/always-on-top.md
-  - Command Line Parameters: settings/command-line-parameters.md
-  - Disable When Active App Is In Fullscreen: settings/disable-when-active-app-is-in-fullscreen.md
-  - Hide On Focus Lost: settings/hide-on-focus-lost.md
-  - Hotkeys: settings/hotkeys.md
-  - Notifications: settings/notifications.md
-  - Opacity: settings/opacity.md
-  - Prefer Monitor: settings/prefer-monitor.md
-  - Size and Align: settings/size-and-align.md
-  - Start Hidden: settings/start-hidden.md
-  - Suppress Hotkey for Processes: settings/suppress-hotkey-for-processes.md
-  - Taskbar Icon Visibility: settings/taskbar-icon-visibility.md
-  - Toggle Animation: settings/toggle-animation.md
-  - Windows Terminal Command: settings/windows-terminal-command.md
+- WTQ v1:
+  - Getting Started:
+    - Direct Download: v1/getting-started/direct-download.md
+    - Get From Scoop: v1/getting-started/get-from-scoop.md
+    - Build (Cake): v1/getting-started/build-cake.md
+    - Build (Visual Studio): v1/getting-started/build-vs.md
+
+  - Settings:
+    - Always On Top: v1/settings/always-on-top.md
+    - Command Line Parameters: v1/settings/command-line-parameters.md
+    - Disable When Active App Is In Fullscreen: v1/settings/disable-when-active-app-is-in-fullscreen.md
+    - Hide On Focus Lost: v1/settings/hide-on-focus-lost.md
+    - Hotkeys: v1/settings/hotkeys.md
+    - Notifications: v1/settings/notifications.md
+    - Opacity: v1/settings/opacity.md
+    - Prefer Monitor: v1/settings/prefer-monitor.md
+    - Size and Align: v1/settings/size-and-align.md
+    - Start Hidden: v1/settings/start-hidden.md
+    - Suppress Hotkey for Processes: v1/settings/suppress-hotkey-for-processes.md
+    - Taskbar Icon Visibility: v1/settings/taskbar-icon-visibility.md
+    - Toggle Animation: v1/settings/toggle-animation.md
+    - Windows Terminal Command: v1/settings/windows-terminal-command.md
 
 - Misc:
   - Changelog: misc/changelog.md
