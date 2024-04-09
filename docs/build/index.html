@@ -15,7 +15,7 @@
     
     
       
-        <title>Windows Terminal Quake</title>
+        <title>Overview - Windows Terminal Quake</title>
       
     
     
@@ -202,14 +202,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
       
       
       
@@ -225,6 +227,30 @@
           WTQ v2
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Overview
+      </a>
+      
+    </li>
+  
+
+            
           
             
               
@@ -249,18 +275,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_1_2">
+        <label class="md-nav__link" for="__nav_1_3">
           Settings
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Settings" data-md-level="2">
-        <label class="md-nav__title" for="__nav_1_2">
+        <label class="md-nav__title" for="__nav_1_3">
           <span class="md-nav__icon md-icon"></span>
           Settings
         </label>
@@ -384,22 +410,36 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="v1/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_2_1">
+        <label class="md-nav__link" for="__nav_2_2">
           Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Getting Started" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_1">
+        <label class="md-nav__title" for="__nav_2_2">
           <span class="md-nav__icon md-icon"></span>
           Getting Started
         </label>
@@ -477,18 +517,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_2_2">
+        <label class="md-nav__link" for="__nav_2_3">
           Settings
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Settings" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_2">
+        <label class="md-nav__title" for="__nav_2_3">
           <span class="md-nav__icon md-icon"></span>
           Settings
         </label>
@@ -806,11 +846,14 @@
 <h1 id="overview">Overview</h1>
 <p>Welcome to the Windows Terminal Quake (WTQ) docs!</p>
 <p>See <a href="v2/installation">Installation</a> to get started.</p>
-<p><a href="/assets/img/wtq.gif"><img alt="img" src="/assets/img/wtq.gif" /></a></p>
+<video width="800" controls loop autoplay>
+  <source src="/assets/video/wtq-v2.mp4" />
+</video>
+
 <div class="admonition note">
 <p class="admonition-title">WTQ v2</p>
 <p>This is the documentation for the in-development WTQ v2.</p>
-<p>Click <a href="../v1">here</a> to go to the WTQ v1 docs, which only supports a single application (by default Microsoft's Windows Terminal).</p>
+<p>Click <a href="/v1">here</a> to go to the WTQ v1 docs, which only supports a single application (by default Microsoft's Windows Terminal).</p>
 </div>
 
               
@@ -823,6 +866,31 @@
         <footer class="md-footer">
 
 	<!-- Link to previous and/or next page -->
+	
+	<div class="md-footer-nav">
+		<nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+
+			<!-- Link to previous page -->
+			
+
+			<!-- Link to next page -->
+			
+			<a href="v2/installation/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Next
+						</span>
+						Installation
+					</div>
+				</div>
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+				</div>
+			</a>
+			
+		</nav>
+	</div>
 	
 
 	<div class="md-footer-meta md-typeset">

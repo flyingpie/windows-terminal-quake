@@ -2,12 +2,12 @@
 
 Companion program for the new Windows Terminal that enables Quake-style drop down and some additional features.
 
-![img](../assets/img/main.gif)
+![img](/assets/img/main.gif)
 
 !!! note "WTQ v1"
     This is the documentation for Windows Terminal Quake v1. It is currently more feature-complete than v2, but as of yet only supports a single application at a time.
 
-    Click [here](../v2) to see the docs for the in-development v2.
+    Click [here](/) to see the docs for the in-development v2.
 
 [![Build Status](https://dev.azure.com/marco0738/windows-terminal-quake/_apis/build/status/flyingpie.windows-terminal-quake?branchName=master)](https://dev.azure.com/marco0738/windows-terminal-quake/_build/latest?definitionId=2&branchName=master)
 

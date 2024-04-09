@@ -6,6 +6,7 @@ site_dir: 'build'
 
 nav:
 - WTQ v2:
+  - Overview: index.md
   - Installation: v2/installation.md
   - Settings:
     - Apps: v2/settings/apps.md
@@ -25,6 +26,7 @@ nav:
     #- Windows Terminal Command: v2/settings/windows-terminal-command.md
 
 - WTQ v1:
+  - Overview: v1/index.md
   - Getting Started:
     - Direct Download: v1/getting-started/direct-download.md
     - Get From Scoop: v1/getting-started/get-from-scoop.md
