@@ -6,7 +6,23 @@ site_dir: 'build'
 
 nav:
 - WTQ v2:
-  - Getting Started: v2/installation.md
+  - Installation: v2/installation.md
+  - Settings:
+    - Apps: v2/settings/apps.md
+    #- Always On Top: v2/settings/always-on-top.md
+    #- Command Line Parameters: v2/settings/command-line-parameters.md
+    #- Disable When Active App Is In Fullscreen: v2/settings/disable-when-active-app-is-in-fullscreen.md
+    #- Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
+    - Hotkeys: v2/settings/hotkeys.md
+    #- Notifications: v2/settings/notifications.md
+    - Opacity: v2/settings/opacity.md
+    - Prefer Monitor: v2/settings/prefer-monitor.md
+    - Size and Align: v2/settings/size-and-align.md
+    #- Start Hidden: v2/settings/start-hidden.md
+    #- Suppress Hotkey for Processes: v2/settings/suppress-hotkey-for-processes.md
+    #- Taskbar Icon Visibility: v2/settings/taskbar-icon-visibility.md
+    #- Toggle Animation: v2/settings/toggle-animation.md
+    #- Windows Terminal Command: v2/settings/windows-terminal-command.md
 
 - WTQ v1:
   - Getting Started:
@@ -64,6 +80,10 @@ extra_css:
   - assets/styles.css
 
 markdown_extensions:
+  - admonition
   - sane_lists
+  - pymdownx.details
   - pymdownx.highlight:
       use_pygments: false
+  - pymdownx.superfences
+

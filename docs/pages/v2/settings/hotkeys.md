@@ -1,33 +1,59 @@
 # Hotkeys
 
+Configures the keys used to open and close an app.
+
+Hot keys are supported on a global basis, and per app.
 Multiple hot keys are supported, with an optional modifier.
 
+## Global
 ```json
 {
-	// The keys that can be used to toggle the terminal
 	"HotKeys": [
-
 		// Tilde, without modifiers
-		{
-			"Key": "OemTilde"
-		},
+		{ "Key": "OemTilde" },
 
 		// Ctrl + Q
-		{
-			"Modifiers": "Control",
-			"Key": "Q"
-		},
+		{ "Modifiers": "Control", "Key": "Q" },
 
 		// Multiple modifiers
+		{ "Modifiers": "Control,Shift", "Key": "W" }
+	]
+}
+```
+
+## Per App
+```json
+{
+	"Apps": [
 		{
-			"Modifiers": "Control,Shift",
-			"Key": "W"
+			"Name": "Terminal",
+
+			"HotKeys": [
+				// Ctrl + 1
+				{ "Modifiers": "Control", "Key": "1" }
+			]
+		},
+		{
+			"Name": "File Browser",
+
+			"HotKeys": [
+				// Ctrl + 2
+				{ "Modifiers": "Control", "Key": "2" }
+			]
 		}
 	]
 }
 ```
 
-## F12 As a Hotkey
+## Windows Key + Tilde as a Hot Key
+
+When using the Windows key + tilde as a hot key, while toggling Windows Terminal, the default shortcut for Windows Terminal's own Quake mode may interfere.
+
+You can turn off the built-in Quake mode, by unmapping the key:
+
+![WT Hot Key](../../assets/img/wt-hotkey.png)
+
+## F12 as a Hot Key
 
 When using "F12" as a hotkey, it may be necessary to disable the key as a shortcut for the system-wide debugger first.
 

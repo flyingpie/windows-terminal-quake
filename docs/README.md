@@ -13,6 +13,10 @@ Eg.
 py3\Scripts\Activate.ps1
 ```
 
+```sh
+source py3/bin/activate
+```
+
 # Install dependencies
 
 Under project folder:

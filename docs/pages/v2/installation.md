@@ -1,5 +1,8 @@
 # Getting Started
 
+!!! note "WTQ v2"
+    These parts are still in development, mind the gaps!
+
 ## Get From WinGet
 
 TODO
