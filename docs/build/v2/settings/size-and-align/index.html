@@ -15,7 +15,7 @@
     
     
       
-        <title>Size & Align - Windows Terminal Quake</title>
+        <title>Size and Align - Windows Terminal Quake</title>
       
     
     
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Size & Align
+              Size and Align
             
           </span>
         </div>
@@ -202,14 +202,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
       
       
       
@@ -232,9 +234,183 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started.md" class="md-nav__link">
-        Getting Started
+      <a href="../../installation/" class="md-nav__link">
+        Installation
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Settings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Settings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/" class="md-nav__link">
+        Apps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hotkeys/" class="md-nav__link">
+        Hotkeys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opacity/" class="md-nav__link">
+        Opacity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prefer-monitor/" class="md-nav__link">
+        Prefer Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Size and Align
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Size and Align
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#horizontal-align" class="md-nav__link">
+    Horizontal Align
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#horizontal-screen-coverage" class="md-nav__link">
+    Horizontal Screen Coverage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vertical-offset" class="md-nav__link">
+    Vertical Offset
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vertical-screen-coverage" class="md-nav__link">
+    Vertical Screen Coverage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maximize-after-toggle" class="md-nav__link">
+    Maximize After Toggle
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -752,10 +928,9 @@
 <li>Center (default)</li>
 <li>Right</li>
 </ul>
-<pre><code class="language-json">{
-    &quot;HorizontalAlign&quot;: &quot;Center&quot;
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "HorizontalAlign": "Center"
+}</code></pre>
 <p><strong>Left</strong>
 <img alt="Left" src="https://user-images.githubusercontent.com/1295673/95656847-467ed980-0b11-11eb-87a4-2bff809c30d0.png" /></p>
 <p><strong>Center</strong>
@@ -766,26 +941,23 @@
 <h2 id="horizontal-screen-coverage">Horizontal Screen Coverage</h2>
 <p>How much horizontal space the terminal should use. When this is below 100, the terminal is centered (can be changed using the <a href="/settings/horizontal-align">Horizontal Align</a>) setting.</p>
 <p>This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width, due to the terminal being bound to column widths (eg. try 100.5 or 101).</p>
-<pre><code class="language-json">{
-    &quot;HorizontalScreenCoverage&quot;: 80
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "HorizontalScreenCoverage": 80
+}</code></pre>
 <p><img alt="Horizontal Coverage" src="https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/baslas">baslas</a></span></p>
 <h2 id="vertical-offset">Vertical Offset</h2>
 <p>How much room to leave between the top of the terminal and the top of the screen.</p>
-<pre><code class="language-json">{
+<pre class="highlight"><code class="language-json">{
   // How much room to leave between the top of the terminal and the top of the screen
-  &quot;VerticalOffset&quot;: 50
-}
-</code></pre>
+  "VerticalOffset": 50
+}</code></pre>
 <h2 id="vertical-screen-coverage">Vertical Screen Coverage</h2>
 <p>The vertical space that is taken up by the terminal window can be configured through "VerticalScreenCoverage".</p>
-<pre><code class="language-json">{
+<pre class="highlight"><code class="language-json">{
   // How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
-  &quot;VerticalScreenCoverage&quot;: 60
-}
-</code></pre>
+  "VerticalScreenCoverage": 60
+}</code></pre>
 <p><img alt="Vertical Screen Coverage" src="https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/ukWaqas">ukWaqas</a></span></p>
 <p><img alt="Vertical Offset" src="https://user-images.githubusercontent.com/1295673/95657244-b9894f80-0b13-11eb-97d5-3f984f4de912.png" /></p>
@@ -796,10 +968,9 @@ Note that this only applies when both <code>HorizontalScreenCoverage</code> and 
 <p>This is to fix the issue where the terminal columns don't line up with the width and height of the screen.</p>
 <p>Since the terminal sizes in incremental values of 1 column, 100% horizontal coverage can actually mean slightly under the full width of the screen.</p>
 <p>Defaults to <code>true</code>.</p>
-<pre><code class="language-json">{
-    &quot;MaximizeAfterToggle&quot;: true
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "MaximizeAfterToggle": true
+}</code></pre>
 
               
             </article>
@@ -811,6 +982,46 @@ Note that this only applies when both <code>HorizontalScreenCoverage</code> and 
         <footer class="md-footer">
 
 	<!-- Link to previous and/or next page -->
+	
+	<div class="md-footer-nav">
+		<nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+
+			<!-- Link to previous page -->
+			
+			<a href="../prefer-monitor/" class="md-footer-nav__link md-footer-nav__link--prev"
+				rel="prev">
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+				</div>
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Previous
+						</span>
+						Prefer Monitor
+					</div>
+				</div>
+			</a>
+			
+
+			<!-- Link to next page -->
+			
+			<a href="../../../v1/getting-started/direct-download/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Next
+						</span>
+						Direct Download
+					</div>
+				</div>
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+				</div>
+			</a>
+			
+		</nav>
+	</div>
 	
 
 	<div class="md-footer-meta md-typeset">

@@ -15,7 +15,7 @@
     
     
       
-        <title>Getting Started - Windows Terminal Quake</title>
+        <title>Installation - Windows Terminal Quake</title>
       
     
     
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Getting Started
+              Installation
             
           </span>
         </div>
@@ -202,14 +202,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
       
       
       
@@ -230,11 +232,183 @@
               
   
   
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Installation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Installation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-from-winget" class="md-nav__link">
+    Get From WinGet
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-from-scoop" class="md-nav__link">
+    Get From Scoop
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#direct-download" class="md-nav__link">
+    Direct Download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-from-command-line" class="md-nav__link">
+    Build (From Command Line)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-using-visual-studio" class="md-nav__link">
+    Build (Using Visual Studio)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Settings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Settings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
   
     <li class="md-nav__item">
-      <a href="../getting-started.md" class="md-nav__link">
-        Getting Started
+      <a href="../settings/apps/" class="md-nav__link">
+        Apps
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/hotkeys/" class="md-nav__link">
+        Hotkeys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/opacity/" class="md-nav__link">
+        Opacity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/prefer-monitor/" class="md-nav__link">
+        Prefer Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/size-and-align/" class="md-nav__link">
+        Size and Align
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -744,12 +918,15 @@
 
 
 <h1 id="getting-started">Getting Started</h1>
+<div class="admonition note">
+<p class="admonition-title">WTQ v2</p>
+<p>These parts are still in development, mind the gaps!</p>
+</div>
 <h2 id="get-from-winget">Get From WinGet</h2>
 <p>TODO</p>
 <h2 id="get-from-scoop">Get From Scoop</h2>
 <p>Download from <a href="https://scoop.sh/">scoop</a>:</p>
-<pre><code class="language-powershell">scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/windows-terminal-quake.json
-</code></pre>
+<pre class="highlight"><code class="language-powershell">scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/windows-terminal-quake.json</code></pre>
 <h2 id="direct-download">Direct Download</h2>
 <p>TODO</p>
 <h2 id="build-from-command-line">Build (From Command Line)</h2>
@@ -765,6 +942,31 @@
         <footer class="md-footer">
 
 	<!-- Link to previous and/or next page -->
+	
+	<div class="md-footer-nav">
+		<nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+
+			<!-- Link to previous page -->
+			
+
+			<!-- Link to next page -->
+			
+			<a href="../settings/apps/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Next
+						</span>
+						Apps
+					</div>
+				</div>
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+				</div>
+			</a>
+			
+		</nav>
+	</div>
 	
 
 	<div class="md-footer-meta md-typeset">

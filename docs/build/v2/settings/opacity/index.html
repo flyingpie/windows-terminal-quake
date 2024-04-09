@@ -202,14 +202,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
       
       
       
@@ -232,9 +234,124 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started.md" class="md-nav__link">
-        Getting Started
+      <a href="../../installation/" class="md-nav__link">
+        Installation
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Settings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Settings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/" class="md-nav__link">
+        Apps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hotkeys/" class="md-nav__link">
+        Hotkeys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Opacity
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prefer-monitor/" class="md-nav__link">
+        Prefer Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../size-and-align/" class="md-nav__link">
+        Size and Align
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -704,10 +821,9 @@
 <p>The terminal window can be made transparent through the <code>Opacity</code>-setting.
 Note that this controls the transparency of the entire window, including the title bar.</p>
 <p>From <code>0</code> (invisible) to <code>100</code> (opaque).</p>
-<pre><code class="language-json">{
-    &quot;Opacity&quot;: 80
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "Opacity": 80
+}</code></pre>
 <p><img alt="Transparency" src="/assets/img/transparency.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/ukWaqas">ukWaqas</a></span></p>
 
@@ -721,6 +837,46 @@ Note that this controls the transparency of the entire window, including the tit
         <footer class="md-footer">
 
 	<!-- Link to previous and/or next page -->
+	
+	<div class="md-footer-nav">
+		<nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+
+			<!-- Link to previous page -->
+			
+			<a href="../hotkeys/" class="md-footer-nav__link md-footer-nav__link--prev"
+				rel="prev">
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+				</div>
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Previous
+						</span>
+						Hotkeys
+					</div>
+				</div>
+			</a>
+			
+
+			<!-- Link to next page -->
+			
+			<a href="../prefer-monitor/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+				<div class="md-footer-nav__title">
+					<div class="md-ellipsis">
+						<span class="md-footer-nav__direction">
+							Next
+						</span>
+						Prefer Monitor
+					</div>
+				</div>
+				<div class="md-footer-nav__button md-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+				</div>
+			</a>
+			
+		</nav>
+	</div>
 	
 
 	<div class="md-footer-meta md-typeset">

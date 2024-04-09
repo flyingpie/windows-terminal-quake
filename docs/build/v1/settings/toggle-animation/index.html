@@ -232,9 +232,112 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../v2/getting-started.md" class="md-nav__link">
-        Getting Started
+      <a href="../../../v2/installation/" class="md-nav__link">
+        Installation
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Settings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Settings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v2/settings/apps/" class="md-nav__link">
+        Apps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v2/settings/hotkeys/" class="md-nav__link">
+        Hotkeys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v2/settings/opacity/" class="md-nav__link">
+        Opacity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v2/settings/prefer-monitor/" class="md-nav__link">
+        Prefer Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v2/settings/size-and-align/" class="md-nav__link">
+        Size and Align
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -818,19 +921,17 @@
 </ul>
 <p>See <a href="https://easings.net/">easings.net</a> for examples of the easings.</p>
 <p>Defaults to <code>EaseOutQuart</code>.</p>
-<pre><code class="language-json">{
-    &quot;ToggleAnimationType&quot;: &quot;EaseOutQuart&quot;
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "ToggleAnimationType": "EaseOutQuart"
+}</code></pre>
 <p><span class="by">Suggested and implemented by <a href="https://github.com/timmolderez">Tim Molderez</a></span></p>
 <h2 id="toggle-duration">Toggle Duration</h2>
 <p>How long it should take for the terminal to come down or go back up.
 This is an estimate, since because of the way the toggling works, some slow downs can happen.</p>
 <p>Setting this to <code>0</code> makes the toggle instant.</p>
-<pre><code class="language-json">{
-    &quot;ToggleDurationMs&quot;: 150
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "ToggleDurationMs": 150
+}</code></pre>
 <p><span class="by">Suggested by <a href="https://github.com/mikef-nl">Mike F</a></span></p>
 <h2 id="toggle-mode">Toggle Mode</h2>
 <p>How the terminal actually gets toggled on- and off the screen.</p>
@@ -842,19 +943,17 @@ This should work on any setup, but can cause some jumping of the terminal charac
 <p>Moves the entire window off-screen to the top, which prevents jumping of the terminal characters, since the size of the terminal is kept constant.</p>
 <p>This doesn't work too great with vertically-stacked monitor setups, since the terminal might be pushed off to the monitor north of the active one.</p>
 <p>Defaults to <code>Resize</code>.</p>
-<pre><code class="language-json">{
-    &quot;ToggleMode&quot;: &quot;Resize&quot;
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "ToggleMode": "Resize"
+}</code></pre>
 <p><span class="by">Suggested by <a href="https://github.com/marxjohnson">Mark Johnson</a> and <a href="https://github.com/shanselman">Scott Hanselman</a></span></p>
 <h2 id="toggle-animation-frame-time">Toggle Animation Frame Time</h2>
 <p>How long each frame in the toggle animation takes in milliseconds.
 The lower this value, the smoother the animation, though values lower than 15 are not supported and will result in a toggle taking more than the configured.</p>
 <p>Defaults to <code>25</code>.</p>
-<pre><code class="language-json">{
-    &quot;ToggleAnimationFrameTimeMs&quot;: 25
-}
-</code></pre>
+<pre class="highlight"><code class="language-json">{
+    "ToggleAnimationFrameTimeMs": 25
+}</code></pre>
 <p><span class="by">Suggested by <a href="https://github.com/rmobis">Raphael Mobis Tacla</a></span></p>
 
               
