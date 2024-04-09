@@ -4,7 +4,7 @@ Welcome to the Windows Terminal Quake (WTQ) docs!
 
 See [Installation](v2/installation) to get started.
 
-[![img](../assets/img/wtq.gif)](../assets/img/wtq.gif)
+[![img](/assets/img/wtq.gif)](/assets/img/wtq.gif)
 
 !!! note "WTQ v2"
     This is the documentation for the in-development WTQ v2.
