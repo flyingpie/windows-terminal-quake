@@ -2,7 +2,7 @@
 
 Companion program for the new Windows Terminal that enables Quake-style drop down and some additional features.
 
-![img](/assets/img/main.gif)
+![img](assets/img/main.gif)
 
 !!! note "WTQ v1"
     This is the documentation for Windows Terminal Quake v1. It is currently more feature-complete than v2, but as of yet only supports a single application at a time.
