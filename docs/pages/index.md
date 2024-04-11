@@ -11,5 +11,5 @@ See [Installation](v2/installation) to get started.
 !!! note "WTQ v2"
     This is the documentation for the in-development WTQ v2.
 
-    Click [here](/v1) to go to the WTQ v1 docs, which only supports a single application (by default Microsoft's Windows Terminal).
+    Click [here](v1) to go to the WTQ v1 docs, which only supports a single application (by default Microsoft's Windows Terminal).
 
