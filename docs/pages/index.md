@@ -5,7 +5,7 @@ Welcome to the Windows Terminal Quake (WTQ) docs!
 See [Installation](v2/installation) to get started.
 
 <video width="800" controls loop autoplay>
-  <source src="/assets/video/wtq-v2.mp4" />
+  <source src="../assets/video/wtq-v2.mp4" />
 </video>
 
 !!! note "WTQ v2"
