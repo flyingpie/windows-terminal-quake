@@ -209,7 +209,10 @@ public sealed class WtqApp : IAsyncDisposable
 		Process = process;
 
 		// TODO: Configurable.
-		_procService.SetTaskbarIconVisibility(process, false);
+		if (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options) == TaskBarIconVisibility.AlwaysHidden)
+		{
+			_procService.SetTaskbarIconVisibility(process, false);
+		}
 
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 

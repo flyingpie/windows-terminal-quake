@@ -41,6 +41,13 @@ public class WtqAppOptions
 	/// </summary>
 	public int? Opacity { get; set; }
 
+	/// <summary>
+	/// <para>When to show the terminal window icon on the taskbar.</para>
+	/// <para>"AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".</para>
+	/// <para>Defaults to "AlwaysHidden".</para>
+	/// </summary>
+	public TaskBarIconVisibility? TaskbarIconVisibility { get; set; }
+
 	#region Sizes
 
 	public HorizontalAlign? HorizontalAlign { get; set; }

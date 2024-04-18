@@ -39,6 +39,20 @@ public sealed class WtqOptions
 		return opts.Opacity ?? Opacity;
 	}
 
+	/// <summary>
+	/// <para>When to show the terminal window icon on the taskbar.</para>
+	/// <para>"AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".</para>
+	/// <para>Defaults to "AlwaysHidden".</para>
+	/// </summary>
+	public TaskBarIconVisibility TaskBarIconVisibility { get; set; } = TaskBarIconVisibility.AlwaysHidden;
+
+	public TaskBarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.TaskbarIconVisibility ?? TaskBarIconVisibility;
+	}
+
 	#region Sizes
 
 	public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;
