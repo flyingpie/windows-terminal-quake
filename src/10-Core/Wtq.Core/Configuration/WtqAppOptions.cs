@@ -7,6 +7,7 @@ public class WtqAppOptions
 	public AttachMode? AttachMode { get; set; }
 
 	// TODO: Use dict key?
+	[NotNull]
 	[Required]
 	public string? Name { get; set; }
 
@@ -32,6 +33,13 @@ public class WtqAppOptions
 	/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 	/// </summary>
 	public PreferMonitor? PreferMonitor { get; set; }
+
+	/// <summary>
+	/// <para>Make the window see-through (applies to the entire window, including the title bar).</para>
+	/// <para>0 (invisible) - 100 (opaque).</para>.
+	/// <para>Defaults to "100".</para>
+	/// </summary>
+	public int? Opacity { get; set; }
 
 	#region Sizes
 

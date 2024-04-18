@@ -10,22 +10,24 @@ public sealed class WtqApp : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<WtqApp>();
 
+	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
 	private readonly IWtqAppToggleService _toggler;
 	private readonly Func<WtqAppOptions> _optionsAccessor;
 
 	public WtqApp(
+		IOptionsMonitor<WtqOptions> opts,
 		IWtqProcessFactory procFactory,
 		IWtqProcessService procService,
 		IWtqAppToggleService toggler,
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
+		_opts = Guard.Against.Null(opts, nameof(opts));
 		_procFactory = procFactory ?? throw new ArgumentNullException(nameof(procFactory));
 		_procService = procService ?? throw new ArgumentNullException(nameof(procService));
 		_toggler = toggler ?? throw new ArgumentNullException(nameof(toggler));
-		//_appRepo = Guard.Against.Null(appRepo, nameof(appRepo));
 		_optionsAccessor = Guard.Against.Null(optionsAccessor, nameof(optionsAccessor));
 
 		Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
@@ -37,10 +39,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
+	/// TODO: Include check for whether the process has been killed etc.
 	/// </summary>
 	public bool IsActive => Process != null;
 
 	public Process? Process { get; set; }
+
+	// TODO: Track whether the app is currently open, has focus, etc.
 
 	public string? ProcessDescription => Process == null
 		? "<no process attached>"
@@ -97,8 +102,6 @@ public sealed class WtqApp : IAsyncDisposable
 			bounds.Y = 10;
 
 			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
-
-			//_procService.MoveWindow(Process, bounds);
 
 			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
@@ -192,6 +195,12 @@ public sealed class WtqApp : IAsyncDisposable
 			}
 
 			await AttachAsync(process).ConfigureAwait(false);
+		}
+
+		// Update opacity.
+		if (IsActive)
+		{
+			_procService.SetTransparency(Process, _opts.CurrentValue.GetOpacityForApp(Options));
 		}
 	}
 

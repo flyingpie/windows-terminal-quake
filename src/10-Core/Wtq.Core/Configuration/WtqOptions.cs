@@ -25,6 +25,20 @@ public sealed class WtqOptions
 	/// </summary>
 	public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
 
+	/// <summary>
+	/// <para>Make the window see-through (applies to the entire window, including the title bar).</para>
+	/// <para>0 (invisible) - 100 (opaque).</para>.
+	/// <para>Defaults to "100".</para>
+	/// </summary>
+	public int Opacity { get; set; } = 100;
+
+	public int GetOpacityForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts, nameof(opts));
+
+		return opts.Opacity ?? Opacity;
+	}
+
 	#region Sizes
 
 	public HorizontalAlign HorizontalAlign { get; set; } = HorizontalAlign.Center;

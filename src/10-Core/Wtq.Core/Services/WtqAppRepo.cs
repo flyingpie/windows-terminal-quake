@@ -87,6 +87,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		Guard.Against.Null(app, nameof(app));
 
 		return new WtqApp(
+			_opts,
 			_procFactory,
 			_procService,
 			_toggleService,
