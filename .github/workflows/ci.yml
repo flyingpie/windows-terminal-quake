@@ -1,4 +1,4 @@
-name: continuous
+name: WTQ CI
 
 on:
   # Runs on pushes targeting the default branch
