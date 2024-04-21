@@ -1,19 +1,12 @@
-﻿using System.Drawing;
+﻿using WindowsTerminalQuake.Utils;
 
-namespace WindowsTerminalQuake;
-
-public interface IScreenBoundsProvider
-{
-	/// <summary>
-	/// Returns a bounding box for the screen where the terminal should be positioned on.
-	/// </summary>
-	Rectangle GetTargetScreenBounds();
-}
+namespace WindowsTerminalQuake.ScreenBoundsProviders;
 
 public class ScreenBoundsProvider : IScreenBoundsProvider
 {
-	/// <inheritdoc/>
+	private readonly ILogger _log = Log.For<ScreenBoundsProvider>();
 
+	/// <inheritdoc/>
 	public Rectangle GetTargetScreenBounds()
 	{
 		var settings = QSettings.Instance;
@@ -25,18 +18,18 @@ public class ScreenBoundsProvider : IScreenBoundsProvider
 		{
 			// At Index
 			case PreferMonitor.AtIndex:
-				Log.Information($"Selecting screen at index '{settings.MonitorIndex}'.");
+				_log.LogInformation($"Selecting screen at index '{settings.MonitorIndex}'.");
 
 				// Make sure the monitor index is within bounds
 				if (settings.MonitorIndex < 0)
 				{
-					Log.Warning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
+					_log.LogWarning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' must be greater than or equal to 0.");
 					return Screen.PrimaryScreen.Bounds;
 				}
 
 				if (settings.MonitorIndex >= scr.Length)
 				{
-					Log.Warning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
+					_log.LogWarning($"Setting '{nameof(QSettings.Instance.MonitorIndex)}' ({settings.MonitorIndex}) must be less than the monitor count ({scr.Length}).");
 					return Screen.PrimaryScreen.Bounds;
 				}
 
@@ -44,14 +37,14 @@ public class ScreenBoundsProvider : IScreenBoundsProvider
 
 			// Primary
 			case PreferMonitor.Primary:
-				Log.Information($"Selecting primary screen.");
+				_log.LogInformation($"Selecting primary screen.");
 
 				return Screen.PrimaryScreen.Bounds;
 
 			// With Cursor
 			default:
 			case PreferMonitor.WithCursor:
-				Log.Information($"Selecting screen with cursor.");
+				_log.LogInformation($"Selecting screen with cursor.");
 
 				return Screen.AllScreens
 					.FirstOrDefault(s => s.Bounds.Contains(Cursor.Position))

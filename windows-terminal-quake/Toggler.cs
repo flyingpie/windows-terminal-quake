@@ -1,11 +1,15 @@
 ﻿using System.Runtime.CompilerServices;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.ScreenBoundsProviders;
 using WindowsTerminalQuake.TerminalBoundsProviders;
+using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake;
 
 public class Toggler : IDisposable
 {
+	private readonly ILogger _log = Log.For<Toggler>();
+
 	private Process Process => TerminalProcess.Get(_args);
 
 	private readonly string[] _args;
@@ -42,7 +46,7 @@ public class Toggler : IDisposable
 
 			foreach (var hk in s.Hotkeys)
 			{
-				Log.Information($"Registering hot key {hk.Modifiers} + {hk.Key}");
+				_log.LogInformation($"Registering hot key {hk.Modifiers} + {hk.Key}");
 				var reg = HotKeyManager.RegisterHotKey(hk.Key, hk.Modifiers);
 				_registeredHotKeys.Add(reg);
 			}
@@ -97,7 +101,7 @@ public class Toggler : IDisposable
 		var animationFn = _animTypeProvider.GetAnimationFunction();
 		var frameTimeMs = QSettings.Instance.ToggleAnimationFrameTimeMs;
 
-		Log.Information(open ? "Open" : "Close");
+		_log.LogInformation(open ? "Open" : "Close");
 
 		// Notify focus tracker
 		if (open) FocusTracker.FocusGained(Process);
@@ -165,7 +169,8 @@ public class Toggler : IDisposable
 	{
 		if (QSettings.Instance.CloseTerminalOnExit)
 		{
-			TerminalProcess.Get(_args).Close();
+			// TODO
+			//TerminalProcess.Get(_args).Close();
 		}
 		else
 		{

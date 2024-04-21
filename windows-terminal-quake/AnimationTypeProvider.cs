@@ -1,4 +1,6 @@
-﻿namespace WindowsTerminalQuake;
+﻿using WindowsTerminalQuake.Utils;
+
+namespace WindowsTerminalQuake;
 
 public interface IAnimationTypeProvider
 {
@@ -20,6 +22,8 @@ public interface IAnimationTypeProvider
 
 public class AnimationTypeProvider : IAnimationTypeProvider
 {
+	private readonly ILogger _log = Log.For<AnimationTypeProvider>();
+
 	/// <inheritdoc/>
 	public Func<double, double> GetAnimationFunction()
 	{
@@ -56,7 +60,7 @@ public class AnimationTypeProvider : IAnimationTypeProvider
 				return (x) => 1.0 + 2.70158 * Math.Pow(x - 1.0, 3) + 1.70158 * Math.Pow(x - 1.0, 2);
 
 			default:
-				Log.Warning("Invalid animation type \"" + type + "\"; falling back to linear.");
+				_log.LogWarning("Invalid animation type '{Type}' falling back to linear", type);
 				return (x) => x;
 		}
 	}

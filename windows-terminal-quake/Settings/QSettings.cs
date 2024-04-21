@@ -1,9 +1,12 @@
 ﻿using WindowsTerminalQuake.UI;
+using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake.Settings;
 
-public class QSettings
+public static class QSettings
 {
+	private static readonly ILogger _log = Log.For(typeof(QSettings));
+
 	public static readonly string DefaultPathToSettingsFile = Path.Combine(Path.GetDirectoryName(new Uri(typeof(QSettings).Assembly.Location).LocalPath), SettingsFileNameWithoutExtension + ".json");
 
 	public static readonly string[] PathsToSettingsDirs = new[]
@@ -24,7 +27,7 @@ public class QSettings
 
 	public const string SettingsFileNameWithoutExtension = "windows-terminal-quake";
 
-	private static readonly List<Action<SettingsDto>> _listeners = new List<Action<SettingsDto>>();
+	private static readonly List<Action<SettingsDto>> _listeners = new();
 
 	public static SettingsDto Instance { get; private set; } = new SettingsDto();
 
@@ -38,15 +41,6 @@ public class QSettings
 	#region Loading & Reloading
 
 	private static readonly List<FileSystemWatcher> _fsWatchers;
-
-	private static readonly RetryPolicy Retry = Policy
-		.Handle<Exception>()
-		.WaitAndRetry(new[] {
-			TimeSpan.FromMilliseconds(250),
-			TimeSpan.FromSeconds(1),
-			TimeSpan.FromSeconds(1)
-		})
-	;
 
 	static QSettings()
 	{
@@ -74,7 +68,7 @@ public class QSettings
 			// (eg. an editor that _just_ saved the file and hasn't released it yet).
 			Retry.Execute(() =>
 			{
-				Log.Information("Reloading settings");
+				_log.LogInformation("Reloading settings");
 
 				foreach (var pathToSettings in GetPathsToSettingsFiles())
 				{
@@ -82,11 +76,11 @@ public class QSettings
 					if (!File.Exists(pathToSettings))
 					{
 						// Note that the file isn't mandatory, so we're not gonna make too much of a fuss about that, other than logging a warning.
-						Log.Warning($"Settings file at '{pathToSettings}' does not exist");
+						_log.LogWarning($"Settings file at '{pathToSettings}' does not exist");
 						continue;
 					}
 
-					Log.Information($"Found settings file at '{pathToSettings}'");
+					_log.LogInformation($"Found settings file at '{pathToSettings}'");
 
 					var newSettings = SettingsDto.ParseFile(pathToSettings)
 						?? throw new Exception($"Settings was null after parsing, this is probably a bug.")
@@ -94,7 +88,7 @@ public class QSettings
 
 					newSettings.PathToSettings = pathToSettings;
 
-					Log.Information($"Parsed settings  from '{pathToSettings}'.");
+					_log.LogInformation($"Parsed settings  from '{pathToSettings}'.");
 
 					Instance = newSettings;
 
@@ -110,7 +104,7 @@ public class QSettings
 		}
 		catch (Exception ex)
 		{
-			Log.Error(ex, ex.Message);
+			_log.LogError(ex, ex.Message);
 			MessageBox.Show($"Error (re)loading settings: ({ex.GetType().FullName}) {ex.Message}. See the log for more information.");
 		}
 	}
@@ -124,12 +118,12 @@ public class QSettings
 			{
 				try
 				{
-					Log.Information($"Watching settings file '{path}' for changes");
+					_log.LogInformation($"Watching settings file '{path}' for changes");
 					var fsWatcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
 
 					fsWatcher.Changed += (s, a) =>
 					{
-						Log.Information($"Settings file '{a.FullPath}' changed");
+						_log.LogInformation($"Settings file '{a.FullPath}' changed");
 						Reload(true);
 					};
 
@@ -139,7 +133,7 @@ public class QSettings
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex, $"Could not load settings file at location '{path}': {ex.Message}");
+					_log.LogError(ex, $"Could not load settings file at location '{path}': {ex.Message}");
 					return null;
 				}
 			})

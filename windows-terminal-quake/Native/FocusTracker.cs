@@ -1,4 +1,6 @@
-﻿namespace WindowsTerminalQuake.Native;
+﻿using WindowsTerminalQuake.Utils;
+
+namespace WindowsTerminalQuake.Native;
 
 /// <summary>
 /// Watches the specified <see cref="Process"/> to see if it still has focus, and fires an event when it doesn't.
@@ -7,13 +9,15 @@
 /// </summary>
 public class FocusTracker
 {
+	private static readonly ILogger _log = Log.For<FocusTracker>();
+
 	public static event EventHandler OnFocusLost = delegate { };
 
 	private static bool _isRunning;
 
 	public static void FocusGained(Process process)
 	{
-		Log.Information("Focus gained");
+		_log.LogInformation("Focus gained");
 
 		if (_isRunning) return;
 
@@ -39,7 +43,7 @@ public class FocusTracker
 				if (process.MainWindowHandle != fg)
 				{
 					// If the foreground window is different to the one we're watching, we lost focus
-					Log.Information("Focus lost");
+					_log.LogInformation("Focus lost");
 
 					OnFocusLost(null, null);
 					_isRunning = false;
@@ -79,7 +83,7 @@ public class FocusTracker
 		}
 		catch (Exception e)
 		{
-			Log.Error("Unable to determine module name from current focus window", e);
+			_log.LogError("Unable to determine module name from current focus window", e);
 			return false;
 		}
 		return false;

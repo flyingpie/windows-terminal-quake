@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
@@ -41,7 +41,7 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 			_initialBounds.Height
 		);
 
-		Log.Debug("Progress: {Progress} Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", progress, screenBounds, res);
+		//Log.Debug("Progress: {Progress} Target screen bounds: {ScreenBounds}. Terminal bounds: {TerminalBounds}", progress, screenBounds, res);
 
 		if (isOpening && progress >= 1)
 		{

@@ -1,10 +1,13 @@
 ﻿using WindowsTerminalQuake.Native;
 using WindowsTerminalQuake.UI;
+using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake;
 
-public class Program
+public static class Program
 {
+	private static readonly ILogger _log = Log.For(typeof(Program));
+
 	private static Toggler? _toggler;
 	private static TrayIcon? _trayIcon;
 
@@ -19,16 +22,20 @@ public class Program
 		}
 		catch (Exception ex)
 		{
-			Log.Error(ex, $"Could not get app version: {ex.Message}");
+			_log.LogError(ex, "Could not get app version: {Message}", ex.Message);
 			return "(could not get version)";
 		}
 	}
 
 	public static void Main(string[] args)
 	{
-		Logging.Configure();
+		Kernel32.AllocConsole();
 
-		Log.Information("Windows Terminal Quake started");
+		Console.WriteLine("Sup");
+
+		_log.LogInformation("Windows Terminal Quake started");
+
+		TerminalProcess.Init();
 
 		_trayIcon = new TrayIcon((s, a) => Close());
 
@@ -39,7 +46,8 @@ public class Program
 			_toggler = new Toggler(args);
 
 			// Transparency
-			QSettings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
+			// TODO
+			//QSettings.Get(s => TerminalProcess.Get(args).SetTransparency(s.Opacity));
 
 			var hotkeys = string.Join(" or ", QSettings.Instance.Hotkeys.Select(hk => $"{hk.Modifiers}+{hk.Key}"));
 
@@ -47,7 +55,7 @@ public class Program
 		}
 		catch (Exception ex)
 		{
-			Log.Logger.Warning(ex, $"Error: {ex.Message}");
+			_log.LogWarning(ex, "Error: {Message}", ex.Message);
 
 			MessageBox.Show($"Error starting Windows Terminal Quake: {ex.Message}", "Ah nej :(");
 

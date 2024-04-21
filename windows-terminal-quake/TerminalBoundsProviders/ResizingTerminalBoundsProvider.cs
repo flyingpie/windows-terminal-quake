@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
@@ -45,7 +45,7 @@ public class ResizingTerminalBoundsProvider : ITerminalBoundsProvider
 			(int)(termHeight * progress)
 		);
 
-		Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
+		//Log.Debug($"Target screen bounds: {screenBounds}. Terminal bounds: {res}");
 
 		return res;
 	}

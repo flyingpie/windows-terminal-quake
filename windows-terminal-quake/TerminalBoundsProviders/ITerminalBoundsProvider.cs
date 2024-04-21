@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace WindowsTerminalQuake.TerminalBoundsProviders;
+﻿namespace WindowsTerminalQuake.TerminalBoundsProviders;
 
 /// <summary>
 /// Determine the window size & position during a toggle animation.

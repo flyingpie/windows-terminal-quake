@@ -15,5 +15,5 @@ public enum TaskBarIconVisibility
 	/// <summary>
 	/// Only show the task bar icon when the terminal is toggled on.
 	/// </summary>
-	WhenTerminalVisible
+	WhenTerminalVisible,
 }

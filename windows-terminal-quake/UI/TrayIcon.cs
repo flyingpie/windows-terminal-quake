@@ -1,4 +1,6 @@
-﻿namespace WindowsTerminalQuake.UI;
+﻿using WindowsTerminalQuake.Utils;
+
+namespace WindowsTerminalQuake.UI;
 
 public class TrayIcon : IDisposable
 {
@@ -69,7 +71,7 @@ public class TrayIcon : IDisposable
 
 			if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
 			{
-				Log.Warning($"Settings file '{path}' not found, attempting to create an example file now and opening that.");
+				//Log.Warning($"Settings file '{path}' not found, attempting to create an example file now and opening that.");
 
 				//  Open the first default path.
 				path = QSettings.Instance.PathToSettings;
@@ -78,7 +80,7 @@ public class TrayIcon : IDisposable
 				// "path" here may not be equal to "path" earlier, since we grabbed a path from PathToSettings.
 				if (!File.Exists(path))
 				{
-					Log.Information($"Creating example file at '{path}'.");
+					//Log.Information($"Creating example file at '{path}'.");
 					File.WriteAllText(path, _Resources.windows_terminal_quake);
 				}
 			}

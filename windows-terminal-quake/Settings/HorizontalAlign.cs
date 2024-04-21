@@ -5,5 +5,5 @@ public enum HorizontalAlign
 	Center = 0,
 
 	Left,
-	Right
+	Right,
 }

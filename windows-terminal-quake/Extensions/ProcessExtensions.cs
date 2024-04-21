@@ -1,15 +1,11 @@
 ﻿using WindowsTerminalQuake.Extensions;
 using WindowsTerminalQuake.Native;
+using WindowsTerminalQuake.Utils;
 
 namespace System.Diagnostics;
 
 public static class ProcessExtensions
 {
-	private static readonly RetryPolicy Retry = Policy
-		.Handle<Exception>()
-		.WaitAndRetry(new[] { TimeSpan.FromMilliseconds(250), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1) })
-	;
-
 	public static Rectangle GetBounds(this Process process)
 	{
 		var bounds = new Rect();
@@ -35,24 +31,6 @@ public static class ProcessExtensions
 			nHeight: bounds.Height,
 			bRepaint: repaint
 		);
-	}
-
-	/// <summary>
-	/// Reset position and size of the specified process' window to be centered on the primary monitor.
-	/// </summary>
-	public static void ResetBounds(this Process process)
-	{
-		if (process == null) throw new ArgumentNullException(nameof(process));
-
-		var bounds = Screen.PrimaryScreen.Bounds;
-
-		bounds.X += 100;
-		bounds.Y += 100;
-		bounds.Width -= 200;
-		bounds.Height -= 200;
-
-		// Reset position
-		process.MoveWindow(bounds);
 	}
 
 	/// <summary>

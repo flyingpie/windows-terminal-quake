@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Serilog.Events;
 using WindowsTerminalQuake.Native;
-using WindowsTerminalQuake.TerminalProcessProviders;
+using WindowsTerminalQuake.Utils;
 
 namespace WindowsTerminalQuake.Settings;
 
@@ -9,7 +9,7 @@ public class SettingsDto
 {
 	public static readonly IReadOnlyCollection<Hotkey> DefaultHotkeys = new List<Hotkey>()
 	{
-		new Hotkey() { Key = Keys.Oemtilde, Modifiers = KeyModifiers.Control },
+		new() { Key = Keys.Oemtilde, Modifiers = KeyModifiers.Control },
 	};
 
 	/// <summary>
@@ -17,6 +17,8 @@ public class SettingsDto
 	/// <para>Defaults to "false".</para>
 	/// </summary>
 	public bool AlwaysOnTop { get; set; } = false;
+
+	public IReadOnlyCollection<App> Apps { get; set; } = Array.Empty<App>();
 
 	/// <summary>
 	/// <para>Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.</para>
@@ -92,12 +94,6 @@ public class SettingsDto
 	/// <para>"WithCursor" (default), "Primary" or "AtIndex".</para>
 	/// </summary>
 	public PreferMonitor PreferMonitor { get; set; } = PreferMonitor.WithCursor;
-
-	/// <summary>
-	/// TODO
-	/// </summary>
-	//	public string ProcessProvider { get; set; } = nameof(WindowsTerminalProcessProvider);
-	public string ProcessProvider { get; set; } = nameof(GenericProcessProvider);
 
 	/// <summary>
 	/// <para>Whether to hide the terminal window immediately after app start.</para>
@@ -181,6 +177,8 @@ public class SettingsDto
 	/// </summary>
 	internal float VerticalScreenCoverageIndex => VerticalScreenCoverage / 100f;
 
+	private static readonly ILogger _log = Log.For<SettingsDto>();
+
 	public static SettingsDto ParseFile(string pathToSettings)
 	{
 		if (string.IsNullOrWhiteSpace(pathToSettings)) throw new ArgumentNullException(nameof(pathToSettings));
@@ -194,11 +192,11 @@ public class SettingsDto
 		}
 		catch (IOException ex)
 		{
-			Log.Error($"Could not load settings from file '{pathToSettings}' {ex.GetType().FullName}: {ex.Message}", ex);
+			_log.LogError($"Could not load settings from file '{pathToSettings}' {ex.GetType().FullName}: {ex.Message}", ex);
 			throw;
 		}
 
-		Log.Information($"Loaded settings from '{pathToSettings}'.");
+		_log.LogInformation($"Loaded settings from '{pathToSettings}'.");
 
 		// Parse JSON contents
 		try
@@ -207,7 +205,7 @@ public class SettingsDto
 		}
 		catch (Exception ex)
 		{
-			Log.Error($"Error parsing settings file '{pathToSettings}':\n\n{ex.Message}");
+			_log.LogError($"Error parsing settings file '{pathToSettings}':\n\n{ex.Message}");
 			throw;
 		}
 	}

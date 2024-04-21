@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema",
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "windows-terminal-quake-schema-1",
 	"type": "object",
 	"title": "Windows Terminal Quake settings schema.",

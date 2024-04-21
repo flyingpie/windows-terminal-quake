@@ -1,149 +1,48 @@
 ﻿{
 	"$schema": "./windows-terminal-quake.schema.1.json",
 
-	// If your editor supports it, this file should be editable with auto-completion through the included JSON schema.
-	// Also, see https://flyingpie.github.io/windows-terminal-quake/ for more information.
-	// Please report bugs and/or feature requests at https://github.com/flyingpie/windows-terminal-quake/issues.
-
-	////////////////////////////////////////////////////////////////////////////////////
-	/// Hotkeys & Suppression
-	////////////////////////////////////////////////////////////////////////////////////
-
-	// The keys that can be used to toggle the terminal.
-	// See "Hotkeys" bellow for possible values.
-	"Hotkeys": [
+	"Apps": [
 		{
-			"Modifiers": "Control",
-			"Key": "Oemtilde"
+			"HotKeys": [ { "Modifiers": "Control,Shift", "Key": "1" } ],
+			"ExistingProcess": {
+				"ProcessName": "WindowsTerminal"
+			},
+			"NewProcess": {
+				"Arguments": [],
+				"FileName": "wt.exe"
+			}
+		},
+		{
+			"HotKeys": [ { "Modifiers": "Control,Shift", "Key": "2" } ],
+			"ExistingProcess": {
+				"ProcessName": "wezterm-gui.exe"
+			},
+			"NewProcess": {
+				"Arguments": [],
+				"FileName": "D:/syncthing/apps/wezterm/wezterm-gui.exe"
+			}
+		},
+		{
+			"HotKeys": [ { "Modifiers": "Control,Shift", "Key": "3" } ],
+			"ExistingProcess": {
+				"ProcessName": "q-dir_x64.exe"
+			},
+			"NewProcess": {
+				"FileName": "D:/syncthing/apps/qdir/Q-Dir_x64.exe"
+			}
 		}
 	],
 
-	// # HotKeys
-	// ## Modifiers
-	// Alt, Control, Shift, Windows
-	//
-	// ## Key
-	// ### Special keys
-	// Alt, Back, CapsLock, Control, Escape, LControlKey, LShiftKey, LWin, RControlKey, RShiftKey, RWin, Shift, Space, Tab
-	//
-	// ### Middle part of the keyboard
-	// Delete, End, Home, Insert, PageDown, PageUp, PrintScreen
-	// Down, Left, Right, Up
-	//
-	// ### Number keys
-	// D0 - D9
-	//
-	// ### Letters
-	// A-Z
-	//
-	// ### Numpad
-	// NumPad0 - NumPad9
-	// Add, Decimal, Divide, Multiply, NumLock, Separator, Subtract
-	//
-	// ### Function keys
-	// F1 - F24
-	//
-	// ### Special characters
-	// OemBackslash, OemClear, OemCloseBrackets, Oemcomma, OemMinus, OemOpenBrackets,
-	// OemPeriod, OemPipe, Oemplus, OemQuestion, OemQuotes, OemSemicolon, Oemtilde
-	// Oem1 - Oem8, Oem102
+	"Notifications": false,
 
-	// Whether to close the Windows Terminal process when the Windows Terminal Quake process exits.
-	"CloseTerminalOnExit": false,
-
-	// Disables toggling of the terminal window if the currently active application is running in fullscreen mode on primary monitor.
-	"DisableWhenActiveAppIsInFullscreen": false,
-
-	// Temporarily disable the toggle hotkeys when any of these processes has focus.
-	"SuppressHotKeyForProcesses": [ "someprocess.exe" ],
-
-	////////////////////////////////////////////////////////////////////////////////////
-	/// Size & Align
-	////////////////////////////////////////////////////////////////////////////////////
-
-	// Whether to maintain the current size of the terminal (as it was when first opened, and possible resizes done by the user).
-	// If "false", the terminal will be sized based on the settings below.
-	"KeepOriginalSize": false,
-
-	// When "HorizontalScreenCoverage" is below 100, this setting determines where the terminal is place horizontally.
-	// "Center", "Left" or "Right".
-	"HorizontalAlign": "Center",
-
-	// How much horizontal space the terminal should use. When this is below 100, the terminal is centered.
-	// This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width,
-	// due to the terminal being bound to column widths (eg. try 100.5 or 101).
-	"HorizontalScreenCoverage": 80,
-
-	// How much room to leave between the top of the terminal and the top of the screen.
-	"VerticalOffset": 0,
-
-	// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen).
-	"VerticalScreenCoverage": 80,
-
-	// Whether to maximize the terminal after it has toggled into view.
-	// Note that this only applies when both "HorizontalScreenCoverage" and "VerticalScreenCoverage" are at least 100.
-	"MaximizeAfterToggle": true,
-
-	////////////////////////////////////////////////////////////////////////////////////
-	/// Toggle Animation
-	////////////////////////////////////////////////////////////////////////////////////
-
-	// Make the window see-through (applies to the entire window, including the title bar).
-	// 0 (invisible) - 100 (opaque)
-	"Opacity": 80,
-
-	// When the terminal window taskbar icon should be visible.
-	// "AlwaysHidden", "AlwaysVisible", "WhenTerminalVisible".
-	"TaskBarIconVisibility": "AlwaysHidden",
-
-	// How long each frame in the toggle animation takes in milliseconds.
-	// The lower this value, the smoother the animation. (If set to 0, the frame rate limiter is removed.)
-	"ToggleAnimationFrameTimeMs": 25,
-
-	// How long the toggle up/down takes in milliseconds.
-	"ToggleDurationMs": 250,
-
-	// Which animation type is used during toggle up/down.
-	// "Linear", "EaseInBack", "EaseInCubic", "EaseInOutSine", "EaseInQuart", "EaseOutBack", "EaseOutCubic" or "EaseOutQuart".
+	"Opacity": 100,
+	"ToggleDurationMs": 150,
 	"ToggleAnimationType": "EaseOutQuart",
-
-	/// How the terminal actually gets toggled on- and off the screen.
-	/// "Resize" (default) or "Move".
-	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
-	/// "Move" keeps the size of the terminal constant, but moves the terminal off-screen to the top, which won't work great with vertically stacked monitors.
 	"ToggleMode": "Move",
 
-	////////////////////////////////////////////////////////////////////////////////////
-	/// Multi-Monitor
-	////////////////////////////////////////////////////////////////////////////////////
-
-	// What monitor to preferrably drop the terminal
-	// "WithCursor" (default), "Primary" or "AtIndex"
-	"PreferMonitor": "WithCursor",
-
-	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
-	// Zero based, eg. 0, 1, etc.
-	"MonitorIndex": 1,
-
-	////////////////////////////////////////////////////////////////////////////////////
-	/// Misc
-	////////////////////////////////////////////////////////////////////////////////////
-
-	// Whether to keep the terminal window always on top (requires restart).
-	"AlwaysOnTop": false,
-
-	// When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.
-	"HideOnFocusLost": true,
-
-	// For troubleshooting purposes.
-	"LogLevel": "Error",
-
-	// Whether to show notifications when the app starts and when the settings are reloaded.
-	"Notifications": true,
-
-	// Whether to hide the terminal window immediately after app start.
-	"StartHidden": false,
-
-	// The command/file path to execute when the app starts and Windows Terminal is not yet running.
-	"WindowsTerminalCommand": "wt.exe"
+	"VerticalScreenCoverage": 95,
+	"HorizontalAlign": "Center",
+	"HorizontalScreenCoverage": 97,
+	"HideOnFocusLost": false,
+	"PreferMonitor": "WithCursor"
 }

@@ -17,5 +17,5 @@ public enum ToggleMode
 	/// <summary>
 	/// "Resize" should work on any setup, but may cause characters in the terminal to jump around after toggling.
 	/// </summary>
-	Resize
+	Resize,
 }
