@@ -37,6 +37,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wtq.Services.WinForms", "20
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wtq.Host.Windows", "30-Host\Wtq.Host.Windows\Wtq.Host.Windows.csproj", "{565A845F-3999-4BBD-9D7D-85A4165E30DD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-Build", "01-Build", "{391579FD-F1D3-4DCB-AC66-AEB9BA845C0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NukeBuild", "01-Build\NukeBuild\NukeBuild.csproj", "{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,10 @@ Global
 		{565A845F-3999-4BBD-9D7D-85A4165E30DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{565A845F-3999-4BBD-9D7D-85A4165E30DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{565A845F-3999-4BBD-9D7D-85A4165E30DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +86,7 @@ Global
 		{02BDF9B7-75A9-45B1-9C2C-3A37ED94BD10} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{A806FD73-3CF4-43AF-A9EF-C6258465DB17} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{565A845F-3999-4BBD-9D7D-85A4165E30DD} = {F414F7B7-3276-46DE-B47E-9DA69D56736F}
+		{F7AFBA04-0770-460B-9FE4-DF120FAAF2EC} = {391579FD-F1D3-4DCB-AC66-AEB9BA845C0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65349C7B-F6B3-49A8-9935-4ABF9B6D3D70}
