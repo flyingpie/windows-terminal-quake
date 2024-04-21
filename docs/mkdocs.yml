@@ -1,0 +1,91 @@
+site_name: Windows Terminal Quake
+site_author: flyingpie
+
+docs_dir: 'pages'
+site_dir: 'build'
+
+nav:
+- WTQ v2:
+  - Overview: index.md
+  - Installation: v2/installation.md
+  - Settings:
+    - Apps: v2/settings/apps.md
+    #- Always On Top: v2/settings/always-on-top.md
+    #- Command Line Parameters: v2/settings/command-line-parameters.md
+    #- Disable When Active App Is In Fullscreen: v2/settings/disable-when-active-app-is-in-fullscreen.md
+    #- Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
+    - Hotkeys: v2/settings/hotkeys.md
+    #- Notifications: v2/settings/notifications.md
+    - Opacity: v2/settings/opacity.md
+    - Prefer Monitor: v2/settings/prefer-monitor.md
+    - Size and Align: v2/settings/size-and-align.md
+    #- Start Hidden: v2/settings/start-hidden.md
+    #- Suppress Hotkey for Processes: v2/settings/suppress-hotkey-for-processes.md
+    #- Taskbar Icon Visibility: v2/settings/taskbar-icon-visibility.md
+    #- Toggle Animation: v2/settings/toggle-animation.md
+    #- Windows Terminal Command: v2/settings/windows-terminal-command.md
+
+- WTQ v1:
+  - Overview: v1/index.md
+  - Getting Started:
+    - Direct Download: v1/getting-started/direct-download.md
+    - Get From Scoop: v1/getting-started/get-from-scoop.md
+    - Build (Cake): v1/getting-started/build-cake.md
+    - Build (Visual Studio): v1/getting-started/build-vs.md
+
+  - Settings:
+    - Always On Top: v1/settings/always-on-top.md
+    - Command Line Parameters: v1/settings/command-line-parameters.md
+    - Disable When Active App Is In Fullscreen: v1/settings/disable-when-active-app-is-in-fullscreen.md
+    - Hide On Focus Lost: v1/settings/hide-on-focus-lost.md
+    - Hotkeys: v1/settings/hotkeys.md
+    - Notifications: v1/settings/notifications.md
+    - Opacity: v1/settings/opacity.md
+    - Prefer Monitor: v1/settings/prefer-monitor.md
+    - Size and Align: v1/settings/size-and-align.md
+    - Start Hidden: v1/settings/start-hidden.md
+    - Suppress Hotkey for Processes: v1/settings/suppress-hotkey-for-processes.md
+    - Taskbar Icon Visibility: v1/settings/taskbar-icon-visibility.md
+    - Toggle Animation: v1/settings/toggle-animation.md
+    - Windows Terminal Command: v1/settings/windows-terminal-command.md
+
+- Misc:
+  - Changelog: misc/changelog.md
+  - Reporting Issues: misc/reporting-issues.md
+
+theme:
+  name: material
+  custom_dir: overrides
+  favicon: assets/favicon.ico
+  features:
+    - navigation.sections
+  font: false
+  highlightjs: true
+  hljs_languages:
+    - bash
+    - powershell
+  icon:
+    repo: fontawesome/brands/github
+  logo: assets/favicon.png
+  palette:
+    scheme: slate
+    primary: blue
+
+repo_name: windows-terminal-quake
+repo_url: http://github.com/flyingpie/windows-terminal-quake
+
+extra_javascript:
+  - assets/highlight/highlight.pack.js
+  - assets/config.js
+extra_css:
+  - assets/highlight/styles/vs2015.css
+  - assets/styles.css
+
+markdown_extensions:
+  - admonition
+  - sane_lists
+  - pymdownx.details
+  - pymdownx.highlight:
+      use_pygments: false
+  - pymdownx.superfences
+
