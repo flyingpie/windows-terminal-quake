@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Win32</AssemblyName>
+		<RootNamespace>Wtq.Win32</RootNamespace>
+
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wtq.Core\Wtq.Core.csproj" />
+	</ItemGroup>
+</Project>
