@@ -24,7 +24,7 @@
 		"layoutRules": {
 			"allowConsecutiveUsings": true,
 			"allowDoWhileOnClosingBrace": true,
-			"newlineAtEndOfFile": "require"
+			"newlineAtEndOfFile": "omit"
 		},
 		"maintainabilityRules": {
 			"topLevelTypes": [ "class" ]
