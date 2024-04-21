@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>wtq</AssemblyName>
+		<RootNamespace>Wtq.Host.Windows</RootNamespace>
+
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<OutputType>WinExe</OutputType>
+
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\wtq.jsonc" Link="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.SharpHook\Wtq.Services.SharpHook.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.SimpleTrayIcon\Wtq.Services.SimpleTrayIcon.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.Win32\Wtq.Services.Win32.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj" />
+	</ItemGroup>
+</Project>
