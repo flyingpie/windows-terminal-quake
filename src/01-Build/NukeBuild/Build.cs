@@ -76,7 +76,7 @@ public sealed class Build : NukeBuild
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
-				.SetProject(Solution._0_Host.Wtq_Windows)
+				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
@@ -99,7 +99,7 @@ public sealed class Build : NukeBuild
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
-				.SetProject(Solution._0_Host.Wtq_Windows)
+				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(staging)
 				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
