@@ -29,7 +29,8 @@ public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 		IWtqAppRepo appRepo)
 	{
 		// _hook = new TaskPoolGlobalHook();
-		_hook = new SimpleGlobalHook();
+		// We only need keyboard events (at the moment), and mouse events cause debug sessions to be really slow.
+		_hook = new SimpleGlobalHook(globalHookType: GlobalHookType.Keyboard);
 
 		_bus = bus;
 		_opts = opts;

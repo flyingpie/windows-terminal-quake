@@ -27,9 +27,6 @@ public sealed class Program
 
 	public Program()
 	{
-		// Kernel32.AllocConsole();
-		Console.WriteLine("Hello, World!");
-
 		// Configuration.
 		var config = new ConfigurationBuilder()
 			.SetBasePath(AppPaths.PathToAppDir)
