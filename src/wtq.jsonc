@@ -1,9 +1,7 @@
 {
 	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
-	// Docs: https://flyingpie.github.io/windows-terminal-quake/
-	// TODO: V2 Docs
-	// TODO: Schema
-	"$schema": "./wtq.schema.2.json",
+	// Docs: https://wtq.flyingpie.nl
+	"$schema": "../schema/wtq.schema.2.json",
 
 	"Apps": [
 		// Example with PowerShell
@@ -11,6 +9,9 @@
 			"Name": "PowerShell",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "powershell"
+		},
+		{
+			"AttachMode": "Find"
 		}
 
 		// Example with Windows Terminal

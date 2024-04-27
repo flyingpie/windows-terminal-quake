@@ -8,12 +8,12 @@
 		"AttachMode": {
 			"title": "Attach mode",
 			"description": "How WTQ attempts to attach to a process to toggle.",
-			// "enum": [ "FindOrCreate", "Find", "Create" ],
+
 			"default": "FindOrStart",
 			"oneOf": [
 				{ "const": "Find",			"description": "Only look for an existing process, don't create a new one." },
 				{ "const": "FindOrStart",	"description": "Looks for an existing process first, and creates one if none was found." },
-				{ "const": "Manual",		"description": "" },
+				{ "const": "Manual",		"description": "TODO" },
 				{ "const": "Start",			"description": "Always create a new process." }
 			]
 		},
@@ -75,7 +75,25 @@
 
 					},
 					"HotKeys": {
-						"items": { "$ref": "#/$defs/HotKey" }
+						"title": "HotKeys",
+						"description": "Keys or key combinations which toggle this app only.",
+						"type": "array",
+						"default": [],
+						"examples": [
+							[
+								{ "Key": "D1" }
+							],
+							[
+								{ "Modifiers": "Control", "Key": "D1" }
+							],
+							[
+								{ "Modifiers": "Control,Shift", "Key": "D1" },
+								{ "Modifiers": "Alt,Shift", "Key": "D1" }
+							]
+						],
+						"items": {
+							"$ref": "#/$defs/HotKey"
+						}
 					},
 					"MonitorIndex": {
 						"title": "",
