@@ -1,4 +1,4 @@
-# Hotkeys
+# Hot Keys
 
 Configures the keys used to open and close an app.
 
