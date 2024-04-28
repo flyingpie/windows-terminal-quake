@@ -3,6 +3,7 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
@@ -24,11 +25,11 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	GitHubActionsImage.WindowsLatest,
 	FetchDepth = 0,
 	OnPushBranches = ["master"],
-	InvokedTargets = [nameof(PublishAll)])]
+	InvokedTargets = [nameof(PublishRelease)])]
 [SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
 public sealed class Build : NukeBuild
 {
-	public static int Main() => Execute<Build>(x => x.PublishAll);
+	public static int Main() => Execute<Build>(x => x.PublishDebug);
 
 	[Nuke.Common.Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
 	private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -44,6 +45,8 @@ public sealed class Build : NukeBuild
 	private readonly string GitHubToken;
 
 	private AbsolutePath ChangeLogFile => RootDirectory / "CHANGELOG.md";
+
+	private AbsolutePath VersionFile => RootDirectory / "VERSION";
 
 	private AbsolutePath OutputDirectory => RootDirectory / "_output";
 
@@ -61,9 +64,19 @@ public sealed class Build : NukeBuild
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	/// <summary>
+	/// Manual versioning for now.
+	/// </summary>
+	private Target SetVersion => _ => _
+		.Executes(() =>
+		{
+			Environment.SetEnvironmentVariable("MINVERVERSIONOVERRIDE", File.ReadAllText(VersionFile).Trim());
+		});
+
+	/// <summary>
 	/// Clean output directories.
 	/// </summary>
 	private Target Clean => _ => _
+		.DependsOn(SetVersion)
 		.Executes(() =>
 		{
 			OutputDirectory.CreateOrCleanDirectory();
@@ -76,7 +89,8 @@ public sealed class Build : NukeBuild
 		.DependsOn(Clean)
 		.Executes(() =>
 		{
-			DotNetRestore();
+			DotNetRestore(_ => _
+				.SetProcessWorkingDirectory(Solution.Directory));
 		});
 
 	/// <summary>
@@ -190,7 +204,6 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target CreateGitHubRelease => _ => _
 		.Description($"Creating release for the publishable version.")
-		.OnlyWhenDynamic(() => Configuration.Equals(Configuration.Release))
 		.Executes(async () =>
 		{
 			var token = GitHubActions?.Token ?? GitHubToken
@@ -237,7 +250,15 @@ public sealed class Build : NukeBuild
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
 
-	private Target PublishAll => _ => _
+	private Target PublishDebug => _ => _
+		.DependsOn(Clean)
+		.DependsOn(PublishWin64FrameworkDependent)
+		.DependsOn(PublishWin64SelfContained)
+		.Triggers(CreateScoopManifest)
+		.Triggers(CreateWinGetManifest)
+		.Executes();
+
+	private Target PublishRelease => _ => _
 		.DependsOn(Clean)
 		.DependsOn(PublishWin64FrameworkDependent)
 		.DependsOn(PublishWin64SelfContained)

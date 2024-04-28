@@ -13,9 +13,6 @@ $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 # CONFIGURATION
 ###########################################################################
 
-$env:MINVERVERSIONOVERRIDE=$(Get-Content "VERSION")
-Write-Output "WTQ VERSION:$($env:MINVERVERSIONOVERRIDE)"
-
 $BuildProjectFile = "$PSScriptRoot\01-Build\NukeBuild\NukeBuild.csproj"
 $TempDirectory = "$PSScriptRoot\.nuke\temp"
 
