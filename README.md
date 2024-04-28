@@ -14,11 +14,15 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
 ```
 
+A shortcut is then available named 'WTQ - Windows Terminal Quake', or you can just run 'wtq' from a command line or Win+R.
+
 ## WinGet
 *[Pending WinGet Manifest PR](https://github.com/microsoft/winget-pkgs/pull/151384)*
 ```
 winget install windows-terminal-quake
 ```
+
+A shortcut is then available named 'wtq', or you can just run 'wtq' from a command line or Win+R.
 
 https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
 
