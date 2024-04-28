@@ -6,7 +6,6 @@
 		<PackageVersion Include="Ardalis.GuardClauses" Version="4.5.0" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.9.28" />
-		<PackageVersion Include="MinVer" Version="5.0.0" />
 		<PackageVersion Include="MSTest.TestFramework" Version="3.2.2" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageVersion Include="Nuke.Common" Version="8.0.0" />

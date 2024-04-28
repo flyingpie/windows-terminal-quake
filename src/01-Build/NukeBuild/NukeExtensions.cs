@@ -1,5 +1,4 @@
-﻿using Nuke.Common.Tools.MinVer;
-using Octokit;
+﻿using Octokit;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -14,7 +13,7 @@ public static partial class NukeExtensions
 
 	public static async Task<string> GetChangeLogEntryAsync(
 		string path,
-		MinVer ver)
+		string ver)
 	{
 		var inCurr = false;
 		var headerRegex = ChangeLogVersionHeaderRegex();
@@ -29,9 +28,7 @@ public static partial class NukeExtensions
 			{
 				// See if this version header matches the one we're publishing.
 				// If it is, we need to start reading the contents.
-				if (match.Groups["major"].Value == ver.MinVerMajor &&
-					match.Groups["minor"].Value == ver.MinVerMinor &&
-					match.Groups["patch"].Value == ver.MinVerPatch)
+				if (match.Groups["semver"].Value == ver)
 				{
 					inCurr = true;
 					continue;
@@ -111,6 +108,6 @@ public static partial class NukeExtensions
 		await client.Repository.Release.UploadAsset(release, assetUpload);
 	}
 
-	[GeneratedRegex(@"^## \[(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\]")]
+	[GeneratedRegex(@"^## \[(?<semver>\d+\.?\d+\.?\d+)\]")]
 	private static partial Regex ChangeLogVersionHeaderRegex();
 }

@@ -7,7 +7,6 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.MinVer;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NerdbankGitVersioning;
 using Octokit;
@@ -39,9 +38,6 @@ public sealed class Build : NukeBuild
 	[GitRepository]
 	private readonly GitRepository GitRepository;
 
-	[MinVer]
-	private readonly MinVer MinVer;
-
 	[Nuke.Common.Parameter("GitHub Token")]
 	private readonly string GitHubToken;
 
@@ -65,19 +61,33 @@ public sealed class Build : NukeBuild
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	/// <summary>
-	/// Manual versioning for now.
+	/// Returns the version as defined by VERSION (eg. "2.3.4").
 	/// </summary>
-	private Target SetVersion => _ => _
+	private string SemVerVersion => File.ReadAllText(VersionFile).Trim();
+
+	/// <summary>
+	/// Returns the version for use in assembly versioning.
+	/// </summary>
+	private string AssemblyVersion => $"{SemVerVersion}";
+
+	/// <summary>
+	/// Returns the version for use in assembly versioning.
+	/// </summary>
+	private string InformationalVersion => $"{SemVerVersion}.{DateTimeOffset.UtcNow:yyyyMMdd}+{GitRepository.Commit}";
+
+	private Target ReportInfo => _ => _
 		.Executes(() =>
 		{
-			Environment.SetEnvironmentVariable("MINVERVERSIONOVERRIDE", File.ReadAllText(VersionFile).Trim());
+			Log.Information("SemVerVersion:{SemVerVersion}", SemVerVersion);
+			Log.Information("AssemblyVersion:{AssemblyVersion}", AssemblyVersion);
+			Log.Information("InformationalVersion:{InformationalVersion}", InformationalVersion);
 		});
 
 	/// <summary>
 	/// Clean output directories.
 	/// </summary>
 	private Target Clean => _ => _
-		.DependsOn(SetVersion)
+		.DependsOn(ReportInfo)
 		.Executes(() =>
 		{
 			OutputDirectory.CreateOrCleanDirectory();
@@ -105,6 +115,8 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "win-x64_framework-dependent";
 
 			DotNetPublish(_ => _
+				.SetAssemblyVersion(AssemblyVersion)
+				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
@@ -131,6 +143,8 @@ public sealed class Build : NukeBuild
 			var staging = StagingDirectory / "win-x64_self-contained";
 
 			DotNetPublish(_ => _
+				.SetAssemblyVersion(AssemblyVersion)
+				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
@@ -156,13 +170,13 @@ public sealed class Build : NukeBuild
 			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
 
 			var manifest = tpl
-				.Replace("$PACKAGE_VERSION$", MinVer.MinVerVersion, StringComparison.OrdinalIgnoreCase)
-				.Replace("$GH_RELEASE_VERSION$", $"v{MinVer.MinVerVersion}", StringComparison.OrdinalIgnoreCase)
+				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+				.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
 				.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
 			await File.WriteAllTextAsync(RootDirectory / "scoop" / "wtq-latest.json", manifest);
 			await File.WriteAllTextAsync(RootDirectory / "scoop" / "wtq-nightly.json", manifest);
-			await File.WriteAllTextAsync(RootDirectory / "scoop" / $"wtq-{MinVer.MinVerVersion}.json", manifest);
+			await File.WriteAllTextAsync(RootDirectory / "scoop" / $"wtq-{SemVerVersion}.json", manifest);
 		});
 
 	/// <summary>
@@ -172,7 +186,7 @@ public sealed class Build : NukeBuild
 		.Executes(async () =>
 		{
 			var templateRoot = RootDirectory / "winget" / "_template";
-			var manifestRoot = RootDirectory / "winget" / MinVer.MinVerVersion;
+			var manifestRoot = RootDirectory / "winget" / SemVerVersion;
 			var prefix = "flyingpie.windows-terminal-quake";
 			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
 
@@ -192,8 +206,8 @@ public sealed class Build : NukeBuild
 				var target = manifestRoot / fn;
 
 				var manifest = tpl
-					.Replace("$PACKAGE_VERSION$", MinVer.MinVerVersion, StringComparison.OrdinalIgnoreCase)
-					.Replace("$GH_RELEASE_VERSION$", $"v{MinVer.MinVerVersion}", StringComparison.OrdinalIgnoreCase)
+					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+					.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
 					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
 				await File.WriteAllTextAsync(target, manifest);
@@ -217,10 +231,10 @@ public sealed class Build : NukeBuild
 
 			var (owner, name) = (GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName());
 
-			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, MinVer.MinVerVersion);
+			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, SemVerVersion);
 
 			// Update release notes.
-			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, MinVer);
+			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, SemVerVersion);
 
 			await GitHubTasks
 				.GitHubClient
