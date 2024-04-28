@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿#pragma warning disable
+
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Extensions.Logging;
 

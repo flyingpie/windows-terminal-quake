@@ -30,8 +30,6 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		{
 			case AttachMode.Start:
 				return procs
-					//.Where(p => opts.FindExisting.Filter(p))
-					//.Where(p => p.StartInfo.Environment.ContainsKey("__WTQ") && p.StartInfo.E)
 					.FirstOrDefault(p => opts.Filter(p, true))
 					?? await CreateProcessAsync(opts).ConfigureAwait(false);
 
@@ -50,7 +48,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		}
 	}
 
-	private async Task<Process> CreateProcessAsync(WtqAppOptions opts)
+	private Task<Process> CreateProcessAsync(WtqAppOptions opts)
 	{
 		_log.LogInformation("Creating process for app '{App}'", opts);
 
@@ -69,8 +67,8 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		};
 
 		// Start
-		await Retry.Default
-			.ExecuteAsync(async () =>
+		Retry.Default
+			.Execute(() =>
 			{
 				try
 				{
@@ -79,43 +77,36 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 				}
 				catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
 				{
-					throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct.");
+					throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
 				}
 				catch (Exception ex)
 				{
 					_log.LogError(ex, "Error starting process: {Message}", ex.Message);
-					throw;
+					throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
 				}
-
-				return 0;
-			})
-			.ConfigureAwait(false);
+			});
 
 		// Wait for main window handle to become available.
-		await Retry.Default
-			.ExecuteAsync(async () =>
+		Retry.Default
+			.Execute(() =>
 			{
 				try
 				{
 					_log.LogInformation("Waiting for process input idle");
 					process.Refresh();
-					//process.WaitForInputIdle();
 
 					if (process.MainWindowHandle == 0)
 					{
-						throw new WtqException("Main window handle not available yet.");
+						throw new WtqException("Main window handle not available yet");
 					}
 				}
 				catch (Exception ex)
 				{
 					_log.LogWarning(ex, "Error waiting for process input idle: {Message}", ex.Message);
-					throw;
+					throw new WtqException($"Error waiting for app instance: {ex.Message}", ex);
 				}
+			});
 
-				return 0;
-			})
-			.ConfigureAwait(false);
-
-		return process;
+		return Task.FromResult(process);
 	}
 }

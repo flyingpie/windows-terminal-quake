@@ -7,6 +7,9 @@ public class WtqBus : IWtqBus
 
 	public void On(Func<IWtqEvent, bool> predicate, Func<IWtqEvent, Task> onEvent)
 	{
+		Guard.Against.Null(predicate);
+		Guard.Against.Null(onEvent);
+
 		_registrations.Add(new EventRegistration()
 		{
 			OnEvent = onEvent,
@@ -14,27 +17,31 @@ public class WtqBus : IWtqBus
 		});
 	}
 
-	public void On<TEvent>(Func<TEvent, Task> onEvent)
+	public void OnEvent<TEvent>(Func<TEvent, Task> onEvent)
 		where TEvent : IWtqEvent
 	{
+		Guard.Against.Null(onEvent);
+
 		On(ev => ev is TEvent, ev => onEvent((TEvent)ev));
 	}
 
-	public void Publish(IWtqEvent ev)
+	public void Publish(IWtqEvent eventType)
 	{
-		_log.LogInformation("Publishing event '[{Type}] {Event}'", ev.GetType().FullName, ev);
+		Guard.Against.Null(eventType);
 
-		foreach (var reg in _registrations.Where(r => r.Predicate(ev)))
+		_log.LogInformation("Publishing event '[{Type}] {Event}'", eventType.GetType().FullName, eventType);
+
+		foreach (var reg in _registrations.Where(r => r.Predicate(eventType)))
 		{
 			_ = Task.Run(async () =>
 			{
 				try
 				{
-					await reg.OnEvent(ev).ConfigureAwait(false);
+					await reg.OnEvent(eventType).ConfigureAwait(false);
 				}
 				catch (Exception ex)
 				{
-					_log.LogWarning(ex, "Error publishing event '{Event}': {Message}", ev, ex.Message);
+					_log.LogWarning(ex, "Error publishing event '{Event}': {Message}", eventType, ex.Message);
 				}
 			});
 		}
@@ -42,8 +49,8 @@ public class WtqBus : IWtqBus
 
 	private sealed class EventRegistration
 	{
-		public Func<IWtqEvent, Task> OnEvent { get; init; }
+		public required Func<IWtqEvent, Task> OnEvent { get; init; }
 
-		public Func<IWtqEvent, bool> Predicate { get; init; }
+		public required Func<IWtqEvent, bool> Predicate { get; init; }
 	}
 }

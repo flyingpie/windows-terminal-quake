@@ -1,30 +1,30 @@
 ﻿using Wtq.Data;
 
-namespace Wtq.Services.TerminalBoundsProviders;
+namespace Wtq.Services.AppBoundsProviders;
 
 /// <summary>
 /// Moves the terminal from- and to where the user put it, maintaining both the original position and size.
 /// </summary>
-public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
+public class InitialAppBoundsProvider : IAppBoundsProvider
 {
 	private WtqRect _initialBounds;
 
-	public InitialTerminalBoundsProvider(WtqRect initialBounds)
+	public InitialAppBoundsProvider(WtqRect initialBounds)
 	{
 		_initialBounds = initialBounds;
 	}
 
 	/// <inheritdoc/>
-	public WtqRect GetTerminalBounds(
+	public WtqRect GetNextAppBounds(
 		WtqApp app,
 		bool isOpening,
 		WtqRect screenBounds,
-		WtqRect currentTerminalBounds,
+		WtqRect currentAppBounds,
 		double progress)
 	{
 		if (!isOpening && progress >= 1)
 		{
-			_initialBounds = currentTerminalBounds;
+			_initialBounds = currentAppBounds;
 		}
 
 		var res = new WtqRect()
@@ -33,7 +33,7 @@ public class InitialTerminalBoundsProvider : ITerminalBoundsProvider
 			X = _initialBounds.X,
 
 			// Move to initial Y
-			Y = -currentTerminalBounds.Height + (int)Math.Round(currentTerminalBounds.Height * progress) + _initialBounds.Y,
+			Y = -currentAppBounds.Height + (int)Math.Round(currentAppBounds.Height * progress) + _initialBounds.Y,
 
 			// Initial width
 			Width = _initialBounds.Width,

@@ -10,18 +10,17 @@ public sealed class WtqFocusTracker(
 	IWtqProcessService procService)
 	: IHostedService, IWtqFocusTracker
 {
-	private readonly ILogger _log = Log.For<WtqFocusTracker>();
-
-	private readonly IWtqAppRepo _appsRepo = appsRepo ?? throw new ArgumentNullException(nameof(appsRepo));
-	private readonly IWtqBus _bus = bus ?? throw new ArgumentNullException(nameof(bus));
-	private readonly IWtqProcessService _procService = procService ?? throw new ArgumentNullException(nameof(procService));
-
+	private readonly IWtqAppRepo _appsRepo = Guard.Against.Null(appsRepo);
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly bool _isRunning = true;
+	private readonly ILogger _log = Log.For<WtqFocusTracker>();
+	private readonly IWtqProcessService _procService = Guard.Against.Null(procService);
 
 	public WtqApp? ForegroundApp { get; private set; }
 
 	public uint? LastNonWtqForeground { get; private set; }
 
+	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the task to be cancelled here.")]
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		_ = Task.Run(async () =>

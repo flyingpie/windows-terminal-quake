@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 		where TService : class
 		where TImplementation : class, TService, IHostedService
 	{
-		Guard.Against.Null(services, nameof(services));
+		Guard.Against.Null(services);
 
 		services.AddSingleton<TService, TImplementation>();
 

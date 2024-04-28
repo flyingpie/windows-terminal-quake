@@ -541,7 +541,9 @@ public enum Keys
 	/// <summary>
 	/// The decimal key.
 	/// </summary>
+#pragma warning disable CA1720 // Identifier contains type name
 	Decimal = 0x6E,
+#pragma warning restore CA1720 // Identifier contains type name
 
 	/// <summary>
 	/// The divide key.

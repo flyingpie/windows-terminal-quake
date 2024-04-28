@@ -33,7 +33,7 @@ public enum KeyModifiers
 
 	/// <summary>
 	/// Prevents holding down the key-combo from firing multiple events.
-	/// TODO: Maybe move this out of the generic lib and into the Win32 or WinForms one?
+	/// TODO: Maybe move this out of the generic lib and into the Win32 or WinForms one.
 	/// </summary>
 	NoRepeat = 0x4000,
 }

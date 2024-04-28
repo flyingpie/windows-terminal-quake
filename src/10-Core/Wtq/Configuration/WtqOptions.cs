@@ -5,8 +5,6 @@
 /// </summary>
 public sealed class WtqOptions
 {
-	private readonly ILogger _log = Log.For<WtqOptions>();
-
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>

@@ -11,9 +11,9 @@ using Wtq.Events;
 using Wtq.Service;
 using Wtq.Services;
 using Wtq.Services.AnimationTypeProviders;
+using Wtq.Services.AppBoundsProviders;
 using Wtq.Services.Apps;
 using Wtq.Services.ScreenBoundsProviders;
-using Wtq.Services.TerminalBoundsProviders;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 using Wtq.Utils;
@@ -23,7 +23,6 @@ namespace Wtq.Host.Windows;
 public sealed class Program
 {
 	private readonly IHost _host;
-	private readonly Microsoft.Extensions.Logging.ILogger _log;
 
 	public Program()
 	{
@@ -49,8 +48,6 @@ public sealed class Program
 		// Logging.
 		Utils.Log.Configure(config);
 
-		_log = Wtq.Utils.Log.For(typeof(Program));
-
 		_host = new HostBuilder()
 			.ConfigureAppConfiguration(opt =>
 			{
@@ -70,7 +67,7 @@ public sealed class Program
 					// Core App Logic
 					.AddSingleton<IAnimationProvider, AnimationProvider>()
 					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
-					.AddSingleton<ITerminalBoundsProvider, MovingTerminalBoundsProvider>()
+					.AddSingleton<IAppBoundsProvider, MovingAppBoundsProvider>()
 
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 					.AddSingleton<WtqAppMonitorService>()
@@ -97,6 +94,11 @@ public sealed class Program
 			.Build();
 	}
 
+	public static async Task Main(string[] args)
+	{
+		await new Program().RunAsync().ConfigureAwait(false);
+	}
+
 	public async Task RunAsync()
 	{
 		try
@@ -109,10 +111,5 @@ public sealed class Program
 		{
 			Console.WriteLine($"Error running application: {ex}");
 		}
-	}
-
-	public static async Task Main(string[] args)
-	{
-		await new Program().RunAsync().ConfigureAwait(false);
 	}
 }

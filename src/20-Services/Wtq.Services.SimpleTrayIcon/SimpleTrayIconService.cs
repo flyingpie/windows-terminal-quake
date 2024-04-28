@@ -6,8 +6,6 @@ namespace Wtq.Services.SimpleTrayIcon;
 
 public class SimpleTrayIconService : IHostedService
 {
-	private readonly CancellationTokenSource _cts = new();
-
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		// var icon = new System.Drawing.Icon(typeof(Program), "WtqS.Demo.tray-icon.ico"); // Load an icon for the tray
@@ -28,8 +26,9 @@ public class SimpleTrayIconService : IHostedService
 		return Task.CompletedTask;
 	}
 
-	public async Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		await _cts.CancelAsync().ConfigureAwait(false);
+		// await _cts.CancelAsync().ConfigureAwait(false);
+		return Task.CompletedTask;
 	}
 }

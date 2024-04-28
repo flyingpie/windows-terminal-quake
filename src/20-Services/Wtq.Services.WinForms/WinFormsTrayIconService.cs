@@ -2,7 +2,9 @@
 
 namespace Wtq.Services.WinForms;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes // MvdO: Instantiated through DI.
 internal sealed class WinFormsTrayIconService : IDisposable, IHostedService
+#pragma warning restore CA1812 // Avoid uninstantiated internal classes
 {
 	private readonly IHostApplicationLifetime _lifetime;
 	private TrayIcon? _icon;

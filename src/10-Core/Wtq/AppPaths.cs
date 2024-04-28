@@ -10,39 +10,27 @@ public static class AppPaths
 	{
 		get
 		{
-			if (_pathToAppConf == null)
-			{
-				_pathToAppConf = Path.Combine(PathToAppDir, "wtq.jsonc");
-			}
-
-			return _pathToAppConf;
+			return _pathToAppConf ??= Path.Combine(PathToAppDir, "wtq.jsonc");
 		}
 	}
 
+	[SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "MvdO: Yeah, not great.")]
 	public static string PathToAppDir
 	{
 		get
 		{
-			if (_pathToAppDir == null)
-			{
-				_pathToAppDir = Path.GetDirectoryName(PathToAppExe);
-			}
-
-			return _pathToAppDir;
+			return _pathToAppDir ??= Path.GetDirectoryName(PathToAppExe)
+				?? throw new WtqException($"Could not get path to app directory (path to app executable: '{PathToAppExe}').");
 		}
 	}
 
+	[SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "MvdO: Yeah, not great.")]
 	public static string PathToAppExe
 	{
 		get
 		{
-			if (_pathToAppExe == null)
-			{
-				_pathToAppExe = Environment.ProcessPath
-					?? throw new WtqException("Could not find path to wtq exe.");
-			}
-
-			return _pathToAppExe;
+			return _pathToAppExe ??= Environment.ProcessPath
+				?? throw new WtqException("Could not find path to wtq exe.");
 		}
 	}
 }
