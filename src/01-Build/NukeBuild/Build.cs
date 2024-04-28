@@ -25,7 +25,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	FetchDepth = 0,
 	OnPushBranches = ["master"],
 	EnableGitHubToken = true,
-	InvokedTargets = [nameof(PublishRelease)])]
+	InvokedTargets = [nameof(PublishDebug)])]
 [SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
 public sealed class Build : NukeBuild
 {
@@ -170,8 +170,8 @@ public sealed class Build : NukeBuild
 			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
 
 			var manifest = tpl
-				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 				.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
+				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 				.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
 			await File.WriteAllTextAsync(RootDirectory / "scoop" / "wtq-latest.json", manifest);
@@ -206,8 +206,9 @@ public sealed class Build : NukeBuild
 				var target = manifestRoot / fn;
 
 				var manifest = tpl
-					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 					.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
+					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
 					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
 				await File.WriteAllTextAsync(target, manifest);
@@ -273,6 +274,7 @@ public sealed class Build : NukeBuild
 		.Triggers(CreateWinGetManifest)
 		.Executes();
 
+	[SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "MvdO: Invoked manually.")]
 	private Target PublishRelease => _ => _
 		.DependsOn(Clean)
 		.DependsOn(PublishWin64FrameworkDependent)

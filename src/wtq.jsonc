@@ -9,9 +9,6 @@
 			"Name": "PowerShell",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "powershell"
-		},
-		{
-			"AttachMode": "Find"
 		}
 
 		// Example with Windows Terminal

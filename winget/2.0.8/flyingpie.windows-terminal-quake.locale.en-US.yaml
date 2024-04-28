@@ -1,5 +1,5 @@
 PackageIdentifier: flyingpie.windows-terminal-quake
-PackageVersion: $PACKAGE_VERSION$
+PackageVersion: 2.0.8
 PackageLocale: en-US
 Publisher: Flyingpie
 PublisherUrl: http://flyingpie.nl/
