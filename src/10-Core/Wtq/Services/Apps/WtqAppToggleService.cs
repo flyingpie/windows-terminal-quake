@@ -1,34 +1,25 @@
 ﻿using Wtq.Services.AnimationTypeProviders;
+using Wtq.Services.AppBoundsProviders;
 using Wtq.Services.ScreenBoundsProviders;
-using Wtq.Services.TerminalBoundsProviders;
 
 namespace Wtq.Services.Apps;
 
 public class WtqAppToggleService(
 	IAnimationProvider animTypeProvider,
 	IScreenBoundsProvider scrBoundsProvider,
-	ITerminalBoundsProvider termBoundsProvider)
+	IAppBoundsProvider termBoundsProvider)
 	: IWtqAppToggleService
 {
+	private readonly IAnimationProvider _animTypeProvider = Guard.Against.Null(animTypeProvider);
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
+	private readonly IScreenBoundsProvider _scrBoundsProvider = Guard.Against.Null(scrBoundsProvider);
+	private readonly IAppBoundsProvider _termBoundsProvider = Guard.Against.Null(termBoundsProvider);
 
-	private readonly IAnimationProvider _animTypeProvider = animTypeProvider
-		?? throw new ArgumentNullException(nameof(animTypeProvider));
-
-	private readonly IScreenBoundsProvider _scrBoundsProvider = scrBoundsProvider
-		?? throw new ArgumentNullException(nameof(scrBoundsProvider));
-
-	private readonly ITerminalBoundsProvider _termBoundsProvider = termBoundsProvider
-		?? throw new ArgumentNullException(nameof(termBoundsProvider));
-
-	// public void Toggle(Process process)
-	// {
-	// _isOpen = !_isOpen;
-
-	// Toggle(process, _isOpen, durationMs: 200);
-	// }
+	[SuppressMessage("Major Bug", "S2583:Conditionally executed code should be reachable", Justification = "MvdO: Frame time will be configurable.")]
 	public async Task ToggleAsync(WtqApp app, bool open, int durationMs)
 	{
+		Guard.Against.Null(app);
+
 		// TODO: Change it so that this method doesn't even get called if we don't have a valid process.
 		if (!app.IsActive)
 		{
@@ -74,21 +65,23 @@ public class WtqAppToggleService(
 				: 1.0 - (deltaMs / durationMs);
 
 			var wndRect = app.GetWindowRect();
-			var intermediateBounds = _termBoundsProvider.GetTerminalBounds(app, open, screen, wndRect, animationFn(linearProgress));
+			var intermediateBounds = _termBoundsProvider.GetNextAppBounds(app, open, screen, wndRect, animationFn(linearProgress));
 
 			app.MoveWindow(intermediateBounds);
 
+#pragma warning disable S2589 // Boolean expressions should not be gratuitous // MvdO: Frame time will be configurable.
 			if (frameTimeMs > 0)
 			{
 				await frameTimer.ConfigureAwait(false); // Wait for the timer to end
 			}
+#pragma warning restore S2589 // Boolean expressions should not be gratuitous
 		}
 
 		stopwatch.Stop();
 
 		// To ensure we end up in exactly the correct final position
 		var wndRect2 = app.GetWindowRect();
-		var finalBounds = _termBoundsProvider.GetTerminalBounds(app, open, screen, wndRect2, open ? 1.0 : 0.0);
+		var finalBounds = _termBoundsProvider.GetNextAppBounds(app, open, screen, wndRect2, open ? 1.0 : 0.0);
 		app.MoveWindow(rect: finalBounds);
 
 		_log.LogInformation("Moved window to {Bounds}", finalBounds);
@@ -101,7 +94,6 @@ public class WtqAppToggleService(
 			// {
 			// Process.SetWindowState(WindowShowStyle.Maximize);
 			// }
-
 			app.BringToForeground();
 		}
 		else

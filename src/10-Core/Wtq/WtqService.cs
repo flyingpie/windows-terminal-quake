@@ -23,8 +23,8 @@ public sealed class WtqService(
 	{
 		_log.LogInformation("Starting");
 
-		_bus.On<WtqToggleAppEvent>(HandleToggleAppEvent);
-		_bus.On<WtqAppFocusEvent>(HandleAppFocusEventAsync);
+		_bus.OnEvent<WtqToggleAppEvent>(HandleToggleAppEventAsync);
+		_bus.OnEvent<WtqAppFocusEvent>(HandleAppFocusEventAsync);
 
 		return Task.CompletedTask;
 	}
@@ -45,7 +45,7 @@ public sealed class WtqService(
 		}
 	}
 
-	private async Task HandleToggleAppEvent(WtqToggleAppEvent ev)
+	private async Task HandleToggleAppEventAsync(WtqToggleAppEvent ev)
 	{
 		var app = ev.App;
 
@@ -80,16 +80,7 @@ public sealed class WtqService(
 				await open.OpenAsync().ConfigureAwait(false);
 				return;
 			}
-
-			return;
 		}
-
-		//// We can't toggle apps that are not active.
-		//if (!app.IsActive)
-		//{
-		//	_log.LogWarning("WTQ process for app '{App}' does not have a process instance assigned", app);
-		//	return;
-		//}
 
 		if (open != null)
 		{

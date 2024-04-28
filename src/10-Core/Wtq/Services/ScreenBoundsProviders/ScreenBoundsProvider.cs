@@ -18,6 +18,8 @@ public class ScreenBoundsProvider(
 	/// <inheritdoc/>
 	public WtqRect GetTargetScreenBounds(WtqApp app)
 	{
+		Guard.Against.Null(app);
+
 		var prefMon = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
 		var monInd = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
 

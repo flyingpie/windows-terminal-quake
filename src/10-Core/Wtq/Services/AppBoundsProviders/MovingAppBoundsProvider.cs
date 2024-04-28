@@ -1,23 +1,22 @@
 ﻿using Wtq.Data;
 
-namespace Wtq.Services.TerminalBoundsProviders;
+namespace Wtq.Services.AppBoundsProviders;
 
-public class MovingTerminalBoundsProvider(
+public class MovingAppBoundsProvider(
 	IOptionsMonitor<WtqOptions> opts)
-	: ITerminalBoundsProvider
+	: IAppBoundsProvider
 {
-	private readonly ILogger _log = Log.For<MovingTerminalBoundsProvider>();
-	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts, nameof(opts));
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 
 	/// <inheritdoc/>
-	public WtqRect GetTerminalBounds(
+	public WtqRect GetNextAppBounds(
 		WtqApp app,
 		bool isOpening,
 		WtqRect screenBounds,
-		WtqRect currentTerminalBounds,
+		WtqRect currentAppBounds,
 		double progress)
 	{
-		Guard.Against.Null(app, nameof(app));
+		Guard.Against.Null(app);
 
 		// TODO: Version that moves apps off the bottom?
 
@@ -35,7 +34,7 @@ public class MovingTerminalBoundsProvider(
 			HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
 
 			// Center
-			_ => screenBounds.X + (int)Math.Ceiling(screenBounds.Width / 2f - termWidth / 2f),
+			_ => screenBounds.X + (int)Math.Ceiling((screenBounds.Width / 2f) - (termWidth / 2f)),
 		};
 
 		return new WtqRect()

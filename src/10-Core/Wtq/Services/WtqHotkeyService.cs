@@ -10,9 +10,9 @@ namespace Wtq.Service;
 /// </summary>
 public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 {
-	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
+	private readonly IOptionsMonitor<WtqOptions> _opts;
 
 	public WtqHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
@@ -25,7 +25,7 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 		_opts.OnChange(SendRegisterEvents);
 
-		_bus.On<WtqHotKeyPressedEvent>(
+		_bus.OnEvent<WtqHotKeyPressedEvent>(
 			e =>
 			{
 				_bus.Publish(new WtqToggleAppEvent()
@@ -35,31 +35,6 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 				return Task.CompletedTask;
 			});
-	}
-
-	private void SendRegisterEvents(WtqOptions opts)
-	{
-		// _log
-		foreach (var app in opts.Apps)
-		{
-			foreach (var hk in app.HotKeys)
-			{
-				_bus.Publish(new WtqRegisterHotKeyEvent()
-				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
-				});
-			}
-		}
-
-		foreach (var hk in opts.HotKeys)
-		{
-			_bus.Publish(new WtqRegisterHotKeyEvent()
-			{
-				Key = hk.Key,
-				Modifiers = hk.Modifiers,
-			});
-		}
 	}
 
 	public WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
@@ -85,5 +60,30 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
 		return Task.CompletedTask;
+	}
+
+	private void SendRegisterEvents(WtqOptions opts)
+	{
+		// _log
+		foreach (var app in opts.Apps)
+		{
+			foreach (var hk in app.HotKeys)
+			{
+				_bus.Publish(new WtqRegisterHotKeyEvent()
+				{
+					Key = hk.Key,
+					Modifiers = hk.Modifiers,
+				});
+			}
+		}
+
+		foreach (var hk in opts.HotKeys)
+		{
+			_bus.Publish(new WtqRegisterHotKeyEvent()
+			{
+				Key = hk.Key,
+				Modifiers = hk.Modifiers,
+			});
+		}
 	}
 }

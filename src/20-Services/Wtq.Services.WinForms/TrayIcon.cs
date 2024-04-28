@@ -4,7 +4,8 @@ public sealed class TrayIcon : IDisposable
 {
 	private NotifyIcon? _notificationIcon;
 
-	public TrayIcon(Action<object, EventArgs> exitHandler)
+	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
+	public TrayIcon(Action<object?, EventArgs> exitHandler)
 	{
 		var waiter = new TaskCompletionSource<bool>();
 
@@ -22,8 +23,6 @@ public sealed class TrayIcon : IDisposable
 
 				CreateOpenSettingsItem(),
 
-				CreateConsoleItem(),
-
 				CreateExitItem(exitHandler),
 			});
 
@@ -32,7 +31,7 @@ public sealed class TrayIcon : IDisposable
 			{
 				Icon = CreateIcon(),
 				ContextMenuStrip = contextMenu,
-				Text = "Windows Terminal Quake",
+				Text = "WTQ",
 				Visible = true,
 			};
 
@@ -46,6 +45,13 @@ public sealed class TrayIcon : IDisposable
 		waiter.Task.GetAwaiter().GetResult();
 	}
 
+	public static void OpenBrowser(Uri uri)
+	{
+		Guard.Against.Null(uri);
+
+		Process.Start(new ProcessStartInfo(uri.ToString()) { UseShellExecute = true });
+	}
+
 	public void Dispose()
 	{
 		_notificationIcon?.Dispose();
@@ -54,17 +60,10 @@ public sealed class TrayIcon : IDisposable
 		Application.Exit();
 	}
 
-	private static ToolStripMenuItem CreateConsoleItem()
+	private static ToolStripMenuItem CreateExitItem(Action<object?, EventArgs> exitHandler)
 	{
-		var mnuExit = new ToolStripMenuItem("Pop Console");
+		Guard.Against.Null(exitHandler);
 
-		//mnuExit.Click += new EventHandler((s, a) => Kernel32.AllocConsole());
-
-		return mnuExit;
-	}
-
-	private static ToolStripMenuItem CreateExitItem(Action<object, EventArgs> exitHandler)
-	{
 		var mnuExit = new ToolStripMenuItem("Exit");
 
 		mnuExit.Click += new EventHandler(exitHandler);
@@ -131,7 +130,7 @@ public sealed class TrayIcon : IDisposable
 
 		item.Click += (s, a) =>
 		{
-			OpenBrowser("https://www.github.com/flyingpie/windows-terminal-quake");
+			OpenBrowser(WtqConstants.GitHubUrl);
 		};
 
 		return item;
@@ -145,10 +144,5 @@ public sealed class TrayIcon : IDisposable
 		{
 			Enabled = false,
 		};
-	}
-
-	public static void OpenBrowser(string url)
-	{
-		Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 	}
 }

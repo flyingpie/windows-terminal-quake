@@ -18,7 +18,7 @@ public class WinFormsHotKeyService : IHostedService
 	{
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 
-		_bus.On<WtqRegisterHotKeyEvent>(
+		_bus.OnEvent<WtqRegisterHotKeyEvent>(
 			e =>
 			{
 				var mods = (KeyModifiers)e.Modifiers;

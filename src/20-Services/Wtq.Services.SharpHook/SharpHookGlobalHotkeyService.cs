@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Native;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace Wtq.Services.SharpHook;
 
 public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 {
-	private readonly IGlobalHook _hook;
+	private readonly SimpleGlobalHook _hook;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppRepo _appRepo;
@@ -96,50 +95,19 @@ public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 		return _appRepo.GetAppByNameRequired(opt.Name);
 	}
 
-	//public void OnHotKey(Func<WtqHotKeyInfo, Task> onHotKey)
-	//{
-	//	// Method intentionally left empty.
-	//}
-
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		// if (!Debugger.IsAttached)
+		new Thread(_hook.Run)
 		{
-			// _ = _hook.RunAsync();
-			new Thread(() =>
-			{
-				_hook.Run();
-			})
-			{
-				Name = "SharpHook",
-			}.Start();
-		}
-
-		var wasAttached = false;
-		_ = Task.Run(async () =>
-		{
-			if (Debugger.IsAttached != wasAttached)
-			{
-				if (Debugger.IsAttached)
-				{
-					// _hook.Dispose();
-				}
-				else
-				{
-				}
-
-				wasAttached = Debugger.IsAttached;
-			}
-		});
+			Name = "SharpHook",
+		}.Start();
 
 		return Task.CompletedTask;
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		Console.WriteLine("HK STOPPING");
 		_hook.Dispose();
-		Console.WriteLine("HK STOPPED");
 
 		return Task.CompletedTask;
 	}

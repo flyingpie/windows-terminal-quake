@@ -1,36 +1,27 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Wtq.Events;
 
 namespace Wtq.Services.Apps;
 
 // TODO: Merge with IWtqAppRepo?
+// TODO: Handle configuration changes?
+// TODO: Handle modifications to apps on runtime (or just request restart?).
 public class WtqAppMonitorService
 	: IHostedService
 {
-	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
-	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly IWtqProcessService _procService;
-	private readonly IWtqFocusTracker _focusTracker;
-	private readonly IWtqBus _bus;
 	private readonly IWtqAppRepo _apps;
-
-	// TODO: Handle configuration changes?
-	// private readonly List<WtqApp> _apps;
-
+	private readonly IWtqFocusTracker _focusTracker;
 	private readonly bool _isRunning = true;
+	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
+	private readonly IWtqProcessService _procService;
 
 	public WtqAppMonitorService(
-		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
-		IWtqBus bus,
 		IWtqFocusTracker focusTracker,
 		IWtqProcessService procService)
 	{
-		_apps = appRepo;
-		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
-		_opts = opts ?? throw new ArgumentNullException(nameof(opts));
-		_focusTracker = focusTracker ?? throw new ArgumentNullException(nameof(focusTracker));
-		_procService = procService ?? throw new ArgumentNullException(nameof(procService));
+		_apps = Guard.Against.Null(appRepo);
+		_focusTracker = Guard.Against.Null(focusTracker);
+		_procService = Guard.Against.Null(procService);
 	}
 
 	public void DropFocus()
@@ -48,7 +39,8 @@ public class WtqAppMonitorService
 		}
 	}
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the created task to be cancelled here.")]
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		_ = Task.Run(async () =>
 		{
@@ -73,6 +65,8 @@ public class WtqAppMonitorService
 				await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
 			}
 		});
+
+		return Task.CompletedTask;
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)
@@ -82,9 +76,6 @@ public class WtqAppMonitorService
 
 	private async Task UpdateAppProcessesAsync()
 	{
-		// TODO: Handle modifications to apps on runtime (or just request restart?).
-		//var processes = _procService.GetProcesses().OrderBy(p => p.ProcessName).ToList();
-
 		foreach (var app in _apps.Apps)
 		{
 			await app.UpdateAsync().ConfigureAwait(false);

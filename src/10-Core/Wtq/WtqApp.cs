@@ -8,6 +8,7 @@ namespace Wtq;
 /// An "app" represents a single process that can be toggled (such as Windows Terminal).<br/>
 /// It tracks its own state, and does not necessarily have a process attached.
 /// </summary>
+// TODO: Track whether the app is currently open, has focus, etc.
 public sealed class WtqApp : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<WtqApp>();
@@ -26,13 +27,13 @@ public sealed class WtqApp : IAsyncDisposable
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
-		_opts = Guard.Against.Null(opts, nameof(opts));
-		_procFactory = procFactory ?? throw new ArgumentNullException(nameof(procFactory));
-		_procService = procService ?? throw new ArgumentNullException(nameof(procService));
-		_toggler = toggler ?? throw new ArgumentNullException(nameof(toggler));
-		_optionsAccessor = Guard.Against.Null(optionsAccessor, nameof(optionsAccessor));
+		_opts = Guard.Against.Null(opts);
+		_procFactory = Guard.Against.Null(procFactory);
+		_procService = Guard.Against.Null(procService);
+		_toggler = Guard.Against.Null(toggler);
+		_optionsAccessor = Guard.Against.Null(optionsAccessor);
 
-		Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
+		Name = Guard.Against.NullOrWhiteSpace(name);
 	}
 
 	/// <summary>
@@ -47,14 +48,14 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public Process? Process { get; set; }
 
-	// TODO: Track whether the app is currently open, has focus, etc.
-
 	public string? ProcessDescription => Process == null
 		? "<no process attached>"
 		: $"[{Process.Id}] {Process.ProcessName}";
 
 	public async Task AttachAsync(Process process)
 	{
+		Guard.Against.Null(process);
+
 		Process = process;
 
 		// TODO: Configurable.
@@ -166,7 +167,7 @@ public sealed class WtqApp : IAsyncDisposable
 			// TODO: Make extensions to safely pull process info without crashing.
 			return $"[App:{Options}] [ProcessID:{Process?.Id}] {Process?.ProcessName ?? "<no process>"}";
 		}
-		catch (Exception ex)
+		catch
 		{
 			return $"[App:{Options}] <no process>";
 		}

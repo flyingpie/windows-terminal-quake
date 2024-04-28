@@ -16,6 +16,7 @@ public class Retry : IRetry
 		});
 	}
 
+	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Maybe move to Polly or something?")]
 	public TResult Execute<TResult>(Func<TResult> action)
 	{
 		return
@@ -27,9 +28,23 @@ public class Retry : IRetry
 			.GetResult();
 	}
 
+	public async Task ExecuteAsync(Func<Task> action)
+	{
+		Guard.Against.Null(action);
+
+		_ = await
+			ExecuteAsync(async () =>
+			{
+				await action().ConfigureAwait(false);
+
+				return 0;
+			})
+			.ConfigureAwait(false);
+	}
+
 	public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action)
 	{
-		Guard.Against.Null(action, nameof(action));
+		Guard.Against.Null(action);
 
 		var maxAttempts = 5;
 		var curAttempt = 0;
@@ -45,7 +60,7 @@ public class Retry : IRetry
 			catch (CancelRetryException ex)
 			{
 				_log.LogWarning(ex, "Cancelling retry");
-				throw;
+				throw new WtqException("Retry cancelled");
 			}
 			catch (Exception ex)
 			{

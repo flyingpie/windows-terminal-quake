@@ -16,7 +16,7 @@ public struct WtqVec2I : IEquatable<WtqVec2I>
 		return left.Equals(right);
 	}
 
-	public override readonly bool Equals(object obj)
+	public override readonly bool Equals(object? obj)
 	{
 		if (obj is not WtqVec2I other)
 		{

@@ -15,10 +15,10 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		IWtqProcessService procService,
 		IWtqAppToggleService toggleService)
 	{
-		_opts = Guard.Against.Null(opts, nameof(opts));
-		_procFactory = Guard.Against.Null(procFactory, nameof(procFactory));
-		_procService = Guard.Against.Null(procService, nameof(procService));
-		_toggleService = Guard.Against.Null(toggleService, nameof(toggleService));
+		_opts = Guard.Against.Null(opts);
+		_procFactory = Guard.Against.Null(procFactory);
+		_procService = Guard.Against.Null(procService);
+		_toggleService = Guard.Against.Null(toggleService);
 	}
 
 	public IReadOnlyCollection<WtqApp> Apps => _apps;
@@ -50,7 +50,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 	public WtqApp? GetAppByName(string name)
 	{
-		Guard.Against.NullOrWhiteSpace(name, nameof(name));
+		Guard.Against.NullOrWhiteSpace(name);
 
 		return _apps.Find(a => a.Name == name);
 	}
@@ -63,7 +63,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 	public WtqAppOptions? GetOptionsByName(string name)
 	{
-		Guard.Against.NullOrWhiteSpace(name, nameof(name));
+		Guard.Against.NullOrWhiteSpace(name);
 
 		return _opts.CurrentValue.Apps.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
 	}
@@ -84,7 +84,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 	public WtqApp Create(WtqAppOptions app)
 	{
-		Guard.Against.Null(app, nameof(app));
+		Guard.Against.Null(app);
 
 		return new WtqApp(
 			_opts,
