@@ -36,8 +36,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: PublishAll'
-        run: ./src/build.cmd PublishAll
+      - name: 'Run: PublishRelease'
+        run: ./src/build.cmd PublishRelease
       - name: 'Publish: win-x64_self-contained.zip'
         uses: actions/upload-artifact@v3
         with:

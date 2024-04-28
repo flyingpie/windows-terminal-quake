@@ -80,10 +80,12 @@
               "CreateGitHubRelease",
               "CreateScoopManifest",
               "CreateWinGetManifest",
-              "PublishAll",
+              "PublishDebug",
+              "PublishRelease",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "Restore"
+              "Restore",
+              "SetVersion"
             ]
           }
         },
@@ -101,10 +103,12 @@
               "CreateGitHubRelease",
               "CreateScoopManifest",
               "CreateWinGetManifest",
-              "PublishAll",
+              "PublishDebug",
+              "PublishRelease",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "Restore"
+              "Restore",
+              "SetVersion"
             ]
           }
         },
