@@ -1,0 +1,200 @@
+# Changelog
+
+## [vNext]
+
+## [2.0.8] / 2024
+- Automated Scoop and WinGet manifest generation.
+- Automated GitHub release creation.
+
+## [2.0.7] / 2024-04-19
+- Added opacity;
+- Toggleable task bar icon visibility.
+
+![image](https://github.com/flyingpie/windows-terminal-quake/assets/1295673/ee95e8bd-b6b2-4c48-a680-60e36a4398e1)
+
+Globally, for all apps:
+```jsonc
+{
+  "Opacity": 0-100,
+  "TaskBarIconVisibility": "AlwaysHidden | AlwaysVisible"
+}
+```
+
+Or per app:
+```jsonc
+{
+  "Apps": [
+    {
+      "Name": "Terminal",
+
+      "Opacity": 0-100,
+      "TaskBarIconVisibility": "AlwaysHidden | AlwaysVisible"
+    },
+    ...
+  ]
+}
+```
+
+## [2.0.6] / 2024-04-1
+- Added sizing.
+
+![wtq-sizing-01](https://github.com/flyingpie/windows-terminal-quake/assets/1295673/0f0a8f81-b0d5-4256-a15d-ac384e6386a1)
+
+Globally, for all apps:
+```jsonc
+{
+  // Horizontal screen coverage, as a percentage (defaults to 95).
+  "HorizontalScreenCoverage": 95,
+
+  // Vertical screen coverage, as a percentage (defaults to 95).
+  "VerticalScreenCoverage": 95,
+
+  // How much room to leave between the top of the terminal and the top of the screen, in pixels.
+  "VerticalOffset": 0
+}
+```
+
+Or per app:
+```jsonc
+{
+  "Apps": [
+    {
+      "Name": "Terminal",
+
+      // Horizontal screen coverage, as a percentage (defaults to 95).
+      "HorizontalScreenCoverage": 95,
+
+      // Vertical screen coverage as a percentage (defaults to 95).
+      "VerticalScreenCoverage": 95,
+    
+      // How much room to leave between the top of the terminal and the top of the screen, in pixels.
+      "VerticalOffset": 0
+    },
+    ...
+  ]
+}
+```
+
+## [2.0.5] / 2024-03-17
+Initial support for auto-starting apps.
+
+**BREAKING CHANGES**
+The configuration file has been simplified.
+
+Old syntax:
+```jsonc
+"Apps": [
+  {
+    "Name": "Terminal",
+    "HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+    "FindExisting": {
+      "ProcessName": "WindowsTerminal"
+    },
+    "StartNew": {
+      "FileName": "wt"
+    }
+  }
+]
+```
+
+The "**ProcessName**"-property is optional for processes where they are the same.
+
+New syntax:
+```jsonc
+"Apps": [
+  {
+    "Name": "Terminal",
+    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "FileName": "wt",
+    "ProcessName": "WindowsTerminal"
+  }
+]
+```
+
+#### Auto-starting apps to toggle
+Currently exploring the direction where an app has an "AttachMode", which dictates how WTQ grabs an app:
+
+- **FindOrStart** (default)
+Looks for an existing process as specified by the "FileName"- and/or "ProcessName"-properties. If no process was found, a new one will be started using the value under the "FileName"-property.
+- **Find**
+Just looks for existing processes as specified by the "FileName"- and/or "ProcessName"-properties. No new processes will be started (previous version behavior, where you always had to manually start the app.
+- **Start** (very experimental)
+Always starts a new process, specifically to be used by WTQ. Meant for apps that have multiple open instances. Initially meant for (among other things) browsers, but these turn out to be more complicated. This will be documented later.
+- **Manual**
+Attaches whatever app has focus, when the hot key is pressed. Keeps the app attached until WTQ is closed.
+
+The mode can be specified per app (note that "FindOrStart" is the default:
+```jsonc
+"Apps": [
+  {
+    "Name": "Terminal",
+    "AttachMode": "Find", // Only attach to process that is already running, don't auto-start one.
+    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "FileName": "wt",
+    "ProcessName": "WindowsTerminal"
+  }
+]
+```
+
+## [2.0.4] / 2024-02-13
+- The ["PreferMonitor" and "MonitorIndex"](https://wtq.flyingpie.nl/v2/settings/prefer-monitor/) settings, to control what monitor an app toggles on.
+
+The setting is available at the root config level, and can be overridden per application.
+
+```jsonc
+{
+  "PreferMonitor": "WithCursor", // WithCursor | Primary | AtIndex
+  "MonitorIndex": 0,
+
+  "Apps": [
+    {
+      "PreferMonitor": "WithCursor", // WithCursor | Primary | AtIndex
+      "MonitorIndex": 0,
+    }
+  ]
+}
+```
+
+## [2.0.3] / 2024-02-11
+- WinGet release preparation.
+
+## [2.0.2] / 2024-02-01
+- Re-introduced tray icon, app runs in the background now
+- Toggle out on focus lost (not configurable yet)
+- Alternative method for toggling focus back to previous app, that does not change app state, reduces flickering
+
+Feel free to join the [v2 discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119).
+
+**The config file has changed slightly, see included example**
+Includes example configuration (windows-terminal-quake.jsonc):
+- Ctrl + 1: Windows Terminal
+- Ctrl + 2: [Q-Dir](http://q-dir.com/)
+- Ctrl + 3: [Process Hacker](https://processhacker.sourceforge.io/)
+- Ctrl + 4: Spotify
+
+- Ctrl + Q: Most recent app
+
+Comes in 2 flavors:
+**Self Contained**: Runs without any prerequisites, but is massive.
+**Requires Net8**: You'll need to download the [.Net 8 runtime first](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.1-windows-x64-installer).
+
+## [2.0.1] / 2024-01-22
+The next major version of Windows-Terminal-Quake, with support for multiple apps, including terminals other than Windows Terminal.
+
+<video autoplay loop width="800">
+	<source src="https://github.com/flyingpie/windows-terminal-quake/assets/1295673/1bedd582-833a-4b7a-895a-f9d4de6d8ba7" />
+</video>
+
+Feel free to join the [v2 discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119).
+
+Includes example configuration (windows-terminal-quake.jsonc):
+- Ctrl + 1: Windows Terminal
+- Ctrl + 2: [Q-Dir](http://q-dir.com/)
+- Ctrl + 3: [Process Hacker](https://processhacker.sourceforge.io/)
+- Ctrl + 4: Spotify
+
+- Ctrl + Q: Most recent app
+
+Comes in 2 flavors:
+**Self Contained**: Runs without any prerequisites, but is massive.
+**Requires Net8**: You'll need to download the [.Net 8 runtime first](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.1-windows-x64-installer).

@@ -18,6 +18,10 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "GitHubToken": {
+          "type": "string",
+          "description": "GitHub Token"
+        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -73,7 +77,7 @@
             "type": "string",
             "enum": [
               "Clean",
-              "CreatePowerShellOneLiner",
+              "CreateGitHubRelease",
               "CreateScoopManifest",
               "CreateWinGetManifest",
               "PublishAll",
@@ -94,7 +98,7 @@
             "type": "string",
             "enum": [
               "Clean",
-              "CreatePowerShellOneLiner",
+              "CreateGitHubRelease",
               "CreateScoopManifest",
               "CreateWinGetManifest",
               "PublishAll",

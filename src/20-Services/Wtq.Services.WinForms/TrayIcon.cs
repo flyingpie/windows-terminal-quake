@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Wtq.Services.WinForms;
+﻿namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
@@ -141,7 +139,9 @@ public sealed class TrayIcon : IDisposable
 
 	private static ToolStripMenuItem CreateVersionItem()
 	{
-		return new ToolStripMenuItem($"Version v2.x.x")
+		var ver = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+
+		return new ToolStripMenuItem($"Version {ver}")
 		{
 			Enabled = false,
 		};
@@ -149,20 +149,6 @@ public sealed class TrayIcon : IDisposable
 
 	public static void OpenBrowser(string url)
 	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); // Works ok on windows
-		}
-		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-		{
-			Process.Start("xdg-open", url);  // Works ok on linux
-		}
-		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-		{
-			Process.Start("open", url); // Not tested
-		}
-		else
-		{
-		}
+		Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 	}
 }
