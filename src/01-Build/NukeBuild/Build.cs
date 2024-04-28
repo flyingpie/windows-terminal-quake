@@ -25,6 +25,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	GitHubActionsImage.WindowsLatest,
 	FetchDepth = 0,
 	OnPushBranches = ["master"],
+	EnableGitHubToken = true,
 	InvokedTargets = [nameof(PublishRelease)])]
 [SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
 public sealed class Build : NukeBuild
