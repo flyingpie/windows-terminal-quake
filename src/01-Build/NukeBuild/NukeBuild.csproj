@@ -13,8 +13,4 @@
 	<ItemGroup>
 		<PackageReference Include="Nuke.Common" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<PackageDownload Include="minver-cli" Version="[5.0.0]" />
-	</ItemGroup>
 </Project>

@@ -84,8 +84,8 @@
               "PublishRelease",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "Restore",
-              "SetVersion"
+              "ReportInfo",
+              "Restore"
             ]
           }
         },
@@ -107,8 +107,8 @@
               "PublishRelease",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "Restore",
-              "SetVersion"
+              "ReportInfo",
+              "Restore"
             ]
           }
         },
