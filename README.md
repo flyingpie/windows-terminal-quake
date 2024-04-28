@@ -6,6 +6,20 @@ Windows Terminal Quake v2 is underway, featuring support for other terminals, ot
 
 Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119) to give us feedback, or take a look at a [prerelease](https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.0-pre7).
 
+## Manual Download
+See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
+## Scoop
+```
+scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
+```
+
+## WinGet
+*[Pending WinGet Manifest PR](https://github.com/microsoft/winget-pkgs/pull/151384)*
+```
+winget install windows-terminal-quake
+```
+
 https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
 
 # WTQ v1
