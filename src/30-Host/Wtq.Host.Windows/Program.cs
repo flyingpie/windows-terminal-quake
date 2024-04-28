@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Service;
@@ -110,6 +111,7 @@ public sealed class Program
 		catch (Exception ex)
 		{
 			Console.WriteLine($"Error running application: {ex}");
+			MessageBox.Show($"Error running application: {ex}", "Error starting WTQ");
 		}
 	}
 }
