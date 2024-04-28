@@ -1,0 +1,20 @@
+{
+	"version": "$PACKAGE_VERSION$",
+	"description": "Turn any app into a Quake-style toggleable app.",
+	"homepage": "https://github.com/flyingpie/windows-terminal-quake",
+	"bin": "wtq.exe",
+	"shortcuts": [
+		[
+			"wtq.exe",
+			"WTQ - Windows Terminal Quake"
+		]
+	],
+	"persist": "wtq.jsonc",
+	"checkver": "github",
+	"architecture": {
+		"64bit": {
+			"url": "https://github.com/flyingpie/windows-terminal-quake/releases/download/$GH_RELEASE_VERSION$/win-x64_self-contained.zip",
+			"hash": "$SELF_CONTAINED_SHA256$"
+		}
+	}
+}
