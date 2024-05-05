@@ -161,6 +161,34 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
+	/// Windows x64 AOT.
+	/// </summary>
+	private Target PublishWin64Aot => _ => _
+		.DependsOn(Restore)
+		.Produces(PathToWin64SelfContainedZip)
+		.Executes(() =>
+		{
+			var staging = StagingDirectory / "win-x64_aot";
+
+			DotNetPublish(_ => _
+				.SetAssemblyVersion(AssemblyVersion)
+				.SetInformationalVersion(InformationalVersion)
+				.SetConfiguration(Configuration)
+				.SetFramework("net8.0-windows")
+				.SetProject(Solution._0_Host.Wtq_Host_Windows)
+				.SetOutput(staging)
+				.SetProperty("PublishAot", true)
+				.SetProperty("InvariantGlobalization", true)
+				.SetRuntime("win-x64"));
+
+			staging.ZipTo(
+				PathToWin64SelfContainedZip,
+				filter: x => x.HasExtension(".exe", ".jsonc"),
+				compressionLevel: CompressionLevel.SmallestSize,
+				fileMode: System.IO.FileMode.CreateNew);
+		});
+
+	/// <summary>
 	/// Scoop manifest.
 	/// </summary>
 	private Target CreateScoopManifest => _ => _
