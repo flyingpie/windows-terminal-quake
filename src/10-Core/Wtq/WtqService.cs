@@ -55,9 +55,9 @@ public sealed class WtqService(
 			if (open != null)
 			{
 				await open.CloseAsync().ConfigureAwait(false);
-				_lastOpen = open;
+				_lastOpen = open; // TODO: Doesn't include focus lost.
 				open = null;
-				_appMon.DropFocus();
+				_appMon.RefocusLastNonWtqApp();
 				return;
 			}
 			else
@@ -89,7 +89,7 @@ public sealed class WtqService(
 				await app.CloseAsync().ConfigureAwait(false);
 				_lastOpen = open;
 				open = null;
-				_appMon.DropFocus();
+				_appMon.RefocusLastNonWtqApp();
 			}
 			else
 			{

@@ -18,7 +18,7 @@ public sealed class WtqFocusTracker(
 
 	public WtqApp? ForegroundApp { get; private set; }
 
-	public uint? LastNonWtqForeground { get; private set; }
+	public WtqWindow? LastNonWtqForeground { get; private set; }
 
 	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the task to be cancelled here.")]
 	public Task StartAsync(CancellationToken cancellationToken)
@@ -31,14 +31,13 @@ public sealed class WtqFocusTracker(
 				{
 					await Task.Delay(TimeSpan.FromMilliseconds(250)).ConfigureAwait(false);
 
-					// var fg = User32.GetForegroundWindow();
-					var fgPid = _procService.GetForegroundProcessId();
+					var fgWindow = _procService.GetForegroundWindow();
 
-					var pr = _appsRepo.Apps.FirstOrDefault(a => a.Process?.Id == fgPid);
+					var pr = _appsRepo.Apps.FirstOrDefault(a => a.Process == fgWindow);
 
 					if (pr == null)
 					{
-						LastNonWtqForeground = fgPid;
+						LastNonWtqForeground = fgWindow;
 					}
 
 					// Nothing changed.
@@ -66,7 +65,7 @@ public sealed class WtqFocusTracker(
 						if (pr == null)
 						{
 							// App lost focus.
-							_log.LogInformation("App '{App}' lost focus (went to PID {Pid})", ForegroundApp, fgPid);
+							_log.LogInformation("App '{App}' lost focus (went to window {Window})", ForegroundApp, fgWindow);
 
 							_bus.Publish(new WtqAppFocusEvent()
 							{

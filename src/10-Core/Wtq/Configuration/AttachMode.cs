@@ -11,11 +11,6 @@ public enum AttachMode
 	None = 0,
 
 	/// <summary>
-	/// Always start a new app instance.
-	/// </summary>
-	Start,
-
-	/// <summary>
 	/// Only look for existing app instances.
 	/// </summary>
 	Find,

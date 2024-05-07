@@ -1,24 +1,22 @@
-﻿using Wtq.Data;
+﻿namespace Wtq.Services;
 
-namespace Wtq.Services;
-
+/// <summary>
+/// Handles interactions with the OS process list.
+/// </summary>
 public interface IWtqProcessService
 {
-	void BringToForeground(Process process);
+	/// <summary>
+	/// Create a new process instance as defined by <see cref="WtqAppOptions"/>'s parameters.
+	/// </summary>
+	Task<WtqWindow?> CreateAsync(WtqAppOptions opts);
 
-	Process? GetForegroundProcess();
+	/// <summary>
+	/// Looks for a process that matches the specified <paramref name="predicate"/>.
+	/// </summary>
+	WtqWindow? FindProcess(WtqAppOptions opts);
 
-	uint GetForegroundProcessId();
-
-	WtqRect GetWindowRect(Process process);
-
-	void MoveWindow(Process process, WtqRect rect, bool repaint = true);
-
-	void SetAlwaysOnTop(Process process);
-
-	void SetTaskbarIconVisibility(Process process, bool isVisible);
-
-	void SetTransparency(Process process, int transparency);
-
-	IEnumerable<Process> GetProcesses();
+	/// <summary>
+	/// Returns the process that currently has UI focus.
+	/// </summary>
+	WtqWindow? GetForegroundWindow();
 }

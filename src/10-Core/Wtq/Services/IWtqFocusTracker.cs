@@ -4,5 +4,5 @@ public interface IWtqFocusTracker
 {
 	WtqApp? ForegroundApp { get; }
 
-	uint? LastNonWtqForeground { get; }
+	WtqWindow? LastNonWtqForeground { get; }
 }

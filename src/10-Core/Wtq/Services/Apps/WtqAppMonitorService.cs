@@ -12,31 +12,22 @@ public class WtqAppMonitorService
 	private readonly IWtqFocusTracker _focusTracker;
 	private readonly bool _isRunning = true;
 	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
-	private readonly IWtqProcessService _procService;
 
 	public WtqAppMonitorService(
 		IWtqAppRepo appRepo,
-		IWtqFocusTracker focusTracker,
-		IWtqProcessService procService)
+		IWtqFocusTracker focusTracker)
 	{
 		_apps = Guard.Against.Null(appRepo);
 		_focusTracker = Guard.Against.Null(focusTracker);
-		_procService = Guard.Against.Null(procService);
 	}
 
-	public void DropFocus()
+	/// <summary>
+	/// Attempt to re-focus the last app that is not toggled by WTQ.</br>
+	/// Ensures that input gets sent to the app that previously was on the foreground.
+	/// </summary>
+	public void RefocusLastNonWtqApp()
 	{
-		if (_focusTracker.LastNonWtqForeground != null)
-		{
-			var p = Process.GetProcessById((int)_focusTracker.LastNonWtqForeground);
-			if (p == null)
-			{
-				_log.LogWarning("No foreground process found with id '{Id}'", _focusTracker.LastNonWtqForeground);
-				return;
-			}
-
-			_procService.BringToForeground(p);
-		}
+		_focusTracker.LastNonWtqForeground?.BringToForeground();
 	}
 
 	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the created task to be cancelled here.")]
