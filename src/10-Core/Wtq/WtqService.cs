@@ -41,6 +41,7 @@ public sealed class WtqService(
 		if (ev.App != null && ev.App == open && !ev.GainedFocus)
 		{
 			await open.CloseAsync().ConfigureAwait(false);
+			_lastOpen = open;
 			open = null;
 		}
 	}
