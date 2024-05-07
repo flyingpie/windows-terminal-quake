@@ -46,13 +46,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public WtqAppOptions Options => _optionsAccessor();
 
-	public Process? Process { get; set; }
+	public WtqWindow? Process { get; set; }
 
 	public string? ProcessDescription => Process == null
 		? "<no process attached>"
-		: $"[{Process.Id}] {Process.ProcessName}";
+		: Process.ToString();
 
-	public async Task AttachAsync(Process process)
+	public async Task AttachAsync(WtqWindow process)
 	{
 		Guard.Against.Null(process);
 
@@ -61,12 +61,12 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Configurable.
 		if (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options) == TaskBarIconVisibility.AlwaysHidden)
 		{
-			_procService.SetTaskbarIconVisibility(process, false);
+			process.SetTaskbarIconVisible(false);
 		}
 
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
-		_log.LogInformation("Found process instance for app '{App}' with name '{ProcessName}' and Id '{ProcessId}'", Options, process.ProcessName, process.Id);
+		_log.LogInformation("Found process instance for app '{App}': '{Process}'", Options, process);
 	}
 
 	/// <summary>
@@ -79,7 +79,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		_procService.BringToForeground(Process);
+		Process.BringToForeground();
 	}
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -96,7 +96,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (Process != null)
 		{
-			var bounds = _procService.GetWindowRect(Process); // TODO: Restore to original position (when we got a hold of the process).
+			var bounds = Process.WindowRect; // TODO: Restore to original position (when we got a hold of the process).
 			bounds.Width = 1280;
 			bounds.Height = 800;
 			bounds.X = 10;
@@ -106,7 +106,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
-			_procService.SetTaskbarIconVisibility(Process, true);
+			Process.SetTaskbarIconVisible(true);
 		}
 	}
 
@@ -117,7 +117,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		return _procService.GetWindowRect(Process);
+		return Process.WindowRect;
 	}
 
 	public void MoveWindow(WtqRect rect)
@@ -127,7 +127,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		_procService.MoveWindow(Process, rect: rect);
+		Process.MoveTo(rect: rect);
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -146,7 +146,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 		if (!IsActive && Options.AttachMode == AttachMode.Manual)
 		{
-			var pr = _procService.GetForegroundProcess();
+			var pr = _procService.GetForegroundWindow();
 			if (pr != null)
 			{
 				await AttachAsync(pr).ConfigureAwait(false);
@@ -164,8 +164,7 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		try
 		{
-			// TODO: Make extensions to safely pull process info without crashing.
-			return $"[App:{Options}] [ProcessID:{Process?.Id}] {Process?.ProcessName ?? "<no process>"}";
+			return $"[App:{Options}] {Process?.ToString() ?? "<no process>"}";
 		}
 		catch
 		{
@@ -178,10 +177,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateAsync()
 	{
+		// TODO: Only update the window handles on app start, and then on hot key pressed.
 		// Check that if we have a process handle, the process is still active.
-		if (Process?.HasExited ?? false)
+		if (Process != null && !Process.IsValid)
 		{
-			_log.LogInformation("Process with name '{ProcessName}' and id '{ProcessId}' exited, releasing handle", Process.ProcessName, Process.Id);
+			_log.LogInformation("Process '{ProcessName}' exited, releasing handle", Process);
 			Process = null;
 		}
 
@@ -201,7 +201,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// Update opacity.
 		if (Process != null && IsActive)
 		{
-			_procService.SetTransparency(Process, _opts.CurrentValue.GetOpacityForApp(Options));
+			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
 		}
 	}
 

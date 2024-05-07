@@ -1,5 +1,9 @@
-﻿using Wtq.Data;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Wtq.Configuration;
 using Wtq.Exceptions;
+using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 using Wtq.Utils;
 
@@ -8,36 +12,29 @@ namespace Wtq.Services.Win32;
 public sealed class Win32ProcessService : IWtqProcessService
 {
 	private readonly ILogger _log = Log.For<Win32ProcessService>();
-	private readonly object _procLock = new();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
-
+	private readonly object _procLock = new();
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
-	private IEnumerable<Process> _processes = [];
+	private IEnumerable<WtqWindow> _processes = [];
 
-	/// <summary>
-	/// Bring the process' main window to the foreground.
-	/// </summary>
-	public void BringToForeground(Process process)
+	public async Task<WtqWindow?> CreateAsync(WtqAppOptions opts)
 	{
-		Guard.Against.Null(process);
-
-		// TODO: Only do this in cases where we want the app to disappear? Toggling window state causes flickering.
-		// SetWindowState(WindowShowStyle.Restore);
-		User32.SetForegroundWindow(process.MainWindowHandle);
-		User32.ForcePaint(process.MainWindowHandle);
-
-		// User32.ShowWindow(process.MainWindowHandle, WindowShowStyle.Show);
-		// User32.SendMessage(process.MainWindowHandle, )
+		return new Win32WtqProcess(await CreateProcessAsync(opts).ConfigureAwait(false));
 	}
 
-	public Process? GetForegroundProcess()
+	public WtqWindow? FindProcess(WtqAppOptions opts)
+	{
+		return GetProcesses().FirstOrDefault(p => p.Matches(opts));
+	}
+
+	public WtqWindow? GetForegroundWindow()
 	{
 		try
 		{
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return Process.GetProcessById((int)fg);
+				return new Win32WtqProcess(Process.GetProcessById((int)fg));
 			}
 		}
 		catch (Exception ex)
@@ -48,7 +45,7 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return null;
 	}
 
-	public uint GetForegroundProcessId()
+	private static uint GetForegroundProcessId()
 	{
 		var hwnd = User32.GetForegroundWindow();
 		User32.GetWindowThreadProcessId(hwnd, out uint pid);
@@ -56,7 +53,48 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return pid;
 	}
 
-	public IEnumerable<Process> GetProcesses()
+	private Task<Process> CreateProcessAsync(WtqAppOptions opts)
+	{
+		_log.LogInformation("Creating process for app '{App}'", opts);
+
+		var process = new Process()
+		{
+			StartInfo = new ProcessStartInfo()
+			{
+				FileName = opts.FileName,
+				Arguments = opts.Arguments,
+				UseShellExecute = false,
+				Environment =
+				{
+					{ "WTQ_START", opts.Name },
+				},
+			},
+		};
+
+		// Start
+		Retry.Default
+			.Execute(() =>
+			{
+				try
+				{
+					process.Start();
+					process.Refresh();
+				}
+				catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
+				{
+					throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
+				}
+				catch (Exception ex)
+				{
+					_log.LogError(ex, "Error starting process: {Message}", ex.Message);
+					throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
+				}
+			});
+
+		return Task.FromResult(process);
+	}
+
+	private IEnumerable<WtqWindow> GetProcesses()
 	{
 		lock (_procLock)
 		{
@@ -64,109 +102,27 @@ public sealed class Win32ProcessService : IWtqProcessService
 			{
 				_log.LogDebug("Looking up list of processes");
 				_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
-				_processes = Process.GetProcesses();
+				var res = new List<WtqWindow>();
+				foreach (var proc in Process.GetProcesses())
+				{
+					if (!proc.TryGetHasExited(out var hasExited) || hasExited)
+					{
+						continue;
+					}
+
+					if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
+					{
+						continue;
+					}
+
+					var wtqProcess = new Win32WtqProcess(proc);
+					res.Add(wtqProcess);
+				}
+
+				_processes = res;
 			}
 		}
 
 		return _processes;
-	}
-
-	public WtqRect GetWindowRect(Process process)
-	{
-		Guard.Against.Null(process);
-
-		var bounds = default(Bounds);
-
-		User32.GetWindowRect(process.MainWindowHandle, ref bounds);
-
-		return bounds.ToWtqBounds().ToWtqRect();
-	}
-
-	/// <summary>
-	/// Sets the position and size of the process' main window.
-	/// </summary>
-	public void MoveWindow(Process process, WtqRect rect, bool repaint = true)
-	{
-		Guard.Against.Null(process);
-
-		User32.MoveWindow(
-			hWnd: process.MainWindowHandle,
-			x: rect.X,
-			y: rect.Y,
-			nWidth: rect.Width,
-			nHeight: rect.Height,
-			bRepaint: repaint);
-	}
-
-	/// <summary>
-	/// Make sure the window is always the top-most one.
-	/// </summary>
-	public void SetAlwaysOnTop(Process process)
-	{
-		Guard.Against.Null(process);
-
-		if (process.MainWindowHandle == IntPtr.Zero)
-		{
-			throw new WtqException("Process handle zero");
-		}
-
-		var isSet = User32.SetWindowPos(process.MainWindowHandle, User32.HWNDTOPMOST, 0, 0, 0, 0, User32.TOPMOSTFLAGS);
-		if (!isSet)
-		{
-			throw new WtqException("Could not set window top most");
-		}
-	}
-
-	/// <summary>
-	/// Hides- or shows the taskbar icon of the specified process.
-	/// </summary>
-	public void SetTaskbarIconVisibility(Process process, bool isVisible)
-	{
-		Guard.Against.Null(process);
-
-		// Get handle to the main window
-		var handle = process.MainWindowHandle;
-
-		_log.LogInformation("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
-
-		// Get current window properties
-		var props = User32.GetWindowLong(handle, User32.GWLEXSTYLE);
-
-		if (isVisible)
-		{
-			// Show
-			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & User32.WSEXAPPWINDOW);
-		}
-		else
-		{
-			// Hide
-			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & ~User32.WSEXAPPWINDOW);
-		}
-	}
-
-	/// <summary>
-	/// Makes the entire window of the specified process transparent.
-	/// </summary>
-	public void SetTransparency(Process process, int transparency)
-	{
-		Guard.Against.Null(process);
-
-		if (process.MainWindowHandle == IntPtr.Zero)
-		{
-			throw new WtqException("Process handle zero");
-		}
-
-		// Get original window properties
-		var props = User32.GetWindowLong(process.MainWindowHandle, User32.GWLEXSTYLE);
-
-		// Add "WS_EX_LAYERED"-flag (required for transparency).
-		User32.SetWindowLong(process.MainWindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
-
-		// Set transparency
-		var isSet = User32.SetLayeredWindowAttributes(process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWAALPHA);
-		if (!isSet)
-		{
-			throw new WtqException("Could not set window opacity");
-		}
 	}
 }

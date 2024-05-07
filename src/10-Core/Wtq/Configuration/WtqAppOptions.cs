@@ -60,65 +60,6 @@ public class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
 	public float? VerticalScreenCoverage { get; set; }
 
-	public bool Filter(Process process, bool isStartedByWtq)
-	{
-		ArgumentNullException.ThrowIfNull(process);
-
-		if (process.MainWindowHandle == nint.Zero)
-		{
-			return false;
-		}
-
-		// TODO: Make some notes about webbrowsers being a pain with starting a new process.
-		try
-		{
-			if (process.MainModule == null)
-			{
-				return false;
-			}
-
-			if (process.MainWindowHandle == nint.Zero)
-			{
-				return false;
-			}
-
-			// TODO: Handle extensions either or not being there.
-			var fn1 = Path.GetFileNameWithoutExtension(ProcessName ?? FileName);
-			var fn2 = Path.GetFileNameWithoutExtension(process.MainModule.FileName);
-
-			if (!fn1.Equals(fn2, StringComparison.OrdinalIgnoreCase))
-			{
-				return false;
-			}
-
-			if (isStartedByWtq)
-			{
-				if (!process.StartInfo.Environment.TryGetValue("WTQ_START", out var val))
-				{
-					return false;
-				}
-
-				if (string.IsNullOrWhiteSpace(val))
-				{
-					return false;
-				}
-
-				if (!val.Equals(Name, StringComparison.OrdinalIgnoreCase))
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-		catch
-		{
-			// TODO: Remove try/catch, use safe property access methods on "Process" instead.
-		}
-
-		return false;
-	}
-
 	public bool HasHotKey(Keys key, KeyModifiers modifiers)
 	{
 		return HotKeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);

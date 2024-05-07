@@ -2,5 +2,5 @@
 
 public interface IWtqProcessFactory
 {
-	Task<Process?> GetProcessAsync(WtqAppOptions opts);
+	Task<WtqWindow?> GetProcessAsync(WtqAppOptions opts);
 }
