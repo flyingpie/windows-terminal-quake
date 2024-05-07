@@ -1,5 +1,6 @@
 ﻿#pragma warning disable
 
+using Ardalis.GuardClauses;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -31,16 +32,35 @@ public static class Log
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()
 	{
+		if (_factory == null)
+		{
+			throw new InvalidOperationException($"Attempting to create logger for type '{typeof(T).Name}', before initializing logging.");
+		}
+
 		return _factory.CreateLogger<T>();
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For(Type type)
 	{
+		Guard.Against.Null(type);
+
+		if (_factory == null)
+		{
+			throw new InvalidOperationException($"Attempting to create logger for type '{type.Name}', before initializing logging.");
+		}
+
 		return _factory.CreateLogger(type);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For(string category)
 	{
+		Guard.Against.NullOrWhiteSpace(category);
+
+		if (_factory == null)
+		{
+			throw new InvalidOperationException($"Attempting to create logger for category '{category}', before initializing logging.");
+		}
+
 		return _factory.CreateLogger(category);
 	}
 }
