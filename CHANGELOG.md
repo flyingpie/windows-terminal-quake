@@ -2,7 +2,13 @@
 
 ## [vNext]
 
-## [2.0.8] / 2024
+## [2.0.9] / Unreleased
+- Reworked how windows are tracked and attached to, should fix a lot of "Main window handle not available yet"-issues.
+- Added support for multiple configuration file locations (see docs for more info).
+- Moved default log location to temp directory.
+- Added "Open logs" button to tray icon.
+
+## [2.0.8] / 2024-04-28
 - Automated Scoop and WinGet manifest generation.
 - Automated GitHub release creation.
 
