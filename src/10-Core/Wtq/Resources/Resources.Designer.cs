@@ -69,5 +69,55 @@ namespace Wtq.Resources {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
+        ///	// Docs: https://wtq.flyingpie.nl
+        ///	&quot;$schema&quot;: &quot;wtq.schema.2.json&quot;,
+        ///
+        ///	&quot;Apps&quot;: [
+        ///		// Example with PowerShell
+        ///		{
+        ///			&quot;Name&quot;: &quot;PowerShell&quot;,
+        ///			&quot;HotKeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
+        ///			&quot;FileName&quot;: &quot;powershell&quot;
+        ///		}
+        ///	],
+        ///
+        ///	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
+        ///	&quot;HotKeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;Q&quot; } ]
+        ///}.
+        /// </summary>
+        public static string wtq_example_ps {
+            get {
+                return ResourceManager.GetString("wtq_example_ps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
+        ///	// Docs: https://wtq.flyingpie.nl
+        ///	&quot;$schema&quot;: &quot;wtq.schema.2.json&quot;,
+        ///
+        ///	&quot;Apps&quot;: [
+        ///		// Example with Windows Terminal
+        ///		{
+        ///			&quot;Name&quot;: &quot;Terminal&quot;,
+        ///			&quot;HotKeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
+        ///			&quot;FileName&quot;: &quot;wt&quot;,
+        ///			&quot;ProcessName&quot;: &quot;WindowsTerminal&quot;
+        ///		}
+        ///	],
+        ///
+        ///	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
+        ///	&quot;HotKeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string wtq_example_wt {
+            get {
+                return ResourceManager.GetString("wtq_example_wt", resourceCulture);
+            }
+        }
     }
 }
