@@ -37,7 +37,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 			return true;
 		}
 
-		return Name == other.Name;
+		return Id == other.Id;
 	}
 
 	public override bool Equals(object? obj)
@@ -71,4 +71,6 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 	public abstract void SetTaskbarIconVisible(bool isVisible);
 
 	public abstract void SetTransparency(int transparency);
+
+	public override string ToString() => $"[{Id}] {Name}";
 }
