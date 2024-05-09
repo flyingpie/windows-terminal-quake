@@ -20,10 +20,7 @@ public class Retry : IRetry
 	public TResult Execute<TResult>(Func<TResult> action)
 	{
 		return
-			ExecuteAsync(() =>
-			{
-				return Task.FromResult(action());
-			})
+			ExecuteAsync(() => Task.FromResult(action()))
 			.GetAwaiter()
 			.GetResult();
 	}

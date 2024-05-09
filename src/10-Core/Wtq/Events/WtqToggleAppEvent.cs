@@ -2,5 +2,5 @@
 
 public sealed class WtqToggleAppEvent : IWtqEvent
 {
-	public WtqApp? App { get; set; }
+	public WtqApp? App { get; init; }
 }

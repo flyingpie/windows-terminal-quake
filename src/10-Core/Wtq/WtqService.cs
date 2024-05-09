@@ -17,7 +17,7 @@ public sealed class WtqService(
 	private readonly ILogger<WtqService> _log = log ?? throw new ArgumentNullException(nameof(log));
 
 	private WtqApp? _lastOpen;
-	private WtqApp? open;
+	private WtqApp? _open;
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
@@ -38,11 +38,11 @@ public sealed class WtqService(
 
 	private async Task HandleAppFocusEventAsync(WtqAppFocusEvent ev)
 	{
-		if (ev.App != null && ev.App == open && !ev.GainedFocus)
+		if (ev.App != null && ev.App == _open && !ev.GainedFocus)
 		{
-			await open.CloseAsync().ConfigureAwait(false);
-			_lastOpen = open;
-			open = null;
+			await _open.CloseAsync().ConfigureAwait(false);
+			_lastOpen = _open;
+			_open = null;
 		}
 	}
 
@@ -53,51 +53,51 @@ public sealed class WtqService(
 		// If the action does not point to a single app, toggle the most recent one.
 		if (app == null)
 		{
-			if (open != null)
+			// If we still have an app open, close it now.
+			if (_open != null)
 			{
-				await open.CloseAsync().ConfigureAwait(false);
-				_lastOpen = open; // TODO: Doesn't include focus lost.
-				open = null;
+				await _open.CloseAsync().ConfigureAwait(false);
+				_lastOpen = _open;
+				_open = null;
 				_appMon.RefocusLastNonWtqApp();
 				return;
 			}
-			else
-			{
-				if (_lastOpen == null)
-				{
-					// TODO
-					var first = _appRepo.Apps.FirstOrDefault();
-					if (first != null)
-					{
-						await first.OpenAsync().ConfigureAwait(false);
-					}
 
-					open = first;
-					_lastOpen = first;
-					return;
+			// If we don't yet have an app open, open either the most recently used one, or the first one.
+			if (_lastOpen == null)
+			{
+				// TODO
+				var first = _appRepo.Apps.FirstOrDefault();
+				if (first != null)
+				{
+					await first.OpenAsync().ConfigureAwait(false);
 				}
 
-				open = _lastOpen;
-				await open.OpenAsync().ConfigureAwait(false);
+				_open = first;
+				_lastOpen = first;
 				return;
 			}
+
+			_open = _lastOpen;
+			await _open.OpenAsync().ConfigureAwait(false);
+			return;
 		}
 
-		if (open != null)
+		if (_open != null)
 		{
-			if (open == app)
+			if (_open == app)
 			{
 				await app.CloseAsync().ConfigureAwait(false);
-				_lastOpen = open;
-				open = null;
+				_lastOpen = _open;
+				_open = null;
 				_appMon.RefocusLastNonWtqApp();
 			}
 			else
 			{
-				await open.CloseAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
+				await _open.CloseAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
 				await app.OpenAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
 
-				open = app;
+				_open = app;
 			}
 
 			return;
@@ -107,7 +107,7 @@ public sealed class WtqService(
 		_log.LogInformation("Toggling app {App}", app);
 		if (await app.OpenAsync().ConfigureAwait(false))
 		{
-			open = app;
+			_open = app;
 		}
 	}
 }

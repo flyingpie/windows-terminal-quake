@@ -2,7 +2,6 @@
 
 public interface IWtqFocusTracker
 {
-	WtqApp? ForegroundApp { get; }
-
+	// TODO: Remove after refactoring to event.
 	WtqWindow? LastNonWtqForeground { get; }
 }

@@ -9,32 +9,32 @@ public sealed class WtqOptions
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
 	[Required]
-	public IEnumerable<WtqAppOptions> Apps { get; set; }
+	public IEnumerable<WtqAppOptions> Apps { get; init; }
 		= [];
 
 	/// <inheritdoc cref="WtqAppOptions.AttachMode"/>
-	public AttachMode AttachMode { get; set; }
+	public AttachMode AttachMode { get; init; }
 		= AttachMode.FindOrStart;
 
 	/// <summary>
 	/// Where to position an app on the chosen monitor, horizontally.<br/>
 	/// Defaults to <see cref="HorizontalAlign.Center"/>.
 	/// </summary>
-	public HorizontalAlign HorizontalAlign { get; set; }
+	public HorizontalAlign HorizontalAlign { get; init; }
 		= HorizontalAlign.Center;
 
 	/// <summary>
 	/// Horizontal screen coverage, as a percentage.<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public float HorizontalScreenCoverage { get; set; }
+	public float HorizontalScreenCoverage { get; init; }
 		= 95f;
 
 	/// <summary>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	[Required]
-	public IEnumerable<HotKeyOptions> HotKeys { get; set; }
+	public IEnumerable<HotKeyOptions> HotKeys { get; init; }
 		= [];
 
 	/// <summary>
@@ -42,21 +42,21 @@ public sealed class WtqOptions
 	/// Zero based, eg. 0, 1, etc.<br/>
 	/// Defaults to "0".
 	/// </summary>
-	public int MonitorIndex { get; set; }
+	public int MonitorIndex { get; init; }
 
 	/// <summary>
 	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
 	/// 0 (invisible) - 100 (opaque)..<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public int Opacity { get; set; }
+	public int Opacity { get; init; }
 		= 100;
 
 	/// <summary>
 	/// What monitor to preferrably drop the app.<br/>
 	/// "WithCursor" (default), "Primary" or "AtIndex".
 	/// </summary>
-	public PreferMonitor PreferMonitor { get; set; }
+	public PreferMonitor PreferMonitor { get; init; }
 		= PreferMonitor.WithCursor;
 
 	/// <summary>
@@ -64,20 +64,20 @@ public sealed class WtqOptions
 	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
 	/// Defaults to "AlwaysHidden".
 	/// </summary>
-	public TaskBarIconVisibility TaskBarIconVisibility { get; set; }
+	public TaskBarIconVisibility TaskBarIconVisibility { get; init; }
 		= TaskBarIconVisibility.AlwaysHidden;
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
-	public int VerticalOffset { get; set; }
+	public int VerticalOffset { get; init; }
 
 	/// <summary>
 	/// Vertical screen coverage as a percentage (0-100).<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public float VerticalScreenCoverage { get; set; }
+	public float VerticalScreenCoverage { get; init; }
 		= 95f;
 
 	public HorizontalAlign GetHorizontalAlignForApp(WtqAppOptions opts)

@@ -2,7 +2,7 @@
 using Wtq.Events;
 using Wtq.Services.Apps;
 
-namespace Wtq.Service;
+namespace Wtq.Services;
 
 /// <summary>
 /// Receives raw hot key events from a platform-specific service, and converts them to more

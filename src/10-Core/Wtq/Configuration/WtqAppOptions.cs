@@ -3,7 +3,7 @@
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
-public class WtqAppOptions
+public sealed class WtqAppOptions
 {
 	/// <summary>
 	/// Command-line arguments that should be passed to the app when it's started.<br/>
