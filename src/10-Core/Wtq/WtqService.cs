@@ -6,15 +6,17 @@ namespace Wtq;
 
 public sealed class WtqService(
 	ILogger<WtqService> log,
+	IOptionsMonitor<WtqOptions> opts,
 	WtqAppMonitorService appMon,
 	IWtqAppRepo appRepo,
 	IWtqBus bus)
 	: IHostedService
 {
-	private readonly WtqAppMonitorService _appMon = appMon ?? throw new ArgumentNullException(nameof(appMon));
-	private readonly IWtqAppRepo _appRepo = appRepo ?? throw new ArgumentNullException(nameof(appRepo));
-	private readonly IWtqBus _bus = bus ?? throw new ArgumentNullException(nameof(bus));
-	private readonly ILogger<WtqService> _log = log ?? throw new ArgumentNullException(nameof(log));
+	private readonly WtqAppMonitorService _appMon = Guard.Against.Null(appMon);
+	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
+	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 
 	private WtqApp? _lastOpen;
 	private WtqApp? _open;
@@ -38,7 +40,11 @@ public sealed class WtqService(
 
 	private async Task HandleAppFocusEventAsync(WtqAppFocusEvent ev)
 	{
-		if (ev.App != null && ev.App == _open && !ev.GainedFocus)
+		// If focus moved to a different window, toggle out the current one (if there is an active app, and it's configured as such).
+		if (ev.App != null &&
+			ev.App == _open &&
+			!ev.GainedFocus &&
+			_opts.CurrentValue.GetHideOnFocusLostForApp(ev.App.Options))
 		{
 			await _open.CloseAsync().ConfigureAwait(false);
 			_lastOpen = _open;
