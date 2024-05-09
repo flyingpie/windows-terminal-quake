@@ -10,6 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\..\schema\wtq.schema.2.json" Link="wtq.schema.2.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\..\wtq.jsonc" Link="wtq.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

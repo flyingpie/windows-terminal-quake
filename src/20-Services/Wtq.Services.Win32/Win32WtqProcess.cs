@@ -18,6 +18,8 @@ public sealed class Win32WtqProcess : WtqWindow
 		_process = Guard.Against.Null(process);
 	}
 
+	public override int Id => _process.Id;
+
 	public override bool IsValid => !_process.HasExited;
 
 	public override string? Name => _process.ProcessName;
