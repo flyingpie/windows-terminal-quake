@@ -1,7 +1,5 @@
 ﻿#pragma warning disable
 
-using Ardalis.GuardClauses;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -11,18 +9,20 @@ public static class Log
 {
 	private static ILoggerFactory _factory;
 
-	public static void Configure(IConfiguration configuration)
+	public static void Configure()
 	{
+		var path = Path.Combine(WtqPaths.GetWtqTempDir(), "logs-.txt");
+
 		Serilog.Log.Logger = new LoggerConfiguration()
 			.MinimumLevel.Verbose()
 
 			.WriteTo.Console()
 
 			.WriteTo.File(
-				path: Path.Combine(AppPaths.PathToAppDir, "logs", ".txt"),
+				path: path,
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
-				retainedFileCountLimit: 3)
+				retainedFileCountLimit: 5)
 			.CreateLogger();
 
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);

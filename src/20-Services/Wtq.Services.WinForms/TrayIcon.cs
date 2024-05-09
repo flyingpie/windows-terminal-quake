@@ -1,4 +1,6 @@
-﻿namespace Wtq.Services.WinForms;
+﻿using Wtq.Configuration;
+
+namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
@@ -22,6 +24,8 @@ public sealed class TrayIcon : IDisposable
 				CreateOpenWebsiteItem(),
 
 				CreateOpenSettingsItem(),
+
+				CreateOpenLogItem(),
 
 				CreateExitItem(exitHandler),
 			});
@@ -56,8 +60,6 @@ public sealed class TrayIcon : IDisposable
 	{
 		_notificationIcon?.Dispose();
 		_notificationIcon = null;
-
-		Application.Exit();
 	}
 
 	private static ToolStripMenuItem CreateExitItem(Action<object?, EventArgs> exitHandler)
@@ -113,7 +115,26 @@ public sealed class TrayIcon : IDisposable
 			// }
 			Process.Start(new ProcessStartInfo()
 			{
-				FileName = AppPaths.PathToAppConf,
+				FileName = WtqOptionsPath.Instance.Path,
+				UseShellExecute = true,
+			});
+		};
+
+		return mnuOpenSettings;
+	}
+
+	private static ToolStripMenuItem CreateOpenLogItem()
+	{
+		var mnuOpenSettings = new ToolStripMenuItem("Open logs")
+		{
+			Enabled = true,
+		};
+
+		mnuOpenSettings.Click += (s, a) =>
+		{
+			Process.Start(new ProcessStartInfo()
+			{
+				FileName = WtqPaths.GetWtqLogDir(),
 				UseShellExecute = true,
 			});
 		};
