@@ -5,15 +5,10 @@ namespace Wtq.Services.AppBoundsProviders;
 /// <summary>
 /// Moves the terminal from- and to where the user put it, maintaining both the original position and size.
 /// </summary>
-public class InitialAppBoundsProvider : IAppBoundsProvider
+public class InitialAppBoundsProvider(
+	WtqRect initialBounds)
+	: IAppBoundsProvider
 {
-	private WtqRect _initialBounds;
-
-	public InitialAppBoundsProvider(WtqRect initialBounds)
-	{
-		_initialBounds = initialBounds;
-	}
-
 	/// <inheritdoc/>
 	public WtqRect GetNextAppBounds(
 		WtqApp app,
@@ -24,27 +19,27 @@ public class InitialAppBoundsProvider : IAppBoundsProvider
 	{
 		if (!isOpening && progress >= 1)
 		{
-			_initialBounds = currentAppBounds;
+			initialBounds = currentAppBounds;
 		}
 
 		var res = new WtqRect()
 		{
 			// Maintain initial X
-			X = _initialBounds.X,
+			X = initialBounds.X,
 
 			// Move to initial Y
-			Y = -currentAppBounds.Height + (int)Math.Round(currentAppBounds.Height * progress) + _initialBounds.Y,
+			Y = -currentAppBounds.Height + (int)Math.Round(currentAppBounds.Height * progress) + initialBounds.Y,
 
 			// Initial width
-			Width = _initialBounds.Width,
+			Width = initialBounds.Width,
 
 			// Initial height
-			Height = _initialBounds.Height,
+			Height = initialBounds.Height,
 		};
 
 		if (isOpening && progress >= 1)
 		{
-			_initialBounds = res;
+			initialBounds = res;
 		}
 
 		return res;

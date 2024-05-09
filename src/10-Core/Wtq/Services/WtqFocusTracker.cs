@@ -15,9 +15,8 @@ public sealed class WtqFocusTracker(
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
 	private readonly IWtqProcessService _procService = Guard.Against.Null(procService);
 
+	private WtqApp? _foregroundApp;
 	private bool _isRunning = true;
-
-	public WtqApp? ForegroundApp { get; private set; }
 
 	public WtqWindow? LastNonWtqForeground { get; private set; }
 
@@ -42,17 +41,17 @@ public sealed class WtqFocusTracker(
 					}
 
 					// Nothing changed.
-					if (pr == ForegroundApp)
+					if (pr == _foregroundApp)
 					{
 						continue;
 					}
 
 					// Did not have focus before, got focus now.
-					if (ForegroundApp == null && pr != null)
+					if (_foregroundApp == null && pr != null)
 					{
 						// App gained focus.
 						_log.LogInformation("App '{App}' gained focus", pr);
-						ForegroundApp = pr;
+						_foregroundApp = pr;
 						_bus.Publish(new WtqAppFocusEvent()
 						{
 							App = pr,
@@ -61,29 +60,28 @@ public sealed class WtqFocusTracker(
 						continue;
 					}
 
-					if (ForegroundApp != null && ForegroundApp != pr)
+					if (_foregroundApp == null || _foregroundApp == pr)
 					{
-						if (pr == null)
+						continue;
+					}
+
+					if (pr == null)
+					{
+						// App lost focus.
+						_log.LogInformation("App '{App}' lost focus (went to window {Window})", _foregroundApp, fgWindow);
+
+						_bus.Publish(new WtqAppFocusEvent()
 						{
-							// App lost focus.
-							_log.LogInformation("App '{App}' lost focus (went to window {Window})", ForegroundApp, fgWindow);
+							App = _foregroundApp,
+							GainedFocus = false,
+						});
 
-							_bus.Publish(new WtqAppFocusEvent()
-							{
-								App = ForegroundApp,
-								GainedFocus = false,
-							});
-
-							ForegroundApp = null;
-
-							continue;
-						}
-						else
-						{
-							_log.LogInformation("Focus moved from app '{AppFrom}' to app '{AppTo}'", ForegroundApp, pr);
-							ForegroundApp = pr;
-							continue;
-						}
+						_foregroundApp = null;
+					}
+					else
+					{
+						_log.LogInformation("Focus moved from app '{AppFrom}' to app '{AppTo}'", _foregroundApp, pr);
+						_foregroundApp = pr;
 					}
 				}
 				catch (Exception ex)

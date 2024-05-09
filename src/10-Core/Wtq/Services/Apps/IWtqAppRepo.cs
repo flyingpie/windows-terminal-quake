@@ -2,7 +2,7 @@
 
 public interface IWtqAppRepo : IAsyncDisposable
 {
-	IReadOnlyCollection<WtqApp> Apps { get; }
+	IEnumerable<WtqApp> Apps { get; }
 
 	WtqApp? GetAppByName(string name);
 

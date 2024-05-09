@@ -21,7 +21,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		_toggleService = Guard.Against.Null(toggleService);
 	}
 
-	public IReadOnlyCollection<WtqApp> Apps => _apps;
+	public IEnumerable<WtqApp> Apps => _apps;
 
 	public async Task UpdateAppsAsync()
 	{

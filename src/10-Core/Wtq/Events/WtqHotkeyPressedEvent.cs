@@ -2,11 +2,11 @@
 
 public sealed class WtqHotKeyPressedEvent : IWtqEvent
 {
-	public WtqApp? App { get; set; }
+	public WtqApp? App { get; init; }
 
-	public Keys Key { get; set; }
+	public Keys Key { get; init; }
 
-	public KeyModifiers Modifiers { get; set; }
+	public KeyModifiers Modifiers { get; init; }
 
 	public override string ToString() => $"[{Modifiers}] {Key}";
 }

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Wtq.Configuration;
 using Wtq.Events;
-using Wtq.Service;
 using Wtq.Services;
 using Wtq.Services.AnimationTypeProviders;
 using Wtq.Services.AppBoundsProviders;

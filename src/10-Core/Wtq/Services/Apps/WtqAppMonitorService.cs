@@ -54,7 +54,7 @@ public class WtqAppMonitorService
 					_log.LogError(ex, "Error updating list of apps: {Message}", ex.Message);
 				}
 
-				await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+				await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken).ConfigureAwait(false);
 			}
 		});
 

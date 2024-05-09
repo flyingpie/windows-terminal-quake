@@ -110,6 +110,7 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 	}
 
+	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
 	public WtqRect GetWindowRect()
 	{
 		if (Process == null)
