@@ -21,6 +21,9 @@ public sealed class WtqAppOptions
 	[Required]
 	public string? FileName { get; set; }
 
+	/// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
+	public bool? HideOnFocusLost { get; init; }
+
 	/// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
 	public HorizontalAlign? HorizontalAlign { get; set; }
 

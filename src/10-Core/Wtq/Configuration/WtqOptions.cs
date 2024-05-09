@@ -17,6 +17,13 @@ public sealed class WtqOptions
 		= AttachMode.FindOrStart;
 
 	/// <summary>
+	/// Whether the app should be toggled out when another app gets focus.<br/>
+	/// Defaults to "true".
+	/// </summary>
+	public bool HideOnFocusLost { get; init; }
+		= true;
+
+	/// <summary>
 	/// Where to position an app on the chosen monitor, horizontally.<br/>
 	/// Defaults to <see cref="HorizontalAlign.Center"/>.
 	/// </summary>
@@ -79,6 +86,13 @@ public sealed class WtqOptions
 	/// </summary>
 	public float VerticalScreenCoverage { get; init; }
 		= 95f;
+
+	public bool GetHideOnFocusLostForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.HideOnFocusLost ?? HideOnFocusLost;
+	}
 
 	public HorizontalAlign GetHorizontalAlignForApp(WtqAppOptions opts)
 	{

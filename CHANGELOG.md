@@ -7,6 +7,27 @@
 - Added support for multiple configuration file locations (see docs for more info).
 - Moved default log location to temp directory.
 - Added "Open logs" button to tray icon.
+- Added "HideOnFocusLost", which controls whether an app should be toggled out if another app gains focus.
+
+Globally, for all apps:
+```json
+{
+  "HideOnFocusLost": true | false
+}
+```
+
+Or per app:
+```json
+{
+  "Apps": [
+    {
+      "Name": "Terminal",
+      "HideOnFocusLost": true | false
+    },
+    ...
+  ]
+}
+```
 
 ## [2.0.8] / 2024-04-28
 - Automated Scoop and WinGet manifest generation.
@@ -19,7 +40,7 @@
 ![image](https://github.com/flyingpie/windows-terminal-quake/assets/1295673/ee95e8bd-b6b2-4c48-a680-60e36a4398e1)
 
 Globally, for all apps:
-```jsonc
+```json
 {
   "Opacity": 0-100,
   "TaskBarIconVisibility": "AlwaysHidden | AlwaysVisible"
@@ -27,7 +48,7 @@ Globally, for all apps:
 ```
 
 Or per app:
-```jsonc
+```json
 {
   "Apps": [
     {
@@ -47,7 +68,7 @@ Or per app:
 ![wtq-sizing-01](https://github.com/flyingpie/windows-terminal-quake/assets/1295673/0f0a8f81-b0d5-4256-a15d-ac384e6386a1)
 
 Globally, for all apps:
-```jsonc
+```json
 {
   // Horizontal screen coverage, as a percentage (defaults to 95).
   "HorizontalScreenCoverage": 95,
@@ -61,7 +82,7 @@ Globally, for all apps:
 ```
 
 Or per app:
-```jsonc
+```json
 {
   "Apps": [
     {
@@ -88,7 +109,7 @@ Initial support for auto-starting apps.
 The configuration file has been simplified.
 
 Old syntax:
-```jsonc
+```json
 "Apps": [
   {
     "Name": "Terminal",
@@ -106,7 +127,7 @@ Old syntax:
 The "**ProcessName**"-property is optional for processes where they are the same.
 
 New syntax:
-```jsonc
+```json
 "Apps": [
   {
     "Name": "Terminal",
@@ -130,7 +151,7 @@ Always starts a new process, specifically to be used by WTQ. Meant for apps that
 Attaches whatever app has focus, when the hot key is pressed. Keeps the app attached until WTQ is closed.
 
 The mode can be specified per app (note that "FindOrStart" is the default:
-```jsonc
+```json
 "Apps": [
   {
     "Name": "Terminal",
@@ -147,7 +168,7 @@ The mode can be specified per app (note that "FindOrStart" is the default:
 
 The setting is available at the root config level, and can be overridden per application.
 
-```jsonc
+```json
 {
   "PreferMonitor": "WithCursor", // WithCursor | Primary | AtIndex
   "MonitorIndex": 0,
