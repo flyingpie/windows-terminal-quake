@@ -46,7 +46,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public WtqAppOptions Options => _optionsAccessor();
 
-	public WtqWindow? Process { get; set; }
+	public WtqWindow? Process { get; private set; }
 
 	public string? ProcessDescription => Process == null
 		? "<no process attached>"
@@ -179,7 +179,7 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		// TODO: Only update the window handles on app start, and then on hot key pressed.
 		// Check that if we have a process handle, the process is still active.
-		if (Process != null && !Process.IsValid)
+		if (Process is { IsValid: false })
 		{
 			_log.LogInformation("Process '{ProcessName}' exited, releasing handle", Process);
 			Process = null;

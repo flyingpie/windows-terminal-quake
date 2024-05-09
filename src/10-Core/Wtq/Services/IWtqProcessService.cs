@@ -11,7 +11,7 @@ public interface IWtqProcessService
 	Task<WtqWindow?> CreateAsync(WtqAppOptions opts);
 
 	/// <summary>
-	/// Looks for a process that matches the specified <paramref name="predicate"/>.
+	/// Looks for a process that matches the specified <paramref name="opts"/>.
 	/// </summary>
 	WtqWindow? FindProcess(WtqAppOptions opts);
 

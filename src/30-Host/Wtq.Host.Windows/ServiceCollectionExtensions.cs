@@ -1,7 +1,5 @@
-﻿using Ardalis.GuardClauses;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace Wtq.Host.Windows;
 

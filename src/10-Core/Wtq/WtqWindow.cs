@@ -6,47 +6,28 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 {
 	public abstract int Id { get; }
 
+	/// <summary>
+	/// Whether the window handle is still pointing to an existing window.
+	/// </summary>
 	public abstract bool IsValid { get; }
 
 	public abstract string? Name { get; }
 
 	public abstract WtqRect WindowRect { get; }
 
-	public static bool operator !=(WtqWindow left, WtqWindow right)
+	public static bool operator ==(WtqWindow? left, WtqWindow? right)
 	{
-		return !(left == right);
+		return Equals(left, right);
 	}
 
-	public static bool operator ==(WtqWindow left, WtqWindow right)
+	public static bool operator !=(WtqWindow? left, WtqWindow? right)
 	{
-		if (ReferenceEquals(left, right))
-		{
-			return true;
-		}
-
-		if (ReferenceEquals(left, null))
-		{
-			return false;
-		}
-
-		if (ReferenceEquals(right, null))
-		{
-			return false;
-		}
-
-		return left.Equals(right);
-	}
-
-	public abstract void BringToForeground();
-
-	public override bool Equals(object? obj)
-	{
-		return Equals(obj as WtqWindow);
+		return !Equals(left, right);
 	}
 
 	public bool Equals(WtqWindow? other)
 	{
-		if (ReferenceEquals(other, null))
+		if (ReferenceEquals(null, other))
 		{
 			return false;
 		}
@@ -56,13 +37,30 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 			return true;
 		}
 
-		return Id == other.Id;
+		return Name == other.Name;
+	}
+
+	public override bool Equals(object? obj)
+	{
+		if (ReferenceEquals(null, obj))
+		{
+			return false;
+		}
+
+		if (ReferenceEquals(this, obj))
+		{
+			return true;
+		}
+
+		return obj.GetType() == GetType() && Equals((WtqWindow)obj);
 	}
 
 	public override int GetHashCode()
 	{
 		return Id;
 	}
+
+	public abstract void BringToForeground();
 
 	public abstract bool Matches(WtqAppOptions opts);
 

@@ -12,9 +12,10 @@ public sealed class WtqFocusTracker(
 {
 	private readonly IWtqAppRepo _appsRepo = Guard.Against.Null(appsRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
-	private readonly bool _isRunning = true;
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
 	private readonly IWtqProcessService _procService = Guard.Against.Null(procService);
+
+	private bool _isRunning = true;
 
 	public WtqApp? ForegroundApp { get; private set; }
 
@@ -97,6 +98,8 @@ public sealed class WtqFocusTracker(
 
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
+		_isRunning = false;
+
 		return Task.CompletedTask;
 	}
 }
