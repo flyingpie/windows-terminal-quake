@@ -10,8 +10,9 @@ public class WtqAppMonitorService
 {
 	private readonly IWtqAppRepo _apps;
 	private readonly IWtqFocusTracker _focusTracker;
-	private readonly bool _isRunning = true;
 	private readonly ILogger _log = Log.For<WtqAppMonitorService>();
+
+	private bool _isRunning = true;
 
 	public WtqAppMonitorService(
 		IWtqAppRepo appRepo,
@@ -22,7 +23,7 @@ public class WtqAppMonitorService
 	}
 
 	/// <summary>
-	/// Attempt to re-focus the last app that is not toggled by WTQ.</br>
+	/// Attempt to re-focus the last app that is not toggled by WTQ.<br/>
 	/// Ensures that input gets sent to the app that previously was on the foreground.
 	/// </summary>
 	public void RefocusLastNonWtqApp()
@@ -62,6 +63,8 @@ public class WtqAppMonitorService
 
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
+		_isRunning = false;
+
 		return Task.CompletedTask;
 	}
 

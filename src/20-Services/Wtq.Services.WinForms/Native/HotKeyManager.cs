@@ -19,6 +19,7 @@ internal static class HotKeyManager
 
 	static HotKeyManager()
 	{
+		// TODO: Thread doesn't exit properly.
 		Thread messageLoop = new(delegate ()
 		{
 			Application.Run(new MessageWindow());

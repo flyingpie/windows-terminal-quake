@@ -10,6 +10,7 @@ public sealed class Win32WtqProcess : WtqWindow
 {
 	private static readonly ILogger _log = Log.For<Win32WtqProcess>();
 
+	// TODO: Refresh?
 	private readonly Process _process;
 
 	public Win32WtqProcess(Process process)
@@ -17,16 +18,7 @@ public sealed class Win32WtqProcess : WtqWindow
 		_process = Guard.Against.Null(process);
 	}
 
-	public override int Id => _process.Id;
-
-	public override bool IsValid
-	{
-		get
-		{
-			// TODO: Refresh?
-			return !_process.HasExited;
-		}
-	}
+	public override bool IsValid => !_process.HasExited;
 
 	public override string? Name => _process.ProcessName;
 
@@ -122,7 +114,12 @@ public sealed class Win32WtqProcess : WtqWindow
 		User32.SetWindowLong(_process.MainWindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
 
 		// Set transparency
-		var isSet = User32.SetLayeredWindowAttributes(_process.MainWindowHandle, 0, (byte)Math.Ceiling(255f / 100f * transparency), User32.LWAALPHA);
+		var isSet = User32.SetLayeredWindowAttributes(
+			_process.MainWindowHandle,
+			0,
+			(byte)Math.Ceiling(255f / 100f * transparency),
+			User32.LWAALPHA);
+
 		if (!isSet)
 		{
 			throw new WtqException("Could not set window opacity");
