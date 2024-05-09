@@ -19,6 +19,8 @@ public sealed class Win32ProcessService : IWtqProcessService
 
 	public async Task<WtqWindow?> CreateAsync(WtqAppOptions opts)
 	{
+		Guard.Against.Null(opts);
+
 		return new Win32WtqProcess(await CreateProcessAsync(opts).ConfigureAwait(false));
 	}
 

@@ -37,9 +37,10 @@ public static class ProcessExtensions
 		return process.TryGetProperty(nameof(process.ProcessName), p => p.ProcessName, out processName);
 	}
 
-	public static bool TryGetProperty<TResult>(this Process process, string name, Func<Process, TResult> accessor, out TResult value)
+	private static bool TryGetProperty<TResult>(this Process process, string name, Func<Process, TResult> accessor, out TResult? value)
 	{
 		Guard.Against.Null(process);
+		Guard.Against.Null(accessor);
 
 		value = default;
 
