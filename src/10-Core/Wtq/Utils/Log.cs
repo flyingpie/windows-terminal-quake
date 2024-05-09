@@ -11,7 +11,7 @@ public static class Log
 
 	public static void Configure()
 	{
-		var path = Path.Combine(WtqPaths.GetWtqTempDir(), "logs-.txt");
+		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
 
 		Serilog.Log.Logger = new LoggerConfiguration()
 			.MinimumLevel.Verbose()
