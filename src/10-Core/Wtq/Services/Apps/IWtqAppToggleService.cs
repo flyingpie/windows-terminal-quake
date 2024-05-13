@@ -2,5 +2,7 @@
 
 public interface IWtqAppToggleService
 {
-	Task ToggleAsync(WtqApp app, bool open, int durationMs);
+	Task ToggleOnAsync(WtqApp app, ToggleModifiers mods);
+
+	Task ToggleOffAsync(WtqApp app, ToggleModifiers mods);
 }

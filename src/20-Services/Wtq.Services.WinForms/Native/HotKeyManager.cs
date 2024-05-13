@@ -1,7 +1,5 @@
 ﻿#pragma warning disable // MvdO: Hacky hook into the WinForms hotkey system.
 
-using Wtq.WinForms.Native;
-
 namespace Wtq.Services.WinForms.Native;
 
 /// <summary>

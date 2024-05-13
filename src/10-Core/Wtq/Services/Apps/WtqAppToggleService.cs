@@ -1,127 +1,161 @@
-﻿using Wtq.Services.AnimationTypeProviders;
-using Wtq.Services.AppBoundsProviders;
-using Wtq.Services.ScreenBoundsProviders;
+﻿using Wtq.Data;
 
 namespace Wtq.Services.Apps;
 
 public class WtqAppToggleService(
-	IAnimationProvider animTypeProvider,
-	IScreenBoundsProvider scrBoundsProvider,
-	IAppBoundsProvider termBoundsProvider)
+	IOptionsMonitor<WtqOptions> opts,
+	IWtqTween tween,
+	IWtqScreenInfoProvider scrInfoProvider)
 	: IWtqAppToggleService
 {
-	private readonly IAnimationProvider _animTypeProvider = Guard.Against.Null(animTypeProvider);
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
+	private readonly IWtqTween _tween = Guard.Against.Null(tween);
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
-	private readonly IScreenBoundsProvider _scrBoundsProvider = Guard.Against.Null(scrBoundsProvider);
-	private readonly IAppBoundsProvider _termBoundsProvider = Guard.Against.Null(termBoundsProvider);
+	private readonly IWtqScreenInfoProvider _scrInfoProvider = Guard.Against.Null(scrInfoProvider);
 
-	[SuppressMessage("Major Bug", "S2583:Conditionally executed code should be reachable", Justification = "MvdO: Frame time will be configurable.")]
-	public async Task ToggleAsync(WtqApp app, bool open, int durationMs)
+	public async Task ToggleOnAsync(WtqApp app, ToggleModifiers mods)
 	{
 		Guard.Against.Null(app);
 
-		// TODO: Change it so that this method doesn't even get called if we don't have a valid process.
-		if (!app.IsActive)
+		app.BringToForeground();
+
+		var durationMs = GetDurationMs(mods);
+		var screen = GetTargetScreenBounds(app);
+
+		var to = GetToggleOnRect(app, screen);
+		var from = to with
 		{
-			_log.LogWarning("Attempted to toggle inactive app '{App}'", app);
-			return;
-		}
+			Y = to.Height - 100f,
+		};
 
-		var animationFn = _animTypeProvider.GetAnimationFunction();
+		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseOutQuart, app.MoveWindow).ConfigureAwait(false);
 
-		// var frameTimeMs = QSettings.Instance.ToggleAnimationFrameTimeMs;
-		var frameTimeMs = 25;
+		_log.LogInformation("ToggleOn from '{From}' to '{To}'", from, to);
+	}
 
-		_log.LogInformation(open ? "Open" : "Close");
+	public async Task ToggleOffAsync(WtqApp app, ToggleModifiers mods)
+	{
+		Guard.Against.Null(app);
 
-		// Notify focus tracker
-		// if (open) FocusTracker.FocusGained(Process);
+		var durationMs = GetDurationMs(mods);
 
-		// TODO: Move to WtqService?
-		if (open)
+		var from1 = app.GetWindowRect();
+		var to = from1 with
 		{
-			app.BringToForeground();
-		}
+			Y = -from1.Height - 100f,
+		};
 
-		var screen = _scrBoundsProvider.GetTargetScreenBounds(app);
+		_log.LogInformation("ToggleOn from '{From}' to '{To}'", from1, to);
 
-		// Used to accurately measure how far we are in the animation
-		var stopwatch = new Stopwatch();
-		stopwatch.Start();
+		await _tween.AnimateAsync(from1, to, durationMs, AnimationType.EaseOutQuart, app.MoveWindow).ConfigureAwait(false);
+	}
 
-		// Run the open/close animation
-		while (stopwatch.ElapsedMilliseconds < durationMs)
+	/// <summary>
+	/// Returns a rectangle representing the screen we want to toggle the terminal onto.
+	/// </summary>
+	/// <param name="app">The app for which we're figuring out the screen bounds.</param>
+	public WtqRect GetTargetScreenBounds(WtqApp app)
+	{
+		Guard.Against.Null(app);
+
+		var prefMon = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
+		var monInd = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+
+		switch (prefMon)
 		{
-			var deltaMs = (float)stopwatch.ElapsedMilliseconds;
-
-			// Asynchronously start the timer for this frame (unless frameTimeMs is 0)
-			var frameTimer = frameTimeMs == 0
-				? Task.CompletedTask
-				: Task.Delay(TimeSpan.FromMilliseconds(frameTimeMs));
-
-			// Render the next frame of animation
-			var linearProgress = open
-				? deltaMs / durationMs
-				: 1.0 - (deltaMs / durationMs);
-
-			var wndRect = app.GetWindowRect();
-			var intermediateBounds = _termBoundsProvider.GetNextAppBounds(app, open, screen, wndRect, animationFn(linearProgress));
-
-			app.MoveWindow(intermediateBounds);
-
-#pragma warning disable S2589 // Boolean expressions should not be gratuitous // MvdO: Frame time will be configurable.
-			if (frameTimeMs > 0)
+			case PreferMonitor.AtIndex:
 			{
-				await frameTimer.ConfigureAwait(false); // Wait for the timer to end
+				var scrs = _scrInfoProvider.GetScreenRects();
+
+				if (scrs.Length > monInd)
+				{
+					return scrs[monInd];
+				}
+
+				_log.LogWarning(
+					"Option '{OptionName}' was set to {MonitorIndex}, but only {MonitorCount} screens were found, falling back to primary",
+					nameof(app.Options.MonitorIndex),
+					monInd,
+					scrs.Length);
+
+				return _scrInfoProvider.GetPrimaryScreenRect();
 			}
-#pragma warning restore S2589 // Boolean expressions should not be gratuitous
-		}
 
-		stopwatch.Stop();
+			case PreferMonitor.Primary:
+				return _scrInfoProvider.GetPrimaryScreenRect();
 
-		// To ensure we end up in exactly the correct final position
-		var wndRect2 = app.GetWindowRect();
-		var finalBounds = _termBoundsProvider.GetNextAppBounds(app, open, screen, wndRect2, open ? 1.0 : 0.0);
-		app.MoveWindow(rect: finalBounds);
+			case PreferMonitor.WithCursor:
+				return _scrInfoProvider.GetScreenWithCursor();
 
-		_log.LogInformation("Moved window to {Bounds}", finalBounds);
-
-		if (open)
-		{
-			// TODO: Only do this in cases where we want the app to disappear? Toggling window state causes flickering.
-			//// If vertical- and horizontal screen coverage is set to 100, maximize the window to make it actually fullscreen
-			// if (QSettings.Instance.MaximizeAfterToggle && QSettings.Instance.VerticalScreenCoverage >= 100 && QSettings.Instance.HorizontalScreenCoverage >= 100)
-			// {
-			// Process.SetWindowState(WindowShowStyle.Maximize);
-			// }
-			app.BringToForeground();
-		}
-		else
-		{
-			// TODO: Only do this in cases where we want the app to disappear? Toggling window state causes flickering.
-			// Minimize first, so the last window gets focus
-			// process.SetWindowState(WindowShowStyle.Minimize);
-
-			// Then hide, so the terminal windows doesn't linger on the desktop
-			// if (QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.AlwaysHidden || QSettings.Instance.TaskbarIconVisibility == TaskBarIconVisibility.WhenTerminalVisible)
-			// process.SetWindowState(WindowShowStyle.Hide);
+			default:
+				_log.LogWarning(
+					"Unknown value '{OptionValue}' for option '{OptionName}'",
+					prefMon,
+					nameof(app.Options.PreferMonitor));
+				return _scrInfoProvider.GetPrimaryScreenRect();
 		}
 	}
 
-	// private static bool ActiveWindowIsInFullscreen()
-	// {
-	// IntPtr fgWindow = User32.GetForegroundWindow();
-	// var appBounds = new Rect();
-	// var screen = new Rect();
-	// User32.GetWindowRect(User32.GetDesktopWindow(), ref screen);
+	/// <summary>
+	/// Returns the target bounds of the specified <param name="app"/>, when its toggling onto the screen.
+	/// </summary>
+	/// <param name="app">The app that's being toggle on. Used to fetch its options.</param>
+	/// <param name="screenBounds">The screen onto which the app is being toggled, used for alignment.</param>
+	/// <param name="progress">How far along we are in the animation, '0' for not started, to '1' for finished.</param>
+	public WtqRect GetToggleOnRect(
+		WtqApp app,
+		WtqRect screenBounds)
+	{
+		Guard.Against.Null(app);
 
-	// if (fgWindow != User32.GetDesktopWindow() && fgWindow != User32.GetShellWindow())
-	// {
-	// if (User32.GetWindowRect(fgWindow, ref appBounds))
-	// {
-	// return appBounds.Equals(screen);
-	// }
-	// }
-	// return false;
-	// }
+		// TODO: Version that moves apps off the bottom?
+
+		// Calculate terminal size.
+		var termWidth = (int)(screenBounds.Width * _opts.CurrentValue.HorizontalScreenCoverageIndexForApp(app.Options));
+		var termHeight = (int)(screenBounds.Height * _opts.CurrentValue.VerticalScreenCoverageIndexForApp(app.Options));
+
+		// Calculate horizontal position.
+		var x = app.Options.HorizontalAlign switch
+		{
+			// Left
+			HorizontalAlign.Left => screenBounds.X,
+
+			// Right
+			HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
+
+			// Center
+			_ => screenBounds.X + (int)Math.Ceiling((screenBounds.Width / 2f) - (termWidth / 2f)),
+		};
+
+		return new WtqRect()
+		{
+			// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
+			X = x,
+
+			// Y, top of the screen + offset
+			Y = screenBounds.Y + (int)_opts.CurrentValue.GetVerticalOffsetForApp(app.Options),
+
+			// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
+			Width = termWidth,
+
+			// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
+			Height = termHeight,
+		};
+	}
+
+	private static int GetDurationMs(ToggleModifiers mods)
+	{
+		switch (mods)
+		{
+			case ToggleModifiers.Instant:
+				return 0;
+
+			case ToggleModifiers.SwitchingApps:
+				return 50;
+
+			case ToggleModifiers.None:
+			default:
+				return 150;
+		}
+	}
 }

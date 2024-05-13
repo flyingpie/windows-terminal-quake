@@ -84,11 +84,9 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		var ms = GetTimeMs(mods);
+		_log.LogInformation("Closing app '{App}'", this);
 
-		_log.LogInformation("Closing app '{App}' in {Time}ms", this, ms);
-
-		await _toggler.ToggleAsync(this, false, ms).ConfigureAwait(false);
+		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
 	}
 
 	public async ValueTask DisposeAsync()
@@ -136,11 +134,9 @@ public sealed class WtqApp : IAsyncDisposable
 		// If we have an active process attached, toggle it open.
 		if (IsActive)
 		{
-			var ms = GetTimeMs(mods);
+			_log.LogInformation("Opening app '{App}'", this);
 
-			_log.LogInformation("Opening app '{App}' in {Time}ms", this, ms);
-
-			await _toggler.ToggleAsync(this, true, ms).ConfigureAwait(false);
+			await _toggler.ToggleOnAsync(this, mods).ConfigureAwait(false);
 
 			return true;
 		}
@@ -203,23 +199,6 @@ public sealed class WtqApp : IAsyncDisposable
 		if (Process != null && IsActive)
 		{
 			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
-		}
-	}
-
-	// TODO: Pull from options.
-	private static int GetTimeMs(ToggleModifiers mods)
-	{
-		switch (mods)
-		{
-			case ToggleModifiers.Instant:
-				return 0;
-
-			case ToggleModifiers.SwitchingApps:
-				return 50;
-
-			case ToggleModifiers.None:
-			default:
-				return 150;
 		}
 	}
 }

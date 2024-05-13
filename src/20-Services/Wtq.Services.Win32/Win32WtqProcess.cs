@@ -59,10 +59,10 @@ public sealed class Win32WtqProcess : WtqWindow
 	{
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: rect.X,
-			y: rect.Y,
-			nWidth: rect.Width,
-			nHeight: rect.Height,
+			x: (int)rect.X,
+			y: (int)rect.Y,
+			nWidth: (int)rect.Width,
+			nHeight: (int)rect.Height,
 			bRepaint: repaint);
 	}
 

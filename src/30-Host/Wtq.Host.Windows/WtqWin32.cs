@@ -6,10 +6,7 @@ using Serilog;
 using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services;
-using Wtq.Services.AnimationTypeProviders;
-using Wtq.Services.AppBoundsProviders;
 using Wtq.Services.Apps;
-using Wtq.Services.ScreenBoundsProviders;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 using Wtq.Utils;
@@ -59,9 +56,8 @@ public class WtqWin32
 					.AddSingleton<IRetry, Retry>()
 
 					// Core App Logic
-					.AddSingleton<IAnimationProvider, AnimationProvider>()
-					.AddSingleton<IScreenBoundsProvider, ScreenBoundsProvider>()
-					.AddSingleton<IAppBoundsProvider, MovingAppBoundsProvider>()
+					.AddSingleton<IWtqTween, WtqTween>()
+					.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>()
 
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 					.AddSingleton<WtqAppMonitorService>()
