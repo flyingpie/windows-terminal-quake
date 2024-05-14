@@ -41,7 +41,7 @@
 		}
 	],
 
-	// "HotKeys": [{ "Modifiers": "Control", "Key": "Q" }],
+	 "HotKeys": [{ "Modifiers": "Control", "Key": "Q" }],
 
 	"PreferMonitor": "WithCursor",
 
