@@ -1,6 +1,6 @@
 ﻿using Wtq.Data;
 
-namespace Wtq.Services;
+namespace Wtq.Utils;
 
 public interface IWtqTween
 {

@@ -1,6 +1,6 @@
 ﻿using Wtq.Data;
 
-namespace Wtq.Services;
+namespace Wtq.Utils;
 
 public sealed class WtqTween : IWtqTween
 {
@@ -25,8 +25,12 @@ public sealed class WtqTween : IWtqTween
 		var swFrame = Stopwatch.StartNew();
 		var animFunc = GetAnimationFunction(animType);
 
+		var frameCount = 0;
+
 		while (swTotal.ElapsedMilliseconds < durationMs)
 		{
+			frameCount++;
+
 			swFrame.Restart();
 
 			var sinceStartMs = (float)swTotal.ElapsedMilliseconds;
@@ -49,8 +53,7 @@ public sealed class WtqTween : IWtqTween
 		// To ensure we end up in exactly the correct final position.
 		move(to);
 
-		// TODO
-		_log.LogInformation("Moved window to {Bounds}", to);
+		_log.LogInformation("Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount}", swTotal.ElapsedMilliseconds, durationMs, frameCount);
 	}
 
 	private Func<double, double> GetAnimationFunction(AnimationType type)
