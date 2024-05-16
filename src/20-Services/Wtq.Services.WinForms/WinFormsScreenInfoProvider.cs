@@ -1,15 +1,11 @@
 ﻿using Wtq.Data;
 using Wtq.Exceptions;
+using Wtq.Services.Win32;
 
-namespace Wtq.Services.Win32;
+namespace Wtq.Services.WinForms;
 
-public sealed class WinFormsScreenCoordsProvider : IWtqScreenCoordsProvider
+public sealed class WinFormsScreenInfoProvider : IWtqScreenInfoProvider
 {
-	public WtqVec2I GetCursorPos()
-	{
-		return Cursor.Position.ToWtqVec2I();
-	}
-
 	public WtqRect GetPrimaryScreenRect()
 	{
 		var scr = Screen.PrimaryScreen
@@ -25,5 +21,15 @@ public sealed class WinFormsScreenCoordsProvider : IWtqScreenCoordsProvider
 			.AllScreens
 			.Select(s => s.Bounds.ToWtqRect())
 			.ToArray();
+	}
+
+	public WtqRect GetScreenWithCursor()
+	{
+		var scrs = GetScreenRects();
+		var c = Cursor.Position.ToWtqVec2I();
+
+		return scrs.Any(s => s.Contains(c))
+			? scrs.FirstOrDefault(s => s.Contains(c))
+			: GetPrimaryScreenRect();
 	}
 }
