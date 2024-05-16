@@ -10,13 +10,13 @@ public struct WtqRect : IEquatable<WtqRect>
 		Width = 1000,
 	};
 
-	public int Height { get; set; }
+	public float Height { get; set; }
 
-	public int Width { get; set; }
+	public float Width { get; set; }
 
-	public int X { get; set; }
+	public float X { get; set; }
 
-	public int Y { get; set; }
+	public float Y { get; set; }
 
 	public static bool operator !=(WtqRect left, WtqRect right)
 	{
@@ -26,6 +26,14 @@ public struct WtqRect : IEquatable<WtqRect>
 	public static bool operator ==(WtqRect left, WtqRect right)
 	{
 		return left.Equals(right);
+	}
+
+	public static WtqRect Lerp(WtqRect b1, WtqRect b2, float by)
+	{
+		return new WtqRect()
+		{
+			X = float.Lerp(b1.X, b2.X, by), Y = float.Lerp(b1.Y, b2.Y, by), Width = float.Lerp(b1.Width, b2.Width, by), Height = float.Lerp(b1.Height, b2.Height, by),
+		};
 	}
 
 	public readonly bool Contains(WtqVec2I pos)

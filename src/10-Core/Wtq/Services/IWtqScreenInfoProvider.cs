@@ -2,11 +2,11 @@
 
 namespace Wtq.Services;
 
-public interface IWtqScreenCoordsProvider
+public interface IWtqScreenInfoProvider
 {
-	WtqVec2I GetCursorPos();
-
 	WtqRect GetPrimaryScreenRect();
 
 	WtqRect[] GetScreenRects();
+
+	WtqRect GetScreenWithCursor();
 }

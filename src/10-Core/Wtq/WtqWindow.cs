@@ -13,6 +13,9 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract string? Name { get; }
 
+	/// <summary>
+	/// The rectangle of the window itself.
+	/// </summary>
 	public abstract WtqRect WindowRect { get; }
 
 	public static bool operator ==(WtqWindow? left, WtqWindow? right)

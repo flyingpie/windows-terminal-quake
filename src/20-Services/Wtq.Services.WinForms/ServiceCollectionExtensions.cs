@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddWinFormsScreenCoordsProvider(this IServiceCollection services)
 	{
 		return services
-			.AddSingleton<IWtqScreenCoordsProvider, WinFormsScreenCoordsProvider>();
+			.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>();
 	}
 
 	public static IServiceCollection AddWinFormsTrayIcon(this IServiceCollection services)
