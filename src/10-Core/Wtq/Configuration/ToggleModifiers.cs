@@ -11,7 +11,7 @@ public enum ToggleModifiers
 	None = 0,
 
 	/// <summary>
-	/// Toggle without animating.
+	/// Toggle without animating. Useful for setup, such as when WTQ is starting apps.
 	/// </summary>
 	Instant,
 
