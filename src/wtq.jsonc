@@ -1,49 +1,42 @@
 {
-	"$schema": "./wtq.schema.2.json",
+	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
+	// Docs: https://wtq.flyingpie.nl
+	"$schema": "../schema/wtq.schema.2.json",
 
 	"Apps": [
+		// Example with PowerShell
 		{
-			"Name":							"WezTerm",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName":						"D:/syncthing/apps/wezterm/wezterm-gui.exe",
-			"Opacity":						95
-		},
-		{
-			"Name":							"QDir",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName":						"D:/syncthing/apps/qdir/Q-Dir_x64.exe",
-			"HideOnFocusLost":				false
-		},
-		{
-			"Name":							"ProcessHacker",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D3" }],
-			"FileName":						"D:/syncthing/apps/process-hacker/ProcessHacker.exe"
-		},
-		{
-			"Name":							"KeePassXC",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D4" }],
-			"FileName":						"D:/syncthing/apps/keepassxc/KeePassXC.exe",
-			"Arguments":					"--allow-screencapture",
-			"ProcessName":					"KeePassXC",
-			"HorizontalAlign":				"Right",
-			"HorizontalScreenCoverage":		40,
-			"HideOnFocusLost":				false
-		},
-		{
-			"Name":							"Spotify",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D5" }],
-			"FileName":						"Spotify.exe"
-		},
-		{
-			"Name":							"Manual",
-			"AttachMode":					"Manual",
-			"HotKeys":						[{ "Modifiers": "Control", "Key": "D6" }]
+			"Name": "PowerShell",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"FileName": "powershell"
 		}
+
+		// Example with Windows Terminal
+		//{
+		//	"Name": "Terminal",
+		//	"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"FileName": "wt",
+		//	"ProcessName": "WindowsTerminal"
+		//}
 	],
 
-	 "HotKeys": [{ "Modifiers": "Control", "Key": "Q" }],
+	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
+	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
+	// What monitor to preferably drop the terminal.
+	// "WithCursor" (default), "Primary" or "AtIndex".
+	// Can be overridden per app.
 	"PreferMonitor": "WithCursor",
 
-	"MonitorIndex": 0
+	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+	// Zero based, eg. 0, 1, etc.
+	// Defaults to "0".
+	// Can be overridden per app.
+	"MonitorIndex": 0,
+
+	// Horizontal screen coverage, as a percentage (defaults to 95).
+	"HorizontalScreenCoverage": 95,
+
+	// Vertical screen coverage, as a percentage (defaults to 95).
+	"VerticalScreenCoverage": 95
 }
