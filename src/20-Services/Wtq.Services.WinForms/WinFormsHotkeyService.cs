@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Wtq.Events;
-using Wtq.Services.WinForms;
 using Wtq.Services.WinForms.Native;
 using Wtq.Utils;
 
-namespace Wtq.Services.Win32;
+namespace Wtq.Services.WinForms;
 
 public class WinFormsHotKeyService : IHostedService
 {

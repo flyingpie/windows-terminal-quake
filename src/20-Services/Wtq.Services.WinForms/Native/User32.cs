@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Wtq.WinForms.Native;
+namespace Wtq.Services.WinForms.Native;
 
 internal static class User32
 {
