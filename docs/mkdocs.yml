@@ -49,16 +49,17 @@ nav:
     - Toggle Animation: v1/settings/toggle-animation.md
     - Windows Terminal Command: v1/settings/windows-terminal-command.md
 
-- Misc:
-  - Changelog: misc/changelog.md
-  - Reporting Issues: misc/reporting-issues.md
+- Reporting Issues: misc/reporting-issues.md
 
 theme:
   name: material
   custom_dir: overrides
   favicon: assets/favicon.ico
   features:
+    - navigation.expand
     - navigation.sections
+    - navigation.tabs
+    - navigation.tracking
   font: false
   highlightjs: true
   hljs_languages:
@@ -68,8 +69,18 @@ theme:
     repo: fontawesome/brands/github
   logo: assets/favicon.png
   palette:
-    scheme: slate
-    primary: blue
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
 
 repo_name: windows-terminal-quake
 repo_url: http://github.com/flyingpie/windows-terminal-quake
