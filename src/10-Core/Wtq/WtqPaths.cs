@@ -27,10 +27,11 @@ public static class WtqPaths
 
 	/// <summary>
 	/// When creating a WTQ configuration file at runtime, place it here.
-	/// Windows:   C:/Users/username/.wtq.jsonc<br/>
-	/// Linux:     /home/username/.wtq.jsonc.
+	/// Windows:   C:/Users/username/wtq.jsonc<br/>
+	/// Linux:     /home/username/wtq.jsonc.
 	/// </summary>
-	public static string PreferredWtqConfigPath => Path.Combine(UserHome, ".wtq.jsonc");
+	// TODO: Put Linux version under "/home/username/.wtq.jsonc".
+	public static string PreferredWtqConfigPath => Path.Combine(UserHome, "wtq.jsonc");
 
 	/// <summary>
 	/// Ordered list of possible paths to WTQ configuration file.<br/>

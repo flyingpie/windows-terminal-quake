@@ -4,10 +4,10 @@
 
 	"Apps": [
 		{
-			// Didn't find Windows Terminal to be installed, so generated fallback to console host.
-			"Name": "Command Prompt",
+			// Didn't find Windows Terminal to be installed, so generated fallback to plain PowerShell prompt.
+			"Name": "PowerShell",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "conhost"
+			"FileName": "powershell"
 		}
 	],
 
