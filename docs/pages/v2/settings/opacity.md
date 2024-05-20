@@ -5,9 +5,23 @@ Note that this controls the transparency of the entire window, including the tit
 
 From ```0``` (invisible) to ```100``` (opaque).
 
+## Global
 ```json
 {
 	"Opacity": 80
+}
+```
+
+## Per App
+```json
+{
+	"Apps": [
+		{
+			"Name": "Terminal",
+			"Opacity": 80,
+			...
+		}
+	]
 }
 ```
 

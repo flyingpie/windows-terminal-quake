@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../taskbar-icon-visibility/">
+        <link rel="prev" href="../apps/">
       
       
-        <link rel="next" href="../windows-terminal-command/">
+        <link rel="next" href="../hot-keys/">
       
       
       <link rel="icon" href="../../../assets/favicon.ico">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Toggle Animation - Windows Terminal Quake</title>
+        <title>Hide On Focus Lost - Windows Terminal Quake</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#toggle-animation" class="md-skip">
+        <a href="#hide-on-focus-lost" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Toggle Animation
+              Hide On Focus Lost
             
           </span>
         </div>
@@ -210,10 +210,12 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -228,13 +230,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../v1/" class="md-tabs__link">
           
   
   WTQ v1
@@ -310,27 +310,30 @@
       
   
   
+    
   
   
+  
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -341,7 +344,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             WTQ v2
@@ -376,7 +379,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../v2/installation/" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -394,27 +397,30 @@
                 
   
   
+    
   
   
+  
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
         
           
+          
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1_3" >
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -425,7 +431,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             Settings
@@ -439,7 +445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../v2/settings/apps/" class="md-nav__link">
+      <a href="../apps/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -457,10 +463,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../v2/settings/hide-on-focus-lost/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Hide On Focus Lost
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -469,6 +495,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per App
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -481,463 +545,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../v2/settings/hot-keys/" class="md-nav__link">
+      <a href="../hot-keys/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Hot Keys
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../v2/settings/opacity/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Opacity
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../v2/settings/prefer-monitor/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Prefer Monitor
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../v2/settings/size-and-align/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Size and Align
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    WTQ v1
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            WTQ v1
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Getting Started
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Getting Started
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/direct-download/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Direct Download
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/get-from-scoop/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Get From Scoop
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/build-cake/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Build (Cake)
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/build-vs/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Build (Visual Studio)
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Settings
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_3">
-            <span class="md-nav__icon md-icon"></span>
-            Settings
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../always-on-top/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Always On Top
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../command-line-parameters/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Command Line Parameters
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../disable-when-active-app-is-in-fullscreen/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Disable When Active App Is In Fullscreen
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hide-on-focus-lost/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Hide On Focus Lost
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hotkeys/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Hotkeys
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../notifications/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Notifications
   </span>
   
 
@@ -1010,6 +622,63 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    WTQ v1
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            WTQ v1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1017,7 +686,393 @@
   
   
     <li class="md-nav__item">
-      <a href="../start-hidden/" class="md-nav__link">
+      <a href="../../../v1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/getting-started/direct-download/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Direct Download
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/getting-started/get-from-scoop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get From Scoop
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/getting-started/build-cake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build (Cake)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/getting-started/build-vs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build (Visual Studio)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Settings
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Settings
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/always-on-top/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Always On Top
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/command-line-parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Line Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/disable-when-active-app-is-in-fullscreen/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Disable When Active App Is In Fullscreen
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/hide-on-focus-lost/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hide On Focus Lost
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/hotkeys/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hotkeys
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/notifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Notifications
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/opacity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Opacity
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/prefer-monitor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prefer Monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/size-and-align/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Size and Align
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/start-hidden/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1038,7 +1093,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../suppress-hotkey-for-processes/" class="md-nav__link">
+      <a href="../../../v1/settings/suppress-hotkey-for-processes/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1059,7 +1114,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../taskbar-icon-visibility/" class="md-nav__link">
+      <a href="../../../v1/settings/taskbar-icon-visibility/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1077,30 +1132,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Toggle Animation
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../v1/settings/toggle-animation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1109,62 +1144,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-animation-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Animation Type
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-duration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Duration
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Mode
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-animation-frame-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Animation Frame Time
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1177,7 +1156,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows-terminal-command/" class="md-nav__link">
+      <a href="../../../v1/settings/windows-terminal-command/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1253,36 +1232,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#toggle-animation-type" class="md-nav__link">
+  <a href="#global" class="md-nav__link">
     <span class="md-ellipsis">
-      Toggle Animation Type
+      Global
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#toggle-duration" class="md-nav__link">
+  <a href="#per-app" class="md-nav__link">
     <span class="md-ellipsis">
-      Toggle Duration
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Mode
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#toggle-animation-frame-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      Toggle Animation Frame Time
+      Per App
     </span>
   </a>
   
@@ -1306,56 +1267,24 @@
   
 
 
-<h1 id="toggle-animation">Toggle Animation</h1>
-<h2 id="toggle-animation-type">Toggle Animation Type</h2>
-<p>Which animation type is used during toggle up/down.</p>
-<p>Supported values:</p>
-<ul>
-<li>Linear</li>
-<li>EaseInBack</li>
-<li>EaseInCubic</li>
-<li>EaseInOutSine</li>
-<li>EaseInQuart</li>
-<li>EaseOutBack</li>
-<li>EaseOutCubic</li>
-<li>EaseOutQuart</li>
-</ul>
-<p>See <a href="https://easings.net/">easings.net</a> for examples of the easings.</p>
-<p>Defaults to <code>EaseOutQuart</code>.</p>
+<h1 id="hide-on-focus-lost">Hide On Focus Lost</h1>
+<p>When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.</p>
+<p>Defaults to <code>true</code>.</p>
+<h2 id="global">Global</h2>
 <pre class="highlight"><code class="language-json">{
-    "ToggleAnimationType": "EaseOutQuart"
+    "HideOnFocusLost": false
 }</code></pre>
-<p><span class="by">Suggested and implemented by <a href="https://github.com/timmolderez">Tim Molderez</a></span></p>
-<h2 id="toggle-duration">Toggle Duration</h2>
-<p>How long it should take for the terminal to come down or go back up.
-This is an estimate, since because of the way the toggling works, some slow downs can happen.</p>
-<p>Setting this to <code>0</code> makes the toggle instant.</p>
+<h2 id="per-app">Per App</h2>
 <pre class="highlight"><code class="language-json">{
-    "ToggleDurationMs": 150
+    "Apps": [
+        {
+            "Name": "Terminal",
+            "HideOnFocusLost": false
+            ...
+        }
+    ]
 }</code></pre>
-<p><span class="by">Suggested by <a href="https://github.com/mikef-nl">Mike F</a></span></p>
-<h2 id="toggle-mode">Toggle Mode</h2>
-<p>How the terminal actually gets toggled on- and off the screen.</p>
-<p>Supported values:</p>
-<p><strong>Resize</strong></p>
-<p>Resizes the terminal window vertically until it is either at full size, or shrunk out of the way.
-This should work on any setup, but can cause some jumping of the terminal characters, such as the cursor.</p>
-<p><strong>Move</strong></p>
-<p>Moves the entire window off-screen to the top, which prevents jumping of the terminal characters, since the size of the terminal is kept constant.</p>
-<p>This doesn't work too great with vertically-stacked monitor setups, since the terminal might be pushed off to the monitor north of the active one.</p>
-<p>Defaults to <code>Resize</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleMode": "Resize"
-}</code></pre>
-<p><span class="by">Suggested by <a href="https://github.com/marxjohnson">Mark Johnson</a> and <a href="https://github.com/shanselman">Scott Hanselman</a></span></p>
-<h2 id="toggle-animation-frame-time">Toggle Animation Frame Time</h2>
-<p>How long each frame in the toggle animation takes in milliseconds.
-The lower this value, the smoother the animation, though values lower than 15 are not supported and will result in a toggle taking more than the configured.</p>
-<p>Defaults to <code>25</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleAnimationFrameTimeMs": 25
-}</code></pre>
-<p><span class="by">Suggested by <a href="https://github.com/rmobis">Raphael Mobis Tacla</a></span></p>
+<p><span class="by">Suggested by <a href="https://github.com/douglara">Douglas Lara</a></span></p>
 
 
 
