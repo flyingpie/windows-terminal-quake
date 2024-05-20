@@ -2,6 +2,7 @@
 
 ## [vNext]
 - Creating a new app instance is now done in a finite retry loop, and stops after 5 failures.
+- Added "AlwaysOnTop", which forces an app to always be above other windows, even if it doesn't have focus.
 
 ## [2.0.9] / 2024-05-20
 - When an app is toggled up, it retains its original screen (fixes [#64](https://github.com/flyingpie/windows-terminal-quake/issues/64)).

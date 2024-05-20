@@ -195,9 +195,12 @@ public sealed class WtqApp : IAsyncDisposable
 			await AttachAsync(process).ConfigureAwait(false);
 		}
 
-		// Update opacity.
 		if (Process != null && IsActive)
 		{
+			// Always on top.
+			Process.SetAlwaysOnTop(_opts.CurrentValue.GetAlwaysOnTopForApp(Options));
+
+			// Opacity.
 			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
 		}
 	}

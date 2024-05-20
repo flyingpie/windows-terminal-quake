@@ -73,7 +73,15 @@ public sealed class Win32WtqProcess : WtqWindow
 			throw new WtqException("Process handle zero");
 		}
 
-		var isSet = User32.SetWindowPos(_process.MainWindowHandle, User32.HWNDTOPMOST, 0, 0, 0, 0, User32.TOPMOSTFLAGS);
+		var isSet = User32.SetWindowPos(
+			_process.MainWindowHandle,
+			isAlwaysOnTop ? User32.HWNDTOPMOST : User32.HWNDNOTOPMOST,
+			0,
+			0,
+			0,
+			0,
+			User32.TOPMOSTFLAGS);
+
 		if (!isSet)
 		{
 			throw new WtqException("Could not set window top most");
@@ -104,6 +112,11 @@ public sealed class Win32WtqProcess : WtqWindow
 
 	public override void SetTransparency(int transparency)
 	{
+		if (transparency >= 100)
+		{
+			return;
+		}
+
 		if (_process.MainWindowHandle == IntPtr.Zero)
 		{
 			throw new WtqException("Process handle zero");
