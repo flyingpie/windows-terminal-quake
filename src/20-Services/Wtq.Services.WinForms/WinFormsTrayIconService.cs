@@ -21,7 +21,13 @@ internal sealed class WinFormsTrayIconService : IDisposable, IHostedService
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		_icon = new TrayIcon((s, a) => _lifetime.StopApplication());
+		_icon = new TrayIcon((s, a) =>
+		{
+			_lifetime.StopApplication();
+
+			// TODO: Remove this, though currently not all threads exit properly.
+			Application.Exit();
+		});
 
 		return Task.CompletedTask;
 	}
