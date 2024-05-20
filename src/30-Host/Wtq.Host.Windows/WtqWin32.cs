@@ -51,8 +51,9 @@ public class WtqWin32
 					.AddWtqCore()
 
 					// Platform-specific.
-					.AddSharpHookGlobalHotKeys()
+					// .AddSharpHookGlobalHotKeys()
 					.AddWin32ProcessService()
+					.AddWinFormsHotKeyService()
 					.AddWinFormsScreenInfoProvider()
 					.AddWinFormsTrayIcon();
 			})
