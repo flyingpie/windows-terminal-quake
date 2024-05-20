@@ -1,8 +1,10 @@
 # Changelog
 
 ## [vNext]
+- Creating a new app instance is now done in a finite retry loop, and stops after 5 failures.
 
-## [2.0.9] / Unreleased
+## [2.0.9] / 2024-05-20
+- When an app is toggled up, it retains its original screen (fixes [#64](https://github.com/flyingpie/windows-terminal-quake/issues/64)).
 - Reworked how windows are tracked and attached to, should fix a lot of "Main window handle not available yet"-issues.
 - Added support for multiple configuration file locations (see docs for more info).
 - Moved default log location to temp directory.
