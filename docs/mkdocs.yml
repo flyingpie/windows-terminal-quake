@@ -30,6 +30,7 @@ nav:
   - Getting Started:
     - Direct Download: v1/getting-started/direct-download.md
     - Get From Scoop: v1/getting-started/get-from-scoop.md
+    - Get From WinGet: v1/getting-started/get-from-winget.md
     - Build (Cake): v1/getting-started/build-cake.md
     - Build (Visual Studio): v1/getting-started/build-vs.md
 
@@ -51,11 +52,14 @@ nav:
 
 - Reporting Issues: misc/reporting-issues.md
 
+- FAQ: misc/faq.md
+
 theme:
   name: material
   custom_dir: overrides
   favicon: assets/favicon.ico
   features:
+    - content.code.copy
     - navigation.expand
     - navigation.sections
     - navigation.tabs

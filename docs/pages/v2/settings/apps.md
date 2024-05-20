@@ -60,6 +60,35 @@ Absolute file paths work too, if the app is not on the PATH:
 }
 ```
 
+Here are some more app-specific properties:
+
+```json
+{
+	"Apps": [
+		{
+			// For use in logging and error messages.
+			"Name":			"Name Of The App",
+
+			// A list of hot keys that toggle this app, and this app only.
+			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+
+			// The file name of the app to attach to. This is used to both find an existing instance of an already running app, and for starting a new one.
+			"FileName":		"C:/Program Files/WezTerm/wezterm-gui.exe",
+
+			// Command line arguments can be passed, only used when spawning new app instances.
+			"Arguments":	"--argument1=value1",
+
+			// For some apps, the initially started process does not equal the ultimately running process name.
+			// Such as for Windows Terminal, which is started using "wt.exe", but then runs using "WindowsTerminal.exe".
+			// In such cases, the "FileName" can't be used to find existing processes.
+			// The "ProcessName" property can be used to override the process name that is used when looking for existing processes.
+			// By default, the "FileName" property is used for this, and "ProcessName" remains null.
+			"ProcessName":	null,
+		}
+	]
+}
+```
+
 ## Examples
 
 ### Windows Terminal
