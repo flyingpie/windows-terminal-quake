@@ -77,12 +77,6 @@ public sealed class TrayIcon : IDisposable
 	{
 		using var str = new MemoryStream(Resources.Resources.icon);
 		return new Icon(str);
-
-		// var bitmap = Resources.icon.ToBitmap();
-		// bitmap.MakeTransparent(Color.White);
-		// var icH = bitmap.GetHicon();
-		// var ico = Icon.FromHandle(icH);
-		// return ico;
 	}
 
 	private static ToolStripMenuItem CreateOpenSettingsItem()
@@ -94,25 +88,6 @@ public sealed class TrayIcon : IDisposable
 
 		mnuOpenSettings.Click += (s, a) =>
 		{
-			// TODO: We need to restore the original multi-location configuration file support.
-
-			// var path = QSettings.Instance.PathToSettings;
-
-			// if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-			// {
-			// //Log.Warning($"Settings file '{path}' not found, attempting to create an example file now and opening that.");
-
-			// //  Open the first default path.
-			// path = QSettings.Instance.PathToSettings;
-
-			// // Make sure it doesn't already exist, and only then write some stub JSON.
-			// // "path" here may not be equal to "path" earlier, since we grabbed a path from PathToSettings.
-			// if (!File.Exists(path))
-			// {
-			// //Log.Information($"Creating example file at '{path}'.");
-			// File.WriteAllText(path, _Resources.windows_terminal_quake);
-			// }
-			// }
 			Process.Start(new ProcessStartInfo()
 			{
 				FileName = WtqOptionsPath.Instance.Path,
