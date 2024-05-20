@@ -11,6 +11,6 @@ From ```0``` (invisible) to ```100``` (opaque).
 }
 ```
 
-![Transparency](/assets/img/transparency.png)
+![Transparency](../../assets/img/transparency.png)
 
 <span class="by">Suggested by [ukWaqas](https://github.com/ukWaqas)</span>
