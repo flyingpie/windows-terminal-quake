@@ -12,6 +12,12 @@ public sealed class WtqOptions
 	public IEnumerable<WtqAppOptions> Apps { get; init; }
 		= [];
 
+	/// <summary>
+	/// Whether the app should always be on top of other windows, regardless of whether it has focus.<br/>
+	/// Defaults to "false".
+	/// </summary>
+	public bool AlwaysOnTop { get; init; }
+
 	/// <inheritdoc cref="WtqAppOptions.AttachMode"/>
 	public AttachMode AttachMode { get; init; }
 		= AttachMode.FindOrStart;
@@ -86,6 +92,13 @@ public sealed class WtqOptions
 	/// </summary>
 	public float VerticalScreenCoverage { get; init; }
 		= 95f;
+
+	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.AlwaysOnTop ?? AlwaysOnTop;
+	}
 
 	public bool GetHideOnFocusLostForApp(WtqAppOptions opts)
 	{

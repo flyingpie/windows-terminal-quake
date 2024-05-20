@@ -11,6 +11,9 @@ public sealed class WtqAppOptions
 	/// </summary>
 	public string? Arguments { get; set; }
 
+	/// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
+	public bool? AlwaysOnTop { get; init; }
+
 	/// <inheritdoc cref="WtqOptions.AttachMode"/>
 	public AttachMode? AttachMode { get; set; }
 
