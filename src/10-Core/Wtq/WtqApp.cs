@@ -1,6 +1,5 @@
 ﻿using Wtq.Data;
 using Wtq.Services;
-using Wtq.Services.Apps;
 
 namespace Wtq;
 
@@ -40,7 +39,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Whether an active process is being tracked by this app instance.
 	/// TODO: Include check for whether the process has been killed etc.
 	/// </summary>
-	public bool IsActive => Process != null;
+	public bool IsActive => Process != null && Process.IsValid;
 
 	public string Name { get; }
 
@@ -84,6 +83,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		// await UpdateAsync().ConfigureAwait(false);
+
 		_log.LogInformation("Closing app '{App}'", this);
 
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
@@ -131,6 +132,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		await UpdateAsync().ConfigureAwait(false);
+
 		// If we have an active process attached, toggle it open.
 		if (IsActive)
 		{
@@ -198,7 +201,11 @@ public sealed class WtqApp : IAsyncDisposable
 		// Update opacity.
 		if (Process != null && IsActive)
 		{
-			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
+			var op = _opts.CurrentValue.GetOpacityForApp(Options);
+			if (op < 100)
+			{
+				Process.SetTransparency(op);
+			}
 		}
 	}
 }

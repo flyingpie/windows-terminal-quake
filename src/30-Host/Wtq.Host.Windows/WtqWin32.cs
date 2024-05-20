@@ -6,7 +6,6 @@ using Serilog;
 using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services;
-using Wtq.Services.Apps;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 using Wtq.Utils;
@@ -60,11 +59,9 @@ public class WtqWin32
 					.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>()
 
 					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
-					.AddSingleton<WtqAppMonitorService>()
 					.AddSingleton<IWtqBus, WtqBus>()
-					.AddHostedService(p => p.GetRequiredService<WtqAppMonitorService>())
 					.AddHostedService<WtqService>()
-					.AddSingleton<IWtqAppRepo, WtqAppRepo>()
+					.AddSingletonHostedService<IWtqAppRepo, WtqAppRepo>()
 					.AddHostedService<WtqHotKeyService>()
 
 					.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()

@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Wtq.Configuration;
 using Wtq.Events;
-using Wtq.Services.Apps;
 
 namespace Wtq.Services.SharpHook;
 
