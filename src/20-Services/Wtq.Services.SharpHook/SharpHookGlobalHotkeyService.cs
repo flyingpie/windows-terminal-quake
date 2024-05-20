@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Native;
@@ -8,32 +9,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using Wtq.Configuration;
 using Wtq.Events;
-using Wtq.Services.Apps;
+using Wtq.Utils;
 
 namespace Wtq.Services.SharpHook;
 
 public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 {
+	private readonly ILogger _log = Log.For<SharpHookGlobalHotKeyService>();
 	private readonly SimpleGlobalHook _hook;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly IWtqAppRepo _appRepo;
+
 	private UioHookEvent? _last;
 
-	// TODO: Make specific to HotKey combinations.
-	// private List<Func<HotKeyInfo, Task>> _registrations = [];
 	public SharpHookGlobalHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqBus bus,
-		IWtqAppRepo appRepo)
+		IWtqBus bus)
 	{
-		// _hook = new TaskPoolGlobalHook();
 		// We only need keyboard events (at the moment), and mouse events cause debug sessions to be really slow.
 		_hook = new SimpleGlobalHook(globalHookType: GlobalHookType.Keyboard);
 
 		_bus = bus;
 		_opts = opts;
-		_appRepo = appRepo;
 
 		_hook.KeyPressed += (s, a) =>
 		{
@@ -43,40 +40,29 @@ public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 				return;
 			}
 
-			var app = GetAppForHotKey(a.RawEvent.Mask.ToWtqKeyModifiers(), a.Data.KeyCode.ToWtqKeys());
+			var mod = a.RawEvent.Mask.ToWtqKeyModifiers();
+			var key = a.Data.KeyCode.ToWtqKeys();
 
-			if (a.RawEvent.Mask == ModifierMask.LeftCtrl && a.Data.KeyCode == KeyCode.Vc2)
+			_log.LogDebug("Raw key:[{RawKeyMod}]{RawKey}, mapped key:[{MappedKeyMod}]{MappedKey}", a.RawEvent.Mask, a.Data.KeyCode, mod, key);
+
+			// Only send events if a registration exists for the hit mod+key combo.
+			if (!IsRegistered(mod, key))
 			{
-				a.SuppressEvent = true;
-				Console.WriteLine("SUPPRESS");
-
-				// TODO: Put something in between ingesting HotKeys and publishing functional events.
-				_bus.Publish(new WtqEvent()
-				{
-					App = app,
-				});
-
-				// var inf = new HotKeyInfo()
-				// {
-				// Key = WtqKeys.A,
-				// Modifiers = WtqKeyModifiers.Alt,
-				// };
-
-				// foreach (var r in _registrations)
-				// {
-				// Task.Run(async () => await r(inf));
-				// }
+				return;
 			}
 
-			Console.WriteLine($"KEY PRESSED: [{a.RawEvent.Mask}] {a.Data.KeyCode}");
+			a.SuppressEvent = true;
+
+			_bus.Publish(
+				new WtqHotKeyPressedEvent()
+				{
+					Key = a.Data.KeyCode.ToWtqKeys(), Modifiers = a.RawEvent.Mask.ToWtqKeyModifiers(),
+				});
 
 			_last = a.RawEvent;
 		};
 
-		_hook.KeyReleased += (s, a) =>
-		{
-			_last = null;
-		};
+		_hook.KeyReleased += (s, a) => { _last = null; };
 	}
 
 	public void Dispose()
@@ -84,15 +70,11 @@ public sealed class SharpHookGlobalHotKeyService : IDisposable, IHostedService
 		_hook.Dispose();
 	}
 
-	public WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
+	public bool IsRegistered(KeyModifiers keyMods, Keys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
-		if (opt == null)
-		{
-			return null;
-		}
-
-		return _appRepo.GetAppByNameRequired(opt.Name);
+		return
+			_opts.CurrentValue.HotKeys.Any(hk => hk.Modifiers == keyMods && hk.Key == key) ||
+			_opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods)) != null;
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
