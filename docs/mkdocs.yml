@@ -13,7 +13,7 @@ nav:
     #- Always On Top: v2/settings/always-on-top.md
     #- Command Line Parameters: v2/settings/command-line-parameters.md
     #- Disable When Active App Is In Fullscreen: v2/settings/disable-when-active-app-is-in-fullscreen.md
-    #- Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
+    - Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
     - Hot Keys: v2/settings/hot-keys.md
     #- Notifications: v2/settings/notifications.md
     - Opacity: v2/settings/opacity.md

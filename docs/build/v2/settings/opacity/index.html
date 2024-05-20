@@ -466,6 +466,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../hide-on-focus-lost/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hide On Focus Lost
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../hot-keys/" class="md-nav__link">
         
   
@@ -496,6 +517,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Opacity
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -505,6 +537,43 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per App
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1156,6 +1225,32 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per App
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1176,8 +1271,19 @@
 <p>The terminal window can be made transparent through the <code>Opacity</code>-setting.
 Note that this controls the transparency of the entire window, including the title bar.</p>
 <p>From <code>0</code> (invisible) to <code>100</code> (opaque).</p>
+<h2 id="global">Global</h2>
 <pre class="highlight"><code class="language-json">{
     "Opacity": 80
+}</code></pre>
+<h2 id="per-app">Per App</h2>
+<pre class="highlight"><code class="language-json">{
+    "Apps": [
+        {
+            "Name": "Terminal",
+            "Opacity": 80,
+            ...
+        }
+    ]
 }</code></pre>
 <p><img alt="Transparency" src="/assets/img/transparency.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/ukWaqas">ukWaqas</a></span></p>
