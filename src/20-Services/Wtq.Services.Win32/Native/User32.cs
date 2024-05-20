@@ -6,6 +6,7 @@ public static class User32
 {
 	public const int GWLEXSTYLE = -20;
 	public const nint HWNDTOPMOST = -1;
+	public const nint HWNDNOTOPMOST = -2;
 	public const int LWAALPHA = 0x2;
 	public const uint SWPNOMOVE = 0x0002;
 	public const uint SWPNOSIZE = 0x0001;

@@ -39,7 +39,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Whether an active process is being tracked by this app instance.
 	/// TODO: Include check for whether the process has been killed etc.
 	/// </summary>
-	public bool IsActive => Process != null && Process.IsValid;
+	public bool IsActive => Process != null;
 
 	public string Name { get; }
 
@@ -95,7 +95,9 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (Process != null)
 		{
-			var bounds = Process.WindowRect; // TODO: Restore to original position (when we got a hold of the process).
+			// Restore original position.
+			// TODO: Restore to original position (when we got a hold of the process).
+			var bounds = Process.WindowRect;
 			bounds.Width = 1280;
 			bounds.Height = 800;
 			bounds.X = 10;
@@ -103,8 +105,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
 
+			// Toggle app onto the screen again.
 			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
+			// Restore "always on top" state.
+			Process.SetAlwaysOnTop(false);
+
+			// Restore taskbar icon visibility.
 			Process.SetTaskbarIconVisible(true);
 		}
 	}
@@ -198,14 +205,13 @@ public sealed class WtqApp : IAsyncDisposable
 			await AttachAsync(process).ConfigureAwait(false);
 		}
 
-		// Update opacity.
 		if (Process != null && IsActive)
 		{
-			var op = _opts.CurrentValue.GetOpacityForApp(Options);
-			if (op < 100)
-			{
-				Process.SetTransparency(op);
-			}
+			// Always on top.
+			Process.SetAlwaysOnTop(_opts.CurrentValue.GetAlwaysOnTopForApp(Options));
+
+			// Opacity.
+			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
 		}
 	}
 }

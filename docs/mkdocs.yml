@@ -13,7 +13,7 @@ nav:
     #- Always On Top: v2/settings/always-on-top.md
     #- Command Line Parameters: v2/settings/command-line-parameters.md
     #- Disable When Active App Is In Fullscreen: v2/settings/disable-when-active-app-is-in-fullscreen.md
-    #- Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
+    - Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
     - Hot Keys: v2/settings/hot-keys.md
     #- Notifications: v2/settings/notifications.md
     - Opacity: v2/settings/opacity.md
@@ -30,6 +30,7 @@ nav:
   - Getting Started:
     - Direct Download: v1/getting-started/direct-download.md
     - Get From Scoop: v1/getting-started/get-from-scoop.md
+    - Get From WinGet: v1/getting-started/get-from-winget.md
     - Build (Cake): v1/getting-started/build-cake.md
     - Build (Visual Studio): v1/getting-started/build-vs.md
 
@@ -49,16 +50,20 @@ nav:
     - Toggle Animation: v1/settings/toggle-animation.md
     - Windows Terminal Command: v1/settings/windows-terminal-command.md
 
-- Misc:
-  - Changelog: misc/changelog.md
-  - Reporting Issues: misc/reporting-issues.md
+- Reporting Issues: misc/reporting-issues.md
+
+- FAQ: misc/faq.md
 
 theme:
   name: material
   custom_dir: overrides
   favicon: assets/favicon.ico
   features:
+    - content.code.copy
+    - navigation.expand
     - navigation.sections
+    - navigation.tabs
+    - navigation.tracking
   font: false
   highlightjs: true
   hljs_languages:
@@ -68,8 +73,18 @@ theme:
     repo: fontawesome/brands/github
   logo: assets/favicon.png
   palette:
-    scheme: slate
-    primary: blue
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
 
 repo_name: windows-terminal-quake
 repo_url: http://github.com/flyingpie/windows-terminal-quake

@@ -4,11 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Wtq.Configuration;
-using Wtq.Events;
-using Wtq.Services;
+using Wtq.Services.SharpHook;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
-using Wtq.Utils;
 
 namespace Wtq.Host.Windows;
 
@@ -50,32 +48,14 @@ public class WtqWin32
 					.Bind(config);
 
 				opt
-
-					// Utils
-					.AddSingleton<IRetry, Retry>()
-
-					// Core App Logic
-					.AddSingleton<IWtqTween, WtqTween>()
-					.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>()
-
-					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
-					.AddSingleton<IWtqBus, WtqBus>()
-					.AddHostedService<WtqService>()
-					.AddSingletonHostedService<IWtqAppRepo, WtqAppRepo>()
-					.AddHostedService<WtqHotKeyService>()
-
-					.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
-					.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
+					.AddWtqCore()
 
 					// Platform-specific.
-					.AddWin32ProcessService()
-					.AddWinFormsScreenCoordsProvider()
-					.AddWinFormsHotKeyService()
-					.AddWinFormsTrayIcon()
-
 					// .AddSharpHookGlobalHotKeys()
-					// .AddSimpleTrayIcon()
-					;
+					.AddWin32ProcessService()
+					.AddWinFormsHotKeyService()
+					.AddWinFormsScreenInfoProvider()
+					.AddWinFormsTrayIcon();
 			})
 			.UseSerilog()
 			.Build();
