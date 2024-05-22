@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Services.KWin</AssemblyName>
+		<RootNamespace>Wtq.Services.KWin</RootNamespace>
+
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Tmds.DBus" Version="0.17.0" />
+		<PackageReference Include="Tmds.DBus.Protocol" Version="0.17.0" />
+	</ItemGroup>
+</Project>
