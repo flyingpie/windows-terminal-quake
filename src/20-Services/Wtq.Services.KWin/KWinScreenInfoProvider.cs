@@ -6,16 +6,22 @@ public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
 {
 	public WtqRect GetPrimaryScreenRect()
 	{
-		return WtqRect.Default;
+		return new WtqRect()
+		{
+			X = 0,
+			Y = 0,
+			Width = 1920,
+			Height = 1080,
+		};
 	}
 
 	public WtqRect[] GetScreenRects()
 	{
-		return [];
+		return [GetPrimaryScreenRect()];
 	}
 
 	public WtqRect GetScreenWithCursor()
 	{
-		return WtqRect.Default;
+		return GetPrimaryScreenRect();
 	}
 }

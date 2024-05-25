@@ -1,4 +1,4 @@
-﻿using Wtq.Services.KWin.DBus;
+﻿using Wtq.Services.KWin;
 
 namespace Wtq.Host.Linux;
 
@@ -6,10 +6,11 @@ public static class Program
 {
 	public static async Task Main(string[] args)
 	{
-		await new KWinClient1().StuffAsync();
-
-		return;
 		Utils.Log.Configure();
+
+		// await new KWinTest().TestAsync();
+
+		// return;
 
 		await new WtqLinux().RunAsync().ConfigureAwait(false);
 	}

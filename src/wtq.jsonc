@@ -6,9 +6,9 @@
 	"Apps": [
 		// Example with PowerShell
 		{
-			"Name": "PowerShell",
+			"Name": "WezTerm",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
+			"FileName": "wezterm-gui"
 		}
 
 		// Example with Windows Terminal
