@@ -67,7 +67,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract bool Matches(WtqAppOptions opts);
 
-	public abstract void MoveTo(WtqRect rect, bool repaint = true);
+	public abstract Task MoveToAsync(WtqRect rect, bool repaint = true);
 
 	public abstract void SetAlwaysOnTop(bool isAlwaysOnTop);
 

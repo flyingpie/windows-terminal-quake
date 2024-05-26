@@ -9,5 +9,5 @@ public interface IWtqTween
 		WtqRect to,
 		int durationMs,
 		AnimationType animType,
-		Action<WtqRect> move);
+		Func<WtqRect, Task> move);
 }

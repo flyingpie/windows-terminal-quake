@@ -71,7 +71,7 @@ public class WtqLinux
 
 					// Platform-specific.
 					.AddKWin()
-					.AddSharpHookGlobalHotKeys()
+					// .AddSharpHookGlobalHotKeys()
 					// .AddWinFormsTrayIcon()
 					;
 			})

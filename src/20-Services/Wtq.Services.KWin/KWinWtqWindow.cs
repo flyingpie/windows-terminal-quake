@@ -19,11 +19,13 @@ public class KWinWtqWindow : WtqWindow
 
 	public override int Id { get; }
 
-	public override bool IsValid { get; }
+	public override bool IsValid { get; } = true;
 
-	public override string? Name { get; }
+	public override string? Name => _window?.ResourceClass;
 
-	public override WtqRect WindowRect { get; }
+	private WtqRect _rect;
+
+	public override WtqRect WindowRect => _rect;
 
 	public override void BringToForeground()
 	{
@@ -32,14 +34,17 @@ public class KWinWtqWindow : WtqWindow
 
 	public override bool Matches(WtqAppOptions opts)
 	{
-		// return _window.ResourceClass?.Contains("wezterm", StringComparison.OrdinalIgnoreCase) ?? false;
-		return _window.ResourceName != null && _window.ResourceName.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase); // TODO
+		var res = _window.ResourceClass?.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase) ?? false;
+		// return _window.ResourceName != null && _window.ResourceName.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase); // TODO
+
+		return res;
 	}
 
-	public override void MoveTo(WtqRect rect, bool repaint = true)
+	public override async Task MoveToAsync(WtqRect rect, bool repaint = true)
 	{
 		// TODO
-		_kwinClient.MoveClientAsync(_window, rect, CancellationToken.None);
+		_rect = rect;
+		await _kwinClient.MoveClientAsync(_window, rect, CancellationToken.None).ConfigureAwait(false);
 	}
 
 	public override void SetAlwaysOnTop(bool isAlwaysOnTop)

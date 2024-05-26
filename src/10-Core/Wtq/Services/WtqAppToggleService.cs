@@ -25,7 +25,7 @@ public class WtqAppToggleService(
 
 		_log.LogInformation("ToggleOff from '{From}' to '{To}'", from, to);
 
-		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseInQuart, app.MoveWindow).ConfigureAwait(false);
+		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseInQuart, app.MoveWindowAsync).ConfigureAwait(false);
 	}
 
 	/// <inheritdoc/>
@@ -41,7 +41,7 @@ public class WtqAppToggleService(
 		var to = GetToggleOnToWindowRect(app, screen);
 		var from = GetToggleOnFromWindowRect(to);
 
-		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseOutQuart, app.MoveWindow).ConfigureAwait(false);
+		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseOutQuart, app.MoveWindowAsync).ConfigureAwait(false);
 
 		_log.LogInformation("ToggleOn from '{From}' to '{To}'", from, to);
 	}

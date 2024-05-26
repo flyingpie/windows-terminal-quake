@@ -4,7 +4,7 @@ namespace Wtq.Utils;
 
 public sealed class WtqTween : IWtqTween
 {
-	private const float FrameTimeMs = 1000f / 40f; // 40 = FPS
+	private const float FrameTimeMs = 1000f / 15f; // 40 = FPS
 
 	private readonly ILogger _log = Log.For<WtqTween>();
 
@@ -13,7 +13,7 @@ public sealed class WtqTween : IWtqTween
 		WtqRect to,
 		int durationMs,
 		AnimationType animType,
-		Action<WtqRect> move)
+		Func<WtqRect, Task> move)
 	{
 		Guard.Against.Null(from);
 		Guard.Against.Null(to);
@@ -40,7 +40,7 @@ public sealed class WtqTween : IWtqTween
 
 			var rect = WtqRect.Lerp(from, to, progress);
 
-			move(rect);
+			await move(rect);
 
 			// Wait for the frame to end.
 			var waitMs = FrameTimeMs - swFrame.ElapsedMilliseconds;

@@ -57,10 +57,18 @@ public class KWinClient : IKWinClient
 
 			for (let client of workspace.clientList())
 			{
-				if (client.resourceClass !== "org.wezfurlong.wezterm") {
+				//if (client.resourceClass !== "org.wezfurlong.wezterm") {
+				//	continue;
+				//}
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
 				}
-			
+
+				client.minimized = false;
+				client.desktop = workspace.currentDesktop;
+				workspace.activeClient = client;
+
+
 				console.log("GOT");
 				client.frameGeometry = {
 					x: {{rect.X}},
@@ -74,5 +82,22 @@ public class KWinClient : IKWinClient
 			""";
 
 		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task RegisterShortcutAsync()
+	{
+		var id = Guid.NewGuid();
+		var js = $$"""
+			registerShortcut(
+				"WTQ_103",
+				"WTQ_103",
+				"Ctrl+q",
+				() => {
+					console.log("Fire shortcut ''");
+					callDBus("wtq.svc", "/wtq/kwin", "wtq.kwin", "PressHotkey", "{{id}}", JSON.stringify(clients));
+					console.log("SUP2!");
+				}
+			);
+			""";
 	}
 }

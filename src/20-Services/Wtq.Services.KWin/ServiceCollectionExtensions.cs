@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wtq.Events;
 using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
@@ -30,7 +31,7 @@ public static class ServiceCollectionExtensions
 					var dbus = (DBusConnection)p.GetRequiredService<IDBusConnection>();
 					await dbus.StartAsync(CancellationToken.None);
 
-					var wtqDBusObj = new WtqDBusObject();
+					var wtqDBusObj = new WtqDBusObject(p.GetRequiredService<IWtqBus>());
 
 					await dbus.RegisterServiceAsync("wtq.svc", wtqDBusObj).ConfigureAwait(false);
 
@@ -38,7 +39,8 @@ public static class ServiceCollectionExtensions
 				})
 			.AddSingleton<KWinScriptExecutor>()
 			.AddKWinProcessService()
-			.AddKWinScreenCoordsProvider();
+			.AddKWinScreenCoordsProvider()
+			.AddHostedService<KWinHotKeyService>();
 	}
 
 	public static IServiceCollection AddKWinProcessService(this IServiceCollection services)

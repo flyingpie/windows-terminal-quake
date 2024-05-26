@@ -126,14 +126,14 @@ public sealed class WtqApp : IAsyncDisposable
 		return Process.WindowRect;
 	}
 
-	public void MoveWindow(WtqRect rect)
+	public async Task MoveWindowAsync(WtqRect rect)
 	{
 		if (Process == null)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		Process.MoveTo(rect: rect);
+		await Process.MoveToAsync(rect: rect);
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)

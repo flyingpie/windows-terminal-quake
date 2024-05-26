@@ -24,7 +24,10 @@ public class KWinProcessService : IWtqProcessService
 				.Select(c => new KWinWtqWindow(_kwinClient, c))
 				.ToList();
 
-			return clients.FirstOrDefault(c => c.Matches(opts));
+			var x = clients.FirstOrDefault(c => c.Matches(opts));
+
+			Console.WriteLine($"GOT {opts.Name}=>{x?.Name}");
+			return x;
 		}
 		catch (Exception ex)
 		{
