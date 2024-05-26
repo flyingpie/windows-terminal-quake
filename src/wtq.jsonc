@@ -13,8 +13,14 @@
 		},
 
 		{
-			"Name": "KeePass",
+			"Name": "Krusader",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "org.kde.krusader"
+		},
+
+		{
+			"Name": "KeePass",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D4" }],
 			"FileName": "org.keepassxc.KeePassXC"
 		}
 

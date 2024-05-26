@@ -15,11 +15,14 @@ public class KWinTest
 			.AddKWin()
 			.BuildServiceProvider();
 
-		var dbus = p.GetRequiredService<IDBusConnection>() as IHostedService;
-		await dbus.StartAsync(CancellationToken.None);
+		// var dbus = p.GetRequiredService<IDBusConnection>() as IHostedService;
+		// await dbus.StartAsync(CancellationToken.None);
 
 		//
 		var kwin = p.GetRequiredService<IKWinClient>();
+
+		var hk = p.GetRequiredService<KWinHotKeyService>();
+		await hk.StartAsync(CancellationToken.None);
 
 		var clients = await kwin.GetClientListAsync(CancellationToken.None).ConfigureAwait(false);
 
