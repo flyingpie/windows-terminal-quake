@@ -71,7 +71,7 @@ public sealed class WtqService(
 					await _open.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					await _appMon.RefocusLastNonWtqAppAsync();
 					return;
 				}
 
@@ -102,7 +102,7 @@ public sealed class WtqService(
 					await app.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					await _appMon.RefocusLastNonWtqAppAsync();
 				}
 				else
 				{

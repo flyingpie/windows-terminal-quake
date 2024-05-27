@@ -86,10 +86,6 @@ internal class KWinScriptExecutor
 
 		var sw = Stopwatch.StartNew();
 
-		// await _scripting.UnloadScriptAsync("wtq_hk1_001");
-		// await _scripting.UnloadScriptAsync("wtq_hk1_002");
-		// await _scripting.UnloadScriptAsync("wtq_hk1_003");
-
 		// for (int i = 0; i < 50; i++)
 		// {
 		// 	var sc = $"wtq_{i:000}";

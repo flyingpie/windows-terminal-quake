@@ -34,7 +34,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Make sure the app has focus.
-		app.BringToForeground();
+		await app.BringToForegroundAsync();
 
 		var durationMs = GetDurationMs(app, mods);
 		var screen = GetToggleOnToScreenRect(app);

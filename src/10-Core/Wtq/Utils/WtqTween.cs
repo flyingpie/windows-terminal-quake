@@ -4,7 +4,7 @@ namespace Wtq.Utils;
 
 public sealed class WtqTween : IWtqTween
 {
-	private const float FrameTimeMs = 1000f / 15f; // 40 = FPS
+	private const float FrameTimeMs = 1000f / 30f; // 40 = FPS
 
 	private readonly ILogger _log = Log.For<WtqTween>();
 

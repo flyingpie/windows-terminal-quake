@@ -63,17 +63,19 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 		return Id;
 	}
 
-	public abstract void BringToForeground();
+	public abstract Task BringToForegroundAsync();
 
 	public abstract bool Matches(WtqAppOptions opts);
 
 	public abstract Task MoveToAsync(WtqRect rect, bool repaint = true);
 
-	public abstract void SetAlwaysOnTop(bool isAlwaysOnTop);
+	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 
-	public abstract void SetTaskbarIconVisible(bool isVisible);
+	public abstract Task SetTaskbarIconVisibleAsync(bool isVisible);
 
-	public abstract void SetTransparency(int transparency);
+	public abstract Task SetTransparencyAsync(int transparency);
+
+	public abstract Task SetVisibleAsync(bool isVisible);
 
 	public override string ToString() => $"[{Id}] {Name}";
 }

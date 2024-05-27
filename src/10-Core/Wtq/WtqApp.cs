@@ -61,7 +61,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Configurable.
 		if (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options) == TaskBarIconVisibility.AlwaysHidden)
 		{
-			process.SetTaskbarIconVisible(false);
+			await process.SetTaskbarIconVisibleAsync(false).ConfigureAwait(false);
 		}
 
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
@@ -72,14 +72,14 @@ public sealed class WtqApp : IAsyncDisposable
 	/// <summary>
 	/// Puts the window associated with the process on top of everything and gives it focus.
 	/// </summary>
-	public void BringToForeground()
+	public async Task BringToForegroundAsync()
 	{
 		if (Process == null)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		Process.BringToForeground();
+		await Process.BringToForegroundAsync();
 	}
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -87,6 +87,8 @@ public sealed class WtqApp : IAsyncDisposable
 		_log.LogInformation("Closing app '{App}'", this);
 
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
+
+		await Process.SetVisibleAsync(false).ConfigureAwait(false);
 	}
 
 	public async ValueTask DisposeAsync()
@@ -108,10 +110,10 @@ public sealed class WtqApp : IAsyncDisposable
 			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
 			// Restore "always on top" state.
-			Process.SetAlwaysOnTop(false);
+			await Process.SetAlwaysOnTopAsync(false).ConfigureAwait(false);
 
 			// Restore taskbar icon visibility.
-			Process.SetTaskbarIconVisible(true);
+			await Process.SetTaskbarIconVisibleAsync(true).ConfigureAwait(false);
 		}
 	}
 
@@ -143,6 +145,7 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
+			await Process.SetVisibleAsync(true).ConfigureAwait(false);
 			await _toggler.ToggleOnAsync(this, mods).ConfigureAwait(false);
 
 			return true;
@@ -205,10 +208,10 @@ public sealed class WtqApp : IAsyncDisposable
 		if (Process != null && IsActive)
 		{
 			// Always on top.
-			Process.SetAlwaysOnTop(_opts.CurrentValue.GetAlwaysOnTopForApp(Options));
+			await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).ConfigureAwait(false);
 
 			// Opacity.
-			Process.SetTransparency(_opts.CurrentValue.GetOpacityForApp(Options));
+			await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).ConfigureAwait(false);
 		}
 	}
 }

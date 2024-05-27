@@ -26,37 +26,41 @@ public class WtqAppMonitorService
 	/// Attempt to re-focus the last app that is not toggled by WTQ.<br/>
 	/// Ensures that input gets sent to the app that previously was on the foreground.
 	/// </summary>
-	public void RefocusLastNonWtqApp()
+	public async Task RefocusLastNonWtqAppAsync()
 	{
-		_focusTracker.LastNonWtqForeground?.BringToForeground();
+		if (_focusTracker.LastNonWtqForeground != null)
+		{
+			await _focusTracker.LastNonWtqForeground.BringToForegroundAsync().ConfigureAwait(false);
+		}
 	}
 
 	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the created task to be cancelled here.")]
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		_ = Task.Run(async () =>
-		{
-			while (_isRunning)
+		_ = Task.Run(
+			async () =>
 			{
-				var sw = Stopwatch.StartNew();
-
-				_log.LogInformation("Updating app process");
-
-				try
+				while (_isRunning)
 				{
-					await _apps.UpdateAppsAsync().ConfigureAwait(false);
-					await UpdateAppProcessesAsync().ConfigureAwait(false);
+					var sw = Stopwatch.StartNew();
 
-					_log.LogInformation("Updated app process, took {Elapsed}", sw.Elapsed);
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error updating list of apps: {Message}", ex.Message);
-				}
+					_log.LogInformation("Updating app process");
 
-				await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
-			}
-		});
+					try
+					{
+						await _apps.UpdateAppsAsync().ConfigureAwait(false);
+						await UpdateAppProcessesAsync().ConfigureAwait(false);
+
+						_log.LogInformation("Updated app process, took {Elapsed}", sw.Elapsed);
+					}
+					catch (Exception ex)
+					{
+						_log.LogError(ex, "Error updating list of apps: {Message}", ex.Message);
+					}
+
+					await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+				}
+			});
 
 		return Task.CompletedTask;
 	}

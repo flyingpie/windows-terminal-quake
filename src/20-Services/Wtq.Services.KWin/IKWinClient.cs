@@ -10,6 +10,16 @@ public interface IKWinClient
 	Task<IEnumerable<KWinWindow>> GetClientListAsync(CancellationToken cancellationToken);
 
 	Task MoveClientAsync(KWinWindow window, WtqRect rect, CancellationToken cancellationToken);
+
+	Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken);
+
+	Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken);
+
+	Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken);
+
+	Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken);
+
+	Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken);
 }
 
 public class KWinClient : IKWinClient
@@ -63,12 +73,12 @@ public class KWinClient : IKWinClient
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
 				}
-
-				client.minimized = false;
-				client.desktop = workspace.currentDesktop;
-				workspace.activeClient = client;
-
-
+			
+				//client.minimized = false;
+				//client.desktop = workspace.currentDesktop;
+				//workspace.activeClient = client;
+			
+			
 				console.log("GOT");
 				client.frameGeometry = {
 					x: {{rect.X}},
@@ -99,5 +109,125 @@ public class KWinClient : IKWinClient
 				}
 			);
 			""";
+	}
+
+	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
+	{
+		var js = $$"""
+			"use strict";
+
+			console.log("Setup");
+
+			for (let client of workspace.clientList())
+			{
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
+					continue;
+				}
+			
+				client.opacity = {{opacity}};
+			
+				break;
+			}
+			""";
+
+		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
+	{
+		var js = $$"""
+			"use strict";
+
+			console.log("Setup");
+
+			for (let client of workspace.clientList())
+			{
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
+					continue;
+				}
+			
+				client.minimized = false;
+				client.desktop = workspace.currentDesktop;
+				workspace.activeClient = client;
+			
+				break;
+			}
+			""";
+
+		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	{
+		var skip = (!isVisible).ToString().ToLowerInvariant();
+
+		var js = $$"""
+			"use strict";
+
+			console.log("Setup");
+
+			for (let client of workspace.clientList())
+			{
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
+					continue;
+				}
+			
+				client.skipPager = {{skip}};
+				client.skipSwitcher = {{skip}};
+				client.skipTaskbar = {{skip}};
+			
+				break;
+			}
+			""";
+
+		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	{
+		var isVisibleStr = (!isVisible).ToString().ToLowerInvariant();
+
+		var js = $$"""
+			"use strict";
+
+			console.log("Setup");
+
+			for (let client of workspace.clientList())
+			{
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
+					continue;
+				}
+			
+				client.minimized = {{isVisibleStr}};
+			
+				break;
+			}
+			""";
+
+		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
+	{
+		var isAlwaysOnTopStr = isAlwaysOnTop.ToString().ToLowerInvariant();
+
+		var js = $$"""
+			"use strict";
+
+			console.log("Setup");
+
+			for (let client of workspace.clientList())
+			{
+				if (client.resourceClass !== "{{window.ResourceClass}}") {
+					continue;
+				}
+			
+				client.keepAbove = {{isAlwaysOnTopStr}};
+			
+				break;
+			}
+			""";
+
+		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).ConfigureAwait(false);
 	}
 }
