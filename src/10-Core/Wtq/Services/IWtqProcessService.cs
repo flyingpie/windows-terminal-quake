@@ -13,7 +13,7 @@ public interface IWtqProcessService
 	/// <summary>
 	/// Looks for a process that matches the specified <paramref name="opts"/>.
 	/// </summary>
-	WtqWindow? FindProcess(WtqAppOptions opts);
+	Task<WtqWindow?> FindProcess(WtqAppOptions opts);
 
 	/// <summary>
 	/// Returns the process that currently has UI focus.

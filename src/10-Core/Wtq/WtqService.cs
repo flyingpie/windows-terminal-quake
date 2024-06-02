@@ -46,6 +46,7 @@ public sealed class WtqService(
 
 	private async Task HandleAppFocusEventAsync(WtqAppFocusEvent ev)
 	{
+		return;
 		// If focus moved to a different window, toggle out the current one (if there is an active app, and it's configured as such).
 		if (ev.App != null &&
 			ev.App == _open &&
@@ -75,7 +76,7 @@ public sealed class WtqService(
 					await _open.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					await _appMon.RefocusLastNonWtqAppAsync();
 					return;
 				}
 
@@ -106,7 +107,7 @@ public sealed class WtqService(
 					await app.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					await _appMon.RefocusLastNonWtqAppAsync();
 				}
 				else
 				{
