@@ -1,4 +1,5 @@
-﻿using Wtq.Configuration;
+﻿using Microsoft.Extensions.Hosting;
+using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
@@ -6,7 +7,10 @@ using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32ProcessService : IHostedService, IWtqProcessService
+public sealed class Win32ProcessService :
+	IDisposable,
+	IHostedService,
+	IWtqProcessService
 {
 	private readonly ILogger _log = Log.For<Win32ProcessService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
@@ -20,6 +24,11 @@ public sealed class Win32ProcessService : IHostedService, IWtqProcessService
 		Guard.Against.Null(opts);
 
 		await CreateProcessAsync(opts).ConfigureAwait(false);
+	}
+
+	public void Dispose()
+	{
+		_lock.Dispose();
 	}
 
 	public WtqWindow? FindProcess(WtqAppOptions opts)
