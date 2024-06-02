@@ -8,7 +8,6 @@ using Wtq.Events;
 using Wtq.Services;
 using Wtq.Services.Apps;
 using Wtq.Services.KWin;
-using Wtq.Services.SharpHook;
 using Wtq.Utils;
 
 namespace Wtq.Host.Linux;

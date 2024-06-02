@@ -19,5 +19,7 @@
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />
 		<PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
+		<PackageVersion Include="Tmds.DBus" Version="0.17.0" />
+		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.17.0" />
 	</ItemGroup>
 </Project>

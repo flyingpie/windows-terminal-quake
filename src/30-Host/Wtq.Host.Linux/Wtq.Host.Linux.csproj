@@ -24,7 +24,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.SharpHook\Wtq.Services.SharpHook.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.SimpleTrayIcon\Wtq.Services.SimpleTrayIcon.csproj" />
 	</ItemGroup>
 </Project>
