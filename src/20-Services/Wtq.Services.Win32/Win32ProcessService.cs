@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Wtq.Configuration;
+﻿using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
@@ -17,6 +14,7 @@ public sealed class Win32ProcessService : IWtqProcessService
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private IEnumerable<WtqWindow> _processes = [];
 
+	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "MvdO: Handled by Win32WtqProcess.")]
 	public async Task<WtqWindow?> CreateAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);

@@ -10,7 +10,7 @@ public sealed class WtqService(
 	WtqAppMonitorService appMon,
 	IWtqAppRepo appRepo,
 	IWtqBus bus)
-	: IHostedService
+	: IDisposable, IHostedService
 {
 	private readonly WtqAppMonitorService _appMon = Guard.Against.Null(appMon);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
@@ -21,6 +21,11 @@ public sealed class WtqService(
 
 	private WtqApp? _lastOpen;
 	private WtqApp? _open;
+
+	public void Dispose()
+	{
+		_lock.Dispose();
+	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
