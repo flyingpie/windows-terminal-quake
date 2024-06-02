@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Wtq.Configuration;
+﻿using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
