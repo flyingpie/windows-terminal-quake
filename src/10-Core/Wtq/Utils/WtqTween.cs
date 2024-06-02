@@ -9,17 +9,17 @@ public sealed class WtqTween : IWtqTween
 	private readonly ILogger _log = Log.For<WtqTween>();
 
 	public async Task AnimateAsync(
-		WtqRect from,
-		WtqRect to,
+		WtqRect src,
+		WtqRect dst,
 		int durationMs,
 		AnimationType animType,
 		Action<WtqRect> move)
 	{
-		Guard.Against.Null(from);
-		Guard.Against.Null(to);
+		Guard.Against.Null(src);
+		Guard.Against.Null(dst);
 		Guard.Against.Null(move);
 
-		_log.LogInformation("Tweening from '{From}' to '{To}' in '{Duration}'ms, with animation type '{AnimationType}'", from, to, durationMs, animType);
+		_log.LogInformation("Tweening from '{From}' to '{To}' in '{Duration}'ms, with animation type '{AnimationType}'", src, dst, durationMs, animType);
 
 		var swTotal = Stopwatch.StartNew();
 		var swFrame = Stopwatch.StartNew();
@@ -38,7 +38,7 @@ public sealed class WtqTween : IWtqTween
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = WtqRect.Lerp(from, to, progress);
+			var rect = WtqRect.Lerp(src, dst, progress);
 
 			move(rect);
 
@@ -51,7 +51,7 @@ public sealed class WtqTween : IWtqTween
 		}
 
 		// To ensure we end up in exactly the correct final position.
-		move(to);
+		move(dst);
 
 		_log.LogInformation("Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount}", swTotal.ElapsedMilliseconds, durationMs, frameCount);
 	}
