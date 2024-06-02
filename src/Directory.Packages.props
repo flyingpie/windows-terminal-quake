@@ -14,7 +14,6 @@
 		<PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
 		<PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageVersion Include="SharpHook" Version="5.3.2" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="9.23.2.88755" />
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />

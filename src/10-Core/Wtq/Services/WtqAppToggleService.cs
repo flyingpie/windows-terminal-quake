@@ -140,7 +140,7 @@ public class WtqAppToggleService(
 	}
 
 	/// <summary>
-	/// Returns the target bounds of the specified <param name="app"/>, when its toggling onto the screen.
+	/// Returns the target bounds of the specified <paramref name="app"/>, within the specified <paramref name="screenBounds"/> when its toggling onto the screen.
 	/// </summary>
 	private WtqRect GetToggleOnToWindowRect(
 		WtqApp app,

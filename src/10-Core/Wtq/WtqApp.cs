@@ -1,6 +1,5 @@
 ﻿using Wtq.Data;
 using Wtq.Services;
-using Wtq.Services.Apps;
 
 namespace Wtq;
 
@@ -84,6 +83,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		// await UpdateAsync().ConfigureAwait(false);
+
 		_log.LogInformation("Closing app '{App}'", this);
 
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
@@ -140,6 +141,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		await UpdateAsync().ConfigureAwait(false);
+
 		// If we have an active process attached, toggle it open.
 		if (IsActive)
 		{

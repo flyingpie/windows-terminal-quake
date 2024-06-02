@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Wtq.Configuration;
-using Wtq.Services.SharpHook;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 
@@ -51,7 +50,6 @@ public class WtqWin32
 					.AddWtqCore()
 
 					// Platform-specific.
-					// .AddSharpHookGlobalHotKeys()
 					.AddWin32ProcessService()
 					.AddWinFormsHotKeyService()
 					.AddWinFormsScreenInfoProvider()

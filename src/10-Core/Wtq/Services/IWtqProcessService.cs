@@ -8,7 +8,7 @@ public interface IWtqProcessService
 	/// <summary>
 	/// Create a new process instance as defined by <see cref="WtqAppOptions"/>'s parameters.
 	/// </summary>
-	Task<WtqWindow?> CreateAsync(WtqAppOptions opts);
+	Task CreateAsync(WtqAppOptions opts);
 
 	/// <summary>
 	/// Looks for a process that matches the specified <paramref name="opts"/>.

@@ -5,8 +5,8 @@ namespace Wtq.Utils;
 public interface IWtqTween
 {
 	Task AnimateAsync(
-		WtqRect from,
-		WtqRect to,
+		WtqRect src,
+		WtqRect dst,
 		int durationMs,
 		AnimationType animType,
 		Func<WtqRect, Task> move);
