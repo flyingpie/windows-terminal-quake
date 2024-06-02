@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.Apps;
+﻿namespace Wtq.Services;
 
 public interface IWtqAppRepo : IAsyncDisposable
 {
@@ -7,10 +7,6 @@ public interface IWtqAppRepo : IAsyncDisposable
 	WtqApp? GetAppByName(string name);
 
 	WtqApp GetAppByNameRequired(string name);
-
-	WtqAppOptions? GetOptionsByName(string name);
-
-	WtqAppOptions GetOptionsByNameRequired(string name);
 
 	Task UpdateAppsAsync();
 }

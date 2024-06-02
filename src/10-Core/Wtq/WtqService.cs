@@ -1,21 +1,21 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Wtq.Events;
-using Wtq.Services.Apps;
+using Wtq.Services;
 
 namespace Wtq;
 
 public sealed class WtqService(
 	ILogger<WtqService> log,
 	IOptionsMonitor<WtqOptions> opts,
-	WtqAppMonitorService appMon,
 	IWtqAppRepo appRepo,
-	IWtqBus bus)
+	IWtqBus bus,
+	IWtqFocusTracker focusTracker)
 	: IDisposable, IHostedService
 {
-	private readonly WtqAppMonitorService _appMon = Guard.Against.Null(appMon);
+	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
-	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
+	private readonly IWtqFocusTracker _focusTracker = Guard.Against.Null(focusTracker);
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly SemaphoreSlim _lock = new(1);
 
@@ -75,7 +75,7 @@ public sealed class WtqService(
 					await _open.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					_focusTracker.LastNonWtqForeground?.BringToForeground();
 					return;
 				}
 
@@ -106,7 +106,7 @@ public sealed class WtqService(
 					await app.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_appMon.RefocusLastNonWtqApp();
+					_focusTracker.LastNonWtqForeground?.BringToForeground();
 				}
 				else
 				{
