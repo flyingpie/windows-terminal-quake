@@ -76,7 +76,7 @@ public sealed class WtqService(
 					await _open.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					await _focusTracker.LastNonWtqForeground?.BringToForegroundAsync();
+					await _focusTracker.FocusLastNonWtqAppAsync();
 					return;
 				}
 
@@ -107,7 +107,7 @@ public sealed class WtqService(
 					await app.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_focusTracker.LastNonWtqForeground?.BringToForegroundAsync();
+					_focusTracker.FocusLastNonWtqAppAsync();
 				}
 				else
 				{

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Wtq.Services.KWin.Models;
+namespace Wtq.Services.KWin.Dto;
 
 public class KWinWindow
 {

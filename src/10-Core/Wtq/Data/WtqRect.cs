@@ -1,4 +1,6 @@
-﻿namespace Wtq.Data;
+﻿using System.Drawing;
+
+namespace Wtq.Data;
 
 public struct WtqRect : IEquatable<WtqRect>
 {
@@ -34,6 +36,15 @@ public struct WtqRect : IEquatable<WtqRect>
 		{
 			X = float.Lerp(b1.X, b2.X, by), Y = float.Lerp(b1.Y, b2.Y, by), Width = float.Lerp(b1.Width, b2.Width, by), Height = float.Lerp(b1.Height, b2.Height, by),
 		};
+	}
+
+	public readonly bool Contains(Point pos)
+	{
+		return
+			X < pos.X &&
+			Y < pos.Y &&
+			X + Width > pos.X &&
+			Y + Height > pos.Y;
 	}
 
 	public readonly bool Contains(WtqVec2I pos)

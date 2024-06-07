@@ -4,6 +4,7 @@
 		<RootNamespace>Wtq.Services.WinForms</RootNamespace>
 
 		<TargetFramework>net8.0-windows</TargetFramework>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>

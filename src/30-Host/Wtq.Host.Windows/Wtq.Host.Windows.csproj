@@ -5,6 +5,7 @@
 
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>

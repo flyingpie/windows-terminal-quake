@@ -4,9 +4,9 @@ namespace Wtq.Services;
 
 public interface IWtqScreenInfoProvider
 {
-	WtqRect GetPrimaryScreenRect();
+	Task<WtqRect> GetPrimaryScreenRectAsync();
 
-	WtqRect[] GetScreenRects();
+	Task<WtqRect[]> GetScreenRectsAsync();
 
-	WtqRect GetScreenWithCursor();
+	Task<WtqRect> GetScreenWithCursorAsync();
 }
