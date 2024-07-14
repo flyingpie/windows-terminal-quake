@@ -13,6 +13,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
+		<ProjectReference Include="..\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
 	</ItemGroup>
 </Project>
