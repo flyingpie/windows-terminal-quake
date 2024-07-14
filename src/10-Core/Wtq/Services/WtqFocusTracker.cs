@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Wtq.Events;
-using Wtq.Services.Apps;
 
 namespace Wtq.Services;
 
@@ -17,8 +16,13 @@ public sealed class WtqFocusTracker(
 
 	private WtqApp? _foregroundApp;
 	private bool _isRunning = true;
+	private WtqWindow? _lastNonWtqForeground;
 
-	public WtqWindow? LastNonWtqForeground { get; private set; }
+	/// <inheritdoc/>
+	public async Task FocusLastNonWtqAppAsync()
+	{
+		await (_lastNonWtqForeground?.BringToForegroundAsync() ?? Task.CompletedTask).ConfigureAwait(false);
+	}
 
 	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the task to be cancelled here.")]
 	public Task StartAsync(CancellationToken cancellationToken)
@@ -37,7 +41,7 @@ public sealed class WtqFocusTracker(
 
 					if (pr == null)
 					{
-						LastNonWtqForeground = fgWindow;
+						_lastNonWtqForeground = fgWindow;
 					}
 
 					// Nothing changed.
