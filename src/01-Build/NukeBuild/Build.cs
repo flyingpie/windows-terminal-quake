@@ -24,6 +24,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	GitHubActionsImage.WindowsLatest,
 	FetchDepth = 0,
 	OnPushBranches = ["master"],
+	OnWorkflowDispatchOptionalInputs = [ "name" ],
 	EnableGitHubToken = true,
 	InvokedTargets = [nameof(PublishRelease)])]
 [SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
@@ -53,6 +54,8 @@ public sealed class Build : NukeBuild
 
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
+
+	private AbsolutePath PathToWin64AotZip => ArtifactsDirectory / $"win-x64_aot.zip";
 
 	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"win-x64_framework-dependent.zip";
 
@@ -94,21 +97,38 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
-	/// NuGet restore.
+	/// Windows x64 AOT.
 	/// </summary>
-	public Target Restore => _ => _
+	private Target PublishWin64Aot => _ => _
 		.DependsOn(Clean)
+		.Produces(PathToWin64AotZip)
 		.Executes(() =>
 		{
-			DotNetRestore(_ => _
-				.SetProcessWorkingDirectory(Solution.Directory));
+			var staging = StagingDirectory / "win-x64_aot";
+
+			DotNetPublish(_ => _
+				.SetAssemblyVersion(AssemblyVersion)
+				.SetInformationalVersion(InformationalVersion)
+				.SetConfiguration(Configuration)
+				.SetFramework("net8.0-windows")
+				.SetProject(Solution._0_Host.Wtq_Host_Windows)
+				.SetOutput(staging)
+				.SetProperty("PublishAot", true)
+				.SetProperty("InvariantGlobalization", true)
+				.SetRuntime("win-x64"));
+
+			staging.ZipTo(
+				PathToWin64AotZip,
+				filter: x => x.HasExtension(".exe", ".jsonc"),
+				compressionLevel: CompressionLevel.SmallestSize,
+				fileMode: System.IO.FileMode.CreateNew);
 		});
 
 	/// <summary>
 	/// Windows x64 framework dependent.
 	/// </summary>
 	private Target PublishWin64FrameworkDependent => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToWin64FrameworkDependentZip)
 		.Executes(() =>
 		{
@@ -136,7 +156,7 @@ public sealed class Build : NukeBuild
 	/// Windows x64 self contained.
 	/// </summary>
 	private Target PublishWin64SelfContained => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToWin64SelfContainedZip)
 		.Executes(() =>
 		{
@@ -152,34 +172,6 @@ public sealed class Build : NukeBuild
 				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
-
-			staging.ZipTo(
-				PathToWin64SelfContainedZip,
-				filter: x => x.HasExtension(".exe", ".jsonc"),
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: System.IO.FileMode.CreateNew);
-		});
-
-	/// <summary>
-	/// Windows x64 AOT.
-	/// </summary>
-	private Target PublishWin64Aot => _ => _
-		.DependsOn(Restore)
-		.Produces(PathToWin64SelfContainedZip)
-		.Executes(() =>
-		{
-			var staging = StagingDirectory / "win-x64_aot";
-
-			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
-				.SetInformationalVersion(InformationalVersion)
-				.SetConfiguration(Configuration)
-				.SetFramework("net8.0-windows")
-				.SetProject(Solution._0_Host.Wtq_Host_Windows)
-				.SetOutput(staging)
-				.SetProperty("PublishAot", true)
-				.SetProperty("InvariantGlobalization", true)
-				.SetRuntime("win-x64"));
 
 			staging.ZipTo(
 				PathToWin64SelfContainedZip,

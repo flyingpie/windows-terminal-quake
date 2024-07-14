@@ -17,7 +17,13 @@ public sealed class WtqFocusTracker(
 	private WtqApp? _foregroundApp;
 	private bool _isRunning = true;
 
+	// TODO: Remove
 	public WtqWindow? LastNonWtqForeground { get; private set; }
+
+	public async Task FocusLastNonWtqAppAsync()
+	{
+		await (LastNonWtqForeground?.BringToForegroundAsync() ?? Task.CompletedTask).ConfigureAwait(false);
+	}
 
 	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the task to be cancelled here.")]
 	public Task StartAsync(CancellationToken cancellationToken)

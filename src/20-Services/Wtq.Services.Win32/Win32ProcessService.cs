@@ -31,9 +31,9 @@ public sealed class Win32ProcessService :
 		_lock.Dispose();
 	}
 
-	public WtqWindow? FindProcess(WtqAppOptions opts)
+	public Task<WtqWindow?> FindProcess(WtqAppOptions opts)
 	{
-		return GetProcesses().FirstOrDefault(p => p.Matches(opts));
+		return Task.FromResult(GetProcesses().FirstOrDefault(p => p.Matches(opts)));
 	}
 
 	public WtqWindow? GetForegroundWindow()

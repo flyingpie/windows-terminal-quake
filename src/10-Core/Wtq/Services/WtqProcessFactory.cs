@@ -32,7 +32,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 
 			case AttachMode.Find:
 			{
-				return _procService.FindProcess(opts);
+				return await _procService.FindProcess(opts).ConfigureAwait(false);
 			}
 
 			default:
@@ -42,7 +42,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 					.ExecuteAsync(
 						async () =>
 						{
-							var proc = _procService.FindProcess(opts);
+							var proc = await _procService.FindProcess(opts).ConfigureAwait(false);
 
 							if (proc != null)
 							{
