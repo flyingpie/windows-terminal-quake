@@ -32,7 +32,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 
 			case AttachMode.Find:
 			{
-				return await _procService.FindProcess(opts).ConfigureAwait(false);
+				return await _procService.FindProcessAsync(opts).NoCtx();
 			}
 
 			default:
@@ -42,18 +42,18 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 					.ExecuteAsync(
 						async () =>
 						{
-							var proc = await _procService.FindProcess(opts).ConfigureAwait(false);
+							var proc = await _procService.FindProcessAsync(opts).NoCtx();
 
 							if (proc != null)
 							{
 								return proc;
 							}
 
-							await _procService.CreateAsync(opts).ConfigureAwait(false);
+							await _procService.CreateAsync(opts).NoCtx();
 
 							throw new WtqException($"Failed to find or start window for app '{opts}'.");
 						})
-					.ConfigureAwait(false);
+					.NoCtx();
 			}
 		}
 	}
