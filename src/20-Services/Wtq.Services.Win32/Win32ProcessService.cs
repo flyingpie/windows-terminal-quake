@@ -22,7 +22,7 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return new Win32WtqProcess(await CreateProcessAsync(opts).ConfigureAwait(false));
 	}
 
-	public WtqWindow? FindProcess(WtqAppOptions opts)
+	public WtqWindow? FindProcessAsync(WtqAppOptions opts)
 	{
 		return GetProcesses().FirstOrDefault(p => p.Matches(opts));
 	}
