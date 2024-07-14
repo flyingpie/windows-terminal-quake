@@ -6,13 +6,16 @@
 public sealed class WtqProcessFactory : IWtqProcessFactory
 {
 	private readonly IOptions<WtqOptions> _opts;
+	private readonly IRetry _retry;
 	private readonly IWtqProcessService _procService;
 
 	public WtqProcessFactory(
 		IOptions<WtqOptions> opts,
+		IRetry retry,
 		IWtqProcessService procService)
 	{
 		_opts = Guard.Against.Null(opts);
+		_retry = Guard.Against.Null(retry);
 		_procService = Guard.Against.Null(procService);
 	}
 
@@ -23,34 +26,35 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		switch (opts.AttachMode ?? _opts.Value.AttachMode)
 		{
 			case AttachMode.Manual:
-				{
-					return null;
-				}
+			{
+				return null;
+			}
 
 			case AttachMode.Find:
-				{
-					return _procService.FindProcess(opts);
-				}
+			{
+				return await _procService.FindProcessAsync(opts).NoCtx();
+			}
 
 			default:
 			case AttachMode.FindOrStart:
-				{
-					for (var i = 0; i < 5; i++)
-					{
-						var proc = _procService.FindProcess(opts);
-
-						if (proc != null)
+			{
+				return await _retry
+					.ExecuteAsync(
+						async () =>
 						{
-							return proc;
-						}
+							var proc = await _procService.FindProcessAsync(opts).NoCtx();
 
-						await _procService.CreateAsync(opts).ConfigureAwait(false);
+							if (proc != null)
+							{
+								return proc;
+							}
 
-						await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
-					}
+							await _procService.CreateAsync(opts).NoCtx();
 
-					throw new WtqException($"Failed to find or start window for app '{opts}'.");
-				}
+							throw new WtqException($"Failed to find or start window for app '{opts}'.");
+						})
+					.NoCtx();
+			}
 		}
 	}
 }
