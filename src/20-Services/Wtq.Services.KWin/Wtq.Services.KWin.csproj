@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Services.KWin</AssemblyName>
+		<RootNamespace>Wtq.Services.KWin</RootNamespace>
+
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+	</ItemGroup>
+</Project>
