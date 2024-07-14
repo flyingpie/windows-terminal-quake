@@ -1,4 +1,4 @@
-﻿using Wtq.Services.KWin;
+using Wtq.Services.KWin;
 
 namespace Wtq.Host.Linux;
 
