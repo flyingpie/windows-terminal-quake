@@ -17,6 +17,7 @@ public sealed class WtqFocusTracker(
 	private WtqApp? _foregroundApp;
 	private bool _isRunning = true;
 
+	// TODO: Remove
 	public WtqWindow? LastNonWtqForeground { get; private set; }
 
 	public async Task FocusLastNonWtqAppAsync()
