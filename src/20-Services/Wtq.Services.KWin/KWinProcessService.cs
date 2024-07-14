@@ -17,7 +17,7 @@ public class KWinProcessService : IWtqProcessService
 		return Task.CompletedTask;
 	}
 
-	public async Task<WtqWindow?> FindProcess(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
 	{
 		try
 		{
