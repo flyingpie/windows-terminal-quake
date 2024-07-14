@@ -20,6 +20,11 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "name"
+        required: false
 
 jobs:
   windows-latest:
@@ -39,6 +44,7 @@ jobs:
       - name: 'Run: PublishRelease'
         run: ./src/build.cmd PublishRelease
         env:
+          name: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Publish: win-x64_self-contained.zip'
         uses: actions/upload-artifact@v3
