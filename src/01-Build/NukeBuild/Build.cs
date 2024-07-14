@@ -23,7 +23,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	"ci",
 	GitHubActionsImage.WindowsLatest,
 	FetchDepth = 0,
-	OnPushBranches = ["master", "kwin"],
+	OnPushBranches = ["master"],
 	OnWorkflowDispatchOptionalInputs = [ "name" ],
 	EnableGitHubToken = true,
 	InvokedTargets = [nameof(PublishRelease)])]
