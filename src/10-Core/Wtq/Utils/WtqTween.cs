@@ -2,12 +2,15 @@
 
 namespace Wtq.Utils;
 
+/// <inheritdoc/>
 public sealed class WtqTween : IWtqTween
 {
-	private const float FrameTimeMs = 1000f / 30f; // 40 = FPS
+	private const float TargetFps = 30f;
+	private const float FrameTimeMs = 1000f / TargetFps;
 
 	private readonly ILogger _log = Log.For<WtqTween>();
 
+	/// <inheritdoc/>
 	public async Task AnimateAsync(
 		WtqRect src,
 		WtqRect dst,

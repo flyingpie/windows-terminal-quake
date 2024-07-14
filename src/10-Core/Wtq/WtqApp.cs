@@ -60,7 +60,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Configurable.
 		if (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options) == TaskBarIconVisibility.AlwaysHidden)
 		{
-			await process.SetTaskbarIconVisibleAsync(false).ConfigureAwait(false);
+			await process.SetTaskbarIconVisibleAsync(false).NoCtx();
 		}
 
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
@@ -78,7 +78,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Process.BringToForegroundAsync();
+		await Process.BringToForegroundAsync().NoCtx();
 	}
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -108,13 +108,13 @@ public sealed class WtqApp : IAsyncDisposable
 			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
 
 			// Toggle app onto the screen again.
-			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
+			await OpenAsync(ToggleModifiers.Instant).NoCtx();
 
 			// Restore "always on top" state.
-			await Process.SetAlwaysOnTopAsync(false).ConfigureAwait(false);
+			await Process.SetAlwaysOnTopAsync(false).NoCtx();
 
 			// Restore taskbar icon visibility.
-			await Process.SetTaskbarIconVisibleAsync(true).ConfigureAwait(false);
+			await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
 		}
 	}
 
@@ -136,7 +136,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Process.MoveToAsync(rect: rect);
+		await Process.MoveToAsync(rect: rect).NoCtx();
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -148,8 +148,8 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
-			await Process.SetVisibleAsync(true).ConfigureAwait(false);
-			await _toggler.ToggleOnAsync(this, mods).ConfigureAwait(false);
+			await Process.SetVisibleAsync(true).NoCtx();
+			await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
 			return true;
 		}
@@ -197,7 +197,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 		if (Process == null)
 		{
-			var process = await _procFactory.GetProcessAsync(Options).ConfigureAwait(false);
+			var process = await _procFactory.GetProcessAsync(Options).NoCtx();
 
 			if (process == null)
 			{
@@ -211,10 +211,10 @@ public sealed class WtqApp : IAsyncDisposable
 		if (Process != null && IsActive)
 		{
 			// Always on top.
-			await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).ConfigureAwait(false);
+			await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
 
 			// Opacity.
-			await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).ConfigureAwait(false);
+			await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
 		}
 	}
 }
