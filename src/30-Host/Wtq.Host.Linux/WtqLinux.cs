@@ -6,7 +6,6 @@ using Serilog;
 using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services;
-using Wtq.Services.Apps;
 using Wtq.Services.KWin;
 using Wtq.Utils;
 
@@ -52,27 +51,10 @@ public class WtqLinux
 				opt
 
 					// Utils
-					.AddSingleton<IRetry, Retry>()
-
-					// Core App Logic
-					.AddSingleton<IWtqTween, WtqTween>()
-
-					.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
-					.AddSingleton<WtqAppMonitorService>()
-					.AddSingleton<IWtqBus, WtqBus>()
-					.AddHostedService(p => p.GetRequiredService<WtqAppMonitorService>())
-					.AddHostedService<WtqService>()
-					.AddSingleton<IWtqAppRepo, WtqAppRepo>()
-					.AddHostedService<WtqHotKeyService>()
-
-					.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
-					.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
+					.AddWtqCore()
 
 					// Platform-specific.
-					.AddKWin()
-					// .AddSharpHookGlobalHotKeys()
-					// .AddWinFormsTrayIcon()
-					;
+					.AddKWin();
 			})
 			.UseSerilog()
 			.Build();

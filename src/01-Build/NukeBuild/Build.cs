@@ -103,21 +103,10 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
-	/// NuGet restore.
-	/// </summary>
-	public Target Restore => _ => _
-		.DependsOn(Clean)
-		.Executes(() =>
-		{
-			// DotNetRestore(_ => _
-			// 	.SetProcessWorkingDirectory(Solution.));
-		});
-
-	/// <summary>
 	/// Linux x64 AOT.
 	/// </summary>
 	private Target PublishLinux64Aot => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToLinux64AotZip)
 		.Executes(() =>
 		{
@@ -145,7 +134,7 @@ public sealed class Build : NukeBuild
 	/// Linux x64 framework dependent.
 	/// </summary>
 	private Target PublishLinux64FrameworkDependent => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToLinux64FrameworkDependentZip)
 		.Executes(() =>
 		{
@@ -173,7 +162,7 @@ public sealed class Build : NukeBuild
 	/// Windows x64 self contained.
 	/// </summary>
 	private Target PublishLinux64SelfContained => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToLinux64SelfContainedZip)
 		.Executes(() =>
 		{
@@ -201,7 +190,7 @@ public sealed class Build : NukeBuild
 	/// Windows x64 AOT.
 	/// </summary>
 	private Target PublishWin64Aot => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToWin64AotZip)
 		.Executes(() =>
 		{
@@ -229,7 +218,7 @@ public sealed class Build : NukeBuild
 	/// Windows x64 framework dependent.
 	/// </summary>
 	private Target PublishWin64FrameworkDependent => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToWin64FrameworkDependentZip)
 		.Executes(() =>
 		{
@@ -257,7 +246,7 @@ public sealed class Build : NukeBuild
 	/// Windows x64 self contained.
 	/// </summary>
 	private Target PublishWin64SelfContained => _ => _
-		.DependsOn(Restore)
+		.DependsOn(Clean)
 		.Produces(PathToWin64SelfContainedZip)
 		.Executes(() =>
 		{

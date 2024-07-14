@@ -11,16 +11,17 @@ public class KWinProcessService : IWtqProcessService
 		_kwinClient = Guard.Against.Null(kwinClient);
 	}
 
-	public async Task<WtqWindow?> CreateAsync(WtqAppOptions opts)
+	public Task CreateAsync(WtqAppOptions opts)
 	{
-		return null;
+		// TODO
+		return Task.CompletedTask;
 	}
 
 	public async Task<WtqWindow?> FindProcess(WtqAppOptions opts)
 	{
 		try
 		{
-			var clients = (await _kwinClient.GetClientListAsync(CancellationToken.None))
+			var clients = (await _kwinClient.GetClientListAsync(CancellationToken.None).ConfigureAwait(false))
 				.Select(c => new KWinWtqWindow(_kwinClient, c))
 				.ToList();
 

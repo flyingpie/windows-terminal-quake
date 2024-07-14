@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Wtq.Data;
 using Wtq.Services.KWin.DBus;
-using Wtq.Services.KWin.Models;
+using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 
@@ -9,7 +9,11 @@ public interface IKWinClient
 {
 	Task<IEnumerable<KWinWindow>> GetClientListAsync(CancellationToken cancellationToken);
 
+	Task<Point> GetCursorPosAsync(CancellationToken cancellationToken);
+
 	Task MoveClientAsync(KWinWindow window, WtqRect rect, CancellationToken cancellationToken);
+
+	Task<KWinSupportInformation> GetSupportInformationAsync(CancellationToken cancellationToken);
 
 	Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken);
 
@@ -25,10 +29,14 @@ public interface IKWinClient
 public class KWinClient : IKWinClient
 {
 	private readonly KWinScriptExecutor _kwinScriptEx;
+	private readonly KWinService _kwinDbus;
 
-	internal KWinClient(KWinScriptExecutor kwinScriptEx)
+	internal KWinClient(
+		KWinScriptExecutor kwinScriptEx,
+		KWinService kwinDbus)
 	{
 		_kwinScriptEx = Guard.Against.Null(kwinScriptEx);
+		_kwinDbus = Guard.Against.Null(kwinDbus);
 	}
 
 	public async Task<IEnumerable<KWinWindow>> GetClientListAsync(CancellationToken cancellationToken)
@@ -54,6 +62,33 @@ public class KWinClient : IKWinClient
 			""";
 
 		return await _kwinScriptEx.ExecuteAsync<IEnumerable<KWinWindow>>(id, js, cancellationToken).ConfigureAwait(false);
+	}
+
+	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
+	{
+		var id = Guid.NewGuid();
+
+		var js =
+			$$"""
+			callDBus(
+				"wtq.svc",
+				"/wtq/kwin",
+				"wtq.kwin",
+				"SendResponse",
+				"{{id}}",
+				JSON.stringify(workspace.cursorPos));
+			""";
+
+		var point = await _kwinScriptEx.ExecuteAsync<KWinPoint>(id, js, cancellationToken).ConfigureAwait(false);
+
+		return point.ToPoint();
+	}
+
+	public async Task<KWinSupportInformation> GetSupportInformationAsync(CancellationToken cancellationToken)
+	{
+		var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().ConfigureAwait(false);
+
+		return KWinSupportInformation.Parse(str);
 	}
 
 	public async Task MoveClientAsync(KWinWindow window, WtqRect rect, CancellationToken cancellationToken)

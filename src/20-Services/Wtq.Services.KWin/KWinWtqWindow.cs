@@ -1,6 +1,6 @@
 using Wtq.Configuration;
 using Wtq.Data;
-using Wtq.Services.KWin.Models;
+using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 

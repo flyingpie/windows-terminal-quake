@@ -34,10 +34,10 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Make sure the app has focus.
-		await app.BringToForegroundAsync();
+		await app.BringToForegroundAsync().NoCtx();
 
 		var durationMs = GetDurationMs(app, mods);
-		var screen = GetToggleOnToScreenRect(app);
+		var screen = await GetToggleOnToScreenRectAsync(app).NoCtx();
 		var to = GetToggleOnToWindowRect(app, screen);
 		var from = GetToggleOnFromWindowRect(to);
 
@@ -94,7 +94,7 @@ public class WtqAppToggleService(
 	/// Returns a rectangle representing the screen we want to toggle the terminal onto.
 	/// </summary>
 	/// <param name="app">The app for which we're figuring out the screen bounds.</param>
-	private WtqRect GetToggleOnToScreenRect(WtqApp app)
+	private async Task<WtqRect> GetToggleOnToScreenRectAsync(WtqApp app)
 	{
 		Guard.Against.Null(app);
 
@@ -105,7 +105,7 @@ public class WtqAppToggleService(
 		{
 			case PreferMonitor.AtIndex:
 			{
-				var screens = _scrInfoProvider.GetScreenRects();
+				var screens = await _scrInfoProvider.GetScreenRectsAsync().NoCtx();
 
 				if (screens.Length > monInd)
 				{
@@ -118,14 +118,14 @@ public class WtqAppToggleService(
 					monInd,
 					screens.Length);
 
-				return _scrInfoProvider.GetPrimaryScreenRect();
+				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 			}
 
 			case PreferMonitor.Primary:
-				return _scrInfoProvider.GetPrimaryScreenRect();
+				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 
 			case PreferMonitor.WithCursor:
-				return _scrInfoProvider.GetScreenWithCursor();
+				return await _scrInfoProvider.GetScreenWithCursorAsync().NoCtx();
 
 			default:
 			{
@@ -134,13 +134,13 @@ public class WtqAppToggleService(
 					prefMon,
 					nameof(app.Options.PreferMonitor));
 
-				return _scrInfoProvider.GetPrimaryScreenRect();
+				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 			}
 		}
 	}
 
 	/// <summary>
-	/// Returns the target bounds of the specified <param name="app"/>, when its toggling onto the screen.
+	/// Returns the target bounds of the specified <paramref name="app"/>, within the specified <paramref name="screenBounds"/> when its toggling onto the screen.
 	/// </summary>
 	private WtqRect GetToggleOnToWindowRect(
 		WtqApp app,

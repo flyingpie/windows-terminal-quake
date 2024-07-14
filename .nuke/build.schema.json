@@ -88,8 +88,7 @@
               "PublishWin64Aot",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "ReportInfo",
-              "Restore"
+              "ReportInfo"
             ]
           }
         },
@@ -115,8 +114,7 @@
               "PublishWin64Aot",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "ReportInfo",
-              "Restore"
+              "ReportInfo"
             ]
           }
         },
