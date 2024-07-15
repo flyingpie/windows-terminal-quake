@@ -5,13 +5,13 @@
 /// </summary>
 public sealed class WtqOptions
 {
+	private int? _animationDurationMsSwitchingApps;
+
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
 	public int AnimationDurationMs { get; init; }
 		= 250;
-
-	private int? _animationDurationMsSwitchingApps;
 
 	/// <summary>
 	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>

@@ -14,10 +14,10 @@ public sealed class Win32ProcessService :
 {
 	private readonly ILogger _log = Log.For<Win32ProcessService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
+	private readonly SemaphoreSlim _lock = new(1);
+
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private IEnumerable<WtqWindow> _processes = [];
-
-	private readonly SemaphoreSlim _lock = new(1);
 
 	public async Task CreateAsync(WtqAppOptions opts)
 	{
@@ -80,17 +80,16 @@ public sealed class Win32ProcessService :
 	{
 		_log.LogInformation("Creating process for app '{App}'", opts);
 
-		var process = new Process()
+		using var process = new Process();
+
+		process.StartInfo = new ProcessStartInfo()
 		{
-			StartInfo = new ProcessStartInfo()
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+			UseShellExecute = false,
+			Environment =
 			{
-				FileName = opts.FileName,
-				Arguments = opts.Arguments,
-				UseShellExecute = false,
-				Environment =
-				{
-					{ "WTQ_START", opts.Name },
-				},
+				{ "WTQ_START", opts.Name },
 			},
 		};
 
@@ -127,7 +126,6 @@ public sealed class Win32ProcessService :
 	private async Task UpdateProcessesAsync(bool force = false)
 	{
 		// TODO: Remove all the locks and use debounce instead?
-
 		if (!force && _nextLookup > DateTimeOffset.UtcNow)
 		{
 			return;

@@ -59,12 +59,6 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Process = process;
 
-		// TODO: Configurable.
-		if (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options) == TaskBarIconVisibility.AlwaysHidden)
-		{
-			await process.SetTaskbarIconVisibleAsync(false).NoCtx();
-		}
-
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
 		_log.LogInformation("Found process instance for app '{App}': '{Process}'", Options, process);
@@ -72,7 +66,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (!IsActive)
+		if (Process == null || !IsActive)
 		{
 			_log.LogWarning("Attempted to close inactive app {App}", this);
 			return;
@@ -80,35 +74,38 @@ public sealed class WtqApp : IAsyncDisposable
 
 		_log.LogInformation("Closing app '{App}'", this);
 
+		// Move window off-screen.
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
 
+		// Hide window.
 		await Process.SetVisibleAsync(false).ConfigureAwait(false);
+
+		await UpdatePropsAsync(isOpen: false).NoCtx();
 	}
 
 	public async ValueTask DisposeAsync()
 	{
 		// TODO: Add ability to close attached processes when app closes.
-		if (Process != null)
+		if (Process == null || !IsActive)
 		{
-			// Restore original position.
-			// TODO: Restore to original position (when we got a hold of the process).
-			var bounds = Process.WindowRect;
-			bounds.Width = 1280;
-			bounds.Height = 800;
-			bounds.X = 10;
-			bounds.Y = 10;
-
-			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
-
-			// Toggle app onto the screen again.
-			await OpenAsync(ToggleModifiers.Instant).NoCtx();
-
-			// Restore "always on top" state.
-			await Process.SetAlwaysOnTopAsync(false).NoCtx();
-
-			// Restore taskbar icon visibility.
-			await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+			return;
 		}
+
+		// Restore original position.
+		// TODO: Restore to original position (when we got a hold of the process).
+		var bounds = Process.WindowRect;
+		bounds.Width = 1280;
+		bounds.Height = 800;
+		bounds.X = 10;
+		bounds.Y = 10;
+
+		_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
+
+		// Toggle app onto the screen again.
+		await OpenAsync(ToggleModifiers.Instant).NoCtx();
+
+		// Reset app props.
+		await ResetPropsAsync().NoCtx();
 	}
 
 	/// <summary>
@@ -148,7 +145,7 @@ public sealed class WtqApp : IAsyncDisposable
 	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
 	public Rectangle GetWindowRect()
 	{
-		if (Process == null)
+		if (Process == null || !IsActive)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
@@ -158,7 +155,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task MoveWindowAsync(Rectangle rect)
 	{
-		if (Process == null)
+		if (Process == null || !IsActive)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
@@ -168,17 +165,19 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		await UpdateAsync().ConfigureAwait(false);
+		await UpdateProcessAsync().NoCtx();
+		await UpdatePropsAsync(isOpen: true).NoCtx();
 
 		// If we have an active process attached, toggle it open.
-		if (IsActive)
+		if (Process != null && IsActive)
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
-			// Make sure the app is visible and has focus.
+			// Make sure the app window is visible and has focus.
 			await Process.SetVisibleAsync(true).NoCtx();
 			await Process.BringToForegroundAsync().NoCtx();
 
+			// Move app onto screen.
 			await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
 			return true;
@@ -194,7 +193,7 @@ public sealed class WtqApp : IAsyncDisposable
 				return true;
 			}
 
-			_log.LogWarning("ATTACH?!");
+			_log.LogWarning("Cannot manually attach, no foreground window found");
 		}
 
 		return false;
@@ -215,7 +214,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// <summary>
 	/// Updates the state of the <see cref="WtqApp"/> object to reflect running processes on the system.
 	/// </summary>
-	public async Task UpdateAsync()
+	public async Task UpdateProcessAsync()
 	{
 		// Check that if we have a process handle, the process is still active.
 		if (Process is { IsValid: false })
@@ -245,15 +244,59 @@ public sealed class WtqApp : IAsyncDisposable
 
 			await AttachAsync(process).ConfigureAwait(false);
 		}
+	}
 
-		// TODO: Move to "AttachAsync"?
-		if (Process != null && IsActive)
+	/// <summary>
+	/// Updates app properties such as taskbar icon visibility and opacity.
+	/// </summary>
+	private async Task UpdatePropsAsync(bool isOpen)
+	{
+		if (Process == null || !IsActive)
 		{
-			// Always on top.
-			await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
-
-			// Opacity.
-			await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
+			return;
 		}
+
+		// Always on top.
+		await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
+
+		// Opacity.
+		await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
+
+		// Taskbar icon visibility.
+		switch (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options))
+		{
+			case TaskBarIconVisibility.AlwaysHidden:
+				await Process.SetTaskbarIconVisibleAsync(false).NoCtx();
+				break;
+			case TaskBarIconVisibility.AlwaysVisible:
+				await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+				break;
+			case TaskBarIconVisibility.WhenAppVisible:
+				await Process.SetTaskbarIconVisibleAsync(isOpen).NoCtx();
+				break;
+			default:
+				await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+				break;
+		}
+	}
+
+	/// <summary>
+	/// Resets app properties such as taskbar icon visibility and opacity.
+	/// </summary>
+	private async Task ResetPropsAsync()
+	{
+		if (Process == null || !IsActive)
+		{
+			return;
+		}
+
+		// Restore "always on top" state.
+		await Process.SetAlwaysOnTopAsync(false).NoCtx();
+
+		// Restore taskbar icon visibility.
+		await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+
+		// Restore opacity.
+		await Process.SetTransparencyAsync(100).NoCtx();
 	}
 }
