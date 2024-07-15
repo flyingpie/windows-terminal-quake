@@ -1,10 +1,11 @@
 # Changelog
 
 ## [vFuture]
-- Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
 - Support for KDE Plasma (KWin, currently Wayland only).
 
 ## [vNext]
+- Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
+
 - Added options to control the animation speed and style: 
   - **AnimationDurationMs** How long the animation takes.
   - **AnimationDurationMsWhenSwitchingApps** How long the animation takes, when switching between WTQ-attached apps.
