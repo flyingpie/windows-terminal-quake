@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 			.AddHostedService<WinFormsHotKeyService>();
 	}
 
-	public static IServiceCollection AddWinFormsScreenCoordsProvider(this IServiceCollection services)
+	public static IServiceCollection AddWinFormsScreenInfoProvider(this IServiceCollection services)
 	{
 		return services
 			.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>();

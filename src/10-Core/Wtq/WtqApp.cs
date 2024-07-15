@@ -94,7 +94,9 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (Process != null)
 		{
-			var bounds = Process.WindowRect; // TODO: Restore to original position (when we got a hold of the process).
+			// Restore original position.
+			// TODO: Restore to original position (when we got a hold of the process).
+			var bounds = Process.WindowRect;
 			bounds.Width = 1280;
 			bounds.Height = 800;
 			bounds.X = 10;
@@ -102,8 +104,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 			_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
 
+			// Toggle app onto the screen again.
 			await OpenAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
+			// Restore "always on top" state.
+			Process.SetAlwaysOnTop(false);
+
+			// Restore taskbar icon visibility.
 			Process.SetTaskbarIconVisible(true);
 		}
 	}

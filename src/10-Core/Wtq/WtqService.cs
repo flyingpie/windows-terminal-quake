@@ -10,16 +10,22 @@ public sealed class WtqService(
 	WtqAppMonitorService appMon,
 	IWtqAppRepo appRepo,
 	IWtqBus bus)
-	: IHostedService
+	: IDisposable, IHostedService
 {
 	private readonly WtqAppMonitorService _appMon = Guard.Against.Null(appMon);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
+	private readonly SemaphoreSlim _lock = new(1);
 
 	private WtqApp? _lastOpen;
 	private WtqApp? _open;
+
+	public void Dispose()
+	{
+		_lock.Dispose();
+	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
@@ -54,66 +60,75 @@ public sealed class WtqService(
 
 	private async Task HandleToggleAppEventAsync(WtqToggleAppEvent ev)
 	{
-		var app = ev.App;
-
-		// If the action does not point to a single app, toggle the most recent one.
-		if (app == null)
+		try
 		{
-			// If we still have an app open, close it now.
-			if (_open != null)
-			{
-				await _open.CloseAsync().ConfigureAwait(false);
-				_lastOpen = _open;
-				_open = null;
-				_appMon.RefocusLastNonWtqApp();
-				return;
-			}
+			await _lock.WaitAsync().ConfigureAwait(false);
 
-			// If we don't yet have an app open, open either the most recently used one, or the first one.
-			if (_lastOpen == null)
+			var app = ev.App;
+
+			// If the action does not point to a single app, toggle the most recent one.
+			if (app == null)
 			{
-				// TODO
-				var first = _appRepo.Apps.FirstOrDefault();
-				if (first != null)
+				// If we still have an app open, close it now.
+				if (_open != null)
 				{
-					await first.OpenAsync().ConfigureAwait(false);
+					await _open.CloseAsync().ConfigureAwait(false);
+					_lastOpen = _open;
+					_open = null;
+					_appMon.RefocusLastNonWtqApp();
+					return;
 				}
 
-				_open = first;
-				_lastOpen = first;
+				// If we don't yet have an app open, open either the most recently used one, or the first one.
+				if (_lastOpen == null)
+				{
+					// TODO
+					var first = _appRepo.Apps.FirstOrDefault();
+					if (first != null)
+					{
+						await first.OpenAsync().ConfigureAwait(false);
+					}
+
+					_open = first;
+					_lastOpen = first;
+					return;
+				}
+
+				_open = _lastOpen;
+				await _open.OpenAsync().ConfigureAwait(false);
 				return;
 			}
 
-			_open = _lastOpen;
-			await _open.OpenAsync().ConfigureAwait(false);
-			return;
-		}
-
-		if (_open != null)
-		{
-			if (_open == app)
+			if (_open != null)
 			{
-				await app.CloseAsync().ConfigureAwait(false);
-				_lastOpen = _open;
-				_open = null;
-				_appMon.RefocusLastNonWtqApp();
+				if (_open == app)
+				{
+					await app.CloseAsync().ConfigureAwait(false);
+					_lastOpen = _open;
+					_open = null;
+					_appMon.RefocusLastNonWtqApp();
+				}
+				else
+				{
+					await _open.CloseAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
+					await app.OpenAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
+
+					_open = app;
+				}
+
+				return;
 			}
-			else
-			{
-				await _open.CloseAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
-				await app.OpenAsync(ToggleModifiers.SwitchingApps).ConfigureAwait(false);
 
+			// Open the specified app.
+			_log.LogInformation("Toggling app {App}", app);
+			if (await app.OpenAsync().ConfigureAwait(false))
+			{
 				_open = app;
 			}
-
-			return;
 		}
-
-		// Open the specified app.
-		_log.LogInformation("Toggling app {App}", app);
-		if (await app.OpenAsync().ConfigureAwait(false))
+		finally
 		{
-			_open = app;
+			_lock.Release();
 		}
 	}
 }

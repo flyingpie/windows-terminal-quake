@@ -10,9 +10,6 @@ public class WinFormsHotKeyService : IHostedService
 	private readonly ILogger _log = Log.For<WinFormsHotKeyService>();
 	private readonly IWtqBus _bus;
 
-	private KeyModifiers? _lastKeyMod;
-	private Keys? _lastKey;
-
 	public WinFormsHotKeyService(IWtqBus bus)
 	{
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
@@ -32,15 +29,6 @@ public class WinFormsHotKeyService : IHostedService
 
 		HotKeyManager.HotKeyPressed += (s, a) =>
 		{
-			if (_lastKeyMod == a.Modifiers && _lastKey == a.Key)
-			{
-				// TODO: Reset on keyup or something.
-				// return;
-			}
-
-			_lastKeyMod = a.Modifiers;
-			_lastKey = a.Key;
-
 			_bus.Publish(new WtqHotKeyPressedEvent()
 			{
 				Key = a.Key.ToWtqKeys(),

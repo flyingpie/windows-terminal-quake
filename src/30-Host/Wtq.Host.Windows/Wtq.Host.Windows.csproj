@@ -23,8 +23,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.SharpHook\Wtq.Services.SharpHook.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.SimpleTrayIcon\Wtq.Services.SimpleTrayIcon.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.Win32\Wtq.Services.Win32.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj" />
 		<ProjectReference Include="..\Wtq.WtqUI\Wtq.WtqUI.csproj" />
