@@ -17,13 +17,13 @@ public class WtqAppToggleService(
 	{
 		Guard.Against.Null(app);
 
-		var durationMs = GetDurationMs(app, mods);
+		var durationMs = GetDurationMs(mods);
 		var from = app.GetWindowRect();
 		var to = GetToggleOffToWindowRect(from);
 
 		_log.LogInformation("ToggleOff from '{From}' to '{To}'", from, to);
 
-		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseInQuart, app.MoveWindowAsync).NoCtx();
+		await _tween.AnimateAsync(from, to, durationMs, _opts.CurrentValue.AnimationTypeToggleOff, app.MoveWindowAsync).NoCtx();
 	}
 
 	/// <inheritdoc/>
@@ -34,12 +34,12 @@ public class WtqAppToggleService(
 		// Make sure the app has focus.
 		await app.BringToForegroundAsync().NoCtx();
 
-		var durationMs = GetDurationMs(app, mods);
+		var durationMs = GetDurationMs(mods);
 		var screen = await GetToggleOnToScreenRectAsync(app).NoCtx();
 		var to = GetToggleOnToWindowRect(app, screen);
 		var from = GetToggleOnFromWindowRect(to);
 
-		await _tween.AnimateAsync(from, to, durationMs, AnimationType.EaseOutQuart, app.MoveWindowAsync).NoCtx();
+		await _tween.AnimateAsync(from, to, durationMs, _opts.CurrentValue.AnimationTypeToggleOn, app.MoveWindowAsync).NoCtx();
 
 		_log.LogInformation("ToggleOn from '{From}' to '{To}'", from, to);
 	}
@@ -47,7 +47,7 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Returns the time the animation should take in milliseconds.
 	/// </summary>
-	private int GetDurationMs(WtqApp app, ToggleModifiers mods)
+	private int GetDurationMs(ToggleModifiers mods)
 	{
 		switch (mods)
 		{
@@ -55,11 +55,11 @@ public class WtqAppToggleService(
 				return 0;
 
 			case ToggleModifiers.SwitchingApps:
-				return 50;
+				return _opts.CurrentValue.AnimationDurationMsWhenSwitchingApps;
 
 			case ToggleModifiers.None:
 			default:
-				return 250;
+				return _opts.CurrentValue.AnimationDurationMs;
 		}
 	}
 
