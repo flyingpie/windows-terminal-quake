@@ -1,5 +1,4 @@
-﻿using Wtq.Data;
-using Wtq.Services;
+﻿using Wtq.Services;
 
 namespace Wtq;
 
@@ -119,7 +118,7 @@ public sealed class WtqApp : IAsyncDisposable
 	}
 
 	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
-	public WtqRect GetWindowRect()
+	public Rectangle GetWindowRect()
 	{
 		if (Process == null)
 		{
@@ -129,7 +128,7 @@ public sealed class WtqApp : IAsyncDisposable
 		return Process.WindowRect;
 	}
 
-	public async Task MoveWindowAsync(WtqRect rect)
+	public async Task MoveWindowAsync(Rectangle rect)
 	{
 		if (Process == null)
 		{

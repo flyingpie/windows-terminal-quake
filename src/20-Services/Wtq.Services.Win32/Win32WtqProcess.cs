@@ -1,5 +1,4 @@
 ﻿using Wtq.Configuration;
-using Wtq.Data;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Native;
 using Wtq.Utils;
@@ -24,7 +23,7 @@ public sealed class Win32WtqProcess : WtqWindow
 
 	public override string? Name => _process.ProcessName;
 
-	public override WtqRect WindowRect
+	public override Rectangle WindowRect
 	{
 		get
 		{
@@ -32,7 +31,7 @@ public sealed class Win32WtqProcess : WtqWindow
 
 			User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
 
-			return bounds.ToWtqBounds().ToWtqRect();
+			return bounds.ToRectangle();
 		}
 	}
 
@@ -57,14 +56,14 @@ public sealed class Win32WtqProcess : WtqWindow
 		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public override Task MoveToAsync(WtqRect rect, bool repaint = true)
+	public override Task MoveToAsync(Rectangle rect, bool repaint = true)
 	{
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: (int)rect.X,
-			y: (int)rect.Y,
-			nWidth: (int)rect.Width,
-			nHeight: (int)rect.Height,
+			x: rect.X,
+			y: rect.Y,
+			nWidth: rect.Width,
+			nHeight: rect.Height,
 			bRepaint: repaint);
 
 		return Task.CompletedTask;

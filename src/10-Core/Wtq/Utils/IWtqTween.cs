@@ -1,6 +1,4 @@
-﻿using Wtq.Data;
-
-namespace Wtq.Utils;
+﻿namespace Wtq.Utils;
 
 /// <summary>
 /// Utils for running animation sequences.
@@ -13,9 +11,9 @@ public interface IWtqTween
 	/// The <paramref name="move"/> callback is called with a progressing rectangle (position + size).<br/>
 	/// </summary>
 	Task AnimateAsync(
-		WtqRect src,
-		WtqRect dst,
+		Rectangle src,
+		Rectangle dst,
 		int durationMs,
 		AnimationType animType,
-		Func<WtqRect, Task> move);
+		Func<Rectangle, Task> move);
 }

@@ -1,36 +1,34 @@
-﻿using Wtq.Data;
-using Wtq.Exceptions;
-using Wtq.Services.Win32;
+﻿using Wtq.Exceptions;
 using Wtq.Utils;
 
 namespace Wtq.Services.WinForms;
 
 public sealed class WinFormsScreenInfoProvider : IWtqScreenInfoProvider
 {
-	public Task<WtqRect> GetPrimaryScreenRectAsync()
+	public Task<Rectangle> GetPrimaryScreenRectAsync()
 	{
 		var scr = Screen.PrimaryScreen
 			?? Screen.AllScreens.FirstOrDefault()
 			?? throw new WtqException("No screens found!");
 
-		return Task.FromResult(scr.Bounds.ToWtqRect());
+		return Task.FromResult(scr.Bounds);
 	}
 
-	public Task<WtqRect[]> GetScreenRectsAsync()
+	public Task<Rectangle[]> GetScreenRectsAsync()
 	{
 		return Task.FromResult(Screen
 			.AllScreens
-			.Select(s => s.Bounds.ToWtqRect())
+			.Select(s => s.Bounds)
 			.ToArray());
 	}
 
-	public async Task<WtqRect> GetScreenWithCursorAsync()
+	public async Task<Rectangle> GetScreenWithCursorAsync()
 	{
-		var scrs = await GetScreenRectsAsync().NoCtx();
-		var c = Cursor.Position.ToWtqVec2I();
+		var screens = await GetScreenRectsAsync().NoCtx();
+		var cursorPos = Cursor.Position;
 
-		return scrs.Any(s => s.Contains(c))
-			? scrs.FirstOrDefault(s => s.Contains(c))
+		return screens.Any(s => s.Contains(cursorPos))
+			? screens.FirstOrDefault(s => s.Contains(cursorPos))
 			: await GetPrimaryScreenRectAsync().NoCtx();
 	}
 }

@@ -1,6 +1,4 @@
-﻿using Wtq.Data;
-
-namespace Wtq;
+﻿namespace Wtq;
 
 public abstract class WtqWindow : IEquatable<WtqWindow>
 {
@@ -16,7 +14,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 	/// <summary>
 	/// The rectangle of the window itself.
 	/// </summary>
-	public abstract WtqRect WindowRect { get; }
+	public abstract Rectangle WindowRect { get; }
 
 	public static bool operator ==(WtqWindow? left, WtqWindow? right)
 	{
@@ -67,7 +65,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract bool Matches(WtqAppOptions opts);
 
-	public abstract Task MoveToAsync(WtqRect rect, bool repaint = true);
+	public abstract Task MoveToAsync(Rectangle rect, bool repaint = true);
 
 	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 
