@@ -2,10 +2,16 @@
 
 ## [vFuture]
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
-- Reworked how windows are tracked and attached to, should fix a lot of "Main window handle not available yet"-issues.).
 - Support for KDE Plasma (KWin, currently Wayland only).
 
 ## [vNext]
+- Added options to control the animation speed and style: 
+  - **AnimationDurationMs** How long the animation takes.
+  - **AnimationDurationMsWhenSwitchingApps** How long the animation takes, when switching between WTQ-attached apps.
+  - **AnimationTargetFps** How often to attempt to move an application window per second.
+  - **AnimationTypeToggleOn** Easing used for toggling on an app.
+  - **AnimationTypeToggleOff** Easing used for toggling off an app.
+
 - Reworked how apps are tracked
 
 Previously, a background worker was constantly looking for configured apps, and starting processes for ones that weren't running (by default, unless the **AttachMode** was set to something other than **FindOrCreate**).
