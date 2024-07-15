@@ -1,6 +1,4 @@
-﻿using Wtq.Data;
-
-namespace Wtq.Services;
+﻿namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
 public class WtqAppToggleService(
@@ -68,11 +66,11 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Get the position rect a window should move to when toggling OFF.
 	/// </summary>
-	private WtqRect GetToggleOffToWindowRect(WtqRect from1)
+	private Rectangle GetToggleOffToWindowRect(Rectangle from1)
 	{
 		var to = from1 with
 		{
-			Y = -from1.Height - 100f,
+			Y = -from1.Height - 100,
 		};
 
 		return to;
@@ -81,11 +79,11 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Get the position rect a window should move to when toggling ON.
 	/// </summary>
-	private WtqRect GetToggleOnFromWindowRect(WtqRect to)
+	private Rectangle GetToggleOnFromWindowRect(Rectangle to)
 	{
 		var from = to with
 		{
-			Y = -to.Height - 100f,
+			Y = -to.Height - 100,
 		};
 		return from;
 	}
@@ -94,7 +92,7 @@ public class WtqAppToggleService(
 	/// Returns a rectangle representing the screen we want to toggle the terminal onto.
 	/// </summary>
 	/// <param name="app">The app for which we're figuring out the screen bounds.</param>
-	private async Task<WtqRect> GetToggleOnToScreenRectAsync(WtqApp app)
+	private async Task<Rectangle> GetToggleOnToScreenRectAsync(WtqApp app)
 	{
 		Guard.Against.Null(app);
 
@@ -142,9 +140,9 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Returns the target bounds of the specified <paramref name="app"/>, within the specified <paramref name="screenBounds"/> when its toggling onto the screen.
 	/// </summary>
-	private WtqRect GetToggleOnToWindowRect(
+	private Rectangle GetToggleOnToWindowRect(
 		WtqApp app,
-		WtqRect screenBounds)
+		Rectangle screenBounds)
 	{
 		Guard.Against.Null(app);
 
@@ -165,7 +163,7 @@ public class WtqAppToggleService(
 			_ => screenBounds.X + (int)Math.Ceiling((screenBounds.Width / 2f) - (termWidth / 2f)),
 		};
 
-		return new WtqRect()
+		return new Rectangle()
 		{
 			// X, based on the HorizontalAlign and HorizontalScreenCoverage settings
 			X = x,
