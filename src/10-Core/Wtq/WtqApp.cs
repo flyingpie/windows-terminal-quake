@@ -15,12 +15,14 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggler;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqProcessFactory procFactory,
 		IWtqProcessService procService,
+		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggler,
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
@@ -29,6 +31,7 @@ public sealed class WtqApp : IAsyncDisposable
 		_procFactory = Guard.Against.Null(procFactory);
 		_procService = Guard.Against.Null(procService);
 		_toggler = Guard.Against.Null(toggler);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_optionsAccessor = Guard.Against.Null(optionsAccessor);
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
@@ -65,19 +68,6 @@ public sealed class WtqApp : IAsyncDisposable
 		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
 
 		_log.LogInformation("Found process instance for app '{App}': '{Process}'", Options, process);
-	}
-
-	/// <summary>
-	/// Puts the window associated with the process on top of everything and gives it focus.
-	/// </summary>
-	public async Task BringToForegroundAsync()
-	{
-		if (Process == null)
-		{
-			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
-		}
-
-		await Process.BringToForegroundAsync().NoCtx();
 	}
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -117,6 +107,40 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 	}
 
+	/// <summary>
+	/// Returns the rectangle of the screen that the app is on.<br/>
+	/// Uses the top-left corner of the app window to look for the corresponding screen,
+	/// which is useful to keep in mind when using multiple screens.
+	/// </summary>
+	public async Task<Rectangle> GetScreenRectAsync()
+	{
+		_log.LogTrace("Looking for current screen rect for app {App}", this);
+
+		// Get All screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get window rect of this app.
+		var windowRect = GetWindowRect();
+
+		// Look for screen rect that contains the left-top corner of the app window.
+		foreach (var screenRect in screenRects)
+		{
+			if (screenRect.Contains(windowRect.Location))
+			{
+				_log.LogTrace("Got screen {Screen}, for app {App}", screenRect, this);
+				return screenRect;
+			}
+			else
+			{
+				_log.LogTrace("Screen {Screen} does NOT contain app {App}", screenRect, this);
+			}
+		}
+
+		_log.LogWarning("Could not find screen for app {App}, returning primary screen", this);
+
+		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+	}
+
 	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
 	public Rectangle GetWindowRect()
 	{
@@ -147,7 +171,10 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
+			// Make sure the app is visible and has focus.
 			await Process.SetVisibleAsync(true).NoCtx();
+			await Process.BringToForegroundAsync().NoCtx();
+
 			await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
 			return true;

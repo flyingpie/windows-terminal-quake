@@ -6,6 +6,7 @@ public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 {
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggleService;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 
@@ -15,11 +16,13 @@ public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqProcessFactory procFactory,
 		IWtqProcessService procService,
+		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggleService)
 	{
 		_opts = Guard.Against.Null(opts);
 		_procFactory = Guard.Against.Null(procFactory);
 		_procService = Guard.Against.Null(procService);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_toggleService = Guard.Against.Null(toggleService);
 	}
 
@@ -79,6 +82,7 @@ public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 			_opts,
 			_procFactory,
 			_procService,
+			_screenInfoProvider,
 			_toggleService,
 			() => GetOptionsByNameRequired(app.Name),
 			app.Name);

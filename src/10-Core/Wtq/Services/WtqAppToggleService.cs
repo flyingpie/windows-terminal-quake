@@ -3,45 +3,68 @@
 /// <inheritdoc cref="IWtqAppToggleService"/>
 public class WtqAppToggleService(
 	IOptionsMonitor<WtqOptions> opts,
-	IWtqTween tween,
-	IWtqScreenInfoProvider scrInfoProvider)
+	IWtqScreenInfoProvider screenInfoProvider,
+	IWtqTween tween)
 	: IWtqAppToggleService
 {
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
-	private readonly IWtqScreenInfoProvider _scrInfoProvider = Guard.Against.Null(scrInfoProvider);
+	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
-
-	/// <inheritdoc/>
-	public async Task ToggleOffAsync(WtqApp app, ToggleModifiers mods)
-	{
-		Guard.Against.Null(app);
-
-		var durationMs = GetDurationMs(mods);
-		var from = app.GetWindowRect();
-		var to = GetToggleOffToWindowRect(from);
-
-		_log.LogInformation("ToggleOff from '{From}' to '{To}'", from, to);
-
-		await _tween.AnimateAsync(from, to, durationMs, _opts.CurrentValue.AnimationTypeToggleOff, app.MoveWindowAsync).NoCtx();
-	}
 
 	/// <inheritdoc/>
 	public async Task ToggleOnAsync(WtqApp app, ToggleModifiers mods)
 	{
 		Guard.Against.Null(app);
 
-		// Make sure the app has focus.
-		await app.BringToForegroundAsync().NoCtx();
-
+		// Animation duration.
 		var durationMs = GetDurationMs(mods);
-		var screen = await GetToggleOnToScreenRectAsync(app).NoCtx();
-		var to = GetToggleOnToWindowRect(app, screen);
-		var from = GetToggleOnFromWindowRect(to);
 
-		await _tween.AnimateAsync(from, to, durationMs, _opts.CurrentValue.AnimationTypeToggleOn, app.MoveWindowAsync).NoCtx();
+		// Screen bounds.
+		var screenRect = await GetTargetScreenRectAsync(app).NoCtx();
 
-		_log.LogInformation("ToggleOn from '{From}' to '{To}'", from, to);
+		// Source & target bounds.
+		var windowRectSrc = GetOffScreenWindowRect(app, screenRect);
+		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
+
+		// Move window.
+		_log.LogInformation("ToggleOn from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+
+		await _tween
+			.AnimateAsync(
+				src: windowRectSrc,
+				dst: windowRectDst,
+				durationMs: durationMs,
+				animType: _opts.CurrentValue.AnimationTypeToggleOn,
+				move: app.MoveWindowAsync)
+			.NoCtx();
+	}
+
+	/// <inheritdoc/>
+	public async Task ToggleOffAsync(WtqApp app, ToggleModifiers mods)
+	{
+		Guard.Against.Null(app);
+
+		// Animation duration.
+		var durationMs = GetDurationMs(mods);
+
+		// Screen bounds.
+		var screenRect = await app.GetScreenRectAsync().NoCtx();
+
+		// Source & target bounds.
+		var windowRectSrc = app.GetWindowRect();
+		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
+
+		_log.LogInformation("ToggleOff from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+
+		await _tween
+			.AnimateAsync(
+				windowRectSrc,
+				windowRectDst,
+				durationMs,
+				_opts.CurrentValue.AnimationTypeToggleOff,
+				app.MoveWindowAsync)
+			.NoCtx();
 	}
 
 	/// <summary>
@@ -64,103 +87,27 @@ public class WtqAppToggleService(
 	}
 
 	/// <summary>
-	/// Get the position rect a window should move to when toggling OFF.
+	/// Get the position rect a window should be when on-screen.
 	/// </summary>
-	private Rectangle GetToggleOffToWindowRect(Rectangle from1)
-	{
-		var to = from1 with
-		{
-			Y = -from1.Height - 100,
-		};
-
-		return to;
-	}
-
-	/// <summary>
-	/// Get the position rect a window should move to when toggling ON.
-	/// </summary>
-	private Rectangle GetToggleOnFromWindowRect(Rectangle to)
-	{
-		var from = to with
-		{
-			Y = -to.Height - 100,
-		};
-		return from;
-	}
-
-	/// <summary>
-	/// Returns a rectangle representing the screen we want to toggle the terminal onto.
-	/// </summary>
-	/// <param name="app">The app for which we're figuring out the screen bounds.</param>
-	private async Task<Rectangle> GetToggleOnToScreenRectAsync(WtqApp app)
+	private Rectangle GetOnScreenWindowRect(WtqApp app, Rectangle screenRect)
 	{
 		Guard.Against.Null(app);
 
-		var prefMon = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
-		var monInd = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
-
-		switch (prefMon)
-		{
-			case PreferMonitor.AtIndex:
-			{
-				var screens = await _scrInfoProvider.GetScreenRectsAsync().NoCtx();
-
-				if (screens.Length > monInd)
-				{
-					return screens[monInd];
-				}
-
-				_log.LogWarning(
-					"Option '{OptionName}' was set to {MonitorIndex}, but only {MonitorCount} screens were found, falling back to primary",
-					nameof(app.Options.MonitorIndex),
-					monInd,
-					screens.Length);
-
-				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
-			}
-
-			case PreferMonitor.Primary:
-				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
-
-			case PreferMonitor.WithCursor:
-				return await _scrInfoProvider.GetScreenWithCursorAsync().NoCtx();
-
-			default:
-			{
-				_log.LogWarning(
-					"Unknown value '{OptionValue}' for option '{OptionName}', falling back to primary",
-					prefMon,
-					nameof(app.Options.PreferMonitor));
-
-				return await _scrInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
-			}
-		}
-	}
-
-	/// <summary>
-	/// Returns the target bounds of the specified <paramref name="app"/>, within the specified <paramref name="screenBounds"/> when its toggling onto the screen.
-	/// </summary>
-	private Rectangle GetToggleOnToWindowRect(
-		WtqApp app,
-		Rectangle screenBounds)
-	{
-		Guard.Against.Null(app);
-
-		// Calculate terminal size.
-		var termWidth = (int)(screenBounds.Width * _opts.CurrentValue.HorizontalScreenCoverageIndexForApp(app.Options));
-		var termHeight = (int)(screenBounds.Height * _opts.CurrentValue.VerticalScreenCoverageIndexForApp(app.Options));
+		// Calculate app window size.
+		var windowWidth = (int)(screenRect.Width * _opts.CurrentValue.HorizontalScreenCoverageIndexForApp(app.Options));
+		var windowHeight = (int)(screenRect.Height * _opts.CurrentValue.VerticalScreenCoverageIndexForApp(app.Options));
 
 		// Calculate horizontal position.
 		var x = app.Options.HorizontalAlign switch
 		{
 			// Left
-			HorizontalAlign.Left => screenBounds.X,
+			HorizontalAlign.Left => screenRect.X,
 
 			// Right
-			HorizontalAlign.Right => screenBounds.X + (screenBounds.Width - termWidth),
+			HorizontalAlign.Right => screenRect.X + (screenRect.Width - windowWidth),
 
 			// Center
-			_ => screenBounds.X + (int)Math.Ceiling((screenBounds.Width / 2f) - (termWidth / 2f)),
+			_ => screenRect.X + (int)Math.Ceiling((screenRect.Width / 2f) - (windowWidth / 2f)),
 		};
 
 		return new Rectangle()
@@ -169,13 +116,97 @@ public class WtqAppToggleService(
 			X = x,
 
 			// Y, top of the screen + offset
-			Y = screenBounds.Y + (int)_opts.CurrentValue.GetVerticalOffsetForApp(app.Options),
+			Y = screenRect.Y + (int)_opts.CurrentValue.GetVerticalOffsetForApp(app.Options),
 
 			// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
-			Width = termWidth,
+			Width = windowWidth,
 
 			// Vertical Height, based on the VerticalScreenCoverage, VerticalOffset, and current progress of the animation
-			Height = termHeight,
+			Height = windowHeight,
 		};
+	}
+
+	/// <summary>
+	/// Get the position rect a window should be when off-screen.
+	/// </summary>
+	private Rectangle GetOffScreenWindowRect(WtqApp app, Rectangle screenRect)
+	{
+		Guard.Against.Null(app);
+
+		var windowRect = GetOnScreenWindowRect(app, screenRect);
+
+		windowRect.Y
+			= screenRect.Y			// Top of the screen (which can be negative, when on the non-primary screen).
+			- windowRect.Height		// Minus height of the app window.
+			- 100;					// Minus a little margin.
+
+		return windowRect;
+	}
+
+	/// <summary>
+	/// Returns the rectangle of the screen that should be used to toggle the <paramref name="app"/> to.
+	/// </summary>
+	private async Task<Rectangle> GetTargetScreenRectAsync(WtqApp app)
+	{
+		Guard.Against.Null(app);
+
+		_log.LogTrace("Looking for target screen rect for app {App}", this);
+
+		// Determine what monitor we want to use.
+		var preferMonitor = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
+
+		switch (preferMonitor)
+		{
+			case PreferMonitor.AtIndex:
+			{
+				// Get configured screen index.
+				var screenIndex = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+
+				_log.LogTrace("Using screen with index {Index}", screenIndex);
+
+				var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+				if (screens.Length > screenIndex)
+				{
+					var screen = screens[screenIndex];
+
+					_log.LogTrace("Found screen {Screen} with index {Index}", screen, screenIndex);
+
+					return screen;
+				}
+
+				_log.LogWarning(
+					"Option '{OptionName}' was set to {ScreenIndex}, but only {ScreenCount} screens were found (note that the value starts at 0, not 1), falling back to primary",
+					nameof(app.Options.MonitorIndex),
+					screenIndex,
+					screens.Length);
+
+				return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+			}
+
+			case PreferMonitor.Primary:
+			{
+				_log.LogTrace("Using primary screen");
+
+				return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+			}
+
+			case PreferMonitor.WithCursor:
+			{
+				_log.LogTrace("Using screen with cursor");
+
+				return await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
+			}
+
+			default:
+			{
+				_log.LogWarning(
+					"Unknown value '{OptionValue}' for option '{OptionName}', falling back to primary",
+					preferMonitor,
+					nameof(app.Options.PreferMonitor));
+
+				return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+			}
+		}
 	}
 }
