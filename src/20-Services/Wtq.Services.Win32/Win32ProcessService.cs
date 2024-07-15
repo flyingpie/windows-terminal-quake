@@ -31,9 +31,13 @@ public sealed class Win32ProcessService :
 		_lock.Dispose();
 	}
 
-	public Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
 	{
-		return Task.FromResult(GetProcesses().FirstOrDefault(p => p.Matches(opts)));
+		Guard.Against.Null(opts);
+
+		var processes = await GetProcessesAsync().NoCtx();
+
+		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
 	public WtqWindow? GetForegroundWindow()
@@ -113,9 +117,9 @@ public sealed class Win32ProcessService :
 		await UpdateProcessesAsync(force: true).NoCtx();
 	}
 
-	private IEnumerable<WtqWindow> GetProcesses()
+	private async Task<IEnumerable<WtqWindow>> GetProcessesAsync()
 	{
-		_ = Task.Run(async () => await UpdateProcessesAsync().NoCtx());
+		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
 	}

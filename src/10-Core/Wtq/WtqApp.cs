@@ -1,5 +1,4 @@
-﻿using Wtq.Data;
-using Wtq.Services;
+﻿using Wtq.Services;
 
 namespace Wtq;
 
@@ -16,12 +15,14 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggler;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqProcessFactory procFactory,
 		IWtqProcessService procService,
+		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggler,
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
@@ -30,6 +31,7 @@ public sealed class WtqApp : IAsyncDisposable
 		_procFactory = Guard.Against.Null(procFactory);
 		_procService = Guard.Against.Null(procService);
 		_toggler = Guard.Against.Null(toggler);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_optionsAccessor = Guard.Against.Null(optionsAccessor);
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
@@ -68,22 +70,13 @@ public sealed class WtqApp : IAsyncDisposable
 		_log.LogInformation("Found process instance for app '{App}': '{Process}'", Options, process);
 	}
 
-	/// <summary>
-	/// Puts the window associated with the process on top of everything and gives it focus.
-	/// </summary>
-	public async Task BringToForegroundAsync()
-	{
-		if (Process == null)
-		{
-			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
-		}
-
-		await Process.BringToForegroundAsync().NoCtx();
-	}
-
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		// TODO: Should we update the process handle here?
+		if (!IsActive)
+		{
+			_log.LogWarning("Attempted to close inactive app {App}", this);
+			return;
+		}
 
 		_log.LogInformation("Closing app '{App}'", this);
 
@@ -118,8 +111,42 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 	}
 
+	/// <summary>
+	/// Returns the rectangle of the screen that the app is on.<br/>
+	/// Uses the top-left corner of the app window to look for the corresponding screen,
+	/// which is useful to keep in mind when using multiple screens.
+	/// </summary>
+	public async Task<Rectangle> GetScreenRectAsync()
+	{
+		_log.LogTrace("Looking for current screen rect for app {App}", this);
+
+		// Get All screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get window rect of this app.
+		var windowRect = GetWindowRect();
+
+		// Look for screen rect that contains the left-top corner of the app window.
+		foreach (var screenRect in screenRects)
+		{
+			if (screenRect.Contains(windowRect.Location))
+			{
+				_log.LogTrace("Got screen {Screen}, for app {App}", screenRect, this);
+				return screenRect;
+			}
+			else
+			{
+				_log.LogTrace("Screen {Screen} does NOT contain app {App}", screenRect, this);
+			}
+		}
+
+		_log.LogWarning("Could not find screen for app {App}, returning primary screen", this);
+
+		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+	}
+
 	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
-	public WtqRect GetWindowRect()
+	public Rectangle GetWindowRect()
 	{
 		if (Process == null)
 		{
@@ -129,7 +156,7 @@ public sealed class WtqApp : IAsyncDisposable
 		return Process.WindowRect;
 	}
 
-	public async Task MoveWindowAsync(WtqRect rect)
+	public async Task MoveWindowAsync(Rectangle rect)
 	{
 		if (Process == null)
 		{
@@ -148,7 +175,10 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
+			// Make sure the app is visible and has focus.
 			await Process.SetVisibleAsync(true).NoCtx();
+			await Process.BringToForegroundAsync().NoCtx();
+
 			await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
 			return true;
@@ -197,6 +227,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// If we don't have a process handle, see if we can get one.
 		if (Process == null)
 		{
+			_log.LogInformation("No process attached to app {App}, asking process factory for one now", this);
+
 			// As the process factory for a new handle.
 			var process = await _procFactory.GetProcessAsync(Options).NoCtx();
 
@@ -209,6 +241,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 			// We didn't have a process handle when we got into this method, but we have one now,
 			// so attach to the newly acquired handle.
+			_log.LogInformation("Got process for app {App}, attaching", this);
+
 			await AttachAsync(process).ConfigureAwait(false);
 		}
 

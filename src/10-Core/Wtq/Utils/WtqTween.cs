@@ -1,22 +1,20 @@
-﻿using Wtq.Data;
-
-namespace Wtq.Utils;
+﻿namespace Wtq.Utils;
 
 /// <inheritdoc/>
-public sealed class WtqTween : IWtqTween
+public sealed class WtqTween(
+	IOptionsMonitor<WtqOptions> opts)
+	: IWtqTween
 {
-	private const float TargetFps = 30f;
-	private const float FrameTimeMs = 1000f / TargetFps;
-
 	private readonly ILogger _log = Log.For<WtqTween>();
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 
 	/// <inheritdoc/>
 	public async Task AnimateAsync(
-		WtqRect src,
-		WtqRect dst,
+		Rectangle src,
+		Rectangle dst,
 		int durationMs,
 		AnimationType animType,
-		Func<WtqRect, Task> move)
+		Func<Rectangle, Task> move)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
@@ -33,6 +31,9 @@ public sealed class WtqTween : IWtqTween
 		var swFrame = Stopwatch.StartNew();
 		var animFunc = GetAnimationFunction(animType);
 
+		var targetFps = _opts.CurrentValue.AnimationTargetFps;
+		var frameTimeMs = 1000f / targetFps;
+
 		var frameCount = 0;
 
 		while (swTotal.ElapsedMilliseconds < durationMs)
@@ -46,12 +47,12 @@ public sealed class WtqTween : IWtqTween
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = WtqRect.Lerp(src, dst, progress);
+			var rect = MathUtils.Lerp(src, dst, progress);
 
 			await move(rect).NoCtx();
 
 			// Wait for the frame to end.
-			var waitMs = FrameTimeMs - swFrame.ElapsedMilliseconds;
+			var waitMs = frameTimeMs - swFrame.ElapsedMilliseconds;
 			if (waitMs > 0)
 			{
 				await Task.Delay(TimeSpan.FromMilliseconds(waitMs)).ConfigureAwait(false);
