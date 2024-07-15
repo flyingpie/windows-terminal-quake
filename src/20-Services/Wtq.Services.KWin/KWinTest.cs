@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Wtq.Data;
 using Wtq.Services.KWin.DBus;
 using Address = Tmds.DBus.Protocol.Address;
 using Connection = Tmds.DBus.Protocol.Connection;
@@ -31,7 +30,7 @@ public class KWinTest
 		await kwin
 			.MoveClientAsync(
 				wz,
-				new WtqRect()
+				new Rectangle()
 				{
 					X = 50, Y = 50, Width = 1800, Height = 800,
 				},

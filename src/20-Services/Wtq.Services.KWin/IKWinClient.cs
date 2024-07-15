@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Wtq.Data;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
 
@@ -11,7 +9,7 @@ public interface IKWinClient
 
 	Task<Point> GetCursorPosAsync(CancellationToken cancellationToken);
 
-	Task MoveClientAsync(KWinWindow window, WtqRect rect, CancellationToken cancellationToken);
+	Task MoveClientAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken);
 
 	Task<KWinSupportInformation> GetSupportInformationAsync(CancellationToken cancellationToken);
 
@@ -91,7 +89,7 @@ public class KWinClient : IKWinClient
 		return KWinSupportInformation.Parse(str);
 	}
 
-	public async Task MoveClientAsync(KWinWindow window, WtqRect rect, CancellationToken cancellationToken)
+	public async Task MoveClientAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken)
 	{
 		var js = $$"""
 			"use strict";

@@ -1,5 +1,4 @@
 using Wtq.Configuration;
-using Wtq.Data;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
@@ -28,9 +27,9 @@ public class KWinWtqWindow : WtqWindow
 
 	public override string? Name => _window?.ResourceClass;
 
-	private WtqRect _rect;
+	private Rectangle _rect;
 
-	public override WtqRect WindowRect => _rect;
+	public override Rectangle WindowRect => _rect;
 
 	public override async Task BringToForegroundAsync()
 	{
@@ -47,7 +46,7 @@ public class KWinWtqWindow : WtqWindow
 		return res;
 	}
 
-	public override async Task MoveToAsync(WtqRect rect, bool repaint = true)
+	public override async Task MoveToAsync(Rectangle rect, bool repaint = true)
 	{
 		// TODO
 		_rect = rect;

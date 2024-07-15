@@ -1,5 +1,4 @@
-﻿using Wtq.Data;
-using Wtq.Utils;
+﻿using Wtq.Utils;
 
 namespace Wtq.Services.KWin;
 
@@ -12,13 +11,13 @@ public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
 		_kwinClient = Guard.Against.Null(kwinClient);
 	}
 
-	public async Task<WtqRect> GetPrimaryScreenRectAsync()
+	public async Task<Rectangle> GetPrimaryScreenRectAsync()
 	{
 		return (await GetScreenRectsAsync().ConfigureAwait(false))
 			.FirstOrDefault();
 	}
 
-	public async Task<WtqRect[]> GetScreenRectsAsync()
+	public async Task<Rectangle[]> GetScreenRectsAsync()
 	{
 		var sInfo = await _kwinClient
 			.GetSupportInformationAsync(CancellationToken.None)
@@ -26,7 +25,7 @@ public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
 
 		return sInfo.Screens
 			.Select(s => s.Geometry)
-			.Select(g => new WtqRect()
+			.Select(g => new Rectangle()
 			{
 				X = g.X,
 				Y = g.Y,
@@ -36,7 +35,7 @@ public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
 			.ToArray();
 	}
 
-	public async Task<WtqRect> GetScreenWithCursorAsync()
+	public async Task<Rectangle> GetScreenWithCursorAsync()
 	{
 		var cursorPos = await _kwinClient.GetCursorPosAsync(CancellationToken.None).NoCtx();
 		var screens = await GetScreenRectsAsync().NoCtx();
