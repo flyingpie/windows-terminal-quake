@@ -136,9 +136,9 @@ public class WtqAppToggleService(
 		var windowRect = GetOnScreenWindowRect(app, screenRect);
 
 		windowRect.Y
-			= screenRect.Y			// Top of the screen (which can be negative, when on the non-primary screen).
-			- windowRect.Height		// Minus height of the app window.
-			- 100;					// Minus a little margin.
+			= screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
+			- windowRect.Height // Minus height of the app window.
+			- 100; // Minus a little margin.
 
 		return windowRect;
 	}

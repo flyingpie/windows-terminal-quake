@@ -37,6 +37,7 @@ public static class ProcessExtensions
 		return process.TryGetProperty(nameof(process.ProcessName), p => p.ProcessName, out processName);
 	}
 
+	[SuppressMessage("Major Code Smell", "S1172:Unused method parameters should be removed", Justification = "MvdO: TODO: Use parameter after we get access to log.")]
 	private static bool TryGetProperty<TResult>(this Process process, string name, Func<Process, TResult> accessor, out TResult? value)
 	{
 		Guard.Against.Null(process);

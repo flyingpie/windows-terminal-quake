@@ -1,4 +1,6 @@
-﻿namespace Wtq.Services.Win32.Native;
+﻿#pragma warning disable
+
+namespace Wtq.Services.Win32.Native;
 
 public struct Bounds
 {
