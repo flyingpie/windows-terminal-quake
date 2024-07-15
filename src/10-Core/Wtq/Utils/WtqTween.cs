@@ -1,6 +1,4 @@
-﻿using Wtq.Data;
-
-namespace Wtq.Utils;
+﻿namespace Wtq.Utils;
 
 /// <inheritdoc/>
 public sealed class WtqTween : IWtqTween
@@ -12,11 +10,11 @@ public sealed class WtqTween : IWtqTween
 
 	/// <inheritdoc/>
 	public async Task AnimateAsync(
-		WtqRect src,
-		WtqRect dst,
+		Rectangle src,
+		Rectangle dst,
 		int durationMs,
 		AnimationType animType,
-		Func<WtqRect, Task> move)
+		Func<Rectangle, Task> move)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
@@ -46,7 +44,7 @@ public sealed class WtqTween : IWtqTween
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = WtqRect.Lerp(src, dst, progress);
+			var rect = MathUtils.Lerp(src, dst, progress);
 
 			await move(rect).NoCtx();
 
