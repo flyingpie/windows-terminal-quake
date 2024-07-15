@@ -47,7 +47,7 @@ public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 
 				// Create & update app handle.
 				app = Create(opt);
-				await app.UpdateAsync().NoCtx();
+				await app.UpdateProcessAsync().NoCtx();
 
 				_apps.Add(app);
 			}
