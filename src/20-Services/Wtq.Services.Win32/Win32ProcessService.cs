@@ -85,9 +85,7 @@ public sealed class Win32ProcessService :
 				UseShellExecute = false,
 				Environment =
 				{
-					{
-						"WTQ_START", opts.Name
-					},
+					{ "WTQ_START", opts.Name },
 				},
 			},
 		};
