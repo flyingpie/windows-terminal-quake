@@ -112,44 +112,38 @@ public sealed class Win32ProcessService :
 					}
 				});
 
-		await UpdateProcessesAsync(force: true).ConfigureAwait(false);
+		await UpdateProcessesAsync(force: true).NoCtx();
 	}
 
 	private IEnumerable<WtqWindow> GetProcesses()
 	{
-		_ = Task.Run(async () => await UpdateProcessesAsync().ConfigureAwait(false));
+		_ = Task.Run(async () => await UpdateProcessesAsync().NoCtx());
 
 		return _processes;
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)
 	{
-		_log.LogDebug("1 {force}", force);
 		// TODO: Remove all the locks and use debounce instead?
 
 		if (!force && _nextLookup > DateTimeOffset.UtcNow)
 		{
 			return;
 		}
-		_log.LogDebug("2");
+
 		try
 		{
-			var sw1 = Stopwatch.StartNew();
-			await _lock.WaitAsync().ConfigureAwait(false);
-			_log.LogDebug("Waiting for lock took {Elapsed}", sw1.ElapsedMilliseconds);
+			await _lock.WaitAsync().NoCtx();
 
 			if (!force && _nextLookup > DateTimeOffset.UtcNow)
 			{
 				return;
 			}
 
-			_log.LogDebug("Looking up list of processes");
+			_log.LogInformation("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 			var res = new List<WtqWindow>();
-			var sw = Stopwatch.StartNew();
-			var procs = Process.GetProcesses();
-			_log.LogDebug("Got process list, contained {ProcessCount} processes, took {Elapsed}ms", procs.Length, sw.ElapsedMilliseconds);
-			foreach (var proc in procs)
+			foreach (var proc in Process.GetProcesses())
 			{
 				if (!proc.TryGetHasExited(out var hasExited) || hasExited)
 				{

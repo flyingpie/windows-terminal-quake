@@ -83,7 +83,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		// await UpdateAsync().ConfigureAwait(false);
+		// TODO: Should we update the process handle here?
 
 		_log.LogInformation("Closing app '{App}'", this);
 
@@ -187,27 +187,32 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateAsync()
 	{
-		// TODO: Only update the window handles on app start, and then on hot key pressed.
 		// Check that if we have a process handle, the process is still active.
 		if (Process is { IsValid: false })
 		{
-			_log.LogInformation("Process '{ProcessName}' exited, releasing handle", Process);
+			_log.LogInformation("Process '{Process}' exited, releasing handle", Process);
 			Process = null;
 		}
 
+		// If we don't have a process handle, see if we can get one.
 		if (Process == null)
 		{
+			// As the process factory for a new handle.
 			var process = await _procFactory.GetProcessAsync(Options).NoCtx();
 
+			// Log a warning if we don't have a process handle at this point.
 			if (process == null)
 			{
 				_log.LogWarning("No process instances found for app '{App}'", Options);
 				return;
 			}
 
+			// We didn't have a process handle when we got into this method, but we have one now,
+			// so attach to the newly acquired handle.
 			await AttachAsync(process).ConfigureAwait(false);
 		}
 
+		// TODO: Move to "AttachAsync"?
 		if (Process != null && IsActive)
 		{
 			// Always on top.

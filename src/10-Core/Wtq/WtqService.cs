@@ -13,10 +13,10 @@ public sealed class WtqService(
 	: IDisposable, IHostedService
 {
 	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IWtqFocusTracker _focusTracker = Guard.Against.Null(focusTracker);
-	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly SemaphoreSlim _lock = new(1);
 
 	private WtqApp? _lastOpen;
@@ -76,7 +76,7 @@ public sealed class WtqService(
 					await _open.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					await _focusTracker.FocusLastNonWtqAppAsync();
+					await _focusTracker.FocusLastNonWtqAppAsync().NoCtx();
 					return;
 				}
 
@@ -107,7 +107,7 @@ public sealed class WtqService(
 					await app.CloseAsync().ConfigureAwait(false);
 					_lastOpen = _open;
 					_open = null;
-					_focusTracker.FocusLastNonWtqAppAsync();
+					await _focusTracker.FocusLastNonWtqAppAsync().NoCtx();
 				}
 				else
 				{
