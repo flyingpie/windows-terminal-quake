@@ -3,7 +3,7 @@
 ## [vFuture]
 - Support for KDE Plasma (KWin, currently Wayland only).
 
-## [vNext]
+## [2.0.10] / 2024-00-00
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
 
 - Added options to control the animation speed and style: 
