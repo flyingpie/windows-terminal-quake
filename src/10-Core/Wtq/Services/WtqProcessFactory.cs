@@ -5,6 +5,8 @@
 /// </summary>
 public sealed class WtqProcessFactory : IWtqProcessFactory
 {
+	private readonly ILogger _log = Log.For<WtqProcessFactory>();
+
 	private readonly IOptions<WtqOptions> _opts;
 	private readonly IRetry _retry;
 	private readonly IWtqProcessService _procService;
@@ -27,12 +29,26 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		{
 			case AttachMode.Manual:
 			{
+				_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
 				return null;
 			}
 
 			case AttachMode.Find:
 			{
-				return await _procService.FindProcessAsync(opts).NoCtx();
+				_log.LogInformation("Using find-only process attach mode for app with options {Options}, looking for process", opts);
+
+				var process = await _procService.FindProcessAsync(opts).NoCtx();
+
+				if (process != null)
+				{
+					_log.LogInformation("Got process {Process} for options {Options}", process, opts);
+				}
+				else
+				{
+					_log.LogInformation("Got no process for options {Options}", opts);
+				}
+
+				return process;
 			}
 
 			default:
@@ -42,12 +58,17 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 					.ExecuteAsync(
 						async () =>
 						{
-							var proc = await _procService.FindProcessAsync(opts).NoCtx();
+							_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
 
-							if (proc != null)
+							var process = await _procService.FindProcessAsync(opts).NoCtx();
+
+							if (process != null)
 							{
-								return proc;
+								_log.LogInformation("Got process {Process} for options {Options}", process, opts);
+								return process;
 							}
+
+							_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
 
 							await _procService.CreateAsync(opts).NoCtx();
 

@@ -72,7 +72,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		// TODO: Should we update the process handle here?
+		if (!IsActive)
+		{
+			_log.LogWarning("Attempted to close inactive app {App}", this);
+			return;
+		}
 
 		_log.LogInformation("Closing app '{App}'", this);
 
@@ -223,6 +227,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// If we don't have a process handle, see if we can get one.
 		if (Process == null)
 		{
+			_log.LogInformation("No process attached to app {App}, asking process factory for one now", this);
+
 			// As the process factory for a new handle.
 			var process = await _procFactory.GetProcessAsync(Options).NoCtx();
 
@@ -235,6 +241,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 			// We didn't have a process handle when we got into this method, but we have one now,
 			// so attach to the newly acquired handle.
+			_log.LogInformation("Got process for app {App}, attaching", this);
+
 			await AttachAsync(process).ConfigureAwait(false);
 		}
 
