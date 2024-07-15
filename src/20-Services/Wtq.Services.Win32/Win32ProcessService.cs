@@ -1,4 +1,5 @@
-﻿using Wtq.Configuration;
+﻿using Microsoft.Extensions.Hosting;
+using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
@@ -6,20 +7,28 @@ using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32ProcessService : IWtqProcessService
+public sealed class Win32ProcessService :
+	IDisposable,
+	IHostedService,
+	IWtqProcessService
 {
 	private readonly ILogger _log = Log.For<Win32ProcessService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
-	private readonly object _procLock = new();
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private IEnumerable<WtqWindow> _processes = [];
 
-	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "MvdO: Handled by Win32WtqProcess.")]
-	public async Task<WtqWindow?> CreateAsync(WtqAppOptions opts)
+	private readonly SemaphoreSlim _lock = new(1);
+
+	public async Task CreateAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return new Win32WtqProcess(await CreateProcessAsync(opts).ConfigureAwait(false));
+		await CreateProcessAsync(opts).ConfigureAwait(false);
+	}
+
+	public void Dispose()
+	{
+		_lock.Dispose();
 	}
 
 	public Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
@@ -45,6 +54,16 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return null;
 	}
 
+	public async Task StartAsync(CancellationToken cancellationToken)
+	{
+		await UpdateProcessesAsync().ConfigureAwait(false);
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
+	}
+
 	private static uint GetForegroundProcessId()
 	{
 		var hwnd = User32.GetForegroundWindow();
@@ -53,7 +72,7 @@ public sealed class Win32ProcessService : IWtqProcessService
 		return pid;
 	}
 
-	private Task<Process> CreateProcessAsync(WtqAppOptions opts)
+	private async Task CreateProcessAsync(WtqAppOptions opts)
 	{
 		_log.LogInformation("Creating process for app '{App}'", opts);
 
@@ -73,56 +92,76 @@ public sealed class Win32ProcessService : IWtqProcessService
 
 		// Start
 		Retry.Default
-			.Execute(() =>
-			{
-				try
+			.Execute(
+				() =>
 				{
-					process.Start();
-					process.Refresh();
-				}
-				catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
-				{
-					throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error starting process: {Message}", ex.Message);
-					throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
-				}
-			});
+					try
+					{
+						process.Start();
+					}
+					catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
+					{
+						throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
+					}
+					catch (Exception ex)
+					{
+						_log.LogError(ex, "Error starting process: {Message}", ex.Message);
+						throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
+					}
+				});
 
-		return Task.FromResult(process);
+		await UpdateProcessesAsync(force: true).NoCtx();
 	}
 
 	private IEnumerable<WtqWindow> GetProcesses()
 	{
-		lock (_procLock)
-		{
-			if (_nextLookup < DateTimeOffset.UtcNow)
-			{
-				_log.LogDebug("Looking up list of processes");
-				_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
-				var res = new List<WtqWindow>();
-				foreach (var proc in Process.GetProcesses())
-				{
-					if (!proc.TryGetHasExited(out var hasExited) || hasExited)
-					{
-						continue;
-					}
-
-					if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
-					{
-						continue;
-					}
-
-					var wtqProcess = new Win32WtqProcess(proc);
-					res.Add(wtqProcess);
-				}
-
-				_processes = res;
-			}
-		}
+		_ = Task.Run(async () => await UpdateProcessesAsync().NoCtx());
 
 		return _processes;
+	}
+
+	private async Task UpdateProcessesAsync(bool force = false)
+	{
+		// TODO: Remove all the locks and use debounce instead?
+
+		if (!force && _nextLookup > DateTimeOffset.UtcNow)
+		{
+			return;
+		}
+
+		try
+		{
+			await _lock.WaitAsync().NoCtx();
+
+			if (!force && _nextLookup > DateTimeOffset.UtcNow)
+			{
+				return;
+			}
+
+			_log.LogInformation("Looking up list of processes");
+			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
+			var res = new List<WtqWindow>();
+			foreach (var proc in Process.GetProcesses())
+			{
+				if (!proc.TryGetHasExited(out var hasExited) || hasExited)
+				{
+					continue;
+				}
+
+				if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
+				{
+					continue;
+				}
+
+				var wtqProcess = new Win32WtqProcess(proc);
+				res.Add(wtqProcess);
+			}
+
+			_processes = res;
+		}
+		finally
+		{
+			_lock.Release();
+		}
 	}
 }

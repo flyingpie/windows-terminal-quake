@@ -1,6 +1,8 @@
-﻿namespace Wtq.Services;
+using Microsoft.Extensions.Hosting;
 
-public sealed class WtqAppRepo : IWtqAppRepo
+namespace Wtq.Services;
+
+public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 {
 	private readonly IWtqProcessFactory _procFactory;
 	private readonly IWtqProcessService _procService;
@@ -80,6 +82,16 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			_toggleService,
 			() => GetOptionsByNameRequired(app.Name),
 			app.Name);
+	}
+
+	public async Task StartAsync(CancellationToken cancellationToken)
+	{
+		await UpdateAppsAsync().ConfigureAwait(false);
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
 	}
 
 	private WtqAppOptions? GetOptionsByName(string name)
