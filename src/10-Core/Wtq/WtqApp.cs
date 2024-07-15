@@ -86,6 +86,8 @@ public sealed class WtqApp : IAsyncDisposable
 		_log.LogInformation("Closing app '{App}'", this);
 
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
+
+		await Process.SetVisibleAsync(false).ConfigureAwait(false);
 	}
 
 	public async ValueTask DisposeAsync()
@@ -142,6 +144,7 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			_log.LogInformation("Opening app '{App}'", this);
 
+			await Process.SetVisibleAsync(true).NoCtx();
 			await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
 			return true;
