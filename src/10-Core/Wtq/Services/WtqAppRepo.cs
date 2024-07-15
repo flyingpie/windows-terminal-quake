@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.Apps;
+﻿namespace Wtq.Services;
 
 public sealed class WtqAppRepo : IWtqAppRepo
 {
@@ -61,19 +61,6 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			?? throw new WtqException($"No instance found of type '{nameof(WtqApp)}' found with name '{name}'.");
 	}
 
-	public WtqAppOptions? GetOptionsByName(string name)
-	{
-		Guard.Against.NullOrWhiteSpace(name);
-
-		return _opts.CurrentValue.Apps.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
-	}
-
-	public WtqAppOptions GetOptionsByNameRequired(string name)
-	{
-		return GetOptionsByName(name)
-			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'.");
-	}
-
 	public async ValueTask DisposeAsync()
 	{
 		foreach (var app in Apps)
@@ -93,5 +80,18 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			_toggleService,
 			() => GetOptionsByNameRequired(app.Name),
 			app.Name);
+	}
+
+	private WtqAppOptions? GetOptionsByName(string name)
+	{
+		Guard.Against.NullOrWhiteSpace(name);
+
+		return _opts.CurrentValue.Apps.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
+	}
+
+	private WtqAppOptions GetOptionsByNameRequired(string name)
+	{
+		return GetOptionsByName(name)
+			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'.");
 	}
 }
