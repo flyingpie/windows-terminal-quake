@@ -2,14 +2,11 @@ using Wtq.Configuration;
 
 namespace Wtq.Services.KWin;
 
-public class KWinProcessService : IWtqProcessService
+public class KWinProcessService(
+	IKWinClient kwinClient)
+	: IWtqProcessService
 {
-	private readonly IKWinClient _kwinClient;
-
-	public KWinProcessService(IKWinClient kwinClient)
-	{
-		_kwinClient = Guard.Against.Null(kwinClient);
-	}
+	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 
 	public Task CreateAsync(WtqAppOptions opts)
 	{

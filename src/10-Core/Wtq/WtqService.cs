@@ -46,7 +46,6 @@ public sealed class WtqService(
 
 	private async Task HandleAppFocusEventAsync(WtqAppFocusEvent ev)
 	{
-		return;
 		// If focus moved to a different window, toggle out the current one (if there is an active app, and it's configured as such).
 		if (ev.App != null &&
 			ev.App == _open &&

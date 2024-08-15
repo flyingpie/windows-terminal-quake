@@ -3,23 +3,19 @@ using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 
-public class KWinWtqWindow : WtqWindow
+public class KWinWtqWindow(
+	IKWinClient kwinClient,
+	KWinWindow window)
+	: WtqWindow
 {
-	private readonly IKWinClient _kwinClient;
-	private readonly KWinWindow _window;
+	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
+	private readonly KWinWindow _window = Guard.Against.Null(window);
 
 	private bool? _isAlwaysOnTop;
 	private bool? _isTaskbarIconVisible;
 	private int? _transparency;
 	private bool? _isVisible;
-
-	public KWinWtqWindow(
-		IKWinClient kwinClient,
-		KWinWindow window)
-	{
-		_kwinClient = Guard.Against.Null(kwinClient);
-		_window = Guard.Against.Null(window);
-	}
+	private Rectangle _rect;
 
 	public override int Id { get; }
 
@@ -27,18 +23,17 @@ public class KWinWtqWindow : WtqWindow
 
 	public override string? Name => _window?.ResourceClass;
 
-	private Rectangle _rect;
-
 	public override Rectangle WindowRect => _rect;
 
 	public override async Task BringToForegroundAsync()
 	{
-		// TODO
-		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
 	}
 
 	public override bool Matches(WtqAppOptions opts)
 	{
+		Guard.Against.Null(opts);
+
 		var res = _window.ResourceClass?.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase) ?? false;
 
 		// return _window.ResourceName != null && _window.ResourceName.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase); // TODO
@@ -50,7 +45,7 @@ public class KWinWtqWindow : WtqWindow
 	{
 		// TODO
 		_rect = rect;
-		await _kwinClient.MoveClientAsync(_window, rect, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.MoveClientAsync(_window, rect, CancellationToken.None).NoCtx();
 	}
 
 	public override async Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
@@ -61,7 +56,7 @@ public class KWinWtqWindow : WtqWindow
 		}
 
 		// TODO
-		await _kwinClient.SetWindowAlwaysOnTopAsync(_window, isAlwaysOnTop, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.SetWindowAlwaysOnTopAsync(_window, isAlwaysOnTop, CancellationToken.None).NoCtx();
 
 		_isAlwaysOnTop = isAlwaysOnTop;
 	}
@@ -74,7 +69,7 @@ public class KWinWtqWindow : WtqWindow
 		}
 
 		// TODO
-		await _kwinClient.SetTaskbarIconVisibleAsync(_window, isVisible, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.SetTaskbarIconVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 
 		_isTaskbarIconVisible = isVisible;
 	}
@@ -87,7 +82,7 @@ public class KWinWtqWindow : WtqWindow
 		}
 
 		// TODO
-		await _kwinClient.SetWindowOpacityAsync(_window, transparency * .01f, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.SetWindowOpacityAsync(_window, transparency * .01f, CancellationToken.None).NoCtx();
 
 		_transparency = transparency;
 	}
@@ -100,7 +95,7 @@ public class KWinWtqWindow : WtqWindow
 		}
 
 		// TODO
-		await _kwinClient.SetWindowVisibleAsync(_window, isVisible, CancellationToken.None).ConfigureAwait(false);
+		await _kwinClient.SetWindowVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 
 		_isVisible = isVisible;
 	}

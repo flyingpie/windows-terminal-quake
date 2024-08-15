@@ -1,19 +1,14 @@
-﻿using Wtq.Utils;
+﻿namespace Wtq.Services.KWin;
 
-namespace Wtq.Services.KWin;
-
-public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
+public sealed class KWinScreenInfoProvider(
+	IKWinClient kwinClient)
+	: IWtqScreenInfoProvider
 {
-	private readonly IKWinClient _kwinClient;
-
-	public KWinScreenInfoProvider(IKWinClient kwinClient)
-	{
-		_kwinClient = Guard.Against.Null(kwinClient);
-	}
+	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 
 	public async Task<Rectangle> GetPrimaryScreenRectAsync()
 	{
-		return (await GetScreenRectsAsync().ConfigureAwait(false))
+		return (await GetScreenRectsAsync().NoCtx())
 			.FirstOrDefault();
 	}
 
@@ -21,23 +16,19 @@ public sealed class KWinScreenInfoProvider : IWtqScreenInfoProvider
 	{
 		var sInfo = await _kwinClient
 			.GetSupportInformationAsync(CancellationToken.None)
-			.ConfigureAwait(false);
+			.NoCtx();
 
 		return sInfo.Screens
 			.Select(s => s.Geometry)
-			.Select(g => new Rectangle()
-			{
-				X = g.X,
-				Y = g.Y,
-				Width = g.Width,
-				Height = g.Height,
-			})
 			.ToArray();
 	}
 
 	public async Task<Rectangle> GetScreenWithCursorAsync()
 	{
-		var cursorPos = await _kwinClient.GetCursorPosAsync(CancellationToken.None).NoCtx();
+		var cursorPos = await _kwinClient
+			.GetCursorPosAsync(CancellationToken.None)
+			.NoCtx();
+
 		var screens = await GetScreenRectsAsync().NoCtx();
 
 		return screens.Any(s => s.Contains(cursorPos))

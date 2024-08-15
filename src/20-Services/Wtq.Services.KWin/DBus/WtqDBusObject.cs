@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
@@ -6,32 +5,38 @@ using Wtq.Utils;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal class WtqDBusObject : IWtqDBusObject
+internal class WtqDBusObject(
+	IWtqBus bus)
+	: IWtqDBusObject
 {
-	private readonly IWtqBus _bus;
 	public static readonly ObjectPath Path = new("/wtq/kwin");
 
 	private readonly ConcurrentDictionary<Guid, KWinResponseWaiter> _waiters = new();
 	private readonly ILogger _log = Log.For<WtqDBusObject>();
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 
-	public WtqDBusObject(IWtqBus bus)
-	{
-		_bus = bus;
-	}
-	
 	public ObjectPath ObjectPath => Path;
 
 	public Task SendResponseAsync(string responderIdStr, string payloadJson)
 	{
+		responderIdStr ??= string.Empty;
+		payloadJson ??= string.Empty;
+
+		_log.LogInformation(
+			"{MethodName}({ResponderId}, {PayloadJson})",
+			nameof(SendResponseAsync),
+			responderIdStr,
+			payloadJson[0..25]);
+
 		if (!Guid.TryParse(responderIdStr, out var responderId))
 		{
-			_log.LogWarning("Could not parse responder id '{ResponderId}' as a guid", responderIdStr);
+			_log.LogWarning("Could not parse responder id {ResponderId} as a guid", responderIdStr);
 			return Task.CompletedTask;
 		}
 
 		if (!_waiters.TryRemove(responderId, out var waiter))
 		{
-			_log.LogWarning("Could not find response waiter with id '{ResponderId}'", responderId);
+			_log.LogWarning("Could not find response waiter with id {ResponderId}", responderId);
 			return Task.CompletedTask;
 		}
 
@@ -42,7 +47,11 @@ internal class WtqDBusObject : IWtqDBusObject
 
 	public Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
-		_log.LogInformation("ON PRESS HOTKEY: [{Mod}] {Key}", modStr, keyStr);
+		_log.LogInformation(
+			"{MethodName}({Modifier}, {Key})",
+			nameof(OnPressShortcutAsync),
+			modStr,
+			keyStr);
 
 		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);

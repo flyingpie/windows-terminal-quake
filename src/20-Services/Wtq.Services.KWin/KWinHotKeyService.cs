@@ -20,7 +20,7 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		_scriptExecutor = scriptExecutor;
 		_kwinService = kwinService;
 	}
-	
+
 	public void Dispose()
 	{
 
@@ -36,16 +36,11 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		var inf = await comp.AllShortcutInfosAsync();
 		var x = await gl.AllComponentsAsync();
 
-//		var inf = await kwin.ActiveOutputNameAsync();
-//		var p = await kwin.GetPropertiesAsync();
-
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
-
-		var dbg = 2;
 	}
 
 	public async Task StopAsync(CancellationToken cancellationToken)

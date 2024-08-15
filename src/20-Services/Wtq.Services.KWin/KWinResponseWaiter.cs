@@ -16,11 +16,6 @@ public sealed class KWinResponseWaiter : IDisposable
 		Id = id;
 	}
 
-	public void SetResult(string result)
-	{
-		_tcs.TrySetResult(result);
-	}
-
 	public Guid Id { get; set; }
 
 	public Task<string> Task => _tcs.Task;
@@ -35,5 +30,10 @@ public sealed class KWinResponseWaiter : IDisposable
 		var respStr = await _tcs.Task.WaitAsync(cancellationToken);
 
 		return JsonSerializer.Deserialize<TResult>(respStr);
+	}
+
+	public void SetResult(string result)
+	{
+		_tcs.TrySetResult(result);
 	}
 }
