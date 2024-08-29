@@ -36,3 +36,10 @@ mkdocs serve
 ```ps1
 mkdocs build
 ```
+
+# Upgrade Pip packages
+
+```ps1
+pip install pip-upgrader
+pip-upgrader
+```
