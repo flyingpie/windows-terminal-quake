@@ -19,4 +19,14 @@ public static class SystemExtensions
 
 		return task.ConfigureAwait(false);
 	}
+
+	public static ConfiguredValueTaskAwaitable NoCtx(this ValueTask task)
+	{
+		return task.ConfigureAwait(false);
+	}
+
+	public static ConfiguredValueTaskAwaitable<TResult> NoCtx<TResult>(this ValueTask<TResult> task)
+	{
+		return task.ConfigureAwait(false);
+	}
 }
