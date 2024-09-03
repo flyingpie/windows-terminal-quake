@@ -6,33 +6,9 @@
 	"Apps": [
 		// Example with PowerShell
 		{
-			"Name": "WezTerm",
+			"Name": "PowerShell",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-//			"FileName": "wezterm-gui",
-			"FileName": "org.wezfurlong.wezterm",
-			"Opacity": 90
-		},
-
-		{
-			"Name": "Krusader",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName": "org.kde.krusader"
-		},
-
-		{
-			"Name": "RNote",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D3" }],
-			"FileName": "com.github.flxzt.rnote"
-		},
-
-		{
-			"Name": "KeePass",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D4" }],
-			"FileName": "org.keepassxc.KeePassXC",
-			"HorizontalAlign": "Right",
-			"HorizontalScreenCoverage": 50,
-			"AlwaysOnTop": true,
-			"HideOnFocusLost": false
+			"FileName": "powershell"
 		}
 
 		// Example with Windows Terminal

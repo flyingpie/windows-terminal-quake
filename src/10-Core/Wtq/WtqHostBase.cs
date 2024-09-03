@@ -31,6 +31,7 @@ public class WtqHostBase
 				{
 					log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
 					Console.WriteLine($"Error loading configuration file '{pathToWtqConf}': {x.Exception.Message}");
+
 					// MessageBox.Show($"Error loading configuration file '{pathToWtqConf}': {x.Exception.Message}");
 				};
 			})
@@ -50,11 +51,7 @@ public class WtqHostBase
 				opt
 
 					// Utils
-					.AddWtqCore()
-
-					// Platform-specific.
-					// .AddKWin()
-					;
+					.AddWtqCore();
 
 				ConfigureServices(opt);
 			})
@@ -73,6 +70,7 @@ public class WtqHostBase
 		catch (Exception ex)
 		{
 			Console.WriteLine($"Error running application: {ex}");
+
 			// MessageBox.Show($"Error running application: {ex}", "Error starting WTQ");
 		}
 	}
