@@ -1,6 +1,5 @@
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
-using Wtq.Utils;
 
 namespace Wtq.Services.KWin;
 
@@ -31,11 +30,11 @@ internal class KWinScriptExecutor
 
 		try
 		{
-			await File.WriteAllTextAsync(path, script, cancellationToken).ConfigureAwait(false);
+			await File.WriteAllTextAsync(path, script, cancellationToken).NoCtx();
 
-			await _scripting.LoadScriptAsync(path, scriptId).ConfigureAwait(false);
-			await _scripting.StartAsync().ConfigureAwait(false);
-			await _scripting.UnloadScriptAsync(scriptId).ConfigureAwait(false);
+			await _scripting.LoadScriptAsync(path, scriptId).NoCtx();
+			await _scripting.StartAsync().NoCtx();
+			await _scripting.UnloadScriptAsync(scriptId).NoCtx();
 		}
 		finally
 		{
@@ -57,18 +56,18 @@ internal class KWinScriptExecutor
 		var scriptId = id.ToString();
 		var path = $"/dev/shm/wtq-{id}.js";
 
-		var dbus = (WtqDBusObject)await _wtqDBusObj.ConfigureAwait(false);
+		var dbus = (WtqDBusObject)await _wtqDBusObj.NoCtx();
 		var waiter = dbus.CreateResponseWaiter(id);
 
 		try
 		{
-			await File.WriteAllTextAsync(path, script, cancellationToken).ConfigureAwait(false);
+			await File.WriteAllTextAsync(path, script, cancellationToken).NoCtx();
 
-			await _scripting.LoadScriptAsync(path, scriptId).ConfigureAwait(false);
-			await _scripting.StartAsync().ConfigureAwait(false);
-			await _scripting.UnloadScriptAsync(scriptId).ConfigureAwait(false);
+			await _scripting.LoadScriptAsync(path, scriptId).NoCtx();
+			await _scripting.StartAsync().NoCtx();
+			await _scripting.UnloadScriptAsync(scriptId).NoCtx();
 
-			return await waiter.GetResultAsync<TResult>(cancellationToken).ConfigureAwait(false);
+			return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
 		}
 		finally
 		{
@@ -143,20 +142,20 @@ internal class KWinScriptExecutor
 			console.log("/Registering shortcut");
 			""";
 
-		// var dbus = (WtqDBusObject)await _wtqDBusObj.ConfigureAwait(false);
+		// var dbus = (WtqDBusObject)await _wtqDBusObj.NoCtx();
 		// var waiter = dbus.CreateResponseWaiter(id);
 
 		try
 		{
-			await File.WriteAllTextAsync(path, script, cancellationToken).ConfigureAwait(false);
+			await File.WriteAllTextAsync(path, script, cancellationToken).NoCtx();
 
 			_log.LogInformation("Loading script '{ScriptId}'", scriptId);
-			await _scripting.LoadScriptAsync(path, scriptId).ConfigureAwait(false);
-			await _scripting.StartAsync().ConfigureAwait(false);
+			await _scripting.LoadScriptAsync(path, scriptId).NoCtx();
+			await _scripting.StartAsync().NoCtx();
 
-			// await _scripting.UnloadScriptAsync(scriptId).ConfigureAwait(false);
+			// await _scripting.UnloadScriptAsync(scriptId).NoCtx();
 
-			// return await waiter.GetResultAsync<TResult>(cancellationToken).ConfigureAwait(false);
+			// return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
 
 			_log.LogInformation("Loaded script '{ScriptId}'", scriptId);
 		}

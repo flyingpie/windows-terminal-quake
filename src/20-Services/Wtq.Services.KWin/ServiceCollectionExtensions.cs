@@ -15,14 +15,14 @@ public static class ServiceCollectionExtensions
 				p.GetRequiredService<KWinService>()))
 
 			.AddSingleton<IDBusConnection, DBusConnection>()
-			.AddSingleton<KWinService>(
+			.AddSingleton(
 				p =>
 				{
 					var dbus = p.GetRequiredService<IDBusConnection>();
 
 					return new KWinService(dbus.ClientConnection, "org.kde.KWin");
 				})
-			.AddSingleton<Scripting>(
+			.AddSingleton(
 				p =>
 				{
 					var kwinService = p.GetRequiredService<KWinService>();
@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
 				async p =>
 				{
 					var dbus = (DBusConnection)p.GetRequiredService<IDBusConnection>();
-					await dbus.StartAsync(CancellationToken.None);
+					await dbus.StartAsync(CancellationToken.None).NoCtx();
 
 					var wtqDBusObj = new WtqDBusObject(p.GetRequiredService<IWtqBus>());
 
