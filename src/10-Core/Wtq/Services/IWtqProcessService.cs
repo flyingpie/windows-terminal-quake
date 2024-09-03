@@ -8,12 +8,12 @@ public interface IWtqProcessService
 	/// <summary>
 	/// Create a new process instance as defined by <see cref="WtqAppOptions"/>'s parameters.
 	/// </summary>
-	Task<WtqWindow?> CreateAsync(WtqAppOptions opts);
+	Task CreateAsync(WtqAppOptions opts);
 
 	/// <summary>
 	/// Looks for a process that matches the specified <paramref name="opts"/>.
 	/// </summary>
-	WtqWindow? FindProcess(WtqAppOptions opts);
+	Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts);
 
 	/// <summary>
 	/// Returns the process that currently has UI focus.

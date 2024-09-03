@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Wtq.Events;
 using Wtq.Services;
-using Wtq.Services.Apps;
 
 namespace Wtq;
 
@@ -34,14 +33,11 @@ public static class ServiceCollectionExtensions
 			// Core App Logic
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
-			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
+			.AddSingletonHostedService<IWtqAppRepo, WtqAppRepo>()
 			.AddSingletonHostedService<IWtqHotKeyService, WtqHotKeyService>()
 			.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
 
-			.AddHostedService<WtqService>()
-
-			.AddSingleton<WtqAppMonitorService>()
-			.AddHostedService(p => p.GetRequiredService<WtqAppMonitorService>());
+			.AddHostedService<WtqService>();
 	}
 }

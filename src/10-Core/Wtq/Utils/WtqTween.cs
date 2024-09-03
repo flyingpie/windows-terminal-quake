@@ -1,29 +1,38 @@
-﻿using Wtq.Data;
+﻿namespace Wtq.Utils;
 
-namespace Wtq.Utils;
-
-public sealed class WtqTween : IWtqTween
+/// <inheritdoc/>
+public sealed class WtqTween(
+	IOptionsMonitor<WtqOptions> opts)
+	: IWtqTween
 {
-	private const float FrameTimeMs = 1000f / 40f; // 40 = FPS
-
 	private readonly ILogger _log = Log.For<WtqTween>();
+	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 
+	/// <inheritdoc/>
 	public async Task AnimateAsync(
-		WtqRect src,
-		WtqRect dst,
+		Rectangle src,
+		Rectangle dst,
 		int durationMs,
 		AnimationType animType,
-		Action<WtqRect> move)
+		Func<Rectangle, Task> move)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
 		Guard.Against.Null(move);
 
-		_log.LogInformation("Tweening from '{From}' to '{To}' in '{Duration}'ms, with animation type '{AnimationType}'", src, dst, durationMs, animType);
+		_log.LogInformation(
+			"Tweening from {From} to {To} in {Duration}ms, with animation type {AnimationType}",
+			src,
+			dst,
+			durationMs,
+			animType);
 
 		var swTotal = Stopwatch.StartNew();
 		var swFrame = Stopwatch.StartNew();
 		var animFunc = GetAnimationFunction(animType);
+
+		var targetFps = _opts.CurrentValue.AnimationTargetFps;
+		var frameTimeMs = 1000f / targetFps;
 
 		var frameCount = 0;
 
@@ -38,12 +47,12 @@ public sealed class WtqTween : IWtqTween
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = WtqRect.Lerp(src, dst, progress);
+			var rect = MathUtils.Lerp(src, dst, progress);
 
-			move(rect);
+			await move(rect).NoCtx();
 
 			// Wait for the frame to end.
-			var waitMs = FrameTimeMs - swFrame.ElapsedMilliseconds;
+			var waitMs = frameTimeMs - swFrame.ElapsedMilliseconds;
 			if (waitMs > 0)
 			{
 				await Task.Delay(TimeSpan.FromMilliseconds(waitMs)).ConfigureAwait(false);
@@ -51,9 +60,13 @@ public sealed class WtqTween : IWtqTween
 		}
 
 		// To ensure we end up in exactly the correct final position.
-		move(dst);
+		await move(dst).NoCtx();
 
-		_log.LogInformation("Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount}", swTotal.ElapsedMilliseconds, durationMs, frameCount);
+		_log.LogInformation(
+			"Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount} frames",
+			swTotal.ElapsedMilliseconds,
+			durationMs,
+			frameCount);
 	}
 
 	private Func<double, double> GetAnimationFunction(AnimationType type)

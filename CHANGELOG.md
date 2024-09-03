@@ -1,8 +1,31 @@
 # Changelog
 
+## [vFuture]
+- Support for KDE Plasma (KWin, currently Wayland only).
+
 ## [vNext]
-- Creating a new app instance is now done in a finite retry loop, and stops after 5 failures.
-- Added "AlwaysOnTop", which forces an app to always be above other windows, even if it doesn't have focus.
+
+## [2.0.10] / 2024-07-16
+- Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
+
+- Added options to control the animation speed and style: 
+  - **AnimationDurationMs** How long the animation takes.
+  - **AnimationDurationMsWhenSwitchingApps** How long the animation takes, when switching between WTQ-attached apps.
+  - **AnimationTargetFps** How often to attempt to move an application window per second.
+  - **AnimationTypeToggleOn** Easing used for toggling on an app.
+  - **AnimationTypeToggleOff** Easing used for toggling off an app.
+
+- Reworked how apps are tracked
+
+Previously, a background worker was constantly looking for configured apps, and starting processes for ones that weren't running (by default, unless the **AttachMode** was set to something other than **FindOrCreate**).
+
+Now, finding and creating app processes only happens when WTQ starts (configurable) and when a hot key is pressed.
+
+As a result, an app that is manually closed is no longer automatically restarted. And perhaps more relevant, when starting an app doesn't succeed, it no longer results in an infinite retry loop.
+
+This was especially problematic when starting a conhost-hosted app (such as PowerShell), while Windows Terminal was configured to be the default console host. In such cases, Windows Terminal would take over PowerShell, the conhost process would exit, and WTQ assumed the process failed to start.
+
+- Added **AlwaysOnTop**, which forces an app to always be above other windows, even if it doesn't have focus.
 
 ## [2.0.9] / 2024-05-20
 - When an app is toggled up, it retains its original screen (fixes [#64](https://github.com/flyingpie/windows-terminal-quake/issues/64)).

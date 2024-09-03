@@ -1,12 +1,10 @@
-﻿using Wtq.Data;
-
-namespace Wtq.Services;
+﻿namespace Wtq.Services;
 
 public interface IWtqScreenInfoProvider
 {
-	WtqRect GetPrimaryScreenRect();
+	Task<Rectangle> GetPrimaryScreenRectAsync();
 
-	WtqRect[] GetScreenRects();
+	Task<Rectangle[]> GetScreenRectsAsync();
 
-	WtqRect GetScreenWithCursor();
+	Task<Rectangle> GetScreenWithCursorAsync();
 }

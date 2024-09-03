@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Services.KWin.UnitTest</AssemblyName>
+		<RootNamespace>Wtq.Services.KWin.UnitTest</RootNamespace>
+
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
+	</ItemGroup>
+</Project>

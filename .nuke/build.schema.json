@@ -81,12 +81,14 @@
               "CreateScoopManifest",
               "CreateWinGetManifest",
               "PublishDebug",
+              "PublishLinux64Aot",
+              "PublishLinux64FrameworkDependent",
+              "PublishLinux64SelfContained",
               "PublishRelease",
               "PublishWin64Aot",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "ReportInfo",
-              "Restore"
+              "ReportInfo"
             ]
           }
         },
@@ -105,12 +107,14 @@
               "CreateScoopManifest",
               "CreateWinGetManifest",
               "PublishDebug",
+              "PublishLinux64Aot",
+              "PublishLinux64FrameworkDependent",
+              "PublishLinux64SelfContained",
               "PublishRelease",
               "PublishWin64Aot",
               "PublishWin64FrameworkDependent",
               "PublishWin64SelfContained",
-              "ReportInfo",
-              "Restore"
+              "ReportInfo"
             ]
           }
         },

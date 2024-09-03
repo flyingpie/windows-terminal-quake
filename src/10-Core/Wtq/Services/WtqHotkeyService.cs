@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Wtq.Events;
-using Wtq.Services.Apps;
 
 namespace Wtq.Services;
 

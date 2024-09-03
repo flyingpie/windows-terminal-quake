@@ -5,6 +5,49 @@
 /// </summary>
 public sealed class WtqOptions
 {
+	private int? _animationDurationMsSwitchingApps;
+
+	/// <summary>
+	/// How long the animation should take, in milliseconds.
+	/// </summary>
+	public int AnimationDurationMs { get; init; }
+		= 250;
+
+	/// <summary>
+	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
+	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
+	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
+	/// </summary>
+	public int AnimationDurationMsWhenSwitchingApps
+	{
+		get => _animationDurationMsSwitchingApps
+				?? (int)Math.Round(AnimationDurationMs * .5f);
+		set => _animationDurationMsSwitchingApps = value;
+	}
+
+	/// <summary>
+	/// How many frames per second the animation should be.<br/>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
+	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
+	/// Defaults to 40.
+	/// </summary>
+	public int AnimationTargetFps { get; init; }
+		= 40;
+
+	/// <summary>
+	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
+	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
+	/// </summary>
+	public AnimationType AnimationTypeToggleOn { get; init; }
+		= AnimationType.EaseOutQuart;
+
+	/// <summary>
+	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
+	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
+	/// </summary>
+	public AnimationType AnimationTypeToggleOff { get; init; }
+		= AnimationType.EaseInQuart;
+
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>

@@ -1,6 +1,4 @@
-﻿using Wtq.Data;
-
-namespace Wtq;
+﻿namespace Wtq;
 
 public abstract class WtqWindow : IEquatable<WtqWindow>
 {
@@ -16,7 +14,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 	/// <summary>
 	/// The rectangle of the window itself.
 	/// </summary>
-	public abstract WtqRect WindowRect { get; }
+	public abstract Rectangle WindowRect { get; }
 
 	public static bool operator ==(WtqWindow? left, WtqWindow? right)
 	{
@@ -63,17 +61,19 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 		return Id;
 	}
 
-	public abstract void BringToForeground();
+	public abstract Task BringToForegroundAsync();
 
 	public abstract bool Matches(WtqAppOptions opts);
 
-	public abstract void MoveTo(WtqRect rect, bool repaint = true);
+	public abstract Task MoveToAsync(Rectangle rect, bool repaint = true);
 
-	public abstract void SetAlwaysOnTop(bool isAlwaysOnTop);
+	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 
-	public abstract void SetTaskbarIconVisible(bool isVisible);
+	public abstract Task SetTaskbarIconVisibleAsync(bool isVisible);
 
-	public abstract void SetTransparency(int transparency);
+	public abstract Task SetTransparencyAsync(int transparency);
+
+	public abstract Task SetVisibleAsync(bool isVisible);
 
 	public override string ToString() => $"[{Id}] {Name}";
 }

@@ -1,5 +1,4 @@
 ﻿using Wtq.Configuration;
-using Wtq.Data;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Native;
 using Wtq.Utils;
@@ -24,7 +23,7 @@ public sealed class Win32WtqProcess : WtqWindow
 
 	public override string? Name => _process.ProcessName;
 
-	public override WtqRect WindowRect
+	public override Rectangle WindowRect
 	{
 		get
 		{
@@ -32,14 +31,16 @@ public sealed class Win32WtqProcess : WtqWindow
 
 			User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
 
-			return bounds.ToWtqBounds().ToWtqRect();
+			return bounds.ToRectangle();
 		}
 	}
 
-	public override void BringToForeground()
+	public override Task BringToForegroundAsync()
 	{
 		User32.SetForegroundWindow(_process.MainWindowHandle);
 		User32.ForcePaint(_process.MainWindowHandle);
+
+		return Task.CompletedTask;
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -55,18 +56,20 @@ public sealed class Win32WtqProcess : WtqWindow
 		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public override void MoveTo(WtqRect rect, bool repaint = true)
+	public override Task MoveToAsync(Rectangle rect, bool repaint = true)
 	{
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: (int)rect.X,
-			y: (int)rect.Y,
-			nWidth: (int)rect.Width,
-			nHeight: (int)rect.Height,
+			x: rect.X,
+			y: rect.Y,
+			nWidth: rect.Width,
+			nHeight: rect.Height,
 			bRepaint: repaint);
+
+		return Task.CompletedTask;
 	}
 
-	public override void SetAlwaysOnTop(bool isAlwaysOnTop)
+	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
 		if (_process.MainWindowHandle == IntPtr.Zero)
 		{
@@ -86,9 +89,11 @@ public sealed class Win32WtqProcess : WtqWindow
 		{
 			throw new WtqException("Could not set window top most");
 		}
+
+		return Task.CompletedTask;
 	}
 
-	public override void SetTaskbarIconVisible(bool isVisible)
+	public override Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
 		// Get handle to the main window
 		var handle = _process.MainWindowHandle;
@@ -108,13 +113,15 @@ public sealed class Win32WtqProcess : WtqWindow
 			// Hide
 			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & ~User32.WSEXAPPWINDOW);
 		}
+
+		return Task.CompletedTask;
 	}
 
-	public override void SetTransparency(int transparency)
+	public override Task SetTransparencyAsync(int transparency)
 	{
 		if (transparency >= 100)
 		{
-			return;
+			return Task.CompletedTask;
 		}
 
 		if (_process.MainWindowHandle == IntPtr.Zero)
@@ -139,5 +146,12 @@ public sealed class Win32WtqProcess : WtqWindow
 		{
 			throw new WtqException("Could not set window opacity");
 		}
+
+		return Task.CompletedTask;
+	}
+
+	public override Task SetVisibleAsync(bool isVisible)
+	{
+		return Task.CompletedTask;
 	}
 }
