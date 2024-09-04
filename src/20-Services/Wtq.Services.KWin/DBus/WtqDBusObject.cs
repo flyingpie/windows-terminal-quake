@@ -1,7 +1,6 @@
 using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
-using Wtq.Utils;
 
 namespace Wtq.Services.KWin.DBus;
 

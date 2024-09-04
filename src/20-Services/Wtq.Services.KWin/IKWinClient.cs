@@ -2,6 +2,9 @@ using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 
+/// <summary>
+/// High-level interface to the KWin compositor.
+/// </summary>
 public interface IKWinClient
 {
 	Task BringToForegroundAsync(

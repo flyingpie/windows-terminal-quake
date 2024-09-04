@@ -27,9 +27,9 @@ public sealed class KWinResponseWaiter : IDisposable
 
 	public async Task<TResult> GetResultAsync<TResult>(CancellationToken cancellationToken)
 	{
-		var respStr = await _tcs.Task.WaitAsync(cancellationToken);
+		var respStr = await _tcs.Task.WaitAsync(cancellationToken).NoCtx();
 
-		return JsonSerializer.Deserialize<TResult>(respStr);
+		return JsonSerializer.Deserialize<TResult>(respStr)!;
 	}
 
 	public void SetResult(string result)

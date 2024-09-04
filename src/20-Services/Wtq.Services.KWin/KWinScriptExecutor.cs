@@ -1,8 +1,13 @@
+#pragma warning disable // PoC
+
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
 
+/// <summary>
+/// TODO(MvdO): Here be dragons, this is the messiest part of the proof of concept.
+/// </summary>
 internal class KWinScriptExecutor
 {
 	private readonly ILogger _log = Log.For<KWinScriptExecutor>();
@@ -85,17 +90,9 @@ internal class KWinScriptExecutor
 
 		var sw = Stopwatch.StartNew();
 
-		// for (int i = 0; i < 50; i++)
-		// {
-		// 	var sc = $"wtq_{i:000}";
-		// 	var res = await _scripting.UnloadScriptAsync(sc);
-		// 	_log.LogInformation("Unloaded script {Script}: {Res}", sc, res);
-		// }
-
-		//		var scriptId = "wtq-hk-001";
 		var scriptId = name;
-		var unloaded = await _scripting.UnloadScriptAsync(scriptId);
-		var xx2 = await _scripting.IsScriptLoadedAsync(scriptId);
+		var unloaded = await _scripting.UnloadScriptAsync(scriptId).NoCtx();
+		var xx2 = await _scripting.IsScriptLoadedAsync(scriptId).NoCtx();
 
 		var kwinMod = "Ctrl";
 		var kwinKey = "1";
@@ -142,9 +139,6 @@ internal class KWinScriptExecutor
 			console.log("/Registering shortcut");
 			""";
 
-		// var dbus = (WtqDBusObject)await _wtqDBusObj.NoCtx();
-		// var waiter = dbus.CreateResponseWaiter(id);
-
 		try
 		{
 			await File.WriteAllTextAsync(path, script, cancellationToken).NoCtx();
@@ -153,16 +147,10 @@ internal class KWinScriptExecutor
 			await _scripting.LoadScriptAsync(path, scriptId).NoCtx();
 			await _scripting.StartAsync().NoCtx();
 
-			// await _scripting.UnloadScriptAsync(scriptId).NoCtx();
-
-			// return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
-
 			_log.LogInformation("Loaded script '{ScriptId}'", scriptId);
 		}
 		finally
 		{
-			// File.Delete(path);
-
 			_log.LogInformation("Executed script in {ElapsedMs}ms", sw.ElapsedMilliseconds);
 		}
 	}

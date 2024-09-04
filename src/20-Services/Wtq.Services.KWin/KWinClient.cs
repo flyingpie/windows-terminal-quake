@@ -1,10 +1,13 @@
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
 using Wtq.Services.KWin.Utils;
-using Wtq.Utils;
 
 namespace Wtq.Services.KWin;
 
+/// <summary>
+/// TODO(MvdO): Here's most of the work we would need to refactor, since each of these calls results in a JS file write.<br/>
+/// Now, they are currently written to a shared memory mount, so they shouldn't touch an actual drive, but it's still not great.
+/// </summary>
 public class KWinClient : IKWinClient
 {
 	private readonly KWinScriptExecutor _kwinScriptEx;

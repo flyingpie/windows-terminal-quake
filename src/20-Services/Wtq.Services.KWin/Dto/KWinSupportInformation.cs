@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Wtq.Utils;
-
 namespace Wtq.Services.KWin.Dto;
 
 public class KWinSupportInformation
@@ -21,10 +17,8 @@ public class KWinSupportInformation
 		var enabledRegex = new Regex("^enabled: (?<enabled>[0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		var geometryRegex = new Regex("^geometry: (?<x>[0-9]+),(?<y>[0-9]+),(?<w>[0-9]+)x(?<h>[0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		KWinScreenInfo scr = null;
+		KWinScreenInfo? scr = null;
 		List<KWinScreenInfo> scrs = [];
-
-		//var inScreens = false;
 
 		while (true)
 		{
@@ -48,12 +42,9 @@ public class KWinSupportInformation
 			}
 
 			var nameMatch = nameRegex.Match(line);
-			if (nameMatch.Success)
+			if (nameMatch.Success && scr != null)
 			{
-				if (scr != null)
-				{
-					scr.Name = nameMatch.Groups["name"].Value;
-				}
+				scr.Name = nameMatch.Groups["name"].Value;
 			}
 
 			var geometryMatch = geometryRegex.Match(line);
@@ -76,10 +67,6 @@ public class KWinSupportInformation
 					scr.Geometry = new Rectangle(xInt, yInt, wInt, hInt);
 				}
 			}
-
-			var dbg = 2;
-
-			// line = reader.ReadLine()?.Trim();
 		}
 
 		var res = new KWinSupportInformation()
@@ -89,13 +76,4 @@ public class KWinSupportInformation
 
 		return res;
 	}
-}
-
-public class KWinScreenInfo
-{
-	public string? Name { get; set; }
-
-	public bool IsEnabled { get; set; }
-
-	public Rectangle Geometry { get; set; }
 }

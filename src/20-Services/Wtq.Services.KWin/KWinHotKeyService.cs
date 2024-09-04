@@ -1,3 +1,5 @@
+#pragma warning disable // PoC
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Wtq.Configuration;
@@ -23,7 +25,7 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 
 	public void Dispose()
 	{
-
+		// Nothing to do.
 	}
 
 	public async Task StartAsync(CancellationToken cancellationToken)
@@ -32,6 +34,9 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		var comp = _kwinService.CreateComponent("/component/kwin");
 		var kwin = _kwinService.CreateKWin("/org/kde/KWin");
 
+		// TODO(MvdO): Reset any previous shortcuts first, then re-register new ones.
+		// Should also be done when configuration changes.
+		// Also run on app stop, although that's less reliable.
 		var names = await comp.ShortcutNamesAsync();
 		var inf = await comp.AllShortcutInfosAsync();
 		var x = await gl.AllComponentsAsync();
@@ -43,8 +48,9 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
 	}
 
-	public async Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
-
+		// Nothing to do.
+		return Task.CompletedTask;
 	}
 }

@@ -3,7 +3,7 @@ using Tmds.DBus;
 namespace Wtq.Services.KWin.DBus;
 
 /// <summary>
-/// Contains methods used to talk to from KWin scripts.
+/// Contains methods used to talk to, from KWin scripts.
 /// </summary>
 [DBusInterface("wtq.kwin")]
 public interface IWtqDBusObject : IDBusObject
