@@ -9,4 +9,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Tmds.DBus" />
+		<PackageReference Include="Tmds.DBus.Protocol" />
+	</ItemGroup>
 </Project>

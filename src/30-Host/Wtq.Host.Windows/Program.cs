@@ -1,11 +1,13 @@
-﻿namespace Wtq.Host.Windows;
+﻿using Wtq.Utils;
+
+namespace Wtq.Host.Windows;
 
 public static class Program
 {
 	public static async Task Main(string[] args)
 	{
-		Utils.Log.Configure();
+		Log.Configure();
 
-		await new WtqWin32().RunAsync().ConfigureAwait(false);
+		await new WtqWin32().RunAsync().NoCtx();
 	}
 }
