@@ -369,6 +369,8 @@ public sealed class Build : NukeBuild
 			}
 
 			// Upload new assets.
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64FrameworkDependentZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64SelfContainedZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64FrameworkDependentZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
