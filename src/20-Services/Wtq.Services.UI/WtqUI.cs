@@ -12,7 +12,13 @@ namespace Wtq.Services.UI;
 public sealed class WtqUI
 	: IHostedService
 {
+	private readonly IWtqProcessService _processService;
 	private Thread? _uiThread;
+
+	public WtqUI(IWtqProcessService processService)
+	{
+		_processService = processService;
+	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
@@ -39,7 +45,9 @@ public sealed class WtqUI
 	{
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
+
 		appBuilder.Services
+			.AddSingleton<IWtqProcessService>(p => _processService)
 			.AddLogging();
 
 		// register root component
@@ -59,8 +67,6 @@ public sealed class WtqUI
 			return false;
 		});
 
-
-		
 		AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
 		{
 			app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());

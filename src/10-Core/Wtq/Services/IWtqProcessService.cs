@@ -19,4 +19,6 @@ public interface IWtqProcessService
 	/// Returns the process that currently has UI focus.
 	/// </summary>
 	WtqWindow? GetForegroundWindow();
+
+	Task<IEnumerable<WtqWindow>> GetWindowsAsync() => Task.FromResult<IEnumerable<WtqWindow>>([]);
 }

@@ -21,11 +21,11 @@ internal class WtqDBusObject(
 		responderIdStr ??= string.Empty;
 		payloadJson ??= string.Empty;
 
-		_log.LogInformation(
-			"{MethodName}({ResponderId}, {PayloadJson})",
-			nameof(SendResponseAsync),
-			responderIdStr,
-			payloadJson[0..25]);
+		// _log.LogInformation(
+		// 	"{MethodName}({ResponderId}, {PayloadJson})",
+		// 	nameof(SendResponseAsync),
+		// 	responderIdStr,
+		// 	payloadJson[0..25]);
 
 		if (!Guid.TryParse(responderIdStr, out var responderId))
 		{
