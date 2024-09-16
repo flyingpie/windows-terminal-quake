@@ -74,6 +74,10 @@ internal class KWinScriptExecutor
 
 			return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
 		}
+		catch (Exception ex)
+		{
+			throw;
+		}
 		finally
 		{
 			File.Delete(path);
@@ -95,31 +99,17 @@ internal class KWinScriptExecutor
 		var xx2 = await _scripting.IsScriptLoadedAsync(scriptId).NoCtx();
 
 		var kwinMod = "Ctrl";
-		var kwinKey = "1";
-		if (key == Keys.D1)
+		var kwinKey = key switch
 		{
-			kwinKey = "1";
-		}
-
-		if (key == Keys.D2)
-		{
-			kwinKey = "2";
-		}
-
-		if (key == Keys.D3)
-		{
-			kwinKey = "3";
-		}
-
-		if (key == Keys.D4)
-		{
-			kwinKey = "4";
-		}
-
-		if (key == Keys.Q)
-		{
-			kwinKey = "q";
-		}
+			Keys.D1 => "1",
+			Keys.D2 => "2",
+			Keys.D3 => "3",
+			Keys.D4 => "4",
+			Keys.D5 => "5",
+			Keys.D6 => "6",
+			Keys.Q => "q",
+			_ => "1"
+		};
 
 		var kwinSequence = $"{kwinMod}+{kwinKey}";
 

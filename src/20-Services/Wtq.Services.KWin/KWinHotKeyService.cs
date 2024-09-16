@@ -42,9 +42,6 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		for (int i = 0; i < 5; i++)
 		{
 			var resx1 = await gl.UnregisterAsync("kwin", $"wtq_hk1_00{i + 1}_scr_text");
-			// var resx2 = await gl.UnregisterAsync("kwin", $"wtq_hk1_00{i + 1}_scr_title");
-
-			// Console.WriteLine($"SUP:{resx1} {resx2}");
 		}
 
 		await comp.CleanUpAsync();
@@ -63,13 +60,14 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 			Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
 		});
 
+		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
+
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
 		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
-
-
+		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
+		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
 
 		// TODO(MvdO): Reset any previous shortcuts first, then re-register new ones.
 		// Should also be done when configuration changes.

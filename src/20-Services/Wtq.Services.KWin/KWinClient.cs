@@ -10,8 +10,24 @@ namespace Wtq.Services.KWin;
 /// </summary>
 public class KWinClient : IKWinClient
 {
+	private const string JsGetWindows = """
+		let getWindows = () => {
+			if (typeof workspace.clientList === "function") {
+				return workspace.clientList();
+			}
+		
+			if (typeof workspace.windowList === "function") {
+				return workspace.windowList();
+			}
+		
+			throw "Could not find function to fetch windows, unsupported version of KWin perhaps?";
+		};
+		""";
+
 	private readonly KWinScriptExecutor _kwinScriptEx;
 	private readonly KWinService _kwinDbus;
+
+	private KWinSupportInformation? _suppInf;
 
 	internal KWinClient(
 		KWinScriptExecutor kwinScriptEx,
@@ -30,7 +46,11 @@ public class KWinClient : IKWinClient
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			let isDone = false;
+
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
@@ -38,10 +58,23 @@ public class KWinClient : IKWinClient
 			
 				client.minimized = false;
 				client.desktop = workspace.currentDesktop;
-				workspace.activeClient = client;
 			
-				break;
+				if (typeof workspace.activeClient === "object") {
+					workspace.activeClient = client;
+					isDone = true;
+					break;
+				}
+			
+				if (typeof workspace.activeWindow === "object") {
+					workspace.activeWindow = client;
+					isDone = true;
+					break;
+				}
+			
+				throw "Could not find property on workspace for active window, unsupported version of KWin perhaps?";
 			}
+
+			throw "[BringWindowToForeground] Did not find a window with resource class '{{window.ResourceClass}}'";
 			""";
 
 		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).NoCtx();
@@ -54,8 +87,9 @@ public class KWinClient : IKWinClient
 
 		var js =
 			$$"""
-			let clients = workspace
-				.clientList()
+			{{JsGetWindows}}
+
+			let clients = getWindows()
 				.map(client => {
 					return {
 						internalId: client.internalId,
@@ -77,6 +111,8 @@ public class KWinClient : IKWinClient
 
 		var js =
 			$$"""
+			"use strict";
+
 			callDBus(
 				"wtq.svc",
 				"/wtq/kwin",
@@ -94,9 +130,14 @@ public class KWinClient : IKWinClient
 	public async Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken)
 	{
-		var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().NoCtx();
+		if (_suppInf == null)
+		{
+			var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().NoCtx();
 
-		return KWinSupportInformation.Parse(str);
+			_suppInf = KWinSupportInformation.Parse(str);
+		}
+
+		return _suppInf;
 	}
 
 	public async Task MoveClientAsync(
@@ -109,11 +150,17 @@ public class KWinClient : IKWinClient
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			let isDone = false;
+
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
 				}
+
+				console.log("Setting client '{{window.ResourceClass}}' to position ({{rect.X}}, {{rect.Y}}, {{rect.Width}}, {{rect.Height}})");
 
 				client.frameGeometry = {
 					x: {{rect.X}},
@@ -121,9 +168,17 @@ public class KWinClient : IKWinClient
 					width: {{rect.Width}},
 					height: {{rect.Height}}
 				};
-				
+
+				client.frameGeometry.x = {{rect.X}};
+				client.frameGeometry.y = {{rect.Y}};
+				client.frameGeometry.width = {{rect.Width}};
+				client.frameGeometry.height = {{rect.Height}};
+
+				isDone = true;
 				break;
 			}
+
+			throw "[Move] Did not find a window with resource class '{{window.ResourceClass}}'";
 			""";
 
 		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).NoCtx();
@@ -135,13 +190,15 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-
+		return;
 		var skip = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
@@ -164,13 +221,15 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-
+		return;
 		var keepAbove = JsUtils.ToJsBoolean(isAlwaysOnTop);
 
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
@@ -195,7 +254,9 @@ public class KWinClient : IKWinClient
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
@@ -216,13 +277,15 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-
+		return;
 		var minimized = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
 			"use strict";
 
-			for (let client of workspace.clientList())
+			{{JsGetWindows}}
+
+			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;

@@ -1,23 +1,57 @@
 {
-	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
-	// Docs: https://wtq.flyingpie.nl
 	"$schema": "../schema/wtq.schema.2.json",
 
 	"Apps": [
-		// Example with PowerShell
+		// WezTerm
 		{
-			"Name": "Konsole",
+			"Name": "WezTerm",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "org.kde.konsole"
-		}
+			"FileName": "org.wezfurlong.wezterm",
+			"Opacity": 90
+		},
 
-		// Example with Windows Terminal
-		//{
-		//	"Name": "Terminal",
-		//	"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-		//	"FileName": "wt",
-		//	"ProcessName": "WindowsTerminal"
-		//}
+		// Krusader
+		{
+			"Name": "Krusader",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "org.kde.krusader"
+		},
+
+		// Krusader
+		{
+			"Name": "System Monitor",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"FileName": "org.kde.plasma-systemmonitor"
+		},
+
+		// KeePass
+		{
+			"Name": "KeePass",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D4" }],
+			"FileName": "org.keepassxc.KeePassXC",
+			"HorizontalAlign": "Right",
+			"HorizontalScreenCoverage": 50,
+			"AlwaysOnTop": true,
+			"HideOnFocusLost": false
+		},
+
+		// Spotify
+		{
+			"Name": "Spotify",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D5" }],
+			"FileName": "Spotify"
+		},
+
+		// Discord
+		{
+			"Name": "Discord",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D6" }],
+			"FileName": "vesktop",
+			"HorizontalAlign": "Right",
+			"HorizontalScreenCoverage": 70,
+			"AlwaysOnTop": true,
+			"HideOnFocusLost": true
+		}
 	],
 
 	// Hot keys that toggle the most recent app (or the first one if none has been active yet).

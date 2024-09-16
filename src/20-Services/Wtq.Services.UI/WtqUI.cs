@@ -22,14 +22,8 @@ public sealed class WtqUI
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		_uiThread = new Thread(StartUI);
-
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			_uiThread.SetApartmentState(ApartmentState.STA);
-		}
-
-		_uiThread.Start();
+		//
+		OpenUI();
 
 		return Task.CompletedTask;
 	}
@@ -39,6 +33,18 @@ public sealed class WtqUI
 		//_uiThread.Join();
 
 		return Task.CompletedTask;
+	}
+
+	public void OpenUI()
+	{
+		_uiThread = new Thread(StartUI);
+
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			_uiThread.SetApartmentState(ApartmentState.STA);
+		}
+
+		_uiThread.Start();
 	}
 
 	private void StartUI()
