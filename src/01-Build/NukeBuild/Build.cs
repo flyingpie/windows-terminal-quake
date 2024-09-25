@@ -151,7 +151,7 @@ public sealed class Build : NukeBuild
 
 			st.ZipTo(
 				PathToLinux64FrameworkDependentZip,
-				filter: x => x.HasExtension(".exe", ".jsonc"),
+				filter: x => !x.HasExtension(".xml"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -178,7 +178,7 @@ public sealed class Build : NukeBuild
 
 			staging.ZipTo(
 				PathToLinux64SelfContainedZip,
-				filter: x => x.HasExtension(".exe", ".jsonc"),
+				filter: x => !x.HasExtension(".xml"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -369,6 +369,8 @@ public sealed class Build : NukeBuild
 			}
 
 			// Upload new assets.
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64FrameworkDependentZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64SelfContainedZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64FrameworkDependentZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
