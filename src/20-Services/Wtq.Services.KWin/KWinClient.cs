@@ -6,7 +6,8 @@ namespace Wtq.Services.KWin;
 
 /// <summary>
 /// TODO(MvdO): Here's most of the work we would need to refactor, since each of these calls results in a JS file write.<br/>
-/// Now, they are currently written to a shared memory mount, so they shouldn't touch an actual drive, but it's still not great.
+/// Now, they are currently written to a shared memory mount, so they shouldn't touch an actual drive, but it's still not great.<br/>
+/// TODO: The "throw" statement doesn't work great, eg. not (always?) logged or anything.
 /// </summary>
 public class KWinClient : IKWinClient
 {
@@ -15,17 +16,21 @@ public class KWinClient : IKWinClient
 
 			// KWin5
 			if (typeof workspace.clientList === "function") {
+				console.log("Fetching window list using 'workspace.clientList()' (KWin5)");
 				return workspace.clientList();
 			}
 		
 			// KWin6
 			if (typeof workspace.windowList === "function") {
+				console.log("Fetching window list using 'workspace.windowList()' (KWin6)");
 				return workspace.windowList();
 			}
-		
-			throw "Could not find function to fetch windows, unsupported version of KWin perhaps?";
+
+			console.log("Could not find function to fetch windows, unsupported version of KWin perhaps?");
 		};
 		""";
+
+	private readonly ILogger _log = Log.For<KWinClient>();
 
 	private readonly KWinScriptExecutor _kwinScriptEx;
 	private readonly KWinService _kwinDbus;
@@ -46,12 +51,16 @@ public class KWinClient : IKWinClient
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Bring to foreground window '{Window}'", window);
+
 		var js = $$"""
 			"use strict";
 
-			let isDone = false;
-
 			{{JsGetWindows}}
+
+			console.log("Bring to foreground window with resource class '{{window.ResourceClass}}'");
+
+			let isDone = false;
 
 			for (let client of getWindows())
 			{
@@ -75,19 +84,23 @@ public class KWinClient : IKWinClient
 					isDone = true;
 					break;
 				}
-			
+
 				throw "Could not find property on workspace for active window, unsupported version of KWin perhaps?";
 			}
 
-			throw "[BringWindowToForeground] Did not find a window with resource class '{{window.ResourceClass}}'";
+			if (!isDone) {
+				console.log("[BringWindowToForeground] Did not find a window with resource class '{{window.ResourceClass}}'");
+			}
 			""";
 
 		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).NoCtx();
 	}
 
-	public async Task<IEnumerable<KWinWindow>> GetClientListAsync(
+	public async Task<ICollection<KWinWindow>> GetWindowListAsync(
 		CancellationToken cancellationToken)
 	{
+		_log.LogTrace("Fetching list of windows");
+
 		var id = Guid.NewGuid();
 
 		var js =
@@ -106,12 +119,18 @@ public class KWinClient : IKWinClient
 			callDBus("wtq.svc", "/wtq/kwin", "wtq.kwin", "SendResponse", "{{id}}", JSON.stringify(clients));
 			""";
 
-		return await _kwinScriptEx.ExecuteAsync<IEnumerable<KWinWindow>>(id, js, cancellationToken).NoCtx();
+		var windows = await _kwinScriptEx.ExecuteAsync<ICollection<KWinWindow>>(id, js, cancellationToken).NoCtx();
+
+		_log.LogTrace("Got {Count} windows", windows.Count);
+
+		return windows;
 	}
 
 	public async Task<Point> GetCursorPosAsync(
 		CancellationToken cancellationToken)
 	{
+		_log.LogTrace("Fetching cursor position");
+
 		var id = Guid.NewGuid();
 
 		var js =
@@ -127,14 +146,20 @@ public class KWinClient : IKWinClient
 				JSON.stringify(workspace.cursorPos));
 			""";
 
-		var point = await _kwinScriptEx.ExecuteAsync<KWinPoint>(id, js, cancellationToken).NoCtx();
+		var kwinPoint = await _kwinScriptEx.ExecuteAsync<KWinPoint>(id, js, cancellationToken).NoCtx();
+		var point = kwinPoint.ToPoint();
 
-		return point.ToPoint();
+		_log.LogTrace("Got cursor position {Position}", point);
+
+		return point;
 	}
 
 	public async Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken)
 	{
+		_log.LogTrace("Fetching support information");
+
+		// TODO: Expiring cache, doesn't handle cases well were screen configurtion is changed while wtq is running.
 		if (_suppInf == null)
 		{
 			var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().NoCtx();
@@ -145,19 +170,23 @@ public class KWinClient : IKWinClient
 		return _suppInf;
 	}
 
-	public async Task MoveClientAsync(
+	public async Task MoveWindowAsync(
 		KWinWindow window,
 		Rectangle rect,
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Moving window '{Window}' to '{Rectangle}'", window, rect);
+
 		var js = $$"""
 			"use strict";
 
-			let isDone = false;
-
 			{{JsGetWindows}}
+
+			console.log("Moving window with resource class '{{window.ResourceClass}}'");
+
+			let isDone = false;
 
 			for (let client of getWindows())
 			{
@@ -165,8 +194,11 @@ public class KWinClient : IKWinClient
 					continue;
 				}
 
-				console.log("Setting client '{{window.ResourceClass}}' to position ({{rect.X}}, {{rect.Y}}, {{rect.Width}}, {{rect.Height}})");
+				console.log("Setting window '{{window.ResourceClass}}' to position ({{rect.X}}, {{rect.Y}}, {{rect.Width}}, {{rect.Height}})");
 
+				// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
+				// allowing us to eg. only set the width, and not the height, or vice versa.
+				// Not sure if this is a bug, but it took a bunch of time to figure out.
 				client.frameGeometry = {
 					x: {{rect.X}},
 					y: {{rect.Y}},
@@ -174,16 +206,14 @@ public class KWinClient : IKWinClient
 					height: {{rect.Height}}
 				};
 
-				client.frameGeometry.x = {{rect.X}};
-				client.frameGeometry.y = {{rect.Y}};
-				client.frameGeometry.width = {{rect.Width}};
-				client.frameGeometry.height = {{rect.Height}};
-
 				isDone = true;
 				break;
 			}
 
-			throw "[Move] Did not find a window with resource class '{{window.ResourceClass}}'";
+			if (!isDone) {
+				console.log("[Move] Did not find a window with resource class '{{window.ResourceClass}}'");
+				throw "[Move] Did not find a window with resource class '{{window.ResourceClass}}'"; // 'throw' doesn't seem to do anything, maybe do logs with levels instead?
+			}
 			""";
 
 		await _kwinScriptEx.ExecuteAsync(js, cancellationToken).NoCtx();
@@ -196,6 +226,8 @@ public class KWinClient : IKWinClient
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Setting taskbar icon visibility for window '{Window}' to '{IsVisible}'", window, isVisible);
+
 		var skip = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
@@ -203,17 +235,25 @@ public class KWinClient : IKWinClient
 
 			{{JsGetWindows}}
 
+			let isDone = false;
+
+			console.log("Set taskbar icon visibility for window with resource class '{{window.ResourceClass}}' to '{{isVisible}}'");
+
 			for (let client of getWindows())
 			{
 				if (client.resourceClass !== "{{window.ResourceClass}}") {
 					continue;
 				}
-			
+
 				client.skipPager = {{skip}};
 				client.skipSwitcher = {{skip}};
 				client.skipTaskbar = {{skip}};
-			
+				isDone = true;
 				break;
+			}
+
+			if (!isDone) {
+				console.log("[SetTaskbarIconVisible] Did not find a window with resource class '{{window.ResourceClass}}'");
 			}
 			""";
 
@@ -227,12 +267,18 @@ public class KWinClient : IKWinClient
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Setting window 'always on top' state for window '{Window}' to '{IsAlwaysOnTop}'", window, isAlwaysOnTop);
+
 		var keepAbove = JsUtils.ToJsBoolean(isAlwaysOnTop);
 
 		var js = $$"""
 			"use strict";
 
 			{{JsGetWindows}}
+
+			console.log("Set window always on top for window with resource class '{{window.ResourceClass}}' to '{{isAlwaysOnTop}}'");
+
+			let isDone = false;
 
 			for (let client of getWindows())
 			{
@@ -241,8 +287,13 @@ public class KWinClient : IKWinClient
 				}
 			
 				client.keepAbove = {{keepAbove}};
-			
+				isDone = true;
+
 				break;
+			}
+
+			if (!isDone) {
+				console.log("[SetWindowAlwaysOnTop] Did not find a window with resource class '{{window.ResourceClass}}'");
 			}
 			""";
 
@@ -256,10 +307,16 @@ public class KWinClient : IKWinClient
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Setting window opacity for window '{Window}' to opacity '{Opacity}'", window, opacity);
+
 		var js = $$"""
 			"use strict";
 
 			{{JsGetWindows}}
+
+			console.log("Setting opacity for window with resource class '{{window.ResourceClass}}' to '{{opacity}}'");
+
+			let isDone = false;
 
 			for (let client of getWindows())
 			{
@@ -268,8 +325,13 @@ public class KWinClient : IKWinClient
 				}
 			
 				client.opacity = {{opacity}};
-			
+				isDone = true;
+
 				break;
+			}
+
+			if (!isDone) {
+				console.log("[SetWindowOpacity] Did not find a window with resource class '{{window.ResourceClass}}'");
 			}
 			""";
 
@@ -283,12 +345,18 @@ public class KWinClient : IKWinClient
 	{
 		Guard.Against.Null(window);
 
+		_log.LogTrace("Setting window visible state for window '{Window}' to '{IsVisible}'", window, isVisible);
+
 		var minimized = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
 			"use strict";
 
 			{{JsGetWindows}}
+
+			console.log("Setting visibility for window with resource class '{{window.ResourceClass}}' to '{{isVisible}}'");
+
+			let isDone = false;
 
 			for (let client of getWindows())
 			{
@@ -297,8 +365,13 @@ public class KWinClient : IKWinClient
 				}
 			
 				client.minimized = {{minimized}};
-			
+				isDone = true;
+
 				break;
+			}
+
+			if (!isDone) {
+				console.log("[SetWindowVisible] Did not find a window with resource class '{{window.ResourceClass}}'");
 			}
 			""";
 
