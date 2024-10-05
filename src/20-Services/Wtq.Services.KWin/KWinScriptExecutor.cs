@@ -76,6 +76,7 @@ internal class KWinScriptExecutor
 		}
 		catch (Exception ex)
 		{
+			// TODO: Log.
 			throw;
 		}
 		finally

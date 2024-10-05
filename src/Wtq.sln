@@ -46,7 +46,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wtq.Services.KWin.UnitTest"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Host.Base", "30-Host\Wtq.Host.Base\Wtq.Host.Base.csproj", "{E320A9BC-9E9D-42CC-A4E3-32F6F1D6E5A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wtq.Services.UI", "20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj", "{F7E69AC0-0A37-4CB4-8139-DDF22388363C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,10 +89,6 @@ Global
 		{E320A9BC-9E9D-42CC-A4E3-32F6F1D6E5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E320A9BC-9E9D-42CC-A4E3-32F6F1D6E5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E320A9BC-9E9D-42CC-A4E3-32F6F1D6E5A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7E69AC0-0A37-4CB4-8139-DDF22388363C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7E69AC0-0A37-4CB4-8139-DDF22388363C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7E69AC0-0A37-4CB4-8139-DDF22388363C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7E69AC0-0A37-4CB4-8139-DDF22388363C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,7 +103,6 @@ Global
 		{EA8DF436-748C-4A33-8FED-8546B77F65E2} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{36162B19-1E6F-4DC8-BF04-B0939BC21B8C} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{E320A9BC-9E9D-42CC-A4E3-32F6F1D6E5A2} = {F414F7B7-3276-46DE-B47E-9DA69D56736F}
-		{F7E69AC0-0A37-4CB4-8139-DDF22388363C} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65349C7B-F6B3-49A8-9935-4ABF9B6D3D70}

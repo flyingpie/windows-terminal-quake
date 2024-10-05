@@ -31,7 +31,7 @@ public sealed class Win32ProcessService :
 		_lock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 

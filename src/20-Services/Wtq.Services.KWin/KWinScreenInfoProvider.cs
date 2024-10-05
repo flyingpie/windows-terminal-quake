@@ -22,15 +22,9 @@ public sealed class KWinScreenInfoProvider(
 			.Select(s => s.Geometry)
 			.ToArray();
 
-		return res;
+		// TODO: Log.
 
-		// return
-		// [
-		// 	new()
-		// 	{
-		// 		X = 1920, Y = 384, Width = 2560, Height = 1440,
-		// 	},
-		// ];
+		return res;
 	}
 
 	public async Task<Rectangle> GetScreenWithCursorAsync()
@@ -44,6 +38,8 @@ public sealed class KWinScreenInfoProvider(
 		var res = screens.Any(s => s.Contains(cursorPos))
 			? screens.FirstOrDefault(s => s.Contains(cursorPos))
 			: await GetPrimaryScreenRectAsync().NoCtx();
+
+		// TODO: Log.
 
 		return res;
 	}

@@ -12,10 +12,13 @@ public class KWinClient : IKWinClient
 {
 	private const string JsGetWindows = """
 		let getWindows = () => {
+
+			// KWin5
 			if (typeof workspace.clientList === "function") {
 				return workspace.clientList();
 			}
 		
+			// KWin6
 			if (typeof workspace.windowList === "function") {
 				return workspace.windowList();
 			}
@@ -59,12 +62,14 @@ public class KWinClient : IKWinClient
 				client.minimized = false;
 				client.desktop = workspace.currentDesktop;
 			
+				// KWin5
 				if (typeof workspace.activeClient === "object") {
 					workspace.activeClient = client;
 					isDone = true;
 					break;
 				}
 			
+				// KWin6
 				if (typeof workspace.activeWindow === "object") {
 					workspace.activeWindow = client;
 					isDone = true;
@@ -190,7 +195,7 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-		return;
+
 		var skip = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
@@ -221,7 +226,7 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-		return;
+
 		var keepAbove = JsUtils.ToJsBoolean(isAlwaysOnTop);
 
 		var js = $$"""
@@ -277,7 +282,7 @@ public class KWinClient : IKWinClient
 		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(window);
-		return;
+
 		var minimized = JsUtils.ToJsBoolean(!isVisible);
 
 		var js = $$"""
