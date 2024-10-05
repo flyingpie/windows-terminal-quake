@@ -37,7 +37,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 			{
 				_log.LogInformation("Using find-only process attach mode for app with options {Options}, looking for process", opts);
 
-				var process = await _procService.FindProcessAsync(opts).NoCtx();
+				var process = await _procService.FindWindowAsync(opts).NoCtx();
 
 				if (process != null)
 				{
@@ -60,7 +60,7 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 						{
 							_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
 
-							var process = await _procService.FindProcessAsync(opts).NoCtx();
+							var process = await _procService.FindWindowAsync(opts).NoCtx();
 
 							if (process != null)
 							{
