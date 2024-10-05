@@ -76,7 +76,7 @@ internal class KWinScriptExecutor
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log.
+			_log.LogError(ex, "Error executing script with id '{ScriptId}' and content '{Script}': {Message}", scriptId, script, ex.Message);
 			throw;
 		}
 		finally
