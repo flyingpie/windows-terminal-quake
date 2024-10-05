@@ -24,5 +24,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
+		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
 	</ItemGroup>
 </Project>
