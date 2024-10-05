@@ -40,7 +40,7 @@ public class KWinProcessService(
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
 	{
-		return (await _kwinClient.GetClientListAsync(CancellationToken.None).NoCtx())
+		return (await _kwinClient.GetWindowListAsync(CancellationToken.None).NoCtx())
 			.Select(c => (WtqWindow)new KWinWtqWindow(_kwinClient, c))
 			.ToList();
 	}

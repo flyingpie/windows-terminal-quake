@@ -41,7 +41,7 @@ public class KWinWtqWindow(
 	{
 		_rect = rect;
 
-		await _kwinClient.MoveClientAsync(_window, rect, CancellationToken.None).NoCtx();
+		await _kwinClient.MoveWindowAsync(_window, rect, CancellationToken.None).NoCtx();
 	}
 
 	public override async Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)

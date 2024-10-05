@@ -11,18 +11,18 @@ public interface IKWinClient
 		KWinWindow window,
 		CancellationToken cancellationToken);
 
-	Task<IEnumerable<KWinWindow>> GetClientListAsync(
-		CancellationToken cancellationToken);
-
 	Task<Point> GetCursorPosAsync(
 		CancellationToken cancellationToken);
 
-	Task MoveClientAsync(
-		KWinWindow window,
-		Rectangle rect,
+	Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken);
 
-	Task<KWinSupportInformation> GetSupportInformationAsync(
+	Task<ICollection<KWinWindow>> GetWindowListAsync(
+		CancellationToken cancellationToken);
+
+	Task MoveWindowAsync(
+		KWinWindow window,
+		Rectangle rect,
 		CancellationToken cancellationToken);
 
 	Task SetTaskbarIconVisibleAsync(
