@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wtq.Host.Base;
 using Wtq.Services.KWin;
 
 namespace Wtq.Host.Linux;
