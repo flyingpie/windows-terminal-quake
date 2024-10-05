@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 /// <summary>
 /// Handles interactions with the OS process list.
@@ -11,14 +11,18 @@ public interface IWtqProcessService
 	Task CreateAsync(WtqAppOptions opts);
 
 	/// <summary>
-	/// Looks for a process that matches the specified <paramref name="opts"/>.
+	/// Looks for a window that matches the specified <paramref name="opts"/>.
 	/// </summary>
-	Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts);
+	Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts);
 
 	/// <summary>
-	/// Returns the process that currently has UI focus.
+	/// Returns the window that currently has UI focus.
 	/// </summary>
 	WtqWindow? GetForegroundWindow();
 
-	Task<IEnumerable<WtqWindow>> GetWindowsAsync() => Task.FromResult<IEnumerable<WtqWindow>>([]);
+	/// <summary>
+	/// Returns a list of all windows that can be attached to.<br/>
+	/// Includes the ones we may already have attached to.
+	/// </summary>
+	Task<ICollection<WtqWindow>> GetWindowsAsync();
 }

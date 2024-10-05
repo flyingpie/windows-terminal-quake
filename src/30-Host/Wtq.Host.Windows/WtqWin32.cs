@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Wtq.Host.Base;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;

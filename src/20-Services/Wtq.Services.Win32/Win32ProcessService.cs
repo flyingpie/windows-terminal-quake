@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
@@ -17,7 +17,7 @@ public sealed class Win32ProcessService :
 	private readonly SemaphoreSlim _lock = new(1);
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
-	private IEnumerable<WtqWindow> _processes = [];
+	private ICollection<WtqWindow> _processes = [];
 
 	public async Task CreateAsync(WtqAppOptions opts)
 	{
@@ -31,11 +31,11 @@ public sealed class Win32ProcessService :
 		_lock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		var processes = await GetProcessesAsync().NoCtx();
+		var processes = await GetWindowsAsync().NoCtx();
 
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
@@ -56,6 +56,13 @@ public sealed class Win32ProcessService :
 		}
 
 		return null;
+	}
+
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
+	{
+		await UpdateProcessesAsync().NoCtx();
+
+		return _processes;
 	}
 
 	public async Task StartAsync(CancellationToken cancellationToken)
@@ -114,13 +121,6 @@ public sealed class Win32ProcessService :
 				});
 
 		await UpdateProcessesAsync(force: true).NoCtx();
-	}
-
-	private async Task<IEnumerable<WtqWindow>> GetProcessesAsync()
-	{
-		await UpdateProcessesAsync().NoCtx();
-
-		return _processes;
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)

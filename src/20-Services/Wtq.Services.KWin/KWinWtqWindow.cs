@@ -15,7 +15,7 @@ public class KWinWtqWindow(
 	private bool? _isTaskbarIconVisible;
 	private int? _transparency;
 	private bool? _isVisible;
-	private Rectangle _rect;
+	private Rectangle _rect = new(0, 0, 1024, 768); // TODO: Get actual window size.
 
 	public override int Id { get; }
 

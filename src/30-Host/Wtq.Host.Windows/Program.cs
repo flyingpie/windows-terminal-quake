@@ -1,4 +1,4 @@
-﻿using Wtq.Utils;
+using Wtq.Utils;
 
 namespace Wtq.Host.Windows;
 

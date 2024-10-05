@@ -1,4 +1,4 @@
-﻿namespace Wtq.Utils;
+namespace Wtq.Utils;
 
 /// <summary>
 /// Utils for running animation sequences.

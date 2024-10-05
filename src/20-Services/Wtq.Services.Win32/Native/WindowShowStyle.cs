@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.Win32.Native;
+namespace Wtq.Services.Win32.Native;
 
 /// <summary>
 /// Enumeration of the different ways of showing a window using ShowWindow.

@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
 public class WtqAppToggleService(

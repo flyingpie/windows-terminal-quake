@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Wtq.Events;
 using Wtq.Services.WinForms.Native;
 using Wtq.Utils;

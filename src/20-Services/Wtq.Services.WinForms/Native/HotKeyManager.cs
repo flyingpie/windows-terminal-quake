@@ -1,4 +1,4 @@
-﻿#pragma warning disable // MvdO: Hacky hook into the WinForms hotkey system.
+#pragma warning disable // MvdO: Hacky hook into the WinForms hotkey system.
 
 namespace Wtq.Services.WinForms.Native;
 
