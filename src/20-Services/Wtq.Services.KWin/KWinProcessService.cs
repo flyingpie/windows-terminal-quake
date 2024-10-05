@@ -14,13 +14,11 @@ public class KWinProcessService(
 		return Task.CompletedTask;
 	}
 
-	public async Task<WtqWindow?> FindProcessAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
 		try
 		{
-			var clients = (await _kwinClient.GetClientListAsync(CancellationToken.None).ConfigureAwait(false))
-				.Select(c => new KWinWtqWindow(_kwinClient, c))
-				.ToList();
+			var clients = await GetWindowsAsync().NoCtx();
 
 			var x = clients.FirstOrDefault(c => c.Matches(opts));
 
@@ -38,5 +36,12 @@ public class KWinProcessService(
 	public WtqWindow? GetForegroundWindow()
 	{
 		return null;
+	}
+
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
+	{
+		return (await _kwinClient.GetClientListAsync(CancellationToken.None).NoCtx())
+			.Select(c => (WtqWindow)new KWinWtqWindow(_kwinClient, c))
+			.ToList();
 	}
 }
