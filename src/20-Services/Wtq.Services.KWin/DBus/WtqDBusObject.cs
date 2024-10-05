@@ -25,7 +25,7 @@ internal class WtqDBusObject(
 			"{MethodName}({ResponderId}, {PayloadJson})",
 			nameof(SendResponseAsync),
 			responderIdStr,
-			payloadJson[0..25]);
+			payloadJson.Length > 25 ? payloadJson[0..25] : payloadJson);
 
 		if (!Guid.TryParse(responderIdStr, out var responderId))
 		{
