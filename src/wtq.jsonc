@@ -6,9 +6,9 @@
 	"Apps": [
 		// Example with PowerShell
 		{
-			"Name": "PowerShell",
+			"Name": "Konsole",
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
+			"FileName": "org.kde.konsole"
 		}
 
 		// Example with Windows Terminal
