@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 /// <summary>
 /// Handles interactions with the OS process list.

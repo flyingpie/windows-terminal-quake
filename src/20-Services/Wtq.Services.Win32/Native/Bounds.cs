@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 
 namespace Wtq.Services.Win32.Native;
 

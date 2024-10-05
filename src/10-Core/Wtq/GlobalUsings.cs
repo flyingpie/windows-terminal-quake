@@ -1,4 +1,4 @@
-﻿global using Ardalis.GuardClauses;
+global using Ardalis.GuardClauses;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using System;

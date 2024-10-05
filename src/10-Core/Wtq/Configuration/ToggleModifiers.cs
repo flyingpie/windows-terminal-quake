@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 /// <summary>
 /// Flags that are passed when toggling an app, to differentiate between eg. regular toggles and instant ones.

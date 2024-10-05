@@ -1,4 +1,4 @@
-﻿using Octokit;
+using Octokit;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;

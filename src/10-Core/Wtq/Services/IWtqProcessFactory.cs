@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 public interface IWtqProcessFactory
 {
