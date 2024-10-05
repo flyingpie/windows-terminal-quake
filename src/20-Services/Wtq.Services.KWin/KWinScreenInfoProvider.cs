@@ -18,13 +18,9 @@ public sealed class KWinScreenInfoProvider(
 			.GetSupportInformationAsync(CancellationToken.None)
 			.NoCtx();
 
-		var res = sInfo.Screens
+		return sInfo.Screens
 			.Select(s => s.Geometry)
 			.ToArray();
-
-		// TODO: Log.
-
-		return res;
 	}
 
 	public async Task<Rectangle> GetScreenWithCursorAsync()
@@ -35,12 +31,8 @@ public sealed class KWinScreenInfoProvider(
 
 		var screens = await GetScreenRectsAsync().NoCtx();
 
-		var res = screens.Any(s => s.Contains(cursorPos))
+		return screens.Any(s => s.Contains(cursorPos))
 			? screens.FirstOrDefault(s => s.Contains(cursorPos))
 			: await GetPrimaryScreenRectAsync().NoCtx();
-
-		// TODO: Log.
-
-		return res;
 	}
 }
