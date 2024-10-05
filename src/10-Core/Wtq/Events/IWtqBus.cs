@@ -1,4 +1,4 @@
-﻿namespace Wtq.Events;
+namespace Wtq.Events;
 
 public interface IWtqBus
 {

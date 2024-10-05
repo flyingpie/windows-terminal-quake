@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 /// <summary>
 /// Alt, control, etc..

@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).

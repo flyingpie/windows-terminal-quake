@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.WinForms;
+namespace Wtq.Services.WinForms;
 
 internal static class Mapping
 {

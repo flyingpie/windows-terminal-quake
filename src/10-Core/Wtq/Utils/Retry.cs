@@ -1,4 +1,4 @@
-﻿namespace Wtq.Utils;
+namespace Wtq.Utils;
 
 public class Retry : IRetry
 {

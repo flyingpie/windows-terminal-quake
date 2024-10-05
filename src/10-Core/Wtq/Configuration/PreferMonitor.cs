@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 /// <summary>
 /// What monitor an app should be toggle on.

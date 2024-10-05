@@ -1,4 +1,4 @@
-﻿using Wtq.Configuration;
+using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Native;
 using Wtq.Utils;

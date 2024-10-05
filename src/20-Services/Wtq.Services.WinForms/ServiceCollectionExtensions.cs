@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Wtq.Services.Win32;
 
 namespace Wtq.Services.WinForms;

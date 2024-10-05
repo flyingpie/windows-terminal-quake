@@ -1,17 +1,26 @@
-﻿root = true
+root = true
 
 [*]
 
-# Indentation and spacing
-indent_style=tab
-indent_size=4
-tab_width=4
+# Charset
+charset = utf-8
 
 # New line preferences
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = false
 
+# Indentation and spacing
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
 #### .NET Coding Conventions ####
+
+[*.cs]
 
 # Organize usings
 dotnet_separate_import_directive_groups = false

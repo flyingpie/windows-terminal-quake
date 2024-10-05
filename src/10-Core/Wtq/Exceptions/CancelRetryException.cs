@@ -1,4 +1,4 @@
-﻿namespace Wtq.Exceptions;
+namespace Wtq.Exceptions;
 
 public sealed class CancelRetryException : Exception
 {

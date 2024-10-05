@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
 public enum Keys

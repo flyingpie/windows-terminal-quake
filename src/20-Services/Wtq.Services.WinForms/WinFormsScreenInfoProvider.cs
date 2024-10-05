@@ -1,4 +1,4 @@
-﻿using Wtq.Exceptions;
+using Wtq.Exceptions;
 using Wtq.Utils;
 
 namespace Wtq.Services.WinForms;

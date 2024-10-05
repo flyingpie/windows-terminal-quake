@@ -1,4 +1,4 @@
-﻿# WTQ KWin Support
+# WTQ KWin Support
 
 Current version is mostly a proof-of-concept, and since I couldn't wait for a better implementation.
 

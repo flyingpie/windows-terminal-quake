@@ -1,4 +1,4 @@
-﻿namespace Wtq.Configuration;
+namespace Wtq.Configuration;
 
 /// <summary>
 /// See here for more information: https://easings.net/.

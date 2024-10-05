@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 /// <summary>
 /// Handles moving the windows of the specified <see cref="WtqApp"/> objects on- and off the screen.

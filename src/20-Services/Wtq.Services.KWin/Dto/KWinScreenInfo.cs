@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.KWin.Dto;
+namespace Wtq.Services.KWin.Dto;
 
 public class KWinScreenInfo
 {

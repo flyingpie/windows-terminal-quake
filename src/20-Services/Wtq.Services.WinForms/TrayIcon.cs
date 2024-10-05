@@ -1,4 +1,4 @@
-﻿using Wtq.Configuration;
+using Wtq.Configuration;
 
 namespace Wtq.Services.WinForms;
 

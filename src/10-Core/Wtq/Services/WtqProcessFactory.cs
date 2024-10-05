@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services;
+namespace Wtq.Services;
 
 /// <summary>
 /// TODO: Move this stuff to WtqApp and IWtqProcessService.
