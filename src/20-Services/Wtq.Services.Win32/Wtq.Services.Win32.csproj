@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>Wtq.Services.Win32</AssemblyName>
 		<RootNamespace>Wtq.Services.Win32</RootNamespace>

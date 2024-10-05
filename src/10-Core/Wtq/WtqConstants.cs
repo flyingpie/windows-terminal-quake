@@ -1,4 +1,4 @@
-﻿namespace Wtq;
+namespace Wtq;
 
 public static class WtqConstants
 {

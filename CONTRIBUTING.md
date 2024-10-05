@@ -1,4 +1,4 @@
-﻿# Contributing
+# Contributing
 
 ## Setup
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>Wtq.Host.Base</AssemblyName>
 		<RootNamespace>Wtq.Host.Base</RootNamespace>

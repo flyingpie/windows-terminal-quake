@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Linux</RootNamespace>

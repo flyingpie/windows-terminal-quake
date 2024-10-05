@@ -1,4 +1,4 @@
-﻿namespace Wtq;
+namespace Wtq;
 
 public abstract class WtqWindow : IEquatable<WtqWindow>
 {

@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.Win32.Extensions;
+namespace Wtq.Services.Win32.Extensions;
 
 public static class ProcessExtensions
 {

@@ -1,4 +1,4 @@
-﻿namespace Wtq.Utils;
+namespace Wtq.Utils;
 
 /// <inheritdoc/>
 public sealed class WtqTween(

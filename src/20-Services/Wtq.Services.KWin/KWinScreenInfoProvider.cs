@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.KWin;
+namespace Wtq.Services.KWin;
 
 public sealed class KWinScreenInfoProvider(
 	IKWinClient kwinClient)

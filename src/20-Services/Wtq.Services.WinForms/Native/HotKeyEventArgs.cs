@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.WinForms.Native;
+namespace Wtq.Services.WinForms.Native;
 
 internal sealed class HotKeyEventArgs : EventArgs
 {

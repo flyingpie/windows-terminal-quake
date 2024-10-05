@@ -1,4 +1,4 @@
-﻿namespace Wtq.Services.WinForms.Native;
+namespace Wtq.Services.WinForms.Native;
 
 [Flags]
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "MvdO: Self-explanatory.")]
