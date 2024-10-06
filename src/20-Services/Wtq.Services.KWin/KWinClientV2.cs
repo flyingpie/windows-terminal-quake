@@ -1,60 +1,28 @@
-using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
-using Wtq.Services.KWin.Resources;
 
 namespace Wtq.Services.KWin;
 
-public class KWinClientV2 : IKWinClient, IHostedService
+internal sealed class KWinClientV2 : IKWinClient
 {
+	private readonly DBus.KWin _kwinDBusService;
+	private readonly Initializer _init;
 	private readonly IKWinScriptService _scriptService;
-	private readonly Task<IWtqDBusObject> _wtqBusObj;
+	private readonly WtqDBusObject _wtqBusObj;
 
-	public KWinClientV2(
+	private KWinScript? _script;
+
+	internal KWinClientV2(
+		DBus.KWin kwinDBusService,
 		IKWinScriptService scriptService,
-		Task<IWtqDBusObject> wtqBusObj)
+		IWtqDBusObject wtqBusObj)
 	{
+		_init = new(InitializeAsync);
+
+		_kwinDBusService = Guard.Against.Null(kwinDBusService);
 		_scriptService = scriptService;
-		_wtqBusObj = wtqBusObj;
-	}
-
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-	}
-
-	private bool _isInitialized;
-
-	private async Task InitializeAsync()
-	{
-		if (_isInitialized)
-		{
-			return;
-		}
-
-		// TODO: To somewhere else.
-		var scriptId = "WTQ-v1";
-		// var path = "/home/marco/wtq-script-1.js";
-		var path = "/home/marco/ws/flyingpie/wtq_2/src/20-Services/Wtq.Services.KWin/Resources/WtqKWinScript.js";
-
-		// var Js = _Resources.WtqKWinScript;
-		// await File.WriteAllTextAsync(path, Js, CancellationToken.None).NoCtx();
-
-		if (await _scriptService.IsScriptLoadedAsync(scriptId).NoCtx())
-		{
-			await _scriptService.UnloadScriptAsync(scriptId).NoCtx();
-		}
-
-		await _scriptService.LoadScriptAsync(path, scriptId).NoCtx();
-		await _scriptService.StartAsync().NoCtx();
-
-		// TODO: Keep around disposable
-		_isInitialized = true;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
+		_wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
 	}
 
 	public Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
@@ -66,8 +34,7 @@ public class KWinClientV2 : IKWinClient, IHostedService
 	{
 		await InitializeAsync().NoCtx();
 
-		var dbus = (WtqDBusObject)await _wtqBusObj;
-		var resp = await dbus
+		var resp = await _wtqBusObj
 			.SendCommandAsync(new()
 			{
 				Type = "GET_CURSOR_POS",
@@ -79,21 +46,15 @@ public class KWinClientV2 : IKWinClient, IHostedService
 			.ToPoint();
 	}
 
-	// public async Task<KWinSupportInformation> GetSupportInformationAsync(
-	// 	CancellationToken cancellationToken)
-	// {
-	// 	// _log.LogTrace("Fetching support information");
-	//
-	// 	// TODO: Expiring cache, doesn't handle cases well were screen configurtion is changed while wtq is running.
-	// 	if (_suppInf == null)
-	// 	{
-	// 		var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().NoCtx();
-	//
-	// 		_suppInf = KWinSupportInformation.Parse(str);
-	// 	}
-	//
-	// 	return _suppInf;
-	// }
+	public async Task<KWinSupportInformation> GetSupportInformationAsync(
+		CancellationToken cancellationToken)
+	{
+		// _log.LogTrace("Fetching support information");
+
+		var supportInfStr = await _kwinDBusService.SupportInformationAsync().NoCtx();
+
+		return KWinSupportInformation.Parse(supportInfStr);
+	}
 
 	public class KWinGetWindowListResponse
 	{
@@ -104,8 +65,7 @@ public class KWinClientV2 : IKWinClient, IHostedService
 	{
 		await InitializeAsync().NoCtx();
 
-		var dbus = (WtqDBusObject)await _wtqBusObj;
-		var resp = await dbus
+		var resp = await _wtqBusObj
 			.SendCommandAsync(new()
 			{
 				Type = "GET_WINDOW_LIST",
@@ -121,9 +81,7 @@ public class KWinClientV2 : IKWinClient, IHostedService
 	{
 		await InitializeAsync().NoCtx();
 
-		var dbus = (WtqDBusObject)await _wtqBusObj;
-
-		_ = await dbus
+		_ = await _wtqBusObj
 			.SendCommandAsync(new("MOVE_WINDOW")
 			{
 				Params = new
@@ -156,5 +114,37 @@ public class KWinClientV2 : IKWinClient, IHostedService
 	public Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
 		return Task.CompletedTask;
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		_init.Dispose();
+
+		if (_script != null)
+		{
+			await _script.DisposeAsync().NoCtx();
+		}
+	}
+
+	private async Task InitializeAsync()
+	{
+		// TODO: To somewhere else.
+		// TODO: Build artifact?
+		var scriptId = "WTQ-v1";
+		// var path = "/home/marco/wtq-script-1.js";
+		var path = "/home/marco/ws/flyingpie/wtq_2/src/20-Services/Wtq.Services.KWin/Resources/WtqKWinScript.js";
+
+		_script = await _scriptService.LoadScriptAsync(path).NoCtx();
+
+		// var Js = _Resources.WtqKWinScript;
+		// await File.WriteAllTextAsync(path, Js, CancellationToken.None).NoCtx();
+
+		// if (await _scriptService.IsScriptLoadedAsync(scriptId).NoCtx())
+		// {
+		// 	await _scriptService.UnloadScriptAsync(scriptId).NoCtx();
+		// }
+
+		// await _scriptService.LoadScriptAsync(path, scriptId).NoCtx();
+		// await _scriptService.StartAsync().NoCtx();
 	}
 }

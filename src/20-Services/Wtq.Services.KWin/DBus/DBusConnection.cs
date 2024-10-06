@@ -6,20 +6,24 @@ using Connection = Tmds.DBus.Protocol.Connection;
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc/>
-public class DBusConnection : IDBusConnection
+public sealed class DBusConnection : IDBusConnection
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
+	private readonly Initializer _init;
+
 	public DBusConnection()
+		: this(Address.Session)
 	{
-		var address = Address.Session;
+	}
+
+	public DBusConnection(string? address)
+	{
+		Guard.Against.NullOrWhiteSpace(address);
+
+		_init = new(InitializeAsync);
 
 		_log.LogInformation("Setting up DBus using address {Address}", address);
-
-		if (string.IsNullOrWhiteSpace(address))
-		{
-			throw new WtqException("Could not determine address for session DBus.");
-		}
 
 		ClientConnection = new Connection(address);
 		ServerConnection = new Tmds.DBus.Connection(address);
@@ -32,9 +36,33 @@ public class DBusConnection : IDBusConnection
 	public Tmds.DBus.Connection ServerConnection { get; }
 
 	/// <summary>
-	/// Connects to DBus.
+	/// Cleans up connections to DBus.
 	/// </summary>
-	public async Task StartAsync(CancellationToken cancellationToken)
+	public void Dispose()
+	{
+		_log.LogInformation("Cleaning up DBus connections");
+
+		ClientConnection.Dispose();
+		ServerConnection.Dispose();
+
+		_init.Dispose();
+	}
+
+	/// <inheritdoc/>
+	public async Task RegisterServiceAsync(string serviceName, IDBusObject serviceObject)
+	{
+		Guard.Against.NullOrWhiteSpace(serviceName);
+		Guard.Against.Null(serviceObject);
+
+		await _init.InitializeAsync().NoCtx();
+
+		_log.LogInformation("Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'", serviceName, serviceObject);
+
+		await ServerConnection.RegisterServiceAsync(serviceName).NoCtx();
+		await ServerConnection.RegisterObjectAsync(serviceObject).NoCtx();
+	}
+
+	private async Task InitializeAsync()
 	{
 		_log.LogInformation("Setting up DBus connections");
 
@@ -45,30 +73,5 @@ public class DBusConnection : IDBusConnection
 		sw.Restart();
 		await ServerConnection.ConnectAsync().NoCtx();
 		_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
-	}
-
-	/// <summary>
-	/// Cleans up connections to DBus.
-	/// </summary>
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		_log.LogInformation("Cleaning up DBus connections");
-
-		ClientConnection.Dispose();
-		ServerConnection.Dispose();
-
-		return Task.CompletedTask;
-	}
-
-	/// <inheritdoc/>
-	public async Task RegisterServiceAsync(string serviceName, IDBusObject serviceObject)
-	{
-		Guard.Against.NullOrWhiteSpace(serviceName);
-		Guard.Against.Null(serviceObject);
-
-		_log.LogInformation("Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'", serviceName, serviceObject);
-
-		await ServerConnection.RegisterServiceAsync(serviceName).NoCtx();
-		await ServerConnection.RegisterObjectAsync(serviceObject).NoCtx();
 	}
 }

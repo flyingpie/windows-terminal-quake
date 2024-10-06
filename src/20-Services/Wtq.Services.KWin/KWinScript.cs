@@ -1,21 +1,13 @@
-using Wtq.Services.KWin.DBus;
-
 namespace Wtq.Services.KWin;
 
-public class KWinScript : IAsyncDisposable
+public sealed class KWinScript(
+	Func<Task> onDispose)
+	: IAsyncDisposable
 {
-	private readonly Task<IWtqDBusObject> _wtqDBusObj;
-	private readonly Scripting _scripting;
-
-	public KWinScript(
-		Task<IWtqDBusObject> wtqDBusObj,
-		IKWinScriptService scriptService)
-	{
-		
-	}
+	private readonly Func<Task> _onDispose = Guard.Against.Null(onDispose);
 
 	public async ValueTask DisposeAsync()
 	{
-		
+		await _onDispose().NoCtx();
 	}
 }

@@ -1,3 +1,4 @@
+using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
@@ -5,7 +6,7 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// High-level interface to the KWin compositor.
 /// </summary>
-public interface IKWinClient //: IAsyncDisposable
+public interface IKWinClient : IAsyncDisposable
 {
 	Task BringToForegroundAsync(
 		KWinWindow window,
@@ -14,8 +15,8 @@ public interface IKWinClient //: IAsyncDisposable
 	Task<Point> GetCursorPosAsync(
 		CancellationToken cancellationToken);
 
-	// Task<KWinSupportInformation> GetSupportInformationAsync(
-	// 	CancellationToken cancellationToken);
+	Task<KWinSupportInformation> GetSupportInformationAsync(
+		CancellationToken cancellationToken);
 
 	Task<ICollection<KWinWindow>> GetWindowListAsync(
 		CancellationToken cancellationToken);
@@ -24,6 +25,11 @@ public interface IKWinClient //: IAsyncDisposable
 		KWinWindow window,
 		Rectangle rect,
 		CancellationToken cancellationToken);
+
+	Task RegisterHotkeyAsync(
+		string name,
+		KeyModifiers mod,
+		Keys key);
 
 	Task SetTaskbarIconVisibleAsync(
 		KWinWindow window,
@@ -46,9 +52,4 @@ public interface IKWinClient //: IAsyncDisposable
 		CancellationToken cancellationToken);
 
 	Task StartAsync() => Task.CompletedTask;
-
-	// public ValueTask DisposeAsync()
-	// {
-	// 	return ValueTask.CompletedTask;
-	// }
 }

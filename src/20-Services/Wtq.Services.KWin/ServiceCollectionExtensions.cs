@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Events;
 using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
@@ -9,44 +8,27 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddKWin(this IServiceCollection services)
 	{
 		return services
-			.AddSingleton<KWinScriptExecutor>()
-			// .AddSingleton<IKWinClient>(p => new KWinClient(
-			// 	p.GetRequiredService<KWinScriptExecutor>(),
-			// 	p.GetRequiredService<KWinService>()))
+
+			// DBus.
+			.AddSingleton<IDBusConnection, DBusConnection>()
+
+			.AddSingleton<DBus.KWinService>(
+				p => new KWinService(p.GetRequiredService<IDBusConnection>().ClientConnection, "org.kde.KWin"))
+
+			.AddSingleton<DBus.KWin>(
+				p => p.GetRequiredService<KWinService>().CreateKWin("/KWin"))
+
+			.AddSingleton<DBus.Scripting>(
+				p => p.GetRequiredService<KWinService>().CreateScripting("/Scripting"))
+
+			.AddSingleton<IWtqDBusObject, WtqDBusObject>()
 
 			.AddSingleton<IKWinScriptService, KWinScriptService>()
-			.AddSingletonHostedService<IKWinClient, KWinClientV2>()
+			.AddSingleton<IKWinClient, KWinClientV2>()
 
-			.AddSingleton<IDBusConnection, DBusConnection>()
-			.AddSingleton(
-				p =>
-				{
-					var dbus = p.GetRequiredService<IDBusConnection>();
-
-					return new KWinService(dbus.ClientConnection, "org.kde.KWin");
-				})
-			.AddSingleton(
-				p =>
-				{
-					var kwinService = p.GetRequiredService<KWinService>();
-
-					return kwinService.CreateScripting("/Scripting");
-				})
-			.AddSingleton<Task<IWtqDBusObject>>(
-				async p =>
-				{
-					var dbus = (DBusConnection)p.GetRequiredService<IDBusConnection>();
-					await dbus.StartAsync(CancellationToken.None).NoCtx();
-
-					var wtqDBusObj = new WtqDBusObject(p.GetRequiredService<IWtqBus>());
-
-					await dbus.RegisterServiceAsync("wtq.svc", wtqDBusObj).ConfigureAwait(false);
-
-					return wtqDBusObj;
-				})
-			.AddSingleton<KWinScriptExecutor>()
 			.AddKWinProcessService()
 			.AddKWinScreenCoordsProvider()
+
 			.AddHostedService<KWinHotKeyService>();
 	}
 

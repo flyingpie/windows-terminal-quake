@@ -7,7 +7,7 @@ namespace Wtq.Services.KWin.DBus;
 /// Wraps both a client- and a server connection to DBus.<br/>
 /// The client connection is used for sending requests to DBus, the server one is used to register DBus object.
 /// </summary>
-public interface IDBusConnection
+public interface IDBusConnection : IDisposable
 {
 	/// <summary>
 	/// Client connection, used to send requests to DBus.

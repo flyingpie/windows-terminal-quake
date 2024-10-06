@@ -1,77 +1,49 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Channels;
 using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
 
 namespace Wtq.Services.KWin.DBus;
 
-public class CommandInfo
-{
-	public CommandInfo()
-	{
-
-	}
-
-	public CommandInfo(string type)
-	{
-		Type = type;
-	}
-
-	/// <summary>
-	/// The command we want to execute, like "get window list" and "set window opacity".
-	/// </summary>
-	[JsonPropertyName("type")]
-	public string Type { get; set; }
-
-	/// <summary>
-	/// Any parameters that accompany the command, like where to move a window to,
-	/// or what opacity to set a window to.
-	/// </summary>
-	[JsonPropertyName("params")]
-	public object Params { get; set; }
-
-	/// <summary>
-	/// Used to correlate any responses coming back from the KWin script.<br/>
-	/// Note that not all commands result in a response.
-	/// </summary>
-	[JsonPropertyName("responderId")]
-	public Guid ResponderId { get; set; } = Guid.NewGuid();
-
-	public override string ToString() => $"[{Type}]";
-}
-
-public class ResponseInfo
-{
-	[JsonPropertyName("responderId")]
-	public Guid ResponderId { get; set; }
-
-	[JsonPropertyName("params")]
-	public JsonElement Params { get; set; }
-
-	public T GetParamsAs<T>()
-	{
-		return Params.Deserialize<T>();
-	}
-}
-
-internal class WtqDBusObject(
-	IWtqBus bus)
-	: IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
+public sealed class WtqDBusObject : IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
 {
 	public static readonly ObjectPath Path = new("/wtq/kwin");
 
 	private readonly ConcurrentQueue<CommandInfo> _commandQueue = new();
 	private readonly ConcurrentDictionary<Guid, KWinResponseWaiter> _waiters = new();
 	private readonly ILogger _log = Log.For<WtqDBusObject>();
-	private readonly IWtqBus _bus = Guard.Against.Null(bus);
+
+	private readonly IWtqBus _bus;
+	private readonly IDBusConnection _dbus;
+	private readonly Initializer _init;
+
+	public WtqDBusObject(
+		IDBusConnection dbus,
+		IWtqBus bus)
+	{
+		_bus = Guard.Against.Null(bus);
+		_dbus = Guard.Against.Null(dbus);
+		_init = new(InitializeAsync);
+	}
 
 	public ObjectPath ObjectPath => Path;
+
+	public void Dispose()
+	{
+		_init.Dispose();
+	}
+
+	public async Task InitializeAsync()
+	{
+		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
+	}
 
 	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
 	{
 		_log.LogInformation("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
+
+		await _init.InitializeAsync().NoCtx();
+
 		// Add response waiter.
 		var id = cmdInfo.ResponderId;
 		using var waiter = new KWinResponseWaiter(id, () => _waiters.TryRemove(id, out _));
@@ -94,6 +66,8 @@ internal class WtqDBusObject(
 	{
 		_log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
 
+		await _init.InitializeAsync().NoCtx();
+
 		if (_commandQueue.TryDequeue(out var cmdInfo))
 		{
 			_log.LogInformation("Send command '{Command}' to KWin", cmdInfo);
@@ -115,8 +89,10 @@ internal class WtqDBusObject(
 	}
 
 	/// <inheritdoc/>
-	public Task SendResponseAsync(string respInfoStr)
+	public async Task SendResponseAsync(string respInfoStr)
 	{
+		await _init.InitializeAsync().NoCtx();
+
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
 
 		var hasResponder = _waiters.TryGetValue(respInfo.ResponderId, out var responder);
@@ -124,23 +100,23 @@ internal class WtqDBusObject(
 		if (!hasResponder)
 		{
 			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
-			return Task.CompletedTask;
+			return;
 		}
 
 		if (!_waiters.TryRemove(respInfo.ResponderId, out var waiter))
 		{
 			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
-			return Task.CompletedTask;
+			return;
 		}
 
 		waiter.SetResult(respInfo);
-
-		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc/>
-	public Task OnPressShortcutAsync(string modStr, string keyStr)
+	public async Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
+		await _init.InitializeAsync().NoCtx();
+
 		_log.LogInformation(
 			"{MethodName}({Modifier}, {Key})",
 			nameof(OnPressShortcutAsync),
@@ -156,7 +132,5 @@ internal class WtqDBusObject(
 				Key = key,
 				Modifiers = mod,
 			});
-
-		return Task.CompletedTask;
 	}
 }

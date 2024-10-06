@@ -6,7 +6,7 @@ namespace Wtq.Services.KWin.DBus;
 /// Contains methods used to talk to, from KWin scripts.
 /// </summary>
 [DBusInterface("wtq.kwin")]
-public interface IWtqDBusObject : IDBusObject
+public interface IWtqDBusObject : IDBusObject, IDisposable
 {
 	/// <summary>
 	/// Responses to commands (as passed through <seealso cref="GetNextCommandAsync"/>), are dropped here.

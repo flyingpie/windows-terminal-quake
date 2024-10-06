@@ -11,16 +11,16 @@ namespace Wtq.Services.KWin;
 internal class KWinHotKeyService : IDisposable, IHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly KWinScriptExecutor _scriptExecutor;
+	private readonly IKWinClient _kwinClient;
 	private readonly KWinService _kwinService;
 
 	public KWinHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
-		KWinScriptExecutor scriptExecutor,
+		IKWinClient kwinClient,
 		KWinService kwinService)
 	{
 		_opts = opts;
-		_scriptExecutor = scriptExecutor;
+		_kwinClient = kwinClient;
 		_kwinService = kwinService;
 	}
 
@@ -60,14 +60,14 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 			Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
 		});
 
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
 
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)

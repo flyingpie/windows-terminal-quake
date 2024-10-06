@@ -98,6 +98,18 @@ cmds["MOVE_WINDOW"] = (cmdInfo) => {
 	};
 };
 
+cmds["REGISTER_HOT_KEY"] = (cmdInfo) => {
+	registerShortcut(
+		cmdInfo.name,
+		cmdInfo.title,
+		cmdInfo.sequence,
+		() => {
+			console.log("BLEH! Fire shortcut '{{kwinSequence}}'");
+			callDBus("wtq.svc", "/wtq/kwin", "wtq.kwin", "OnPressShortcut", "{{mod}}", "{{key}}");
+			console.log("BLEH! /Fire shortcut '{{kwinSequence}}'");
+		});
+}
+
 cmds["SET_WINDOW_ALWAYS_ON_TOP"] = (cmdInfo) => {
 
 };
