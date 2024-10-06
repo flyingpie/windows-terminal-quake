@@ -62,7 +62,7 @@ internal class KWinScriptExecutor
 		var path = $"/dev/shm/wtq-{id}.js";
 
 		var dbus = (WtqDBusObject)await _wtqDBusObj.NoCtx();
-		var waiter = dbus.CreateResponseWaiter(id);
+		// var waiter = dbus.CreateResponseWaiter(id);
 
 		try
 		{
@@ -72,7 +72,8 @@ internal class KWinScriptExecutor
 			await _scripting.StartAsync().NoCtx();
 			await _scripting.UnloadScriptAsync(scriptId).NoCtx();
 
-			return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
+			// return await waiter.GetResultAsync<TResult>(cancellationToken).NoCtx();
+			return default;
 		}
 		catch (Exception ex)
 		{

@@ -5,7 +5,7 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// High-level interface to the KWin compositor.
 /// </summary>
-public interface IKWinClient
+public interface IKWinClient //: IAsyncDisposable
 {
 	Task BringToForegroundAsync(
 		KWinWindow window,
@@ -14,8 +14,8 @@ public interface IKWinClient
 	Task<Point> GetCursorPosAsync(
 		CancellationToken cancellationToken);
 
-	Task<KWinSupportInformation> GetSupportInformationAsync(
-		CancellationToken cancellationToken);
+	// Task<KWinSupportInformation> GetSupportInformationAsync(
+	// 	CancellationToken cancellationToken);
 
 	Task<ICollection<KWinWindow>> GetWindowListAsync(
 		CancellationToken cancellationToken);
@@ -44,4 +44,11 @@ public interface IKWinClient
 		KWinWindow window,
 		bool isVisible,
 		CancellationToken cancellationToken);
+
+	Task StartAsync() => Task.CompletedTask;
+
+	// public ValueTask DisposeAsync()
+	// {
+	// 	return ValueTask.CompletedTask;
+	// }
 }

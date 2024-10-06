@@ -10,9 +10,12 @@ public static class ServiceCollectionExtensions
 	{
 		return services
 			.AddSingleton<KWinScriptExecutor>()
-			.AddSingleton<IKWinClient>(p => new KWinClient(
-				p.GetRequiredService<KWinScriptExecutor>(),
-				p.GetRequiredService<KWinService>()))
+			// .AddSingleton<IKWinClient>(p => new KWinClient(
+			// 	p.GetRequiredService<KWinScriptExecutor>(),
+			// 	p.GetRequiredService<KWinService>()))
+
+			.AddSingleton<IKWinScriptService, KWinScriptService>()
+			.AddSingletonHostedService<IKWinClient, KWinClientV2>()
 
 			.AddSingleton<IDBusConnection, DBusConnection>()
 			.AddSingleton(

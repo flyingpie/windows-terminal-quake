@@ -14,13 +14,15 @@ public sealed class KWinScreenInfoProvider(
 
 	public async Task<Rectangle[]> GetScreenRectsAsync()
 	{
-		var sInfo = await _kwinClient
-			.GetSupportInformationAsync(CancellationToken.None)
-			.NoCtx();
+		return new[]{ new Rectangle(0, 0, 1920, 1080) };
 
-		return sInfo.Screens
-			.Select(s => s.Geometry)
-			.ToArray();
+		// var sInfo = await _kwinClient
+		// 	.GetSupportInformationAsync(CancellationToken.None)
+		// 	.NoCtx();
+		//
+		// return sInfo.Screens
+		// 	.Select(s => s.Geometry)
+		// 	.ToArray();
 	}
 
 	public async Task<Rectangle> GetScreenWithCursorAsync()
