@@ -10,6 +10,8 @@ public interface IWtqDBusObject : IDBusObject, IDisposable
 {
 	Task InitAsync();
 
+	Task LogAsync(string level, string msg);
+
 	/// <summary>
 	/// Responses to commands (as passed through <seealso cref="GetNextCommandAsync"/>), are dropped here.
 	/// </summary>

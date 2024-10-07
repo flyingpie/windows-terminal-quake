@@ -163,6 +163,16 @@ public sealed class WtqApp : IAsyncDisposable
 		await Process.MoveToAsync(rect: rect).NoCtx();
 	}
 
+	public async Task ResizeWindowAsync(Rectangle rect)
+	{
+		if (Process == null || !IsActive)
+		{
+			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
+		}
+
+		await Process.ResizeAsync(rect: rect).NoCtx();
+	}
+
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
 		await UpdateProcessAsync().NoCtx();

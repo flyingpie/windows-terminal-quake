@@ -379,10 +379,10 @@ public sealed class Build : NukeBuild
 		.DependsOn(Clean)
 		.DependsOn(PublishLinux64FrameworkDependent)
 		.DependsOn(PublishLinux64SelfContained)
-		.DependsOn(PublishWin64FrameworkDependent)
-		.DependsOn(PublishWin64SelfContained)
-		.Triggers(CreateScoopManifest)
-		.Triggers(CreateWinGetManifest)
+		// .DependsOn(PublishWin64FrameworkDependent)
+		// .DependsOn(PublishWin64SelfContained)
+		// .Triggers(CreateScoopManifest)
+		// .Triggers(CreateWinGetManifest)
 		.Executes();
 
 	[SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "MvdO: Invoked manually.")]

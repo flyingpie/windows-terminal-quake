@@ -69,6 +69,19 @@ public sealed class Win32WtqProcess : WtqWindow
 		return Task.CompletedTask;
 	}
 
+	public override Task ResizeAsync(Rectangle rect, bool repaint = true)
+	{
+		User32.MoveWindow(
+			hWnd: _process.MainWindowHandle,
+			x: rect.X,
+			y: rect.Y,
+			nWidth: rect.Width,
+			nHeight: rect.Height,
+			bRepaint: repaint);
+
+		return Task.CompletedTask;
+	}
+
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
 		if (_process.MainWindowHandle == IntPtr.Zero)

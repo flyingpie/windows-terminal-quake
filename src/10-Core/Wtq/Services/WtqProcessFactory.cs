@@ -28,54 +28,61 @@ public sealed class WtqProcessFactory : IWtqProcessFactory
 		switch (opts.AttachMode ?? _opts.Value.AttachMode)
 		{
 			case AttachMode.Manual:
-			{
-				_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
-				return null;
-			}
+				{
+					_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
+					return null;
+				}
 
 			case AttachMode.Find:
-			{
-				_log.LogInformation("Using find-only process attach mode for app with options {Options}, looking for process", opts);
-
-				var process = await _procService.FindWindowAsync(opts).NoCtx();
-
-				if (process != null)
 				{
-					_log.LogInformation("Got process {Process} for options {Options}", process, opts);
-				}
-				else
-				{
-					_log.LogInformation("Got no process for options {Options}", opts);
-				}
+					_log.LogInformation("Using find-only process attach mode for app with options {Options}, looking for process", opts);
 
-				return process;
-			}
+					var process = await _procService.FindWindowAsync(opts).NoCtx();
+
+					if (process != null)
+					{
+						_log.LogInformation("Got process {Process} for options {Options}", process, opts);
+					}
+					else
+					{
+						_log.LogInformation("Got no process for options {Options}", opts);
+					}
+
+					return process;
+				}
 
 			default:
 			case AttachMode.FindOrStart:
-			{
-				return await _retry
-					.ExecuteAsync(
-						async () =>
-						{
-							_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
+				{
+					try
+					{
+						return await _retry
+							.ExecuteAsync(
+								async () =>
+								{
+									_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
 
-							var process = await _procService.FindWindowAsync(opts).NoCtx();
+									var process = await _procService.FindWindowAsync(opts).NoCtx();
 
-							if (process != null)
-							{
-								_log.LogInformation("Got process {Process} for options {Options}", process, opts);
-								return process;
-							}
+									if (process != null)
+									{
+										_log.LogInformation("Got process {Process} for options {Options}", process, opts);
+										return process;
+									}
 
-							_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
+									_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
 
-							await _procService.CreateAsync(opts).NoCtx();
+									await _procService.CreateAsync(opts).NoCtx();
 
-							throw new WtqException($"Failed to find or start window for app '{opts}'.");
-						})
-					.NoCtx();
-			}
+									throw new WtqException($"Failed to find or start window for app '{opts}'.");
+								})
+							.NoCtx();
+					}
+					catch (Exception ex)
+					{
+						return null;
+					}
+				}
 		}
 	}
 }

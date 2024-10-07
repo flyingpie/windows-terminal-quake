@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
+using Wtq.Services.KWin.Utils;
 
 namespace Wtq.Services.KWin;
 
@@ -19,16 +20,27 @@ internal sealed class KWinClientV2 : IKWinClient
 		IKWinScriptService scriptService,
 		IWtqDBusObject wtqBusObj)
 	{
-		_init = new(InitializeAsync);
+		_init = new Initializer<KWinClientV2>(InitializeAsync);
 
 		_dbus = Guard.Against.Null(dbus);
 		_scriptService = scriptService;
 		_wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
 	}
 
-	public Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
+	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
 	{
-		return Task.CompletedTask;
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"BRING_WINDOW_TO_FOREGROUND",
+				new
+				{
+					resourceClass = window.ResourceClass,
+				})
+			.NoCtx();
+
+		await GetWindowAsync(window).NoCtx();
 	}
 
 	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
@@ -52,26 +64,22 @@ internal sealed class KWinClientV2 : IKWinClient
 	{
 		// _log.LogTrace("Fetching support information");
 
-		var supportInfStr = await (await _dbus.GetKWinAsync()).SupportInformationAsync().NoCtx();
+		var supportInfStr = await (await _dbus.GetKWinAsync().NoCtx()).SupportInformationAsync().NoCtx();
 
 		return KWinSupportInformation.Parse(supportInfStr);
 	}
 
 	public class KWinGetWindowListResponse
 	{
-		[JsonPropertyName("windows")] public ICollection<KWinWindow> Windows { get; set; }
-	};
+		[JsonPropertyName("windows")]
+		public ICollection<KWinWindow> Windows { get; set; }
+	}
 
 	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
 	{
 		await _init.InitializeAsync().NoCtx();
 
-		var resp = await _wtqBusObj
-			.SendCommandAsync(new()
-			{
-				Type = "GET_WINDOW_LIST",
-			})
-			.NoCtx();
+		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST").NoCtx();
 
 		return resp
 			.GetParamsAs<KWinGetWindowListResponse>()
@@ -83,18 +91,25 @@ internal sealed class KWinClientV2 : IKWinClient
 		await _init.InitializeAsync().NoCtx();
 
 		_ = await _wtqBusObj
-			.SendCommandAsync(new("MOVE_WINDOW")
-			{
-				Params = new
+			.SendCommandAsync(
+				"MOVE_WINDOW",
+				new
 				{
 					resourceClass = window.ResourceClass,
 					x = rect.X,
 					y = rect.Y,
 					width = rect.Width,
 					height = rect.Height,
-				},
-			})
+				})
 			.NoCtx();
+
+		var w = await GetWindowAsync(window).NoCtx();
+		var fg = w.FrameGeometry.ToRect();
+
+		if (fg != rect)
+		{
+			Console.WriteLine($"EXPECTED:{rect} ACTUAL:{fg}");
+		}
 	}
 
 	public async Task RegisterHotkeyAsync(string name, KeyModifiers mod, Keys key)
@@ -122,31 +137,157 @@ internal sealed class KWinClientV2 : IKWinClient
 					name = $"{name}_name",
 					title = $"{name}_title",
 					sequence = kwinSequence,
-					mod = kwinMod,
-					key = kwinKey,
+					mod = mod.ToString(),
+					key = key.ToString(),
 				},
 			})
 			.NoCtx();
 	}
 
-	public Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	public class KWinWindowInfo
 	{
-		return Task.CompletedTask;
+		[JsonPropertyName("resourceClass")]
+		public string ResourceClass { get; set; }
+
+		[JsonPropertyName("resourceName")]
+		public string ResourceName { get; set; }
+
+		[JsonPropertyName("frameGeometry")]
+		public KWinRectangle FrameGeometry { get; set; }
+
+		[JsonPropertyName("skipPager")]
+		public bool SkipPager { get; set; }
+
+		[JsonPropertyName("skipTaskbar")]
+		public bool SkipTaskbar { get; set; }
+
+		[JsonPropertyName("skipSwitcher")]
+		public bool SkipSwitcher { get; set; }
+
+		[JsonPropertyName("minimized")]
+		public bool Minimized { get; set; }
+
+		[JsonPropertyName("keepAbove")]
+		public bool KeepAbove { get; set; }
+
+		[JsonPropertyName("layer")]
+		public int Layer { get; set; }
+
+		[JsonPropertyName("hidden")]
+		public bool Hidden { get; set; }
+
+		public override string ToString() =>
+			$"{ResourceClass} FrameGeometry:{FrameGeometry} SkipPager:{SkipPager} SkipTaskbar:{SkipTaskbar} SkipSwitcher:{SkipSwitcher} Minimized:{Minimized} KeepAbove:{KeepAbove} Layer:{Layer} Hidden:{Hidden}";
 	}
 
-	public Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
+	public async Task<KWinWindowInfo> GetWindowAsync(KWinWindow window)
 	{
-		return Task.CompletedTask;
+		await _init.InitializeAsync().NoCtx();
+
+		var resp = await _wtqBusObj
+			.SendCommandAsync(
+				"GET_WINDOW",
+				new
+				{
+					resourceClass = window.ResourceClass,
+				})
+			.NoCtx();
+
+		Console.WriteLine($"WINDOW:${resp.GetParamsAs<KWinWindowInfo>()}");
+
+		return resp.GetParamsAs<KWinWindowInfo>();
 	}
 
-	public Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
+	public async Task ResizeWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken)
 	{
-		return Task.CompletedTask;
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"RESIZE_WINDOW",
+				new
+				{
+					resourceClass = window.ResourceClass,
+					width = rect.Width,
+					height = rect.Height,
+				})
+			.NoCtx();
+
+		var w = await GetWindowAsync(window).NoCtx();
+		var fg = w.FrameGeometry.ToRect();
+
+		if (fg != rect)
+		{
+			Console.WriteLine($"EXPECTED:{rect} ACTUAL:{fg}");
+		}
 	}
 
-	public Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
-		return Task.CompletedTask;
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
+				new
+				{
+					resourceClass = window.ResourceClass,
+					isVisible = JsUtils.ToJsBoolean(isVisible),
+				})
+			.NoCtx();
+
+		await GetWindowAsync(window).NoCtx();
+	}
+
+	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"SET_WINDOW_ALWAYS_ON_TOP",
+				new
+				{
+					resourceClass = window.ResourceClass,
+					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
+				})
+			.NoCtx();
+
+		await GetWindowAsync(window).NoCtx();
+	}
+
+	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"SET_WINDOW_OPACITY",
+				new
+				{
+					resourceClass = window.ResourceClass,
+					opacity = opacity,
+				})
+			.NoCtx();
+
+		await GetWindowAsync(window).NoCtx();
+	}
+
+	public async Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"SET_WINDOW_VISIBLE",
+				new
+				{
+					resourceClass = window.ResourceClass,
+					isVisible = JsUtils.ToJsBoolean(isVisible),
+				})
+			.NoCtx();
+
+		await GetWindowAsync(window).NoCtx();
 	}
 
 	public async ValueTask DisposeAsync()
@@ -161,25 +302,12 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	private async Task InitializeAsync()
 	{
-		await _wtqBusObj.InitAsync();
+		await _wtqBusObj.InitAsync().NoCtx(); // TODO: Remove, currently required to make sure DBus object is initialized.
 
-		// TODO: To somewhere else.
 		// TODO: Build artifact?
 		var scriptId = "WTQ-v1";
-		// var path = "/home/marco/wtq-script-1.js";
-		var path = "/home/marco/ws/flyingpie/wtq_2/src/20-Services/Wtq.Services.KWin/Resources/WtqKWinScript.js";
+		var path = "Resources/WtqKWinScript.js";
 
 		_script = await _scriptService.LoadScriptAsync(scriptId, path).NoCtx();
-
-		// var Js = _Resources.WtqKWinScript;
-		// await File.WriteAllTextAsync(path, Js, CancellationToken.None).NoCtx();
-
-		// if (await _scriptService.IsScriptLoadedAsync(scriptId).NoCtx())
-		// {
-		// 	await _scriptService.UnloadScriptAsync(scriptId).NoCtx();
-		// }
-
-		// await _scriptService.LoadScriptAsync(path, scriptId).NoCtx();
-		// await _scriptService.StartAsync().NoCtx();
 	}
 }

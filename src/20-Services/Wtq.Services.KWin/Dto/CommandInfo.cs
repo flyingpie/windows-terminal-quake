@@ -1,17 +1,19 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Channels;
-using Tmds.DBus;
-using Wtq.Configuration;
-using Wtq.Events;
 
 namespace Wtq.Services.KWin.Dto;
 
+/// <summary>
+/// Represents a set of parameters sent to the KWin script, like for requesting the list of windows, or moving one, or setting its opacity.
+/// </summary>
 public class CommandInfo
 {
+	// public static readonly string[] CommandTypes =
+	// [
+	// 	"GET_WINDOW_LIST",
+	// ];
+
 	public CommandInfo()
 	{
-
 	}
 
 	public CommandInfo(string type)

@@ -1,15 +1,17 @@
+using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
 using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
+using Wtq.Services.KWin.Exceptions;
 
 namespace Wtq.Services.KWin.DBus;
 
 internal sealed class WtqDBusObject
 	: IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
 {
-	public static readonly ObjectPath Path = new("/wtq/kwin");
+	private static readonly ObjectPath _path = new("/wtq/kwin");
 
 	private readonly ConcurrentQueue<CommandInfo> _commandQueue = new();
 	private readonly ConcurrentDictionary<Guid, KWinResponseWaiter> _waiters = new();
@@ -25,25 +27,56 @@ internal sealed class WtqDBusObject
 	{
 		_bus = Guard.Against.Null(bus);
 		_dbus = Guard.Against.Null(dbus);
-		_init = new(InitializeAsync);
+		_init = new Initializer<WtqDBusObject>(InitializeAsync);
 	}
 
-	public ObjectPath ObjectPath => Path;
+	public ObjectPath ObjectPath => _path;
 
 	public void Dispose()
 	{
+		_dbus.Dispose();
 		_init.Dispose();
 	}
 
 	public async Task InitAsync()
 	{
-		await _init.InitializeAsync();
+		await _init.InitializeAsync().NoCtx();
 	}
+
+	private readonly CancellationTokenSource _cts = new();
 
 	private async Task InitializeAsync()
 	{
 		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
+
+		_ = Task.Run(async () =>
+		{
+			while(!_cts.IsCancellationRequested)
+			{
+				try
+				{
+					await SendCommandAsync("NOOP").NoCtx();
+				}
+				catch
+				{
+
+				}
+
+				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
+			}
+		});
 	}
+
+	public Task LogAsync(string level, string msg)
+	{
+		// TODO
+		_log.LogInformation($"{level} {msg}");
+
+		return Task.CompletedTask;
+	}
+
+	public Task<ResponseInfo> SendCommandAsync(string commandType, object? parameters = null)
+		=> SendCommandAsync(new CommandInfo(commandType) { Params = parameters ?? new() });
 
 	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
 	{
@@ -62,37 +95,55 @@ internal sealed class WtqDBusObject
 
 		// Queue command
 		_commandQueue.Enqueue(cmdInfo);
+		_res.Set();
 
 		// Wait for response
 		// TODO: Cancellation token.
-		return await waiter.Task.NoCtx();
+		try
+		{
+			return await waiter.Task.TimeoutAfter(TimeSpan.FromSeconds(1)).NoCtx();
+		}
+		catch (TimeoutException ex)
+		{
+			throw new KWinException($"Timeout while attempting to send KWin command '{cmdInfo}': {ex.Message}", ex);
+		}
 	}
+
+	private AsyncAutoResetEvent _res = new(false);
 
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync(string a, string b, string c)
 	{
-		_log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
+		// _log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
 
 		await _init.InitializeAsync().NoCtx();
 
-		if (_commandQueue.TryDequeue(out var cmdInfo))
+		while (true)
 		{
-			_log.LogInformation("Send command '{Command}' to KWin", cmdInfo);
-			return JsonSerializer.Serialize(cmdInfo);
+			// See if we have a command on the queue to send back.
+			if (_commandQueue.TryDequeue(out var cmdInfo))
+			{
+				_log.LogInformation("Send command '{Command}' to KWin", cmdInfo);
+				return JsonSerializer.Serialize(cmdInfo);
+			}
+
+			// If not, wait for one to be queued.
+			// TODO: Can this timeout, do we need to drop NOOPs?
+			await _res.WaitAsync().NoCtx();
 		}
 
-		_log.LogInformation("No command in queue");
-		await Task.Delay(TimeSpan.FromMilliseconds(25));
-
-		return JsonSerializer.Serialize(new CommandInfo()
-		{
-			Type = "NOOP",
-			// msg = "Dooods!",
-			Params = new
-			{
-				x = 42,
-			},
-		});
+		// _log.LogInformation("No command in queue");
+		// await Task.Delay(TimeSpan.FromMilliseconds(100));
+		//
+		// return JsonSerializer.Serialize(new CommandInfo()
+		// {
+		// 	Type = "NOOP",
+		// 	// msg = "Dooods!",
+		// 	Params = new
+		// 	{
+		// 		x = 42,
+		// 	},
+		// });
 	}
 
 	/// <inheritdoc/>
@@ -101,6 +152,8 @@ internal sealed class WtqDBusObject
 		await _init.InitializeAsync().NoCtx();
 
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
+
+		_log.LogInformation("Got response {Response}", respInfo);
 
 		var hasResponder = _waiters.TryGetValue(respInfo.ResponderId, out var responder);
 
@@ -116,7 +169,14 @@ internal sealed class WtqDBusObject
 			return;
 		}
 
-		waiter.SetResult(respInfo);
+		if (respInfo.Exception != null)
+		{
+			waiter.SetException(respInfo.Exception);
+		}
+		else
+		{
+			waiter.SetResult(respInfo);
+		}
 	}
 
 	/// <inheritdoc/>

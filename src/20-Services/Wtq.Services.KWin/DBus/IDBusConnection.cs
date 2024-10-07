@@ -1,5 +1,4 @@
 using Tmds.DBus;
-using Connection = Tmds.DBus.Protocol.Connection;
 
 namespace Wtq.Services.KWin.DBus;
 
@@ -9,21 +8,11 @@ namespace Wtq.Services.KWin.DBus;
 /// </summary>
 internal interface IDBusConnection : IDisposable
 {
-	/// <summary>
-	/// Client connection, used to send requests to DBus.
-	/// </summary>
-	Connection ClientConnection { get; }
+	Task<KWin> GetKWinAsync();
 
-	/// <summary>
-	/// Server connection, used to register DBus objects.
-	/// </summary>
-	Tmds.DBus.Connection ServerConnection { get; }
+	Task<KWinService> GetKWinServiceAsync();
 
-	public Task<DBus.KWinService> GetKWinServiceAsync();
-
-	public Task<DBus.KWin> GetKWinAsync();
-
-	public Task<DBus.Scripting> GetScriptingAsync();
+	Task<Scripting> GetScriptingAsync();
 
 	/// <summary>
 	/// Register an object that exposes methods that can be called by other processes.

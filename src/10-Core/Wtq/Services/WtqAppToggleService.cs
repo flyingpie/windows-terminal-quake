@@ -30,6 +30,8 @@ public class WtqAppToggleService(
 		// Move window.
 		_log.LogInformation("ToggleOn from '{From}' to '{To}'", windowRectSrc, windowRectDst);
 
+		await app.ResizeWindowAsync(windowRectDst).NoCtx();
+
 		await _tween
 			.AnimateAsync(
 				src: windowRectSrc,
@@ -56,6 +58,8 @@ public class WtqAppToggleService(
 		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
 
 		_log.LogInformation("ToggleOff from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+
+		await app.ResizeWindowAsync(windowRectDst).NoCtx();
 
 		await _tween
 			.AnimateAsync(

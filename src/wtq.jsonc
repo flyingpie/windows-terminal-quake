@@ -10,13 +10,13 @@
 			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "org.kde.konsole",
 			"Opacity": 90
-		}
+		},
 
-		// {
-		// 	"Name": "Krusader",
-		// 	"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
-		// 	"FileName": "org.kde.krusader"
-		// },
+		{
+			"Name": "Krusader",
+			"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "org.kde.krusader"
+		}
 
 		//{
 		//	"Name": "RNote",

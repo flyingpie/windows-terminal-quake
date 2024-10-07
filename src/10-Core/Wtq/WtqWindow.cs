@@ -67,6 +67,8 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract Task MoveToAsync(Rectangle rect, bool repaint = true);
 
+	public abstract Task ResizeAsync(Rectangle rect, bool repaint = true);
+
 	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 
 	public abstract Task SetTaskbarIconVisibleAsync(bool isVisible);

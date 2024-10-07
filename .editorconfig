@@ -1,4 +1,4 @@
-root = true
+﻿root = true
 
 [*]
 
@@ -192,6 +192,34 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+# Resharper
+resharper_arguments_skip_single = true
+resharper_blank_lines_around_block_case_section = 1
+resharper_blank_lines_around_single_line_auto_property = 1
+resharper_braces_for_foreach = required
+resharper_braces_for_ifelse = required
+resharper_braces_for_while = required
+resharper_csharp_blank_lines_around_single_line_invocable = 1
+resharper_csharp_max_line_length = 180
+resharper_csharp_remove_blank_lines_near_braces_in_code = false
+resharper_csharp_wrap_before_binary_opsign = true
+resharper_csharp_wrap_extends_list_style = chop_if_long
+resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_instance_members_qualify_declared_in =
+resharper_keep_existing_arrangement = true
+resharper_parentheses_redundancy_style = remove
+resharper_place_accessorholder_attribute_on_same_line = false
+resharper_place_expr_accessor_on_single_line = true
+resharper_place_expr_property_on_single_line = true
+resharper_place_field_attribute_on_same_line = false
+resharper_place_simple_property_pattern_on_single_line = true
+resharper_trailing_comma_in_multiline_lists = true
+resharper_wrap_after_primary_constructor_declaration_lpar = false
+resharper_wrap_list_pattern = chop_if_long
+resharper_wrap_object_and_collection_initializer_style = chop_always
+resharper_wrap_primary_constructor_parameters_style = chop_always
+resharper_wrap_property_pattern = wrap_if_long
 
 #### Naming styles ####
 

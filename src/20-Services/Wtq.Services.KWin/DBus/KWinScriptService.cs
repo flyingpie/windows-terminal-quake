@@ -1,3 +1,4 @@
+using Wtq.Exceptions;
 using Wtq.Services.KWin;
 using Wtq.Services.KWin.DBus;
 
@@ -14,11 +15,18 @@ internal sealed class KWinScriptService(
 
 	public async Task<KWinScript> LoadScriptAsync(string id, string path)
 	{
+		path = Path.GetFullPath(path);
+
 		var scr = await _dbus.GetScriptingAsync().NoCtx();
 
 		if (await scr.IsScriptLoadedAsync(id).NoCtx())
 		{
 			await scr.UnloadScriptAsync(id).NoCtx();
+		}
+
+		if (!File.Exists(path))
+		{
+			throw new WtqException($"No such script file at path '{path}'.");
 		}
 
 		await scr.LoadScriptAsync(path, id).NoCtx();

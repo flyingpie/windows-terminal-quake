@@ -160,7 +160,7 @@
 // 	{
 // 		_log.LogTrace("Fetching support information");
 
-// 		// TODO: Expiring cache, doesn't handle cases well were screen configurtion is changed while wtq is running.
+// 		// TODO: Exp							iring cache, doesn't handle cases well were screen configurtion is changed while wtq is running.
 // 		if (_suppInf == null)
 // 		{
 // 			var str = await _kwinDbus.CreateKWin("/KWin").SupportInformationAsync().NoCtx();

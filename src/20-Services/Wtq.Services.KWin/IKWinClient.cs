@@ -31,6 +31,11 @@ public interface IKWinClient : IAsyncDisposable
 		KeyModifiers mod,
 		Keys key);
 
+	Task ResizeWindowAsync(
+		KWinWindow window,
+		Rectangle rect,
+		CancellationToken cancellationToken);
+
 	Task SetTaskbarIconVisibleAsync(
 		KWinWindow window,
 		bool isVisible,

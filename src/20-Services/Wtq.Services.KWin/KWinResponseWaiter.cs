@@ -25,6 +25,11 @@ public sealed class KWinResponseWaiter : IDisposable
 		_onDone();
 	}
 
+	public void SetException(Exception ex)
+	{
+		_tcs.TrySetException(ex);
+	}
+
 	public void SetResult(ResponseInfo respInfo)
 	{
 		_tcs.TrySetResult(respInfo);
