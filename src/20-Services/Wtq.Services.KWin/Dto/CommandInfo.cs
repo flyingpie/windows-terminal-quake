@@ -5,7 +5,7 @@ using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
 
-namespace Wtq.Services.KWin.DBus;
+namespace Wtq.Services.KWin.Dto;
 
 public class CommandInfo
 {

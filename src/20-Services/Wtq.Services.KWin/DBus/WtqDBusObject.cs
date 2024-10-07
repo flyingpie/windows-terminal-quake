@@ -2,10 +2,12 @@ using System.Text.Json;
 using Tmds.DBus;
 using Wtq.Configuration;
 using Wtq.Events;
+using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin.DBus;
 
-public sealed class WtqDBusObject : IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
+internal sealed class WtqDBusObject
+	: IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
 {
 	public static readonly ObjectPath Path = new("/wtq/kwin");
 
@@ -33,7 +35,12 @@ public sealed class WtqDBusObject : IWtqDBusObject // TODO: Add second interface
 		_init.Dispose();
 	}
 
-	public async Task InitializeAsync()
+	public async Task InitAsync()
+	{
+		await _init.InitializeAsync();
+	}
+
+	private async Task InitializeAsync()
 	{
 		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
 	}
@@ -75,7 +82,7 @@ public sealed class WtqDBusObject : IWtqDBusObject // TODO: Add second interface
 		}
 
 		_log.LogInformation("No command in queue");
-		await Task.Delay(TimeSpan.FromMilliseconds(500));
+		await Task.Delay(TimeSpan.FromMilliseconds(25));
 
 		return JsonSerializer.Serialize(new CommandInfo()
 		{

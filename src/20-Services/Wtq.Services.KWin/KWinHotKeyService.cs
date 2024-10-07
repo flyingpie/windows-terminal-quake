@@ -12,16 +12,16 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IKWinClient _kwinClient;
-	private readonly KWinService _kwinService;
+	private readonly IDBusConnection _dbus;
 
 	public KWinHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IKWinClient kwinClient,
-		KWinService kwinService)
+		IDBusConnection dbus)
 	{
 		_opts = opts;
 		_kwinClient = kwinClient;
-		_kwinService = kwinService;
+		_dbus = dbus;
 	}
 
 	public void Dispose()
@@ -34,9 +34,11 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{
-		var gl = _kwinService.CreateKGlobalAccel("/kglobalaccel");
-		var comp = _kwinService.CreateComponent("/component/kwin");
-		var kwin = _kwinService.CreateKWin("/org/kde/KWin");
+		var kwinx = await _dbus.GetKWinServiceAsync();
+
+		var gl = kwinx.CreateKGlobalAccel("/kglobalaccel");
+		var comp = kwinx.CreateComponent("/component/kwin");
+		var kwin = kwinx.CreateKWin("/org/kde/KWin");
 
 		// Clear.
 		for (int i = 0; i < 5; i++)

@@ -12,14 +12,14 @@ public static class ServiceCollectionExtensions
 			// DBus.
 			.AddSingleton<IDBusConnection, DBusConnection>()
 
-			.AddSingleton<DBus.KWinService>(
-				p => new KWinService(p.GetRequiredService<IDBusConnection>().ClientConnection, "org.kde.KWin"))
-
-			.AddSingleton<DBus.KWin>(
-				p => p.GetRequiredService<KWinService>().CreateKWin("/KWin"))
-
-			.AddSingleton<DBus.Scripting>(
-				p => p.GetRequiredService<KWinService>().CreateScripting("/Scripting"))
+			// .AddSingleton<DBus.KWinService>(
+			// 	p => new KWinService(p.GetRequiredService<IDBusConnection>().ClientConnection, "org.kde.KWin"))
+			//
+			// .AddSingleton<DBus.KWin>(
+			// 	p => p.GetRequiredService<KWinService>().CreateKWin("/KWin"))
+			//
+			// .AddSingleton<DBus.Scripting>(
+			// 	p => p.GetRequiredService<KWinService>().CreateScripting("/Scripting"))
 
 			.AddSingleton<IWtqDBusObject, WtqDBusObject>()
 

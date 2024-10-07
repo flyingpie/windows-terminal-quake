@@ -5,12 +5,24 @@ console.log("Loading up stuff!! v1");
 // Command loop ////////////////////////////////////////////
 let wtq = {};
 
-wtq.onGotCommand = (cmdInfoStr) => {
-	console.log(`CALLBACK, a:${cmdInfoStr}`);
+wtq.sendResponse = (cmdInfo, params) => {
+	console.log(`SEND RESPONSE, a:${cmdInfo.type}`);
 
+	callDBus(
+		"wtq.svc",
+		"/wtq/kwin",
+		"wtq.kwin",
+		"SendResponse",
+		JSON.stringify({
+			responderId: cmdInfo.responderId,
+			params: params,
+		}));
+};
+
+wtq.onGotCommand = (cmdInfoStr) => {
 	try {
 		const cmdInfo = JSON.parse(cmdInfoStr);
-		console.log(`RESPONSE MESSAGE TYPE: ${cmdInfo.type}`);
+		console.log(`COMMAND TYPE: ${cmdInfo.type}`);
 
 		// TODO: Check if session ends.
 		// TODO: Handle command
@@ -51,12 +63,12 @@ wtq.getNextCommand();
 let cmds = {};
 
 cmds["BRING_WINDOW_TO_FOREGROUND"] = (cmdInfo) => {
-
+	// TODO
 };
 
 cmds["GET_CURSOR_POS"] = (cmdInfo) => {
 
-	console.log(`Get cursor pos! ${JSON.stringify(cmdInfo.params)}`);
+//	console.log(`Get cursor pos! ${JSON.stringify(cmdInfo.params)}`);
 
 	wtq.sendResponse(cmdInfo, workspace.cursorPos);
 };
@@ -80,10 +92,14 @@ cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 
 cmds["MOVE_WINDOW"] = (cmdInfo) => {
 
+	const p = cmdInfo.params;
+
 	const w = kwin.getWindowByResourceClass(cmdInfo.params.resourceClass);
+	console.log(`Moving win ${p.resourceClass} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
 
 	if (!w) {
-		console.log("No window found with resource class");
+		console.log(`No window found with resource class ${cmdInfo.params.resourceClass}`);
+		wtq.sendResponse(cmdInfo, {});
 		return;
 	}
 
@@ -91,39 +107,49 @@ cmds["MOVE_WINDOW"] = (cmdInfo) => {
 	// allowing us to eg. only set the width, and not the height, or vice versa.
 	// Not sure if this is a bug, but it took a bunch of time to figure out.
 	w.frameGeometry = {
-		x: cmdInfo.params.x,
-		y: cmdInfo.params.y,
-		width: cmdInfo.params.width,
-		height: cmdInfo.params.rectheight,
+		x: p.x,
+		y: p.y,
+		width: p.width,
+		height: p.height,
 	};
+
+	wtq.sendResponse(cmdInfo, {});
+};
+
+cmds["NOOP"] = (cmdInfo) => {
+
 };
 
 cmds["REGISTER_HOT_KEY"] = (cmdInfo) => {
+	console.log(`Reg shortcut name:'${cmdInfo.name}' sequence:'${cmdInfo.sequence}'`);
+
 	registerShortcut(
-		cmdInfo.name,
-		cmdInfo.title,
-		cmdInfo.sequence,
+		cmdInfo.params.name,
+		cmdInfo.params.title,
+		cmdInfo.params.sequence,
 		() => {
-			console.log("BLEH! Fire shortcut '{{kwinSequence}}'");
-			callDBus("wtq.svc", "/wtq/kwin", "wtq.kwin", "OnPressShortcut", "{{mod}}", "{{key}}");
+			console.log(`BLEH! Fire shortcut '${cmdInfo.name}'`);
+			callDBus("wtq.svc", "/wtq/kwin", "wtq.kwin", "OnPressShortcut", cmdInfo.params.mod, cmdInfo.params.key);
 			console.log("BLEH! /Fire shortcut '{{kwinSequence}}'");
 		});
+
+	wtq.sendResponse(cmdInfo, {});
 }
 
 cmds["SET_WINDOW_ALWAYS_ON_TOP"] = (cmdInfo) => {
-
+	// TODO
 };
 
 cmds["SET_WINDOW_OPACITY"] = (cmdInfo) => {
-
+	// TODO
 };
 
 cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
-
+	// TODO
 };
 
 cmds["SET_WINDOW_VISIBLE"] = (cmdInfo) => {
-
+	// TODO
 };
 ////////////////////////////////////////////////////////////
 
@@ -159,7 +185,8 @@ kwin.getWindowByInternalId = (internalId) => {
 
 // TODO: Use shorter syntax.
 kwin.getWindowByResourceClass = (resourceClass) => {
-	for (const w in kwin.getWindows()) {
+	for (const w of kwin.getWindows()) {
+		console.log(`RES CLASS: ${w.resourceClass}`);
 		if (w.resourceClass === resourceClass) {
 			return w;
 		}
@@ -172,18 +199,6 @@ kwin.getWindowByResourceClass = (resourceClass) => {
 
 wtq.log = () => {
 
-};
-
-wtq.sendResponse = (cmdInfo, params) => {
-	callDBus(
-		"wtq.svc",
-		"/wtq/kwin",
-		"wtq.kwin",
-		"SendResponse",
-		JSON.stringify({
-			responderId: cmdInfo.responderId,
-			params: params,
-		}));
 };
 ////////////////////////////////////////////////////////////
 

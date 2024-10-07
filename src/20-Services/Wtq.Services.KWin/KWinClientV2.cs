@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
 
@@ -6,21 +7,21 @@ namespace Wtq.Services.KWin;
 
 internal sealed class KWinClientV2 : IKWinClient
 {
-	private readonly DBus.KWin _kwinDBusService;
+	private readonly IDBusConnection _dbus;
 	private readonly Initializer _init;
 	private readonly IKWinScriptService _scriptService;
 	private readonly WtqDBusObject _wtqBusObj;
 
 	private KWinScript? _script;
 
-	internal KWinClientV2(
-		DBus.KWin kwinDBusService,
+	public KWinClientV2(
+		IDBusConnection dbus,
 		IKWinScriptService scriptService,
 		IWtqDBusObject wtqBusObj)
 	{
 		_init = new(InitializeAsync);
 
-		_kwinDBusService = Guard.Against.Null(kwinDBusService);
+		_dbus = Guard.Against.Null(dbus);
 		_scriptService = scriptService;
 		_wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
 	}
@@ -32,7 +33,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
 	{
-		await InitializeAsync().NoCtx();
+		await _init.InitializeAsync().NoCtx();
 
 		var resp = await _wtqBusObj
 			.SendCommandAsync(new()
@@ -51,7 +52,7 @@ internal sealed class KWinClientV2 : IKWinClient
 	{
 		// _log.LogTrace("Fetching support information");
 
-		var supportInfStr = await _kwinDBusService.SupportInformationAsync().NoCtx();
+		var supportInfStr = await (await _dbus.GetKWinAsync()).SupportInformationAsync().NoCtx();
 
 		return KWinSupportInformation.Parse(supportInfStr);
 	}
@@ -63,7 +64,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
 	{
-		await InitializeAsync().NoCtx();
+		await _init.InitializeAsync().NoCtx();
 
 		var resp = await _wtqBusObj
 			.SendCommandAsync(new()
@@ -79,7 +80,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task MoveWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken)
 	{
-		await InitializeAsync().NoCtx();
+		await _init.InitializeAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(new("MOVE_WINDOW")
@@ -91,6 +92,38 @@ internal sealed class KWinClientV2 : IKWinClient
 					y = rect.Y,
 					width = rect.Width,
 					height = rect.Height,
+				},
+			})
+			.NoCtx();
+	}
+
+	public async Task RegisterHotkeyAsync(string name, KeyModifiers mod, Keys key)
+	{
+		var kwinMod = "Ctrl";
+		var kwinKey = key switch
+		{
+			Keys.D1 => "1",
+			Keys.D2 => "2",
+			Keys.D3 => "3",
+			Keys.D4 => "4",
+			Keys.D5 => "5",
+			Keys.D6 => "6",
+			Keys.Q => "q",
+			_ => "1",
+		};
+
+		var kwinSequence = $"{kwinMod}+{kwinKey}";
+
+		_ = await _wtqBusObj
+			.SendCommandAsync(new("REGISTER_HOT_KEY")
+			{
+				Params = new
+				{
+					name = $"{name}_name",
+					title = $"{name}_title",
+					sequence = kwinSequence,
+					mod = kwinMod,
+					key = kwinKey,
 				},
 			})
 			.NoCtx();
@@ -128,13 +161,15 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	private async Task InitializeAsync()
 	{
+		await _wtqBusObj.InitAsync();
+
 		// TODO: To somewhere else.
 		// TODO: Build artifact?
 		var scriptId = "WTQ-v1";
 		// var path = "/home/marco/wtq-script-1.js";
 		var path = "/home/marco/ws/flyingpie/wtq_2/src/20-Services/Wtq.Services.KWin/Resources/WtqKWinScript.js";
 
-		_script = await _scriptService.LoadScriptAsync(path).NoCtx();
+		_script = await _scriptService.LoadScriptAsync(scriptId, path).NoCtx();
 
 		// var Js = _Resources.WtqKWinScript;
 		// await File.WriteAllTextAsync(path, Js, CancellationToken.None).NoCtx();

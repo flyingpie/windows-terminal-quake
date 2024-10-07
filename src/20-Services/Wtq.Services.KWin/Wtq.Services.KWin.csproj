@@ -14,19 +14,4 @@
 		<PackageReference Include="Tmds.DBus" />
 		<PackageReference Include="Tmds.DBus.Protocol" />
 	</ItemGroup>
-	
-	<ItemGroup>
-	  <EmbeddedResource Update="Resources\_Resources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>_Resources.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Compile Update="Resources\_Resources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>_Resources.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
 </Project>

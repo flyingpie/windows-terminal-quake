@@ -1,16 +1,19 @@
 using Tmds.DBus;
-using Wtq.Exceptions;
 using Address = Tmds.DBus.Protocol.Address;
 using Connection = Tmds.DBus.Protocol.Connection;
 
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc/>
-public sealed class DBusConnection : IDBusConnection
+internal sealed class DBusConnection : IDBusConnection
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
 	private readonly Initializer _init;
+
+	private DBus.KWinService? _kwinService;
+	private DBus.KWin? _kwin;
+	private DBus.Scripting? _scripting;
 
 	public DBusConnection()
 		: this(Address.Session)
@@ -34,6 +37,27 @@ public sealed class DBusConnection : IDBusConnection
 
 	/// <inheritdoc/>
 	public Tmds.DBus.Connection ServerConnection { get; }
+
+	public async Task<DBus.KWinService> GetKWinServiceAsync()
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		return _kwinService ??= new KWinService(ClientConnection, "org.kde.KWin");
+	}
+
+	public async Task<DBus.KWin> GetKWinAsync()
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
+	}
+
+	public async Task<DBus.Scripting> GetScriptingAsync()
+	{
+		await _init.InitializeAsync().NoCtx();
+
+		return _scripting ??= (await GetKWinServiceAsync().NoCtx()).CreateScripting("/Scripting");
+	}
 
 	/// <summary>
 	/// Cleans up connections to DBus.

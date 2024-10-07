@@ -1,11 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Channels;
-using Tmds.DBus;
-using Wtq.Configuration;
-using Wtq.Events;
 
-namespace Wtq.Services.KWin.DBus;
+namespace Wtq.Services.KWin.Dto;
 
 public class ResponseInfo
 {

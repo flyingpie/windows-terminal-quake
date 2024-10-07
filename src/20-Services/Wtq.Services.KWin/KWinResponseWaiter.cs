@@ -1,5 +1,4 @@
-using System.Text.Json;
-using Wtq.Services.KWin.DBus;
+using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 
@@ -25,13 +24,6 @@ public sealed class KWinResponseWaiter : IDisposable
 	{
 		_onDone();
 	}
-
-	// public async Task<TResult> GetResultAsync<TResult>(CancellationToken cancellationToken)
-	// {
-	// 	var respStr = await _tcs.Task.WaitAsync(cancellationToken).NoCtx();
-
-	// 	return JsonSerializer.Deserialize<TResult>(respStr)!;
-	// }
 
 	public void SetResult(ResponseInfo respInfo)
 	{

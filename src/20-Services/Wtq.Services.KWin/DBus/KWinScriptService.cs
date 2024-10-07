@@ -3,65 +3,27 @@ using Wtq.Services.KWin.DBus;
 
 public interface IKWinScriptService
 {
-	// Task<bool> IsScriptLoadedAsync(string scriptId);
-
-	Task<KWinScript> LoadScriptAsync(string path);
-
-	// Task LoadScriptAsync(string path, string scriptId);
-
-	// Task StartAsync();
-
-	// Task UnloadScriptAsync(string scriptId);
-
+	Task<KWinScript> LoadScriptAsync(string id, string path);
 }
 
 internal sealed class KWinScriptService(
-	Scripting scripting)
+	IDBusConnection dbus)
 	: IKWinScriptService
 {
-	private readonly Scripting _scripting = Guard.Against.Null(scripting);
+	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
-	public async Task<KWinScript> LoadScriptAsync(string path)
+	public async Task<KWinScript> LoadScriptAsync(string id, string path)
 	{
-		var scriptId = Guid.NewGuid().ToString();
+		var scr = await _dbus.GetScriptingAsync().NoCtx();
 
-		// TODO: To somewhere else.
-		// TODO: Build artifact?
-		// var scriptId = "WTQ-v1";
-		// var path = "/home/marco/wtq-script-1.js";
-		// var path = "/home/marco/ws/flyingpie/wtq_2/src/20-Services/Wtq.Services.KWin/Resources/WtqKWinScript.js";
-
-		// var Js = _Resources.WtqKWinScript;
-		// await File.WriteAllTextAsync(path, Js, CancellationToken.None).NoCtx();
-
-		if (await _scripting.IsScriptLoadedAsync(scriptId).NoCtx())
+		if (await scr.IsScriptLoadedAsync(id).NoCtx())
 		{
-			await _scripting.UnloadScriptAsync(scriptId).NoCtx();
+			await scr.UnloadScriptAsync(id).NoCtx();
 		}
 
-		await _scripting.LoadScriptAsync(path, scriptId).NoCtx();
-		await _scripting.StartAsync().NoCtx();
+		await scr.LoadScriptAsync(path, id).NoCtx();
+		await scr.StartAsync().NoCtx();
 
-		return new KWinScript(() => _scripting.UnloadScriptAsync(scriptId));
+		return new KWinScript(() => scr.UnloadScriptAsync(id));
 	}
-
-	// public Task<bool> IsScriptLoadedAsync(string scriptId)
-	// {
-	// 	return _scripting.IsScriptLoadedAsync(scriptId);
-	// }
-
-	// public Task LoadScriptAsync(string path, string scriptId)
-	// {
-	// 	return _scripting.LoadScriptAsync(path, scriptId);
-	// }
-
-	// public Task StartAsync()
-	// {
-	// 	return _scripting.StartAsync();
-	// }
-
-	// public Task UnloadScriptAsync(string scriptId)
-	// {
-	// 	return _scripting.UnloadScriptAsync(scriptId);
-	// }
 }
