@@ -49,6 +49,14 @@ internal sealed class WtqDBusObject
 	{
 		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
 
+	}
+
+	/// <summary>
+	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+	/// and the connections is dropped.
+	/// </summary>
+	private void StartNoOpLoop()
+	{
 		_ = Task.Run(async () =>
 		{
 			while(!_cts.IsCancellationRequested)
@@ -57,9 +65,9 @@ internal sealed class WtqDBusObject
 				{
 					await SendCommandAsync("NOOP").NoCtx();
 				}
-				catch
+				catch (Exception ex)
 				{
-
+					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
 				}
 
 				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();

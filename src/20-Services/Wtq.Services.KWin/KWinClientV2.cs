@@ -6,6 +6,9 @@ using Wtq.Services.KWin.Utils;
 
 namespace Wtq.Services.KWin;
 
+/// <summary>
+/// Wraps functions in the wtq.kwin script.
+/// </summary>
 internal sealed class KWinClientV2 : IKWinClient
 {
 	private readonly IDBusConnection _dbus;
@@ -86,7 +89,10 @@ internal sealed class KWinClientV2 : IKWinClient
 			.Windows;
 	}
 
-	public async Task MoveWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken)
+	public async Task MoveWindowAsync(
+		KWinWindow window,
+		Point location,
+		CancellationToken cancellationToken)
 	{
 		await _init.InitializeAsync().NoCtx();
 
@@ -96,10 +102,8 @@ internal sealed class KWinClientV2 : IKWinClient
 				new
 				{
 					resourceClass = window.ResourceClass,
-					x = rect.X,
-					y = rect.Y,
-					width = rect.Width,
-					height = rect.Height,
+					x = location.X,
+					y = location.Y,
 				})
 			.NoCtx();
 

@@ -23,17 +23,17 @@ public interface IKWinClient : IAsyncDisposable
 
 	Task MoveWindowAsync(
 		KWinWindow window,
-		Rectangle rect,
+		Point location,
 		CancellationToken cancellationToken);
 
 	Task RegisterHotkeyAsync(
 		string name,
-		KeyModifiers mod,
+		KeyModifiers modifiers,
 		Keys key);
 
 	Task ResizeWindowAsync(
 		KWinWindow window,
-		Rectangle rect,
+		Size size,
 		CancellationToken cancellationToken);
 
 	Task SetTaskbarIconVisibleAsync(
@@ -55,6 +55,4 @@ public interface IKWinClient : IAsyncDisposable
 		KWinWindow window,
 		bool isVisible,
 		CancellationToken cancellationToken);
-
-	Task StartAsync() => Task.CompletedTask;
 }
