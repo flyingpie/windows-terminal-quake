@@ -40,7 +40,7 @@ public sealed class Win32ProcessService :
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public WtqWindow? GetForegroundWindow()
+	public async Task<WtqWindow?> GetForegroundWindowAsync()
 	{
 		try
 		{

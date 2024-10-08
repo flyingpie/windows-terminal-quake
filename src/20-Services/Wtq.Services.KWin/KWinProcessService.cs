@@ -36,9 +36,13 @@ public class KWinProcessService(
 		return null;
 	}
 
-	public WtqWindow? GetForegroundWindow()
+	public async Task<WtqWindow?> GetForegroundWindowAsync()
 	{
-		return null;
+		var w = await _kwinClient.GetForegroundWindowAsync().NoCtx();
+
+		return w != null
+			? new KWinWtqWindow(_kwinClient, w)
+			: null;
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()

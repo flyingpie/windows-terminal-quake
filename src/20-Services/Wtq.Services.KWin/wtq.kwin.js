@@ -56,6 +56,22 @@ kwin.getWindowByResourceClassRequired = (resourceClass) => {
 	return w;
 };
 
+kwin.getActiveWindow = (window) => {
+	// KWin5
+	if (typeof workspace.activeClient === "object") {
+		log.info("Using KWin5 interface 'workspace.activeClient'");
+		return workspace.activeClient;
+	}
+
+	// KWin6
+	if (typeof workspace.activeWindow === "object") {
+		log.info("Using KWin6 interface 'workspace.activeWindow'");
+		return workspace.activeWindow;
+	}
+
+	throw "Could not find property for active client/window, unsupported version of KWin perhaps?";
+};
+
 kwin.setActiveWindow = (window) => {
 	// KWin5
 	if (typeof workspace.activeClient === "object") {
@@ -166,6 +182,23 @@ cmds["BRING_WINDOW_TO_FOREGROUND"] = (cmdInfo) => {
 
 cmds["GET_CURSOR_POS"] = (cmdInfo) => {
 	return workspace.cursorPos;
+};
+
+cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
+	const w = kwin.getActiveWindow();
+
+	return {
+		frameGeometry: w.frameGeometry,
+		hidden: w.hidden,
+		keepAbove: w.keepAbove,
+		layer: w.layer,
+		minimized: w.minimized,
+		resourceClass: w.resourceClass,
+		resourceName: w.resourceName,
+		skipPager: w.skipPager,
+		skipSwitcher: w.skipSwitcher,
+		skipTaskbar: w.skipTaskbar,
+	};
 };
 
 cmds["GET_WINDOW"] = (cmdInfo) => {
@@ -281,9 +314,9 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	const p = cmdInfo.params;
 	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
 
-	log.info(`Setting taskbar icon visible for window with resource class '${p.resourceClass}' to '${p.isVisible}'`);
+	const skip = !(p.isVisible == "true");
 
-	const skip = !p.isVisible;
+	log.info(`Setting taskbar icon visible for window with resource class '${p.resourceClass}' to '${p.isVisible}' (skip: ${skip})`);
 
 	w.skipPager = skip;
 	w.skipSwitcher = skip;

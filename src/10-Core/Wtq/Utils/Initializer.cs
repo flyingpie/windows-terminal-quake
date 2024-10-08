@@ -33,7 +33,7 @@ public abstract class Initializer(
 		_lock.Dispose();
 	}
 
-	public async Task InitializeAsync()
+	public async Task InitAsync()
 	{
 		// Check if we've already initialized.
 		if (_isInitialized)

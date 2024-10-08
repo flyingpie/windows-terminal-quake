@@ -4,7 +4,7 @@ using Wtq.Services.KWin.DBus;
 
 public interface IKWinScriptService
 {
-	Task<KWinScript> LoadScriptAsync(string id, string path);
+	Task<KWinScript> LoadScriptAsync(string path);
 }
 
 internal sealed class KWinScriptService(
@@ -13,9 +13,11 @@ internal sealed class KWinScriptService(
 {
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
-	public async Task<KWinScript> LoadScriptAsync(string id, string path)
+	public async Task<KWinScript> LoadScriptAsync(string path)
 	{
 		path = Path.GetFullPath(path);
+
+		var id = Path.GetFileName(path);
 
 		var scr = await _dbus.GetScriptingAsync().NoCtx();
 

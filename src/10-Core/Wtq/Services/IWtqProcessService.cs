@@ -18,7 +18,7 @@ public interface IWtqProcessService
 	/// <summary>
 	/// Returns the window that currently has UI focus.
 	/// </summary>
-	WtqWindow? GetForegroundWindow();
+	Task<WtqWindow?> GetForegroundWindowAsync();
 
 	/// <summary>
 	/// Returns a list of all windows that can be attached to.<br/>

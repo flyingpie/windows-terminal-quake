@@ -93,13 +93,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// Restore original position.
 		// TODO: Restore to original position (when we got a hold of the process).
-		var bounds = Process.WindowRect;
-		bounds.Width = 1280;
-		bounds.Height = 800;
-		bounds.X = 10;
-		bounds.Y = 10;
-
-		_log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
+		// var bounds = new Rectangle(); //await Process.WindowRect;
+		// bounds.Width = 1280;
+		// bounds.Height = 800;
+		// bounds.X = 10;
+		// bounds.Y = 10;
+		//
+		// _log.LogInformation("Restoring process '{Process}' to its original bounds of '{Bounds}'", ProcessDescription, bounds);
 
 		// Toggle app onto the screen again.
 		await OpenAsync(ToggleModifiers.Instant).NoCtx();
@@ -121,7 +121,7 @@ public sealed class WtqApp : IAsyncDisposable
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
 
 		// Get window rect of this app.
-		var windowRect = GetWindowRect();
+		var windowRect = await GetWindowRectAsync().NoCtx();
 
 		// Look for screen rect that contains the left-top corner of the app window.
 		foreach (var screenRect in screenRects)
@@ -142,35 +142,34 @@ public sealed class WtqApp : IAsyncDisposable
 		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 	}
 
-	[SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "MvdO: May throw an exception, which we don't want to do in a property.")]
-	public Rectangle GetWindowRect()
+	public async Task<Rectangle> GetWindowRectAsync()
 	{
 		if (Process == null || !IsActive)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		return Process.WindowRect;
+		return await Process.GetWindowRectAsync().NoCtx();
 	}
 
-	public async Task MoveWindowAsync(Rectangle rect)
+	public async Task MoveWindowAsync(Point location)
 	{
 		if (Process == null || !IsActive)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Process.MoveToAsync(rect: rect).NoCtx();
+		await Process.MoveToAsync(location).NoCtx();
 	}
 
-	public async Task ResizeWindowAsync(Rectangle rect)
+	public async Task ResizeWindowAsync(Size size)
 	{
 		if (Process == null || !IsActive)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Process.ResizeAsync(rect: rect).NoCtx();
+		await Process.ResizeAsync(size).NoCtx();
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -195,7 +194,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 		if (!IsActive && Options.AttachMode == AttachMode.Manual)
 		{
-			var pr = _procService.GetForegroundWindow();
+			var pr = await _procService.GetForegroundWindowAsync().NoCtx();
 			if (pr != null)
 			{
 				await AttachAsync(pr).ConfigureAwait(false);

@@ -17,17 +17,22 @@ public class KWinWtqWindow(
 	private bool? _isVisible;
 	private Rectangle _rect = new(0, 0, 1024, 768); // TODO: Get actual window size.
 
-	public override int Id { get; }
+	public override string Id => _window.ResourceClass; // TODO: Use "InternalId"
 
 	public override bool IsValid { get; } = true;
 
 	public override string? Name => _window?.ResourceClass;
 
-	public override Rectangle WindowRect => _rect;
-
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
+	}
+
+	public override async Task<Rectangle> GetWindowRectAsync()
+	{
+		var w = await _kwinClient.GetWindowAsync(_window).NoCtx();
+
+		return w.FrameGeometry.ToRect(); // TODO: Handle null.
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -37,24 +42,22 @@ public class KWinWtqWindow(
 		return _window.ResourceClass?.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase) ?? false;
 	}
 
-	public override async Task MoveToAsync(Rectangle rect, bool repaint = true)
+	public override async Task MoveToAsync(Point location)
 	{
-		_rect = rect;
-
-		await _kwinClient.MoveWindowAsync(_window, rect, CancellationToken.None).NoCtx();
+		await _kwinClient.MoveWindowAsync(_window, location, CancellationToken.None).NoCtx();
 	}
 
-	public override async Task ResizeAsync(Rectangle rect, bool repaint = true)
+	public override async Task ResizeAsync(Size size)
 	{
-		await _kwinClient.ResizeWindowAsync(_window, rect, CancellationToken.None).NoCtx();
+		await _kwinClient.ResizeWindowAsync(_window, size, CancellationToken.None).NoCtx();
 	}
 
 	public override async Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
-		if (_isAlwaysOnTop == isAlwaysOnTop)
-		{
-			return;
-		}
+		// if (_isAlwaysOnTop == isAlwaysOnTop)
+		// {
+		// 	return;
+		// }
 
 		await _kwinClient.SetWindowAlwaysOnTopAsync(_window, isAlwaysOnTop, CancellationToken.None).NoCtx();
 
@@ -63,10 +66,10 @@ public class KWinWtqWindow(
 
 	public override async Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
-		if (_isTaskbarIconVisible == isVisible)
-		{
-			return;
-		}
+		// if (_isTaskbarIconVisible == isVisible)
+		// {
+		// 	return;
+		// }
 
 		await _kwinClient.SetTaskbarIconVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 
@@ -75,10 +78,10 @@ public class KWinWtqWindow(
 
 	public override async Task SetTransparencyAsync(int transparency)
 	{
-		if (_transparency == transparency)
-		{
-			return;
-		}
+		// if (_transparency == transparency)
+		// {
+		// 	return;
+		// }
 
 		await _kwinClient.SetWindowOpacityAsync(_window, transparency * .01f, CancellationToken.None).NoCtx();
 
@@ -87,10 +90,10 @@ public class KWinWtqWindow(
 
 	public override async Task SetVisibleAsync(bool isVisible)
 	{
-		if (_isVisible == isVisible)
-		{
-			return;
-		}
+		// if (_isVisible == isVisible)
+		// {
+		// 	return;
+		// }
 
 		await _kwinClient.SetWindowVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 

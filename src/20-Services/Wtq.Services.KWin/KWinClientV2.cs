@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
@@ -11,6 +10,8 @@ namespace Wtq.Services.KWin;
 /// </summary>
 internal sealed class KWinClientV2 : IKWinClient
 {
+	private readonly ILogger _log = Log.For<KWinClientV2>();
+
 	private readonly IDBusConnection _dbus;
 	private readonly Initializer _init;
 	private readonly IKWinScriptService _scriptService;
@@ -32,7 +33,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -42,24 +43,27 @@ internal sealed class KWinClientV2 : IKWinClient
 					resourceClass = window.ResourceClass,
 				})
 			.NoCtx();
-
-		await GetWindowAsync(window).NoCtx();
 	}
 
 	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
-		var resp = await _wtqBusObj
-			.SendCommandAsync(new()
-			{
-				Type = "GET_CURSOR_POS",
-			})
-			.NoCtx();
-
-		return resp
+		return (await _wtqBusObj
+			.SendCommandAsync("GET_CURSOR_POS")
+			.NoCtx())
 			.GetParamsAs<KWinPoint>()
 			.ToPoint();
+	}
+
+	public async Task<KWinWindow?> GetForegroundWindowAsync()
+	{
+		await _init.InitAsync().NoCtx();
+
+		return (await _wtqBusObj
+			.SendCommandAsync("GET_FOREGROUND_WINDOW")
+			.NoCtx())
+			.GetParamsAs<KWinWindow>();
 	}
 
 	public async Task<KWinSupportInformation> GetSupportInformationAsync(
@@ -67,20 +71,32 @@ internal sealed class KWinClientV2 : IKWinClient
 	{
 		// _log.LogTrace("Fetching support information");
 
-		var supportInfStr = await (await _dbus.GetKWinAsync().NoCtx()).SupportInformationAsync().NoCtx();
+		var kwin = await _dbus.GetKWinAsync().NoCtx();
+
+		var supportInfStr = await kwin.SupportInformationAsync().NoCtx();
 
 		return KWinSupportInformation.Parse(supportInfStr);
 	}
 
-	public class KWinGetWindowListResponse
+	public async Task<KWinWindow> GetWindowAsync(KWinWindow window)
 	{
-		[JsonPropertyName("windows")]
-		public ICollection<KWinWindow> Windows { get; set; }
+		await _init.InitAsync().NoCtx();
+
+		var resp = await _wtqBusObj
+			.SendCommandAsync(
+				"GET_WINDOW",
+				new
+				{
+					resourceClass = window.ResourceClass,
+				})
+			.NoCtx();
+
+		return resp.GetParamsAs<KWinWindow>();
 	}
 
 	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST").NoCtx();
 
@@ -94,7 +110,7 @@ internal sealed class KWinClientV2 : IKWinClient
 		Point location,
 		CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -108,11 +124,12 @@ internal sealed class KWinClientV2 : IKWinClient
 			.NoCtx();
 
 		var w = await GetWindowAsync(window).NoCtx();
-		var fg = w.FrameGeometry.ToRect();
 
-		if (fg != rect)
+		var actualLocation = w.FrameGeometry.ToPoint();
+
+		if (actualLocation != location)
 		{
-			Console.WriteLine($"EXPECTED:{rect} ACTUAL:{fg}");
+			Console.WriteLine($"EXPECTED:{location} ACTUAL:{actualLocation}");
 		}
 	}
 
@@ -148,63 +165,12 @@ internal sealed class KWinClientV2 : IKWinClient
 			.NoCtx();
 	}
 
-	public class KWinWindowInfo
+	public async Task ResizeWindowAsync(
+		KWinWindow window,
+		Size size,
+		CancellationToken cancellationToken)
 	{
-		[JsonPropertyName("resourceClass")]
-		public string ResourceClass { get; set; }
-
-		[JsonPropertyName("resourceName")]
-		public string ResourceName { get; set; }
-
-		[JsonPropertyName("frameGeometry")]
-		public KWinRectangle FrameGeometry { get; set; }
-
-		[JsonPropertyName("skipPager")]
-		public bool SkipPager { get; set; }
-
-		[JsonPropertyName("skipTaskbar")]
-		public bool SkipTaskbar { get; set; }
-
-		[JsonPropertyName("skipSwitcher")]
-		public bool SkipSwitcher { get; set; }
-
-		[JsonPropertyName("minimized")]
-		public bool Minimized { get; set; }
-
-		[JsonPropertyName("keepAbove")]
-		public bool KeepAbove { get; set; }
-
-		[JsonPropertyName("layer")]
-		public int Layer { get; set; }
-
-		[JsonPropertyName("hidden")]
-		public bool Hidden { get; set; }
-
-		public override string ToString() =>
-			$"{ResourceClass} FrameGeometry:{FrameGeometry} SkipPager:{SkipPager} SkipTaskbar:{SkipTaskbar} SkipSwitcher:{SkipSwitcher} Minimized:{Minimized} KeepAbove:{KeepAbove} Layer:{Layer} Hidden:{Hidden}";
-	}
-
-	public async Task<KWinWindowInfo> GetWindowAsync(KWinWindow window)
-	{
-		await _init.InitializeAsync().NoCtx();
-
-		var resp = await _wtqBusObj
-			.SendCommandAsync(
-				"GET_WINDOW",
-				new
-				{
-					resourceClass = window.ResourceClass,
-				})
-			.NoCtx();
-
-		Console.WriteLine($"WINDOW:${resp.GetParamsAs<KWinWindowInfo>()}");
-
-		return resp.GetParamsAs<KWinWindowInfo>();
-	}
-
-	public async Task ResizeWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken)
-	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -212,23 +178,23 @@ internal sealed class KWinClientV2 : IKWinClient
 				new
 				{
 					resourceClass = window.ResourceClass,
-					width = rect.Width,
-					height = rect.Height,
+					width = size.Width,
+					height = size.Height,
 				})
 			.NoCtx();
 
 		var w = await GetWindowAsync(window).NoCtx();
-		var fg = w.FrameGeometry.ToRect();
+		var actualSize = w.FrameGeometry.ToSize();
 
-		if (fg != rect)
+		if (actualSize != size)
 		{
-			Console.WriteLine($"EXPECTED:{rect} ACTUAL:{fg}");
+			Console.WriteLine($"EXPECTED:{size} ACTUAL:{actualSize}");
 		}
 	}
 
 	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -245,7 +211,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -262,7 +228,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -279,7 +245,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 	public async Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -308,10 +274,6 @@ internal sealed class KWinClientV2 : IKWinClient
 	{
 		await _wtqBusObj.InitAsync().NoCtx(); // TODO: Remove, currently required to make sure DBus object is initialized.
 
-		// TODO: Build artifact?
-		var scriptId = "WTQ-v1";
-		var path = "Resources/WtqKWinScript.js";
-
-		_script = await _scriptService.LoadScriptAsync(scriptId, path).NoCtx();
+		_script = await _scriptService.LoadScriptAsync("wtq.kwin.js").NoCtx();
 	}
 }

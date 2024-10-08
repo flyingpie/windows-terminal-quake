@@ -40,7 +40,7 @@ internal sealed class WtqDBusObject
 
 	public async Task InitAsync()
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 	}
 
 	private readonly CancellationTokenSource _cts = new();
@@ -90,7 +90,7 @@ internal sealed class WtqDBusObject
 	{
 		_log.LogInformation("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		// Add response waiter.
 		var id = cmdInfo.ResponderId;
@@ -124,7 +124,7 @@ internal sealed class WtqDBusObject
 	{
 		// _log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
 
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		while (true)
 		{
@@ -157,7 +157,7 @@ internal sealed class WtqDBusObject
 	/// <inheritdoc/>
 	public async Task SendResponseAsync(string respInfoStr)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
 
@@ -190,7 +190,7 @@ internal sealed class WtqDBusObject
 	/// <inheritdoc/>
 	public async Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_log.LogInformation(
 			"{MethodName}({Modifier}, {Key})",

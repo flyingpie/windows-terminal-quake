@@ -11,13 +11,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Threading" />
+		<PackageReference Include="Microsoft.VisualStudio.Threading"/>
 		<PackageReference Include="Tmds.DBus"/>
 		<PackageReference Include="Tmds.DBus.Protocol"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Resources\**">
+		<None Update="wtq.kwin.js">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

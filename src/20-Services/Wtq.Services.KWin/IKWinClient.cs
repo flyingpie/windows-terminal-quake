@@ -18,6 +18,11 @@ public interface IKWinClient : IAsyncDisposable
 	Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken);
 
+	Task<KWinWindow?> GetForegroundWindowAsync();
+
+	Task<KWinWindow> GetWindowAsync(
+		KWinWindow window);
+
 	Task<ICollection<KWinWindow>> GetWindowListAsync(
 		CancellationToken cancellationToken);
 

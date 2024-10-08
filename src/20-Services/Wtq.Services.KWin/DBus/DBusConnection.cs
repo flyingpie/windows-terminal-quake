@@ -44,21 +44,21 @@ internal sealed class DBusConnection : IDBusConnection
 
 	public async Task<DBus.KWinService> GetKWinServiceAsync()
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		return _kwinService ??= new KWinService(_clientConnection, "org.kde.KWin");
 	}
 
 	public async Task<DBus.KWin> GetKWinAsync()
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
 	}
 
 	public async Task<DBus.Scripting> GetScriptingAsync()
 	{
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		return _scripting ??= (await GetKWinServiceAsync().NoCtx()).CreateScripting("/Scripting");
 	}
@@ -82,7 +82,7 @@ internal sealed class DBusConnection : IDBusConnection
 		Guard.Against.NullOrWhiteSpace(serviceName);
 		Guard.Against.Null(serviceObject);
 
-		await _init.InitializeAsync().NoCtx();
+		await _init.InitAsync().NoCtx();
 
 		_log.LogInformation("Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'", serviceName, serviceObject);
 

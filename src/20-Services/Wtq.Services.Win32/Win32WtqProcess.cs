@@ -17,23 +17,11 @@ public sealed class Win32WtqProcess : WtqWindow
 		_process = Guard.Against.Null(process);
 	}
 
-	public override int Id => _process.Id;
+	public override string Id => _process.Id.ToString();
 
 	public override bool IsValid => !_process.HasExited;
 
 	public override string? Name => _process.ProcessName;
-
-	public override Rectangle WindowRect
-	{
-		get
-		{
-			var bounds = default(Bounds);
-
-			User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
-
-			return bounds.ToRectangle();
-		}
-	}
 
 	public override Task BringToForegroundAsync()
 	{
@@ -41,6 +29,15 @@ public sealed class Win32WtqProcess : WtqWindow
 		User32.ForcePaint(_process.MainWindowHandle);
 
 		return Task.CompletedTask;
+	}
+
+	public override Task<Rectangle> GetWindowRectAsync()
+	{
+		var bounds = default(Bounds);
+
+		User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
+
+		return Task.FromResult(bounds.ToRectangle());
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -56,30 +53,30 @@ public sealed class Win32WtqProcess : WtqWindow
 		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public override Task MoveToAsync(Rectangle rect, bool repaint = true)
+	public override async Task MoveToAsync(Point location)
 	{
+		var r = await GetWindowRectAsync().NoCtx();
+
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: rect.X,
-			y: rect.Y,
-			nWidth: rect.Width,
-			nHeight: rect.Height,
-			bRepaint: repaint);
-
-		return Task.CompletedTask;
+			x: location.X,
+			y: location.Y,
+			nWidth: r.Width,
+			nHeight: r.Height,
+			bRepaint: true);
 	}
 
-	public override Task ResizeAsync(Rectangle rect, bool repaint = true)
+	public override async Task ResizeAsync(Size size)
 	{
+		var r = await GetWindowRectAsync().NoCtx();
+
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: rect.X,
-			y: rect.Y,
-			nWidth: rect.Width,
-			nHeight: rect.Height,
-			bRepaint: repaint);
-
-		return Task.CompletedTask;
+			x: r.X,
+			y: r.Y,
+			nWidth: size.Width,
+			nHeight: size.Height,
+			bRepaint: true);
 	}
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
