@@ -271,6 +271,9 @@ public sealed class WtqApp : IAsyncDisposable
 		// Opacity.
 		await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
 
+		// Window Title.
+		await Process.SetWindowTitleAsync("The Window Title Yo.").NoCtx();
+
 		// Taskbar icon visibility.
 		switch (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options))
 		{
