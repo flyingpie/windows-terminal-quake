@@ -18,6 +18,8 @@ public class KWinProcessService(
 
 	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
+		_ = Guard.Against.Null(opts);
+
 		try
 		{
 			var clients = await GetWindowsAsync().NoCtx();
