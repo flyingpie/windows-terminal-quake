@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Wtq.Configuration;
+using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
@@ -49,6 +50,7 @@ public class WtqHostBase
 					.Bind(config);
 
 				opt
+					.AddUI()
 
 					// Utils
 					.AddWtqCore();
