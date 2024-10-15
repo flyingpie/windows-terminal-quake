@@ -99,4 +99,9 @@ public class KWinWtqWindow(
 
 		_isVisible = isVisible;
 	}
+
+	public override Task SetWindowTitleAsync(string title)
+	{
+		return Task.CompletedTask;
+	}
 }

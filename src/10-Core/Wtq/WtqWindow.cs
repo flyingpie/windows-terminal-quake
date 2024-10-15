@@ -68,5 +68,7 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract Task SetVisibleAsync(bool isVisible);
 
+	public abstract Task SetWindowTitleAsync(string title);
+
 	public override string ToString() => $"[{Id}] {Name}";
 }

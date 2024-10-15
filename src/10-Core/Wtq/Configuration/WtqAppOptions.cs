@@ -66,6 +66,11 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
 	public float? VerticalScreenCoverage { get; set; }
 
+	/// <summary>
+	/// Attempt to set the window title to a specific value.
+	/// </summary>
+	public string? WindowTitleOverride { get; set; }
+
 	public bool HasHotKey(Keys key, KeyModifiers modifiers)
 	{
 		return HotKeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);

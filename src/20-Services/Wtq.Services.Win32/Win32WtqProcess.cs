@@ -164,4 +164,11 @@ public sealed class Win32WtqProcess : WtqWindow
 	{
 		return Task.CompletedTask;
 	}
+
+	public override Task SetWindowTitleAsync(string title)
+	{
+		User32.SetWindowText(_process.MainWindowHandle, title);
+
+		return Task.CompletedTask;
+	}
 }
