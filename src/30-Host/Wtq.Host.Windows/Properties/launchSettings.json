@@ -1,7 +1,7 @@
 {
 	"profiles": {
 		"Wtq.Host.Windows": {
-			"commandName": "Project"
+			"commandName": "Wtq.Windows"
 		}
 	}
 }
