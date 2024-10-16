@@ -110,21 +110,22 @@ public sealed class Build : NukeBuild
 		.Produces(PathToLinux64AotZip)
 		.Executes(() =>
 		{
-			var staging = StagingDirectory / "linux-x64_aot";
+			var st = StagingDirectory / "linux-x64_aot";
 
 			DotNetPublish(_ => _
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
-				.SetOutput(staging)
+				.SetOutput(st)
 				.SetProperty("PublishAot", true)
 				.SetProperty("InvariantGlobalization", true)
 				.SetRuntime("linux-x64"));
 
-			staging.ZipTo(
+			// TODO: Remove unnecessary files.
+
+			st.ZipTo(
 				PathToLinux64AotZip,
-				filter: x => x.HasExtension(".exe"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -149,9 +150,10 @@ public sealed class Build : NukeBuild
 				.SetRuntime("linux-x64")
 				.SetSelfContained(false));
 
+			st.DeleteFiles("wtq", "wtq.kwin.js");
+
 			st.ZipTo(
 				PathToLinux64FrameworkDependentZip,
-				filter: x => !x.HasExtension(".xml"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -164,21 +166,22 @@ public sealed class Build : NukeBuild
 		.Produces(PathToLinux64SelfContainedZip)
 		.Executes(() =>
 		{
-			var staging = StagingDirectory / "linux-x64_self-contained";
+			var st = StagingDirectory / "linux-x64_self-contained";
 
 			DotNetPublish(_ => _
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
-				.SetOutput(staging)
+				.SetOutput(st)
 				.SetPublishSingleFile(true)
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			staging.ZipTo(
+			st.DeleteFiles("wtq", "wtq.kwin.js");
+
+			st.ZipTo(
 				PathToLinux64SelfContainedZip,
-				filter: x => !x.HasExtension(".xml"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -191,7 +194,7 @@ public sealed class Build : NukeBuild
 		.Produces(PathToWin64AotZip)
 		.Executes(() =>
 		{
-			var staging = StagingDirectory / "win-x64_aot";
+			var st = StagingDirectory / "win-x64_aot";
 
 			DotNetPublish(_ => _
 				.SetAssemblyVersion(AssemblyVersion)
@@ -199,14 +202,15 @@ public sealed class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
-				.SetOutput(staging)
+				.SetOutput(st)
 				.SetProperty("PublishAot", true)
 				.SetProperty("InvariantGlobalization", true)
 				.SetRuntime("win-x64"));
 
-			staging.ZipTo(
+			// TODO: Remove unnecessary files.
+
+			st.ZipTo(
 				PathToWin64AotZip,
-				filter: x => x.HasExtension(".exe"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -232,9 +236,10 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(false));
 
+			st.DeleteFiles("wtq.exe");
+
 			st.ZipTo(
 				PathToWin64FrameworkDependentZip,
-				filter: x => x.HasExtension(".exe"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -247,7 +252,7 @@ public sealed class Build : NukeBuild
 		.Produces(PathToWin64SelfContainedZip)
 		.Executes(() =>
 		{
-			var staging = StagingDirectory / "win-x64_self-contained";
+			var st = StagingDirectory / "win-x64_self-contained";
 
 			DotNetPublish(_ => _
 				.SetAssemblyVersion(AssemblyVersion)
@@ -255,14 +260,15 @@ public sealed class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
-				.SetOutput(staging)
+				.SetOutput(st)
 				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			staging.ZipTo(
+			st.DeleteFiles("wtq.exe");
+
+			st.ZipTo(
 				PathToWin64SelfContainedZip,
-				filter: x => x.HasExtension(".exe"),
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
