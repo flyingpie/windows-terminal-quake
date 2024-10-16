@@ -35,7 +35,7 @@ public sealed class WtqFocusTracker(
 				{
 					await Task.Delay(TimeSpan.FromMilliseconds(250)).ConfigureAwait(false);
 
-					var fgWindow = _procService.GetForegroundWindow();
+					var fgWindow = await _procService.GetForegroundWindowAsync().NoCtx();
 
 					var pr = _appsRepo.Apps.FirstOrDefault(a => a.Process == fgWindow);
 

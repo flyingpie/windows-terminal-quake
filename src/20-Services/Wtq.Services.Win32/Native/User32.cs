@@ -62,6 +62,9 @@ public static class User32
 	public static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
 	[DllImport("user32.dll", SetLastError = true)]
+	public static extern int SetWindowText(IntPtr hWnd, string text);
+
+	[DllImport("user32.dll", SetLastError = true)]
 	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
 
 	[DllImport("user32.dll", SetLastError = true)]

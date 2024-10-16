@@ -10,11 +10,11 @@ public sealed class WtqTween(
 
 	/// <inheritdoc/>
 	public async Task AnimateAsync(
-		Rectangle src,
-		Rectangle dst,
+		Point src,
+		Point dst,
 		int durationMs,
 		AnimationType animType,
-		Func<Rectangle, Task> move)
+		Func<Point, Task> move)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
@@ -36,6 +36,8 @@ public sealed class WtqTween(
 
 		var frameCount = 0;
 
+		await move(src).NoCtx();
+
 		while (swTotal.ElapsedMilliseconds < durationMs)
 		{
 			frameCount++;
@@ -47,9 +49,9 @@ public sealed class WtqTween(
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = MathUtils.Lerp(src, dst, progress);
+			var current = MathUtils.Lerp(src, dst, progress);
 
-			await move(rect).NoCtx();
+			await move(current).NoCtx();
 
 			// Wait for the frame to end.
 			var waitMs = frameTimeMs - swFrame.ElapsedMilliseconds;

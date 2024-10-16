@@ -11,17 +11,17 @@ namespace Wtq.Services.KWin;
 internal class KWinHotKeyService : IDisposable, IHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly KWinScriptExecutor _scriptExecutor;
-	private readonly KWinService _kwinService;
+	private readonly IKWinClient _kwinClient;
+	private readonly IDBusConnection _dbus;
 
 	public KWinHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
-		KWinScriptExecutor scriptExecutor,
-		KWinService kwinService)
+		IKWinClient kwinClient,
+		IDBusConnection dbus)
 	{
 		_opts = opts;
-		_scriptExecutor = scriptExecutor;
-		_kwinService = kwinService;
+		_kwinClient = kwinClient;
+		_dbus = dbus;
 	}
 
 	public void Dispose()
@@ -34,9 +34,11 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{
-		var gl = _kwinService.CreateKGlobalAccel("/kglobalaccel");
-		var comp = _kwinService.CreateComponent("/component/kwin");
-		var kwin = _kwinService.CreateKWin("/org/kde/KWin");
+		var kwinx = await _dbus.GetKWinServiceAsync();
+
+		var gl = kwinx.CreateKGlobalAccel("/kglobalaccel");
+		var comp = kwinx.CreateComponent("/component/kwin");
+		var kwin = kwinx.CreateKWin("/org/kde/KWin");
 
 		// Clear.
 		for (int i = 0; i < 5; i++)
@@ -60,14 +62,14 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 			Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
 		});
 
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
 
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
-		await _scriptExecutor.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_001_scr", KeyModifiers.Control, Keys.D1);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_002_scr", KeyModifiers.Control, Keys.D2);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_003_scr", KeyModifiers.Control, Keys.D3);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
+		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)

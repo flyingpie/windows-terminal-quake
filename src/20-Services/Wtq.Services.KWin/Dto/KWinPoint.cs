@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Wtq.Services.KWin.Dto;
 
-public class KWinPoint
+public sealed class KWinPoint
 {
 	[JsonPropertyName("x")]
 	public int? X { get; set; }
@@ -10,5 +10,5 @@ public class KWinPoint
 	[JsonPropertyName("y")]
 	public int? Y { get; set; }
 
-	public Point ToPoint() => new Point(X.Value, Y.Value);
+	public Point ToPoint() => new(X ?? 0, Y ?? 0);
 }
