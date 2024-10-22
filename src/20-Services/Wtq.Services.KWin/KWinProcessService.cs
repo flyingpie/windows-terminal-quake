@@ -6,16 +6,30 @@ public class KWinProcessService(
 	IKWinClient kwinClient)
 	: IWtqProcessService
 {
+	private readonly ILogger _log = Log.For<KWinProcessService>();
+
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 
 	public Task CreateAsync(WtqAppOptions opts)
 	{
-		// TODO
+		using var process = new Process();
+
+		process.StartInfo = new ProcessStartInfo()
+		{
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+//			UseShellExecute = false,
+		};
+
+		process.Start();
+
 		return Task.CompletedTask;
 	}
 
 	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
+		_ = Guard.Against.Null(opts);
+
 		try
 		{
 			var clients = await GetWindowsAsync().NoCtx();
@@ -28,19 +42,24 @@ public class KWinProcessService(
 		catch (Exception ex)
 		{
 			var dbg = 2;
+			_log.LogError(ex, "Failed to look up list of windows: {Message}", ex.Message);
 		}
 
 		return null;
 	}
 
-	public WtqWindow? GetForegroundWindow()
+	public async Task<WtqWindow?> GetForegroundWindowAsync()
 	{
-		return null;
+		var w = await _kwinClient.GetForegroundWindowAsync().NoCtx();
+
+		return w != null
+			? new KWinWtqWindow(_kwinClient, w)
+			: null;
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
 	{
-		return (await _kwinClient.GetClientListAsync(CancellationToken.None).NoCtx())
+		return (await _kwinClient.GetWindowListAsync(CancellationToken.None).NoCtx())
 			.Select(c => (WtqWindow)new KWinWtqWindow(_kwinClient, c))
 			.ToList();
 	}

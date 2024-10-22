@@ -2,7 +2,7 @@ namespace Wtq;
 
 public abstract class WtqWindow : IEquatable<WtqWindow>
 {
-	public abstract int Id { get; }
+	public abstract string Id { get; }
 
 	/// <summary>
 	/// Whether the window handle is still pointing to an existing window.
@@ -11,20 +11,9 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 
 	public abstract string? Name { get; }
 
-	/// <summary>
-	/// The rectangle of the window itself.
-	/// </summary>
-	public abstract Rectangle WindowRect { get; }
+	public static bool operator ==(WtqWindow? left, WtqWindow? right) => Equals(left, right);
 
-	public static bool operator ==(WtqWindow? left, WtqWindow? right)
-	{
-		return Equals(left, right);
-	}
-
-	public static bool operator !=(WtqWindow? left, WtqWindow? right)
-	{
-		return !Equals(left, right);
-	}
+	public static bool operator !=(WtqWindow? left, WtqWindow? right) => !Equals(left, right);
 
 	public bool Equals(WtqWindow? other)
 	{
@@ -56,16 +45,20 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 		return obj.GetType() == GetType() && Equals((WtqWindow)obj);
 	}
 
-	public override int GetHashCode()
-	{
-		return Id;
-	}
+	public override int GetHashCode() => Id.GetHashCode(StringComparison.OrdinalIgnoreCase);
 
 	public abstract Task BringToForegroundAsync();
 
+	/// <summary>
+	/// The rectangle of the window itself.
+	/// </summary>
+	public abstract Task<Rectangle> GetWindowRectAsync();
+
 	public abstract bool Matches(WtqAppOptions opts);
 
-	public abstract Task MoveToAsync(Rectangle rect, bool repaint = true);
+	public abstract Task MoveToAsync(Point location);
+
+	public abstract Task ResizeAsync(Size size);
 
 	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 
@@ -74,6 +67,8 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 	public abstract Task SetTransparencyAsync(int transparency);
 
 	public abstract Task SetVisibleAsync(bool isVisible);
+
+	public abstract Task SetWindowTitleAsync(string title);
 
 	public override string ToString() => $"[{Id}] {Name}";
 }
