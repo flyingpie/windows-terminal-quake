@@ -5,19 +5,18 @@
 	"Apps": [
 		{
 			// Found Windows Terminal to be installed, using that.
-			"Name": "Terminal",
+			"Name": "Konsole",
 			"HotKeys": [
 				{
 					"Modifiers": "Control",
 					"Key": "D1"
 				}
 			],
-			"FileName": "wt",
-			"ProcessName": "WindowsTerminal",
-			"TaskbarIconVisibility": "AlwaysVisible"
+			"FileName": "konsole",
+			"ProcessName": "org.kde.konsole"
 		}
 	],
-	"TaskbarIconVisibility": "AlwaysVisible",
+
 	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
 	"HotKeys": [
 		{

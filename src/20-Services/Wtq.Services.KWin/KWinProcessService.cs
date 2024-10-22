@@ -12,7 +12,17 @@ public class KWinProcessService(
 
 	public Task CreateAsync(WtqAppOptions opts)
 	{
-		// TODO
+		using var process = new Process();
+
+		process.StartInfo = new ProcessStartInfo()
+		{
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+//			UseShellExecute = false,
+		};
+
+		process.Start();
+
 		return Task.CompletedTask;
 	}
 

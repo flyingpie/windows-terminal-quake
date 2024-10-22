@@ -39,7 +39,13 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
-		return _window.ResourceClass?.Equals(opts.FileName, StringComparison.OrdinalIgnoreCase) ?? false;
+		var expResClass = opts.ProcessName;
+		if (string.IsNullOrWhiteSpace(expResClass))
+		{
+			expResClass = Path.GetFileNameWithoutExtension(opts.FileName);
+		}
+
+		return expResClass.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase);
 	}
 
 	public override async Task MoveToAsync(Point location)
