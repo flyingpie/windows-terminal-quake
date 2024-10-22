@@ -195,7 +195,6 @@ internal sealed class KWinClientV2 : IKWinClient
 	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
 		await _init.InitAsync().NoCtx();
-
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
@@ -243,21 +242,23 @@ internal sealed class KWinClientV2 : IKWinClient
 		await GetWindowAsync(window).NoCtx();
 	}
 
-	public async Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	public Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
-		await _init.InitAsync().NoCtx();
+		// await _init.InitAsync().NoCtx();
 
-		_ = await _wtqBusObj
-			.SendCommandAsync(
-				"SET_WINDOW_VISIBLE",
-				new
-				{
-					resourceClass = window.ResourceClass,
-					isVisible = JsUtils.ToJsBoolean(isVisible),
-				})
-			.NoCtx();
+		// _ = await _wtqBusObj
+		// 	.SendCommandAsync(
+		// 		"SET_WINDOW_VISIBLE",
+		// 		new
+		// 		{
+		// 			resourceClass = window.ResourceClass,
+		// 			isVisible = JsUtils.ToJsBoolean(isVisible),
+		// 		})
+		// 	.NoCtx();
 
-		await GetWindowAsync(window).NoCtx();
+		// await GetWindowAsync(window).NoCtx();
+
+		return Task.CompletedTask;
 	}
 
 	public async ValueTask DisposeAsync()
