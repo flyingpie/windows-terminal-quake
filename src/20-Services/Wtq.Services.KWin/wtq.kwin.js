@@ -15,6 +15,26 @@ log.log = (level, msg) => {
 log.error		= (msg) => log.log("ERR", msg);
 log.info		= (msg) => log.log("INF", msg);
 log.warning		= (msg)	=> log.log("WRN", msg);
+
+////////////////////////////////////////////////////////////
+
+// Utils ///////////////////////////////////////////////////
+
+let utils = {};
+utils.mapRect = (rect) => {
+	return {
+		x: Math.round(rect.x),
+		y: Math.round(rect.y),
+		width: Math.round(rect.width),
+		height: Math.round(rect.height),
+
+		top: Math.round(rect.top),
+		bottom: Math.round(rect.bottom),
+		left: Math.round(rect.left),
+		right: Math.round(rect.right),
+	};
+};
+
 ////////////////////////////////////////////////////////////
 
 // KWin Helper Functions ///////////////////////////////////
@@ -188,7 +208,7 @@ cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
 	const w = kwin.getActiveWindow();
 
 	return {
-		frameGeometry: w.frameGeometry,
+		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
 		keepAbove: w.keepAbove,
 		layer: w.layer,
@@ -206,7 +226,7 @@ cmds["GET_WINDOW"] = (cmdInfo) => {
 	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
 
 	return {
-		frameGeometry: w.frameGeometry,
+		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
 		keepAbove: w.keepAbove,
 		layer: w.layer,

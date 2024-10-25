@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Wtq.Services.KWin.Dto;
 
 public sealed class KWinRectangle
