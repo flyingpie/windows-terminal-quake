@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddKWinProcessService(this IServiceCollection services)
 	{
 		return services
-			.AddSingleton<IWtqProcessService, KWinProcessService>();
+			.AddSingleton<IWtqWindowService, KWinWindowService>();
 	}
 
 	public static IServiceCollection AddKWinScreenCoordsProvider(this IServiceCollection services)

@@ -1,5 +1,8 @@
 namespace Wtq.Services;
 
+/// <summary>
+/// Keeps track of what window has focus, so we can trigger app toggles on focus gained/lost.
+/// </summary>
 public interface IWtqFocusTracker
 {
 	/// <summary>
@@ -8,5 +11,5 @@ public interface IWtqFocusTracker
 	/// are sent to whatever is now on top.<br/>
 	/// Doesn't do anything if no non-WTQ app is known by WTQ.
 	/// </summary>
-	Task FocusLastNonWtqAppAsync();
+	// Task FocusLastNonWtqAppAsync();
 }

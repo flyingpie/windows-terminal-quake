@@ -1,3 +1,4 @@
+using Wtq.Events;
 using Wtq.Services;
 
 namespace Wtq;
@@ -6,67 +7,119 @@ namespace Wtq;
 /// An "app" represents a single process that can be toggled (such as Windows Terminal).<br/>
 /// It tracks its own state, and does not necessarily have a process attached.
 /// </summary>
+
 // TODO: Track whether the app is currently open, has focus, etc.
 public sealed class WtqApp : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<WtqApp>();
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
+	private readonly IWtqAppRepo _appRepo;
+	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly IWtqProcessFactory _procFactory;
-	private readonly IWtqProcessService _procService;
+	private readonly IWtqWindowResolver _windowResolver;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggler;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqProcessFactory procFactory,
-		IWtqProcessService procService,
+		IWtqAppRepo appRepo,
+		IWtqBus bus,
+		IWtqWindowResolver windowResolver,
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggler,
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
 		_opts = Guard.Against.Null(opts);
-		_procFactory = Guard.Against.Null(procFactory);
-		_procService = Guard.Against.Null(procService);
+		_appRepo = Guard.Against.Null(appRepo);
+		_bus = Guard.Against.Null(bus);
+		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_optionsAccessor = Guard.Against.Null(optionsAccessor);
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
+
+		// TODO: Extract method.
+		_bus.OnEvent<WtqWindowFocusEvent>(
+			async e =>
+			{
+				// This app lost focus.
+				if (e.LostFocusWindow == Window)
+				{
+					// If we lost focus to another WTQ-managed app, always close.
+					var otherApp = e.GotFocusWindow != null ? _appRepo.GetByWindow(e.GotFocusWindow) : null;
+					if (otherApp != null && otherApp != this)
+					{
+						await CloseAsync().NoCtx();
+					}
+
+					// Only close if we should on focus lost.
+					if (!_opts.CurrentValue.GetHideOnFocusLostForApp(optionsAccessor()))
+					{
+						_log.LogDebug("App '{App}' lost focus, but 'hide on focus lost' is disabled", this);
+						return;
+					}
+
+					// TODO: Setting for "hide on focus lost, only if newly focussed window is on the same screen".
+					_log.LogDebug("App '{App}' lost focus, closing", this);
+
+					await CloseAsync().NoCtx();
+				}
+			});
+
+		_bus.OnEvent<WtqAppToggledEvent>(
+			async e =>
+			{
+				// This app got toggled.
+				if (e.App == this)
+				{
+					// TODO: Wait for other apps to close?
+
+					await ToggleAsync().NoCtx();
+					return;
+				}
+
+				// TODO: Is close necessary, eg. not already handled through focus lost?
+			});
+
+		// TODO: Extract method.
+		_ = Task.Run(
+			async () =>
+			{
+				while (true)
+				{
+					await UpdateLocalAppStateAsync(allowStartNew: false).NoCtx();
+
+					await Task.Delay(TimeSpan.FromSeconds(1)).NoCtx();
+				}
+			});
 	}
 
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
-	/// TODO: Include check for whether the process has been killed etc.
 	/// </summary>
-	public bool IsActive => Process != null;
+	public bool IsAttached => Window?.IsValid ?? false;
+
+	public bool IsOpen { get; private set; }
 
 	public string Name { get; }
 
 	public WtqAppOptions Options => _optionsAccessor();
 
-	public WtqWindow? Process { get; private set; }
+	public WtqWindow? Window { get; private set; }
 
-	public string? ProcessDescription => Process == null
-		? "<no process attached>"
-		: Process.ToString();
-
-	public async Task AttachAsync(WtqWindow process)
+	public async Task ToggleAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		Guard.Against.Null(process);
-
-		Process = process;
-
-		await CloseAsync(ToggleModifiers.Instant).ConfigureAwait(false);
-
-		_log.LogInformation("Found process instance for app '{App}': '{Process}'", Options, process);
+		await (IsOpen ? CloseAsync(mods) : OpenAsync(mods)).NoCtx();
 	}
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (Process == null || !IsActive)
+		IsOpen = false;
+
+		if (!IsAttached)
 		{
 			_log.LogWarning("Attempted to close inactive app {App}", this);
 			return;
@@ -78,15 +131,15 @@ public sealed class WtqApp : IAsyncDisposable
 		await _toggler.ToggleOffAsync(this, mods).ConfigureAwait(false);
 
 		// Hide window.
-		await Process.SetVisibleAsync(false).ConfigureAwait(false);
+		await Window.SetVisibleAsync(false).ConfigureAwait(false);
 
-		await UpdatePropsAsync(isOpen: false).NoCtx();
+		await UpdateWindowPropsAsync().NoCtx();
 	}
 
 	public async ValueTask DisposeAsync()
 	{
 		// TODO: Add ability to close attached processes when app closes.
-		if (Process == null || !IsActive)
+		if (!IsAttached)
 		{
 			return;
 		}
@@ -144,154 +197,145 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<Rectangle> GetWindowRectAsync()
 	{
-		if (Process == null || !IsActive)
+		if (Window == null || !IsAttached)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		return await Process.GetWindowRectAsync().NoCtx();
+		return await Window.GetWindowRectAsync().NoCtx();
 	}
 
 	public async Task MoveWindowAsync(Point location)
 	{
-		if (Process == null || !IsActive)
+		if (Window == null || !IsAttached)
 		{
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Process.MoveToAsync(location).NoCtx();
-	}
-
-	public async Task ResizeWindowAsync(Size size)
-	{
-		if (Process == null || !IsActive)
-		{
-			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
-		}
-
-		await Process.ResizeAsync(size).NoCtx();
+		await Window.MoveToAsync(location).NoCtx();
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		await UpdateProcessAsync().NoCtx();
-		await UpdatePropsAsync(isOpen: true).NoCtx();
+		_log.LogInformation("Opening app '{App}'", this);
 
-		// If we have an active process attached, toggle it open.
-		if (Process != null && IsActive)
+		IsOpen = true;
+
+		await UpdateLocalAppStateAsync(allowStartNew: true).NoCtx();
+		await UpdateWindowPropsAsync().NoCtx();
+
+		// If we are not attached to any window, stop the "Open" action, as we don't have anything to open.
+		if (!IsAttached)
 		{
-			_log.LogInformation("Opening app '{App}'", this);
-
-			// Make sure the app window is visible and has focus.
-			await Process.SetVisibleAsync(true).NoCtx();
-			await Process.BringToForegroundAsync().NoCtx();
-
-			// Move app onto screen.
-			await _toggler.ToggleOnAsync(this, mods).NoCtx();
-
-			return true;
+			return false;
 		}
 
-		if (!IsActive && Options.AttachMode == AttachMode.Manual)
-		{
-			var pr = await _procService.GetForegroundWindowAsync().NoCtx();
-			if (pr != null)
-			{
-				await AttachAsync(pr).ConfigureAwait(false);
+		// Make sure the app window is visible and has focus.
+		await Window!.SetVisibleAsync(true).NoCtx();
+		await Window.BringToForegroundAsync().NoCtx();
 
-				return true;
-			}
+		// Move app onto screen.
+		await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
-			_log.LogWarning("Cannot manually attach, no foreground window found");
-		}
-
-		return false;
+		return true;
 	}
 
-	public override string ToString()
+	public async Task ResizeWindowAsync(Size size)
 	{
-		try
+		if (Window == null || !IsAttached)
 		{
-			return $"[App:{Options}] {Process?.ToString() ?? "<no process>"}";
+			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
-		catch
-		{
-			return $"[App:{Options}] <no process>";
-		}
+
+		await Window.ResizeAsync(size).NoCtx();
 	}
+
+	public override string ToString() => $"[App:{Options}] {Window?.ToString() ?? "<no process>"}";
 
 	/// <summary>
 	/// Updates the state of the <see cref="WtqApp"/> object to reflect running processes on the system.
 	/// </summary>
-	public async Task UpdateProcessAsync()
+	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
 		// Check that if we have a process handle, the process is still active.
-		if (Process is { IsValid: false })
+		if (IsAttached)
 		{
-			_log.LogInformation("Process '{Process}' exited, releasing handle", Process);
-			Process = null;
+			_log.LogTrace("Window handle '{Window}' for app '{App}' is still active, skipping update", Window, this);
+			return;
 		}
 
 		// If we don't have a process handle, see if we can get one.
-		if (Process == null)
+		_log.LogInformation("No process attached to app {App}, asking process factory for one now", this);
+
+		// Ask the process factory for a new handle.
+		var process = await _windowResolver.GetWindowHandleAsync(Options, allowStartNew).NoCtx();
+
+		// Log a warning if we don't have a process handle at this point.
+		if (process == null)
 		{
-			_log.LogInformation("No process attached to app {App}, asking process factory for one now", this);
-
-			// As the process factory for a new handle.
-			var process = await _procFactory.GetProcessAsync(Options).NoCtx();
-
-			// Log a warning if we don't have a process handle at this point.
-			if (process == null)
-			{
-				_log.LogWarning("No process instances found for app '{App}'", Options);
-				return;
-			}
-
-			// We didn't have a process handle when we got into this method, but we have one now,
-			// so attach to the newly acquired handle.
-			_log.LogInformation("Got process for app {App}, attaching", this);
-
-			await AttachAsync(process).ConfigureAwait(false);
+			_log.LogWarning("No process instances found for app '{App}'", Options);
+			return;
 		}
+
+		// We didn't have a process handle when we got into this method, but we have one now,
+		// so attach to the newly acquired handle.
+		_log.LogInformation("Got process for app {App}, attaching", this);
+
+		await AttachToWindowAsync(process).ConfigureAwait(false);
+	}
+
+	/// <summary>
+	/// Stores the specified <paramref name="window"/>'s handle, and toggles it off the screen.
+	/// </summary>
+	private async Task AttachToWindowAsync(WtqWindow window)
+	{
+		Guard.Against.Null(window);
+
+		_log.LogInformation("Attaching to window handle '{Window}' for app '{App}'", window, this);
+
+		Window = window;
+
+		// Move the window off the screen ASAP (e.g. without animating).
+		await CloseAsync(ToggleModifiers.Instant).NoCtx();
 	}
 
 	/// <summary>
 	/// Updates app properties such as taskbar icon visibility and opacity.
 	/// </summary>
-	private async Task UpdatePropsAsync(bool isOpen)
+	private async Task UpdateWindowPropsAsync()
 	{
-		if (Process == null || !IsActive)
+		if (!IsAttached)
 		{
 			return;
 		}
 
 		// Always on top.
-		await Process.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
+		await Window!.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
 
 		// Opacity.
-		await Process.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
+		await Window.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
 
 		// Window Title.
 		var title = Options.WindowTitleOverride;
 		if (!string.IsNullOrWhiteSpace(title))
 		{
-			await Process.SetWindowTitleAsync(title).NoCtx();
+			await Window.SetWindowTitleAsync(title).NoCtx();
 		}
 
 		// Taskbar icon visibility.
 		switch (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options))
 		{
 			case TaskBarIconVisibility.AlwaysHidden:
-				await Process.SetTaskbarIconVisibleAsync(false).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(false).NoCtx();
 				break;
 			case TaskBarIconVisibility.AlwaysVisible:
-				await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 				break;
 			case TaskBarIconVisibility.WhenAppVisible:
-				await Process.SetTaskbarIconVisibleAsync(isOpen).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(IsOpen).NoCtx();
 				break;
 			default:
-				await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 				break;
 		}
 	}
@@ -301,18 +345,18 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	private async Task ResetPropsAsync()
 	{
-		if (Process == null || !IsActive)
+		if (!IsAttached)
 		{
 			return;
 		}
 
 		// Restore "always on top" state.
-		await Process.SetAlwaysOnTopAsync(false).NoCtx();
+		await Window!.SetAlwaysOnTopAsync(false).NoCtx();
 
 		// Restore taskbar icon visibility.
-		await Process.SetTaskbarIconVisibleAsync(true).NoCtx();
+		await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 
 		// Restore opacity.
-		await Process.SetTransparencyAsync(100).NoCtx();
+		await Window.SetTransparencyAsync(100).NoCtx();
 	}
 }

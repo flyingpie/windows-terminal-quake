@@ -2,23 +2,24 @@ using Wtq.Configuration;
 
 namespace Wtq.Services.KWin;
 
-public class KWinProcessService(
+public class KWinWindowService(
 	IKWinClient kwinClient)
-	: IWtqProcessService
+	: IWtqWindowService
 {
-	private readonly ILogger _log = Log.For<KWinProcessService>();
+	private readonly ILogger _log = Log.For<KWinWindowService>();
 
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 
 	public Task CreateAsync(WtqAppOptions opts)
 	{
+		Guard.Against.Null(opts);
+
 		using var process = new Process();
 
 		process.StartInfo = new ProcessStartInfo()
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
-//			UseShellExecute = false,
 		};
 
 		process.Start();
@@ -34,14 +35,10 @@ public class KWinProcessService(
 		{
 			var clients = await GetWindowsAsync().NoCtx();
 
-			var x = clients.FirstOrDefault(c => c.Matches(opts));
-
-			Console.WriteLine($"GOT {opts.Name}=>{x?.Name}");
-			return x;
+			return clients.FirstOrDefault(c => c.Matches(opts));
 		}
 		catch (Exception ex)
 		{
-			var dbg = 2;
 			_log.LogError(ex, "Failed to look up list of windows: {Message}", ex.Message);
 		}
 

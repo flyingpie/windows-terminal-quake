@@ -13,11 +13,9 @@ public static class ServiceCollectionExtensions
 	{
 		Guard.Against.Null(services);
 
-		services.AddSingleton<TService, TImplementation>();
-
-		services.AddHostedService(p => (TImplementation)p.GetRequiredService<TService>());
-
-		return services;
+		return services
+			.AddSingleton<TService, TImplementation>()
+			.AddHostedService(p => (TImplementation)p.GetRequiredService<TService>());
 	}
 
 	public static IServiceCollection AddWtqCore(this IServiceCollection services)
@@ -27,13 +25,12 @@ public static class ServiceCollectionExtensions
 		return services
 
 			// Utils
-			.AddSingleton<IRetry, Retry>()
 			.AddSingleton<IWtqTween, WtqTween>()
 
 			// Core App Logic
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
-			.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
+			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 			.AddSingletonHostedService<IWtqAppRepo, WtqAppRepo>()
 			.AddSingletonHostedService<IWtqHotKeyService, WtqHotKeyService>()
 			.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()

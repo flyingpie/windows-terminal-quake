@@ -5,31 +5,31 @@ public class WtqBus : IWtqBus
 	private readonly ILogger _log = Log.For<WtqBus>();
 	private readonly List<EventRegistration> _registrations = [];
 
-	public void On(Func<IWtqEvent, bool> predicate, Func<IWtqEvent, Task> onEvent)
-	{
-		Guard.Against.Null(predicate);
-		Guard.Against.Null(onEvent);
-
-		_registrations.Add(new EventRegistration()
-		{
-			OnEvent = onEvent,
-			Predicate = predicate,
-		});
-	}
-
-	public void OnEvent<TEvent>(Func<TEvent, Task> onEvent)
+	public void OnEvent<TEvent>(
+		Func<TEvent, Task> onEvent)
 		where TEvent : IWtqEvent
 	{
 		Guard.Against.Null(onEvent);
 
-		On(ev => ev is TEvent, ev => onEvent((TEvent)ev));
+		OnInternal(ev => ev is TEvent, ev => onEvent((TEvent)ev));
+	}
+
+	public void OnEvent<TEvent>(
+		Func<TEvent, bool> predicate,
+		Func<TEvent, Task> onEvent)
+		where TEvent : IWtqEvent
+	{
+		Guard.Against.Null(predicate);
+		Guard.Against.Null(onEvent);
+
+		OnInternal(ev => ev is TEvent e && predicate(e), ev => onEvent((TEvent)ev));
 	}
 
 	public void Publish(IWtqEvent eventType)
 	{
 		Guard.Against.Null(eventType);
 
-		_log.LogInformation("Publishing event '[{Type}] {Event}'", eventType.GetType().FullName, eventType);
+		_log.LogDebug("Publishing event '[{Type}] {Event}'", eventType.GetType().FullName, eventType);
 
 		foreach (var reg in _registrations.Where(r => r.Predicate(eventType)))
 		{
@@ -45,6 +45,20 @@ public class WtqBus : IWtqBus
 				}
 			});
 		}
+	}
+
+	private void OnInternal(
+		Func<IWtqEvent, bool> predicate,
+		Func<IWtqEvent, Task> onEvent)
+	{
+		Guard.Against.Null(predicate);
+		Guard.Against.Null(onEvent);
+
+		_registrations.Add(new EventRegistration()
+		{
+			OnEvent = onEvent,
+			Predicate = predicate,
+		});
 	}
 
 	private sealed class EventRegistration

@@ -1,6 +1,6 @@
 namespace Wtq.Events;
 
-public sealed class WtqToggleAppEvent : IWtqEvent
+public sealed class WtqAppToggledEvent : IWtqEvent
 {
 	public WtqApp? App { get; init; }
 }

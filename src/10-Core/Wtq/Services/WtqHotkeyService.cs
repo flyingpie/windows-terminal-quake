@@ -3,15 +3,15 @@ using Wtq.Events;
 
 namespace Wtq.Services;
 
-/// <summary>
-/// Receives raw hot key events from a platform-specific service, and converts them to more
-/// specific events, such as <see cref="Events.WtqToggleAppEvent"/>.
-/// </summary>
-public class WtqHotKeyService : IHostedService, IWtqHotKeyService
+/// <inheritdoc cref="IWtqHotKeyService"/>
+public class WtqHotKeyService
+	: IHostedService, IWtqHotKeyService
 {
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
+
+	private WtqApp? _prevApp;
 
 	public WtqHotKeyService(
 		IOptionsMonitor<WtqOptions> opts,
@@ -24,29 +24,17 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 		_opts.OnChange(SendRegisterEvents);
 
-		_bus.OnEvent<WtqHotKeyPressedEvent>(
+		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
-				_bus.Publish(new WtqToggleAppEvent()
-				{
-					App = GetAppForHotKey(e.Modifiers, e.Key),
-				});
+				_bus.Publish(
+					new WtqAppToggledEvent()
+					{
+						App = GetAppForHotKey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary(),
+					});
 
 				return Task.CompletedTask;
 			});
-	}
-
-	public WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
-	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
-		if (opt == null)
-		{
-			return null;
-		}
-
-		var res = _appRepo.GetAppByName(opt.Name);
-
-		return res;
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
@@ -61,6 +49,15 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 		return Task.CompletedTask;
 	}
 
+	private WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
+	{
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
+
+		return opt == null
+			? null
+			: _appRepo.GetByName(opt.Name);
+	}
+
 	private void SendRegisterEvents(WtqOptions opts)
 	{
 		// _log
@@ -68,21 +65,23 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 		{
 			foreach (var hk in app.HotKeys)
 			{
-				_bus.Publish(new WtqRegisterHotKeyEvent()
-				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
-				});
+				_bus.Publish(
+					new WtqHotkeyDefinedEvent()
+					{
+						Key = hk.Key,
+						Modifiers = hk.Modifiers,
+					});
 			}
 		}
 
 		foreach (var hk in opts.HotKeys)
 		{
-			_bus.Publish(new WtqRegisterHotKeyEvent()
-			{
-				Key = hk.Key,
-				Modifiers = hk.Modifiers,
-			});
+			_bus.Publish(
+				new WtqHotkeyDefinedEvent()
+				{
+					Key = hk.Key,
+					Modifiers = hk.Modifiers,
+				});
 		}
 	}
 }

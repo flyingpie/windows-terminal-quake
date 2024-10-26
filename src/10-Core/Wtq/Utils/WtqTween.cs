@@ -20,7 +20,7 @@ public sealed class WtqTween(
 		Guard.Against.Null(dst);
 		Guard.Against.Null(move);
 
-		_log.LogInformation(
+		_log.LogDebug(
 			"Tweening from {From} to {To} in {Duration}ms, with animation type {AnimationType}",
 			src,
 			dst,
@@ -51,6 +51,10 @@ public sealed class WtqTween(
 
 			var current = MathUtils.Lerp(src, dst, progress);
 
+			// TODO: Currently, we don't need to move on the X-axis, and there's a little bit of jitter, where X seems to lerp around a bit.
+			// Find out why and fix that, then remove this.
+			current.X = dst.X;
+
 			await move(current).NoCtx();
 
 			// Wait for the frame to end.
@@ -64,7 +68,7 @@ public sealed class WtqTween(
 		// To ensure we end up in exactly the correct final position.
 		await move(dst).NoCtx();
 
-		_log.LogInformation(
+		_log.LogDebug(
 			"Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount} frames",
 			swTotal.ElapsedMilliseconds,
 			durationMs,

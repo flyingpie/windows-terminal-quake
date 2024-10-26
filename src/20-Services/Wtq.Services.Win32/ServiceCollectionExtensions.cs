@@ -8,6 +8,6 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddWin32ProcessService(this IServiceCollection services)
 	{
 		return services
-			.AddSingletonHostedService<IWtqProcessService, Win32ProcessService>();
+			.AddSingletonHostedService<IWtqWindowService, Win32WindowService>();
 	}
 }

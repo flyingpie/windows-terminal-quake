@@ -1,12 +1,12 @@
 namespace Wtq.Services;
 
 /// <summary>
-/// Handles interactions with the OS process list.
+/// Handles interactions with application windows.
 /// </summary>
-public interface IWtqProcessService
+public interface IWtqWindowService
 {
 	/// <summary>
-	/// Create a new process instance as defined by <see cref="WtqAppOptions"/>'s parameters.
+	/// Start an application, so we can attach to its window later. The specified <see cref="WtqAppOptions"/> defines startup parameters.
 	/// </summary>
 	Task CreateAsync(WtqAppOptions opts);
 

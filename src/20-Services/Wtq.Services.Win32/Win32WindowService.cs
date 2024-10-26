@@ -7,12 +7,12 @@ using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32ProcessService :
+public sealed class Win32WindowService :
 	IDisposable,
 	IHostedService,
-	IWtqProcessService
+	IWtqWindowService
 {
-	private readonly ILogger _log = Log.For<Win32ProcessService>();
+	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
 
@@ -40,14 +40,14 @@ public sealed class Win32ProcessService :
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync()
+	public Task<WtqWindow?> GetForegroundWindowAsync()
 	{
 		try
 		{
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return new Win32WtqProcess(Process.GetProcessById((int)fg));
+				return Task.FromResult<WtqWindow?>(new Win32WtqProcess(Process.GetProcessById((int)fg)));
 			}
 		}
 		catch (Exception ex)
@@ -55,7 +55,7 @@ public sealed class Win32ProcessService :
 			_log.LogWarning(ex, "Error looking up foreground process: {Message}", ex.Message);
 		}
 
-		return null;
+		return Task.FromResult<WtqWindow?>(null);
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
@@ -101,26 +101,69 @@ public sealed class Win32ProcessService :
 		};
 
 		// Start
-		Retry.Default
-			.Execute(
-				() =>
-				{
-					try
-					{
-						process.Start();
-					}
-					catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
-					{
-						throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
-					}
-					catch (Exception ex)
-					{
-						_log.LogError(ex, "Error starting process: {Message}", ex.Message);
-						throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
-					}
-				});
+		try
+		{
+			process.Start();
+		}
+		catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
+		{
+			throw new WtqException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
+		}
+		catch (Exception ex)
+		{
+			throw new WtqException($"Error starting process for app '{opts}': {ex.Message}", ex);
+		}
 
 		await UpdateProcessesAsync(force: true).NoCtx();
+	}
+
+	private async Task<WtqWindow?> FindOrStartAsync(WtqAppOptions opts, bool allowStartNew)
+	{
+		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
+
+		// Look for an existing window first.
+		var window1 = await FindWindowAsync(opts).NoCtx();
+		if (window1 != null)
+		{
+			// If we got one, great, return it.
+			_log.LogInformation("Got process {Process} for options {Options}", window1, opts);
+			return window1;
+		}
+
+		// If we didn't get one, see if we can try to make a new one.
+		if (!allowStartNew)
+		{
+			// If not, return empty-handed.
+			return null;
+		}
+
+		// Try to start a new process that presumably creates the window we're looking for.
+		_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
+
+		await CreateAsync(opts).NoCtx();
+
+		for (var attempt = 0; attempt < 5; attempt++)
+		{
+			// Look for our newly created window.
+			var window2 = await FindWindowAsync(opts).NoCtx();
+			if (window2 == null)
+			{
+				continue;
+			}
+
+			// If we got one, great, return it.
+			_log.LogInformation("Got process {Process} for options {Options}", window2, opts);
+			return window2;
+		}
+
+		return null;
+	}
+
+	private Task<WtqWindow?> ManualAsync(WtqAppOptions opts)
+	{
+		_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
+
+		return Task.FromResult<WtqWindow?>(null);
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)

@@ -78,7 +78,7 @@ internal sealed class WtqDBusObject
 	public Task LogAsync(string level, string msg)
 	{
 		// TODO
-		_log.LogInformation($"{level} {msg}");
+		_log.LogDebug($"{level} {msg}");
 
 		return Task.CompletedTask;
 	}
@@ -88,7 +88,7 @@ internal sealed class WtqDBusObject
 
 	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
 	{
-		_log.LogInformation("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
+		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
 		await _init.InitAsync().NoCtx();
 
@@ -109,7 +109,7 @@ internal sealed class WtqDBusObject
 		// TODO: Cancellation token.
 		try
 		{
-			return await waiter.Task.TimeoutAfter(TimeSpan.FromSeconds(1)).NoCtx();
+			return await waiter.Task.TimeoutAfterAsync(TimeSpan.FromSeconds(1)).NoCtx();
 		}
 		catch (TimeoutException ex)
 		{
@@ -131,7 +131,7 @@ internal sealed class WtqDBusObject
 			// See if we have a command on the queue to send back.
 			if (_commandQueue.TryDequeue(out var cmdInfo))
 			{
-				_log.LogInformation("Send command '{Command}' to KWin", cmdInfo);
+				_log.LogTrace("Send command '{Command}' to KWin", cmdInfo);
 				return JsonSerializer.Serialize(cmdInfo);
 			}
 
@@ -161,7 +161,7 @@ internal sealed class WtqDBusObject
 
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
 
-		_log.LogInformation("Got response {Response}", respInfo);
+		_log.LogTrace("Got response {Response}", respInfo);
 
 		var hasResponder = _waiters.TryGetValue(respInfo.ResponderId, out var responder);
 
@@ -202,7 +202,7 @@ internal sealed class WtqDBusObject
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
 
 		_bus.Publish(
-			new WtqHotKeyPressedEvent()
+			new WtqHotkeyPressedEvent()
 			{
 				Key = key,
 				Modifiers = mod,

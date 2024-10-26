@@ -19,6 +19,11 @@ public class KWinWtqWindow(
 
 	public override string Id => _window.ResourceClass; // TODO: Use "InternalId"
 
+	/// <summary>
+	/// TODO: Add proper window activity checking.
+	/// - Does the window still exist?
+	/// - Is the window still valid/movable/whatever?
+	/// </summary>
 	public override bool IsValid { get; } = true;
 
 	public override string? Name => _window?.ResourceClass;

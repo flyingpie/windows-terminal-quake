@@ -15,7 +15,8 @@ public static class Log
 		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
 
 		Serilog.Log.Logger = new LoggerConfiguration()
-			.MinimumLevel.Verbose()
+			// .MinimumLevel.Verbose()
+			.MinimumLevel.Information() // TODO: Configurable.
 
 			.WriteTo.Console()
 

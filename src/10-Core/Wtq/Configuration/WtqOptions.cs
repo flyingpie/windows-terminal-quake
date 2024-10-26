@@ -143,6 +143,13 @@ public sealed class WtqOptions
 		return opts.AlwaysOnTop ?? AlwaysOnTop;
 	}
 
+	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.AttachMode ?? AttachMode;
+	}
+
 	public bool GetHideOnFocusLostForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);

@@ -2,7 +2,6 @@
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Tmds.DBus.Protocol;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 
@@ -53,13 +52,12 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		// So dial down the JS part to just registration, remove the callback to WTQ part.
 		_disp1 = await comp.WatchGlobalShortcutPressedAsync((exception, tuple) =>
 		{
-			var xx2 = 2;
-			Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+			// Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
 		});
 
 		_disp2 = await comp.WatchGlobalShortcutReleasedAsync((exception, tuple) =>
 		{
-			Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+			// Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
 		});
 
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);

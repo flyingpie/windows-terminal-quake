@@ -129,7 +129,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 		if (actualLocation != location)
 		{
-			Console.WriteLine($"EXPECTED:{location} ACTUAL:{actualLocation}");
+			_log.LogWarning("Window '{Window}' did not have expected location '{ExpectedLocation}' after move (was '{ActualLocation}')", window, location, actualLocation);
 		}
 	}
 
@@ -188,7 +188,7 @@ internal sealed class KWinClientV2 : IKWinClient
 
 		if (actualSize != size)
 		{
-			Console.WriteLine($"EXPECTED:{size} ACTUAL:{actualSize}");
+			_log.LogWarning("Window '{Window}' did not have expected size '{ExpectedSize}' after resize (was '{ActualSize}')", window, size, actualSize);
 		}
 	}
 
