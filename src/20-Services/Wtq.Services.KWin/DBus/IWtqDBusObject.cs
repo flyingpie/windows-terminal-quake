@@ -8,7 +8,7 @@ namespace Wtq.Services.KWin.DBus;
 [DBusInterface("wtq.kwin")]
 public interface IWtqDBusObject : IDBusObject, IDisposable
 {
-	Task InitAsync();
+	// Task InitAsync();
 
 	Task LogAsync(string level, string msg);
 

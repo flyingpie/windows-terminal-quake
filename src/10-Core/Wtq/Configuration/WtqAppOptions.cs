@@ -33,7 +33,7 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
 	public float? HorizontalScreenCoverage { get; set; }
 
-	public IEnumerable<HotKeyOptions> HotKeys { get; set; } = [];
+	public IEnumerable<HotkeyOptions> Hotkeys { get; set; } = [];
 
 	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
 	public int? MonitorIndex { get; set; }
@@ -71,9 +71,9 @@ public sealed class WtqAppOptions
 	/// </summary>
 	public string? WindowTitleOverride { get; set; }
 
-	public bool HasHotKey(Keys key, KeyModifiers modifiers)
+	public bool HasHotkey(Keys key, KeyModifiers modifiers)
 	{
-		return HotKeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
 	}
 
 	public override string ToString() => Name;

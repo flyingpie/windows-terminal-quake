@@ -3,7 +3,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines a combination of a <see cref="Keys"/> value, with optional <see cref="KeyModifiers"/>, used for mapping a shortcut to an action.
 /// </summary>
-public sealed class HotKeyOptions
+public sealed class HotkeyOptions
 {
 	public Keys Key { get; set; }
 

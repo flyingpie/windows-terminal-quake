@@ -63,7 +63,7 @@
 	"AnimationDurationMs": 200,
 	"AnimationTargetFps": 60,
 
-	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
+	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
 	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
 	// What monitor to preferably drop the terminal.

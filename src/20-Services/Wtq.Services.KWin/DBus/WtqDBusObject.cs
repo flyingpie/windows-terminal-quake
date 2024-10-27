@@ -8,8 +8,7 @@ using Wtq.Services.KWin.Exceptions;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject
-	: IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
+internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
 {
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -19,7 +18,7 @@ internal sealed class WtqDBusObject
 
 	private readonly IWtqBus _bus;
 	private readonly IDBusConnection _dbus;
-	private readonly Initializer _init;
+	// private readonly Initializer _init;
 
 	public WtqDBusObject(
 		IDBusConnection dbus,
@@ -27,29 +26,30 @@ internal sealed class WtqDBusObject
 	{
 		_bus = Guard.Against.Null(bus);
 		_dbus = Guard.Against.Null(dbus);
-		_init = new Initializer<WtqDBusObject>(InitializeAsync);
+		// _init = new Initializer<WtqDBusObject>(InitializeAsync);
 	}
 
+	public int Priority => -10;
+
 	public ObjectPath ObjectPath => _path;
+
+	public async Task InitializeAsync()
+	{
+		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
+	}
 
 	public void Dispose()
 	{
 		_dbus.Dispose();
-		_init.Dispose();
+		// _init.Dispose();
 	}
 
-	public async Task InitAsync()
-	{
-		await _init.InitAsync().NoCtx();
-	}
+	// public async Task InitAsync()
+	// {
+	// 	await _init.InitAsync().NoCtx();
+	// }
 
 	private readonly CancellationTokenSource _cts = new();
-
-	private async Task InitializeAsync()
-	{
-		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
-
-	}
 
 	/// <summary>
 	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
@@ -57,6 +57,7 @@ internal sealed class WtqDBusObject
 	/// </summary>
 	private void StartNoOpLoop()
 	{
+		// TODO: As event.
 		_ = Task.Run(async () =>
 		{
 			while(!_cts.IsCancellationRequested)
@@ -90,7 +91,7 @@ internal sealed class WtqDBusObject
 	{
 		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
-		await _init.InitAsync().NoCtx();
+		// await _init.InitAsync().NoCtx();
 
 		// Add response waiter.
 		var id = cmdInfo.ResponderId;
@@ -124,7 +125,7 @@ internal sealed class WtqDBusObject
 	{
 		// _log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
 
-		await _init.InitAsync().NoCtx();
+		// await _init.InitAsync().NoCtx();
 
 		while (true)
 		{
@@ -157,7 +158,7 @@ internal sealed class WtqDBusObject
 	/// <inheritdoc/>
 	public async Task SendResponseAsync(string respInfoStr)
 	{
-		await _init.InitAsync().NoCtx();
+		// await _init.InitAsync().NoCtx();
 
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
 
@@ -190,7 +191,7 @@ internal sealed class WtqDBusObject
 	/// <inheritdoc/>
 	public async Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
-		await _init.InitAsync().NoCtx();
+		// await _init.InitAsync().NoCtx();
 
 		_log.LogInformation(
 			"{MethodName}({Modifier}, {Key})",

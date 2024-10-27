@@ -21,7 +21,7 @@ public enum AttachMode
 	FindOrStart,
 
 	/// <summary>
-	/// Attach to the foreground app when pressing the assigned hot key.
+	/// Attach to the foreground app when pressing the assigned hotkey.
 	/// </summary>
 	Manual,
 }

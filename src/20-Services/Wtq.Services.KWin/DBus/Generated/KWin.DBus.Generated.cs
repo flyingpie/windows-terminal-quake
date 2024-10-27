@@ -1,6 +1,6 @@
 #pragma warning disable
 
-namespace Wtq.Services.KWin.DBus;
+namespace Wtq.Services.KWin.DBus.Generated;
 
 using System;
 using Tmds.DBus.Protocol;

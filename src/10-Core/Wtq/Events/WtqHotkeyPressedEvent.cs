@@ -1,12 +1,12 @@
 namespace Wtq.Events;
 
-public sealed class WtqHotkeyPressedEvent : IWtqEvent
+public sealed class WtqHotkeyPressedEvent : WtqEvent
 {
 	public WtqApp? App { get; init; }
 
-	public Keys Key { get; init; }
+	public required Keys Key { get; init; }
 
-	public KeyModifiers Modifiers { get; init; }
+	public required KeyModifiers Modifiers { get; init; }
 
 	public override string ToString() => $"[{Modifiers}] {Key}";
 }

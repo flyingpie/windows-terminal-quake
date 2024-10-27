@@ -1,11 +1,10 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
-
 namespace Wtq.Services;
 
-/// <inheritdoc cref="IWtqHotKeyService"/>
-public class WtqHotKeyService
-	: IHostedService, IWtqHotKeyService
+/// <summary>
+/// Receives raw hotkey events from a platform-specific service, and converts them to more
+/// specific events, such as <see cref="WtqAppToggledEvent"/>.
+/// </summary>
+public class WtqHotkeyService : IAsyncInitializable
 {
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
@@ -13,7 +12,7 @@ public class WtqHotKeyService
 
 	private WtqApp? _prevApp;
 
-	public WtqHotKeyService(
+	public WtqHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -27,31 +26,30 @@ public class WtqHotKeyService
 		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
+				var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
+
 				_bus.Publish(
 					new WtqAppToggledEvent()
 					{
-						App = GetAppForHotKey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary(),
+						App = app,
 					});
+
+				_prevApp = app;
 
 				return Task.CompletedTask;
 			});
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
 		SendRegisterEvents(_opts.CurrentValue);
 
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
 	{
-		return Task.CompletedTask;
-	}
-
-	private WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
-	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
 
 		return opt == null
 			? null
@@ -63,7 +61,7 @@ public class WtqHotKeyService
 		// _log
 		foreach (var app in opts.Apps)
 		{
-			foreach (var hk in app.HotKeys)
+			foreach (var hk in app.Hotkeys)
 			{
 				_bus.Publish(
 					new WtqHotkeyDefinedEvent()
@@ -74,7 +72,7 @@ public class WtqHotKeyService
 			}
 		}
 
-		foreach (var hk in opts.HotKeys)
+		foreach (var hk in opts.Hotkeys)
 		{
 			_bus.Publish(
 				new WtqHotkeyDefinedEvent()

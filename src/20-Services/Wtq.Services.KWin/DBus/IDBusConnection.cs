@@ -8,11 +8,11 @@ namespace Wtq.Services.KWin.DBus;
 /// </summary>
 internal interface IDBusConnection : IDisposable
 {
-	Task<KWin> GetKWinAsync();
+	Task<DBus.Generated.KWin> GetKWinAsync();
 
-	Task<KWinService> GetKWinServiceAsync();
+	Task<DBus.Generated.KWinService> GetKWinServiceAsync();
 
-	Task<Scripting> GetScriptingAsync();
+	Task<DBus.Generated.Scripting> GetScriptingAsync();
 
 	/// <summary>
 	/// Register an object that exposes methods that can be called by other processes.

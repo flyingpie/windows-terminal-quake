@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
 using Wtq.Services;
 
 namespace Wtq;
@@ -10,7 +8,7 @@ public sealed class WtqService(
 	IWtqAppRepo appRepo,
 	IWtqBus bus,
 	IWtqFocusTracker focusTracker)
-	: IDisposable, IHostedService
+	: IAsyncInitializable, IDisposable
 {
 	private readonly ILogger<WtqService> _log = Guard.Against.Null(log);
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
@@ -21,13 +19,9 @@ public sealed class WtqService(
 
 	private WtqApp? _lastOpen;
 	private WtqApp? _open;
+	private WtqWindow? _lastNonWtqWindow;
 
-	public void Dispose()
-	{
-		_lock.Dispose();
-	}
-
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
 		_log.LogInformation("Starting");
 
@@ -38,14 +32,10 @@ public sealed class WtqService(
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	public void Dispose()
 	{
-		_log.LogInformation("Stopping");
-
-		return Task.CompletedTask;
+		_lock.Dispose();
 	}
-
-	private WtqWindow? _lastNonWtqWindow;
 
 	private async Task HandleAppFocusEventAsync(WtqWindowFocusEvent ev)
 	{

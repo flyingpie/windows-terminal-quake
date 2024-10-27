@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
-
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqFocusTracker"/>
@@ -8,7 +5,7 @@ public sealed class WtqFocusTracker(
 	IWtqAppRepo appsRepo,
 	IWtqBus bus,
 	IWtqWindowService procService)
-	: IHostedService, IWtqFocusTracker
+	: IAsyncInitializable, IAsyncDisposable, IWtqFocusTracker
 {
 	// private readonly IWtqAppRepo _appsRepo = Guard.Against.Null(appsRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
@@ -28,8 +25,7 @@ public sealed class WtqFocusTracker(
 	// 	await (_lastNonWtqForeground?.BringToForegroundAsync() ?? Task.CompletedTask).NoCtx();
 	// }
 
-	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "MvdO: We do not want the task to be cancelled here.")]
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
 		_ = Task.Run(async () =>
 		{
@@ -118,10 +114,10 @@ public sealed class WtqFocusTracker(
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	public ValueTask DisposeAsync()
 	{
 		_isRunning = false;
 
-		return Task.CompletedTask;
+		return ValueTask.CompletedTask;
 	}
 }

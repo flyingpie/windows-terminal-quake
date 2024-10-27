@@ -1,14 +1,17 @@
-using Wtq.Events;
 using Wtq.Services;
 
 namespace Wtq;
 
 /// <summary>
-/// An "app" represents a single process that can be toggled (such as Windows Terminal).<br/>
-/// It tracks its own state, and does not necessarily have a process attached.
+/// An "app" represents a single window that can be toggled (such as Windows Terminal).<br/>
+///
+/// Some traits of an "app":
+/// - It is defined through the WTQ settings;
+/// - It tracks its own state;
+/// - It does not necessarily have a window attached;
+/// - It can start a process, if configured as such;
+/// - It has methods to do actions like open/close the window, set opacity, etc.
 /// </summary>
-
-// TODO: Track whether the app is currently open, has focus, etc.
 public sealed class WtqApp : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<WtqApp>();
@@ -88,6 +91,7 @@ public sealed class WtqApp : IAsyncDisposable
 		_ = Task.Run(
 			async () =>
 			{
+				// TODO: Make nicer.
 				while (true)
 				{
 					await UpdateLocalAppStateAsync(allowStartNew: false).NoCtx();

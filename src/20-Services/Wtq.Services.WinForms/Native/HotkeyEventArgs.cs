@@ -1,16 +1,16 @@
 namespace Wtq.Services.WinForms.Native;
 
-internal sealed class HotKeyEventArgs : EventArgs
+internal sealed class HotkeyEventArgs : EventArgs
 {
-	public HotKeyEventArgs(Keys key, KeyModifiers modifiers)
+	public HotkeyEventArgs(Keys key, KeyModifiers modifiers)
 	{
 		Key = key;
 		Modifiers = modifiers;
 	}
 
-	public HotKeyEventArgs(nint hotKeyParam)
+	public HotkeyEventArgs(nint hotkeyParam)
 	{
-		uint param = (uint)hotKeyParam.ToInt64();
+		uint param = (uint)hotkeyParam.ToInt64();
 		Key = (Keys)((param & 0xffff0000) >> 16);
 		Modifiers = (KeyModifiers)(param & 0x0000ffff);
 	}

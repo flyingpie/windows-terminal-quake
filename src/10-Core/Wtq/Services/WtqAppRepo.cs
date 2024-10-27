@@ -1,10 +1,6 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
-
 namespace Wtq.Services;
 
-public sealed class WtqAppRepo
-	: IHostedService, IWtqAppRepo
+public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly IWtqBus _bus;
@@ -30,6 +26,21 @@ public sealed class WtqAppRepo
 
 		// Whenever the settings file changes, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(async () => await UpdateAppsAsync(allowStartNew: false).NoCtx()));
+	}
+
+	public async Task InitializeAsync()
+	{
+		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+		// "StartApps": "OnWtqStart | OnHotkeyPress"
+		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		foreach (var app in _apps)
+		{
+			await app.DisposeAsync().NoCtx();
+		}
 	}
 
 	public WtqApp? GetByName(string name)
@@ -119,28 +130,4 @@ public sealed class WtqAppRepo
 			_apps.Remove(app);
 		}
 	}
-
-	#region Hosted Service
-
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-		// "StartApps": "OnWtqStart | OnHotkeyPress"
-		await UpdateAppsAsync(allowStartNew: true).NoCtx();
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
-	}
-
-	public async ValueTask DisposeAsync()
-	{
-		foreach (var app in _apps)
-		{
-			await app.DisposeAsync().NoCtx();
-		}
-	}
-
-	#endregion
 }

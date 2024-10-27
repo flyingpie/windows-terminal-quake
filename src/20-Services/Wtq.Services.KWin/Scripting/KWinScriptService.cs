@@ -1,11 +1,6 @@
-using Wtq.Exceptions;
-using Wtq.Services.KWin;
 using Wtq.Services.KWin.DBus;
 
-public interface IKWinScriptService
-{
-	Task<KWinScript> LoadScriptAsync(string path);
-}
+namespace Wtq.Services.KWin.Scripting;
 
 internal sealed class KWinScriptService(
 	IDBusConnection dbus)
@@ -15,6 +10,8 @@ internal sealed class KWinScriptService(
 
 	public async Task<KWinScript> LoadScriptAsync(string path)
 	{
+		Guard.Against.NullOrWhiteSpace(path);
+
 		path = Path.GetFullPath(path);
 
 		var id = Path.GetFileName(path);

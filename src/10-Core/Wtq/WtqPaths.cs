@@ -39,7 +39,6 @@ public static class WtqPaths
 	/// </summary>
 	public static IEnumerable<string> WtqConfigPaths { get; } =
 	[
-
 		// Next to wtq executable.
 		Path.Combine(GetWtqAppDir(), "wtq.json"),
 		Path.Combine(GetWtqAppDir(), "wtq.jsonc"),

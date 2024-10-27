@@ -1,4 +1,4 @@
-namespace Wtq.Services.KWin.Utils;
+namespace Wtq.Services.KWin.Scripting;
 
 public static class JsUtils
 {

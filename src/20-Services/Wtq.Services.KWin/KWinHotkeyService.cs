@@ -1,19 +1,18 @@
 #pragma warning disable // PoC
 
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
 
-internal class KWinHotKeyService : IDisposable, IHostedService
+internal class KWinHotkeyService : IAsyncInitializable, IDisposable
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IKWinClient _kwinClient;
 	private readonly IDBusConnection _dbus;
 
-	public KWinHotKeyService(
+	public KWinHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IKWinClient kwinClient,
 		IDBusConnection dbus)
@@ -31,7 +30,7 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 	private IDisposable _disp1;
 	private IDisposable _disp2;
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	public async Task InitializeAsync()
 	{
 		var kwinx = await _dbus.GetKWinServiceAsync();
 
@@ -68,11 +67,5 @@ internal class KWinHotKeyService : IDisposable, IHostedService
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		// Nothing to do.
-		return Task.CompletedTask;
 	}
 }

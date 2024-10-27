@@ -12,4 +12,5 @@ global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using System.Threading;
 global using System.Threading.Tasks;
+global using Wtq.Exceptions;
 global using Wtq.Utils;

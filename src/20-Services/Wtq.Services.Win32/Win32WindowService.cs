@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Wtq.Configuration;
 using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
@@ -8,8 +7,8 @@ using Wtq.Utils;
 namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService :
+	IAsyncInitializable,
 	IDisposable,
-	IHostedService,
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
@@ -24,6 +23,11 @@ public sealed class Win32WindowService :
 		Guard.Against.Null(opts);
 
 		await CreateProcessAsync(opts).ConfigureAwait(false);
+	}
+
+	public async Task InitializeAsync()
+	{
+		await UpdateProcessesAsync().ConfigureAwait(false);
 	}
 
 	public void Dispose()
@@ -63,16 +67,6 @@ public sealed class Win32WindowService :
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
-	}
-
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-		await UpdateProcessesAsync().ConfigureAwait(false);
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
 	}
 
 	private static uint GetForegroundProcessId()

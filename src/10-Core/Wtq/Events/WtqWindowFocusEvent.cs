@@ -1,9 +1,7 @@
 namespace Wtq.Events;
 
-public class WtqWindowFocusEvent : IWtqEvent
+public class WtqWindowFocusEvent : WtqEvent
 {
-	// public WtqApp? App { get; init; }
-
 	/// <summary>
 	/// Window that got focus.
 	/// </summary>
@@ -13,6 +11,4 @@ public class WtqWindowFocusEvent : IWtqEvent
 	/// Window that lost focus.
 	/// </summary>
 	public WtqWindow? LostFocusWindow { get; init; }
-
-	// public bool GainedFocus { get; init; }
 }

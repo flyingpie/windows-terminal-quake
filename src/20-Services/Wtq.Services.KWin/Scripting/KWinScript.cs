@@ -1,4 +1,4 @@
-namespace Wtq.Services.KWin;
+namespace Wtq.Services.KWin.Scripting;
 
 public sealed class KWinScript(
 	Func<Task> onDispose)
