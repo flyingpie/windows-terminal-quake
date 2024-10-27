@@ -3,7 +3,6 @@ namespace Wtq.Services;
 public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
-	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqWindowResolver _windowResolver;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
@@ -13,19 +12,17 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 	public WtqAppRepo(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqBus bus,
 		IWtqWindowResolver procResolver,
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggleService)
 	{
 		_opts = Guard.Against.Null(opts);
-		_bus = Guard.Against.Null(bus);
 		_windowResolver = Guard.Against.Null(procResolver);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_toggleService = Guard.Against.Null(toggleService);
 
-		// Whenever the settings file changes, update the list of tracked apps.
-		opts.OnChange(o => _ = Task.Run(async () => await UpdateAppsAsync(allowStartNew: false).NoCtx()));
+		// Whenever the settings change, update the list of tracked apps.
+		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
 	}
 
 	public async Task InitializeAsync()
@@ -57,6 +54,11 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		return _apps.FirstOrDefault(a => a.Window == window);
 	}
 
+	public WtqApp? GetOpen()
+	{
+		return _apps.FirstOrDefault(a => a.IsOpen);
+	}
+
 	public WtqApp? GetPrimary()
 	{
 		return _apps.FirstOrDefault();
@@ -81,8 +83,6 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		return new WtqApp(
 			_opts,
-			this,
-			_bus,
 			_windowResolver,
 			_screenInfoProvider,
 			_toggleService,

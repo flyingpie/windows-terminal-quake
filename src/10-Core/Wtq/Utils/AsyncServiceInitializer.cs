@@ -16,7 +16,7 @@ public class AsyncServiceInitializer
 					Descr = s,
 					Inst = (IAsyncInitializable)provider.GetService(s.ServiceType),
 				})
-			.OrderBy(s => s.Inst.Priority)
+			.OrderBy(s => s.Inst.InitializePriority)
 			.ToList();
 
 		foreach (var s in serv)

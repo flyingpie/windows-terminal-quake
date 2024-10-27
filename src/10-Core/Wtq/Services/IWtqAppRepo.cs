@@ -18,6 +18,11 @@ public interface IWtqAppRepo : IAsyncDisposable, IAsyncInitializable
 		WtqWindow window);
 
 	/// <summary>
+	/// Returns the app that is currently toggled onto the screen (if any).
+	/// </summary>
+	WtqApp? GetOpen();
+
+	/// <summary>
 	/// Returns the "primary" app, currently just the first one in the settings list (if any).
 	/// </summary>
 	WtqApp? GetPrimary();

@@ -1,6 +1,6 @@
 namespace Wtq.Events;
 
-public class WtqWindowFocusEvent : WtqEvent
+public class WtqWindowFocusChangedEvent : WtqEvent
 {
 	/// <summary>
 	/// Window that got focus.

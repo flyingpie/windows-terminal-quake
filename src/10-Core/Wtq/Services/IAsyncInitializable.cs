@@ -2,7 +2,7 @@ namespace Wtq.Services;
 
 public interface IAsyncInitializable
 {
-	int Priority => 0;
+	int InitializePriority => 0;
 
 	Task InitializeAsync();
 }

@@ -29,7 +29,7 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 		// _init = new Initializer<WtqDBusObject>(InitializeAsync);
 	}
 
-	public int Priority => -10;
+	public int InitializePriority => -10;
 
 	public ObjectPath ObjectPath => _path;
 

@@ -13,6 +13,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 
 	private readonly IDBusConnection _dbus;
+
 	// private readonly Initializer _init;
 	private readonly IKWinScriptService _scriptService;
 	private readonly WtqDBusObject _wtqBusObj;
@@ -31,7 +32,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 		_wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
 	}
 
-	public int Priority => -5;
+	public int InitializePriority => -5;
 
 	public async Task InitializeAsync()
 	{
@@ -67,8 +68,8 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 		// await _init.InitAsync().NoCtx();
 
 		return (await _wtqBusObj
-			.SendCommandAsync("GET_CURSOR_POS")
-			.NoCtx())
+				.SendCommandAsync("GET_CURSOR_POS")
+				.NoCtx())
 			.GetParamsAs<KWinPoint>()
 			.ToPoint();
 	}
@@ -78,8 +79,8 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 		// await _init.InitAsync().NoCtx();
 
 		return (await _wtqBusObj
-			.SendCommandAsync("GET_FOREGROUND_WINDOW")
-			.NoCtx())
+				.SendCommandAsync("GET_FOREGROUND_WINDOW")
+				.NoCtx())
 			.GetParamsAs<KWinWindow>();
 	}
 
@@ -95,7 +96,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 		return KWinSupportInformation.Parse(supportInfStr);
 	}
 
-	public async Task<KWinWindow> GetWindowAsync(KWinWindow window)
+	public async Task<KWinWindow?> GetWindowAsync(KWinWindow window)
 	{
 		// await _init.InitAsync().NoCtx();
 
@@ -141,6 +142,11 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 			.NoCtx();
 
 		var w = await GetWindowAsync(window).NoCtx();
+
+		if (w?.FrameGeometry == null)
+		{
+			return;
+		}
 
 		var actualLocation = w.FrameGeometry.ToPoint();
 
@@ -201,6 +207,12 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 			.NoCtx();
 
 		var w = await GetWindowAsync(window).NoCtx();
+
+		if (w?.FrameGeometry == null)
+		{
+			return;
+		}
+
 		var actualSize = w.FrameGeometry.ToSize();
 
 		if (actualSize != size)

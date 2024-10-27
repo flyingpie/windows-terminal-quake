@@ -33,7 +33,7 @@ public class ResponseInfo
 		}
 	}
 
-	public T GetParamsAs<T>()
+	public T? GetParamsAs<T>()
 	{
 		// TODO: Error handling, with print of json.
 		return Params.Deserialize<T>();
