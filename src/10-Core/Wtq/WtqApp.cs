@@ -60,7 +60,7 @@ public sealed class WtqApp : IAsyncDisposable
 	[MemberNotNullWhen(true, nameof(Window))]
 	public bool IsAttached => Window?.IsValid ?? false;
 
-	public bool IsOpen { get; private set; }
+	public bool IsOpen { get; private set; } = true;
 
 	public string Name { get; }
 
@@ -70,6 +70,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		if (!IsOpen)
+		{
+			return;
+		}
+
 		IsOpen = false;
 
 		if (!IsAttached)
@@ -129,6 +134,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// Look for screen rect that contains the left-top corner of the app window.
 		foreach (var screenRect in screenRects)
 		{
+			// TODO: Use screen with largest overlap instead?
 			if (screenRect.Contains(windowRect.Location))
 			{
 				_log.LogTrace("Got screen {Screen}, for app {App}", screenRect, this);
@@ -138,7 +144,7 @@ public sealed class WtqApp : IAsyncDisposable
 			_log.LogTrace("Screen {Screen} does NOT contain app {App}", screenRect, this);
 		}
 
-		_log.LogWarning("Could not find screen for app {App}, returning primary screen", this);
+		_log.LogWarning("Could not find screen for app {App} ({Rectangle}), returning primary screen", this, windowRect);
 
 		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 	}
@@ -165,6 +171,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		if (IsOpen)
+		{
+			return false;
+		}
+
 		_log.LogInformation("Opening app '{App}'", this);
 
 		IsOpen = true;
