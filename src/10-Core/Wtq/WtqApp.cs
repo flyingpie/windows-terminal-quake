@@ -60,6 +60,10 @@ public sealed class WtqApp : IAsyncDisposable
 	[MemberNotNullWhen(true, nameof(Window))]
 	public bool IsAttached => Window?.IsValid ?? false;
 
+	/// <summary>
+	/// Whether the app is currently toggled onto the screen.<br/>
+	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
+	/// </summary>
 	public bool IsOpen { get; private set; } = true;
 
 	public string Name { get; }
