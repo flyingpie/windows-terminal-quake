@@ -28,12 +28,14 @@ public class WtqAppToggleService(
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
 
 		// Move window.
-		_log.LogInformation("ToggleOn from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+
+		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 
 		await _tween
 			.AnimateAsync(
-				src: windowRectSrc,
-				dst: windowRectDst,
+				src: windowRectSrc.Location,
+				dst: windowRectDst.Location,
 				durationMs: durationMs,
 				animType: _opts.CurrentValue.AnimationTypeToggleOn,
 				move: app.MoveWindowAsync)
@@ -52,15 +54,17 @@ public class WtqAppToggleService(
 		var screenRect = await app.GetScreenRectAsync().NoCtx();
 
 		// Source & target bounds.
-		var windowRectSrc = app.GetWindowRect();
+		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
 		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
 
-		_log.LogInformation("ToggleOff from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+
+		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 
 		await _tween
 			.AnimateAsync(
-				windowRectSrc,
-				windowRectDst,
+				windowRectSrc.Location,
+				windowRectDst.Location,
 				durationMs,
 				_opts.CurrentValue.AnimationTypeToggleOff,
 				app.MoveWindowAsync)
