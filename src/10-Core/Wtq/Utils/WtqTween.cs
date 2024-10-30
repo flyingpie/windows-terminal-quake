@@ -10,17 +10,17 @@ public sealed class WtqTween(
 
 	/// <inheritdoc/>
 	public async Task AnimateAsync(
-		Rectangle src,
-		Rectangle dst,
+		Point src,
+		Point dst,
 		int durationMs,
 		AnimationType animType,
-		Func<Rectangle, Task> move)
+		Func<Point, Task> move)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
 		Guard.Against.Null(move);
 
-		_log.LogInformation(
+		_log.LogDebug(
 			"Tweening from {From} to {To} in {Duration}ms, with animation type {AnimationType}",
 			src,
 			dst,
@@ -36,6 +36,8 @@ public sealed class WtqTween(
 
 		var frameCount = 0;
 
+		await move(src).NoCtx();
+
 		while (swTotal.ElapsedMilliseconds < durationMs)
 		{
 			frameCount++;
@@ -47,9 +49,13 @@ public sealed class WtqTween(
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var rect = MathUtils.Lerp(src, dst, progress);
+			var current = MathUtils.Lerp(src, dst, progress);
 
-			await move(rect).NoCtx();
+			// TODO: Currently, we don't need to move on the X-axis, and there's a little bit of jitter, where X seems to lerp around a bit.
+			// Find out why and fix that, then remove this.
+			current.X = dst.X;
+
+			await move(current).NoCtx();
 
 			// Wait for the frame to end.
 			var waitMs = frameTimeMs - swFrame.ElapsedMilliseconds;
@@ -62,7 +68,7 @@ public sealed class WtqTween(
 		// To ensure we end up in exactly the correct final position.
 		await move(dst).NoCtx();
 
-		_log.LogInformation(
+		_log.LogDebug(
 			"Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount} frames",
 			swTotal.ElapsedMilliseconds,
 			durationMs,
