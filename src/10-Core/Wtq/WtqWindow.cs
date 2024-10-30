@@ -1,45 +1,74 @@
 namespace Wtq;
 
-public abstract class WtqWindow : IEquatable<WtqWindow>
+/// <summary>
+/// Represents a single application window, provides information about it such as position and size, and allows operations such as moving and setting opacity.
+/// </summary>
+public abstract class WtqWindow
+	: IEquatable<WtqWindow>, IEqualityComparer<WtqWindow>
 {
-	public abstract int Id { get; }
+	/// <summary>
+	/// A string that uniquely identifies this window across the system.
+	/// </summary>
+	public abstract string Id { get; }
 
 	/// <summary>
 	/// Whether the window handle is still pointing to an existing window.
 	/// </summary>
 	public abstract bool IsValid { get; }
 
+	/// <summary>
+	/// A descriptive name of the window, often (close to) the process name.
+	/// </summary>
 	public abstract string? Name { get; }
 
+	public abstract Task BringToForegroundAsync();
+
 	/// <summary>
-	/// The rectangle of the window itself.
+	/// The rectangle of the window itself, includes both position and size.
 	/// </summary>
-	public abstract Rectangle WindowRect { get; }
+	public abstract Task<Rectangle> GetWindowRectAsync();
+
+	public abstract bool Matches(WtqAppOptions opts);
+
+	public abstract Task MoveToAsync(Point location);
+
+	public abstract Task ResizeAsync(Size size);
+
+	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
+
+	public abstract Task SetTaskbarIconVisibleAsync(bool isVisible);
+
+	public abstract Task SetTransparencyAsync(int transparency);
+
+	public abstract Task SetVisibleAsync(bool isVisible);
+
+	public abstract Task SetWindowTitleAsync(string title);
+
+	public override string ToString() => $"[{Id}] {Name}";
+
+	#region Equality
 
 	public static bool operator ==(WtqWindow? left, WtqWindow? right)
 	{
-		return Equals(left, right);
-	}
-
-	public static bool operator !=(WtqWindow? left, WtqWindow? right)
-	{
-		return !Equals(left, right);
-	}
-
-	public bool Equals(WtqWindow? other)
-	{
-		if (ReferenceEquals(null, other))
-		{
-			return false;
-		}
-
-		if (ReferenceEquals(this, other))
+		if (ReferenceEquals(left, right))
 		{
 			return true;
 		}
 
-		return Id == other.Id;
+		if (ReferenceEquals(null, left))
+		{
+			return false;
+		}
+
+		if (ReferenceEquals(null, right))
+		{
+			return false;
+		}
+
+		return left.Equals(right);
 	}
+
+	public static bool operator !=(WtqWindow? left, WtqWindow? right) => !(left == right);
 
 	public override bool Equals(object? obj)
 	{
@@ -56,24 +85,54 @@ public abstract class WtqWindow : IEquatable<WtqWindow>
 		return obj.GetType() == GetType() && Equals((WtqWindow)obj);
 	}
 
-	public override int GetHashCode()
+	public bool Equals(WtqWindow? other)
 	{
-		return Id;
+		if (ReferenceEquals(null, other))
+		{
+			return false;
+		}
+
+		if (ReferenceEquals(this, other))
+		{
+			return true;
+		}
+
+		return Id.Equals(other.Id, StringComparison.Ordinal);
 	}
 
-	public abstract Task BringToForegroundAsync();
+	public bool Equals(WtqWindow? x, WtqWindow? y)
+	{
+		if (ReferenceEquals(x, y))
+		{
+			return true;
+		}
 
-	public abstract bool Matches(WtqAppOptions opts);
+		if (x is null)
+		{
+			return false;
+		}
 
-	public abstract Task MoveToAsync(Rectangle rect, bool repaint = true);
+		if (y is null)
+		{
+			return false;
+		}
 
-	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
+		if (x.GetType() != y.GetType())
+		{
+			return false;
+		}
 
-	public abstract Task SetTaskbarIconVisibleAsync(bool isVisible);
+		return x.Id.Equals(y.Id, StringComparison.Ordinal);
+	}
 
-	public abstract Task SetTransparencyAsync(int transparency);
+	public int GetHashCode(WtqWindow obj)
+	{
+		Guard.Against.Null(obj);
 
-	public abstract Task SetVisibleAsync(bool isVisible);
+		return obj.Id.GetHashCode(StringComparison.Ordinal);
+	}
 
-	public override string ToString() => $"[{Id}] {Name}";
+	public override int GetHashCode() => Id.GetHashCode(StringComparison.Ordinal);
+
+	#endregion
 }
