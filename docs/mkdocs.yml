@@ -14,7 +14,7 @@ nav:
     #- Command Line Parameters: v2/settings/command-line-parameters.md
     #- Disable When Active App Is In Fullscreen: v2/settings/disable-when-active-app-is-in-fullscreen.md
     - Hide On Focus Lost: v2/settings/hide-on-focus-lost.md
-    - Hot Keys: v2/settings/hot-keys.md
+    - Hotkeys: v2/settings/hotkeys.md
     #- Notifications: v2/settings/notifications.md
     - Opacity: v2/settings/opacity.md
     - Prefer Monitor: v2/settings/prefer-monitor.md

@@ -90,7 +90,7 @@ public sealed class WtqOptions
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	[Required]
-	public IEnumerable<HotKeyOptions> HotKeys { get; init; }
+	public IEnumerable<HotkeyOptions> Hotkeys { get; init; }
 		= [];
 
 	/// <summary>

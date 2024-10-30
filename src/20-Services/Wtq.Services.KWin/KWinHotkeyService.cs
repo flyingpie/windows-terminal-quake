@@ -8,13 +8,13 @@ using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
 
-internal class KWinHotKeyService : IDisposable, IHostedService
+internal class KWinHotkeyService : IDisposable, IHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly KWinScriptExecutor _scriptExecutor;
 	private readonly KWinService _kwinService;
 
-	public KWinHotKeyService(
+	public KWinHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		KWinScriptExecutor scriptExecutor,
 		KWinService kwinService)

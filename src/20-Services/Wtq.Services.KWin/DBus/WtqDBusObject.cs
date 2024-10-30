@@ -56,7 +56,7 @@ internal class WtqDBusObject(
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
 
 		_bus.Publish(
-			new WtqHotKeyPressedEvent()
+			new WtqHotkeyPressedEvent()
 			{
 				Key = key,
 				Modifiers = mod,

@@ -80,13 +80,13 @@ namespace Wtq.Resources {
         ///		// Example with PowerShell
         ///		{
         ///			&quot;Name&quot;: &quot;PowerShell&quot;,
-        ///			&quot;HotKeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
+        ///			&quot;Hotkeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
         ///			&quot;FileName&quot;: &quot;powershell&quot;
         ///		}
         ///	],
         ///
-        ///	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
-        ///	&quot;HotKeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;Q&quot; } ]
+        ///	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
+        ///	&quot;Hotkeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;Q&quot; } ]
         ///}.
         /// </summary>
         public static string wtq_example_ps {
@@ -105,14 +105,14 @@ namespace Wtq.Resources {
         ///		// Example with Windows Terminal
         ///		{
         ///			&quot;Name&quot;: &quot;Terminal&quot;,
-        ///			&quot;HotKeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
+        ///			&quot;Hotkeys&quot;: [{ &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot;: &quot;D1&quot; }],
         ///			&quot;FileName&quot;: &quot;wt&quot;,
         ///			&quot;ProcessName&quot;: &quot;WindowsTerminal&quot;
         ///		}
         ///	],
         ///
-        ///	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
-        ///	&quot;HotKeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot; [rest of string was truncated]&quot;;.
+        ///	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
+        ///	&quot;Hotkeys&quot;: [ { &quot;Modifiers&quot;: &quot;Control&quot;, &quot;Key&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         public static string wtq_example_wt {
             get {

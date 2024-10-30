@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqProcessFactory, WtqProcessFactory>()
 			.AddSingletonHostedService<IWtqAppRepo, WtqAppRepo>()
-			.AddSingletonHostedService<IWtqHotKeyService, WtqHotKeyService>()
+			.AddSingletonHostedService<IWtqHotkeyService, WtqHotkeyService>()
 			.AddSingletonHostedService<IWtqFocusTracker, WtqFocusTracker>()
 
 			.AddHostedService<WtqService>();

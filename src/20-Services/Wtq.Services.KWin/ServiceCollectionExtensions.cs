@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<KWinScriptExecutor>()
 			.AddKWinProcessService()
 			.AddKWinScreenCoordsProvider()
-			.AddHostedService<KWinHotKeyService>();
+			.AddHostedService<KWinHotkeyService>();
 	}
 
 	public static IServiceCollection AddKWinProcessService(this IServiceCollection services)
