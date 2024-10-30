@@ -2,8 +2,6 @@ namespace Wtq.Services.KWin.Dto;
 
 public class KWinSupportInformation
 {
-	private static readonly ILogger _log = Log.For<KWinSupportInformation>();
-
 	public required ICollection<KWinScreenInfo> Screens { get; init; }
 
 	public static KWinSupportInformation Parse(string supportInfoStr)
@@ -14,7 +12,6 @@ public class KWinSupportInformation
 
 		var headerRegex = new Regex("^screen (?<index>[0-9]+):$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		var nameRegex = new Regex("^name: (?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		var enabledRegex = new Regex("^enabled: (?<enabled>[0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		var geometryRegex = new Regex("^geometry: (?<x>[0-9]+),(?<y>[0-9]+),(?<w>[0-9]+)x(?<h>[0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 		KWinScreenInfo? scr = null;

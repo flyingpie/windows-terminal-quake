@@ -20,7 +20,7 @@ public interface IKWinClient : IAsyncDisposable
 
 	Task<KWinWindow?> GetForegroundWindowAsync();
 
-	Task<KWinWindow> GetWindowAsync(
+	Task<KWinWindow?> GetWindowAsync(
 		KWinWindow window);
 
 	Task<ICollection<KWinWindow>> GetWindowListAsync(
@@ -54,10 +54,5 @@ public interface IKWinClient : IAsyncDisposable
 	Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
-		CancellationToken cancellationToken);
-
-	Task SetWindowVisibleAsync(
-		KWinWindow window,
-		bool isVisible,
 		CancellationToken cancellationToken);
 }

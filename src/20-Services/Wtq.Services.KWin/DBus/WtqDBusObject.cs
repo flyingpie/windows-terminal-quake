@@ -8,26 +8,21 @@ using Wtq.Services.KWin.Exceptions;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TODO: Add second interface for internal-facing stuff?
+internal sealed class WtqDBusObject(
+	IDBusConnection dbus,
+	IWtqBus bus)
+	: IAsyncInitializable, IWtqDBusObject
 {
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
+	private readonly CancellationTokenSource _cts = new();
+	private readonly AsyncAutoResetEvent _res = new(false);
 	private readonly ConcurrentQueue<CommandInfo> _commandQueue = new();
 	private readonly ConcurrentDictionary<Guid, KWinResponseWaiter> _waiters = new();
 	private readonly ILogger _log = Log.For<WtqDBusObject>();
 
-	private readonly IWtqBus _bus;
-	private readonly IDBusConnection _dbus;
-	// private readonly Initializer _init;
-
-	public WtqDBusObject(
-		IDBusConnection dbus,
-		IWtqBus bus)
-	{
-		_bus = Guard.Against.Null(bus);
-		_dbus = Guard.Against.Null(dbus);
-		// _init = new Initializer<WtqDBusObject>(InitializeAsync);
-	}
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
+	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
 	public int InitializePriority => -10;
 
@@ -35,51 +30,21 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 
 	public async Task InitializeAsync()
 	{
-		await _dbus.RegisterServiceAsync("wtq.svc", this).ConfigureAwait(false);
+		await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+
+		StartNoOpLoop();
 	}
 
 	public void Dispose()
 	{
+		_cts.Dispose();
 		_dbus.Dispose();
-		// _init.Dispose();
-	}
-
-	// public async Task InitAsync()
-	// {
-	// 	await _init.InitAsync().NoCtx();
-	// }
-
-	private readonly CancellationTokenSource _cts = new();
-
-	/// <summary>
-	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connections is dropped.
-	/// </summary>
-	private void StartNoOpLoop()
-	{
-		// TODO: As event.
-		_ = Task.Run(async () =>
-		{
-			while(!_cts.IsCancellationRequested)
-			{
-				try
-				{
-					await SendCommandAsync("NOOP").NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
-				}
-
-				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
-			}
-		});
 	}
 
 	public Task LogAsync(string level, string msg)
 	{
 		// TODO
-		_log.LogDebug($"{level} {msg}");
+		_log.LogDebug("{Level} {Message}", level, msg);
 
 		return Task.CompletedTask;
 	}
@@ -90,8 +55,6 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
 	{
 		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
-
-		// await _init.InitAsync().NoCtx();
 
 		// Add response waiter.
 		var id = cmdInfo.ResponderId;
@@ -107,7 +70,6 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 		_res.Set();
 
 		// Wait for response
-		// TODO: Cancellation token.
 		try
 		{
 			return await waiter.Task.TimeoutAfterAsync(TimeSpan.FromSeconds(1)).NoCtx();
@@ -118,15 +80,9 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 		}
 	}
 
-	private AsyncAutoResetEvent _res = new(false);
-
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync(string a, string b, string c)
 	{
-		// _log.LogInformation($"DoTheThing('{a}', '{b}', '{c}')");
-
-		// await _init.InitAsync().NoCtx();
-
 		while (true)
 		{
 			// See if we have a command on the queue to send back.
@@ -137,29 +93,13 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 			}
 
 			// If not, wait for one to be queued.
-			// TODO: Can this timeout, do we need to drop NOOPs?
 			await _res.WaitAsync().NoCtx();
 		}
-
-		// _log.LogInformation("No command in queue");
-		// await Task.Delay(TimeSpan.FromMilliseconds(100));
-		//
-		// return JsonSerializer.Serialize(new CommandInfo()
-		// {
-		// 	Type = "NOOP",
-		// 	// msg = "Dooods!",
-		// 	Params = new
-		// 	{
-		// 		x = 42,
-		// 	},
-		// });
 	}
 
 	/// <inheritdoc/>
-	public async Task SendResponseAsync(string respInfoStr)
+	public Task SendResponseAsync(string respInfoStr)
 	{
-		// await _init.InitAsync().NoCtx();
-
 		var respInfo = JsonSerializer.Deserialize<ResponseInfo>(respInfoStr);
 
 		_log.LogTrace("Got response {Response}", respInfo);
@@ -169,13 +109,13 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 		if (!hasResponder)
 		{
 			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
-			return;
+			return Task.CompletedTask;
 		}
 
 		if (!_waiters.TryRemove(respInfo.ResponderId, out var waiter))
 		{
 			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
-			return;
+			return Task.CompletedTask;
 		}
 
 		if (respInfo.Exception != null)
@@ -186,13 +126,13 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 		{
 			waiter.SetResult(respInfo);
 		}
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc/>
-	public async Task OnPressShortcutAsync(string modStr, string keyStr)
+	public Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
-		// await _init.InitAsync().NoCtx();
-
 		_log.LogInformation(
 			"{MethodName}({Modifier}, {Key})",
 			nameof(OnPressShortcutAsync),
@@ -208,5 +148,32 @@ internal sealed class WtqDBusObject : IAsyncInitializable, IWtqDBusObject // TOD
 				Key = key,
 				Modifiers = mod,
 			});
+
+		return Task.CompletedTask;
+	}
+
+	/// <summary>
+	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+	/// and the connections is dropped.
+	/// </summary>
+	private void StartNoOpLoop()
+	{
+		// TODO: Generalize loop.
+		_ = Task.Run(async () =>
+		{
+			while (!_cts.IsCancellationRequested)
+			{
+				try
+				{
+					await SendCommandAsync("NOOP").NoCtx();
+				}
+				catch (Exception ex)
+				{
+					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
+				}
+
+				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
+			}
+		});
 	}
 }

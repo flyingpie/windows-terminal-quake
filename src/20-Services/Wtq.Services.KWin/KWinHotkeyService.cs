@@ -6,7 +6,7 @@ using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
 
-internal class KWinHotkeyService : IAsyncInitializable, IDisposable
+internal class KWinHotkeyService : IAsyncInitializable
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IKWinClient _kwinClient;
@@ -22,21 +22,13 @@ internal class KWinHotkeyService : IAsyncInitializable, IDisposable
 		_dbus = dbus;
 	}
 
-	public void Dispose()
-	{
-		// Nothing to do.
-	}
-
-	private IDisposable _disp1;
-	private IDisposable _disp2;
-
 	public async Task InitializeAsync()
 	{
 		var kwinx = await _dbus.GetKWinServiceAsync();
 
 		var gl = kwinx.CreateKGlobalAccel("/kglobalaccel");
 		var comp = kwinx.CreateComponent("/component/kwin");
-		var kwin = kwinx.CreateKWin("/org/kde/KWin");
+		// var kwin = kwinx.CreateKWin("/org/kde/KWin");
 
 		// Clear.
 		for (int i = 0; i < 5; i++)
@@ -49,15 +41,15 @@ internal class KWinHotkeyService : IAsyncInitializable, IDisposable
 		// TODO: Although we haven't gotten shortcut registration to work reliably through direct DBus calls,
 		// we _can_ catch when shortcuts are being pressed/released.
 		// So dial down the JS part to just registration, remove the callback to WTQ part.
-		_disp1 = await comp.WatchGlobalShortcutPressedAsync((exception, tuple) =>
-		{
-			// Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
-		});
+		// _disp1 = await comp.WatchGlobalShortcutPressedAsync((exception, tuple) =>
+		// {
+		// 	// Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+		// });
 
-		_disp2 = await comp.WatchGlobalShortcutReleasedAsync((exception, tuple) =>
-		{
-			// Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
-		});
+		// _disp2 = await comp.WatchGlobalShortcutReleasedAsync((exception, tuple) =>
+		// {
+		// 	// Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+		// });
 
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q);
 

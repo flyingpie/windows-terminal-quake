@@ -40,8 +40,6 @@ public abstract class WtqWindow
 
 	public abstract Task SetTransparencyAsync(int transparency);
 
-	public abstract Task SetVisibleAsync(bool isVisible);
-
 	public abstract Task SetWindowTitleAsync(string title);
 
 	public override string ToString() => $"[{Id}] {Name}";

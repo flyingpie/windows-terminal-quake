@@ -153,11 +153,6 @@ public sealed class Win32WtqWindow(
 		return Task.CompletedTask;
 	}
 
-	public override Task SetVisibleAsync(bool isVisible)
-	{
-		return Task.CompletedTask;
-	}
-
 	public override Task SetWindowTitleAsync(string title)
 	{
 		User32.SetWindowText(_process.MainWindowHandle, title);

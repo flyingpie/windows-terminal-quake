@@ -345,13 +345,4 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	w.skipSwitcher = skip;
 	w.skipTaskbar = skip;
 };
-
-cmds["SET_WINDOW_VISIBLE"] = (cmdInfo) => {
-	const p = cmdInfo.params;
-	const w = kwin.getWindowByInternalIdRequired(p.internalId);
-
-	log.info(`Setting visibility of window with internal id '${p.internalId}' to '${p.opacity}' to '${p.isVisible}'`);
-
-	w.minimized = p.isVisible;
-};
 ////////////////////////////////////////////////////////////

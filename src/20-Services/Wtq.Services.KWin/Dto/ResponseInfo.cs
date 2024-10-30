@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Wtq.Services.KWin.Exceptions;
 
 namespace Wtq.Services.KWin.Dto;
@@ -39,5 +38,5 @@ public class ResponseInfo
 		return Params.Deserialize<T>();
 	}
 
-	public override string ToString() => $"[{CommandType}] exc:{(ExceptionMessage)}";
+	public override string ToString() => $"[{CommandType}] exc:{ExceptionMessage}";
 }
