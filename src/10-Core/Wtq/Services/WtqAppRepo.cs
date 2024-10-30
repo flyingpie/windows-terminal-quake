@@ -133,6 +133,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			}
 
 			_log.LogInformation("Dropped options {Options}, removing app handle {App}", opt, app);
+
 			await app.DisposeAsync().NoCtx();
 
 			_apps.Remove(app);
