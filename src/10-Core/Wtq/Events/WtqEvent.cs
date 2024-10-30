@@ -1,8 +1,8 @@
 namespace Wtq.Events;
 
-public class WtqEvent : IWtqEvent
+/// <summary>
+/// Base class for all events, used for generics and constraints.
+/// </summary>
+public abstract class WtqEvent
 {
-	public WtqApp? App { get; init; }
-
-	public override string ToString() => $"[{nameof(WtqEvent)}] App:{App}";
 }
