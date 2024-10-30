@@ -105,9 +105,6 @@ public sealed class WtqApp : IAsyncDisposable
 		// Move window off-screen.
 		await _toggler.ToggleOffAsync(this, mods).NoCtx();
 
-		// Hide window.
-		await Window.SetVisibleAsync(false).NoCtx();
-
 		await UpdateWindowPropsAsync().NoCtx();
 	}
 
@@ -206,8 +203,7 @@ public sealed class WtqApp : IAsyncDisposable
 			return false;
 		}
 
-		// Make sure the app window is visible and has focus.
-		await Window.SetVisibleAsync(true).NoCtx();
+		// Make sure the app has focus.
 		await Window.BringToForegroundAsync().NoCtx();
 
 		// Move app onto screen.
