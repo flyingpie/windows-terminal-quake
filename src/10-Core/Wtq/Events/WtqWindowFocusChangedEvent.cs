@@ -1,5 +1,9 @@
 namespace Wtq.Events;
 
+/// <summary>
+/// Fired when one window loses focus, and/or another one gains focus.<br/>
+/// Note that this also includes windows not managed by WTQ.
+/// </summary>
 public class WtqWindowFocusChangedEvent : WtqEvent
 {
 	/// <summary>
