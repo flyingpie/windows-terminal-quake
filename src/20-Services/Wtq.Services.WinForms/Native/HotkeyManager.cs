@@ -32,7 +32,7 @@ internal static class HotkeyManager
 
 	private delegate void RegisterHotkeyDelegate(nint hwnd, int id, uint modifiers, uint key);
 
-	private delegate void UnRegisterHotkeyDelegate(nint hwnd, int id);
+	private delegate void UnregisterHotkeyDelegate(nint hwnd, int id);
 
 	/// <summary>
 	/// Fired when the registered hotkey is pressed. Note that <see cref="RegisterHotkey"/> needs to be called first.
@@ -50,7 +50,7 @@ internal static class HotkeyManager
 
 	public static void UnregisterHotkey(int id)
 	{
-		_wnd.Invoke(new UnRegisterHotkeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
+		_wnd.Invoke(new UnregisterHotkeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
 	}
 
 	/// <summary>
