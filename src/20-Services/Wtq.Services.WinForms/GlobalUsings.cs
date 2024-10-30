@@ -9,3 +9,6 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using System.Windows.Forms;
+global using Wtq.Events;
+global using Wtq.Utils;
+global using Wtq.Utils.AsyncInit;
