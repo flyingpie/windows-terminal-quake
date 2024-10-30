@@ -1,23 +1,16 @@
-using Wtq.Configuration;
-using Wtq.Exceptions;
 using Wtq.Services.Win32.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WtqProcess : WtqWindow
+public sealed class Win32WtqWindow(
+	Process process)
+	: WtqWindow
 {
-	private static readonly ILogger _log = Log.For<Win32WtqProcess>();
+	private static readonly ILogger _log = Log.For<Win32WtqWindow>();
 
-	// TODO: Refresh?
-	private readonly Process _process;
+	private readonly Process _process = Guard.Against.Null(process);
 
-	public Win32WtqProcess(Process process)
-	{
-		_process = Guard.Against.Null(process);
-	}
-
-	public override string Id => _process.Id.ToString();
+	public override string Id => _process.Id.ToString(CultureInfo.InvariantCulture);
 
 	public override bool IsValid => !_process.HasExited;
 

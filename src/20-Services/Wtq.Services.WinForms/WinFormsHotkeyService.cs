@@ -1,11 +1,8 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
 using Wtq.Services.WinForms.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotkeyService : IHostedService
+public class WinFormsHotkeyService : IAsyncInitializable
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
@@ -36,7 +33,9 @@ public class WinFormsHotkeyService : IHostedService
 		};
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-
-	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task InitializeAsync()
+	{
+		// Only here to make sure an instance of this class is created.
+		return Task.CompletedTask;
+	}
 }

@@ -1,8 +1,5 @@
-using Wtq.Configuration;
-using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
@@ -51,7 +48,7 @@ public sealed class Win32WindowService :
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return Task.FromResult<WtqWindow?>(new Win32WtqProcess(Process.GetProcessById((int)fg)));
+				return Task.FromResult<WtqWindow?>(new Win32WtqWindow(Process.GetProcessById((int)fg)));
 			}
 		}
 		catch (Exception ex)
@@ -88,10 +85,6 @@ public sealed class Win32WindowService :
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
 			UseShellExecute = false,
-			Environment =
-			{
-				{ "WTQ_START", opts.Name },
-			},
 		};
 
 		// Start
@@ -192,7 +185,7 @@ public sealed class Win32WindowService :
 					continue;
 				}
 
-				var wtqProcess = new Win32WtqProcess(proc);
+				var wtqProcess = new Win32WtqWindow(proc);
 				res.Add(wtqProcess);
 			}
 
