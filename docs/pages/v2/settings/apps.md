@@ -11,8 +11,8 @@ Here's an example of WTQ toggling a PowerShell prompt:
 			// A unique name for the app, used for logging.
 			"Name":		"PowerShell",
 
-			// Hot keys that toggle this app only.
-			"HotKeys":	[{ "Modifiers": "Control", "Key": "D1" }],
+			// Hotkeys that toggle this app only.
+			"Hotkeys":	[{ "Modifiers": "Control", "Key": "D1" }],
 
 			// Used to find an existing instance, or start a new one.
 			"FileName":	"powershell"
@@ -28,17 +28,17 @@ You can define more than 1 app:
 	"Apps": [
 		{
 			"Name":		"App Name 1",
-			"HotKeys":	[{ "Modifiers": "Control", "Key": "D1" }], // Ctrl + 1
+			"Hotkeys":	[{ "Modifiers": "Control", "Key": "D1" }], // Ctrl + 1
 			...
 		},
 		{
 			"Name":		"App Name 2",
-			"HotKeys":	[{ "Modifiers": "Control", "Key": "D2" }], // Ctrl + 2
+			"Hotkeys":	[{ "Modifiers": "Control", "Key": "D2" }], // Ctrl + 2
 			...
 		},
 		{
 			"Name":		"App Name 3",
-			"HotKeys":	[{ "Modifiers": "Control", "Key": "D3" }], // Ctrl + 3
+			"Hotkeys":	[{ "Modifiers": "Control", "Key": "D3" }], // Ctrl + 3
 			...
 		},
 		...
@@ -53,7 +53,7 @@ Absolute file paths work too, if the app is not on the PATH:
 	"Apps": [
 		{
 			"Name":			"WezTerm",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"C:/Program Files/WezTerm/wezterm-gui.exe"
 		}
 	]
@@ -69,8 +69,8 @@ Here are some more app-specific properties:
 			// For use in logging and error messages.
 			"Name":			"Name Of The App",
 
-			// A list of hot keys that toggle this app, and this app only.
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			// A list of hotkeys that toggle this app, and this app only.
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 
 			// The file name of the app to attach to. This is used to both find an existing instance of an already running app, and for starting a new one.
 			"FileName":		"C:/Program Files/WezTerm/wezterm-gui.exe",
@@ -100,7 +100,7 @@ Here are some more app-specific properties:
 	"Apps": [
 		{
 			"Name":			"Windows Terminal",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"wt",
 			"ProcessName":	"WindowsTerminal"
 		}
@@ -119,7 +119,7 @@ Windows Terminal has a particular behavior where the initial "wt.exe" starts ano
 	"Apps": [
 		{
 			"Name":			"WezTerm",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"wezterm-gui"
 		}
 	]
@@ -135,7 +135,7 @@ Windows Terminal has a particular behavior where the initial "wt.exe" starts ano
 	"Apps": [
 		{
 			"Name":			"Alacritty",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"alacritty"
 		}
 	]
@@ -151,7 +151,7 @@ Windows Terminal has a particular behavior where the initial "wt.exe" starts ano
 	"Apps": [
 		{
 			"Name":			"Double Commander",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"doublecmd"
 		}
 	]

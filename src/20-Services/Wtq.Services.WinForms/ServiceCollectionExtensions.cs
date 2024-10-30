@@ -5,10 +5,10 @@ namespace Wtq.Services.WinForms;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddWinFormsHotKeyService(this IServiceCollection services)
+	public static IServiceCollection AddWinFormsHotkeyService(this IServiceCollection services)
 	{
 		return services
-			.AddHostedService<WinFormsHotKeyService>();
+			.AddHostedService<WinFormsHotkeyService>();
 	}
 
 	public static IServiceCollection AddWinFormsScreenInfoProvider(this IServiceCollection services)

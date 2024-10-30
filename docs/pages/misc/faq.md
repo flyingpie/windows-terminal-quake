@@ -15,7 +15,7 @@ If you want to toggle Windows Terminal, you can point WTQ to it, instead of the 
 	"Apps": [
 		{
 			"Name":			"Windows Terminal",
-			"HotKeys":		[{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys":		[{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName":		"wt",
 			"ProcessName":	"WindowsTerminal"
 		}

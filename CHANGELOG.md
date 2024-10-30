@@ -19,7 +19,7 @@
 
 Previously, a background worker was constantly looking for configured apps, and starting processes for ones that weren't running (by default, unless the **AttachMode** was set to something other than **FindOrCreate**).
 
-Now, finding and creating app processes only happens when WTQ starts (configurable) and when a hot key is pressed.
+Now, finding and creating app processes only happens when WTQ starts (configurable) and when a hotkey is pressed.
 
 As a result, an app that is manually closed is no longer automatically restarted. And perhaps more relevant, when starting an app doesn't succeed, it no longer results in an infinite retry loop.
 
@@ -139,7 +139,7 @@ Old syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+    "Hotkeys": [ { "Modifiers": "Control", "Key": "D1" } ],
     "FindExisting": {
       "ProcessName": "WindowsTerminal"
     },
@@ -157,7 +157,7 @@ New syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }
@@ -174,7 +174,7 @@ Just looks for existing processes as specified by the "FileName"- and/or "Proces
 - **Start** (very experimental)
 Always starts a new process, specifically to be used by WTQ. Meant for apps that have multiple open instances. Initially meant for (among other things) browsers, but these turn out to be more complicated. This will be documented later.
 - **Manual**
-Attaches whatever app has focus, when the hot key is pressed. Keeps the app attached until WTQ is closed.
+Attaches whatever app has focus, when the hotkey is pressed. Keeps the app attached until WTQ is closed.
 
 The mode can be specified per app (note that "FindOrStart" is the default:
 ```json
@@ -182,7 +182,7 @@ The mode can be specified per app (note that "FindOrStart" is the default:
   {
     "Name": "Terminal",
     "AttachMode": "Find", // Only attach to process that is already running, don't auto-start one.
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }

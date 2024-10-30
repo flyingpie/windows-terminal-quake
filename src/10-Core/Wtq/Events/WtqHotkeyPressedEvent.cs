@@ -1,6 +1,6 @@
 namespace Wtq.Events;
 
-public sealed class WtqHotKeyPressedEvent : IWtqEvent
+public sealed class WtqHotkeyPressedEvent : IWtqEvent
 {
 	public WtqApp? App { get; init; }
 

@@ -4,16 +4,16 @@ using Wtq.Events;
 namespace Wtq.Services;
 
 /// <summary>
-/// Receives raw hot key events from a platform-specific service, and converts them to more
+/// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="Events.WtqToggleAppEvent"/>.
 /// </summary>
-public class WtqHotKeyService : IHostedService, IWtqHotKeyService
+public class WtqHotkeyService : IHostedService, IWtqHotkeyService
 {
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 
-	public WtqHotKeyService(
+	public WtqHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -24,7 +24,7 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 		_opts.OnChange(SendRegisterEvents);
 
-		_bus.OnEvent<WtqHotKeyPressedEvent>(
+		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
 				_bus.Publish(new WtqToggleAppEvent()
@@ -38,7 +38,7 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 	public WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
 		if (opt == null)
 		{
 			return null;
@@ -66,9 +66,9 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 		// _log
 		foreach (var app in opts.Apps)
 		{
-			foreach (var hk in app.HotKeys)
+			foreach (var hk in app.Hotkeys)
 			{
-				_bus.Publish(new WtqRegisterHotKeyEvent()
+				_bus.Publish(new WtqRegisterHotkeyEvent()
 				{
 					Key = hk.Key,
 					Modifiers = hk.Modifiers,
@@ -76,9 +76,9 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 			}
 		}
 
-		foreach (var hk in opts.HotKeys)
+		foreach (var hk in opts.Hotkeys)
 		{
-			_bus.Publish(new WtqRegisterHotKeyEvent()
+			_bus.Publish(new WtqRegisterHotkeyEvent()
 			{
 				Key = hk.Key,
 				Modifiers = hk.Modifiers,
