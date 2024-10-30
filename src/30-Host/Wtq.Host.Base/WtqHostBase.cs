@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Wtq.Configuration;
+using Wtq.Utils;
+using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Host.Base;
 
@@ -54,6 +56,9 @@ public class WtqHostBase
 					.AddWtqCore();
 
 				ConfigureServices(opt);
+
+				opt
+					.AddAsyncInitializable();
 			})
 			.UseSerilog()
 			.Build();
@@ -63,6 +68,8 @@ public class WtqHostBase
 	{
 		try
 		{
+			await _host.Services.InitializeAsync().NoCtx();
+
 			await _host
 				.RunAsync()
 				.ConfigureAwait(false);
