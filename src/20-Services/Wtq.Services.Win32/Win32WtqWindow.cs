@@ -1,39 +1,20 @@
-using Wtq.Configuration;
-using Wtq.Exceptions;
 using Wtq.Services.Win32.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WtqProcess : WtqWindow
+public sealed class Win32WtqWindow(
+	Process process)
+	: WtqWindow
 {
-	private static readonly ILogger _log = Log.For<Win32WtqProcess>();
+	private static readonly ILogger _log = Log.For<Win32WtqWindow>();
 
-	// TODO: Refresh?
-	private readonly Process _process;
+	private readonly Process _process = Guard.Against.Null(process);
 
-	public Win32WtqProcess(Process process)
-	{
-		_process = Guard.Against.Null(process);
-	}
-
-	public override int Id => _process.Id;
+	public override string Id => _process.Id.ToString(CultureInfo.InvariantCulture);
 
 	public override bool IsValid => !_process.HasExited;
 
 	public override string? Name => _process.ProcessName;
-
-	public override Rectangle WindowRect
-	{
-		get
-		{
-			var bounds = default(Bounds);
-
-			User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
-
-			return bounds.ToRectangle();
-		}
-	}
 
 	public override Task BringToForegroundAsync()
 	{
@@ -41,6 +22,15 @@ public sealed class Win32WtqProcess : WtqWindow
 		User32.ForcePaint(_process.MainWindowHandle);
 
 		return Task.CompletedTask;
+	}
+
+	public override Task<Rectangle> GetWindowRectAsync()
+	{
+		var bounds = default(Bounds);
+
+		User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
+
+		return Task.FromResult(bounds.ToRectangle());
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -56,17 +46,30 @@ public sealed class Win32WtqProcess : WtqWindow
 		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public override Task MoveToAsync(Rectangle rect, bool repaint = true)
+	public override async Task MoveToAsync(Point location)
 	{
+		var r = await GetWindowRectAsync().NoCtx();
+
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
-			x: rect.X,
-			y: rect.Y,
-			nWidth: rect.Width,
-			nHeight: rect.Height,
-			bRepaint: repaint);
+			x: location.X,
+			y: location.Y,
+			nWidth: r.Width,
+			nHeight: r.Height,
+			bRepaint: true);
+	}
 
-		return Task.CompletedTask;
+	public override async Task ResizeAsync(Size size)
+	{
+		var r = await GetWindowRectAsync().NoCtx();
+
+		User32.MoveWindow(
+			hWnd: _process.MainWindowHandle,
+			x: r.X,
+			y: r.Y,
+			nWidth: size.Width,
+			nHeight: size.Height,
+			bRepaint: true);
 	}
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
@@ -152,6 +155,13 @@ public sealed class Win32WtqProcess : WtqWindow
 
 	public override Task SetVisibleAsync(bool isVisible)
 	{
+		return Task.CompletedTask;
+	}
+
+	public override Task SetWindowTitleAsync(string title)
+	{
+		User32.SetWindowText(_process.MainWindowHandle, title);
+
 		return Task.CompletedTask;
 	}
 }
