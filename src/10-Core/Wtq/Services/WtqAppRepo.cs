@@ -75,9 +75,9 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		return new WtqApp(
 			_opts,
-			_windowResolver,
-			_screenInfoProvider,
 			_toggleService,
+			_screenInfoProvider,
+			_windowResolver,
 			() => GetOptionsByNameRequired(app.Name),
 			app.Name);
 	}
