@@ -1,5 +1,8 @@
+using Nuke.Common.IO;
 using Octokit;
 using Serilog;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -10,6 +13,28 @@ using System.Threading.Tasks;
 public static partial class NukeExtensions
 {
 	private static readonly string ApplicationOctetStream = "application/octet-stream";
+
+	/// <summary>
+	/// Deletes all files under the specified <paramref name="path"/>, except for any <paramref name="excludes"/>.
+	/// </summary>
+	public static void DeleteFilesExceptFor(this AbsolutePath path, params string[] excludes)
+	{
+		var wl = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+		foreach (var ex in excludes)
+		{
+			wl.Add(ex);
+		}
+
+		foreach (var f in path.GetFiles())
+		{
+			if (wl.Contains(f.Name))
+			{
+				continue;
+			}
+
+			f.DeleteFile();
+		}
+	}
 
 	public static async Task<string> GetChangeLogEntryAsync(
 		string path,
