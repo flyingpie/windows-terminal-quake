@@ -139,7 +139,7 @@ Old syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+    "Hotkeys": [ { "Modifiers": "Control", "Key": "D1" } ],
     "FindExisting": {
       "ProcessName": "WindowsTerminal"
     },
@@ -157,7 +157,7 @@ New syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }
@@ -182,7 +182,7 @@ The mode can be specified per app (note that "FindOrStart" is the default:
   {
     "Name": "Terminal",
     "AttachMode": "Find", // Only attach to process that is already running, don't auto-start one.
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }

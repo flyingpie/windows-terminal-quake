@@ -4,67 +4,22 @@
 	"Apps": [
 		// WezTerm
 		{
-			"Name": "WezTerm",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "wezterm",
-			"Opacity": 90,
-			"ProcessName": "org.wezfurlong.wezterm"
-		},
-
-		// Dolphin
-		{
-			"Name": "Dolphin",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName": "dolphin",
-			"HorizontalScreenCoverage": 80,
-			"ProcessName": "org.kde.dolphin"
-		},
-
-		// System Info
-		{
-			"Name": "System Monitor",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D3" }],
-			"FileName": "plasma-systemmonitor",
-			"ProcessName": "org.kde.plasma-systemmonitor"
-		},
-
-		// KeePass
-		{
-			"Name": "KeePass",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D4" }],
-			"FileName": "keepassxc",
-			"ProcessName": "org.keepassxc.KeePassXC",
-			"HorizontalAlign": "Right",
-			"HorizontalScreenCoverage": 50,
-			"AlwaysOnTop": true,
-			"HideOnFocusLost": false
-		},
-
-		// Spotify
-		{
-			"Name": "Spotify",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D5" }],
-			"FileName": "com.spotify.Client",
-			"ProcessName": "Spotify"
+			"Name": "PowerShell",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"FileName": "powershell"
 		}
 
 		// Discord
 		//{
-		//	"Name": "Discord",
-		//	"HotKeys": [{ "Modifiers": "Control", "Key": "D6" }],
-		//	"FileName": "vesktop",
-		//	"HorizontalAlign": "Right",
-		//	"HorizontalScreenCoverage": 70,
-		//	"AlwaysOnTop": true,
-		//	"HideOnFocusLost": false
+		//	"Name": "Terminal",
+		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"FileName": "wt",
+		//	"ProcessName": "WindowsTerminal"
 		//}
 	],
 
-	"AnimationDurationMs": 200,
-	"AnimationTargetFps": 60,
-
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
+	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".
