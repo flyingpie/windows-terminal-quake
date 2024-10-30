@@ -1,18 +1,14 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Configuration;
-using Wtq.Exceptions;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32ProcessService :
+public sealed class Win32WindowService :
+	IAsyncInitializable,
 	IDisposable,
-	IHostedService,
-	IWtqProcessService
+	IWtqWindowService
 {
-	private readonly ILogger _log = Log.For<Win32ProcessService>();
+	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
 
@@ -24,6 +20,11 @@ public sealed class Win32ProcessService :
 		Guard.Against.Null(opts);
 
 		await CreateProcessAsync(opts).ConfigureAwait(false);
+	}
+
+	public async Task InitializeAsync()
+	{
+		await UpdateProcessesAsync().ConfigureAwait(false);
 	}
 
 	public void Dispose()
@@ -40,14 +41,14 @@ public sealed class Win32ProcessService :
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public WtqWindow? GetForegroundWindow()
+	public Task<WtqWindow?> GetForegroundWindowAsync()
 	{
 		try
 		{
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return new Win32WtqProcess(Process.GetProcessById((int)fg));
+				return Task.FromResult<WtqWindow?>(new Win32WtqWindow(Process.GetProcessById((int)fg)));
 			}
 		}
 		catch (Exception ex)
@@ -55,7 +56,7 @@ public sealed class Win32ProcessService :
 			_log.LogWarning(ex, "Error looking up foreground process: {Message}", ex.Message);
 		}
 
-		return null;
+		return Task.FromResult<WtqWindow?>(null);
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
@@ -63,16 +64,6 @@ public sealed class Win32ProcessService :
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
-	}
-
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-		await UpdateProcessesAsync().ConfigureAwait(false);
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
 	}
 
 	private static uint GetForegroundProcessId()
@@ -94,31 +85,21 @@ public sealed class Win32ProcessService :
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
 			UseShellExecute = false,
-			Environment =
-			{
-				{ "WTQ_START", opts.Name },
-			},
 		};
 
 		// Start
-		Retry.Default
-			.Execute(
-				() =>
-				{
-					try
-					{
-						process.Start();
-					}
-					catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
-					{
-						throw new CancelRetryException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
-					}
-					catch (Exception ex)
-					{
-						_log.LogError(ex, "Error starting process: {Message}", ex.Message);
-						throw new WtqException($"Error starting instance of app '{opts}': {ex.Message}", ex);
-					}
-				});
+		try
+		{
+			process.Start();
+		}
+		catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
+		{
+			throw new WtqException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
+		}
+		catch (Exception ex)
+		{
+			throw new WtqException($"Error starting process for app '{opts}': {ex.Message}", ex);
+		}
 
 		await UpdateProcessesAsync(force: true).NoCtx();
 	}
@@ -155,7 +136,7 @@ public sealed class Win32ProcessService :
 					continue;
 				}
 
-				var wtqProcess = new Win32WtqProcess(proc);
+				var wtqProcess = new Win32WtqWindow(proc);
 				res.Add(wtqProcess);
 			}
 
