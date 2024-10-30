@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Wtq.Configuration;
 using Wtq.Utils;
+using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Host.Base;
 
