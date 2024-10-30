@@ -1,8 +1,11 @@
 using Wtq.Services;
 
-
 namespace Wtq;
 
+/// <summary>
+/// Orchestrates toggling on- and off of apps, and sending focus to the right window.
+/// </summary>
+// TODO: Better name.
 public sealed class WtqService : IDisposable, IAsyncInitializable
 {
 	private readonly ILogger<WtqService> _log;
@@ -52,6 +55,7 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 		var open = _appRepo.GetOpen();
 		if (open != null && open != ev.App)
 		{
+			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, ev.App);
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			await ev.App.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
@@ -60,6 +64,8 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 		// "Toggling app"
 		if (ev.App.IsOpen)
 		{
+			_log.LogInformation("Closing previously open app '{App}'", ev.App);
+
 			// Close app.
 			ev.App.CloseAsync().NoCtx();
 
@@ -68,6 +74,8 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 		}
 		else
 		{
+			_log.LogInformation("Opening previously closed app '{App}'", ev.App);
+
 			// Open app.
 			ev.App.OpenAsync().NoCtx();
 		}
@@ -108,6 +116,7 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 				return;
 			}
 
+			_log.LogInformation("App '{App}' lost focus, closing", appLostFocus);
 			await appLostFocus.CloseAsync().NoCtx();
 		}
 	}

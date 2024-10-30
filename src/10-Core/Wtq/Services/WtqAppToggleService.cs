@@ -57,7 +57,7 @@ public class WtqAppToggleService(
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
 		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
 
-		_log.LogInformation("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
 		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 

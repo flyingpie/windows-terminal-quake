@@ -18,17 +18,17 @@ public sealed class WtqApp : IAsyncDisposable
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly IWtqWindowResolver _windowResolver;
-	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggler;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
+	private readonly IWtqWindowResolver _windowResolver;
 
 	private Rectangle? _originalRect;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqWindowResolver windowResolver,
-		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqAppToggleService toggler,
+		IWtqScreenInfoProvider screenInfoProvider,
+		IWtqWindowResolver windowResolver,
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
@@ -40,11 +40,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
 
-		// TODO: Extract method.
+		// Start loop that updates app state periodically.
+		// TODO: Generalize loop.
 		_ = Task.Run(
 			async () =>
 			{
-				// TODO: Make nicer.
 				while (true)
 				{
 					await UpdateLocalAppStateAsync(allowStartNew: false).NoCtx();
@@ -66,12 +66,25 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public bool IsOpen { get; private set; } = true;
 
+	/// <summary>
+	/// The name of the app, as configured in the settings file.<br/>
+	/// Used for logging purposes, and correlating across configuration changes.
+	/// </summary>
 	public string Name { get; }
 
+	/// <summary>
+	/// Returns the <see cref="WtqAppOptions"/> associated with this app.
+	/// </summary>
 	public WtqAppOptions Options => _optionsAccessor();
 
+	/// <summary>
+	/// The <see cref="WtqWindow"/> that is tracked by this app (if any).
+	/// </summary>
 	public WtqWindow? Window { get; private set; }
 
+	/// <summary>
+	/// Toggle the app off the screen.
+	/// </summary>
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
 		if (!IsOpen)
@@ -129,16 +142,16 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		_log.LogTrace("Looking for current screen rect for app {App}", this);
 
-		// Get All screen rects.
+		// Get all screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
 
 		// Get window rect of this app.
 		var windowRect = await GetWindowRectAsync().NoCtx();
 
 		// Look for screen rect that contains the left-top corner of the app window.
+		// TODO: Use screen with largest overlap instead?
 		foreach (var screenRect in screenRects)
 		{
-			// TODO: Use screen with largest overlap instead?
 			if (screenRect.Contains(windowRect.Location))
 			{
 				_log.LogTrace("Got screen {Screen}, for app {App}", screenRect, this);
@@ -227,24 +240,24 @@ public sealed class WtqApp : IAsyncDisposable
 			return;
 		}
 
-		// If we don't have a process handle, see if we can get one.
-		_log.LogInformation("No process attached to app {App}, asking process factory for one now", this);
+		// If we don't have a window handle, see if we can get one.
+		_log.LogInformation("No window attached to app {App}, asking window resolver for one now", this);
 
-		// Ask the process factory for a new handle.
-		var process = await _windowResolver.GetWindowHandleAsync(Options, allowStartNew).NoCtx();
+		// Ask the window resolver for a new handle.
+		var window = await _windowResolver.GetWindowHandleAsync(Options, allowStartNew).NoCtx();
 
-		// Log a warning if we don't have a process handle at this point.
-		if (process == null)
+		// Log a warning if we don't have a window handle at this point.
+		if (window == null)
 		{
-			_log.LogWarning("No process instances found for app '{App}'", Options);
+			_log.LogWarning("No window found for app '{App}'", Options);
 			return;
 		}
 
-		// We didn't have a process handle when we got into this method, but we have one now,
+		// We didn't have a window handle when we got into this method, but we have one now,
 		// so attach to the newly acquired handle.
-		_log.LogInformation("Got process for app {App}, attaching", this);
+		_log.LogInformation("Got window for app {App}, attaching", this);
 
-		await AttachToWindowAsync(process).ConfigureAwait(false);
+		await AttachToWindowAsync(window).NoCtx();
 	}
 
 	/// <summary>

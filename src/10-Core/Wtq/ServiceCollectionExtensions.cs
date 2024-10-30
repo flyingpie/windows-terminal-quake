@@ -15,10 +15,10 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqTween, WtqTween>()
 
 			// Core App Logic
+			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 
 			.AddSingleton<WtqFocusTracker>()
 			.AddSingleton<WtqHotkeyService>()

@@ -11,6 +11,7 @@ public sealed class WtqWindowResolver(
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(procService);
 
+	/// <inheritdoc/>
 	public async Task<WtqWindow?> GetWindowHandleAsync(WtqAppOptions opts, bool allowStartNew)
 	{
 		Guard.Against.Null(opts);
@@ -63,6 +64,7 @@ public sealed class WtqWindowResolver(
 			var window2 = await _windowService.FindWindowAsync(opts).NoCtx();
 			if (window2 == null)
 			{
+				await Task.Delay(TimeSpan.FromMilliseconds(250)).NoCtx();
 				continue;
 			}
 

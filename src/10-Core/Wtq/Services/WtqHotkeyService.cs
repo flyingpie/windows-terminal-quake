@@ -26,6 +26,9 @@ public class WtqHotkeyService : IAsyncInitializable
 		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
+				// Look for app that has the specified hotkey configured.
+				// Fall back to most recently toggled app.
+				// Fall back to first configured app after that.
 				var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
 
 				_bus.Publish(
@@ -58,7 +61,6 @@ public class WtqHotkeyService : IAsyncInitializable
 
 	private void SendRegisterEvents(WtqOptions opts)
 	{
-		// _log
 		foreach (var app in opts.Apps)
 		{
 			foreach (var hk in app.Hotkeys)

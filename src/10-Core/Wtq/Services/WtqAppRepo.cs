@@ -1,25 +1,26 @@
 namespace Wtq.Services;
 
+/// <inheritdoc cref="IWtqAppRepo"/>.
 public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly IOptionsMonitor<WtqOptions> _opts;
-	private readonly IWtqWindowResolver _windowResolver;
-	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqAppToggleService _toggleService;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
+	private readonly IWtqWindowResolver _windowResolver;
 
 	private readonly List<WtqApp> _apps = [];
 
 	public WtqAppRepo(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqWindowResolver procResolver,
+		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
-		IWtqAppToggleService toggleService)
+		IWtqWindowResolver procResolver)
 	{
 		_opts = Guard.Against.Null(opts);
-		_windowResolver = Guard.Against.Null(procResolver);
-		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_toggleService = Guard.Against.Null(toggleService);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+		_windowResolver = Guard.Against.Null(procResolver);
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
@@ -40,6 +41,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		}
 	}
 
+	/// <inheritdoc/>
 	public WtqApp? GetByName(string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name);
@@ -47,6 +49,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		return _apps.Find(a => a.Name == name);
 	}
 
+	/// <inheritdoc/>
 	public WtqApp? GetByWindow(WtqWindow window)
 	{
 		Guard.Against.Null(window);
@@ -54,27 +57,16 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		return _apps.FirstOrDefault(a => a.Window == window);
 	}
 
+	/// <inheritdoc/>
 	public WtqApp? GetOpen()
 	{
 		return _apps.FirstOrDefault(a => a.IsOpen);
 	}
 
+	/// <inheritdoc/>
 	public WtqApp? GetPrimary()
 	{
 		return _apps.FirstOrDefault();
-	}
-
-	private WtqAppOptions? GetOptionsByName(string name)
-	{
-		Guard.Against.NullOrWhiteSpace(name);
-
-		return _opts.CurrentValue.Apps.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
-	}
-
-	private WtqAppOptions GetOptionsByNameRequired(string name)
-	{
-		return GetOptionsByName(name)
-			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'.");
 	}
 
 	private WtqApp Create(WtqAppOptions app)
@@ -83,16 +75,32 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		return new WtqApp(
 			_opts,
-			_windowResolver,
-			_screenInfoProvider,
 			_toggleService,
+			_screenInfoProvider,
+			_windowResolver,
 			() => GetOptionsByNameRequired(app.Name),
 			app.Name);
 	}
 
+	private WtqAppOptions? GetOptionsByName(string name)
+	{
+		Guard.Against.NullOrWhiteSpace(name);
+
+		return _opts
+			.CurrentValue
+			.Apps
+			.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
+	}
+
+	private WtqAppOptions GetOptionsByNameRequired(string name)
+	{
+		return GetOptionsByName(name)
+			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'.");
+	}
+
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
-		_log.LogInformation("Updating apps");
+		_log.LogDebug("Updating apps");
 
 		// Add app handles for options that don't have one yet.
 		foreach (var opt in _opts.CurrentValue.Apps)
