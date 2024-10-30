@@ -17,7 +17,7 @@ public class KWinWtqWindow(
 	private bool? _isVisible;
 	private Rectangle _rect = new(0, 0, 1024, 768); // TODO: Get actual window size.
 
-	public override string Id => _window.ResourceClass; // TODO: Use "InternalId"
+	public override string Id => _window.InternalId; // TODO: Use "InternalId"
 
 	/// <summary>
 	/// TODO: Add proper window activity checking.
@@ -44,13 +44,15 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
-		var expResClass = opts.ProcessName;
-		if (string.IsNullOrWhiteSpace(expResClass))
+		var searchTerm = opts.ProcessName;
+		if (string.IsNullOrWhiteSpace(searchTerm))
 		{
-			expResClass = Path.GetFileNameWithoutExtension(opts.FileName);
+			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
-		return expResClass.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase);
+		return
+			searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase) ||
+			searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase);
 	}
 
 	public override async Task MoveToAsync(Point location)

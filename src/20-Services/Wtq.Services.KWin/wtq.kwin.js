@@ -56,21 +56,22 @@ kwin.getWindows = () => {
 	log.warning("Could not find function to fetch windows, unsupported version of KWin perhaps?");
 };
 
-// TODO: Use ByInternalId instead of ByResourceClass.
-// TODO: Use shorter syntax.
-kwin.getWindowByResourceClass = (resourceClass) => {
+kwin.getWindowByInternalId = (internalId) => {
 	for (const w of kwin.getWindows()) {
-		if (w.resourceClass === resourceClass) {
+		// "internalId" is an object, so convert to string first.
+		// Looks like this:
+		// {ec94dfb2-f5fb-4485-bf9d-49658a68b365}
+		if (w.internalId.toString() === internalId) {
 			return w;
 		}
 	}
 };
 
-kwin.getWindowByResourceClassRequired = (resourceClass) => {
-	const w = kwin.getWindowByResourceClass(resourceClass);
+kwin.getWindowByInternalIdRequired = (internalId) => {
+	const w = kwin.getWindowByInternalId(internalId);
 
 	if (!w) {
-		throw `No window found with resource class ${resourceClass}`;
+		throw `No window found with internal id ${internalId}`;
 	}
 
 	return w;
@@ -193,9 +194,9 @@ wtq.sendResponse = (cmdInfo, params, exception_message) => {
 // Commands ////////////////////////////////////////////////
 cmds["BRING_WINDOW_TO_FOREGROUND"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Bringing to foreground window with resource class '${p.resourceClass}'`);
+	log.info(`Bringing to foreground window with internal id '${p.internalId}'`);
 
 	kwin.setActiveWindow(w);
 };
@@ -210,6 +211,7 @@ cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
 	return {
 		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
+		internalId: w.internalId,
 		keepAbove: w.keepAbove,
 		layer: w.layer,
 		minimized: w.minimized,
@@ -223,11 +225,12 @@ cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
 
 cmds["GET_WINDOW"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
 	return {
 		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
+		internalId: w.internalId,
 		keepAbove: w.keepAbove,
 		layer: w.layer,
 		minimized: w.minimized,
@@ -257,9 +260,9 @@ cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
 	// We used to both move- and resize the window in here, but this caused some issues with multi-monitor setups.
 	// Not entirely sure why, apparently KWin doesn't like hammering so many widths and heights.
 	// So we split it off, and now do a single RESIZE_WINDOW before a bunch of MOVE_WINDOWs.
-	let w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	let w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Moving win ${p.resourceClass} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
+	log.info(`Moving win ${p.internalId} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
 
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
 	// allowing us to eg. only set the width, and not the height, or vice versa.
@@ -274,9 +277,9 @@ cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
 
 cmds["RESIZE_WINDOW"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	let w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	let w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Moving win ${p.resourceClass} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
+	log.info(`Moving win ${p.internalId} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
 
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
 	// allowing us to eg. only set the width, and not the height, or vice versa.
@@ -314,29 +317,29 @@ cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 
 cmds["SET_WINDOW_ALWAYS_ON_TOP"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Setting 'always on top'-state for window with resource class '${p.resourceClass}' to '${p.isAlwaysOnTop}'`);
+	log.info(`Setting 'always on top'-state for window with internal id '${p.internalId}' to '${p.isAlwaysOnTop}'`);
 
 	w.keepAbove = p.isAlwaysOnTop;
 };
 
 cmds["SET_WINDOW_OPACITY"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Setting opacity for window with resource class '${p.resourceClass}' to '${p.opacity}'`);
+	log.info(`Setting opacity for window with internal id '${p.internalId}' to '${p.opacity}'`);
 
 	w.opacity = p.opacity;
 };
 
 cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
 	const skip = !(p.isVisible == "true");
 
-	log.info(`Setting taskbar icon visible for window with resource class '${p.resourceClass}' to '${p.isVisible}' (skip: ${skip})`);
+	log.info(`Setting taskbar icon visible for window with internal id '${p.internalId}' to '${p.isVisible}' (skip: ${skip})`);
 
 	w.skipPager = skip;
 	w.skipSwitcher = skip;
@@ -345,9 +348,9 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 
 cmds["SET_WINDOW_VISIBLE"] = (cmdInfo) => {
 	const p = cmdInfo.params;
-	const w = kwin.getWindowByResourceClassRequired(p.resourceClass);
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Setting visibility of window with resource class '${p.resourceClass}' to '${p.opacity}' to '${p.isVisible}'`);
+	log.info(`Setting visibility of window with internal id '${p.internalId}' to '${p.opacity}' to '${p.isVisible}'`);
 
 	w.minimized = p.isVisible;
 };

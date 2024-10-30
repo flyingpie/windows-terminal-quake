@@ -58,7 +58,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"BRING_WINDOW_TO_FOREGROUND",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 				})
 			.NoCtx();
 	}
@@ -105,7 +105,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"GET_WINDOW",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 				})
 			.NoCtx();
 
@@ -135,7 +135,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"MOVE_WINDOW",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 					x = location.X,
 					y = location.Y,
 				})
@@ -200,7 +200,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"RESIZE_WINDOW",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 					width = size.Width,
 					height = size.Height,
 				})
@@ -230,7 +230,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 					isVisible = JsUtils.ToJsBoolean(isVisible),
 				})
 			.NoCtx();
@@ -247,7 +247,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"SET_WINDOW_ALWAYS_ON_TOP",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
 				})
 			.NoCtx();
@@ -264,7 +264,7 @@ internal sealed class KWinClientV2 : IAsyncInitializable, IKWinClient
 				"SET_WINDOW_OPACITY",
 				new
 				{
-					resourceClass = window.ResourceClass,
+					internalId = window.InternalId,
 					opacity = opacity,
 				})
 			.NoCtx();

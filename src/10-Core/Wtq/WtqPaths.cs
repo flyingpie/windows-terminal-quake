@@ -44,6 +44,11 @@ public static class WtqPaths
 		Path.Combine(GetWtqAppDir(), "wtq.jsonc"),
 		Path.Combine(GetWtqAppDir(), "wtq.json5"),
 
+		// In XDG config dir.
+		Path.Combine(UserHome, ".config", "wtq.json"),
+		Path.Combine(UserHome, ".config", "wtq.jsonc"),
+		Path.Combine(UserHome, ".config", "wtq.json5"),
+
 		// In user home dir.
 		Path.Combine(UserHome, "wtq.json"),
 		Path.Combine(UserHome, "wtq.jsonc"),
