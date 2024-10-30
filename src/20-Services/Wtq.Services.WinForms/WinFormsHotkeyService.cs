@@ -1,20 +1,16 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
 using Wtq.Services.WinForms.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotkeyService : IHostedService
+public class WinFormsHotkeyService : IAsyncInitializable
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
-	private readonly IWtqBus _bus;
 
 	public WinFormsHotkeyService(IWtqBus bus)
 	{
-		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
+		Guard.Against.Null(bus);
 
-		_bus.OnEvent<WtqRegisterHotkeyEvent>(
+		bus.OnEvent<WtqHotkeyDefinedEvent>(
 			e =>
 			{
 				var mods = (KeyModifiers)e.Modifiers;
@@ -29,7 +25,7 @@ public class WinFormsHotkeyService : IHostedService
 
 		HotkeyManager.HotkeyPressed += (s, a) =>
 		{
-			_bus.Publish(new WtqHotkeyPressedEvent()
+			bus.Publish(new WtqHotkeyPressedEvent()
 			{
 				Key = a.Key.ToWtqKeys(),
 				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
@@ -37,13 +33,9 @@ public class WinFormsHotkeyService : IHostedService
 		};
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
-		return Task.CompletedTask;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
+		// Only here to make sure an instance of this class is created.
 		return Task.CompletedTask;
 	}
 }
