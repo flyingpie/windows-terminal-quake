@@ -17,7 +17,7 @@ public static partial class NukeExtensions
 	/// <summary>
 	/// Deletes all files under the specified <paramref name="path"/>, except for any <paramref name="excludes"/>.
 	/// </summary>
-	public static void DeleteFiles(this AbsolutePath path, params string[] excludes)
+	public static void DeleteFilesExceptFor(this AbsolutePath path, params string[] excludes)
 	{
 		var wl = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		foreach (var ex in excludes)

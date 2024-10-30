@@ -150,7 +150,7 @@ public sealed class Build : NukeBuild
 				.SetRuntime("linux-x64")
 				.SetSelfContained(false));
 
-			st.DeleteFiles("wtq", "wtq.kwin.js");
+			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
 
 			st.ZipTo(
 				PathToLinux64FrameworkDependentZip,
@@ -178,7 +178,7 @@ public sealed class Build : NukeBuild
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFiles("wtq", "wtq.kwin.js");
+			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
 
 			st.ZipTo(
 				PathToLinux64SelfContainedZip,
@@ -236,7 +236,7 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(false));
 
-			st.DeleteFiles("wtq.exe");
+			st.DeleteFilesExceptFor("wtq.exe");
 
 			st.ZipTo(
 				PathToWin64FrameworkDependentZip,
@@ -265,7 +265,7 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFiles("wtq.exe");
+			st.DeleteFilesExceptFor("wtq.exe");
 
 			st.ZipTo(
 				PathToWin64SelfContainedZip,
@@ -381,12 +381,24 @@ public sealed class Build : NukeBuild
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
 
-	private Target PublishDebug => _ => _
+	private Target PublishLinux64 => _ => _
 		.DependsOn(Clean)
 		.DependsOn(PublishLinux64FrameworkDependent)
 		.DependsOn(PublishLinux64SelfContained)
+		.Executes();
+
+	private Target PublishWin64 => _ => _
+		.DependsOn(Clean)
 		.DependsOn(PublishWin64FrameworkDependent)
 		.DependsOn(PublishWin64SelfContained)
+		.Triggers(CreateScoopManifest)
+		.Triggers(CreateWinGetManifest)
+		.Executes();
+
+	private Target PublishDebug => _ => _
+		.DependsOn(Clean)
+		.DependsOn(PublishLinux64)
+		.DependsOn(PublishWin64)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)
 		.Executes();
