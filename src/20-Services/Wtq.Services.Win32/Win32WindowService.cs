@@ -104,55 +104,6 @@ public sealed class Win32WindowService :
 		await UpdateProcessesAsync(force: true).NoCtx();
 	}
 
-	private async Task<WtqWindow?> FindOrStartAsync(WtqAppOptions opts, bool allowStartNew)
-	{
-		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
-
-		// Look for an existing window first.
-		var window1 = await FindWindowAsync(opts).NoCtx();
-		if (window1 != null)
-		{
-			// If we got one, great, return it.
-			_log.LogInformation("Got process {Process} for options {Options}", window1, opts);
-			return window1;
-		}
-
-		// If we didn't get one, see if we can try to make a new one.
-		if (!allowStartNew)
-		{
-			// If not, return empty-handed.
-			return null;
-		}
-
-		// Try to start a new process that presumably creates the window we're looking for.
-		_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
-
-		await CreateAsync(opts).NoCtx();
-
-		for (var attempt = 0; attempt < 5; attempt++)
-		{
-			// Look for our newly created window.
-			var window2 = await FindWindowAsync(opts).NoCtx();
-			if (window2 == null)
-			{
-				continue;
-			}
-
-			// If we got one, great, return it.
-			_log.LogInformation("Got process {Process} for options {Options}", window2, opts);
-			return window2;
-		}
-
-		return null;
-	}
-
-	private Task<WtqWindow?> ManualAsync(WtqAppOptions opts)
-	{
-		_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
-
-		return Task.FromResult<WtqWindow?>(null);
-	}
-
 	private async Task UpdateProcessesAsync(bool force = false)
 	{
 		// TODO: Remove all the locks and use debounce instead?
