@@ -1,3 +1,4 @@
+using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
@@ -5,24 +6,39 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// High-level interface to the KWin compositor.
 /// </summary>
-public interface IKWinClient
+public interface IKWinClient : IAsyncDisposable
 {
 	Task BringToForegroundAsync(
 		KWinWindow window,
 		CancellationToken cancellationToken);
 
-	Task<IEnumerable<KWinWindow>> GetClientListAsync(
-		CancellationToken cancellationToken);
-
 	Task<Point> GetCursorPosAsync(
 		CancellationToken cancellationToken);
 
-	Task MoveClientAsync(
-		KWinWindow window,
-		Rectangle rect,
+	Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken);
 
-	Task<KWinSupportInformation> GetSupportInformationAsync(
+	Task<KWinWindow?> GetForegroundWindowAsync();
+
+	Task<KWinWindow?> GetWindowAsync(
+		KWinWindow window);
+
+	Task<ICollection<KWinWindow>> GetWindowListAsync(
+		CancellationToken cancellationToken);
+
+	Task MoveWindowAsync(
+		KWinWindow window,
+		Point location,
+		CancellationToken cancellationToken);
+
+	Task RegisterHotkeyAsync(
+		string name,
+		KeyModifiers modifiers,
+		Keys key);
+
+	Task ResizeWindowAsync(
+		KWinWindow window,
+		Size size,
 		CancellationToken cancellationToken);
 
 	Task SetTaskbarIconVisibleAsync(
@@ -38,10 +54,5 @@ public interface IKWinClient
 	Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
-		CancellationToken cancellationToken);
-
-	Task SetWindowVisibleAsync(
-		KWinWindow window,
-		bool isVisible,
 		CancellationToken cancellationToken);
 }
