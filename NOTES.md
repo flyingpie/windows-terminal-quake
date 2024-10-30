@@ -7,9 +7,9 @@
 - Logging
 - Comments
 - Options docs + schema
-
 - Logs may not be flushed properly on app exit, dropping some entries.
 
+# KWin Client/Window object
 ```json
 {
 	"objectName": "",

@@ -1,15 +1,17 @@
 {
+	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
+	// Docs: https://wtq.flyingpie.nl
 	"$schema": "../schema/wtq.schema.2.json",
 
 	"Apps": [
-		// WezTerm
+		// Example with PowerShell
 		{
 			"Name": "PowerShell",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "powershell"
 		}
 
-		// Discord
+		// Example with Windows Terminal
 		//{
 		//	"Name": "Terminal",
 		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],

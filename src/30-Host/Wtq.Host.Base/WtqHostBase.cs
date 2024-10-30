@@ -40,9 +40,6 @@ public class WtqHostBase
 			.Build();
 
 		_host = new HostBuilder()
-
-			// .UseServiceProviderFactory((x) => new AsyncServiceProviderFactory())
-
 			.ConfigureAppConfiguration(opt =>
 			{
 				opt.AddConfiguration(config);
