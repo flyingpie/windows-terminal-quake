@@ -14,6 +14,9 @@ public static partial class NukeExtensions
 {
 	private static readonly string ApplicationOctetStream = "application/octet-stream";
 
+	/// <summary>
+	/// Deletes all files under the specified <paramref name="path"/>, except for any <paramref name="excludes"/>.
+	/// </summary>
 	public static void DeleteFiles(this AbsolutePath path, params string[] excludes)
 	{
 		var wl = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

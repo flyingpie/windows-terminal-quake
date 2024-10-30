@@ -11,5 +11,7 @@ public interface IWtqWindowResolver
 	/// <param name="opts">The settings associated with the app the find a window for.</param>
 	/// <param name="allowStartNew">Whether a new window may be created if necessary (and configured).</param>
 	/// <returns>The window handle, if one was found.</returns>
-	Task<WtqWindow?> GetWindowHandleAsync(WtqAppOptions opts, bool allowStartNew);
+	Task<WtqWindow?> GetWindowHandleAsync(
+		WtqAppOptions opts,
+		bool allowStartNew);
 }
