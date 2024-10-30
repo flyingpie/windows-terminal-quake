@@ -38,7 +38,7 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 		_serverConnection = new Tmds.DBus.Connection(address);
 	}
 
-	public int InitializePriority => -20;
+	public int InitializePriority => 20;
 
 	public async Task InitializeAsync()
 	{

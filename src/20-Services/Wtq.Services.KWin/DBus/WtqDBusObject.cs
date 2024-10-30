@@ -24,7 +24,7 @@ internal sealed class WtqDBusObject(
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
-	public int InitializePriority => -10;
+	public int InitializePriority => 10;
 
 	public ObjectPath ObjectPath => _path;
 

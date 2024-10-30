@@ -21,7 +21,7 @@ internal sealed class KWinClientV2(
 
 	private KWinScript? _script;
 
-	public int InitializePriority => -5;
+	public int InitializePriority => 5;
 
 	public async Task InitializeAsync()
 	{

@@ -139,9 +139,6 @@ wtq.getNextCommand = () => {
 		wtq.DBUS_PATH,			// Path
 		wtq.DBUS_INTERFACE,		// Interface
 		"GetNextCommand",		// Method
-		"arg 1",				// Argument 1
-		"arg 2",				// Argument 2
-		"arg 3",				// Argument 3
 		wtq.onGotCommand		// Response callback
 	);
 };
