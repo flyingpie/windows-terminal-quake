@@ -9,8 +9,6 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
-	// private readonly Initializer _init;
-
 	/// <summary>
 	/// Client connection, used to send requests to DBus.
 	/// </summary>
@@ -57,22 +55,16 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 
 	public async Task<DBus.Generated.KWinService> GetKWinServiceAsync()
 	{
-		// await _init.InitAsync().NoCtx();
-
 		return _kwinService ??= new DBus.Generated.KWinService(_clientConnection, "org.kde.KWin");
 	}
 
 	public async Task<DBus.Generated.KWin> GetKWinAsync()
 	{
-		// await _init.InitAsync().NoCtx();
-
 		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
 	}
 
 	public async Task<DBus.Generated.Scripting> GetScriptingAsync()
 	{
-		// await _init.InitAsync().NoCtx();
-
 		return _scripting ??= (await GetKWinServiceAsync().NoCtx()).CreateScripting("/Scripting");
 	}
 
@@ -85,8 +77,6 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 
 		_clientConnection.Dispose();
 		_serverConnection.Dispose();
-
-		// _init.Dispose();
 	}
 
 	/// <inheritdoc/>
@@ -94,8 +84,6 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 	{
 		Guard.Against.NullOrWhiteSpace(serviceName);
 		Guard.Against.Null(serviceObject);
-
-		// await _init.InitAsync().NoCtx();
 
 		_log.LogInformation("Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'", serviceName, serviceObject);
 

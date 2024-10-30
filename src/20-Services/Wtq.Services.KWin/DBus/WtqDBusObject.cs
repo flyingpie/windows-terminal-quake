@@ -81,7 +81,7 @@ internal sealed class WtqDBusObject(
 	}
 
 	/// <inheritdoc/>
-	public async Task<string> GetNextCommandAsync(string a, string b, string c)
+	public async Task<string> GetNextCommandAsync()
 	{
 		while (true)
 		{
