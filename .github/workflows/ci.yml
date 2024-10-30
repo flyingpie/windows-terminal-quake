@@ -31,11 +31,11 @@ jobs:
     name: windows-latest
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .nuke/temp
@@ -47,22 +47,22 @@ jobs:
           name: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Publish: win-x64_self-contained.zip'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: win-x64_self-contained.zip
           path: _output/artifacts/win-x64_self-contained.zip
       - name: 'Publish: win-x64_framework-dependent.zip'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: win-x64_framework-dependent.zip
           path: _output/artifacts/win-x64_framework-dependent.zip
       - name: 'Publish: linux-x64_self-contained.zip'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-x64_self-contained.zip
           path: _output/artifacts/linux-x64_self-contained.zip
       - name: 'Publish: linux-x64_framework-dependent.zip'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-x64_framework-dependent.zip
           path: _output/artifacts/linux-x64_framework-dependent.zip
