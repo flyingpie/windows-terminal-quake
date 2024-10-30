@@ -5,6 +5,7 @@ using Serilog.Extensions.Logging;
 
 namespace Wtq.Utils;
 
+// TODO: Dispose or something on app close, we're dropping logs now due to lack of flush.
 public static class Log
 {
 	private static ILoggerFactory _factory;
@@ -14,7 +15,7 @@ public static class Log
 		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
 
 		Serilog.Log.Logger = new LoggerConfiguration()
-			.MinimumLevel.Verbose()
+			.MinimumLevel.Information() // TODO: Configurable.
 
 			.WriteTo.Console()
 
