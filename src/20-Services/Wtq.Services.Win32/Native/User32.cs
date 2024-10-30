@@ -42,9 +42,6 @@ public static class User32
 	[DllImport("user32.dll", SetLastError = true)]
 	public static extern bool MoveWindow(nint hWnd, int x, int y, int nWidth, int nHeight, bool bRepaint);
 
-	[DllImport("user32.dll", SetLastError = true)]
-	public static extern bool RegisterHotKey(nint hWnd, int id, uint fsModifiers, uint vk);
-
 	[DllImport("User32.dll")]
 	public static extern long SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
@@ -62,8 +59,8 @@ public static class User32
 	public static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
 	[DllImport("user32.dll", SetLastError = true)]
-	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
+	public static extern int SetWindowText(IntPtr hWnd, string text);
 
 	[DllImport("user32.dll", SetLastError = true)]
-	public static extern bool UnregisterHotKey(nint hWnd, int id);
+	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
 }
