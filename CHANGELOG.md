@@ -1,9 +1,25 @@
 # Changelog
 
 ## [vFuture]
-- Support for KDE Plasma (KWin, currently Wayland only).
 
 ## [vNext]
+
+## [2.0.11] / TBD
+- Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
+- Reworked how apps are started (mostly when WTQ starts), should fix a lot of cases where multiple instances of an app (such as Windows Terminal) are started (fixes [145](https://github.com/flyingpie/windows-terminal-quake/issues/145)).
+- Added "WindowTitleOverride", which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
+
+```json
+{
+  "Apps": [
+    {
+      "Name": "Terminal",
+      "WindowTitleOverride": "The New Window Title"
+    },
+    ...
+  ]
+}
+```
 
 ## [2.0.10] / 2024-07-16
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
