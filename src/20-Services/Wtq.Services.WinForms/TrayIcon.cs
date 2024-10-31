@@ -25,6 +25,8 @@ public sealed class TrayIcon : IDisposable
 
 				CreateOpenSettingsItem(),
 
+				CreateOpenSettingsDirItem(),
+
 				CreateOpenLogItem(),
 
 				CreateExitItem(exitHandler),
@@ -91,6 +93,25 @@ public sealed class TrayIcon : IDisposable
 			Process.Start(new ProcessStartInfo()
 			{
 				FileName = WtqOptionsPath.Instance.Path,
+				UseShellExecute = true,
+			});
+		};
+
+		return mnuOpenSettings;
+	}
+
+	private static ToolStripMenuItem CreateOpenSettingsDirItem()
+	{
+		var mnuOpenSettings = new ToolStripMenuItem("Open settings directory")
+		{
+			Enabled = true,
+		};
+
+		mnuOpenSettings.Click += (s, a) =>
+		{
+			Process.Start(new ProcessStartInfo()
+			{
+				FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path),
 				UseShellExecute = true,
 			});
 		};
