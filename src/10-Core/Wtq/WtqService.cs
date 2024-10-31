@@ -67,7 +67,7 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 			_log.LogInformation("Closing previously open app '{App}'", ev.App);
 
 			// Close app.
-			ev.App.CloseAsync().NoCtx();
+			await ev.App.CloseAsync().NoCtx();
 
 			// Bring focus back to last non-WTQ app.
 			await (_lastNonWtqWindow?.BringToForegroundAsync() ?? Task.CompletedTask).NoCtx();
@@ -77,7 +77,7 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 			_log.LogInformation("Opening previously closed app '{App}'", ev.App);
 
 			// Open app.
-			ev.App.OpenAsync().NoCtx();
+			await ev.App.OpenAsync().NoCtx();
 		}
 	}
 
