@@ -34,8 +34,6 @@
 	// Can be overridden per app.
 	"MonitorIndex": 0,
 
-	"ToggleDirectionOrder": [],
-
 	// Horizontal screen coverage, as a percentage (defaults to 95).
 	"HorizontalScreenCoverage": 95,
 

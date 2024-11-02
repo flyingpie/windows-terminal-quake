@@ -16,8 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\wtq.jsonc">
-			<Link>wtq.jsonc</Link>
+		<None Include="..\..\wtq.jsonc" Link="wtq.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
