@@ -139,46 +139,80 @@ public class WtqAppToggleService(
 
 		var windowRect = GetOnScreenWindowRect(app, screenRect);
 
+		// Get possible rectangles to move the app to.
+		var targetRects = GetOffScreenWindowRects(app, windowRect, screenRect);
+
+		// Get screen rectangles.
 		var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
-		var dirs = _opts.CurrentValue.GetToggleDirectionOrderForApp(app.Options);
 
-		foreach (var dir in dirs)
-		{
-			// TODO: Detect if the calculated target rect is empty (e.g. not within a screen).
-		}
-
+		// Return first target rectangle that does not overlap with a screen.
+		// TODO: Detect if the calculated target rect is empty (e.g. not within a screen).
 		// TODO: What if directions is empty? Handle that in the options thing instead of here?
-		var d = dirs.First();
-
-		switch (d)
-		{
-			case ToggleDirection.Down:
-				windowRect.Y
-					= screenRect.Y + screenRect.Height // Bottom of the screen (which can be negative, when on the non-primary screen).
-					+ windowRect.Height // Plus height of the app window.
-					+ 100; // Plus a little margin.
-				break;
-			case ToggleDirection.Up:
-				windowRect.Y
-					= screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
-					- windowRect.Height // Minus height of the app window.
-					- 100; // Minus a little margin.
-				break;
-			case ToggleDirection.Left:
-				// TODO
-				break;
-			case ToggleDirection.Right:
-				// TODO
-				break;
-		}
-
-		return windowRect;
+		return targetRects
+			.First(r => !screens.Any(scr => scr.IntersectsWith(r)));
 	}
 
-	private IEnumerable<Rectangle> GetOffScreenWindowRects()
+	/// <summary>
+	/// Returns a set of <see cref="Rectangle"/>s, each a possible off-screen position for the <paramref name="windowRect"/> to move to.<br/>
+	/// The list is ordered by <see cref="ToggleDirection"/>, as specified in the settings.
+	/// </summary>
+	private IEnumerable<Rectangle> GetOffScreenWindowRects(
+		WtqApp app,
+		Rectangle windowRect,
+		Rectangle screenRect)
 	{
+		Guard.Against.Null(app);
+		Guard.Against.Null(windowRect);
+		Guard.Against.Null(screenRect);
+
 		// TODO: Take order into account.
-		return null;
+		return _opts.CurrentValue
+			.GetToggleDirectionOrderForApp(app.Options)
+			.Select(dir => dir switch
+			{
+				// Up
+				ToggleDirection.None or ToggleDirection.Up => windowRect with
+				{
+					Y = screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
+					- windowRect.Height // Minus height of the app window.
+					- 100, // Minus a little margin.
+				},
+
+				// Down
+				ToggleDirection.Down => windowRect with
+				{
+					Y = screenRect.Y + screenRect.Height // Bottom of the screen (which can be negative, when on the non-primary screen).
+					+ windowRect.Height // Plus height of the app window.
+					+ 100, // Plus a little margin.
+				},
+
+				// Left
+				ToggleDirection.Left => windowRect with
+				{
+					// TODO
+					X = screenRect.X // Bottom of the screen (which can be negative, when on the non-primary screen).
+					- windowRect.Width // Plus height of the app window.
+					- 100, // Plus a little margin.
+				},
+
+				// Right
+				ToggleDirection.Right => windowRect with
+				{
+					// TODO
+					X = screenRect.X + screenRect.Width // Bottom of the screen (which can be negative, when on the non-primary screen).
+					+ windowRect.Width // Plus height of the app window.
+					+ 100, // Plus a little margin.
+				},
+
+				// Void
+				ToggleDirection.Void => windowRect with
+				{
+					// TODO
+					Y = screenRect.Y // Bottom of the screen (which can be negative, when on the non-primary screen).
+					- 1_000_000, // Plus a little margin.
+				},
+				_ => throw new WtqException("Unknown toggle direction."),
+			});
 	}
 
 	/// <summary>

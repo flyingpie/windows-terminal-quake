@@ -126,11 +126,12 @@ public sealed class WtqOptions
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
-	/// By default, WTQ tries to move the app in this direction: Up, Down, Left, Right.<br/>
-	/// If you have monitors all around, well, good for you :).
+	/// By default, WTQ looks for empty space in this order: Up, Down, Left, Right, Void.<br/>
+	/// The "Void" direction doesn't move to anywhere, but just instantly disappears the window. Meant for cases
+	/// where a monitor is sandwiched in between other monitors.
 	/// </summary>
 	public IEnumerable<ToggleDirection> ToggleDirectionOrder { get; init; }
-		= [ToggleDirection.Up, ToggleDirection.Down, ToggleDirection.Left, ToggleDirection.Right];
+		= [ToggleDirection.Up, ToggleDirection.Down, ToggleDirection.Left, ToggleDirection.Right, ToggleDirection.Void];
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>

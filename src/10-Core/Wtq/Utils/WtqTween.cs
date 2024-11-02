@@ -53,7 +53,7 @@ public sealed class WtqTween(
 
 			// TODO: Currently, we don't need to move on the X-axis, and there's a little bit of jitter, where X seems to lerp around a bit.
 			// Find out why and fix that, then remove this.
-			current.X = dst.X;
+			// current.X = dst.X;
 
 			await move(current).NoCtx();
 

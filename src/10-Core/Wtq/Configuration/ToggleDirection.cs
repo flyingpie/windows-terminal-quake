@@ -29,4 +29,10 @@ public enum ToggleDirection
 	/// Move right of the screen.
 	/// </summary>
 	Right,
+
+	/// <summary>
+	/// Instantly disappear the app window off the screen into "nothingness".<br/>
+	/// Useful for cases where no empty space can be found, such as a 5-monitor setup arranged in a cross.
+	/// </summary>
+	Void,
 }
