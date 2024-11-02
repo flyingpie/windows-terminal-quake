@@ -24,7 +24,7 @@ public class WtqAppToggleService(
 		var screenRect = await GetTargetScreenRectAsync(app).NoCtx();
 
 		// Source & target bounds.
-		var windowRectSrc = GetOffScreenWindowRect(app, screenRect);
+		var windowRectSrc = await GetOffScreenWindowRectAsync(app, screenRect).NoCtx();
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
 
 		// Move window.
@@ -55,7 +55,7 @@ public class WtqAppToggleService(
 
 		// Source & target bounds.
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
-		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
+		var windowRectDst = await GetOffScreenWindowRectAsync(app, screenRect).NoCtx();
 
 		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
@@ -133,18 +133,52 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Get the position rect a window should be when off-screen.
 	/// </summary>
-	private Rectangle GetOffScreenWindowRect(WtqApp app, Rectangle screenRect)
+	private async Task<Rectangle> GetOffScreenWindowRectAsync(WtqApp app, Rectangle screenRect)
 	{
 		Guard.Against.Null(app);
 
 		var windowRect = GetOnScreenWindowRect(app, screenRect);
 
-		windowRect.Y
-			= screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
-			- windowRect.Height // Minus height of the app window.
-			- 100; // Minus a little margin.
+		var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+		var dirs = _opts.CurrentValue.GetToggleDirectionOrderForApp(app.Options);
+
+		foreach (var dir in dirs)
+		{
+			// TODO: Detect if the calculated target rect is empty (e.g. not within a screen).
+		}
+
+		// TODO: What if directions is empty? Handle that in the options thing instead of here?
+		var d = dirs.First();
+
+		switch (d)
+		{
+			case ToggleDirection.Down:
+				windowRect.Y
+					= screenRect.Y + screenRect.Height // Bottom of the screen (which can be negative, when on the non-primary screen).
+					+ windowRect.Height // Plus height of the app window.
+					+ 100; // Plus a little margin.
+				break;
+			case ToggleDirection.Up:
+				windowRect.Y
+					= screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
+					- windowRect.Height // Minus height of the app window.
+					- 100; // Minus a little margin.
+				break;
+			case ToggleDirection.Left:
+				// TODO
+				break;
+			case ToggleDirection.Right:
+				// TODO
+				break;
+		}
 
 		return windowRect;
+	}
+
+	private IEnumerable<Rectangle> GetOffScreenWindowRects()
+	{
+		// TODO: Take order into account.
+		return null;
 	}
 
 	/// <summary>

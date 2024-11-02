@@ -124,6 +124,15 @@ public sealed class WtqOptions
 		= TaskBarIconVisibility.AlwaysHidden;
 
 	/// <summary>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
+	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
+	/// By default, WTQ tries to move the app in this direction: Up, Down, Left, Right.<br/>
+	/// If you have monitors all around, well, good for you :).
+	/// </summary>
+	public IEnumerable<ToggleDirection> ToggleDirectionOrder { get; init; }
+		= [ToggleDirection.Up, ToggleDirection.Down, ToggleDirection.Left, ToggleDirection.Right];
+
+	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
@@ -183,6 +192,13 @@ public sealed class WtqOptions
 		Guard.Against.Null(opts);
 
 		return opts.TaskbarIconVisibility ?? TaskBarIconVisibility;
+	}
+
+	public IEnumerable<ToggleDirection> GetToggleDirectionOrderForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.ToggleDirectionOrder ?? ToggleDirectionOrder;
 	}
 
 	public float GetVerticalOffsetForApp(WtqAppOptions opts)
