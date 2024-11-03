@@ -196,10 +196,11 @@ public class WtqAppToggleService(
 					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
 				},
 
-				OffScreenLocation.Void => windowRect with
+				// TODO: Should hide the app window instantly, without moving anything.
+				Behind => windowRect with
 				{
 					// Very high up.
-					Y = screenRect.Y - 1_000_000,
+					Y = screenRect.Y - 10_000_000,
 				},
 				_ => throw new WtqException("Unknown toggle direction."),
 			});

@@ -1,3 +1,5 @@
+using static Wtq.Configuration.OffScreenLocation;
+
 namespace Wtq.Configuration;
 
 /// <summary>
@@ -126,12 +128,12 @@ public sealed class WtqOptions
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
-	/// By default, WTQ looks for empty space in this order: Up, Down, Left, Right, Void.<br/>
-	/// The "Void" direction doesn't move to anywhere, but just instantly disappears the window. Meant for cases
-	/// where a monitor is sandwiched in between other monitors.
+	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right, Behind.<br/>
+	/// The "Behind" location doesn't move to anywhere, but just instantly hides the window. Meant for cases
+	/// where a monitor is sandwiched in between other monitors, like 5-monitor in a cross arrangement.
 	/// </summary>
 	public IEnumerable<OffScreenLocation> OffScreenLocations { get; init; }
-		= [OffScreenLocation.Above, OffScreenLocation.Below, OffScreenLocation.Left, OffScreenLocation.Right, OffScreenLocation.Void];
+		= [Above, Below, Left, Right, Behind];
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
