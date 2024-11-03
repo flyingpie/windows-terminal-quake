@@ -1,3 +1,5 @@
+using static Wtq.Configuration.OffScreenLocation;
+
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
@@ -154,7 +156,7 @@ public class WtqAppToggleService(
 
 	/// <summary>
 	/// Returns a set of <see cref="Rectangle"/>s, each a possible off-screen position for the <paramref name="windowRect"/> to move to.<br/>
-	/// The list is ordered by <see cref="ToggleDirection"/>, as specified in the settings.
+	/// The list is ordered by <see cref="OffScreenLocation"/>, as specified in the settings.
 	/// </summary>
 	private IEnumerable<Rectangle> GetOffScreenWindowRects(
 		WtqApp app,
@@ -165,51 +167,39 @@ public class WtqAppToggleService(
 		Guard.Against.Null(windowRect);
 		Guard.Against.Null(screenRect);
 
-		// TODO: Take order into account.
+		var margin = 100;
 		return _opts.CurrentValue
-			.GetToggleDirectionOrderForApp(app.Options)
+			.GetOffScreenLocationsForApp(app.Options)
 			.Select(dir => dir switch
 			{
-				// Up
-				ToggleDirection.None or ToggleDirection.Up => windowRect with
+				Above or None => windowRect with
 				{
-					Y = screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
-					- windowRect.Height // Minus height of the app window.
-					- 100, // Minus a little margin.
+					// Top of the screen, minus height of the app window.
+					Y = screenRect.Y - windowRect.Height - margin,
 				},
 
-				// Down
-				ToggleDirection.Down => windowRect with
+				Below => windowRect with
 				{
-					Y = screenRect.Y + screenRect.Height // Bottom of the screen (which can be negative, when on the non-primary screen).
-					+ windowRect.Height // Plus height of the app window.
-					+ 100, // Plus a little margin.
+					// Bottom of the screen.
+					Y = screenRect.Y + screenRect.Height + margin,
 				},
 
-				// Left
-				ToggleDirection.Left => windowRect with
+				Left => windowRect with
 				{
-					// TODO
-					X = screenRect.X // Bottom of the screen (which can be negative, when on the non-primary screen).
-					- windowRect.Width // Plus height of the app window.
-					- 100, // Plus a little margin.
+					// Left of the screen, minus width of the app window.
+					X = screenRect.X - windowRect.Width - margin,
 				},
 
-				// Right
-				ToggleDirection.Right => windowRect with
+				Right => windowRect with
 				{
-					// TODO
-					X = screenRect.X + screenRect.Width // Bottom of the screen (which can be negative, when on the non-primary screen).
-					+ windowRect.Width // Plus height of the app window.
-					+ 100, // Plus a little margin.
+					// Right of the screen, plus width of the app window.
+					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
 				},
 
-				// Void
-				ToggleDirection.Void => windowRect with
+				OffScreenLocation.Void => windowRect with
 				{
-					// TODO
-					Y = screenRect.Y // Bottom of the screen (which can be negative, when on the non-primary screen).
-					- 1_000_000, // Plus a little margin.
+					// Very high up.
+					Y = screenRect.Y - 1_000_000,
 				},
 				_ => throw new WtqException("Unknown toggle direction."),
 			});

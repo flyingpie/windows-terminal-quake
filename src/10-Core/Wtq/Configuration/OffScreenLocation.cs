@@ -5,6 +5,8 @@ namespace Wtq.Configuration;
 /// </summary>
 public enum OffScreenLocation
 {
+	None,
+
 	/// <summary>
 	/// Above the screen.
 	/// </summary>
@@ -14,4 +16,10 @@ public enum OffScreenLocation
 	/// Below the screen.
 	/// </summary>
 	Below,
+
+	Left,
+
+	Right,
+
+	Void,
 }

@@ -130,8 +130,8 @@ public sealed class WtqOptions
 	/// The "Void" direction doesn't move to anywhere, but just instantly disappears the window. Meant for cases
 	/// where a monitor is sandwiched in between other monitors.
 	/// </summary>
-	public IEnumerable<ToggleDirection> ToggleDirectionOrder { get; init; }
-		= [ToggleDirection.Up, ToggleDirection.Down, ToggleDirection.Left, ToggleDirection.Right, ToggleDirection.Void];
+	public IEnumerable<OffScreenLocation> OffScreenLocations { get; init; }
+		= [OffScreenLocation.Above, OffScreenLocation.Below, OffScreenLocation.Left, OffScreenLocation.Right, OffScreenLocation.Void];
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
@@ -195,11 +195,11 @@ public sealed class WtqOptions
 		return opts.TaskbarIconVisibility ?? TaskBarIconVisibility;
 	}
 
-	public IEnumerable<ToggleDirection> GetToggleDirectionOrderForApp(WtqAppOptions opts)
+	public IEnumerable<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.ToggleDirectionOrder ?? ToggleDirectionOrder;
+		return opts.OffScreenLocations ?? OffScreenLocations;
 	}
 
 	public float GetVerticalOffsetForApp(WtqAppOptions opts)
