@@ -133,7 +133,7 @@ public sealed class WtqOptions
 	/// where a monitor is sandwiched in between other monitors, like 5-monitor in a cross arrangement.
 	/// </summary>
 	public IEnumerable<OffScreenLocation> OffScreenLocations { get; init; }
-		= [Above, Below, Left, Right, Behind];
+		= [Above, Below, Left, Right];
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
