@@ -6,6 +6,11 @@ namespace Wtq.Configuration;
 public enum OffScreenLocation
 {
 	/// <summary>
+	/// Used for detecting serialization issues.
+	/// </summary>
+	None = 0,
+
+	/// <summary>
 	/// Above the screen.
 	/// </summary>
 	Above,
@@ -14,4 +19,19 @@ public enum OffScreenLocation
 	/// Below the screen.
 	/// </summary>
 	Below,
+
+	/// <summary>
+	/// Left of the screen.
+	/// </summary>
+	Left,
+
+	/// <summary>
+	/// Right of the screen.
+	/// </summary>
+	Right,
+
+	/// <summary>
+	/// Instantly hides the window, without actually moving anywhere.
+	/// </summary>
+	Behind,
 }
