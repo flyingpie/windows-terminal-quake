@@ -56,7 +56,15 @@ public sealed class WtqWindowResolver(
 		// Try to start a new process that presumably creates the window we're looking for.
 		_log.LogInformation("Got no process for options {Options}, attempting to create one", opts);
 
-		await _windowService.CreateAsync(opts).NoCtx();
+		try
+		{
+			await _windowService.CreateAsync(opts).NoCtx();
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Could not create process for app '{App}': {Message}", opts, ex.Message);
+			return null;
+		}
 
 		for (var attempt = 0; attempt < 5; attempt++)
 		{
