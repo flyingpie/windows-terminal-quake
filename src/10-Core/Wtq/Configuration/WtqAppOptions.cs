@@ -60,6 +60,9 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.TaskBarIconVisibility"/>
 	public TaskBarIconVisibility? TaskbarIconVisibility { get; set; }
 
+	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
+	public IEnumerable<OffScreenLocation>? OffScreenLocations { get; init; }
+
 	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
 	public int? VerticalOffset { get; set; }
 
