@@ -9,10 +9,14 @@ public class WtqAppToggleService(
 	IWtqTween tween)
 	: IWtqAppToggleService
 {
+	private static readonly Point BehindLocation = new(0, -1_000_000);
+
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
+
+	private static bool IsBehind(Rectangle rect) => rect.Location == BehindLocation;
 
 	/// <inheritdoc/>
 	public async Task ToggleOnAsync(WtqApp app, ToggleModifiers mods)
@@ -22,18 +26,28 @@ public class WtqAppToggleService(
 		// Animation duration.
 		var durationMs = GetDurationMs(mods);
 
-		// Screen bounds.
+		// All available screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get rect of the screen where the app currently is.
 		var screenRect = await GetTargetScreenRectAsync(app).NoCtx();
 
-		// Source & target bounds.
-		var windowRectSrc = await GetOffScreenWindowRectAsync(app, screenRect).NoCtx();
+		// Source & target rects.
+		var windowRectSrc = GetOffScreenWindowRect(app, screenRect, screenRects);
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
 
-		// Move window.
+		// If we're moving from- or to the "Behind" location, move instantly.
+		if (IsBehind(windowRectSrc) || IsBehind(windowRectDst))
+		{
+			durationMs = 0;
+		}
+
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		// Resize window.
 		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 
+		// Move window.
 		await _tween
 			.AnimateAsync(
 				src: windowRectSrc.Location,
@@ -52,24 +66,35 @@ public class WtqAppToggleService(
 		// Animation duration.
 		var durationMs = GetDurationMs(mods);
 
-		// Screen bounds.
+		// All available screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get rect of the screen where the app currently is.
 		var screenRect = await app.GetScreenRectAsync().NoCtx();
 
-		// Source & target bounds.
+		// Source & target rects.
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
-		var windowRectDst = await GetOffScreenWindowRectAsync(app, screenRect).NoCtx();
+		var windowRectDst = GetOffScreenWindowRect(app, screenRect, screenRects);
+
+		// If we're moving from- or to the "Behind" location, move instantly.
+		if (IsBehind(windowRectSrc) || IsBehind(windowRectDst))
+		{
+			durationMs = 0;
+		}
 
 		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		// Resize window.
 		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 
+		// Move window.
 		await _tween
 			.AnimateAsync(
-				windowRectSrc.Location,
-				windowRectDst.Location,
-				durationMs,
-				_opts.CurrentValue.AnimationTypeToggleOff,
-				app.MoveWindowAsync)
+				src: windowRectSrc.Location,
+				dst: windowRectDst.Location,
+				durationMs: durationMs,
+				animType: _opts.CurrentValue.AnimationTypeToggleOff,
+				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
 
@@ -135,23 +160,35 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Get the position rect a window should be when off-screen.
 	/// </summary>
-	private async Task<Rectangle> GetOffScreenWindowRectAsync(WtqApp app, Rectangle screenRect)
+	private Rectangle GetOffScreenWindowRect(
+		WtqApp app,
+		Rectangle currScreenRect,
+		Rectangle[] screenRects)
 	{
 		Guard.Against.Null(app);
+		Guard.Against.Null(screenRects);
 
-		var windowRect = GetOnScreenWindowRect(app, screenRect);
+		// Get the app's current window rectangle.
+		var windowRect = GetOnScreenWindowRect(app, currScreenRect);
 
 		// Get possible rectangles to move the app to.
-		var targetRects = GetOffScreenWindowRects(app, windowRect, screenRect);
-
-		// Get screen rectangles.
-		var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+		var targetRects = GetOffScreenWindowRects(app, windowRect, currScreenRect);
 
 		// Return first target rectangle that does not overlap with a screen.
-		// TODO: Detect if the calculated target rect is empty (e.g. not within a screen).
-		// TODO: What if directions is empty? Handle that in the options thing instead of here?
-		return targetRects
-			.First(r => !screens.Any(scr => scr.IntersectsWith(r)));
+		var targetRect = targetRects
+			.FirstOrDefault(r => !screenRects.Any(scr => scr.IntersectsWith(r)));
+
+		if (!targetRect.IsEmpty)
+		{
+			return targetRect;
+		}
+
+		// Fallback to "Behind" position, if we can't find a free spot.
+		return currScreenRect with
+		{
+			X = BehindLocation.X,
+			Y = BehindLocation.Y,
+		};
 	}
 
 	/// <summary>
@@ -168,6 +205,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(screenRect);
 
 		var margin = 100;
+
 		return _opts.CurrentValue
 			.GetOffScreenLocationsForApp(app.Options)
 			.Select(dir => dir switch
@@ -196,11 +234,11 @@ public class WtqAppToggleService(
 					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
 				},
 
-				// TODO: Should hide the app window instantly, without moving anything.
 				Behind => windowRect with
 				{
-					// Very high up.
-					Y = screenRect.Y - 10_000_000,
+					// Magic position.
+					X = BehindLocation.X,
+					Y = BehindLocation.Y,
 				},
 				_ => throw new WtqException("Unknown toggle direction."),
 			});
