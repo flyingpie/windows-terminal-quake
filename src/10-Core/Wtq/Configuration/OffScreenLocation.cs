@@ -29,9 +29,4 @@ public enum OffScreenLocation
 	/// Right of the screen.
 	/// </summary>
 	Right,
-
-	/// <summary>
-	/// Instantly hides the window, without actually moving anywhere.
-	/// </summary>
-	Behind,
 }

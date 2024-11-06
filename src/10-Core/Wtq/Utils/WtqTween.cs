@@ -49,11 +49,9 @@ public sealed class WtqTween(
 			var linearProgress = sinceStartMs / durationMs;
 			var progress = (float)animFunc(linearProgress);
 
-			var current = MathUtils.Lerp(src, dst, progress);
-
 			// TODO: Currently, we don't need to move on the X-axis, and there's a little bit of jitter, where X seems to lerp around a bit.
-			// Find out why and fix that, then remove this.
-			// current.X = dst.X;
+			// Find out why and fix that.
+			var current = MathUtils.Lerp(src, dst, progress);
 
 			await move(current).NoCtx();
 

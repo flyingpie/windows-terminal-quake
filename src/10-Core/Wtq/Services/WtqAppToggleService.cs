@@ -9,14 +9,10 @@ public class WtqAppToggleService(
 	IWtqTween tween)
 	: IWtqAppToggleService
 {
-	private static readonly Point BehindLocation = new(0, -1_000_000);
-
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
-
-	private static bool IsBehind(Rectangle rect) => rect.Location == BehindLocation;
 
 	/// <inheritdoc/>
 	public async Task ToggleOnAsync(WtqApp app, ToggleModifiers mods)
@@ -35,12 +31,6 @@ public class WtqAppToggleService(
 		// Source & target rects.
 		var windowRectSrc = GetOffScreenWindowRect(app, screenRect, screenRects);
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
-
-		// If we're moving from- or to the "Behind" location, move instantly.
-		if (IsBehind(windowRectSrc) || IsBehind(windowRectDst))
-		{
-			durationMs = 0;
-		}
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
@@ -75,12 +65,6 @@ public class WtqAppToggleService(
 		// Source & target rects.
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
 		var windowRectDst = GetOffScreenWindowRect(app, screenRect, screenRects);
-
-		// If we're moving from- or to the "Behind" location, move instantly.
-		if (IsBehind(windowRectSrc) || IsBehind(windowRectDst))
-		{
-			durationMs = 0;
-		}
 
 		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
@@ -178,24 +162,14 @@ public class WtqAppToggleService(
 		var targetRect = targetRects
 			.FirstOrDefault(r => !screenRects.Any(scr => scr.IntersectsWith(r)));
 
-		if (!targetRect.IsEmpty)
-		{
-			return targetRect;
-		}
-
-		// Fallback to "Behind" position, if we can't find a free spot.
-		return currScreenRect with
-		{
-			X = BehindLocation.X,
-			Y = BehindLocation.Y,
-		};
+		return !targetRect.IsEmpty ? targetRect : targetRects[0];
 	}
 
 	/// <summary>
 	/// Returns a set of <see cref="Rectangle"/>s, each a possible off-screen position for the <paramref name="windowRect"/> to move to.<br/>
 	/// The list is ordered by <see cref="OffScreenLocation"/>, as specified in the settings.
 	/// </summary>
-	private IEnumerable<Rectangle> GetOffScreenWindowRects(
+	private Rectangle[] GetOffScreenWindowRects(
 		WtqApp app,
 		Rectangle windowRect,
 		Rectangle screenRect)
@@ -234,14 +208,9 @@ public class WtqAppToggleService(
 					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
 				},
 
-				Behind => windowRect with
-				{
-					// Magic position.
-					X = BehindLocation.X,
-					Y = BehindLocation.Y,
-				},
 				_ => throw new WtqException("Unknown toggle direction."),
-			});
+			})
+			.ToArray();
 	}
 
 	/// <summary>
