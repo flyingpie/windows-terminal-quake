@@ -23,6 +23,12 @@
 	{
 		_windows = await WindowService.GetWindowsAsync();
 	}
+
+	void ButtonClicked()
+	{
+		// Handle the Click event of RadzenButton
+	}
+
 }
 
 <div>
@@ -41,4 +47,7 @@
 			</tr>
 		}
 	</table>
+
+	<RadzenButton Click="@ButtonClicked" Text="Hi"></RadzenButton>
+
 </div>

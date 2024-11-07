@@ -6,9 +6,9 @@
 	"Apps": [
 		// Example with PowerShell
 		{
-			"Name": "PowerShell",
+			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
+			"FileName": "dolphin"
 		}
 
 		// Example with Windows Terminal

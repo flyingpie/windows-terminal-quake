@@ -9,6 +9,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Photino.Blazor" />
+		<PackageReference Include="Photino.NET.Server" />
+		<PackageReference Include="Radzen.Blazor" />
 	</ItemGroup>
 
 	<ItemGroup>

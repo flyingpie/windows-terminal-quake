@@ -45,10 +45,10 @@ public sealed class WtqUI
 	{
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
-
 		appBuilder.Services
 			.AddSingleton<IWtqWindowService>(p => _processService)
-			.AddLogging();
+			.AddLogging()
+			;
 
 		// register root component
 		appBuilder.RootComponents.Add<App>("app");
