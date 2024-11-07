@@ -3,13 +3,14 @@
 ## [vFuture]
 
 ## [vNext]
+- First version of a graphical UI.
+- Update docs.
 
-## [2.0.11] / TBD
+## [2.0.11] / 2024-11-07
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
 - Reworked how apps are started (mostly when WTQ starts), should fix a lot of cases where multiple instances of an app (such as Windows Terminal) are started (fixes [145](https://github.com/flyingpie/windows-terminal-quake/issues/145)).
-- Added "WindowTitleOverride", which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
-
-```json
+- Added **WindowTitleOverride**, which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
+```jsonc
 {
   "Apps": [
     {
@@ -18,6 +19,27 @@
     },
     ...
   ]
+}
+```
+
+- Added other **off screen locations**, to support vertically-stacked monitors (see [#146](https://github.com/flyingpie/windows-terminal-quake/issues/146)).
+
+WTQ will look for an empty space outside of the screen, starting above, then below, then to the left, then to the right. Whichever location that does not overlap with a screen wins, in order.
+
+The order can be changed using the "OffScreenLocations" setting:
+```jsonc
+{
+  "Apps": [
+    {
+      // Per app:
+      "Name": "Terminal",
+      "OffScreenLocations": ["Above", "Below", "Left", "Right"]
+    },
+    ...
+  ],
+
+  // ..or globally:
+  "OffScreenLocations": ["Above", "Below", "Left", "Right"]
 }
 ```
 
