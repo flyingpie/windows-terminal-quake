@@ -1,4 +1,4 @@
-@inject IWtqProcessService ProcessService
+@inject IWtqWindowService WindowService
 
 @code
 {
@@ -21,7 +21,7 @@
 
 	public async Task InitAsync()
 	{
-		_windows = await ProcessService.GetWindowsAsync();
+		_windows = await WindowService.GetWindowsAsync();
 	}
 }
 

@@ -12,10 +12,10 @@ namespace Wtq.Services.UI;
 public sealed class WtqUI
 	: IHostedService
 {
-	private readonly IWtqProcessService _processService;
+	private readonly IWtqWindowService _processService;
 	private Thread? _uiThread;
 
-	public WtqUI(IWtqProcessService processService)
+	public WtqUI(IWtqWindowService processService)
 	{
 		_processService = processService;
 	}
@@ -47,7 +47,7 @@ public sealed class WtqUI
 
 
 		appBuilder.Services
-			.AddSingleton<IWtqProcessService>(p => _processService)
+			.AddSingleton<IWtqWindowService>(p => _processService)
 			.AddLogging();
 
 		// register root component
