@@ -1,11 +1,18 @@
 # WTQ v2
 ### Enable Quake-style dropdown for (almost) any application.
+For **Windows 10** & **11**, and **KDE Plasma 5** & **6**.
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
 ![Preview](./assets/logo-01.webp)
 
+On **Windows 10**, with Windows Terminal, Double Commander and Process Hacker.
+
 https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
+
+On **CachyOS**, with WezTerm, Dolphin, System Monitor, KeePassXC and Spotify.
+
+https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf
 
 - Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119)
 - Open an [issue](https://github.com/flyingpie/windows-terminal-quake/issues)
