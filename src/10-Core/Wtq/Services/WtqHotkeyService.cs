@@ -1,19 +1,18 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
-
 namespace Wtq.Services;
 
 /// <summary>
-/// Receives raw hot key events from a platform-specific service, and converts them to more
-/// specific events, such as <see cref="Events.WtqToggleAppEvent"/>.
+/// Receives raw hotkey events from a platform-specific service, and converts them to more
+/// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotKeyService : IHostedService, IWtqHotKeyService
+public class WtqHotkeyService : IAsyncInitializable
 {
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 
-	public WtqHotKeyService(
+	private WtqApp? _prevApp;
+
+	public WtqHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -24,65 +23,65 @@ public class WtqHotKeyService : IHostedService, IWtqHotKeyService
 
 		_opts.OnChange(SendRegisterEvents);
 
-		_bus.OnEvent<WtqHotKeyPressedEvent>(
+		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
-				_bus.Publish(new WtqToggleAppEvent()
-				{
-					App = GetAppForHotKey(e.Modifiers, e.Key),
-				});
+				// Look for app that has the specified hotkey configured.
+				// Fall back to most recently toggled app.
+				// Fall back to first configured app after that.
+				var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
+
+				_bus.Publish(
+					new WtqAppToggledEvent()
+					{
+						App = app,
+					});
+
+				_prevApp = app;
 
 				return Task.CompletedTask;
 			});
 	}
 
-	public WtqApp? GetAppForHotKey(KeyModifiers keyMods, Keys key)
-	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotKey(key, keyMods));
-		if (opt == null)
-		{
-			return null;
-		}
-
-		var res = _appRepo.GetAppByName(opt.Name);
-
-		return res;
-	}
-
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
 		SendRegisterEvents(_opts.CurrentValue);
 
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
 	{
-		return Task.CompletedTask;
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
+
+		return opt == null
+			? null
+			: _appRepo.GetByName(opt.Name);
 	}
 
 	private void SendRegisterEvents(WtqOptions opts)
 	{
-		// _log
 		foreach (var app in opts.Apps)
 		{
-			foreach (var hk in app.HotKeys)
+			foreach (var hk in app.Hotkeys)
 			{
-				_bus.Publish(new WtqRegisterHotKeyEvent()
+				_bus.Publish(
+					new WtqHotkeyDefinedEvent()
+					{
+						Key = hk.Key,
+						Modifiers = hk.Modifiers,
+					});
+			}
+		}
+
+		foreach (var hk in opts.Hotkeys)
+		{
+			_bus.Publish(
+				new WtqHotkeyDefinedEvent()
 				{
 					Key = hk.Key,
 					Modifiers = hk.Modifiers,
 				});
-			}
-		}
-
-		foreach (var hk in opts.HotKeys)
-		{
-			_bus.Publish(new WtqRegisterHotKeyEvent()
-			{
-				Key = hk.Key,
-				Modifiers = hk.Modifiers,
-			});
 		}
 	}
 }

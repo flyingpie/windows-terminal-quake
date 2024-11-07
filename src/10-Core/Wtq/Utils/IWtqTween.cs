@@ -11,9 +11,9 @@ public interface IWtqTween
 	/// The <paramref name="move"/> callback is called with a progressing rectangle (position + size).<br/>
 	/// </summary>
 	Task AnimateAsync(
-		Rectangle src,
-		Rectangle dst,
+		Point src,
+		Point dst,
 		int durationMs,
 		AnimationType animType,
-		Func<Rectangle, Task> move);
+		Func<Point, Task> move);
 }

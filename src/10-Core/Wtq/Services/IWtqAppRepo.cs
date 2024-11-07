@@ -1,12 +1,29 @@
 namespace Wtq.Services;
 
-public interface IWtqAppRepo : IAsyncDisposable
+/// <summary>
+/// The app repo keeps track of <see cref="WtqApp"/> instances, as configured in the settings file.
+/// </summary>
+public interface IWtqAppRepo : IAsyncDisposable, IAsyncInitializable
 {
-	IEnumerable<WtqApp> Apps { get; }
+	/// <summary>
+	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config (if any).
+	/// </summary>
+	WtqApp? GetByName(
+		string name);
 
-	WtqApp? GetAppByName(string name);
+	/// <summary>
+	/// Returns the <see cref="WtqApp"/> instance for the specified <paramref name="window"/> (if any).
+	/// </summary>
+	WtqApp? GetByWindow(
+		WtqWindow window);
 
-	WtqApp GetAppByNameRequired(string name);
+	/// <summary>
+	/// Returns the app that is currently toggled onto the screen (if any).
+	/// </summary>
+	WtqApp? GetOpen();
 
-	Task UpdateAppsAsync();
+	/// <summary>
+	/// Returns the "primary" app, currently just the first one in the settings list (if any).
+	/// </summary>
+	WtqApp? GetPrimary();
 }

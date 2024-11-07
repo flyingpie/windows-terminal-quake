@@ -13,7 +13,7 @@ public class WtqWin32 : WtqHostBase
 
 		services
 			.AddWin32ProcessService()
-			.AddWinFormsHotKeyService()
+			.AddWinFormsHotkeyService()
 			.AddWinFormsScreenInfoProvider()
 			.AddWinFormsTrayIcon();
 	}

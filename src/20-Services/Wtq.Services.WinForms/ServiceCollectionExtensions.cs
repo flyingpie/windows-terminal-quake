@@ -1,24 +1,29 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Services.Win32;
 
 namespace Wtq.Services.WinForms;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddWinFormsHotKeyService(this IServiceCollection services)
+	public static IServiceCollection AddWinFormsHotkeyService(this IServiceCollection services)
 	{
+		Guard.Against.Null(services);
+
 		return services
-			.AddHostedService<WinFormsHotKeyService>();
+			.AddSingleton<WinFormsHotkeyService>();
 	}
 
 	public static IServiceCollection AddWinFormsScreenInfoProvider(this IServiceCollection services)
 	{
+		Guard.Against.Null(services);
+
 		return services
 			.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>();
 	}
 
 	public static IServiceCollection AddWinFormsTrayIcon(this IServiceCollection services)
 	{
+		Guard.Against.Null(services);
+
 		return services
 			.AddHostedService<WinFormsTrayIconService>();
 	}

@@ -1,35 +1,31 @@
-using Microsoft.Extensions.Hosting;
-using Wtq.Events;
 using Wtq.Services.WinForms.Native;
-using Wtq.Utils;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotKeyService : IHostedService
+public class WinFormsHotkeyService : IAsyncInitializable
 {
-	private readonly ILogger _log = Log.For<WinFormsHotKeyService>();
-	private readonly IWtqBus _bus;
+	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
-	public WinFormsHotKeyService(IWtqBus bus)
+	public WinFormsHotkeyService(IWtqBus bus)
 	{
-		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
+		Guard.Against.Null(bus);
 
-		_bus.OnEvent<WtqRegisterHotKeyEvent>(
+		bus.OnEvent<WtqHotkeyDefinedEvent>(
 			e =>
 			{
 				var mods = (KeyModifiers)e.Modifiers;
 				var key = (Keys)e.Key;
 
-				_log.LogInformation("Registering HotKey [{Modifiers}] '{Key}'", mods, key);
+				_log.LogInformation("Registering Hotkey [{Modifiers}] '{Key}'", mods, key);
 
-				HotKeyManager.RegisterHotKey(key, mods);
+				HotkeyManager.RegisterHotkey(key, mods);
 
 				return Task.CompletedTask;
 			});
 
-		HotKeyManager.HotKeyPressed += (s, a) =>
+		HotkeyManager.HotkeyPressed += (s, a) =>
 		{
-			_bus.Publish(new WtqHotKeyPressedEvent()
+			bus.Publish(new WtqHotkeyPressedEvent()
 			{
 				Key = a.Key.ToWtqKeys(),
 				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
@@ -37,13 +33,9 @@ public class WinFormsHotKeyService : IHostedService
 		};
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task InitializeAsync()
 	{
-		return Task.CompletedTask;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
+		// Only here to make sure an instance of this class is created.
 		return Task.CompletedTask;
 	}
 }

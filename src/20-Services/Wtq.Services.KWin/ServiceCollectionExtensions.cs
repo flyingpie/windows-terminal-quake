@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Events;
 using Wtq.Services.KWin.DBus;
+using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin;
 
@@ -8,54 +8,20 @@ public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddKWin(this IServiceCollection services)
 	{
-		return services
-			.AddSingleton<KWinScriptExecutor>()
-			.AddSingleton<IKWinClient>(p => new KWinClient(
-				p.GetRequiredService<KWinScriptExecutor>(),
-				p.GetRequiredService<KWinService>()))
+		Guard.Against.Null(services);
 
+		return services
+
+			// DBus.
 			.AddSingleton<IDBusConnection, DBusConnection>()
-			.AddSingleton(
-				p =>
-				{
-					var dbus = p.GetRequiredService<IDBusConnection>();
+			.AddSingleton<IWtqDBusObject, WtqDBusObject>()
 
-					return new KWinService(dbus.ClientConnection, "org.kde.KWin");
-				})
-			.AddSingleton(
-				p =>
-				{
-					var kwinService = p.GetRequiredService<KWinService>();
+			.AddSingleton<IKWinScriptService, KWinScriptService>()
+			.AddSingleton<IKWinClient, KWinClientV2>()
 
-					return kwinService.CreateScripting("/Scripting");
-				})
-			.AddSingleton<Task<IWtqDBusObject>>(
-				async p =>
-				{
-					var dbus = (DBusConnection)p.GetRequiredService<IDBusConnection>();
-					await dbus.StartAsync(CancellationToken.None).NoCtx();
+			.AddSingleton<IWtqWindowService, KWinWindowService>()
+			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>()
 
-					var wtqDBusObj = new WtqDBusObject(p.GetRequiredService<IWtqBus>());
-
-					await dbus.RegisterServiceAsync("wtq.svc", wtqDBusObj).ConfigureAwait(false);
-
-					return wtqDBusObj;
-				})
-			.AddSingleton<KWinScriptExecutor>()
-			.AddKWinProcessService()
-			.AddKWinScreenCoordsProvider()
-			.AddHostedService<KWinHotKeyService>();
-	}
-
-	public static IServiceCollection AddKWinProcessService(this IServiceCollection services)
-	{
-		return services
-			.AddSingleton<IWtqProcessService, KWinProcessService>();
-	}
-
-	public static IServiceCollection AddKWinScreenCoordsProvider(this IServiceCollection services)
-	{
-		return services
-			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>();
+			.AddSingleton<KWinHotkeyService>();
 	}
 }

@@ -1,51 +1,87 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "$ref": "#/definitions/build",
-  "title": "Build Schema",
+  "properties": {
+    "Configuration": {
+      "type": "string",
+      "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
+      "enum": [
+        "Debug",
+        "Release"
+      ]
+    },
+    "GitHubToken": {
+      "type": "string",
+      "description": "GitHub Token"
+    },
+    "Solution": {
+      "type": "string",
+      "description": "Path to a solution file that is automatically loaded"
+    }
+  },
   "definitions": {
-    "build": {
-      "type": "object",
+    "Host": {
+      "type": "string",
+      "enum": [
+        "AppVeyor",
+        "AzurePipelines",
+        "Bamboo",
+        "Bitbucket",
+        "Bitrise",
+        "GitHubActions",
+        "GitLab",
+        "Jenkins",
+        "Rider",
+        "SpaceAutomation",
+        "TeamCity",
+        "Terminal",
+        "TravisCI",
+        "VisualStudio",
+        "VSCode"
+      ]
+    },
+    "ExecutableTarget": {
+      "type": "string",
+      "enum": [
+        "Clean",
+        "CreateGitHubRelease",
+        "CreateScoopManifest",
+        "CreateWinGetManifest",
+        "PublishDebug",
+        "PublishLinux64",
+        "PublishLinux64Aot",
+        "PublishLinux64FrameworkDependent",
+        "PublishLinux64SelfContained",
+        "PublishRelease",
+        "PublishWin64",
+        "PublishWin64Aot",
+        "PublishWin64FrameworkDependent",
+        "PublishWin64SelfContained",
+        "ReportInfo"
+      ]
+    },
+    "Verbosity": {
+      "type": "string",
+      "description": "",
+      "enum": [
+        "Verbose",
+        "Normal",
+        "Minimal",
+        "Quiet"
+      ]
+    },
+    "NukeBuild": {
       "properties": {
-        "Configuration": {
-          "type": "string",
-          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
-          "enum": [
-            "Debug",
-            "Release"
-          ]
-        },
         "Continue": {
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
-        },
-        "GitHubToken": {
-          "type": "string",
-          "description": "GitHub Token"
         },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
         },
         "Host": {
-          "type": "string",
           "description": "Host for execution. Default is 'automatic'",
-          "enum": [
-            "AppVeyor",
-            "AzurePipelines",
-            "Bamboo",
-            "Bitbucket",
-            "Bitrise",
-            "GitHubActions",
-            "GitLab",
-            "Jenkins",
-            "Rider",
-            "SpaceAutomation",
-            "TeamCity",
-            "Terminal",
-            "TravisCI",
-            "VisualStudio",
-            "VSCode"
-          ]
+          "$ref": "#/definitions/Host"
         },
         "NoLogo": {
           "type": "boolean",
@@ -74,61 +110,22 @@
           "type": "array",
           "description": "List of targets to be skipped. Empty list skips all dependencies",
           "items": {
-            "type": "string",
-            "enum": [
-              "Clean",
-              "CreateGitHubRelease",
-              "CreateScoopManifest",
-              "CreateWinGetManifest",
-              "PublishDebug",
-              "PublishLinux64Aot",
-              "PublishLinux64FrameworkDependent",
-              "PublishLinux64SelfContained",
-              "PublishRelease",
-              "PublishWin64Aot",
-              "PublishWin64FrameworkDependent",
-              "PublishWin64SelfContained",
-              "ReportInfo"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
-        },
-        "Solution": {
-          "type": "string",
-          "description": "Path to a solution file that is automatically loaded"
         },
         "Target": {
           "type": "array",
           "description": "List of targets to be invoked. Default is '{default_target}'",
           "items": {
-            "type": "string",
-            "enum": [
-              "Clean",
-              "CreateGitHubRelease",
-              "CreateScoopManifest",
-              "CreateWinGetManifest",
-              "PublishDebug",
-              "PublishLinux64Aot",
-              "PublishLinux64FrameworkDependent",
-              "PublishLinux64SelfContained",
-              "PublishRelease",
-              "PublishWin64Aot",
-              "PublishWin64FrameworkDependent",
-              "PublishWin64SelfContained",
-              "ReportInfo"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
         },
         "Verbosity": {
-          "type": "string",
           "description": "Logging verbosity during build execution. Default is 'Normal'",
-          "enum": [
-            "Minimal",
-            "Normal",
-            "Quiet",
-            "Verbose"
-          ]
+          "$ref": "#/definitions/Verbosity"
         }
       }
     }
-  }
+  },
+  "$ref": "#/definitions/NukeBuild"
 }

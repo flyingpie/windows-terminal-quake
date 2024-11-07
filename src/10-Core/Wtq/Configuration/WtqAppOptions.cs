@@ -33,7 +33,7 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
 	public float? HorizontalScreenCoverage { get; set; }
 
-	public IEnumerable<HotKeyOptions> HotKeys { get; set; } = [];
+	public IEnumerable<HotkeyOptions> Hotkeys { get; set; } = [];
 
 	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
 	public int? MonitorIndex { get; set; }
@@ -60,15 +60,23 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.TaskBarIconVisibility"/>
 	public TaskBarIconVisibility? TaskbarIconVisibility { get; set; }
 
+	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
+	public IEnumerable<OffScreenLocation>? OffScreenLocations { get; init; }
+
 	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
 	public int? VerticalOffset { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
 	public float? VerticalScreenCoverage { get; set; }
 
-	public bool HasHotKey(Keys key, KeyModifiers modifiers)
+	/// <summary>
+	/// Attempt to set the window title to a specific value.
+	/// </summary>
+	public string? WindowTitleOverride { get; set; }
+
+	public bool HasHotkey(Keys key, KeyModifiers modifiers)
 	{
-		return HotKeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
 	}
 
 	public override string ToString() => Name;

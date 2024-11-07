@@ -1,9 +1,47 @@
 # Changelog
 
 ## [vFuture]
-- Support for KDE Plasma (KWin, currently Wayland only).
 
 ## [vNext]
+- First version of a graphical UI.
+- Update docs.
+
+## [2.0.11] / 2024-11-07
+- Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
+- Reworked how apps are started (mostly when WTQ starts), should fix a lot of cases where multiple instances of an app (such as Windows Terminal) are started (fixes [145](https://github.com/flyingpie/windows-terminal-quake/issues/145)).
+- Added **WindowTitleOverride**, which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
+```jsonc
+{
+  "Apps": [
+    {
+      "Name": "Terminal",
+      "WindowTitleOverride": "The New Window Title"
+    },
+    ...
+  ]
+}
+```
+
+- Added other **off screen locations**, to support vertically-stacked monitors (see [#146](https://github.com/flyingpie/windows-terminal-quake/issues/146)).
+
+WTQ will look for an empty space outside of the screen, starting above, then below, then to the left, then to the right. Whichever location that does not overlap with a screen wins, in order.
+
+The order can be changed using the "OffScreenLocations" setting:
+```jsonc
+{
+  "Apps": [
+    {
+      // Per app:
+      "Name": "Terminal",
+      "OffScreenLocations": ["Above", "Below", "Left", "Right"]
+    },
+    ...
+  ],
+
+  // ..or globally:
+  "OffScreenLocations": ["Above", "Below", "Left", "Right"]
+}
+```
 
 ## [2.0.10] / 2024-07-16
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
@@ -19,7 +57,7 @@
 
 Previously, a background worker was constantly looking for configured apps, and starting processes for ones that weren't running (by default, unless the **AttachMode** was set to something other than **FindOrCreate**).
 
-Now, finding and creating app processes only happens when WTQ starts (configurable) and when a hot key is pressed.
+Now, finding and creating app processes only happens when WTQ starts (configurable) and when a hotkey is pressed.
 
 As a result, an app that is manually closed is no longer automatically restarted. And perhaps more relevant, when starting an app doesn't succeed, it no longer results in an infinite retry loop.
 
@@ -139,7 +177,7 @@ Old syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [ { "Modifiers": "Control", "Key": "D1" } ],
+    "Hotkeys": [ { "Modifiers": "Control", "Key": "D1" } ],
     "FindExisting": {
       "ProcessName": "WindowsTerminal"
     },
@@ -157,7 +195,7 @@ New syntax:
 "Apps": [
   {
     "Name": "Terminal",
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }
@@ -174,7 +212,7 @@ Just looks for existing processes as specified by the "FileName"- and/or "Proces
 - **Start** (very experimental)
 Always starts a new process, specifically to be used by WTQ. Meant for apps that have multiple open instances. Initially meant for (among other things) browsers, but these turn out to be more complicated. This will be documented later.
 - **Manual**
-Attaches whatever app has focus, when the hot key is pressed. Keeps the app attached until WTQ is closed.
+Attaches whatever app has focus, when the hotkey is pressed. Keeps the app attached until WTQ is closed.
 
 The mode can be specified per app (note that "FindOrStart" is the default:
 ```json
@@ -182,7 +220,7 @@ The mode can be specified per app (note that "FindOrStart" is the default:
   {
     "Name": "Terminal",
     "AttachMode": "Find", // Only attach to process that is already running, don't auto-start one.
-    "HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
     "FileName": "wt",
     "ProcessName": "WindowsTerminal"
   }

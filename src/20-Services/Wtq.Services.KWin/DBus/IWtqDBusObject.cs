@@ -6,16 +6,23 @@ namespace Wtq.Services.KWin.DBus;
 /// Contains methods used to talk to, from KWin scripts.
 /// </summary>
 [DBusInterface("wtq.kwin")]
-public interface IWtqDBusObject : IDBusObject
+public interface IWtqDBusObject : IDBusObject, IDisposable
 {
-	/// <summary>
-	/// Called when a shortcut has been pressed.
-	/// </summary>
-	Task OnPressShortcutAsync(string modStr, string keyStr);
+	Task LogAsync(string level, string msg);
 
 	/// <summary>
-	/// Generic callback handler, responses are formatted as JSON.
+	/// Responses to commands (as passed through <seealso cref="GetNextCommandAsync"/>), are dropped here.
 	/// </summary>
-	/// TODO: Can we drop the request/response thing and move to pure events?
-	Task SendResponseAsync(string responderIdStr, string payloadJson);
+	Task SendResponseAsync(string respInfoStr);
+
+	/// <summary>
+	/// Ask WTQ for the next command to execute in the KWin script.
+	/// </summary>
+	Task<string> GetNextCommandAsync();
+
+	/// <summary>
+	/// Called when a shortcut has been pressed.<br/>
+	/// TODO: Would like to remove this, and do shortcuts through DBus (without KWin script). Didn't get that working just yet.
+	/// </summary>
+	Task OnPressShortcutAsync(string modStr, string keyStr);
 }

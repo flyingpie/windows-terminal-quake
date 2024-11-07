@@ -17,20 +17,20 @@
 				{ "const": "Start",			"description": "Always create a new process." }
 			]
 		},
-		"HotKey": {
+		"Hotkey": {
 			"type": "object",
-			"title": "HotKeys",
+			"title": "Hotkeys",
 			"description": "Keyboard combinations for when to toggle the terminal.",
 			"required": [ "Modifiers", "Key" ],
 			"properties": {
 				"Modifiers": {
-					"$id": "#/properties/HotKeys/items/anyOf/0/properties/Modifiers",
+					"$id": "#/properties/Hotkeys/items/anyOf/0/properties/Modifiers",
 					"title": "Modifiers",
 					"description": "Key modifiers, such as control, shift or alt",
 					"enum": [ "Alt", "Control", "Shift", "Windows", "NoRepeat" ]
 				},
 				"Key": {
-					"$id": "#/properties/HotKeys/items/anyOf/0/properties/Key",
+					"$id": "#/properties/Hotkeys/items/anyOf/0/properties/Key",
 					"title": "Key",
 					"description": "Key, such as a letter, a number or a symbol.",
 					"enum": [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "NumPad0", "NumPad1", "NumPad2", "NumPad3", "NumPad4", "NumPad5", "NumPad6", "NumPad7", "NumPad8", "NumPad9", "CapsLock", "Enter", "Escape", "Space", "Tab", "BrowserBack", "BrowserFavorites", "BrowserForward", "BrowserHome", "BrowserRefresh", "BrowserSearch", "BrowserStop", "Oem1", "Oem2", "Oem3", "Oem4", "Oem5", "Oem6", "Oem7", "Oem8", "Oem102", "OemBackslash", "OemClear", "OemCloseBrackets", "Oemcomma", "OemMinus", "OemOpenBrackets", "OemPeriod", "OemPipe", "Oemplus", "OemQuestion", "OemQuotes", "OemSemicolon", "Oemtilde", "Alt", "Control", "ControlKey", "LControlKey", "LMenu", "LShiftKey", "LWin", "RControlKey", "RMenu", "RShiftKey", "RWin", "Shift", "ShiftKey", "Delete", "End", "Home", "Insert", "PageDown", "PageUp", "LButton", "MButton", "RButton", "Down", "Left", "Right", "Up", "Add", "Clear", "Divide", "Multiply", "Subtract", "MediaNextTrack", "MediaPlayPause", "MediaPreviousTrack", "MediaStop", "Apps", "Attn", "Back", "Cancel", "Capital", "Crsel", "Decimal", "EraseEof", "Execute", "Exsel", "FinalMode", "HanguelMode", "HangulMode", "HanjaMode", "Help", "IMEAccept", "IMEAceept", "IMEConvert", "IMEModeChange", "IMENonconvert", "JunjaMode", "KanaMode", "KanjiMode", "KeyCode", "LaunchApplication1", "LaunchApplication2", "LaunchMail", "LineFeed", "Menu", "Modifiers", "Next", "NoName", "None", "NumLock", "Pa1", "Packet", "Pause", "Play", "Print", "PrintScreen", "Prior", "ProcessKey", "Return", "Scroll", "Select", "SelectMedia", "Separator", "Sleep", "Snapshot", "VolumeDown", "VolumeMute", "VolumeUp", "XButton1", "XButton2", "Zoom" ]
@@ -44,7 +44,7 @@
 		// TODO: MaximizeAfterToggle
 		// TODO: Opacity
 		// TODO: StartHidden
-		// TODO: SuppressHotKeyForProcesses
+		// TODO: SuppressHotkeyForProcesses
 		// TODO: TaskbarIconVisibility
 		// TODO: ToggleAnimationFrameTimeMs
 		// TODO: ToggleAnimationType
@@ -74,8 +74,8 @@
 					"FileName": {
 
 					},
-					"HotKeys": {
-						"title": "HotKeys",
+					"Hotkeys": {
+						"title": "Hotkeys",
 						"description": "Keys or key combinations which toggle this app only.",
 						"type": "array",
 						"default": [],
@@ -92,7 +92,7 @@
 							]
 						],
 						"items": {
-							"$ref": "#/$defs/HotKey"
+							"$ref": "#/$defs/Hotkey"
 						}
 					},
 					"MonitorIndex": {
@@ -111,8 +111,8 @@
 		"AttachMode": {
 			"$ref": "#/$defs/AttachMode"
 		},
-		"HotKeys": {
-			"title": "HotKeys",
+		"Hotkeys": {
+			"title": "Hotkeys",
 			"description": "Keys or key combinations which toggle the terminal.",
 			"type": "array",
 			"default": [
@@ -128,7 +128,7 @@
 				]
 			],
 			"items": {
-				"$ref": "#/$defs/HotKey"
+				"$ref": "#/$defs/Hotkey"
 			}
 		},
 		"MonitorIndex": {

@@ -6,22 +6,22 @@
 	"Apps": [
 		// Example with PowerShell
 		{
-			"Name": "Konsole",
-			"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "org.kde.konsole"
+			"Name": "PowerShell",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"FileName": "powershell"
 		}
 
 		// Example with Windows Terminal
 		//{
 		//	"Name": "Terminal",
-		//	"HotKeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
 		//	"FileName": "wt",
 		//	"ProcessName": "WindowsTerminal"
 		//}
 	],
 
-	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
-	"HotKeys": [ { "Modifiers": "Control", "Key": "Q" } ],
+	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
+	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".

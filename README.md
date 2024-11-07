@@ -1,10 +1,22 @@
 # WTQ v2
+### Enable Quake-style dropdown for (almost) any application.
+For **Windows 10** & **11**, and **KDE Plasma 5** & **6**.
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
-Windows Terminal Quake v2 is underway, featuring support for other terminals, other apps in general, and multiple apps simultaneously.
+![Preview](./assets/logo-01.webp)
 
-Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119) to give us feedback, or take a look at a [release](https://github.com/flyingpie/windows-terminal-quake/releases/latest).
+On **Windows 10**, with Windows Terminal, Double Commander and Process Hacker.
+
+https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
+
+On **CachyOS**, with WezTerm, Dolphin, System Monitor, KeePassXC and Spotify.
+
+https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf
+
+- Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119)
+- Open an [issue](https://github.com/flyingpie/windows-terminal-quake/issues)
+- Try a [release](https://github.com/flyingpie/windows-terminal-quake/releases/latest)
 
 ## Manual Download
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
@@ -17,7 +29,6 @@ scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake
 A shortcut is then available named 'WTQ - Windows Terminal Quake', or you can just run 'wtq' from a command line or Win+R.
 
 ## WinGet
-*[Pending WinGet Manifest PR](https://github.com/microsoft/winget-pkgs/pull/151384)*
 ```
 winget install windows-terminal-quake
 ```
@@ -27,6 +38,8 @@ A shortcut is then available named 'wtq', or you can just run 'wtq' from a comma
 https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
 
 # WTQ v1
+WTQ started as a companion app to the new Microsoft's [Windows Terminal](https://github.com/microsoft/terminal), before a rewrite to v2 that supported other apps as well.
+
 If you're missing a feature from v2, feel free to use v1 instead.
 
 Companion program for the new Windows Terminal that enables Quake-style drop down.

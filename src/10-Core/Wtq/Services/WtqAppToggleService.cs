@@ -1,3 +1,5 @@
+using static Wtq.Configuration.OffScreenLocation;
+
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
@@ -20,20 +22,26 @@ public class WtqAppToggleService(
 		// Animation duration.
 		var durationMs = GetDurationMs(mods);
 
-		// Screen bounds.
+		// All available screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get rect of the screen where the app currently is.
 		var screenRect = await GetTargetScreenRectAsync(app).NoCtx();
 
-		// Source & target bounds.
-		var windowRectSrc = GetOffScreenWindowRect(app, screenRect);
+		// Source & target rects.
+		var windowRectSrc = GetOffScreenWindowRect(app, screenRect, screenRects);
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
 
-		// Move window.
-		_log.LogInformation("ToggleOn from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		// Resize window.
+		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
+
+		// Move window.
 		await _tween
 			.AnimateAsync(
-				src: windowRectSrc,
-				dst: windowRectDst,
+				src: windowRectSrc.Location,
+				dst: windowRectDst.Location,
 				durationMs: durationMs,
 				animType: _opts.CurrentValue.AnimationTypeToggleOn,
 				move: app.MoveWindowAsync)
@@ -48,22 +56,29 @@ public class WtqAppToggleService(
 		// Animation duration.
 		var durationMs = GetDurationMs(mods);
 
-		// Screen bounds.
+		// All available screen rects.
+		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		// Get rect of the screen where the app currently is.
 		var screenRect = await app.GetScreenRectAsync().NoCtx();
 
-		// Source & target bounds.
-		var windowRectSrc = app.GetWindowRect();
-		var windowRectDst = GetOffScreenWindowRect(app, screenRect);
+		// Source & target rects.
+		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
+		var windowRectDst = GetOffScreenWindowRect(app, screenRect, screenRects);
 
-		_log.LogInformation("ToggleOff from '{From}' to '{To}'", windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		// Resize window.
+		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
+
+		// Move window.
 		await _tween
 			.AnimateAsync(
-				windowRectSrc,
-				windowRectDst,
-				durationMs,
-				_opts.CurrentValue.AnimationTypeToggleOff,
-				app.MoveWindowAsync)
+				src: windowRectSrc.Location,
+				dst: windowRectDst.Location,
+				durationMs: durationMs,
+				animType: _opts.CurrentValue.AnimationTypeToggleOff,
+				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
 
@@ -129,18 +144,73 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Get the position rect a window should be when off-screen.
 	/// </summary>
-	private Rectangle GetOffScreenWindowRect(WtqApp app, Rectangle screenRect)
+	private Rectangle GetOffScreenWindowRect(
+		WtqApp app,
+		Rectangle currScreenRect,
+		Rectangle[] screenRects)
 	{
 		Guard.Against.Null(app);
+		Guard.Against.Null(screenRects);
 
-		var windowRect = GetOnScreenWindowRect(app, screenRect);
+		// Get the app's current window rectangle.
+		var windowRect = GetOnScreenWindowRect(app, currScreenRect);
 
-		windowRect.Y
-			= screenRect.Y // Top of the screen (which can be negative, when on the non-primary screen).
-			- windowRect.Height // Minus height of the app window.
-			- 100; // Minus a little margin.
+		// Get possible rectangles to move the app to.
+		var targetRects = GetOffScreenWindowRects(app, windowRect, currScreenRect);
 
-		return windowRect;
+		// Return first target rectangle that does not overlap with a screen.
+		var targetRect = targetRects
+			.FirstOrDefault(r => !screenRects.Any(scr => scr.IntersectsWith(r)));
+
+		return !targetRect.IsEmpty ? targetRect : targetRects[0];
+	}
+
+	/// <summary>
+	/// Returns a set of <see cref="Rectangle"/>s, each a possible off-screen position for the <paramref name="windowRect"/> to move to.<br/>
+	/// The list is ordered by <see cref="OffScreenLocation"/>, as specified in the settings.
+	/// </summary>
+	private Rectangle[] GetOffScreenWindowRects(
+		WtqApp app,
+		Rectangle windowRect,
+		Rectangle screenRect)
+	{
+		Guard.Against.Null(app);
+		Guard.Against.Null(windowRect);
+		Guard.Against.Null(screenRect);
+
+		var margin = 100;
+
+		return _opts.CurrentValue
+			.GetOffScreenLocationsForApp(app.Options)
+			.Select(dir => dir switch
+			{
+				Above or None => windowRect with
+				{
+					// Top of the screen, minus height of the app window.
+					Y = screenRect.Y - windowRect.Height - margin,
+				},
+
+				Below => windowRect with
+				{
+					// Bottom of the screen.
+					Y = screenRect.Y + screenRect.Height + margin,
+				},
+
+				Left => windowRect with
+				{
+					// Left of the screen, minus width of the app window.
+					X = screenRect.X - windowRect.Width - margin,
+				},
+
+				Right => windowRect with
+				{
+					// Right of the screen, plus width of the app window.
+					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
+				},
+
+				_ => throw new WtqException("Unknown toggle direction."),
+			})
+			.ToArray();
 	}
 
 	/// <summary>
