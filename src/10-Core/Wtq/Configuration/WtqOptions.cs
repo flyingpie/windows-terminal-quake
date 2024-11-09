@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
@@ -126,6 +126,14 @@ public sealed class WtqOptions
 		= TaskBarIconVisibility.AlwaysHidden;
 
 	/// <summary>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
+	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
+	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+	/// </summary>
+	public IEnumerable<OffScreenLocation> OffScreenLocations { get; init; }
+		= [Above, Below, Left, Right];
+
+	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
@@ -185,6 +193,13 @@ public sealed class WtqOptions
 		Guard.Against.Null(opts);
 
 		return opts.TaskbarIconVisibility ?? TaskBarIconVisibility;
+	}
+
+	public IEnumerable<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		return opts.OffScreenLocations ?? OffScreenLocations;
 	}
 
 	public float GetVerticalOffsetForApp(WtqAppOptions opts)
