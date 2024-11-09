@@ -1,44 +1,11 @@
-@inject IWtqWindowService WindowService
-
-@code
-{
-	string message;
-	private int currentCount = 0;
-
-	IEnumerable<WtqWindow>? _windows;
-
-	protected override async Task OnParametersSetAsync()
-	{
-		message = "Hello Photino.Blazor!";
-
-		await InitAsync();
-	}
-
-	void IncrementCount(object e)
-	{
-		currentCount += 2;
-	}
-
-	public async Task InitAsync()
-	{
-		_windows = await WindowService.GetWindowsAsync();
-	}
-}
-
-<div>
-	<h1>@message!</h1>
-
-	<p>Current count: @currentCount</p>
-
-	<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
-	<table>
-		@foreach (var proc in _windows ?? [])
-		{
-			<tr>
-				<td>@proc.Id</td>
-				<td>@proc.Name</td>
-			</tr>
-		}
-	</table>
-</div>
+<Router AppAssembly="@typeof(App).Assembly">
+	<Found Context="routeData">
+		<RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+	</Found>
+	<NotFound>
+		<PageTitle>Not found</PageTitle>
+		<LayoutView Layout="@typeof(MainLayout)">
+			<p role="alert">Sorry, there's nothing at this address.</p>
+		</LayoutView>
+	</NotFound>
+</Router>

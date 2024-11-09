@@ -5,10 +5,13 @@
 
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
+
+		<ApplicationIcon>wwwroot/img/icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Photino.Blazor" />
+		<PackageReference Include="Photino.Blazor"/>
+		<PackageReference Include="Radzen.Blazor"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -18,12 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-<!--		<None Update="favicon.ico">-->
-<!--			<CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--		</None>-->
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
 </Project>
