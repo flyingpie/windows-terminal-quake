@@ -54,8 +54,9 @@ public sealed class WtqUI
 
 		// customize window
 		app.MainWindow
-			.SetIconFile("wwwroot/img/icon.ico")
-			.SetTitle("Photino Hello World");
+			// .SetIconFile("wwwroot/img/icon.ico")
+			// .Load("wwwroot/_content/Wtq.Services.UI/index.html")
+			.SetTitle("Photino Hello World 3");
 
 		app.MainWindow.RegisterWindowClosingHandler((s, a) =>
 		{

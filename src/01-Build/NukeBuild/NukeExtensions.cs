@@ -114,6 +114,13 @@ public static partial class NukeExtensions
 			.Release.Create(owner, name, newRelease);
 	}
 
+	public static void MoveWtqUI(this AbsolutePath root)
+	{
+		var wwwroot = root / "wwwroot";
+		var wtqUI = wwwroot / "_content/Wtq.Services.UI";
+		wtqUI.Move(wwwroot, ExistsPolicy.DirectoryMerge);
+	}
+
 	public static async Task UploadReleaseAssetToGithub(
 		this GitHubClient client,
 		Release release,
