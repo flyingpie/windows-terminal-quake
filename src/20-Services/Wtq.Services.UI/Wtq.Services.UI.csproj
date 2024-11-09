@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BlazorMonaco" />
 		<PackageReference Include="Photino.Blazor"/>
 		<PackageReference Include="Radzen.Blazor"/>
 	</ItemGroup>
