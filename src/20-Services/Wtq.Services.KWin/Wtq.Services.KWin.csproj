@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Threading"/>
+		<PackageReference Include="NotificationIcon.NET" />
 		<PackageReference Include="Tmds.DBus"/>
 		<PackageReference Include="Tmds.DBus.Protocol"/>
 	</ItemGroup>
