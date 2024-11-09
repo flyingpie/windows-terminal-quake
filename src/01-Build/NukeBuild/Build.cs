@@ -150,7 +150,12 @@ public sealed class Build : NukeBuild
 				.SetRuntime("linux-x64")
 				.SetSelfContained(false));
 
-			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			// st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+
+			// var wwwroot = st / "wwwroot";
+			// var wtqUI = wwwroot / "_content/Wtq.Services.UI";
+			// wtqUI.Move(wwwroot, ExistsPolicy.DirectoryMerge);
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToLinux64FrameworkDependentZip,
@@ -178,7 +183,9 @@ public sealed class Build : NukeBuild
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			// st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToLinux64SelfContainedZip,
@@ -236,7 +243,9 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(false));
 
-			st.DeleteFilesExceptFor("wtq.exe");
+			// st.DeleteFilesExceptFor("wtq.exe");
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToWin64FrameworkDependentZip,
@@ -265,7 +274,9 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFilesExceptFor("wtq.exe");
+			// st.DeleteFilesExceptFor("wtq.exe");
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToWin64SelfContainedZip,

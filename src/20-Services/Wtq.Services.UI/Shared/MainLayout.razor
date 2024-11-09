@@ -1,0 +1,22 @@
+@inherits LayoutComponentBase
+
+<RadzenComponents/>
+
+<RadzenLayout>
+	<RadzenSidebar>
+		<RadzenPanelMenu>
+			<RadzenPanelMenuItem Text="Home" Icon="home"/>
+			<RadzenPanelMenuItem Text="Users" Icon="account_box" Path="/ActiveWindows"/>
+			<RadzenPanelMenuItem Text="Active Windows" Icon="account_box" Path="/ActiveWindows"/>
+			<RadzenPanelMenuItem Text="Editor" Icon="account_box" Path="/Editor"/>
+		</RadzenPanelMenu>
+	</RadzenSidebar>
+	<RadzenBody>
+		<div class="rz-p-4">
+			@Body
+		</div>
+	</RadzenBody>
+	<RadzenFooter>
+		Footer
+	</RadzenFooter>
+</RadzenLayout>

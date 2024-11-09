@@ -1,0 +1,19 @@
+@page "/ActiveWindows"
+
+@inject IWtqWindowService WindowService
+
+@code {
+	IEnumerable<WtqWindow>? _windows = [];
+
+	protected override async Task OnParametersSetAsync()
+	{
+		_windows = await WindowService.GetWindowsAsync();
+	}
+}
+
+<RadzenDataGrid Data="@_windows" GridLines="DataGridGridLines.Both" AllowPaging="true" AllowSorting="true" Count="50">
+	<Columns>
+		<RadzenDataGridColumn Property="@nameof(WtqWindow.Name)" Title="@nameof(WtqWindow.Name)"/>
+		<RadzenDataGridColumn Property="Name" Title="ProductID"/>
+	</Columns>
+</RadzenDataGrid>

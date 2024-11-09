@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Radzen;
 
 namespace Wtq.Services.UI;
 
@@ -9,6 +10,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
+			.AddRadzenComponents()
 			.AddHostedService<WtqUI>();
 	}
 }

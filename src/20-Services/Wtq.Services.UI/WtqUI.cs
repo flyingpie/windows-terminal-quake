@@ -1,11 +1,7 @@
-using Ardalis.GuardClauses;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
-using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Wtq.Services.UI;
 
@@ -36,7 +32,7 @@ public sealed class WtqUI
 
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		//_uiThread.Join();
+		// _uiThread.Join();
 
 		return Task.CompletedTask;
 	}
@@ -45,10 +41,11 @@ public sealed class WtqUI
 	{
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
+		// TODO: Unify with the main app DI.
 		appBuilder.Services
 			.AddSingleton<IWtqWindowService>(p => _processService)
-			.AddLogging()
-			;
+			.AddUI()
+			.AddLogging();
 
 		// register root component
 		appBuilder.RootComponents.Add<App>("app");
@@ -57,8 +54,9 @@ public sealed class WtqUI
 
 		// customize window
 		app.MainWindow
-			// .SetIconFile("favicon.ico")
-			.SetTitle("Photino Hello World");
+			// .SetIconFile("wwwroot/img/icon.ico")
+			// .Load("wwwroot/_content/Wtq.Services.UI/index.html")
+			.SetTitle("Photino Hello World 3");
 
 		app.MainWindow.RegisterWindowClosingHandler((s, a) =>
 		{

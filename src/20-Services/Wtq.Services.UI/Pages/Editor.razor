@@ -1,0 +1,33 @@
+@page "/Editor"
+
+@inject IJSRuntime jsRuntime
+
+@code {
+
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		// await BlazorMonaco.Editor.Global.SetTheme(jsRuntime, "Visual Studio Dark");
+	}
+
+	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+	{
+		return new StandaloneEditorConstructionOptions
+		{
+			AutomaticLayout = true,
+			Theme = "vs-dark",
+			Language = "xml",
+			Value = "<root></root>",
+		};
+	}
+
+}
+
+<StandaloneCodeEditor Id="my-editor-instance-id" ConstructionOptions="EditorConstructionOptions" />
+
+<style>
+	.monaco-editor-container { /* for all editor instances */
+		height: 600px;
+	}
+</style>
