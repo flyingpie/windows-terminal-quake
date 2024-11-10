@@ -149,8 +149,6 @@ internal sealed class WtqDBusObject(
 				Modifiers = mod,
 			});
 
-		_bus.Publish(new WtqUIRequestedEvent());
-
 		return Task.CompletedTask;
 	}
 

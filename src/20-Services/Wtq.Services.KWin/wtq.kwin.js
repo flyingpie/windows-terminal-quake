@@ -8,7 +8,7 @@ let wtq = {};
 // Logging /////////////////////////////////////////////////
 
 log.log = (level, msg) => {
-	// console.log(`${new Date().toISOString()} [${level}] ${msg}`);
+	console.log(`${new Date().toISOString()} [${level}] ${msg}`);
 	wtq.log(level, msg);
 };
 
@@ -245,6 +245,7 @@ cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 			.getWindows()
 			.map(w => {
 				return {
+					caption: w.caption,
 					internalId: w.internalId,
 					resourceClass: w.resourceClass,
 					resourceName: w.resourceName
@@ -341,5 +342,16 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	w.skipPager = skip;
 	w.skipSwitcher = skip;
 	w.skipTaskbar = skip;
+};
+
+cmds["SET_WINDOW_VISIBLE"] = (cmdInfo) => {
+	const p = cmdInfo.params;
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
+
+	const minimized = !(p.isVisible == "true");
+
+	log.info(`Setting window visible for window with internal id '${p.internalId}' to '${p.isVisible}'`);
+
+	w.minimized = minimized;
 };
 ////////////////////////////////////////////////////////////

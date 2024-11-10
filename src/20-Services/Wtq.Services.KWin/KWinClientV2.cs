@@ -204,7 +204,7 @@ internal sealed class KWinClientV2(
 				})
 			.NoCtx();
 
-		await GetWindowAsync(window).NoCtx();
+		// await GetWindowAsync(window).NoCtx();
 	}
 
 	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
@@ -219,7 +219,7 @@ internal sealed class KWinClientV2(
 				})
 			.NoCtx();
 
-		await GetWindowAsync(window).NoCtx();
+		// await GetWindowAsync(window).NoCtx();
 	}
 
 	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
@@ -234,6 +234,21 @@ internal sealed class KWinClientV2(
 				})
 			.NoCtx();
 
-		await GetWindowAsync(window).NoCtx();
+		// await GetWindowAsync(window).NoCtx();
+	}
+
+	public async Task SetWindowVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	{
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"SET_WINDOW_VISIBLE",
+				new
+				{
+					internalId = window.InternalId,
+					isVisible = isVisible,
+				})
+			.NoCtx();
+
+		// await GetWindowAsync(window).NoCtx();
 	}
 }

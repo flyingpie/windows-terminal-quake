@@ -21,7 +21,9 @@ public class KWinWtqWindow(
 	/// </summary>
 	public override bool IsValid { get; } = true;
 
-	public override string? Name => _window?.ResourceClass;
+	public override string? Name => $"[{_window?.InternalId}] {_window?.ResourceClass} {_window?.ResourceName} {_window?.Caption}";
+
+	public override string? Title => _window?.Caption;
 
 	public override async Task BringToForegroundAsync()
 	{
@@ -79,5 +81,10 @@ public class KWinWtqWindow(
 	{
 		// TODO
 		return Task.CompletedTask;
+	}
+
+	public override async Task SetWindowVisibleAsync(bool isVisible)
+	{
+		await _kwinClient.SetWindowVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 	}
 }
