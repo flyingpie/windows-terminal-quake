@@ -24,8 +24,6 @@ internal class KWinHotkeyService : IAsyncInitializable
 
 	public async Task InitializeAsync()
 	{
-		return;
-
 		var kwinx = await _dbus.GetKWinServiceAsync();
 
 		var gl = kwinx.CreateKGlobalAccel("/kglobalaccel");

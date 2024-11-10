@@ -1,31 +1,57 @@
 using NotificationIcon.NET;
-using System.Runtime.InteropServices;
 
 namespace Wtq.Services.KWin;
 
-public sealed class KWinTrayIconService : IAsyncDisposable, IAsyncInitializable
+public sealed class KWinTrayIconService
+	: IAsyncDisposable, IAsyncInitializable
 {
+	private readonly IWtqBus _bus;
+	private readonly IWtqUIThreadService _uiThread;
+
+	private NotifyIcon _icon;
+
 	// NotifyIcon icon;
 	Thread _iconThread;
 
+	public KWinTrayIconService(
+		IWtqBus bus,
+		IWtqUIThreadService uiThread)
+	{
+		_bus = bus;
+		_uiThread = uiThread;
+
+		_iconThread = new Thread(ShowStatusIcon);
+		_iconThread.Start();
+	}
+
 	public async Task InitializeAsync()
 	{
-		// _iconThread = new Thread(() =>
-		// {
-			string iconPath = AppContext.BaseDirectory;
-			iconPath = Path.Join(iconPath, "icon.ico");
+	}
 
-			// if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			// {
-			// }
-			// else
-			// {
-			// 	iconPath = Path.Join(iconPath, "icon.png");
-			// }
+	public async ValueTask DisposeAsync()
+	{
+		// TODO release managed resources here
+		var dbg = 2;
+	}
 
-			var icon = NotifyIcon.Create(iconPath, new List<MenuItem>()
+	private void ShowStatusIcon()
+	{
+		string iconPath = AppContext.BaseDirectory;
+		iconPath = Path.Join(iconPath, "icon.ico");
+
+		_icon = NotifyIcon.Create(
+			iconPath,
+			new List<MenuItem>()
 			{
-				new MenuItem("Example Button"),
+				new MenuItem("Example Button")
+				{
+					Click = (s, e) =>
+					{
+						Console.WriteLine("Example Button!");
+						// _bus.Publish(new WtqUIReadyEvent());
+						_uiThread.OpenMainWindow();
+					},
+				},
 				new MenuItem("Example Checkbox")
 				{
 					IsChecked = true,
@@ -33,31 +59,22 @@ public sealed class KWinTrayIconService : IAsyncDisposable, IAsyncInitializable
 					{
 						MenuItem me = (MenuItem)s!;
 						me.IsChecked = !me.IsChecked;
-					}
+					},
 				},
 				new MenuItem("Quit")
 				{
-					Click = (s, e) =>
-					{
-						e.Icon.Dispose();
-					}
-				}
+					Click = (s, e) => { e.Icon.Dispose(); }
+				},
 			});
 
-			var dbg2 =2;
+		while (true)
+		{
+			_uiThread.RunOnUIThread(() =>
+			{
+				_icon.MessageLoopIteration(true);
+			});
 
-			icon.Show();
-
-			var dbg =2;
-		// });
-
-		// _iconThread.SetApartmentState(ApartmentState.STA);
-		// _iconThread.Start();
-	}
-
-	public async ValueTask DisposeAsync()
-	{
-		// TODO release managed resources here
-		var dbg = 2;
+			Thread.Sleep(100);
+		}
 	}
 }

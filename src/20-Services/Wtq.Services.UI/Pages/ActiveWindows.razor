@@ -3,7 +3,7 @@
 @inject IWtqWindowService WindowService
 
 @code {
-	IEnumerable<WtqWindow>? _windows = [];
+	private IEnumerable<WtqWindow>? _windows = [];
 
 	protected override async Task OnParametersSetAsync()
 	{

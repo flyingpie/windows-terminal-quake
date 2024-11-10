@@ -1,22 +1,24 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
 using System.Runtime.InteropServices;
+using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI
-	: IHostedService
+public sealed class WtqUI(IWtqWindowService processService)
+	: IAsyncInitializable, IWtqUIThreadService
 {
-	private readonly IWtqWindowService _processService;
-	private Thread? _uiThread;
+	private readonly IWtqWindowService _processService = Guard.Against.Null(processService);
 
-	public WtqUI(IWtqWindowService processService)
+	private Thread? _uiThread;
+	private PhotinoBlazorApp? _app;
+
+	public Task InitializeAsync()
 	{
-		_processService = processService;
+		return Task.CompletedTask;
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
+	public void OpenMainWindow()
 	{
 		_uiThread = new Thread(StartUI);
 
@@ -26,19 +28,12 @@ public sealed class WtqUI
 		}
 
 		_uiThread.Start();
-
-		return Task.CompletedTask;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		// _uiThread.Join();
-
-		return Task.CompletedTask;
 	}
 
 	private void StartUI()
 	{
+		_lock1.Wait();
+
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
 		// TODO: Unify with the main app DI.
@@ -47,31 +42,64 @@ public sealed class WtqUI
 			.AddUI()
 			.AddLogging();
 
-		// register root component
 		appBuilder.RootComponents.Add<App>("app");
 
-		var app = appBuilder.Build();
+		_app = appBuilder.Build();
 
-		// customize window
-		app.MainWindow
+		_app.MainWindow
+
 			// .SetIconFile("wwwroot/img/icon.ico")
-			// .Load("wwwroot/_content/Wtq.Services.UI/index.html")
 			.SetTitle("Photino Hello World 3");
 
-		app.MainWindow.RegisterWindowClosingHandler((s, a) =>
+		_app.MainWindow.RegisterWindowCreatedHandler(
+			(s, a) =>
+			{
+				//
+				Console.WriteLine("CREATED");
+				_lock1.Release();
+			});
+
+		_app.MainWindow.RegisterWindowClosingHandler(
+			(s, a) =>
+			{
+				var dbg = 2;
+				_app = null;
+
+				return false;
+			});
+
+		AppDomain.CurrentDomain.UnhandledException +=
+			(sender, error) =>
+			{
+				//
+				_app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
+			};
+
+		_app.Run();
+
+		Console.WriteLine("CLOSE");
+	}
+
+	private readonly SemaphoreSlim _lock1 = new(1);
+
+	public void RunOnUIThread(Action action)
+	{
+		try
 		{
-			var dbg = 2;
+			_lock1.Wait();
 
-			return false;
-		});
+			// TODO: Thread safety.
+			if (_app?.MainWindow != null)
+			{
+				_app.MainWindow.Invoke(action);
+				return;
+			}
 
-		AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+			action();
+		}
+		finally
 		{
-			app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
-		};
-
-		app.Run();
-
-		var dbg2 = 2;
+			_lock1.Release();
+		}
 	}
 }

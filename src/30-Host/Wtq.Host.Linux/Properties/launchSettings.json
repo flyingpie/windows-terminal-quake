@@ -1,6 +1,6 @@
 {
 	"profiles": {
-		"Wtq.Host.Windows": {
+		"Wtq.Host.Linux": {
 			"commandName": "Project",
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1"
