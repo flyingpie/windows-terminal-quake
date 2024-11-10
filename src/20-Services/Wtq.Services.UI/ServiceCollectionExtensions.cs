@@ -11,7 +11,6 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddRadzenComponents()
-			.AddSingleton<WtqUI>()
-			.AddSingleton<IWtqUIThreadService>(p => p.GetRequiredService<WtqUI>());
+			.AddSingleton<WtqUI>();
 	}
 }

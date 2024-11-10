@@ -6,7 +6,7 @@ using Wtq.Utils.AsyncInit;
 namespace Wtq.Services.UI;
 
 public sealed class WtqUI(IWtqWindowService processService)
-	: IAsyncInitializable, IWtqUIThreadService
+	: IAsyncInitializable
 {
 	private readonly IWtqWindowService _processService = Guard.Against.Null(processService);
 
@@ -32,8 +32,6 @@ public sealed class WtqUI(IWtqWindowService processService)
 
 	private void StartUI()
 	{
-		_lock1.Wait();
-
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
 		// TODO: Unify with the main app DI.
@@ -56,7 +54,6 @@ public sealed class WtqUI(IWtqWindowService processService)
 			{
 				//
 				Console.WriteLine("CREATED");
-				_lock1.Release();
 			});
 
 		_app.MainWindow.RegisterWindowClosingHandler(
@@ -78,28 +75,5 @@ public sealed class WtqUI(IWtqWindowService processService)
 		_app.Run();
 
 		Console.WriteLine("CLOSE");
-	}
-
-	private readonly SemaphoreSlim _lock1 = new(1);
-
-	public void RunOnUIThread(Action action)
-	{
-		try
-		{
-			_lock1.Wait();
-
-			// TODO: Thread safety.
-			if (_app?.MainWindow != null)
-			{
-				_app.MainWindow.Invoke(action);
-				return;
-			}
-
-			action();
-		}
-		finally
-		{
-			_lock1.Release();
-		}
 	}
 }
