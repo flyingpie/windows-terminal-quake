@@ -1,13 +1,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 using System.Runtime.InteropServices;
+using Wtq.Events;
 using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI(IWtqWindowService processService)
+public sealed class WtqUI(
+	IWtqBus bus,
+	IWtqWindowService processService)
 	: IAsyncInitializable
 {
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IWtqWindowService _processService = Guard.Against.Null(processService);
 
 	private Thread? _uiThread;
@@ -15,6 +19,14 @@ public sealed class WtqUI(IWtqWindowService processService)
 
 	public Task InitializeAsync()
 	{
+		_bus.OnEvent<WtqUIRequestedEvent>(
+			e =>
+			{
+				OpenMainWindow();
+
+				return Task.CompletedTask;
+			});
+
 		return Task.CompletedTask;
 	}
 
