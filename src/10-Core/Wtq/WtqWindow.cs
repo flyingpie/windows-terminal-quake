@@ -21,6 +21,8 @@ public abstract class WtqWindow
 	/// </summary>
 	public abstract string? Name { get; }
 
+	public abstract string? Title { get; }
+
 	public abstract Task BringToForegroundAsync();
 
 	/// <summary>
@@ -41,6 +43,8 @@ public abstract class WtqWindow
 	public abstract Task SetTransparencyAsync(int transparency);
 
 	public abstract Task SetWindowTitleAsync(string title);
+
+	public abstract Task SetWindowVisibleAsync(bool isVisible);
 
 	public override string ToString() => $"[{Id}] {Name}";
 

@@ -55,4 +55,9 @@ public interface IKWinClient : IAsyncDisposable
 		KWinWindow window,
 		float opacity,
 		CancellationToken cancellationToken);
+
+	Task SetWindowVisibleAsync(
+		KWinWindow window,
+		bool isVisible,
+		CancellationToken cancellationToken);
 }

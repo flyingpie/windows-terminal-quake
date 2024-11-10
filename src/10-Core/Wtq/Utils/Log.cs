@@ -16,6 +16,7 @@ public static class Log
 
 		Serilog.Log.Logger = new LoggerConfiguration()
 			.MinimumLevel.Information() // TODO: Configurable.
+			// .MinimumLevel.Verbose()
 
 			.WriteTo.Console()
 

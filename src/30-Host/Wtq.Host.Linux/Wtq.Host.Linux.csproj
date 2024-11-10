@@ -6,7 +6,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<OutputType>Exe</OutputType>
 
-
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
@@ -15,10 +14,10 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="icon.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="icon.ico">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
@@ -29,14 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj"/>
-		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
+		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
 	</ItemGroup>
-
-<!--	<ItemGroup>-->
-<!--		<Content Include="..\..\20-Services\Wtq.Services.UI\wwwroot\**" LinkBase="wwwroot">-->
-<!--			<CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--		</Content>-->
-<!--	</ItemGroup>-->
 </Project>

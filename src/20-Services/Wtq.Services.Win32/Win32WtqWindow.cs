@@ -16,6 +16,8 @@ public sealed class Win32WtqWindow(
 
 	public override string? Name => _process.ProcessName;
 
+	public override string? Title => _process.MainWindowTitle;
+
 	public override Task BringToForegroundAsync()
 	{
 		User32.SetForegroundWindow(_process.MainWindowHandle);
@@ -156,6 +158,13 @@ public sealed class Win32WtqWindow(
 	public override Task SetWindowTitleAsync(string title)
 	{
 		User32.SetWindowText(_process.MainWindowHandle, title);
+
+		return Task.CompletedTask;
+	}
+
+	public override Task SetWindowVisibleAsync(bool isVisible)
+	{
+//		User32.ShowWindow(_process.MainWindowHandle, isVisible ? WindowShowStyle.Show : WindowShowStyle.Hide);
 
 		return Task.CompletedTask;
 	}

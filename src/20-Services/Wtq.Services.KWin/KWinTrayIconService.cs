@@ -6,7 +6,7 @@ public sealed class KWinTrayIconService
 	: IAsyncDisposable, IAsyncInitializable
 {
 	private readonly IWtqBus _bus;
-	private readonly IWtqUIThreadService _uiThread;
+	private readonly IWtqUIService _ui;
 
 	private NotifyIcon _icon;
 
@@ -15,10 +15,10 @@ public sealed class KWinTrayIconService
 
 	public KWinTrayIconService(
 		IWtqBus bus,
-		IWtqUIThreadService uiThread)
+		IWtqUIService ui)
 	{
 		_bus = bus;
-		_uiThread = uiThread;
+		_ui = ui;
 
 		_iconThread = new Thread(ShowStatusIcon);
 		_iconThread.Start();
@@ -49,7 +49,7 @@ public sealed class KWinTrayIconService
 					{
 						Console.WriteLine("Example Button!");
 						// _bus.Publish(new WtqUIReadyEvent());
-						_uiThread.OpenMainWindow();
+						_ = Task.Run(() => _ui.OpenMainWindowAsync());
 					},
 				},
 				new MenuItem("Example Checkbox")
@@ -69,7 +69,7 @@ public sealed class KWinTrayIconService
 
 		while (true)
 		{
-			_uiThread.RunOnUIThread(() =>
+			_ui.RunOnUIThread(() =>
 			{
 				_icon.MessageLoopIteration(true);
 			});

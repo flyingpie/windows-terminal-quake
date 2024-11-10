@@ -1,25 +1,29 @@
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
+using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
+using Wtq.Utils;
 using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI(IWtqWindowService processService)
-	: IAsyncInitializable, IWtqUIThreadService
+public sealed class WtqUI : IAsyncInitializable, IWtqUIService
 {
-	private readonly IWtqWindowService _processService = Guard.Against.Null(processService);
+	private readonly IWtqWindowService _windowService;
+	private readonly IWtqWindowService _processService;
 
 	private Thread? _uiThread;
 	private PhotinoBlazorApp? _app;
+	private Point? _loc;
 
-	public Task InitializeAsync()
+	public WtqUI(
+		IWtqWindowService windowService,
+		IWtqWindowService processService)
 	{
-		return Task.CompletedTask;
-	}
+		_windowService = windowService;
+		_processService = Guard.Against.Null(processService);
 
-	public void OpenMainWindow()
-	{
 		_uiThread = new Thread(StartUI);
 
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -30,10 +34,65 @@ public sealed class WtqUI(IWtqWindowService processService)
 		_uiThread.Start();
 	}
 
+	public Task InitializeAsync()
+	{
+		return Task.CompletedTask;
+	}
+
+	public async Task CloseMainWindowAsync()
+	{
+		var w = await FindWtqMainWindowAsync().NoCtx();
+
+		if (w == null)
+		{
+			return;
+		}
+
+		await w.MoveToAsync(new Point(0, -1_000_000)).NoCtx();
+		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
+	}
+
+	public async Task OpenMainWindowAsync()
+	{
+		var w = await FindWtqMainWindowAsync().NoCtx();
+
+		if (w == null)
+		{
+			return;
+		}
+
+		await w.MoveToAsync(_loc ?? Point.Empty).NoCtx();
+		await w.BringToForegroundAsync().NoCtx();
+		await w.SetTaskbarIconVisibleAsync(true).NoCtx();
+	}
+
+	public void RunOnUIThread(Action action)
+	{
+		_app?.MainWindow?.Invoke(action);
+	}
+
+	private async Task<WtqWindow?> FindWtqMainWindowAsync()
+	{
+		for (var i = 0; i < 10; i++)
+		{
+			var windows = await _windowService.GetWindowsAsync().NoCtx();
+
+			var mainWindow = windows.FirstOrDefault(w => w.Title == "WTQ - Main Window");
+
+			if (mainWindow != null)
+			{
+				_loc ??= (await mainWindow.GetWindowRectAsync().NoCtx()).Location;
+				return mainWindow;
+			}
+
+			await Task.Delay(TimeSpan.FromMilliseconds(200)).NoCtx();
+		}
+
+		return null;
+	}
+
 	private void StartUI()
 	{
-		_lock1.Wait();
-
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
 		// TODO: Unify with the main app DI.
@@ -47,59 +106,23 @@ public sealed class WtqUI(IWtqWindowService processService)
 		_app = appBuilder.Build();
 
 		_app.MainWindow
-
 			// .SetIconFile("wwwroot/img/icon.ico")
-			.SetTitle("Photino Hello World 3");
+			.SetTitle("WTQ - Main Window");
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
 			(s, a) =>
 			{
-				//
-				Console.WriteLine("CREATED");
-				_lock1.Release();
+				_ = Task.Run(CloseMainWindowAsync);
 			});
 
 		_app.MainWindow.RegisterWindowClosingHandler(
 			(s, a) =>
 			{
-				var dbg = 2;
-				_app = null;
+				_ = Task.Run(CloseMainWindowAsync);
 
-				return false;
+				return true;
 			});
 
-		AppDomain.CurrentDomain.UnhandledException +=
-			(sender, error) =>
-			{
-				//
-				_app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
-			};
-
 		_app.Run();
-
-		Console.WriteLine("CLOSE");
-	}
-
-	private readonly SemaphoreSlim _lock1 = new(1);
-
-	public void RunOnUIThread(Action action)
-	{
-		try
-		{
-			_lock1.Wait();
-
-			// TODO: Thread safety.
-			if (_app?.MainWindow != null)
-			{
-				_app.MainWindow.Invoke(action);
-				return;
-			}
-
-			action();
-		}
-		finally
-		{
-			_lock1.Release();
-		}
 	}
 }

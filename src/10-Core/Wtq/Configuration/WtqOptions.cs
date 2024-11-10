@@ -118,6 +118,12 @@ public sealed class WtqOptions
 		= PreferMonitor.WithCursor;
 
 	/// <summary>
+	/// Temporary setting to toggle the UI.<br/>
+	/// Switch to tray icon when we have one on Linux.
+	/// </summary>
+	public bool ShowUI { get; set; }
+
+	/// <summary>
 	/// When to show the terminal window icon on the taskbar.<br/>
 	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
 	/// Defaults to "AlwaysHidden".
