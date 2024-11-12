@@ -1,22 +1,66 @@
 @inherits LayoutComponentBase
 
+@code {
+
+	private string _appVersion;
+
+	protected override void OnInitialized()
+	{
+		_appVersion = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+	}
+
+}
+
 <RadzenComponents/>
 
 <RadzenLayout>
 	<RadzenSidebar>
 		<RadzenPanelMenu>
-			<RadzenPanelMenuItem Text="Home" Icon="home"/>
-			<RadzenPanelMenuItem Text="Users" Icon="account_box" Path="/ActiveWindows"/>
+			<RadzenPanelMenuItem Text="Welcome" Icon="home" Path="/Welcome" />
+			<hr/>
+			<RadzenPanelMenuItem Text="Global Settings" Icon="account_box" Path="/GlobalSettings"/>
+			<RadzenPanelMenuItem Text="Apps" Icon="account_box" Path="/Apps">
+				<RadzenPanelMenuItem Text="WezTerm" Path="/Apps/1" />
+				<RadzenPanelMenuItem Text="Dolphin" Path="/Apps/2" />
+				<RadzenPanelMenuItem Text="System Information" Path="/Apps/3" />
+				<RadzenPanelMenuItem Text="KeePassXC" Path="/Apps/4" />
+				<RadzenPanelMenuItem Text="Spotify" Path="/Apps/5" />
+				<RadzenPanelMenuItem Text="Discord" Path="/Apps/6" />
+			</RadzenPanelMenuItem>
+			<RadzenPanelMenuItem Text="Disq" Icon="account_box" Path="/Disq"/>
+			<hr/>
 			<RadzenPanelMenuItem Text="Active Windows" Icon="account_box" Path="/ActiveWindows"/>
-			<RadzenPanelMenuItem Text="Editor" Icon="account_box" Path="/Editor"/>
+			<RadzenPanelMenuItem Text="Logs" Icon="account_box" Path="/Logs"/>
+			<RadzenPanelMenuItem Text="Settings (JSON)" Icon="account_box" Path="/Editor"/>
 		</RadzenPanelMenu>
 	</RadzenSidebar>
 	<RadzenBody>
-		<div class="rz-p-4">
+		<div class="rz-p-2">
 			@Body
 		</div>
 	</RadzenBody>
-	<RadzenFooter>
-		Footer
+	<RadzenFooter Style="padding: 1em;">
+		<RadzenStack Orientation="Orientation.Vertical" Gap="1em;">
+			<RadzenStack
+				Orientation="Orientation.Horizontal"
+				JustifyContent="JustifyContent.Center">
+				<RadzenColumn>WTQ @_appVersion</RadzenColumn>
+			</RadzenStack>
+			@* <RadzenStack *@
+			@* 	Orientation="Orientation.Horizontal" *@
+			@* 	JustifyContent="JustifyContent.SpaceEvenly"> *@
+			@* 	<RadzenColumn>Footer</RadzenColumn> *@
+			@* 	<RadzenColumn> *@
+			@* 		<a href="https://www.github.com/flyingpie/windows-terminal-quake"><RadzenIcon Icon="account_circle"></RadzenIcon>&nbsp;GitHub</a> *@
+			@* 	</RadzenColumn> *@
+			@* 	<RadzenColumn>Footer</RadzenColumn> *@
+			@* </RadzenStack> *@
+		</RadzenStack>
 	</RadzenFooter>
 </RadzenLayout>
+
+<style>
+	body {
+		background: #19191a;
+	}
+</style>
