@@ -13,12 +13,6 @@
 		<None Include="..\..\..\schema\wtq.schema.2.json" Link="wtq.schema.2.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="icon.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="icon.ico">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,8 +22,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj" />
-		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj"/>
+		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\..\..\assets\icon-01-64.png">
+			<Link>icon.png</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 </Project>
