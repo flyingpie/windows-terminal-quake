@@ -3,11 +3,8 @@ namespace Wtq.Utils;
 public sealed class InitLock
 {
 	private readonly SemaphoreSlim _lock = new(1);
-	private bool _isInit;
 
-	public InitLock()
-	{
-	}
+	private bool _isInit;
 
 	public async Task InitAsync(Func<Task> action)
 	{

@@ -8,7 +8,7 @@ let wtq = {};
 // Logging /////////////////////////////////////////////////
 
 log.log = (level, msg) => {
-	console.log(`${new Date().toISOString()} [${level}] ${msg}`);
+	// console.log(`${new Date().toISOString()} [${level}] ${msg}`);
 	wtq.log(level, msg);
 };
 

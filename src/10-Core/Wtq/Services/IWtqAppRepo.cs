@@ -3,7 +3,7 @@ namespace Wtq.Services;
 /// <summary>
 /// The app repo keeps track of <see cref="WtqApp"/> instances, as configured in the settings file.
 /// </summary>
-public interface IWtqAppRepo : IAsyncDisposable
+public interface IWtqAppRepo
 {
 	/// <summary>
 	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config (if any).

@@ -6,12 +6,13 @@ namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService :
 	IDisposable,
-	IHostedService, // TODO: Remove
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
+
+	private readonly InitLock _lock = new();
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
@@ -22,18 +23,10 @@ public sealed class Win32WindowService :
 	{
 		Guard.Against.Null(opts);
 
+		await InitAsync().NoCtx();
+
 		await CreateProcessAsync(opts).ConfigureAwait(false);
 	}
-
-	public async Task StartAsync(
-		CancellationToken cancellationToken)
-	{
-		await UpdateProcessesAsync().ConfigureAwait(false);
-	}
-
-	public Task StopAsync(
-		CancellationToken cancellationToken)
-		=> Task.CompletedTask;
 
 	public void Dispose()
 	{
@@ -46,6 +39,8 @@ public sealed class Win32WindowService :
 	{
 		Guard.Against.Null(opts);
 
+		await InitAsync().NoCtx();
+
 		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
 
 		return processes.FirstOrDefault(p => p.Matches(opts));
@@ -54,6 +49,8 @@ public sealed class Win32WindowService :
 	public Task<WtqWindow?> GetForegroundWindowAsync(
 		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		try
 		{
 			var fg = GetForegroundProcessId();
@@ -73,6 +70,8 @@ public sealed class Win32WindowService :
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
@@ -88,6 +87,8 @@ public sealed class Win32WindowService :
 
 	private async Task CreateProcessAsync(WtqAppOptions opts)
 	{
+		await InitAsync().NoCtx();
+
 		_log.LogInformation("Creating process for app '{App}'", opts);
 
 		using var process = new Process();
@@ -114,6 +115,11 @@ public sealed class Win32WindowService :
 		}
 
 		await UpdateProcessesAsync(force: true).NoCtx();
+	}
+
+	private async Task InitAsync()
+	{
+		await _lock.InitAsync(() => UpdateProcessesAsync()).NoCtx();
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)

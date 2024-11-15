@@ -8,7 +8,6 @@ public sealed class KWinScript(
 
 	public async ValueTask DisposeAsync()
 	{
-		// TODO
-		// await _onDispose().NoCtx();
+		await _onDispose().NoCtx();
 	}
 }

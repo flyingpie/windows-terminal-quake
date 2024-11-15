@@ -88,8 +88,8 @@ internal sealed class DBusConnection : IDBusConnection
 	{
 		_log.LogInformation("Cleaning up DBus connections");
 
-		// _clientConnection.Dispose();
-		// _serverConnection.Dispose();
+		_clientConnection.Dispose();
+		_serverConnection.Dispose();
 	}
 
 	/// <inheritdoc/>
