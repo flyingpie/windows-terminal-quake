@@ -6,7 +6,7 @@ namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService :
 	IDisposable,
-	IHostedService,
+	IHostedService, // TODO: Remove
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
@@ -16,19 +16,23 @@ public sealed class Win32WindowService :
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
 
-	public async Task CreateAsync(WtqAppOptions opts)
+	public async Task CreateAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
 		await CreateProcessAsync(opts).ConfigureAwait(false);
 	}
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	public async Task StartAsync(
+		CancellationToken cancellationToken)
 	{
 		await UpdateProcessesAsync().ConfigureAwait(false);
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(
+		CancellationToken cancellationToken)
 		=> Task.CompletedTask;
 
 	public void Dispose()
@@ -36,16 +40,19 @@ public sealed class Win32WindowService :
 		_lock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
-		var processes = await GetWindowsAsync().NoCtx();
+		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
 
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public Task<WtqWindow?> GetForegroundWindowAsync()
+	public Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -63,7 +70,8 @@ public sealed class Win32WindowService :
 		return Task.FromResult<WtqWindow?>(null);
 	}
 
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
+		CancellationToken cancellationToken)
 	{
 		await UpdateProcessesAsync().NoCtx();
 

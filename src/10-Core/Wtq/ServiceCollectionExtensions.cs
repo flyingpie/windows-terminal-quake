@@ -38,10 +38,9 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqTween, WtqTween>()
 
 			// Core App Logic
-			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>()
+			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
-			// .AddSingleton<IWtqUpdateLoopService, WtqUpdateLoopService>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 
 			.AddHostedService<WtqFocusTracker>()

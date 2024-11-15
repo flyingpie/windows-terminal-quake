@@ -51,16 +51,13 @@ public class WtqHostBase
 					.AddOptionsWithValidateOnStart<WtqOptions>()
 					.Bind(config);
 
-				ConfigureServices(opt);
-
 				opt
 					.AddUI()
 
 					// Utils
 					.AddWtqCore();
 
-				// opt
-				// 	.AddAsyncInitializable();
+				ConfigureServices(opt);
 			})
 			.UseSerilog()
 			.Build();
@@ -70,8 +67,6 @@ public class WtqHostBase
 	{
 		try
 		{
-			// await _host.Services.InitializeAsync().NoCtx();
-
 			await _host
 				.RunAsync()
 				.ConfigureAwait(false);

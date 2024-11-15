@@ -3,7 +3,7 @@ namespace Wtq.Utils;
 /// <summary>
 /// Runs a specified task at a specified interval.
 /// </summary>
-public sealed class Worker : IAsyncDisposable
+public sealed class Worker : IDisposable
 {
 	public static readonly TimeSpan DefaultInterval = TimeSpan.FromMilliseconds(250);
 
@@ -24,27 +24,27 @@ public sealed class Worker : IAsyncDisposable
 		_action = action;
 		_interval = interval;
 
-		_ = Task.Run(async () =>
-		{
-			while (!_cts.IsCancellationRequested)
+		_ = Task.Run(
+			async () =>
 			{
-				try
+				while (!_cts.Token.IsCancellationRequested)
 				{
-					await action(_cts.Token).NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogWarning(ex, "Error running iteration for loop: {Message}", ex.Message);
-				}
+					try
+					{
+						await action(_cts.Token).NoCtx();
+					}
+					catch (Exception ex)
+					{
+						_log.LogWarning(ex, "Error running iteration for loop: {Message}", ex.Message);
+					}
 
-				await Task.Delay(_interval).NoCtx();
-			}
-		});
+					await Task.Delay(_interval).NoCtx();
+				}
+			});
 	}
 
-	public async ValueTask DisposeAsync()
+	public void Dispose()
 	{
-		await _cts.CancelAsync().NoCtx();
-		// _cts.Dispose();
+		_cts.Dispose();
 	}
 }

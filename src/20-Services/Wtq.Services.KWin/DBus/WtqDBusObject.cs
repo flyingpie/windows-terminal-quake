@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
 using Tmds.DBus;
@@ -6,16 +5,15 @@ using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
 using Wtq.Services.KWin.Exceptions;
-using IAsyncDisposable = System.IAsyncDisposable;
 
 namespace Wtq.Services.KWin.DBus;
 
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
-	IWtqBus bus,
-	IHostApplicationLifetime lifetime)
-	: IAsyncDisposable, IHostedService, IWtqDBusObject
+	IWtqBus bus)
+	: IDisposable, IWtqDBusObject
 {
+	private const string ServiceName = "wtq.svc";
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
 	private readonly CancellationTokenSource _cts = new();
@@ -26,47 +24,72 @@ internal sealed class WtqDBusObject(
 
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
-	private readonly IHostApplicationLifetime _lifetime = Guard.Against.Null(lifetime);
+
+	private readonly InitLock _lock = new();
 
 	private Worker? _loop;
 
-	public int InitializePriority => 10;
-
 	public ObjectPath ObjectPath => _path;
+	private bool _isDisposed;
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	#region Setup
+
+	public async Task InitAsync()
 	{
-		await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up WTQ DBus service");
 
-		StartNoOpLoop();
+				// Register this object as a DBus service.
+				await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
+
+				// Start NOOP loop.
+				StartNoOpLoop();
+			})
+			.NoCtx();
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
-	}
-
-	public async ValueTask DisposeAsync()
+	public void Dispose()
 	{
 		_cts.Dispose();
-		_dbus.Dispose();
 
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		_isDisposed = true;
 	}
 
-	public Task LogAsync(string level, string msg)
+	/// <summary>
+	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+	/// and the connection is dropped.
+	/// </summary>
+	private void StartNoOpLoop()
 	{
-		// TODO
-		_log.LogDebug("{Level} {Message}", level, msg);
-
-		return Task.CompletedTask;
+		_loop = new(
+			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx(),
+			TimeSpan.FromSeconds(10));
 	}
 
-	public Task<ResponseInfo> SendCommandAsync(string commandType, object? parameters = null)
-		=> SendCommandAsync(new CommandInfo(commandType) { Params = parameters ?? new() });
+	#endregion
 
-	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
+	#region Called by WTQ
+
+	public Task<ResponseInfo> SendCommandAsync(
+		string commandType,
+		object? parameters,
+		CancellationToken cancellationToken)
+		=> SendCommandAsync(
+			new CommandInfo(commandType)
+			{
+				Params = parameters,
+			},
+			cancellationToken);
+
+	public async Task<ResponseInfo> SendCommandAsync(
+		CommandInfo cmdInfo,
+		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
 		// Add response waiter.
@@ -85,7 +108,14 @@ internal sealed class WtqDBusObject(
 		// Wait for response
 		try
 		{
-			return await waiter.Task.TimeoutAfterAsync(TimeSpan.FromSeconds(1)).NoCtx();
+			return await waiter.Task
+				.WithCancellation(cancellationToken)
+				.WithTimeout(TimeSpan.FromSeconds(1))
+				.NoCtx();
+		}
+		catch (TaskCanceledException)
+		{
+			throw new KWinException($"Task canceled while attempting to send KWin command '{cmdInfo}'");
 		}
 		catch (TimeoutException ex)
 		{
@@ -93,10 +123,14 @@ internal sealed class WtqDBusObject(
 		}
 	}
 
+	#endregion
+
+	#region Called from KWin script
+
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync()
 	{
-		while (!_lifetime.ApplicationStopping.IsCancellationRequested)
+		while (!_cts.IsCancellationRequested)
 		{
 			// See if we have a command on the queue to send back.
 			if (_commandQueue.TryDequeue(out var cmdInfo))
@@ -106,11 +140,40 @@ internal sealed class WtqDBusObject(
 			}
 
 			// If not, wait for one to be queued.
-			await _res.WaitAsync(_lifetime.ApplicationStopping).NoCtx();
+			await _res.WaitAsync(_cts.Token).NoCtx();
 		}
 
 		_log.LogTrace("Sending 'STOPPING' command to KWin script");
 		return JsonSerializer.Serialize(CommandInfo.Stopping);
+	}
+
+	public Task LogAsync(string level, string msg)
+	{
+		// TODO
+		_log.LogDebug("{Level} {Message}", level, msg);
+
+		return Task.CompletedTask;
+	}
+
+	/// <inheritdoc/>
+	public Task OnPressShortcutAsync(string modStr, string keyStr)
+	{
+		_log.LogInformation(
+			"{MethodName}({Modifier}, {Key})",
+			nameof(OnPressShortcutAsync),
+			modStr,
+			keyStr);
+
+		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
+		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
+
+		_bus.Publish(
+			new WtqHotkeyPressedEvent()
+			{
+				Key = key, Modifiers = mod,
+			});
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc/>
@@ -146,37 +209,5 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
-	/// <inheritdoc/>
-	public Task OnPressShortcutAsync(string modStr, string keyStr)
-	{
-		_log.LogInformation(
-			"{MethodName}({Modifier}, {Key})",
-			nameof(OnPressShortcutAsync),
-			modStr,
-			keyStr);
-
-		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
-		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-
-		_bus.Publish(
-			new WtqHotkeyPressedEvent()
-			{
-				Key = key,
-				Modifiers = mod,
-			});
-
-		return Task.CompletedTask;
-	}
-
-	/// <summary>
-	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connections is dropped.
-	/// </summary>
-	private void StartNoOpLoop()
-	{
-		_loop = new(
-			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
-			async _ => await SendCommandAsync("NOOP").NoCtx(),
-			TimeSpan.FromSeconds(10));
-	}
+	#endregion
 }

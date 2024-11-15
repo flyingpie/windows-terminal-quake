@@ -124,7 +124,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
 
-		await _loop.DisposeAsync().NoCtx();
+		_loop.Dispose();
 	}
 
 	/// <summary>

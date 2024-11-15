@@ -9,7 +9,7 @@
 
 	protected override async Task OnParametersSetAsync()
 	{
-		_windows = await WindowService.GetWindowsAsync();
+		_windows = await WindowService.GetWindowsAsync(CancellationToken.None);
 	}
 }
 

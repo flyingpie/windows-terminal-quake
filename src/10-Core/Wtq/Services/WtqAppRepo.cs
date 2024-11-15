@@ -1,9 +1,7 @@
-using Microsoft.Extensions.Hosting;
-
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppRepo"/>.
-public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
+public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -26,26 +24,21 @@ public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
+
+		_ = Task.Run(async () =>
+		{
+			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+			// "StartApps": "OnWtqStart | OnHotkeyPress"
+			await UpdateAppsAsync(allowStartNew: true).NoCtx();
+		});
 	}
 
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-		// "StartApps": "OnWtqStart | OnHotkeyPress"
-		await UpdateAppsAsync(allowStartNew: true).NoCtx();
-	}
-
-	public async Task StopAsync(CancellationToken cancellationToken)
+	public async ValueTask DisposeAsync()
 	{
 		foreach (var app in _apps)
 		{
 			await app.DisposeAsync().NoCtx();
 		}
-	}
-
-	public async ValueTask DisposeAsync()
-	{
-		// TODO: Is this called?
 	}
 
 	/// <inheritdoc/>

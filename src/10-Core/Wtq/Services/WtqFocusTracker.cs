@@ -23,7 +23,7 @@ public sealed class WtqFocusTracker(
 			async _ =>
 			{
 				// Get current foreground window (could be null).
-				var curr = await _windowService.GetForegroundWindowAsync().NoCtx();
+				var curr = await _windowService.GetForegroundWindowAsync(cancellationToken).NoCtx();
 
 				// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
 				// Note that both the past- and the future window can be null.
@@ -49,6 +49,6 @@ public sealed class WtqFocusTracker(
 
 	public async ValueTask DisposeAsync()
 	{
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		_loop?.Dispose();
 	}
 }

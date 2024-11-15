@@ -9,22 +9,26 @@ public interface IWtqWindowService
 	/// Start an application, so we can attach to its window later. The specified <see cref="WtqAppOptions"/> defines startup parameters.
 	/// </summary>
 	Task CreateAsync(
-		WtqAppOptions opts);
+		WtqAppOptions opts,
+		CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Looks for a window that matches the specified <paramref name="opts"/>.
 	/// </summary>
 	Task<WtqWindow?> FindWindowAsync(
-		WtqAppOptions opts);
+		WtqAppOptions opts,
+		CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Returns the window that currently has UI focus.
 	/// </summary>
-	Task<WtqWindow?> GetForegroundWindowAsync();
+	Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Returns a list of all windows that can be attached to.<br/>
 	/// Includes the ones we may already have attached to.
 	/// </summary>
-	Task<ICollection<WtqWindow>> GetWindowsAsync();
+	Task<ICollection<WtqWindow>> GetWindowsAsync(
+		CancellationToken cancellationToken);
 }

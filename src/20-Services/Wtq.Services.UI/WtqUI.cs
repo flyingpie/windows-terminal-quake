@@ -84,7 +84,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 	{
 		for (var i = 0; i < 10; i++)
 		{
-			var windows = await _windowService.GetWindowsAsync().NoCtx();
+			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
 
 			var mainWindow = windows.FirstOrDefault(w => w.Title == "WTQ - Main Window");
 
@@ -99,6 +99,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 		return null;
 	}
+
+	private bool _isClosing;
 
 	private void StartUI()
 	{
@@ -115,7 +117,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
-			.SetIconFile("icon.png")
+			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("icon.png"))
 			.SetTitle("WTQ - Main Window");
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
@@ -129,10 +131,15 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 			{
 				_ = Task.Run(CloseMainWindowAsync);
 
-				return true;
+				return !_isClosing;
 			});
 
-		_appLifetime.ApplicationStopping.Register(() => _app.MainWindow.Close());
+		_appLifetime.ApplicationStopping.Register(() =>
+		{
+			_isClosing = true;
+
+			_app.MainWindow.Close();
+		});
 
 		_app.Run();
 	}

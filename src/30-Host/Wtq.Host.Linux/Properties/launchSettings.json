@@ -2,9 +2,10 @@
 	"profiles": {
 		"Wtq.Host.Linux": {
 			"commandName": "Project",
+			"workingDirectory": "/home/marco",
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
-				"WTQ_CONFIG_FILE": "/home/marco/.config/wtq/wtq.jsonc"
+				"WTQ_CONFIG_FILE_1": "/home/marco/.config/wtq/wtq.jsonc"
 			}
 		}
 	}

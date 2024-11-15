@@ -4,7 +4,7 @@ using NotificationIcon.NET;
 namespace Wtq.Services.KWin;
 
 public sealed class KWinTrayIconService
-	: IAsyncDisposable, IHostedService
+	: IDisposable, IHostedService
 {
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
@@ -31,9 +31,9 @@ public sealed class KWinTrayIconService
 
 	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-	public async ValueTask DisposeAsync()
+	public void Dispose()
 	{
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		_loop?.Dispose();
 	}
 
 	private void ShowStatusIcon()
@@ -54,7 +54,7 @@ public sealed class KWinTrayIconService
 
 		_loop = new(
 			nameof(KWinTrayIconService),
-			_ =>
+			ct =>
 			{
 				_ui.RunOnUIThread(() => { _icon.MessageLoopIteration(true); });
 

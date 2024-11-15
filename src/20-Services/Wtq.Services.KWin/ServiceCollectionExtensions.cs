@@ -13,9 +13,9 @@ public static class ServiceCollectionExtensions
 		return services
 
 			// DBus.
-			.AddHostedServiceSingleton<IDBusConnection, DBusConnection>()
-			.AddHostedServiceSingleton<IWtqDBusObject, WtqDBusObject>()
-			.AddHostedServiceSingleton<IKWinClient, KWinClientV2>()
+			.AddSingleton<IDBusConnection, DBusConnection>()
+			.AddSingleton<IWtqDBusObject, WtqDBusObject>()
+			.AddSingleton<IKWinClient, KWinClientV2>()
 
 			.AddSingleton<IKWinScriptService, KWinScriptService>()
 			.AddSingleton<IWtqWindowService, KWinWindowService>()

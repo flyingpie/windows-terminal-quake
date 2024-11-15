@@ -37,9 +37,9 @@ public sealed class WtqService : IHostedService
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	public async Task StopAsync(CancellationToken cancellationToken)
 	{
-		return Task.CompletedTask;
+		await _appRepo.DisposeAsync().NoCtx();
 	}
 
 	public void Dispose()

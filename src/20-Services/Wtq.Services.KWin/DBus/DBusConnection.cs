@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Tmds.DBus;
 using Address = Tmds.DBus.Protocol.Address;
 using Connection = Tmds.DBus.Protocol.Connection;
@@ -6,7 +5,7 @@ using Connection = Tmds.DBus.Protocol.Connection;
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc cref="IDBusConnection"/>
-internal sealed class DBusConnection : IHostedService, IDBusConnection
+internal sealed class DBusConnection : IDBusConnection
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
@@ -23,6 +22,8 @@ internal sealed class DBusConnection : IHostedService, IDBusConnection
 	private DBus.Generated.KWinService? _kwinService;
 	private DBus.Generated.KWin? _kwin;
 	private DBus.Generated.Scripting? _scripting;
+
+	private readonly InitLock _lock = new();
 
 	public DBusConnection()
 		: this(Address.Session)
@@ -41,36 +42,42 @@ internal sealed class DBusConnection : IHostedService, IDBusConnection
 
 	public int InitializePriority => 20;
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	private async Task InitAsync()
 	{
-		_log.LogInformation("Setting up DBus connections");
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up DBus connections");
 
-		var sw = Stopwatch.StartNew();
-		await _clientConnection.ConnectAsync().NoCtx();
-		_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
+				var sw = Stopwatch.StartNew();
+				await _clientConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
 
-		sw.Restart();
-		await _serverConnection.ConnectAsync().NoCtx();
-		_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
+				sw.Restart();
+				await _serverConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
+			})
+			.NoCtx();
 	}
 
 	public async Task<DBus.Generated.KWinService> GetKWinServiceAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _kwinService ??= new DBus.Generated.KWinService(_clientConnection, "org.kde.KWin");
 	}
 
 	public async Task<DBus.Generated.KWin> GetKWinAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
 	}
 
 	public async Task<DBus.Generated.Scripting> GetScriptingAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _scripting ??= (await GetKWinServiceAsync().NoCtx()).CreateScripting("/Scripting");
 	}
 
@@ -81,13 +88,15 @@ internal sealed class DBusConnection : IHostedService, IDBusConnection
 	{
 		_log.LogInformation("Cleaning up DBus connections");
 
-		_clientConnection.Dispose();
-		_serverConnection.Dispose();
+		// _clientConnection.Dispose();
+		// _serverConnection.Dispose();
 	}
 
 	/// <inheritdoc/>
 	public async Task RegisterServiceAsync(string serviceName, IDBusObject serviceObject)
 	{
+		await InitAsync().NoCtx();
+
 		Guard.Against.NullOrWhiteSpace(serviceName);
 		Guard.Against.Null(serviceObject);
 

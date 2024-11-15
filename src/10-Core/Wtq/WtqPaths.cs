@@ -72,6 +72,8 @@ public static class WtqPaths
 		Path.Combine(AppDataWtq, "wtq.json5"),
 	];
 
+	public static string GetPathRelativeToWtqAppDir(string path) => Path.Combine(GetWtqAppDir(), path);
+
 	/// <summary>
 	/// Path to directory that contains the WTQ executable.
 	/// </summary>

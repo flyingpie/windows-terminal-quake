@@ -32,7 +32,7 @@ public class KWinWtqWindow(
 
 	public override async Task<Rectangle> GetWindowRectAsync()
 	{
-		var w = await _kwinClient.GetWindowAsync(_window).NoCtx();
+		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
 		return w.FrameGeometry.ToRect(); // TODO: Handle null.
 	}
