@@ -40,8 +40,7 @@ internal sealed class KWinClientV2(
 
 	public async ValueTask DisposeAsync()
 	{
-		// TODO
-		// await (_script?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		await (_script?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public async Task BringToForegroundAsync(

@@ -13,10 +13,10 @@ public static class Log
 	public static void Configure()
 	{
 		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
+		var logLevel = WtqEnv.LogLevel;
 
 		Serilog.Log.Logger = new LoggerConfiguration()
-			.MinimumLevel.Information() // TODO: Configurable.
-			// .MinimumLevel.Verbose()
+			.MinimumLevel.Is(logLevel)
 
 			.WriteTo.Console()
 
@@ -30,6 +30,8 @@ public static class Log
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
 		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
 		_factory.AddProvider(provider);
+
+		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()
