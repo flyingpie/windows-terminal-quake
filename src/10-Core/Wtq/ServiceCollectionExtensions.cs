@@ -5,6 +5,29 @@ namespace Wtq;
 
 public static class ServiceCollectionExtensions
 {
+	public static IServiceCollection AddHostedServiceSingleton<TImplementation>(
+		this IServiceCollection services)
+		where TImplementation : class, IHostedService
+	{
+		Guard.Against.Null(services);
+
+		return services
+			.AddSingleton<TImplementation>()
+			.AddHostedService<TImplementation>(p => (TImplementation)p.GetRequiredService<TImplementation>());
+	}
+
+	public static IServiceCollection AddHostedServiceSingleton<TService, TImplementation>(
+		this IServiceCollection services)
+		where TImplementation : class, IHostedService, TService
+		where TService : class
+	{
+		Guard.Against.Null(services);
+
+		return services
+			.AddSingleton<TService, TImplementation>()
+			.AddHostedService<TImplementation>(p => (TImplementation)p.GetRequiredService<TService>());
+	}
+
 	public static IServiceCollection AddWtqCore(this IServiceCollection services)
 	{
 		Guard.Against.Null(services);
@@ -15,13 +38,14 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqTween, WtqTween>()
 
 			// Core App Logic
-			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
+			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
+			// .AddSingleton<IWtqUpdateLoopService, WtqUpdateLoopService>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 
-			.AddSingleton<WtqFocusTracker>()
-			.AddSingleton<WtqHotkeyService>()
-			.AddSingleton<WtqService>();
+			.AddHostedService<WtqFocusTracker>()
+			.AddHostedService<WtqHotkeyService>()
+			.AddHostedService<WtqService>();
 	}
 }

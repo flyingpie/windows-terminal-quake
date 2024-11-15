@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
@@ -12,7 +13,7 @@ internal sealed class KWinClientV2(
 	IDBusConnection dbus,
 	IKWinScriptService scriptService,
 	IWtqDBusObject wtqBusObj)
-	: IAsyncInitializable, IKWinClient
+	: IHostedService, IKWinClient
 {
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 
@@ -23,12 +24,12 @@ internal sealed class KWinClientV2(
 
 	public int InitializePriority => 5;
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		_script = await scriptService.LoadScriptAsync("wtq.kwin.js").NoCtx();
 	}
 
-	public async ValueTask DisposeAsync()
+	public async Task StopAsync(CancellationToken cancellationToken)
 	{
 		if (_script != null)
 		{

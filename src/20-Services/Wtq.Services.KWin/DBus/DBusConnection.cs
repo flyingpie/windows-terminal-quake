@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Tmds.DBus;
 using Address = Tmds.DBus.Protocol.Address;
 using Connection = Tmds.DBus.Protocol.Connection;
@@ -5,7 +6,7 @@ using Connection = Tmds.DBus.Protocol.Connection;
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc cref="IDBusConnection"/>
-internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
+internal sealed class DBusConnection : IHostedService, IDBusConnection
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
@@ -40,7 +41,7 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 
 	public int InitializePriority => 20;
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		_log.LogInformation("Setting up DBus connections");
 
@@ -51,6 +52,11 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 		sw.Restart();
 		await _serverConnection.ConnectAsync().NoCtx();
 		_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
 	}
 
 	public async Task<DBus.Generated.KWinService> GetKWinServiceAsync()

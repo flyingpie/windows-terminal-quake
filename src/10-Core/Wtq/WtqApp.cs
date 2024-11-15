@@ -22,6 +22,8 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
 
+	private readonly Worker _loop;
+
 	private Rectangle? _originalRect;
 
 	public WtqApp(
@@ -41,17 +43,10 @@ public sealed class WtqApp : IAsyncDisposable
 		Name = Guard.Against.NullOrWhiteSpace(name);
 
 		// Start loop that updates app state periodically.
-		// TODO: Generalize loop.
-		_ = Task.Run(
-			async () =>
-			{
-				while (true)
-				{
-					await UpdateLocalAppStateAsync(allowStartNew: false).NoCtx();
-
-					await Task.Delay(TimeSpan.FromSeconds(1)).NoCtx();
-				}
-			});
+		_loop = new(
+			$"{nameof(WtqApp)}.{name}",
+			_ => UpdateLocalAppStateAsync(allowStartNew: false),
+			TimeSpan.FromSeconds(1));
 	}
 
 	/// <summary>
@@ -128,6 +123,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
+
+		await _loop.DisposeAsync().NoCtx();
 	}
 
 	/// <summary>

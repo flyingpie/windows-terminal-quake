@@ -1,12 +1,13 @@
 #pragma warning disable // PoC
 
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 
 namespace Wtq.Services.KWin;
 
-internal class KWinHotkeyService : IAsyncInitializable
+internal class KWinHotkeyService : IHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IKWinClient _kwinClient;
@@ -22,7 +23,7 @@ internal class KWinHotkeyService : IAsyncInitializable
 		_dbus = dbus;
 	}
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		var kwinx = await _dbus.GetKWinServiceAsync();
 
@@ -59,5 +60,10 @@ internal class KWinHotkeyService : IAsyncInitializable
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_004_scr", KeyModifiers.Control, Keys.D4);
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_006_scr", KeyModifiers.Control, Keys.D5);
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_007_scr", KeyModifiers.Control, Keys.D6);
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
 	}
 }

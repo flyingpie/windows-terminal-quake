@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
 using Tmds.DBus;
@@ -5,13 +6,15 @@ using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
 using Wtq.Services.KWin.Exceptions;
+using IAsyncDisposable = System.IAsyncDisposable;
 
 namespace Wtq.Services.KWin.DBus;
 
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
-	IWtqBus bus)
-	: IAsyncInitializable, IWtqDBusObject
+	IWtqBus bus,
+	IHostApplicationLifetime lifetime)
+	: IAsyncDisposable, IHostedService, IWtqDBusObject
 {
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -23,22 +26,32 @@ internal sealed class WtqDBusObject(
 
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
+	private readonly IHostApplicationLifetime _lifetime = Guard.Against.Null(lifetime);
+
+	private Worker? _loop;
 
 	public int InitializePriority => 10;
 
 	public ObjectPath ObjectPath => _path;
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
 
 		StartNoOpLoop();
 	}
 
-	public void Dispose()
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
+	}
+
+	public async ValueTask DisposeAsync()
 	{
 		_cts.Dispose();
 		_dbus.Dispose();
+
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public Task LogAsync(string level, string msg)
@@ -83,7 +96,7 @@ internal sealed class WtqDBusObject(
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync()
 	{
-		while (true)
+		while (!_lifetime.ApplicationStopping.IsCancellationRequested)
 		{
 			// See if we have a command on the queue to send back.
 			if (_commandQueue.TryDequeue(out var cmdInfo))
@@ -93,8 +106,11 @@ internal sealed class WtqDBusObject(
 			}
 
 			// If not, wait for one to be queued.
-			await _res.WaitAsync().NoCtx();
+			await _res.WaitAsync(_lifetime.ApplicationStopping).NoCtx();
 		}
+
+		_log.LogTrace("Sending 'STOPPING' command to KWin script");
+		return JsonSerializer.Serialize(CommandInfo.Stopping);
 	}
 
 	/// <inheritdoc/>
@@ -158,22 +174,9 @@ internal sealed class WtqDBusObject(
 	/// </summary>
 	private void StartNoOpLoop()
 	{
-		// TODO: Generalize loop.
-		_ = Task.Run(async () =>
-		{
-			while (!_cts.IsCancellationRequested)
-			{
-				try
-				{
-					await SendCommandAsync("NOOP").NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
-				}
-
-				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
-			}
-		});
+		_loop = new(
+			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
+			async _ => await SendCommandAsync("NOOP").NoCtx(),
+			TimeSpan.FromSeconds(10));
 	}
 }

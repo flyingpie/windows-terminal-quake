@@ -2,7 +2,7 @@ using Wtq.Services.WinForms.Native;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotkeyService : IAsyncInitializable
+public class WinFormsHotkeyService : IHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
@@ -33,9 +33,12 @@ public class WinFormsHotkeyService : IAsyncInitializable
 		};
 	}
 
-	public Task InitializeAsync()
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		// Only here to make sure an instance of this class is created.
 		return Task.CompletedTask;
 	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 }

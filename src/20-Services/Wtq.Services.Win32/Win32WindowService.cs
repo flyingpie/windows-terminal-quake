@@ -1,11 +1,12 @@
+using Microsoft.Extensions.Hosting;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 
 namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService :
-	IAsyncInitializable,
 	IDisposable,
+	IHostedService,
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
@@ -22,10 +23,13 @@ public sealed class Win32WindowService :
 		await CreateProcessAsync(opts).ConfigureAwait(false);
 	}
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		await UpdateProcessesAsync().ConfigureAwait(false);
 	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
 	public void Dispose()
 	{

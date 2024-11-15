@@ -34,11 +34,18 @@ public static class WtqPaths
 	public static string PreferredWtqConfigPath => Path.Combine(UserHome, "wtq.jsonc");
 
 	/// <summary>
+	/// Returns path to the WTQ config file, as specified by an environment variable.
+	/// </summary>
+	public static string WtqConfigFromEnvVar => Environment.GetEnvironmentVariable(WtqConstants.WtqConfigEnvVar) ?? string.Empty;
+
+	/// <summary>
 	/// Ordered list of possible paths to WTQ configuration file.<br/>
 	/// Files are checked front-to-back, first one that exists is used.
 	/// </summary>
 	public static IEnumerable<string> WtqConfigPaths { get; } =
 	[
+		WtqConfigFromEnvVar,
+
 		// Next to wtq executable.
 		Path.Combine(GetWtqAppDir(), "wtq.json"),
 		Path.Combine(GetWtqAppDir(), "wtq.jsonc"),

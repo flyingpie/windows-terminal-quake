@@ -1,7 +1,9 @@
+using Microsoft.Extensions.Hosting;
+
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppRepo"/>.
-public sealed class WtqAppRepo : IWtqAppRepo
+public sealed class WtqAppRepo : IHostedService, IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -26,19 +28,24 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
 	}
 
-	public async Task InitializeAsync()
+	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
 		// "StartApps": "OnWtqStart | OnHotkeyPress"
 		await UpdateAppsAsync(allowStartNew: true).NoCtx();
 	}
 
-	public async ValueTask DisposeAsync()
+	public async Task StopAsync(CancellationToken cancellationToken)
 	{
 		foreach (var app in _apps)
 		{
 			await app.DisposeAsync().NoCtx();
 		}
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		// TODO: Is this called?
 	}
 
 	/// <inheritdoc/>

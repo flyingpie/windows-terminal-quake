@@ -1,16 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Wtq.Utils;
-using Wtq.Utils.AsyncInit;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI : IAsyncInitializable, IWtqUIService
+public sealed class WtqUI : IHostedService, IWtqUIService
 {
+	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
 	private readonly IWtqWindowService _processService;
 
@@ -20,10 +20,12 @@ public sealed class WtqUI : IAsyncInitializable, IWtqUIService
 	private Point? _loc;
 
 	public WtqUI(
+		IHostApplicationLifetime appLifetime,
 		IWtqWindowService windowService,
 		IWtqWindowService processService)
 	{
-		_windowService = windowService;
+		_appLifetime = Guard.Against.Null(appLifetime);
+		_windowService = Guard.Against.Null(windowService);
 		_processService = Guard.Against.Null(processService);
 
 		_uiThread = new Thread(StartUI);
@@ -36,7 +38,12 @@ public sealed class WtqUI : IAsyncInitializable, IWtqUIService
 		_uiThread.Start();
 	}
 
-	public Task InitializeAsync()
+	public Task StartAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
 		return Task.CompletedTask;
 	}
@@ -108,7 +115,7 @@ public sealed class WtqUI : IAsyncInitializable, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
-			// .SetIconFile("wwwroot/img/icon.ico")
+			.SetIconFile("icon.png")
 			.SetTitle("WTQ - Main Window");
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
@@ -124,6 +131,8 @@ public sealed class WtqUI : IAsyncInitializable, IWtqUIService
 
 				return true;
 			});
+
+		_appLifetime.ApplicationStopping.Register(() => _app.MainWindow.Close());
 
 		_app.Run();
 	}
