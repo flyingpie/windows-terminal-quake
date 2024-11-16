@@ -14,4 +14,10 @@
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj"/>
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="wtq.jsonc">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>

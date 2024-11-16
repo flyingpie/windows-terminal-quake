@@ -23,6 +23,9 @@ internal class KWinHotkeyService : IHostedService
 		_dbus = dbus;
 	}
 
+	private IDisposable _disp1;
+	private IDisposable _disp2;
+
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		var kwinx = await _dbus.GetKWinServiceAsync();
@@ -42,15 +45,15 @@ internal class KWinHotkeyService : IHostedService
 		// TODO: Although we haven't gotten shortcut registration to work reliably through direct DBus calls,
 		// we _can_ catch when shortcuts are being pressed/released.
 		// So dial down the JS part to just registration, remove the callback to WTQ part.
-		// _disp1 = await comp.WatchGlobalShortcutPressedAsync((exception, tuple) =>
-		// {
-		// 	// Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
-		// });
+		_disp1 = await comp.WatchGlobalShortcutPressedAsync((exception, tuple) =>
+		{
+			Console.WriteLine($"PRESSED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+		});
 
-		// _disp2 = await comp.WatchGlobalShortcutReleasedAsync((exception, tuple) =>
-		// {
-		// 	// Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
-		// });
+		_disp2 = await comp.WatchGlobalShortcutReleasedAsync((exception, tuple) =>
+		{
+			Console.WriteLine($"RELEASED:{tuple.ComponentUnique} {tuple.ShortcutUnique} {tuple.Timestamp} {exception?.Message}");
+		});
 
 		await _kwinClient.RegisterHotkeyAsync("wtq_hk1_005_scr", KeyModifiers.Control, Keys.Q, cancellationToken);
 

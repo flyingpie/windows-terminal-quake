@@ -4,58 +4,38 @@ using Photino.Blazor;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Utils;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI : IHostedService, IWtqUIService
+public sealed class WtqDisqUI
 {
 	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
 	private readonly IWtqWindowService _processService;
 
-	private Thread? _uiThread;
-
 	private PhotinoBlazorApp? _app;
 	private Point? _loc;
 
-	private WtqDisqUI _disq;
-
-	public WtqUI(
+	public WtqDisqUI(
 		IHostApplicationLifetime appLifetime,
 		IWtqBus bus,
 		IWtqWindowService windowService,
-		IWtqWindowService processService,
-		WtqDisqUI disq)
+		IWtqWindowService processService)
 	{
 		_ = Guard.Against.Null(bus);
 		_appLifetime = Guard.Against.Null(appLifetime);
 		_windowService = Guard.Against.Null(windowService);
 		_processService = Guard.Against.Null(processService);
-		_disq = disq;
 
-		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+//		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+
+		bus.OnEvent<WtqHotkeyPressedEvent>(e => e.Key == Keys.D2, e => _isOpen ? CloseMainWindowAsync() : OpenMainWindowAsync());
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
-	{
-		_uiThread = new Thread(StartUI);
-
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			_uiThread.SetApartmentState(ApartmentState.STA);
-		}
-
-		_uiThread.Start();
-
-		return Task.CompletedTask;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
-	}
+	private bool _isOpen;
 
 	public async Task CloseMainWindowAsync()
 	{
@@ -68,6 +48,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 		await w.MoveToAsync(new Point(0, -1_000_000)).NoCtx();
 		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
+
+		_isOpen = false;
 	}
 
 	public async Task OpenMainWindowAsync()
@@ -82,11 +64,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		await w.MoveToAsync(_loc ?? Point.Empty).NoCtx();
 		await w.BringToForegroundAsync().NoCtx();
 		await w.SetTaskbarIconVisibleAsync(true).NoCtx();
-	}
 
-	public void RunOnUIThread(Action action)
-	{
-		_app?.MainWindow?.Invoke(action);
+		_isOpen = true;
 	}
 
 	private async Task<WtqWindow?> FindWtqMainWindowAsync()
@@ -95,7 +74,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		{
 			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
 
-			var mainWindow = windows.FirstOrDefault(w => w.Title == "WTQ - Main Window");
+			var mainWindow = windows.FirstOrDefault(w => w.Title == "WTQ - Disq");
 
 			if (mainWindow != null)
 			{
@@ -111,7 +90,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	private bool _isClosing;
 
-	private void StartUI()
+	public void StartUI()
 	{
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
@@ -126,15 +105,16 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
+			.SetSize(500, 300)
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("icon-v2-64.png"))
-			.SetTitle("WTQ - Main Window");
+			.SetTitle("WTQ - Disq");
+
+		_app.WindowManager.Navigate("/disq");
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
 			(s, a) =>
 			{
 				_ = Task.Run(CloseMainWindowAsync);
-
-				_disq.StartUI();
 			});
 
 		_app.MainWindow.RegisterWindowClosingHandler(

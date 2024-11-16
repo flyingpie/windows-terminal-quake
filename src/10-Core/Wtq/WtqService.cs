@@ -27,7 +27,7 @@ public sealed class WtqService : IDisposable, IHostedService
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
 
-		_bus.OnEvent<WtqAppToggledEvent>(OnAppToggledEventAsync);
+		// _bus.OnEvent<WtqAppToggledEvent>(OnAppToggledEventAsync);
 		_bus.OnEvent<WtqWindowFocusChangedEvent>(OnWindowFocusChangedEventAsync);
 	}
 

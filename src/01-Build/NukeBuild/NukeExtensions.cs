@@ -38,7 +38,7 @@ public static partial class NukeExtensions
 
 	public static void DeleteUnnecessaryFiles(this AbsolutePath st)
 	{
-		// TODO: Remove unnecessary files.
+		// TODO: Add more patterns.
 		var patterns = new string[]
 		{
 			"wtq.jsonc",
