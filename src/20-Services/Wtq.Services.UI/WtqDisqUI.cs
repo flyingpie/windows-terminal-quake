@@ -32,7 +32,7 @@ public sealed class WtqDisqUI
 
 //		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 
-		bus.OnEvent<WtqHotkeyPressedEvent>(e => e.Key == Keys.D2, e => _isOpen ? CloseMainWindowAsync() : OpenMainWindowAsync());
+		// bus.OnEvent<WtqHotkeyPressedEvent>(e => e.Key == Keys.D2, e => _isOpen ? CloseMainWindowAsync() : OpenMainWindowAsync());
 	}
 
 	private bool _isOpen;

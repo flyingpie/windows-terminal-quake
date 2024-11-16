@@ -39,7 +39,7 @@ public sealed class KWinTrayIconService
 
 	private void ShowStatusIcon()
 	{
-		var iconPath = Path.Join(AppContext.BaseDirectory, "icon.png");
+		var iconPath = Path.Join(AppContext.BaseDirectory, "icon-v2-64.png");
 
 		_icon = NotifyIcon.Create(
 			iconPath,
