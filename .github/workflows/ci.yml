@@ -51,13 +51,18 @@ jobs:
         with:
           name: win-x64_self-contained.zip
           path: _output/artifacts/win-x64_self-contained.zip
+      - name: 'Publish: win-x64_framework-dependent.zip'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-x64_framework-dependent.zip
+          path: _output/artifacts/win-x64_framework-dependent.zip
       - name: 'Publish: linux-x64_self-contained.zip'
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64_self-contained.zip
           path: _output/artifacts/linux-x64_self-contained.zip
-      - name: 'Publish: framework-dependent.zip'
+      - name: 'Publish: linux-x64_framework-dependent.zip'
         uses: actions/upload-artifact@v4
         with:
-          name: framework-dependent.zip
-          path: _output/artifacts/framework-dependent.zip
+          name: linux-x64_framework-dependent.zip
+          path: _output/artifacts/linux-x64_framework-dependent.zip

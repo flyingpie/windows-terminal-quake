@@ -4,6 +4,7 @@ using Photino.Blazor;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Wtq.Events;
 using Wtq.Utils;
 
 namespace Wtq.Services.UI;
@@ -21,13 +22,20 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	public WtqUI(
 		IHostApplicationLifetime appLifetime,
+		IWtqBus bus,
 		IWtqWindowService windowService,
 		IWtqWindowService processService)
 	{
+		_ = Guard.Against.Null(bus);
 		_appLifetime = Guard.Against.Null(appLifetime);
 		_windowService = Guard.Against.Null(windowService);
 		_processService = Guard.Against.Null(processService);
 
+		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+	}
+
+	public Task StartAsync(CancellationToken cancellationToken)
+	{
 		_uiThread = new Thread(StartUI);
 
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -36,10 +44,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		}
 
 		_uiThread.Start();
-	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
-	{
 		return Task.CompletedTask;
 	}
 

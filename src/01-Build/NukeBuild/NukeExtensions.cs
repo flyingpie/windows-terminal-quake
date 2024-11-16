@@ -36,6 +36,23 @@ public static partial class NukeExtensions
 		}
 	}
 
+	public static void DeleteUnnecessaryFiles(this AbsolutePath st)
+	{
+		// TODO: Remove unnecessary files.
+		var patterns = new string[]
+		{
+			"wtq.jsonc",
+		};
+
+		foreach (var p in patterns)
+		{
+			foreach (var f in st.GetFiles(pattern: p, depth: 10))
+			{
+				f.DeleteFile();
+			}
+		}
+	}
+
 	public static async Task<string> GetChangeLogEntryAsync(
 		string path,
 		string ver)

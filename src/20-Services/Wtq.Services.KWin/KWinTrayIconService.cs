@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using NotificationIcon.NET;
+using Wtq.Events;
 
 namespace Wtq.Services.KWin;
 
@@ -77,7 +78,7 @@ public sealed class KWinTrayIconService
 	{
 		return new MenuItem("Open Settings")
 		{
-			Click = (s, e) => { _ = Task.Run(() => _ui.OpenMainWindowAsync()); },
+			Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
 		};
 	}
 

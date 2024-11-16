@@ -12,7 +12,7 @@ public class WtqWin32 : WtqHostBase
 		Guard.Against.Null(services);
 
 		services
-			.AddWin32ProcessService()
+			.AddWin32WindowService()
 			.AddWinFormsHotkeyService()
 			.AddWinFormsScreenInfoProvider()
 			.AddWinFormsTrayIcon();
