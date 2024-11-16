@@ -264,6 +264,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Window = window;
 
+		// TODO: Original rect can be off-screen, in which case we may not want to store it as such.
 		_originalRect = await window.GetWindowRectAsync().NoCtx();
 
 		// Move the window off the screen ASAP (e.g. without animating).

@@ -4,6 +4,7 @@ namespace Wtq.Services;
 public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
+	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppToggleService _toggleService;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
@@ -12,11 +13,13 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private readonly List<WtqApp> _apps = [];
 
 	public WtqAppRepo(
+		IHostApplicationLifetime lifetime,
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowResolver procResolver)
 	{
+		_ = Guard.Against.Null(lifetime);
 		_opts = Guard.Against.Null(opts);
 		_toggleService = Guard.Against.Null(toggleService);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
@@ -30,6 +33,11 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
 			// "StartApps": "OnWtqStart | OnHotkeyPress"
 			await UpdateAppsAsync(allowStartNew: true).NoCtx();
+		});
+
+		lifetime.ApplicationStopping.Register(() =>
+		{
+			DisposeAsync().GetAwaiter().GetResult();
 		});
 	}
 

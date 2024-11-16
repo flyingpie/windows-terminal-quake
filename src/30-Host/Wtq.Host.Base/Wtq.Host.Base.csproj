@@ -12,8 +12,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="..\..\..\assets\icon-01-64.png">
-			<Link>icon.png</Link>
+		<Content Include="..\..\..\assets\icon-v2-64.png">
+			<Link>icon-v2-64.png</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

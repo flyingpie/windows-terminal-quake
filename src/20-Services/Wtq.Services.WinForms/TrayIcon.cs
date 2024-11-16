@@ -88,7 +88,7 @@ public sealed class TrayIcon : IDisposable
 
 	private static Icon CreateIcon()
 	{
-		using var str = new MemoryStream(Resources.Resources.icon);
+		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
 		return new Icon(str);
 	}
 
