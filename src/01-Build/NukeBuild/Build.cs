@@ -145,7 +145,7 @@ public sealed class Build : NukeBuild
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
 				.SetOutput(st));
 
-			// st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			// TODO: Remove unnecessary files.
 
 			st.MoveWtqUI();
 
@@ -171,11 +171,10 @@ public sealed class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
 				.SetOutput(st)
-				//.SetPublishSingleFile(true)
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			// st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			// TODO: Remove unnecessary files.
 
 			st.MoveWtqUI();
 
@@ -235,7 +234,7 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			// st.DeleteFilesExceptFor("wtq.exe");
+			// TODO: Remove unnecessary files.
 
 			st.MoveWtqUI();
 
