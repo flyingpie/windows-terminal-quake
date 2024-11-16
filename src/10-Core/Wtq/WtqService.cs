@@ -6,7 +6,7 @@ namespace Wtq;
 /// Orchestrates toggling on- and off of apps, and sending focus to the right window.
 /// </summary>
 // TODO: Better name.
-public sealed class WtqService : IHostedService
+public sealed class WtqService : IDisposable, IHostedService
 {
 	private readonly ILogger<WtqService> _log;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -37,9 +37,9 @@ public sealed class WtqService : IHostedService
 		return Task.CompletedTask;
 	}
 
-	public async Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		await _appRepo.DisposeAsync().NoCtx();
+		return Task.CompletedTask;
 	}
 
 	public void Dispose()

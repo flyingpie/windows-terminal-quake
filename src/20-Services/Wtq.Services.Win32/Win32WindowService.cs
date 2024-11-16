@@ -12,7 +12,7 @@ public sealed class Win32WindowService :
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
 
-	private readonly InitLock _lock = new();
+	private readonly InitLock _initLock = new();
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
@@ -46,7 +46,7 @@ public sealed class Win32WindowService :
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public Task<WtqWindow?> GetForegroundWindowAsync(
+	public async Task<WtqWindow?> GetForegroundWindowAsync(
 		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
@@ -56,7 +56,7 @@ public sealed class Win32WindowService :
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return Task.FromResult<WtqWindow?>(new Win32WtqWindow(Process.GetProcessById((int)fg)));
+				return new Win32WtqWindow(Process.GetProcessById((int)fg));
 			}
 		}
 		catch (Exception ex)
@@ -64,7 +64,7 @@ public sealed class Win32WindowService :
 			_log.LogWarning(ex, "Error looking up foreground process: {Message}", ex.Message);
 		}
 
-		return Task.FromResult<WtqWindow?>(null);
+		return null;
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
@@ -119,7 +119,7 @@ public sealed class Win32WindowService :
 
 	private async Task InitAsync()
 	{
-		await _lock.InitAsync(() => UpdateProcessesAsync()).NoCtx();
+		await _initLock.InitAsync(() => UpdateProcessesAsync()).NoCtx();
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)
