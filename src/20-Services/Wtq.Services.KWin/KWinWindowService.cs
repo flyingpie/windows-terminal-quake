@@ -63,7 +63,7 @@ public class KWinWindowService(
 		CancellationToken cancellationToken)
 	{
 		return (await _kwinClient.GetWindowListAsync(cancellationToken).NoCtx())
-			.Select(c => (WtqWindow)new KWinWtqWindow(_kwinClient, c))
+			.Select(WtqWindow (c) => new KWinWtqWindow(_kwinClient, c))
 			.ToList();
 	}
 }
