@@ -29,14 +29,13 @@
         "CreateScoopManifest",
         "CreateWinGetManifest",
         "PublishDebug",
+        "PublishFrameworkDependent",
         "PublishLinux64",
         "PublishLinux64Aot",
-        "PublishLinux64FrameworkDependent",
         "PublishLinux64SelfContained",
         "PublishRelease",
         "PublishWin64",
         "PublishWin64Aot",
-        "PublishWin64FrameworkDependent",
         "PublishWin64SelfContained",
         "ReportInfo"
       ]

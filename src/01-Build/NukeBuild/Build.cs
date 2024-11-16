@@ -52,18 +52,16 @@ public sealed class Build : NukeBuild
 
 	private AbsolutePath StagingDirectory => OutputDirectory / "staging";
 
+	private AbsolutePath PathToFrameworkDependentZip => ArtifactsDirectory / $"framework-dependent.zip";
+
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
 	private AbsolutePath PathToLinux64AotZip => ArtifactsDirectory / $"linux-x64_aot.zip";
 
-	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / $"linux-x64_framework-dependent.zip";
-
 	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / $"linux-x64_self-contained.zip";
 
 	private AbsolutePath PathToWin64AotZip => ArtifactsDirectory / $"win-x64_aot.zip";
-
-	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"win-x64_framework-dependent.zip";
 
 	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"win-x64_self-contained.zip";
 
@@ -131,34 +129,28 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
-	/// Linux x64 framework dependent.
+	/// Cross-platform framework dependent.
 	/// </summary>
-	private Target PublishLinux64FrameworkDependent => _ => _
+	private Target PublishFrameworkDependent => _ => _
 		.DependsOn(Clean)
-		.Produces(PathToLinux64FrameworkDependentZip)
+		.Produces(PathToFrameworkDependentZip)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "linux-x64_framework-dependent";
+			var st = StagingDirectory / "framework-dependent";
 
 			DotNetPublish(_ => _
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
-				.SetOutput(st)
-				.SetPublishSingleFile(true)
-				.SetRuntime("linux-x64")
-				.SetSelfContained(false));
+				.SetOutput(st));
 
 			// st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
 
-			// var wwwroot = st / "wwwroot";
-			// var wtqUI = wwwroot / "_content/Wtq.Services.UI";
-			// wtqUI.Move(wwwroot, ExistsPolicy.DirectoryMerge);
 			st.MoveWtqUI();
 
 			st.ZipTo(
-				PathToLinux64FrameworkDependentZip,
+				PathToFrameworkDependentZip,
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -179,7 +171,7 @@ public sealed class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
 				.SetOutput(st)
-				.SetPublishSingleFile(true)
+				//.SetPublishSingleFile(true)
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
@@ -218,37 +210,6 @@ public sealed class Build : NukeBuild
 
 			st.ZipTo(
 				PathToWin64AotZip,
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: System.IO.FileMode.CreateNew);
-		});
-
-	/// <summary>
-	/// Windows x64 framework dependent.
-	/// </summary>
-	private Target PublishWin64FrameworkDependent => _ => _
-		.DependsOn(Clean)
-		.Produces(PathToWin64FrameworkDependentZip)
-		.Executes(() =>
-		{
-			var st = StagingDirectory / "win-x64_framework-dependent";
-
-			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
-				.SetInformationalVersion(InformationalVersion)
-				.SetConfiguration(Configuration)
-				.SetFramework("net8.0-windows")
-				.SetProject(Solution._0_Host.Wtq_Host_Windows)
-				.SetOutput(st)
-				.SetPublishSingleFile(true)
-				.SetRuntime("win-x64")
-				.SetSelfContained(false));
-
-			// st.DeleteFilesExceptFor("wtq.exe");
-
-			st.MoveWtqUI();
-
-			st.ZipTo(
-				PathToWin64FrameworkDependentZip,
 				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
@@ -386,21 +347,18 @@ public sealed class Build : NukeBuild
 			}
 
 			// Upload new assets.
-			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64FrameworkDependentZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToFrameworkDependentZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64SelfContainedZip);
-			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64FrameworkDependentZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
 
 	private Target PublishLinux64 => _ => _
 		.DependsOn(Clean)
-		.DependsOn(PublishLinux64FrameworkDependent)
 		.DependsOn(PublishLinux64SelfContained)
 		.Executes();
 
 	private Target PublishWin64 => _ => _
 		.DependsOn(Clean)
-		.DependsOn(PublishWin64FrameworkDependent)
 		.DependsOn(PublishWin64SelfContained)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)
@@ -408,6 +366,7 @@ public sealed class Build : NukeBuild
 
 	private Target PublishDebug => _ => _
 		.DependsOn(Clean)
+		.DependsOn(PublishFrameworkDependent)
 		.DependsOn(PublishLinux64)
 		.DependsOn(PublishWin64)
 		.Triggers(CreateScoopManifest)
@@ -417,9 +376,8 @@ public sealed class Build : NukeBuild
 	[SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "MvdO: Invoked manually.")]
 	private Target PublishRelease => _ => _
 		.DependsOn(Clean)
-		.DependsOn(PublishLinux64FrameworkDependent)
+		.DependsOn(PublishFrameworkDependent)
 		.DependsOn(PublishLinux64SelfContained)
-		.DependsOn(PublishWin64FrameworkDependent)
 		.DependsOn(PublishWin64SelfContained)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./src/build.sh
+./src/build.sh "$@"
