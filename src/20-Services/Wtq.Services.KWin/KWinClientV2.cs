@@ -156,12 +156,17 @@ internal sealed class KWinClientV2(
 		var kwinMod = "Ctrl";
 		var kwinKey = key switch
 		{
+			Keys.Oemtilde => "`",
+			Keys.D0 => "0",
 			Keys.D1 => "1",
 			Keys.D2 => "2",
 			Keys.D3 => "3",
 			Keys.D4 => "4",
 			Keys.D5 => "5",
 			Keys.D6 => "6",
+			Keys.D7 => "7",
+			Keys.D8 => "8",
+			Keys.D9 => "9",
 			Keys.Q => "q",
 			_ => "1",
 		};
@@ -174,7 +179,8 @@ internal sealed class KWinClientV2(
 				{
 					Params = new
 					{
-						name = $"{name}_name",
+						// name = $"{name}_name",
+						name = name,
 						title = $"{name}_title",
 						sequence = kwinSequence,
 						mod = mod.ToString(),

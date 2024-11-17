@@ -158,20 +158,20 @@ internal sealed class WtqDBusObject(
 	/// <inheritdoc/>
 	public Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
-		_log.LogInformation(
-			"{MethodName}({Modifier}, {Key})",
-			nameof(OnPressShortcutAsync),
-			modStr,
-			keyStr);
-
-		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
-		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-
-		_bus.Publish(
-			new WtqHotkeyPressedEvent()
-			{
-				Key = key, Modifiers = mod,
-			});
+		// _log.LogInformation(
+		// 	"{MethodName}({Modifier}, {Key})",
+		// 	nameof(OnPressShortcutAsync),
+		// 	modStr,
+		// 	keyStr);
+		//
+		// Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
+		// Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
+		//
+		// _bus.Publish(
+		// 	new WtqHotkeyPressedEvent()
+		// 	{
+		// 		Key = key, Modifiers = mod,
+		// 	});
 
 		return Task.CompletedTask;
 	}
