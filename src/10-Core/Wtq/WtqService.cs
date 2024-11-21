@@ -52,6 +52,11 @@ public sealed class WtqService : IDisposable, IHostedService
 	/// </summary>
 	private async Task OnAppToggledEventAsync(WtqAppToggledEvent ev)
 	{
+		if (ev.App == null && ev.AppName != null)
+		{
+			ev.App = _appRepo.GetByName(ev.AppName);
+		}
+
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 

@@ -9,5 +9,7 @@ public sealed class WtqAppToggledEvent : WtqEvent
 	/// <summary>
 	/// The app to toggle.
 	/// </summary>
-	public required WtqApp App { get; init; }
+	public WtqApp App { get; set; }
+
+	public string AppName { get; set; }
 }
