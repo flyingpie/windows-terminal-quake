@@ -10,7 +10,9 @@ public class KWinWindowService(
 
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 
-	public Task CreateAsync(WtqAppOptions opts)
+	public Task CreateAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
@@ -27,13 +29,15 @@ public class KWinWindowService(
 		return Task.CompletedTask;
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		_ = Guard.Against.Null(opts);
 
 		try
 		{
-			var clients = await GetWindowsAsync().NoCtx();
+			var clients = await GetWindowsAsync(cancellationToken).NoCtx();
 
 			return clients.FirstOrDefault(c => c.Matches(opts));
 		}
@@ -45,19 +49,21 @@ public class KWinWindowService(
 		return null;
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync()
+	public async Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
-		var w = await _kwinClient.GetForegroundWindowAsync().NoCtx();
+		var w = await _kwinClient.GetForegroundWindowAsync(cancellationToken).NoCtx();
 
 		return w != null
 			? new KWinWtqWindow(_kwinClient, w)
 			: null;
 	}
 
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
+		CancellationToken cancellationToken)
 	{
-		return (await _kwinClient.GetWindowListAsync(CancellationToken.None).NoCtx())
-			.Select(c => (WtqWindow)new KWinWtqWindow(_kwinClient, c))
+		return (await _kwinClient.GetWindowListAsync(cancellationToken).NoCtx())
+			.Select(WtqWindow (c) => new KWinWtqWindow(_kwinClient, c))
 			.ToList();
 	}
 }
