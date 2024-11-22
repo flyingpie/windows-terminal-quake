@@ -161,11 +161,4 @@ public sealed class Win32WtqWindow(
 
 		return Task.CompletedTask;
 	}
-
-	public override Task SetWindowVisibleAsync(bool isVisible)
-	{
-//		User32.ShowWindow(_process.MainWindowHandle, isVisible ? WindowShowStyle.Show : WindowShowStyle.Hide);
-
-		return Task.CompletedTask;
-	}
 }

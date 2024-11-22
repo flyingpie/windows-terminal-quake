@@ -2,7 +2,8 @@ using Wtq.Services.WinForms.Native;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotkeyService : IDisposable, IHostedService
+public sealed class WinFormsHotkeyService
+	: IDisposable, IHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
@@ -45,5 +46,7 @@ public class WinFormsHotkeyService : IDisposable, IHostedService
 	}
 
 	public Task StopAsync(CancellationToken cancellationToken)
-		=> Task.CompletedTask;
+	{
+		return Task.CompletedTask;
+	}
 }

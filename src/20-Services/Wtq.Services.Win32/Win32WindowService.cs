@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 

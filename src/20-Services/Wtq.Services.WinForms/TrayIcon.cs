@@ -61,12 +61,6 @@ public sealed class TrayIcon : IDisposable
 		waiter.Task.GetAwaiter().GetResult();
 	}
 
-	public void Dispose()
-	{
-		_notificationIcon?.Dispose();
-		_notificationIcon = null;
-	}
-
 	private static void OpenBrowser(Uri uri)
 	{
 		Guard.Against.Null(uri);
@@ -75,6 +69,12 @@ public sealed class TrayIcon : IDisposable
 		{
 			UseShellExecute = true,
 		});
+	}
+
+	public void Dispose()
+	{
+		_notificationIcon?.Dispose();
+		_notificationIcon = null;
 	}
 
 	private ToolStripMenuItem CreateExitItem()
@@ -89,6 +89,7 @@ public sealed class TrayIcon : IDisposable
 	private static Icon CreateIcon()
 	{
 		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
+
 		return new Icon(str);
 	}
 
