@@ -1,1 +1,1 @@
-./src/build.ps1
+./src/build.ps1 $args
