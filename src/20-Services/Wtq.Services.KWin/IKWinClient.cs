@@ -6,7 +6,7 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// High-level interface to the KWin compositor.
 /// </summary>
-public interface IKWinClient : IAsyncDisposable
+public interface IKWinClient
 {
 	Task BringToForegroundAsync(
 		KWinWindow window,
@@ -18,10 +18,12 @@ public interface IKWinClient : IAsyncDisposable
 	Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken);
 
-	Task<KWinWindow?> GetForegroundWindowAsync();
+	Task<KWinWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken);
 
 	Task<KWinWindow?> GetWindowAsync(
-		KWinWindow window);
+		KWinWindow window,
+		CancellationToken cancellationToken);
 
 	Task<ICollection<KWinWindow>> GetWindowListAsync(
 		CancellationToken cancellationToken);
@@ -34,7 +36,8 @@ public interface IKWinClient : IAsyncDisposable
 	Task RegisterHotkeyAsync(
 		string name,
 		KeyModifiers modifiers,
-		Keys key);
+		Keys key,
+		CancellationToken cancellationToken);
 
 	Task ResizeWindowAsync(
 		KWinWindow window,
