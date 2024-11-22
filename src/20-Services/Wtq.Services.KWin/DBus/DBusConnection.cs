@@ -19,11 +19,11 @@ internal sealed class DBusConnection : IDBusConnection
 	/// </summary>
 	private readonly Tmds.DBus.Connection _serverConnection;
 
+	private readonly InitLock _lock = new();
+
 	private DBus.Generated.KWinService? _kwinService;
 	private DBus.Generated.KWin? _kwin;
 	private DBus.Generated.Scripting? _scripting;
-
-	private readonly InitLock _lock = new();
 
 	public DBusConnection()
 		: this(Address.Session)
@@ -38,26 +38,6 @@ internal sealed class DBusConnection : IDBusConnection
 
 		_clientConnection = new Connection(address);
 		_serverConnection = new Tmds.DBus.Connection(address);
-	}
-
-	public int InitializePriority => 20;
-
-	private async Task InitAsync()
-	{
-		await _lock
-			.InitAsync(async () =>
-			{
-				_log.LogInformation("Setting up DBus connections");
-
-				var sw = Stopwatch.StartNew();
-				await _clientConnection.ConnectAsync().NoCtx();
-				_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
-
-				sw.Restart();
-				await _serverConnection.ConnectAsync().NoCtx();
-				_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
-			})
-			.NoCtx();
 	}
 
 	public async Task<DBus.Generated.KWinService> GetKWinServiceAsync()
@@ -104,5 +84,23 @@ internal sealed class DBusConnection : IDBusConnection
 
 		await _serverConnection.RegisterServiceAsync(serviceName).NoCtx();
 		await _serverConnection.RegisterObjectAsync(serviceObject).NoCtx();
+	}
+
+	private async Task InitAsync()
+	{
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up DBus connections");
+
+				var sw = Stopwatch.StartNew();
+				await _clientConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
+
+				sw.Restart();
+				await _serverConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
+			})
+			.NoCtx();
 	}
 }

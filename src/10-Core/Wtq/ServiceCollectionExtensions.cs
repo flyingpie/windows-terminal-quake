@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddSingleton<TImplementation>()
-			.AddHostedService<TImplementation>(p => (TImplementation)p.GetRequiredService<TImplementation>());
+			.AddHostedService(p => p.GetRequiredService<TImplementation>());
 	}
 
 	public static IServiceCollection AddHostedServiceSingleton<TService, TImplementation>(
@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddSingleton<TService, TImplementation>()
-			.AddHostedService<TImplementation>(p => (TImplementation)p.GetRequiredService<TService>());
+			.AddHostedService(p => (TImplementation)p.GetRequiredService<TService>());
 	}
 
 	public static IServiceCollection AddWtqCore(this IServiceCollection services)

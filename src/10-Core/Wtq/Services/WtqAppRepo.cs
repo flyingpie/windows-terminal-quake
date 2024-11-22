@@ -4,7 +4,6 @@ namespace Wtq.Services;
 public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
-	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppToggleService _toggleService;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;

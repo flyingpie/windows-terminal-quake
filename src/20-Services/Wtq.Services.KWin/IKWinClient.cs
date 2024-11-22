@@ -58,9 +58,4 @@ public interface IKWinClient
 		KWinWindow window,
 		float opacity,
 		CancellationToken cancellationToken);
-
-	Task SetWindowVisibleAsync(
-		KWinWindow window,
-		bool isVisible,
-		CancellationToken cancellationToken);
 }
