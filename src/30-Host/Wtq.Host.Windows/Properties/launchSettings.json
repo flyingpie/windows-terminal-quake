@@ -1,7 +1,11 @@
 {
 	"profiles": {
 		"Wtq.Host.Windows": {
-			"commandName": "Project"
+			"commandName": "Project",
+			"environmentVariables": {
+				"WTQ_CONFIG_FILE": "C:/users/marco/.config/wtq/wtq.jsonc",
+				"WTQ_LOG_LEVEL": "Information"
+			}
 		}
 	}
 }
