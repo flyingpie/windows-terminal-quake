@@ -4,19 +4,27 @@ namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
+	private readonly IHostApplicationLifetime _lifetime;
+	private readonly IWtqBus _bus;
+
 	private NotifyIcon? _notificationIcon;
 
 	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
-	public TrayIcon(Action<object?, EventArgs> exitHandler)
+	public TrayIcon(
+		IHostApplicationLifetime lifetime,
+		IWtqBus bus)
 	{
+		_lifetime = Guard.Against.Null(lifetime);
+		_bus = Guard.Against.Null(bus);
+
 		var waiter = new TaskCompletionSource<bool>();
 
 		var notifyThread = new Thread(() =>
 		{
 			var contextMenu = new ContextMenuStrip();
 
-			contextMenu.Items.AddRange(new ToolStripItem[]
-			{
+			contextMenu.Items.AddRange(
+			[
 				CreateVersionItem(),
 
 				new ToolStripSeparator(),
@@ -25,12 +33,14 @@ public sealed class TrayIcon : IDisposable
 
 				CreateOpenSettingsItem(),
 
+				CreateOpenSettingsFileItem(),
+
 				CreateOpenSettingsDirItem(),
 
 				CreateOpenLogItem(),
 
-				CreateExitItem(exitHandler),
-			});
+				CreateExitItem(),
+			]);
 
 			// Tray Icon
 			_notificationIcon = new NotifyIcon()
@@ -55,7 +65,10 @@ public sealed class TrayIcon : IDisposable
 	{
 		Guard.Against.Null(uri);
 
-		Process.Start(new ProcessStartInfo(uri.ToString()) { UseShellExecute = true });
+		Process.Start(new ProcessStartInfo(uri.ToString())
+		{
+			UseShellExecute = true,
+		});
 	}
 
 	public void Dispose()
@@ -64,26 +77,39 @@ public sealed class TrayIcon : IDisposable
 		_notificationIcon = null;
 	}
 
-	private static ToolStripMenuItem CreateExitItem(Action<object?, EventArgs> exitHandler)
+	private ToolStripMenuItem CreateExitItem()
 	{
-		Guard.Against.Null(exitHandler);
-
 		var mnuExit = new ToolStripMenuItem("Exit");
 
-		mnuExit.Click += new EventHandler(exitHandler);
+		mnuExit.Click += (s, a) => _lifetime.StopApplication();
 
 		return mnuExit;
 	}
 
 	private static Icon CreateIcon()
 	{
-		using var str = new MemoryStream(Resources.Resources.icon);
+		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
 		return new Icon(str);
 	}
 
-	private static ToolStripMenuItem CreateOpenSettingsItem()
+	private ToolStripMenuItem CreateOpenSettingsItem()
 	{
 		var mnuOpenSettings = new ToolStripMenuItem("Open settings")
+		{
+			Enabled = true,
+		};
+
+		mnuOpenSettings.Click += (s, a) =>
+		{
+			_bus.Publish(new WtqUIRequestedEvent());
+		};
+
+		return mnuOpenSettings;
+	}
+
+	private static ToolStripMenuItem CreateOpenSettingsFileItem()
+	{
+		var mnuOpenSettings = new ToolStripMenuItem("Open settings file")
 		{
 			Enabled = true,
 		};
