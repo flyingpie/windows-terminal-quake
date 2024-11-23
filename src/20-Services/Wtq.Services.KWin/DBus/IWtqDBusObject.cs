@@ -25,4 +25,6 @@ public interface IWtqDBusObject : IDBusObject
 	/// TODO: Would like to remove this, and do shortcuts through DBus (without KWin script). Didn't get that working just yet.
 	/// </summary>
 	Task OnPressShortcutAsync(string modStr, string keyStr);
+
+	Task ToggleAppAsync(string appName);
 }

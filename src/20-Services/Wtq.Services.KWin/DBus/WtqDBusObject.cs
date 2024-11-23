@@ -188,6 +188,16 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
+	public Task ToggleAppAsync(string appName)
+	{
+		_bus.Publish(new WtqAppToggledEvent()
+		{
+			AppName = appName,
+		});
+
+		return Task.CompletedTask;
+	}
+
 	/// <summary>
 	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
 	/// and the connection is dropped.
