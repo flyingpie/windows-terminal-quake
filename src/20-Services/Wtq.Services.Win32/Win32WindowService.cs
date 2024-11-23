@@ -16,7 +16,9 @@ public sealed class Win32WindowService :
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
 
-	public async Task CreateAsync(WtqAppOptions opts)
+	public async Task CreateAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
@@ -31,18 +33,21 @@ public sealed class Win32WindowService :
 		_initLock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
+	public async Task<WtqWindow?> FindWindowAsync(
+		WtqAppOptions opts,
+		CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
 		await InitAsync().NoCtx();
 
-		var processes = await GetWindowsAsync().NoCtx();
+		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
 
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync()
+	public async Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -62,7 +67,8 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
