@@ -13,6 +13,7 @@ internal sealed class WtqDBusObject(
 	IWtqBus bus)
 	: IAsyncDisposable, IWtqDBusObject
 {
+	private const string ServiceName = "wtq.svc";
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
 	private readonly CancellationTokenSource _cts = new();
@@ -38,7 +39,7 @@ internal sealed class WtqDBusObject(
 				_log.LogInformation("Setting up WTQ DBus service");
 
 				// Register this object as a DBus service.
-				await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+				await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
 
 				// Start NOOP loop.
 				StartNoOpLoop();
