@@ -7,9 +7,7 @@ namespace Wtq.Events;
 public sealed class WtqAppToggledEvent : WtqEvent
 {
 	/// <summary>
-	/// The app to toggle.
+	/// Name of the app to toggle.
 	/// </summary>
-	public WtqApp App { get; set; }
-
-	public string AppName { get; set; }
+	public required string AppName { get; init; }
 }

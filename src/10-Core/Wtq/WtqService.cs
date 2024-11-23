@@ -53,9 +53,12 @@ public sealed class WtqService : IDisposable, IHostedService
 	/// </summary>
 	private async Task OnAppToggledEventAsync(WtqAppToggledEvent ev)
 	{
-		if (ev.App == null && ev.AppName != null)
+		var app = _appRepo.GetByName(ev.AppName);
+
+		if (app == null)
 		{
-			ev.App = _appRepo.GetByName(ev.AppName);
+			_log.LogWarning("No app found with name '{AppName}'", ev.AppName);
+			return;
 		}
 
 		// Wait for service-wide lock.
@@ -64,31 +67,31 @@ public sealed class WtqService : IDisposable, IHostedService
 		// "Switching apps"
 		// If a previously toggled app (that is not the to-be-toggled app) is still open, close it first.
 		var open = _appRepo.GetOpen();
-		if (open != null && open != ev.App)
+		if (open != null && open != app)
 		{
-			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, ev.App);
+			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
-			await ev.App.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
 
 		// "Toggling app"
-		if (ev.App.IsOpen)
+		if (app.IsOpen)
 		{
-			_log.LogInformation("Closing previously open app '{App}'", ev.App);
+			_log.LogInformation("Closing previously open app '{App}'", app);
 
 			// Close app.
-			await ev.App.CloseAsync().NoCtx();
+			await app.CloseAsync().NoCtx();
 
 			// Bring focus back to last non-WTQ app.
 			await (_lastNonWtqWindow?.BringToForegroundAsync() ?? Task.CompletedTask).NoCtx();
 		}
 		else
 		{
-			_log.LogInformation("Opening previously closed app '{App}'", ev.App);
+			_log.LogInformation("Opening previously closed app '{App}'", app);
 
 			// Open app.
-			await ev.App.OpenAsync().NoCtx();
+			await app.OpenAsync().NoCtx();
 		}
 	}
 
