@@ -16,6 +16,8 @@ public sealed class Win32WtqWindow(
 
 	public override string? Name => _process.ProcessName;
 
+	public override string? Title => _process.MainWindowTitle;
+
 	public override Task BringToForegroundAsync()
 	{
 		User32.SetForegroundWindow(_process.MainWindowHandle);

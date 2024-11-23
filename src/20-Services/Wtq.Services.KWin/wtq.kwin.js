@@ -245,6 +245,7 @@ cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 			.getWindows()
 			.map(w => {
 				return {
+					caption: w.caption,
 					internalId: w.internalId,
 					resourceClass: w.resourceClass,
 					resourceName: w.resourceName
