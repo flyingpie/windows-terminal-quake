@@ -61,7 +61,7 @@ public sealed class TrayIcon : IDisposable
 		waiter.Task.GetAwaiter().GetResult();
 	}
 
-	private static void OpenBrowser(Uri uri)
+	public static void OpenBrowser(Uri uri)
 	{
 		Guard.Against.Null(uri);
 
@@ -89,7 +89,6 @@ public sealed class TrayIcon : IDisposable
 	private static Icon CreateIcon()
 	{
 		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
-
 		return new Icon(str);
 	}
 

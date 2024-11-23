@@ -179,7 +179,7 @@ internal sealed class KWinClientV2(
 				{
 					Params = new
 					{
-						name = name,
+						name = $"{name}_name",
 						title = $"{name}_title",
 						sequence = kwinSequence,
 						mod = mod.ToString(),
