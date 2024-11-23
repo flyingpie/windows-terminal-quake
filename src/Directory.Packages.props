@@ -11,6 +11,7 @@
 		<PackageVersion Include="MSTest.TestAdapter" Version="3.6.1" />
 		<PackageVersion Include="MSTest.TestFramework" Version="3.6.1" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"  />
 		<PackageVersion Include="Nuke.Common" Version="8.1.2" />
 		<PackageVersion Include="Serilog" Version="4.1.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="8.0.0" />

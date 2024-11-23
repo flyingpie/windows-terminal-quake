@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqWindowService, KWinWindowService>()
 			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>()
 
-			.AddHostedService<KWinHotkeyService>();
+			.AddHostedService<KWinHotkeyService>()
+			.AddHostedService<KWinTrayIconService>();
 	}
 }
