@@ -13,4 +13,3 @@ global using System.Threading.Tasks;
 global using Wtq.Configuration;
 global using Wtq.Exceptions;
 global using Wtq.Utils;
-global using Wtq.Utils.AsyncInit;
