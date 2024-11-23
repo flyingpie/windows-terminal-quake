@@ -1,0 +1,57 @@
+@inherits LayoutComponentBase
+
+@code {
+
+	private string _appVersion;
+
+	protected override void OnInitialized()
+	{
+		_appVersion = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+	}
+
+}
+
+<RadzenComponents/>
+
+<RadzenLayout>
+	<RadzenSidebar>
+		<RadzenPanelMenu Style="margin-top: 1em;">
+			<RadzenPanelMenuItem Text="Welcome" Icon="home" Path="/" />
+			<hr/>
+			<RadzenPanelMenuItem Text="Global Settings" Icon="public" Path="/GlobalSettings"/>
+			<RadzenPanelMenuItem Text="Apps" Icon="ad_group" Path="/Apps">
+				<RadzenPanelMenuItem Text="WezTerm" Path="/Apps/1" />
+				<RadzenPanelMenuItem Text="Dolphin" Path="/Apps/2" />
+				<RadzenPanelMenuItem Text="System Information" Path="/Apps/3" />
+				<RadzenPanelMenuItem Text="KeePassXC" Path="/Apps/4" />
+				<RadzenPanelMenuItem Text="Spotify" Path="/Apps/5" />
+				<RadzenPanelMenuItem Text="Discord" Path="/Apps/6" />
+			</RadzenPanelMenuItem>
+			<hr/>
+			<RadzenPanelMenuItem Text="Windows" Icon="select_window" Path="/Windows"/>
+			<RadzenPanelMenuItem Text="Screens" Icon="monitor" Path="/Screens"/>
+			<RadzenPanelMenuItem Text="Logs" Icon="subject" Path="/Logs"/>
+			<RadzenPanelMenuItem Text="Settings (JSON)" Icon="data_object" Path="/SettingsJson"/>
+		</RadzenPanelMenu>
+	</RadzenSidebar>
+	<RadzenBody>
+		<div class="rz-p-2">
+			@Body
+		</div>
+	</RadzenBody>
+	<RadzenFooter Style="padding: 1em;">
+		<RadzenStack Orientation="Orientation.Vertical" Gap="1em;">
+			<RadzenStack
+				Orientation="Orientation.Horizontal"
+				JustifyContent="JustifyContent.Center">
+				<RadzenColumn>WTQ @_appVersion</RadzenColumn>
+			</RadzenStack>
+		</RadzenStack>
+	</RadzenFooter>
+</RadzenLayout>
+
+<style>
+	body {
+		background: #19191a;
+	}
+</style>

@@ -2,23 +2,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using Wtq.Events;
-using Wtq.Utils;
 
 namespace Wtq.Services.UI;
 
 public sealed class WtqUI : IHostedService, IWtqUIService
 {
+	private const string MainWindowTitle = "WTQ - Main Window";
+
 	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
 	private readonly IWtqWindowService _processService;
 
-	private Thread? _uiThread;
-
 	private PhotinoBlazorApp? _app;
 	private Point? _loc;
+	private bool _isClosing;
+	private Thread? _uiThread;
 
 	public WtqUI(
 		IHostApplicationLifetime appLifetime,
@@ -91,7 +90,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		{
 			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
 
-			var mainWindow = windows.FirstOrDefault(w => w.Title == "WTQ - Main Window");
+			var mainWindow = windows.FirstOrDefault(w => w.Title == MainWindowTitle);
 
 			if (mainWindow != null)
 			{
@@ -104,8 +103,6 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 		return null;
 	}
-
-	private bool _isClosing;
 
 	private void StartUI()
 	{
@@ -122,8 +119,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("icon-v2-64.png"))
-			.SetTitle("WTQ - Main Window");
+			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
+			.SetTitle(MainWindowTitle);
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
 			(s, a) =>
