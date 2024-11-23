@@ -34,8 +34,10 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			await UpdateAppsAsync(allowStartNew: true).NoCtx();
 		});
 
+		// When WTQ stops, reset all tracked apps.
 		lifetime.ApplicationStopping.Register(() =>
 		{
+			// TODO: Find a nicer way to handle this.
 			DisposeAsync().GetAwaiter().GetResult();
 		});
 	}

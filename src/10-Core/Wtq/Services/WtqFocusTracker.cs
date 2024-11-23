@@ -56,9 +56,12 @@ public sealed class WtqFocusTracker(
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
+	}
 
-	public async async ValueTask DisposeAsync()
+	public async ValueTask DisposeAsync()
 	{
 		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}

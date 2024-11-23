@@ -1,6 +1,9 @@
 namespace Wtq.Utils;
 
-public sealed class InitLock
+/// <summary>
+/// Makes async initialization easier and thread safe.
+/// </summary>
+public sealed class InitLock : IDisposable
 {
 	private readonly SemaphoreSlim _lock = new(1);
 
@@ -10,20 +13,24 @@ public sealed class InitLock
 	{
 		Guard.Against.Null(action);
 
+		// See if we're already initialized.
+		if (_isInit)
+		{
+			return;
+		}
+
 		try
 		{
-			if (_isInit)
-			{
-				return;
-			}
-
+			// Make sure we're not being initialized by another thread right now.
 			await _lock.WaitAsync().NoCtx();
 
+			// See if another thread did initialization while we were waiting.
 			if (_isInit)
 			{
 				return;
 			}
 
+			// Initialize.
 			await action().NoCtx();
 
 			_isInit = true;
@@ -32,5 +39,10 @@ public sealed class InitLock
 		{
 			_lock.Release();
 		}
+	}
+
+	public void Dispose()
+	{
+		_lock.Dispose();
 	}
 }

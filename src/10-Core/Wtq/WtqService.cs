@@ -34,6 +34,7 @@ public sealed class WtqService : IDisposable, IHostedService
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		// TODO: Currently necessary to make sure this service is constructed.
+		// Maybe remove IHostedService and manually resolve this type on app startup?
 		return Task.CompletedTask;
 	}
 

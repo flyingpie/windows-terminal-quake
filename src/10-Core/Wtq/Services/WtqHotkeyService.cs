@@ -50,7 +50,10 @@ public class WtqHotkeyService : IHostedService
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		return Task.CompletedTask;
+	}
 
 	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
 	{

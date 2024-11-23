@@ -5,7 +5,7 @@ using Connection = Tmds.DBus.Protocol.Connection;
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc cref="IDBusConnection"/>
-internal sealed class DBusConnection : IDBusConnection
+internal sealed class DBusConnection : IDBusConnection, IDisposable
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
@@ -70,6 +70,7 @@ internal sealed class DBusConnection : IDBusConnection
 
 		_clientConnection.Dispose();
 		_serverConnection.Dispose();
+		_lock.Dispose();
 	}
 
 	/// <inheritdoc/>

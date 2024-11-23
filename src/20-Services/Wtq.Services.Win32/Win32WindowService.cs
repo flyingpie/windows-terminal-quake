@@ -30,6 +30,7 @@ public sealed class Win32WindowService :
 	public void Dispose()
 	{
 		_lock.Dispose();
+		_initLock.Dispose();
 	}
 
 	public async Task<WtqWindow?> FindWindowAsync(
