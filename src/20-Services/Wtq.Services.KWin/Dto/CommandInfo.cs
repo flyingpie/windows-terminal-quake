@@ -6,6 +6,12 @@ namespace Wtq.Services.KWin.Dto;
 public class CommandInfo(
 	string type)
 {
+	public static readonly CommandInfo NoOp
+		= new("NOOP");
+
+	public static readonly CommandInfo Stopping
+		= new("STOPPING");
+
 	/// <summary>
 	/// The command we want to execute, like "get window list" and "set window opacity".
 	/// </summary>
