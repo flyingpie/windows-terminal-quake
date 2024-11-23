@@ -35,8 +35,6 @@ winget install windows-terminal-quake
 
 A shortcut is then available named 'wtq', or you can just run 'wtq' from a command line or Win+R.
 
-https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
-
 # WTQ v1
 WTQ started as a companion app to the new Microsoft's [Windows Terminal](https://github.com/microsoft/terminal), before a rewrite to v2 that supported other apps as well.
 

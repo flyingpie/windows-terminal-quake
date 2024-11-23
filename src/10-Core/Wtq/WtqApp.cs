@@ -21,7 +21,6 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqAppToggleService _toggler;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
-
 	private readonly Worker _loop;
 
 	private Rectangle? _originalRect;
@@ -124,7 +123,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
 
-		_loop.Dispose();
+		// Stop update loop.
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	/// <summary>

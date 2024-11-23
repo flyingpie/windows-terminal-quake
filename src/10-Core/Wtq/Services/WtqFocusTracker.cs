@@ -30,7 +30,18 @@ public sealed class WtqFocusTracker(
 				if (_prev != curr)
 				{
 					_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
+				// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
+				// Note that both the past- and the future window can be null.
+				if (_prev != curr)
+				{
+					_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
 
+					_bus.Publish(new WtqWindowFocusChangedEvent()
+					{
+						GotFocusWindow = curr,
+						LostFocusWindow = _prev,
+					});
+				}
 					_bus.Publish(new WtqWindowFocusChangedEvent()
 					{
 						GotFocusWindow = curr,
@@ -47,8 +58,8 @@ public sealed class WtqFocusTracker(
 
 	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-	public async ValueTask DisposeAsync()
+	public async async ValueTask DisposeAsync()
 	{
-		_loop?.Dispose();
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 }

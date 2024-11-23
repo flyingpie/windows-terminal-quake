@@ -3,25 +3,28 @@ namespace Wtq.Utils;
 /// <summary>
 /// Runs a specified task at a specified interval.
 /// </summary>
-public sealed class Worker : IDisposable
+public sealed class Worker : IAsyncDisposable
 {
 	public static readonly TimeSpan DefaultInterval = TimeSpan.FromMilliseconds(250);
 
 	private readonly ILogger _log = Log.For<Worker>();
 
-	private readonly Func<CancellationToken, Task> _action;
+	private readonly CancellationTokenSource _cts = new();
 	private readonly TimeSpan _interval;
 
-	private CancellationTokenSource _cts = new();
-
-	public Worker(string name, Func<CancellationToken, Task> action)
+	public Worker(
+		string name,
+		Func<CancellationToken, Task> action)
 		: this(name, action, DefaultInterval)
 	{
 	}
 
-	public Worker(string name, Func<CancellationToken, Task> action, TimeSpan interval)
+	public Worker(
+		string name,
+		Func<CancellationToken, Task>
+		action,
+		TimeSpan interval)
 	{
-		_action = action;
 		_interval = interval;
 
 		_ = Task.Run(
@@ -35,7 +38,7 @@ public sealed class Worker : IDisposable
 					}
 					catch (Exception ex)
 					{
-						_log.LogWarning(ex, "Error running iteration for loop: {Message}", ex.Message);
+						_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
 					}
 
 					await Task.Delay(_interval).NoCtx();
@@ -43,8 +46,11 @@ public sealed class Worker : IDisposable
 			});
 	}
 
-	public void Dispose()
+	public ValueTask DisposeAsync()
 	{
+		// TODO: Wait for loop iteration to end.
 		_cts.Dispose();
+
+		return ValueTask.CompletedTask;
 	}
 }
