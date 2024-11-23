@@ -6,7 +6,7 @@ namespace Wtq;
 /// Orchestrates toggling on- and off of apps, and sending focus to the right window.
 /// </summary>
 // TODO: Better name.
-public sealed class WtqService : IDisposable, IAsyncInitializable
+public sealed class WtqService : IDisposable, IHostedService
 {
 	private readonly ILogger<WtqService> _log;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -31,9 +31,15 @@ public sealed class WtqService : IDisposable, IAsyncInitializable
 		_bus.OnEvent<WtqWindowFocusChangedEvent>(OnWindowFocusChangedEventAsync);
 	}
 
-	public Task InitializeAsync()
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		// TODO: Currently necessary to make sure this service is constructed.
+		// Maybe remove IHostedService and manually resolve this type on app startup?
+		return Task.CompletedTask;
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
 		return Task.CompletedTask;
 	}
 

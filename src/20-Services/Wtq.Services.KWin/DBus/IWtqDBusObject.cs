@@ -6,7 +6,7 @@ namespace Wtq.Services.KWin.DBus;
 /// Contains methods used to talk to, from KWin scripts.
 /// </summary>
 [DBusInterface("wtq.kwin")]
-public interface IWtqDBusObject : IDBusObject, IDisposable
+public interface IWtqDBusObject : IDBusObject
 {
 	Task LogAsync(string level, string msg);
 

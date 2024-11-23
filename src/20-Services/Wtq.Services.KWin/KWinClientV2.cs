@@ -12,32 +12,41 @@ internal sealed class KWinClientV2(
 	IDBusConnection dbus,
 	IKWinScriptService scriptService,
 	IWtqDBusObject wtqBusObj)
-	: IAsyncInitializable, IKWinClient
+	: IAsyncDisposable, IKWinClient
 {
+	private static string PathToWtqKwinJs = WtqPaths.GetPathRelativeToWtqAppDir("wtq.kwin.js");
+
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 	private readonly WtqDBusObject _wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
+	private readonly InitLock _lock = new();
 
-	private KWinScript? _script;
+	private IAsyncDisposable? _script;
 
-	public int InitializePriority => 5;
-
-	public async Task InitializeAsync()
+	private async Task InitAsync()
 	{
-		_script = await scriptService.LoadScriptAsync("wtq.kwin.js").NoCtx();
+		await _lock
+			.InitAsync(async () =>
+			{
+				// Setup WTQ DBus service for the KWin script to talk to.
+				await _wtqBusObj.InitAsync().NoCtx();
+
+				// Load KWin script.
+				_script = await scriptService.LoadScriptAsync(PathToWtqKwinJs).NoCtx();
+			})
+			.NoCtx();
 	}
 
 	public async ValueTask DisposeAsync()
 	{
-		if (_script != null)
-		{
-			await _script.DisposeAsync().NoCtx();
-		}
+		await (_script?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"BRING_WINDOW_TO_FOREGROUND",
@@ -50,6 +59,8 @@ internal sealed class KWinClientV2(
 
 	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		return (await _wtqBusObj
 				.SendCommandAsync("GET_CURSOR_POS")
 				.NoCtx())
@@ -68,6 +79,8 @@ internal sealed class KWinClientV2(
 	public async Task<KWinSupportInformation> GetSupportInformationAsync(
 		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		var kwin = await _dbus.GetKWinAsync().NoCtx();
 
 		var supportInfStr = await kwin.SupportInformationAsync().NoCtx();
@@ -77,6 +90,8 @@ internal sealed class KWinClientV2(
 
 	public async Task<KWinWindow?> GetWindowAsync(KWinWindow window)
 	{
+		await InitAsync().NoCtx();
+
 		var resp = await _wtqBusObj
 			.SendCommandAsync(
 				"GET_WINDOW",
@@ -91,6 +106,8 @@ internal sealed class KWinClientV2(
 
 	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST").NoCtx();
 
 		return resp
@@ -103,6 +120,8 @@ internal sealed class KWinClientV2(
 		Point location,
 		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"MOVE_WINDOW",
@@ -131,6 +150,8 @@ internal sealed class KWinClientV2(
 
 	public async Task RegisterHotkeyAsync(string name, KeyModifiers mod, Keys key)
 	{
+		await InitAsync().NoCtx();
+
 		var kwinMod = "Ctrl";
 		var kwinKey = key switch
 		{
@@ -166,6 +187,8 @@ internal sealed class KWinClientV2(
 		Size size,
 		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"RESIZE_WINDOW",
@@ -194,6 +217,8 @@ internal sealed class KWinClientV2(
 
 	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
@@ -209,6 +234,8 @@ internal sealed class KWinClientV2(
 
 	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_ALWAYS_ON_TOP",
@@ -224,6 +251,8 @@ internal sealed class KWinClientV2(
 
 	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_OPACITY",

@@ -7,7 +7,7 @@ namespace Wtq.Services;
 public sealed class WtqFocusTracker(
 	IWtqBus bus,
 	IWtqWindowService windowService)
-	: IAsyncInitializable, IAsyncDisposable
+	: IAsyncDisposable, IHostedService
 {
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
@@ -42,6 +42,11 @@ public sealed class WtqFocusTracker(
 				_prev = curr;
 			});
 
+		return Task.CompletedTask;
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
 		return Task.CompletedTask;
 	}
 
