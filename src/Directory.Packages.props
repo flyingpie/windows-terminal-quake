@@ -15,7 +15,7 @@
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
 		<PackageVersion Include="Nuke.Common" Version="9.0.1" />
 		<PackageVersion Include="Photino.Blazor" Version="3.2.0" />
-		<PackageVersion Include="Radzen.Blazor" Version="5.5.5" />
+		<PackageVersion Include="Radzen.Blazor" Version="5.6.7" />
 		<PackageVersion Include="Serilog" Version="4.1.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="8.0.0" />
 		<PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
