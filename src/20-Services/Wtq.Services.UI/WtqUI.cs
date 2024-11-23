@@ -20,20 +20,16 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 	private PhotinoBlazorApp? _app;
 	private Point? _loc;
 
-	private WtqDisqUI _disq;
-
 	public WtqUI(
 		IHostApplicationLifetime appLifetime,
 		IWtqBus bus,
 		IWtqWindowService windowService,
-		IWtqWindowService processService,
-		WtqDisqUI disq)
+		IWtqWindowService processService)
 	{
 		_ = Guard.Against.Null(bus);
 		_appLifetime = Guard.Against.Null(appLifetime);
 		_windowService = Guard.Against.Null(windowService);
 		_processService = Guard.Against.Null(processService);
-		_disq = disq;
 
 		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 	}
@@ -133,8 +129,6 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 			(s, a) =>
 			{
 				_ = Task.Run(CloseMainWindowAsync);
-
-				_disq.StartUI();
 			});
 
 		_app.MainWindow.RegisterWindowClosingHandler(

@@ -11,9 +11,10 @@ namespace Wtq.Services.KWin.DBus;
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
 	IWtqBus bus)
-	: IAsyncDisposable, IWtqDBusObject
+	: System.IAsyncDisposable, IWtqDBusObject
 {
 	private const string ServiceName = "wtq.svc";
+
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
 	private readonly CancellationTokenSource _cts = new();
@@ -50,7 +51,7 @@ internal sealed class WtqDBusObject(
 	public async ValueTask DisposeAsync()
 	{
 		_cts.Dispose();
-		_dbus.Dispose();
+		_lock.Dispose();
 
 		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}

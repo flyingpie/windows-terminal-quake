@@ -6,6 +6,8 @@ namespace Wtq.Services;
 /// </summary>
 public class WtqHotkeyService : IHostedService
 {
+	private readonly ILogger _log = Log.For<WtqHotkeyService>();
+
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -31,10 +33,16 @@ public class WtqHotkeyService : IHostedService
 				// Fall back to first configured app after that.
 				var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
 
+				if (app == null)
+				{
+					_log.LogWarning("No app found for hotkey '{Modifiers}+{Key}'", e.Modifiers, e.Key);
+					return Task.CompletedTask;
+				}
+
 				_bus.Publish(
 					new WtqAppToggledEvent()
 					{
-						App = app,
+						AppName = app.Name,
 					});
 
 				_prevApp = app;
