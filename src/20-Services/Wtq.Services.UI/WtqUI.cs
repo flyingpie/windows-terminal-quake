@@ -119,7 +119,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("icon-v2-64.png"))
+			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
 			.SetTitle(MainWindowTitle);
 
 		_app.MainWindow.RegisterWindowCreatedHandler(
