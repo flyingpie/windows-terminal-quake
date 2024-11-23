@@ -21,7 +21,9 @@ public class KWinWtqWindow(
 	/// </summary>
 	public override bool IsValid { get; } = true;
 
-	public override string? Name => _window?.ResourceClass;
+	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
+
+	public override string? Title => _window?.Caption;
 
 	public override async Task BringToForegroundAsync()
 	{
@@ -30,7 +32,7 @@ public class KWinWtqWindow(
 
 	public override async Task<Rectangle> GetWindowRectAsync()
 	{
-		var w = await _kwinClient.GetWindowAsync(_window).NoCtx();
+		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
 		return w.FrameGeometry.ToRect(); // TODO: Handle null.
 	}

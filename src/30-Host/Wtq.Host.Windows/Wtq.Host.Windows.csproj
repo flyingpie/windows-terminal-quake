@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
@@ -11,21 +11,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\..\schema\wtq.schema.2.json" Link="wtq.schema.2.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\wtq.jsonc" Link="wtq.jsonc">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.Win32\Wtq.Services.Win32.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj" />
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>

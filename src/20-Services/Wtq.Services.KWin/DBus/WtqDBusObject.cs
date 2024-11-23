@@ -11,8 +11,10 @@ namespace Wtq.Services.KWin.DBus;
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
 	IWtqBus bus)
-	: IAsyncInitializable, IWtqDBusObject
+	: System.IAsyncDisposable, IWtqDBusObject
 {
+	private const string ServiceName = "wtq.svc";
+
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
 	private readonly CancellationTokenSource _cts = new();
@@ -24,21 +26,34 @@ internal sealed class WtqDBusObject(
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
-	public int InitializePriority => 10;
+	private readonly InitLock _lock = new();
+
+	private Worker? _loop;
 
 	public ObjectPath ObjectPath => _path;
 
-	public async Task InitializeAsync()
+	public async Task InitAsync()
 	{
-		await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up WTQ DBus service");
 
-		StartNoOpLoop();
+				// Register this object as a DBus service.
+				await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
+
+				// Start NOOP loop.
+				StartNoOpLoop();
+			})
+			.NoCtx();
 	}
 
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
 		_cts.Dispose();
-		_dbus.Dispose();
+		_lock.Dispose();
+
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public Task LogAsync(string level, string msg)
@@ -49,11 +64,23 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
-	public Task<ResponseInfo> SendCommandAsync(string commandType, object? parameters = null)
-		=> SendCommandAsync(new CommandInfo(commandType) { Params = parameters ?? new() });
+	public Task<ResponseInfo> SendCommandAsync(
+		string commandType,
+		object? parameters,
+		CancellationToken cancellationToken)
+		=> SendCommandAsync(
+			new CommandInfo(commandType)
+			{
+				Params = parameters,
+			},
+			cancellationToken);
 
-	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
+	public async Task<ResponseInfo> SendCommandAsync(
+		CommandInfo cmdInfo,
+		CancellationToken cancellationToken)
 	{
+		await InitAsync().NoCtx();
+
 		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
 		// Add response waiter.
@@ -72,7 +99,14 @@ internal sealed class WtqDBusObject(
 		// Wait for response
 		try
 		{
-			return await waiter.Task.TimeoutAfterAsync(TimeSpan.FromSeconds(1)).NoCtx();
+			return await waiter.Task
+				.WithCancellation(cancellationToken)
+				.WithTimeout(TimeSpan.FromSeconds(1))
+				.NoCtx();
+		}
+		catch (TaskCanceledException)
+		{
+			throw new KWinException($"Task canceled while attempting to send KWin command '{cmdInfo}'");
 		}
 		catch (TimeoutException ex)
 		{
@@ -83,7 +117,7 @@ internal sealed class WtqDBusObject(
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync()
 	{
-		while (true)
+		while (!_cts.IsCancellationRequested)
 		{
 			// See if we have a command on the queue to send back.
 			if (_commandQueue.TryDequeue(out var cmdInfo))
@@ -93,8 +127,11 @@ internal sealed class WtqDBusObject(
 			}
 
 			// If not, wait for one to be queued.
-			await _res.WaitAsync().NoCtx();
+			await _res.WaitAsync(_cts.Token).NoCtx();
 		}
+
+		_log.LogTrace("Sending 'STOPPING' command to KWin script");
+		return JsonSerializer.Serialize(CommandInfo.Stopping);
 	}
 
 	/// <inheritdoc/>
@@ -152,28 +189,25 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
+	public Task ToggleAppAsync(string appName)
+	{
+		_bus.Publish(new WtqAppToggledEvent()
+		{
+			AppName = appName,
+		});
+
+		return Task.CompletedTask;
+	}
+
 	/// <summary>
 	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connections is dropped.
+	/// and the connection is dropped.
 	/// </summary>
 	private void StartNoOpLoop()
 	{
-		// TODO: Generalize loop.
-		_ = Task.Run(async () =>
-		{
-			while (!_cts.IsCancellationRequested)
-			{
-				try
-				{
-					await SendCommandAsync("NOOP").NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
-				}
-
-				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
-			}
-		});
+		_loop = new(
+			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx(),
+			TimeSpan.FromSeconds(10));
 	}
 }

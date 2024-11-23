@@ -5,7 +5,7 @@ using Connection = Tmds.DBus.Protocol.Connection;
 namespace Wtq.Services.KWin.DBus;
 
 /// <inheritdoc cref="IDBusConnection"/>
-internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
+internal sealed class DBusConnection : IDBusConnection, IDisposable
 {
 	private readonly ILogger _log = Log.For<DBusConnection>();
 
@@ -18,6 +18,8 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 	/// Server connection, used to register DBus objects.
 	/// </summary>
 	private readonly Tmds.DBus.Connection _serverConnection;
+
+	private readonly InitLock _lock = new();
 
 	private DBus.Generated.KWinService? _kwinService;
 	private DBus.Generated.KWin? _kwin;
@@ -38,33 +40,24 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 		_serverConnection = new Tmds.DBus.Connection(address);
 	}
 
-	public int InitializePriority => 20;
-
-	public async Task InitializeAsync()
-	{
-		_log.LogInformation("Setting up DBus connections");
-
-		var sw = Stopwatch.StartNew();
-		await _clientConnection.ConnectAsync().NoCtx();
-		_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
-
-		sw.Restart();
-		await _serverConnection.ConnectAsync().NoCtx();
-		_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
-	}
-
 	public async Task<DBus.Generated.KWinService> GetKWinServiceAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _kwinService ??= new DBus.Generated.KWinService(_clientConnection, "org.kde.KWin");
 	}
 
 	public async Task<DBus.Generated.KWin> GetKWinAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
 	}
 
 	public async Task<DBus.Generated.Scripting> GetScriptingAsync()
 	{
+		await InitAsync().NoCtx();
+
 		return _scripting ??= (await GetKWinServiceAsync().NoCtx()).CreateScripting("/Scripting");
 	}
 
@@ -77,11 +70,14 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 
 		_clientConnection.Dispose();
 		_serverConnection.Dispose();
+		_lock.Dispose();
 	}
 
 	/// <inheritdoc/>
 	public async Task RegisterServiceAsync(string serviceName, IDBusObject serviceObject)
 	{
+		await InitAsync().NoCtx();
+
 		Guard.Against.NullOrWhiteSpace(serviceName);
 		Guard.Against.Null(serviceObject);
 
@@ -89,5 +85,23 @@ internal sealed class DBusConnection : IAsyncInitializable, IDBusConnection
 
 		await _serverConnection.RegisterServiceAsync(serviceName).NoCtx();
 		await _serverConnection.RegisterObjectAsync(serviceObject).NoCtx();
+	}
+
+	private async Task InitAsync()
+	{
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up DBus connections");
+
+				var sw = Stopwatch.StartNew();
+				await _clientConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus client connection ready, took {Elapsed}", sw.Elapsed);
+
+				sw.Restart();
+				await _serverConnection.ConnectAsync().NoCtx();
+				_log.LogInformation("DBus server connection ready, took {Elapsed}", sw.Elapsed);
+			})
+			.NoCtx();
 	}
 }

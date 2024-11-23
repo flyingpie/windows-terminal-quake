@@ -38,7 +38,7 @@ public sealed class WtqWindowResolver(
 		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
 
 		// Look for an existing window first.
-		var window1 = await _windowService.FindWindowAsync(opts).NoCtx();
+		var window1 = await _windowService.FindWindowAsync(opts, CancellationToken.None).NoCtx();
 		if (window1 != null)
 		{
 			// If we got one, great, return it.
@@ -58,7 +58,7 @@ public sealed class WtqWindowResolver(
 
 		try
 		{
-			await _windowService.CreateAsync(opts).NoCtx();
+			await _windowService.CreateAsync(opts, CancellationToken.None).NoCtx();
 		}
 		catch (Exception ex)
 		{
@@ -69,7 +69,7 @@ public sealed class WtqWindowResolver(
 		for (var attempt = 0; attempt < 5; attempt++)
 		{
 			// Look for our newly created window.
-			var window2 = await _windowService.FindWindowAsync(opts).NoCtx();
+			var window2 = await _windowService.FindWindowAsync(opts, CancellationToken.None).NoCtx();
 			if (window2 == null)
 			{
 				await Task.Delay(TimeSpan.FromMilliseconds(250)).NoCtx();
@@ -88,7 +88,7 @@ public sealed class WtqWindowResolver(
 	{
 		_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
 
-		var window = await _windowService.GetForegroundWindowAsync().NoCtx();
+		var window = await _windowService.GetForegroundWindowAsync(CancellationToken.None).NoCtx();
 
 		if (window != null)
 		{

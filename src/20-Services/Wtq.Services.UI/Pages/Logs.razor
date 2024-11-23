@@ -1,0 +1,22 @@
+@page "/Logs"
+
+<h3>Logs</h3>
+
+@code {
+	private static StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor) =>
+		new()
+		{
+			AutomaticLayout = true,
+			Theme = "vs-dark",
+			Language = "xml",
+			Value = "<root></root>",
+		};
+}
+
+<StandaloneCodeEditor Id="my-editor-instance-id" ConstructionOptions="EditorConstructionOptions" />
+
+<style>
+	.monaco-editor-container {
+		height: 600px;
+	}
+</style>

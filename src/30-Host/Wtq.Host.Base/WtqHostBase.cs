@@ -11,8 +11,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wtq.Configuration;
-using Wtq.Utils;
-using Wtq.Utils.AsyncInit;
+using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
@@ -71,16 +70,14 @@ public class WtqHostBase
 						.AddOptionsWithValidateOnStart<WtqOptions>()
 						.Bind(config);
 
-					opt
+				opt
+					.AddUI()
 
 						// Utils
 						.AddWtqCore();
 
-					ConfigureServices(opt);
-
-					opt
-						.AddAsyncInitializable();
-				})
+				ConfigureServices(opt);
+			})
 			.UseSerilog()
 			.Build();
 	}
@@ -89,8 +86,6 @@ public class WtqHostBase
 	{
 		try
 		{
-			await _host.Services.InitializeAsync().NoCtx();
-
 			await _host
 				.RunAsync()
 				.ConfigureAwait(false);

@@ -2,6 +2,9 @@ namespace Wtq.Services.KWin.Dto;
 
 public class KWinWindow
 {
+	[JsonPropertyName("caption")]
+	public string? Caption { get; set; }
+
 	[JsonPropertyName("frameGeometry")]
 	public KWinRectangle? FrameGeometry { get; set; }
 

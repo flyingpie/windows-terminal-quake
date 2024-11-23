@@ -6,7 +6,7 @@ namespace Wtq.Services.KWin.DBus;
 /// Wraps both a client- and a server connection to DBus.<br/>
 /// The client connection is used for sending requests to DBus, the server one is used to register DBus object.
 /// </summary>
-internal interface IDBusConnection : IDisposable
+internal interface IDBusConnection
 {
 	Task<DBus.Generated.KWin> GetKWinAsync();
 

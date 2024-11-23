@@ -12,11 +12,13 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private readonly List<WtqApp> _apps = [];
 
 	public WtqAppRepo(
+		IHostApplicationLifetime lifetime,
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowResolver procResolver)
 	{
+		_ = Guard.Against.Null(lifetime);
 		_opts = Guard.Against.Null(opts);
 		_toggleService = Guard.Against.Null(toggleService);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
@@ -24,13 +26,20 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
-	}
 
-	public async Task InitializeAsync()
-	{
-		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-		// "StartApps": "OnWtqStart | OnHotkeyPress"
-		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+		_ = Task.Run(async () =>
+		{
+			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+			// "StartApps": "OnWtqStart | OnHotkeyPress"
+			await UpdateAppsAsync(allowStartNew: true).NoCtx();
+		});
+
+		// When WTQ stops, reset all tracked apps.
+		lifetime.ApplicationStopping.Register(() =>
+		{
+			// TODO: Find a nicer way to handle this.
+			DisposeAsync().GetAwaiter().GetResult();
+		});
 	}
 
 	public async ValueTask DisposeAsync()

@@ -6,7 +6,7 @@ namespace Wtq.Services.KWin.DBus;
 /// Contains methods used to talk to, from KWin scripts.
 /// </summary>
 [DBusInterface("wtq.kwin")]
-public interface IWtqDBusObject : IDBusObject, IDisposable
+public interface IWtqDBusObject : IDBusObject
 {
 	Task LogAsync(string level, string msg);
 
@@ -25,4 +25,6 @@ public interface IWtqDBusObject : IDBusObject, IDisposable
 	/// TODO: Would like to remove this, and do shortcuts through DBus (without KWin script). Didn't get that working just yet.
 	/// </summary>
 	Task OnPressShortcutAsync(string modStr, string keyStr);
+
+	Task ToggleAppAsync(string appName);
 }

@@ -17,7 +17,6 @@ internal static class HotkeyManager
 
 	static HotkeyManager()
 	{
-		// TODO: Thread doesn't exit properly.
 		Thread messageLoop = new(delegate ()
 		{
 			Application.Run(new MessageWindow());
@@ -38,6 +37,11 @@ internal static class HotkeyManager
 	/// Fired when the registered hotkey is pressed. Note that <see cref="RegisterHotkey"/> needs to be called first.
 	/// </summary>
 	public static event EventHandler<HotkeyEventArgs> HotkeyPressed = (sender, e) => { };
+
+	public static void Exit()
+	{
+		Application.Exit();
+	}
 
 	public static int RegisterHotkey(Keys key, KeyModifiers modifiers)
 	{

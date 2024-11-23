@@ -7,61 +7,51 @@ namespace Wtq.Services;
 public sealed class WtqFocusTracker(
 	IWtqBus bus,
 	IWtqWindowService windowService)
-	: IAsyncInitializable, IAsyncDisposable
+	: IAsyncDisposable, IHostedService
 {
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(windowService);
 
-	private bool _isRunning = true;
-
+	private Worker? _loop;
 	private WtqWindow? _prev;
 
-	public Task InitializeAsync()
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		// TODO: Generalize loop.
-		_ = Task.Run(
-			async () =>
+		_loop = new(
+			nameof(WtqFocusTracker),
+			async _ =>
 			{
-				while (_isRunning)
+				// Get current foreground window (could be null).
+				var curr = await _windowService.GetForegroundWindowAsync(cancellationToken).NoCtx();
+
+				// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
+				// Note that both the past- and the future window can be null.
+				if (_prev != curr)
 				{
-					try
+					_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
+
+					_bus.Publish(new WtqWindowFocusChangedEvent()
 					{
-						// Get current foreground window (could be null).
-						var curr = await _windowService.GetForegroundWindowAsync().NoCtx();
-
-						// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
-						// Note that both the past- and the future window can be null.
-						if (_prev != curr)
-						{
-							_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
-
-							_bus.Publish(new WtqWindowFocusChangedEvent()
-							{
-								GotFocusWindow = curr,
-								LostFocusWindow = _prev,
-							});
-						}
-
-						// Store for next cycle.
-						_prev = curr;
-					}
-					catch (Exception ex)
-					{
-						_log.LogError(ex, "Error tracking focus: {Message}", ex.Message);
-					}
-
-					await Task.Delay(TimeSpan.FromMilliseconds(250)).NoCtx();
+						GotFocusWindow = curr,
+						LostFocusWindow = _prev,
+					});
 				}
+
+				// Store for next cycle.
+				_prev = curr;
 			});
 
 		return Task.CompletedTask;
 	}
 
-	public ValueTask DisposeAsync()
+	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		_isRunning = false;
+		return Task.CompletedTask;
+	}
 
-		return ValueTask.CompletedTask;
+	public async ValueTask DisposeAsync()
+	{
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 }
