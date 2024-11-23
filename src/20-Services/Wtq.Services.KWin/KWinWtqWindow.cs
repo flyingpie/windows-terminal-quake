@@ -25,6 +25,8 @@ public class KWinWtqWindow(
 
 	public override string? Title => _window?.Caption;
 
+	public override string? Title => _window?.Caption;
+
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
