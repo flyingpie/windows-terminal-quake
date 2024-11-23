@@ -36,6 +36,23 @@ public static partial class NukeExtensions
 		}
 	}
 
+	public static void DeleteUnnecessaryFiles(this AbsolutePath st)
+	{
+		// TODO: Add more patterns.
+		var patterns = new string[]
+		{
+			"wtq.jsonc",
+		};
+
+		foreach (var p in patterns)
+		{
+			foreach (var f in st.GetFiles(pattern: p, depth: 10))
+			{
+				f.DeleteFile();
+			}
+		}
+	}
+
 	public static async Task<string> GetChangeLogEntryAsync(
 		string path,
 		string ver)
@@ -112,6 +129,13 @@ public static partial class NukeExtensions
 		return await client
 			.Repository
 			.Release.Create(owner, name, newRelease);
+	}
+
+	public static void MoveWtqUI(this AbsolutePath root)
+	{
+		var wwwroot = root / "wwwroot";
+		var wtqUI = wwwroot / "_content/Wtq.Services.UI";
+		wtqUI.Move(wwwroot, ExistsPolicy.DirectoryMerge);
 	}
 
 	public static async Task UploadReleaseAssetToGithub(
