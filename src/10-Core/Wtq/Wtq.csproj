@@ -18,7 +18,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Resources\icon.ico" />
+		<Content Include="..\..\..\assets\*" LinkBase="assets">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
