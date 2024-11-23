@@ -30,9 +30,6 @@ internal sealed class WtqDBusObject(
 	private Worker? _loop;
 
 	public ObjectPath ObjectPath => _path;
-	private bool _isDisposed;
-
-	#region Setup
 
 	public async Task InitAsync()
 	{
@@ -58,21 +55,13 @@ internal sealed class WtqDBusObject(
 		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
-	/// <summary>
-	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connection is dropped.
-	/// </summary>
-	private void StartNoOpLoop()
+	public Task LogAsync(string level, string msg)
 	{
-		_loop = new(
-			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
-			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx(),
-			TimeSpan.FromSeconds(10));
+		// TODO
+		_log.LogDebug("{Level} {Message}", level, msg);
+
+		return Task.CompletedTask;
 	}
-
-	#endregion
-
-	#region Called by WTQ
 
 	public Task<ResponseInfo> SendCommandAsync(
 		string commandType,
@@ -124,10 +113,6 @@ internal sealed class WtqDBusObject(
 		}
 	}
 
-	#endregion
-
-	#region Called from KWin script
-
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync()
 	{
@@ -146,35 +131,6 @@ internal sealed class WtqDBusObject(
 
 		_log.LogTrace("Sending 'STOPPING' command to KWin script");
 		return JsonSerializer.Serialize(CommandInfo.Stopping);
-	}
-
-	public Task LogAsync(string level, string msg)
-	{
-		// TODO
-		_log.LogDebug("{Level} {Message}", level, msg);
-
-		return Task.CompletedTask;
-	}
-
-	/// <inheritdoc/>
-	public Task OnPressShortcutAsync(string modStr, string keyStr)
-	{
-		// _log.LogInformation(
-		// 	"{MethodName}({Modifier}, {Key})",
-		// 	nameof(OnPressShortcutAsync),
-		// 	modStr,
-		// 	keyStr);
-		//
-		// Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
-		// Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-		//
-		// _bus.Publish(
-		// 	new WtqHotkeyPressedEvent()
-		// 	{
-		// 		Key = key, Modifiers = mod,
-		// 	});
-
-		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc/>
@@ -210,6 +166,28 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
+	/// <inheritdoc/>
+	public Task OnPressShortcutAsync(string modStr, string keyStr)
+	{
+		_log.LogInformation(
+			"{MethodName}({Modifier}, {Key})",
+			nameof(OnPressShortcutAsync),
+			modStr,
+			keyStr);
+
+		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
+		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
+
+		_bus.Publish(
+			new WtqHotkeyPressedEvent()
+			{
+				Key = key,
+				Modifiers = mod,
+			});
+
+		return Task.CompletedTask;
+	}
+
 	public async Task ToggleAppAsync(string appName)
 	{
 		_bus.Publish(new WtqAppToggledEvent()
@@ -218,5 +196,15 @@ internal sealed class WtqDBusObject(
 		});
 	}
 
-	#endregion
+	/// <summary>
+	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+	/// and the connection is dropped.
+	/// </summary>
+	private void StartNoOpLoop()
+	{
+		_loop = new(
+			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx(),
+			TimeSpan.FromSeconds(10));
+	}
 }

@@ -25,8 +25,6 @@ public class KWinWtqWindow(
 
 	public override string? Title => _window?.Caption;
 
-	public override string? Title => _window?.Caption;
-
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
@@ -83,10 +81,5 @@ public class KWinWtqWindow(
 	{
 		// TODO
 		return Task.CompletedTask;
-	}
-
-	public override async Task SetWindowVisibleAsync(bool isVisible)
-	{
-		await _kwinClient.SetWindowVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
 	}
 }

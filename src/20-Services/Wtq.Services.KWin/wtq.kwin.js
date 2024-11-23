@@ -343,15 +343,4 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	w.skipSwitcher = skip;
 	w.skipTaskbar = skip;
 };
-
-cmds["SET_WINDOW_VISIBLE"] = (cmdInfo) => {
-	const p = cmdInfo.params;
-	const w = kwin.getWindowByInternalIdRequired(p.internalId);
-
-	const minimized = !(p.isVisible == "true");
-
-	log.info(`Setting window visible for window with internal id '${p.internalId}' to '${p.isVisible}'`);
-
-	w.minimized = minimized;
-};
 ////////////////////////////////////////////////////////////

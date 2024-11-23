@@ -179,7 +179,6 @@ internal sealed class KWinClientV2(
 				{
 					Params = new
 					{
-						// name = $"{name}_name",
 						name = name,
 						title = $"{name}_title",
 						sequence = kwinSequence,
@@ -263,25 +262,6 @@ internal sealed class KWinClientV2(
 				{
 					internalId = window.InternalId,
 					opacity = opacity,
-				},
-				cancellationToken)
-			.NoCtx();
-	}
-
-	public async Task SetWindowVisibleAsync(
-		KWinWindow window,
-		bool isVisible,
-		CancellationToken cancellationToken)
-	{
-		await InitAsync().NoCtx();
-
-		_ = await _wtqBusObj
-			.SendCommandAsync(
-				"SET_WINDOW_VISIBLE",
-				new
-				{
-					internalId = window.InternalId,
-					isVisible = isVisible,
 				},
 				cancellationToken)
 			.NoCtx();

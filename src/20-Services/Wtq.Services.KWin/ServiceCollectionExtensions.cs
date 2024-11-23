@@ -15,11 +15,12 @@ public static class ServiceCollectionExtensions
 			// DBus.
 			.AddSingleton<IDBusConnection, DBusConnection>()
 			.AddSingleton<IWtqDBusObject, WtqDBusObject>()
-			.AddSingleton<IKWinClient, KWinClientV2>()
-			.AddSingleton<IKWinScriptService, KWinScriptService>()
 
-			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>()
+			.AddSingleton<IKWinScriptService, KWinScriptService>()
+			.AddSingleton<IKWinClient, KWinClientV2>()
+
 			.AddSingleton<IWtqWindowService, KWinWindowService>()
+			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>()
 
 			.AddHostedService<KWinHotkeyService>()
 			.AddHostedService<KWinTrayIconService>();
