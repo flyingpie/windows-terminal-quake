@@ -2,7 +2,8 @@ using Wtq.Services.WinForms.Native;
 
 namespace Wtq.Services.WinForms;
 
-public class WinFormsHotkeyService : IHostedService
+public sealed class WinFormsHotkeyService
+	: IDisposable, IHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
@@ -31,6 +32,11 @@ public class WinFormsHotkeyService : IHostedService
 				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
 			});
 		};
+	}
+
+	public void Dispose()
+	{
+		HotkeyManager.Exit();
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
