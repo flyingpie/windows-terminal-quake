@@ -3,12 +3,8 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitHub;
-using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.MSBuild;
-using Nuke.Common.Tools.NerdbankGitVersioning;
 using Octokit;
 using Octokit.Internal;
 using Serilog;
@@ -26,7 +22,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 	OnPushBranches = ["master"],
 	OnWorkflowDispatchOptionalInputs = [ "name" ],
 	EnableGitHubToken = true,
-	InvokedTargets = [nameof(PublishRelease)])]
+	InvokedTargets = [nameof(PublishRelease)])]	
 [SuppressMessage("Major Bug", "S3903:Types should be defined in named namespaces", Justification = "MvdO: Build script.")]
 public sealed class Build : NukeBuild
 {
@@ -145,12 +141,11 @@ public sealed class Build : NukeBuild
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
-				.SetOutput(st)
-				.SetPublishSingleFile(true)
-				.SetRuntime("linux-x64")
-				.SetSelfContained(false));
+				.SetOutput(st));
 
-			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			st.DeleteUnnecessaryFiles();
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToLinux64FrameworkDependentZip,
@@ -174,11 +169,12 @@ public sealed class Build : NukeBuild
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
 				.SetOutput(st)
-				.SetPublishSingleFile(true)
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFilesExceptFor("wtq", "wtq.kwin.js");
+			st.DeleteUnnecessaryFiles();
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToLinux64SelfContainedZip,
@@ -232,11 +228,12 @@ public sealed class Build : NukeBuild
 				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
-				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(false));
 
-			st.DeleteFilesExceptFor("wtq.exe");
+			st.DeleteUnnecessaryFiles();
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToWin64FrameworkDependentZip,
@@ -265,7 +262,9 @@ public sealed class Build : NukeBuild
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			st.DeleteFilesExceptFor("wtq.exe");
+			st.DeleteUnnecessaryFiles();
+
+			st.MoveWtqUI();
 
 			st.ZipTo(
 				PathToWin64SelfContainedZip,
