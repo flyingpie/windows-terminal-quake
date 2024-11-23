@@ -4,7 +4,7 @@ namespace Wtq.Services;
 /// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotkeyService : IAsyncInitializable
+public class WtqHotkeyService : IHostedService
 {
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
@@ -43,10 +43,15 @@ public class WtqHotkeyService : IAsyncInitializable
 			});
 	}
 
-	public Task InitializeAsync()
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		SendRegisterEvents(_opts.CurrentValue);
 
+		return Task.CompletedTask;
+	}
+
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
 		return Task.CompletedTask;
 	}
 

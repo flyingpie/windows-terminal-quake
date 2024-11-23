@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
-			.AddSingleton<WinFormsHotkeyService>();
+			.AddHostedService<WinFormsHotkeyService>();
 	}
 
 	public static IServiceCollection AddWinFormsScreenInfoProvider(this IServiceCollection services)

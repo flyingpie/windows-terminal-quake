@@ -11,7 +11,7 @@ namespace Wtq.Services.KWin.DBus;
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
 	IWtqBus bus)
-	: IAsyncDisposable, IAsyncInitializable, IWtqDBusObject
+	: IAsyncDisposable, IWtqDBusObject
 {
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -24,17 +24,26 @@ internal sealed class WtqDBusObject(
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
-	public int InitializePriority => 10;
+	private readonly InitLock _lock = new();
 
 	private Worker? _loop;
 
 	public ObjectPath ObjectPath => _path;
 
-	public async Task InitializeAsync()
+	public async Task InitAsync()
 	{
-		await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+		await _lock
+			.InitAsync(async () =>
+			{
+				_log.LogInformation("Setting up WTQ DBus service");
 
-		StartNoOpLoop();
+				// Register this object as a DBus service.
+				await _dbus.RegisterServiceAsync("wtq.svc", this).NoCtx();
+
+				// Start NOOP loop.
+				StartNoOpLoop();
+			})
+			.NoCtx();
 	}
 
 	public async ValueTask DisposeAsync()
@@ -58,6 +67,8 @@ internal sealed class WtqDBusObject(
 
 	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
 	{
+		await InitAsync().NoCtx();
+
 		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
 		// Add response waiter.

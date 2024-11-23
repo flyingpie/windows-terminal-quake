@@ -4,13 +4,14 @@ using Wtq.Services.Win32.Native;
 namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService :
-	IAsyncInitializable,
 	IDisposable,
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
+
+	private readonly InitLock _initLock = new();
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
@@ -19,36 +20,38 @@ public sealed class Win32WindowService :
 	{
 		Guard.Against.Null(opts);
 
-		await CreateProcessAsync(opts).ConfigureAwait(false);
-	}
+		await InitAsync().NoCtx();
 
-	public async Task InitializeAsync()
-	{
-		await UpdateProcessesAsync().ConfigureAwait(false);
+		await CreateProcessAsync(opts).ConfigureAwait(false);
 	}
 
 	public void Dispose()
 	{
 		_lock.Dispose();
+		_initLock.Dispose();
 	}
 
 	public async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
+		await InitAsync().NoCtx();
+
 		var processes = await GetWindowsAsync().NoCtx();
 
 		return processes.FirstOrDefault(p => p.Matches(opts));
 	}
 
-	public Task<WtqWindow?> GetForegroundWindowAsync()
+	public async Task<WtqWindow?> GetForegroundWindowAsync()
 	{
+		await InitAsync().NoCtx();
+
 		try
 		{
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return Task.FromResult<WtqWindow?>(new Win32WtqWindow(Process.GetProcessById((int)fg)));
+				return new Win32WtqWindow(Process.GetProcessById((int)fg));
 			}
 		}
 		catch (Exception ex)
@@ -56,11 +59,13 @@ public sealed class Win32WindowService :
 			_log.LogWarning(ex, "Error looking up foreground process: {Message}", ex.Message);
 		}
 
-		return Task.FromResult<WtqWindow?>(null);
+		return null;
 	}
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync()
 	{
+		await InitAsync().NoCtx();
+
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
@@ -76,6 +81,8 @@ public sealed class Win32WindowService :
 
 	private async Task CreateProcessAsync(WtqAppOptions opts)
 	{
+		await InitAsync().NoCtx();
+
 		_log.LogInformation("Creating process for app '{App}'", opts);
 
 		using var process = new Process();
@@ -102,6 +109,11 @@ public sealed class Win32WindowService :
 		}
 
 		await UpdateProcessesAsync(force: true).NoCtx();
+	}
+
+	private async Task InitAsync()
+	{
+		await _initLock.InitAsync(() => UpdateProcessesAsync()).NoCtx();
 	}
 
 	private async Task UpdateProcessesAsync(bool force = false)

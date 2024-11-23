@@ -1,4 +1,5 @@
 global using Ardalis.GuardClauses;
+global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using System;
 global using System.Diagnostics;
@@ -11,4 +12,3 @@ global using System.Threading.Tasks;
 global using System.Windows.Forms;
 global using Wtq.Events;
 global using Wtq.Utils;
-global using Wtq.Utils.AsyncInit;
