@@ -11,7 +11,7 @@ namespace Wtq.Services.KWin.DBus;
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
 	IWtqBus bus)
-	: IAsyncInitializable, IWtqDBusObject
+	: IAsyncDisposable, IAsyncInitializable, IWtqDBusObject
 {
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -26,6 +26,8 @@ internal sealed class WtqDBusObject(
 
 	public int InitializePriority => 10;
 
+	private Worker? _loop;
+
 	public ObjectPath ObjectPath => _path;
 
 	public async Task InitializeAsync()
@@ -35,10 +37,12 @@ internal sealed class WtqDBusObject(
 		StartNoOpLoop();
 	}
 
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
 		_cts.Dispose();
 		_dbus.Dispose();
+
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public Task LogAsync(string level, string msg)
@@ -154,26 +158,13 @@ internal sealed class WtqDBusObject(
 
 	/// <summary>
 	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connections is dropped.
+	/// and the connection is dropped.
 	/// </summary>
 	private void StartNoOpLoop()
 	{
-		// TODO: Generalize loop.
-		_ = Task.Run(async () =>
-		{
-			while (!_cts.IsCancellationRequested)
-			{
-				try
-				{
-					await SendCommandAsync("NOOP").NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogError(ex, "Error while sending NO_OP to wtq.kwin: {Message}", ex.Message);
-				}
-
-				await Task.Delay(TimeSpan.FromSeconds(10)).NoCtx();
-			}
-		});
+		_loop = new(
+			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
+			async ct => await SendCommandAsync("NOOP").NoCtx(),
+			TimeSpan.FromSeconds(10));
 	}
 }
