@@ -62,10 +62,20 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
-	public Task<ResponseInfo> SendCommandAsync(string commandType, object? parameters = null)
-		=> SendCommandAsync(new CommandInfo(commandType) { Params = parameters ?? new() });
+	public Task<ResponseInfo> SendCommandAsync(
+		string commandType,
+		object? parameters,
+		CancellationToken cancellationToken)
+		=> SendCommandAsync(
+			new CommandInfo(commandType)
+			{
+				Params = parameters,
+			},
+			cancellationToken);
 
-	public async Task<ResponseInfo> SendCommandAsync(CommandInfo cmdInfo)
+	public async Task<ResponseInfo> SendCommandAsync(
+		CommandInfo cmdInfo,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -87,7 +97,14 @@ internal sealed class WtqDBusObject(
 		// Wait for response
 		try
 		{
-			return await waiter.Task.TimeoutAfterAsync(TimeSpan.FromSeconds(1)).NoCtx();
+			return await waiter.Task
+				.WithCancellation(cancellationToken)
+				.WithTimeout(TimeSpan.FromSeconds(1))
+				.NoCtx();
+		}
+		catch (TaskCanceledException)
+		{
+			throw new KWinException($"Task canceled while attempting to send KWin command '{cmdInfo}'");
 		}
 		catch (TimeoutException ex)
 		{
@@ -98,7 +115,7 @@ internal sealed class WtqDBusObject(
 	/// <inheritdoc/>
 	public async Task<string> GetNextCommandAsync()
 	{
-		while (true)
+		while (!_cts.IsCancellationRequested)
 		{
 			// See if we have a command on the queue to send back.
 			if (_commandQueue.TryDequeue(out var cmdInfo))
@@ -108,8 +125,11 @@ internal sealed class WtqDBusObject(
 			}
 
 			// If not, wait for one to be queued.
-			await _res.WaitAsync().NoCtx();
+			await _res.WaitAsync(_cts.Token).NoCtx();
 		}
+
+		_log.LogTrace("Sending 'STOPPING' command to KWin script");
+		return JsonSerializer.Serialize(CommandInfo.Stopping);
 	}
 
 	/// <inheritdoc/>
@@ -175,7 +195,7 @@ internal sealed class WtqDBusObject(
 	{
 		_loop = new(
 			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
-			async ct => await SendCommandAsync("NOOP").NoCtx(),
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx(),
 			TimeSpan.FromSeconds(10));
 	}
 }

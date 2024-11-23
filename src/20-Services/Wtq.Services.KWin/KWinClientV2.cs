@@ -43,7 +43,9 @@ internal sealed class KWinClientV2(
 		await (_script?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
-	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
+	public async Task BringToForegroundAsync(
+		KWinWindow window,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -53,25 +55,28 @@ internal sealed class KWinClientV2(
 				new
 				{
 					internalId = window.InternalId,
-				})
+				},
+				cancellationToken)
 			.NoCtx();
 	}
 
-	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
+	public async Task<Point> GetCursorPosAsync(
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
 		return (await _wtqBusObj
-				.SendCommandAsync("GET_CURSOR_POS")
+				.SendCommandAsync("GET_CURSOR_POS", null, cancellationToken)
 				.NoCtx())
 			.GetParamsAs<KWinPoint>()
 			.ToPoint();
 	}
 
-	public async Task<KWinWindow?> GetForegroundWindowAsync()
+	public async Task<KWinWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		return (await _wtqBusObj
-				.SendCommandAsync("GET_FOREGROUND_WINDOW")
+				.SendCommandAsync("GET_FOREGROUND_WINDOW", null, cancellationToken)
 				.NoCtx())
 			.GetParamsAs<KWinWindow>();
 	}
@@ -88,7 +93,9 @@ internal sealed class KWinClientV2(
 		return KWinSupportInformation.Parse(supportInfStr);
 	}
 
-	public async Task<KWinWindow?> GetWindowAsync(KWinWindow window)
+	public async Task<KWinWindow?> GetWindowAsync(
+		KWinWindow window,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -98,17 +105,19 @@ internal sealed class KWinClientV2(
 				new
 				{
 					internalId = window.InternalId,
-				})
+				},
+				cancellationToken)
 			.NoCtx();
 
 		return resp.GetParamsAs<KWinWindow>();
 	}
 
-	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
+	public async Task<ICollection<KWinWindow>> GetWindowListAsync(
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
-		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST").NoCtx();
+		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST", null, cancellationToken).NoCtx();
 
 		return resp
 			.GetParamsAs<KWinGetWindowListResponse>()
@@ -130,25 +139,16 @@ internal sealed class KWinClientV2(
 					internalId = window.InternalId,
 					x = location.X,
 					y = location.Y,
-				})
+				},
+				cancellationToken)
 			.NoCtx();
-
-		// var w = await GetWindowAsync(window).NoCtx();
-		//
-		// if (w?.FrameGeometry == null)
-		// {
-		// 	return;
-		// }
-		//
-		// var actualLocation = w.FrameGeometry.ToPoint();
-		//
-		// if (actualLocation != location)
-		// {
-		// 	_log.LogWarning("Window '{Window}' did not have expected location '{ExpectedLocation}' after move (was '{ActualLocation}')", window, location, actualLocation);
-		// }
 	}
 
-	public async Task RegisterHotkeyAsync(string name, KeyModifiers mod, Keys key)
+	public async Task RegisterHotkeyAsync(
+		string name,
+		KeyModifiers mod,
+		Keys key,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -168,17 +168,19 @@ internal sealed class KWinClientV2(
 		var kwinSequence = $"{kwinMod}+{kwinKey}";
 
 		_ = await _wtqBusObj
-			.SendCommandAsync(new("REGISTER_HOT_KEY")
-			{
-				Params = new
+			.SendCommandAsync(
+				new("REGISTER_HOT_KEY")
 				{
-					name = $"{name}_name",
-					title = $"{name}_title",
-					sequence = kwinSequence,
-					mod = mod.ToString(),
-					key = key.ToString(),
+					Params = new
+					{
+						name = $"{name}_name",
+						title = $"{name}_title",
+						sequence = kwinSequence,
+						mod = mod.ToString(),
+						key = key.ToString(),
+					},
 				},
-			})
+				cancellationToken)
 			.NoCtx();
 	}
 
@@ -197,25 +199,15 @@ internal sealed class KWinClientV2(
 					internalId = window.InternalId,
 					width = size.Width,
 					height = size.Height,
-				})
+				},
+				cancellationToken)
 			.NoCtx();
-
-		// var w = await GetWindowAsync(window).NoCtx();
-		//
-		// if (w?.FrameGeometry == null)
-		// {
-		// 	return;
-		// }
-		//
-		// var actualSize = w.FrameGeometry.ToSize();
-		//
-		// if (actualSize != size)
-		// {
-		// 	_log.LogWarning("Window '{Window}' did not have expected size '{ExpectedSize}' after resize (was '{ActualSize}')", window, size, actualSize);
-		// }
 	}
 
-	public async Task SetTaskbarIconVisibleAsync(KWinWindow window, bool isVisible, CancellationToken cancellationToken)
+	public async Task SetTaskbarIconVisibleAsync(
+		KWinWindow window,
+		bool isVisible,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -226,13 +218,15 @@ internal sealed class KWinClientV2(
 				{
 					internalId = window.InternalId,
 					isVisible = JsUtils.ToJsBoolean(isVisible),
-				})
+				},
+				cancellationToken)
 			.NoCtx();
-
-		await GetWindowAsync(window).NoCtx();
 	}
 
-	public async Task SetWindowAlwaysOnTopAsync(KWinWindow window, bool isAlwaysOnTop, CancellationToken cancellationToken)
+	public async Task SetWindowAlwaysOnTopAsync(
+		KWinWindow window,
+		bool isAlwaysOnTop,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -243,13 +237,15 @@ internal sealed class KWinClientV2(
 				{
 					internalId = window.InternalId,
 					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
-				})
+				},
+				cancellationToken)
 			.NoCtx();
-
-		await GetWindowAsync(window).NoCtx();
 	}
 
-	public async Task SetWindowOpacityAsync(KWinWindow window, float opacity, CancellationToken cancellationToken)
+	public async Task SetWindowOpacityAsync(
+		KWinWindow window,
+		float opacity,
+		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -260,9 +256,8 @@ internal sealed class KWinClientV2(
 				{
 					internalId = window.InternalId,
 					opacity = opacity,
-				})
+				},
+				cancellationToken)
 			.NoCtx();
-
-		await GetWindowAsync(window).NoCtx();
 	}
 }
