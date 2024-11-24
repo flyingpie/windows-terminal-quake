@@ -62,7 +62,7 @@ internal sealed class KWinHotkeyService
 		await ResetShortcutsAsync().NoCtx();
 	}
 
-	private static string GetShortcutName(int index) => $"wtq_hk1_{index:000}";
+	private static string GetShortcutName(int index) => $"wtq_hotkey_{index:000}";
 
 	private async Task InitAsync()
 	{
