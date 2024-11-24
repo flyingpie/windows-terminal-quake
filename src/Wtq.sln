@@ -20,7 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00-Sln", "00-Sln", "{79182C
 		global.json = global.json
 		stylecop.json = stylecop.json
 		..\VERSION = ..\VERSION
-		wtq.jsonc = wtq.jsonc
 		..\schema\wtq.schema.2.json = ..\schema\wtq.schema.2.json
 	EndProjectSection
 EndProject
