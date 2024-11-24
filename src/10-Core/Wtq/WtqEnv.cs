@@ -21,7 +21,7 @@ public static class WtqEnv
 	/// Returns the requested log level, as specified by an environment variable.
 	/// </summary>
 	public static LogEventLevel LogLevel
-		=> Enum.TryParse<LogEventLevel>(Names.LogLevel, ignoreCase: true, out var res)
+		=> Enum.TryParse<LogEventLevel>(Environment.GetEnvironmentVariable(Names.LogLevel), ignoreCase: true, out var res)
 		? res
 		: LogEventLevel.Information;
 }
