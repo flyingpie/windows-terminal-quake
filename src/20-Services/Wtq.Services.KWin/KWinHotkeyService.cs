@@ -43,7 +43,7 @@ internal sealed class KWinHotkeyService
 
 				_log.LogInformation("Registering shortcut with name '{Name}', modifiers '{Modifiers}' and key '{Key}'", name, e.Modifiers, e.Key);
 
-				await kwinClient.RegisterHotkeyAsync(name, e.Modifiers, e.Key, CancellationToken.None).NoCtx();
+				await kwinClient.RegisterHotkeyAsync(name, e.AppOptions?.Name ?? string.Empty, e.Modifiers, e.Key, CancellationToken.None).NoCtx();
 			});
 	}
 

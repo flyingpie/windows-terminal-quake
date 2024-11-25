@@ -146,6 +146,7 @@ internal sealed class KWinClientV2(
 
 	public async Task RegisterHotkeyAsync(
 		string name,
+		string description,
 		KeyModifiers modifiers,
 		Keys key,
 		CancellationToken cancellationToken)
@@ -159,7 +160,7 @@ internal sealed class KWinClientV2(
 					Params = new
 					{
 						name = name,
-						title = $"WTQ {modifiers}+{key} (configured through WTQ settings)",
+						title = $"WTQ {(!string.IsNullOrWhiteSpace(description) ? $"- {description} - " : string.Empty)}(configured through WTQ settings)",
 						sequence = Mapping.Sequence(modifiers, key),
 						mod = modifiers.ToString(),
 						key = key.ToString(),

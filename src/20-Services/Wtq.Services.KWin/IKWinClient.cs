@@ -35,6 +35,7 @@ public interface IKWinClient
 
 	Task RegisterHotkeyAsync(
 		string name,
+		string description,
 		KeyModifiers modifiers,
 		Keys key,
 		CancellationToken cancellationToken);
