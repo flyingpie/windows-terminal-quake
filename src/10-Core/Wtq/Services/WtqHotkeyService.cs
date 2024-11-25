@@ -81,6 +81,7 @@ public class WtqHotkeyService : IHostedService
 				_bus.Publish(
 					new WtqHotkeyDefinedEvent()
 					{
+						AppOptions = app,
 						Key = hk.Key,
 						Modifiers = hk.Modifiers,
 					});

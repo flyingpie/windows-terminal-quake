@@ -8,7 +8,7 @@ public sealed class WtqHotkeyDefinedEvent : WtqEvent
 	/// <summary>
 	/// The app with which the hotkey is associated. Can be null, for the "most recent app"-hotkey.
 	/// </summary>
-	public WtqApp? App { get; init; }
+	public WtqAppOptions? AppOptions { get; init; }
 
 	/// <summary>
 	/// The pressed key (Q, 1, F1, etc.).
