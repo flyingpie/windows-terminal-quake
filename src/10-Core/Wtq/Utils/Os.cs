@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Wtq.Utils;
 
 public static class Os
@@ -25,5 +27,36 @@ public static class Os
 		}
 
 		return null;
+	}
+
+	public static void OpenUrl(Uri url)
+	{
+		Guard.Against.Null(url);
+
+		try
+		{
+			Process.Start(url.ToString());
+		}
+		catch
+		{
+			// hack because of this: https://github.com/dotnet/corefx/issues/10361
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				var urlstr = url.ToString().Replace("&", "^&", StringComparison.Ordinal);
+				Process.Start(
+					new ProcessStartInfo(urlstr)
+					{
+						UseShellExecute = true,
+					});
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				Process.Start("xdg-open", url.ToString());
+			}
+			else
+			{
+				throw;
+			}
+		}
 	}
 }

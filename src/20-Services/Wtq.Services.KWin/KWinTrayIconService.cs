@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using NotificationIcon.NET;
+using Wtq.Configuration;
 using Wtq.Events;
 
 namespace Wtq.Services.KWin;
@@ -48,7 +49,17 @@ public sealed class KWinTrayIconService
 
 				new SeparatorItem(),
 
+				CreateOpenWebsiteItem(),
+
 				CreateOpenSettingsItem(),
+
+				CreateOpenSettingsFileItem(),
+
+				CreateOpenSettingsDirItem(),
+
+				CreateOpenLogItem(),
+
+				new SeparatorItem(),
 
 				CreateExitItem(),
 			]);
@@ -64,6 +75,40 @@ public sealed class KWinTrayIconService
 			TimeSpan.FromMilliseconds(100));
 	}
 
+	private static MenuItem CreateOpenSettingsDirItem()
+	{
+		var mnuOpenSettings = new MenuItem("Open settings directory")
+		{
+			Click = (s, a) =>
+			{
+				Process.Start(
+					new ProcessStartInfo()
+					{
+						FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path), UseShellExecute = true,
+					});
+			},
+		};
+
+		return mnuOpenSettings;
+	}
+
+	private static MenuItem CreateOpenLogItem()
+	{
+		var mnuOpenSettings = new MenuItem("Open logs")
+		{
+			Click = (s, a) =>
+			{
+				Process.Start(
+					new ProcessStartInfo()
+					{
+						FileName = WtqPaths.GetWtqLogDir(), UseShellExecute = true,
+					});
+			},
+		};
+
+		return mnuOpenSettings;
+	}
+
 	private static MenuItem CreateVersionItem()
 	{
 		var ver = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
@@ -74,9 +119,36 @@ public sealed class KWinTrayIconService
 		};
 	}
 
+	private static MenuItem CreateOpenWebsiteItem()
+	{
+		var item = new MenuItem($"Open project website (GitHub)")
+		{
+			Click = (s, a) => Os.OpenUrl(WtqConstants.GitHubUrl),
+		};
+
+		return item;
+	}
+
+	private static MenuItem CreateOpenSettingsFileItem()
+	{
+		var mnuOpenSettings = new MenuItem("Open settings file")
+		{
+			Click = (s, a) =>
+			{
+				Process.Start(
+					new ProcessStartInfo()
+					{
+						FileName = WtqOptionsPath.Instance.Path, UseShellExecute = true,
+					});
+			},
+		};
+
+		return mnuOpenSettings;
+	}
+
 	private MenuItem CreateOpenSettingsItem()
 	{
-		return new MenuItem("Open Settings")
+		return new MenuItem("Open settings")
 		{
 			Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
 		};

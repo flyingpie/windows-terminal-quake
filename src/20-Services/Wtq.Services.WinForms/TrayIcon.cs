@@ -19,56 +19,46 @@ public sealed class TrayIcon : IDisposable
 
 		var waiter = new TaskCompletionSource<bool>();
 
-		var notifyThread = new Thread(() =>
-		{
-			var contextMenu = new ContextMenuStrip();
-
-			contextMenu.Items.AddRange(
-			[
-				CreateVersionItem(),
-
-				new ToolStripSeparator(),
-
-				CreateOpenWebsiteItem(),
-
-				CreateOpenSettingsItem(),
-
-				CreateOpenSettingsFileItem(),
-
-				CreateOpenSettingsDirItem(),
-
-				CreateOpenLogItem(),
-
-				CreateExitItem(),
-			]);
-
-			// Tray Icon
-			_notificationIcon = new NotifyIcon()
+		var notifyThread = new Thread(
+			() =>
 			{
-				Icon = CreateIcon(),
-				ContextMenuStrip = contextMenu,
-				Text = "WTQ",
-				Visible = true,
-			};
+				var contextMenu = new ContextMenuStrip();
 
-			waiter.SetResult(true);
+				contextMenu.Items.AddRange(
+				[
+					CreateVersionItem(),
 
-			Application.Run();
-		});
+					new ToolStripSeparator(),
+
+					CreateOpenWebsiteItem(),
+
+					CreateOpenSettingsItem(),
+
+					CreateOpenSettingsFileItem(),
+
+					CreateOpenSettingsDirItem(),
+
+					CreateOpenLogItem(),
+
+					new ToolStripSeparator(),
+
+					CreateExitItem(),
+				]);
+
+				// Tray Icon
+				_notificationIcon = new NotifyIcon()
+				{
+					Icon = CreateIcon(), ContextMenuStrip = contextMenu, Text = "WTQ", Visible = true,
+				};
+
+				waiter.SetResult(true);
+
+				Application.Run();
+			});
 
 		notifyThread.Start();
 
 		waiter.Task.GetAwaiter().GetResult();
-	}
-
-	public static void OpenBrowser(Uri uri)
-	{
-		Guard.Against.Null(uri);
-
-		Process.Start(new ProcessStartInfo(uri.ToString())
-		{
-			UseShellExecute = true,
-		});
 	}
 
 	public void Dispose()
@@ -99,10 +89,7 @@ public sealed class TrayIcon : IDisposable
 			Enabled = true,
 		};
 
-		mnuOpenSettings.Click += (s, a) =>
-		{
-			_bus.Publish(new WtqUIRequestedEvent());
-		};
+		mnuOpenSettings.Click += (s, a) => { _bus.Publish(new WtqUIRequestedEvent()); };
 
 		return mnuOpenSettings;
 	}
@@ -116,11 +103,11 @@ public sealed class TrayIcon : IDisposable
 
 		mnuOpenSettings.Click += (s, a) =>
 		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = WtqOptionsPath.Instance.Path,
-				UseShellExecute = true,
-			});
+			Process.Start(
+				new ProcessStartInfo()
+				{
+					FileName = WtqOptionsPath.Instance.Path, UseShellExecute = true,
+				});
 		};
 
 		return mnuOpenSettings;
@@ -135,11 +122,11 @@ public sealed class TrayIcon : IDisposable
 
 		mnuOpenSettings.Click += (s, a) =>
 		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path),
-				UseShellExecute = true,
-			});
+			Process.Start(
+				new ProcessStartInfo()
+				{
+					FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path), UseShellExecute = true,
+				});
 		};
 
 		return mnuOpenSettings;
@@ -154,11 +141,11 @@ public sealed class TrayIcon : IDisposable
 
 		mnuOpenSettings.Click += (s, a) =>
 		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = WtqPaths.GetWtqLogDir(),
-				UseShellExecute = true,
-			});
+			Process.Start(
+				new ProcessStartInfo()
+				{
+					FileName = WtqPaths.GetWtqLogDir(), UseShellExecute = true,
+				});
 		};
 
 		return mnuOpenSettings;
@@ -166,15 +153,12 @@ public sealed class TrayIcon : IDisposable
 
 	private static ToolStripMenuItem CreateOpenWebsiteItem()
 	{
-		var item = new ToolStripMenuItem($"Open GitHub Project Website")
+		var item = new ToolStripMenuItem($"Open project website (GitHub)")
 		{
 			Enabled = true,
 		};
 
-		item.Click += (s, a) =>
-		{
-			OpenBrowser(WtqConstants.GitHubUrl);
-		};
+		item.Click += (s, a) => Os.OpenUrl(WtqConstants.GitHubUrl);
 
 		return item;
 	}
