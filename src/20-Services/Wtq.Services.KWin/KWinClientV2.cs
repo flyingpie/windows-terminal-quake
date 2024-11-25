@@ -146,32 +146,12 @@ internal sealed class KWinClientV2(
 
 	public async Task RegisterHotkeyAsync(
 		string name,
-		KeyModifiers mod,
+		string description,
+		KeyModifiers modifiers,
 		Keys key,
 		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
-
-		// TODO
-		var kwinMod = "Ctrl";
-		var kwinKey = key switch
-		{
-			Keys.Oemtilde => "`",
-			Keys.D0 => "0",
-			Keys.D1 => "1",
-			Keys.D2 => "2",
-			Keys.D3 => "3",
-			Keys.D4 => "4",
-			Keys.D5 => "5",
-			Keys.D6 => "6",
-			Keys.D7 => "7",
-			Keys.D8 => "8",
-			Keys.D9 => "9",
-			Keys.Q => "q",
-			_ => "1",
-		};
-
-		var kwinSequence = $"{kwinMod}+{kwinKey}";
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -179,10 +159,10 @@ internal sealed class KWinClientV2(
 				{
 					Params = new
 					{
-						name = $"{name}_name",
-						title = $"{name}_title",
-						sequence = kwinSequence,
-						mod = mod.ToString(),
+						name = name,
+						title = $"WTQ {(!string.IsNullOrWhiteSpace(description) ? $"- {description} - " : string.Empty)}(configured through WTQ settings)",
+						sequence = Mapping.Sequence(modifiers, key),
+						mod = modifiers.ToString(),
 						key = key.ToString(),
 					},
 				},
