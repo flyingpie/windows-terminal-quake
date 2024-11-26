@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using NotificationIcon.NET;
+using Wtq.Configuration;
 using Wtq.Events;
 
 namespace Wtq.Services.KWin;
@@ -11,9 +12,8 @@ public sealed class KWinTrayIconService
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
 
-	private Thread? _iconThread;
-	private Worker? _loop;
 	private NotifyIcon? _icon;
+	private Worker? _loop;
 
 	public KWinTrayIconService(
 		IHostApplicationLifetime lifetime,
@@ -24,8 +24,7 @@ public sealed class KWinTrayIconService
 		_bus = Guard.Against.Null(bus);
 		_ui = Guard.Against.Null(ui);
 
-		_iconThread = new Thread(ShowStatusIcon);
-		_iconThread.Start();
+		new Thread(ShowStatusIcon).Start();
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
@@ -34,6 +33,7 @@ public sealed class KWinTrayIconService
 
 	public async ValueTask DisposeAsync()
 	{
+		_icon?.Dispose();
 		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
@@ -44,49 +44,64 @@ public sealed class KWinTrayIconService
 		_icon = NotifyIcon.Create(
 			iconPath,
 			[
-				CreateVersionItem(),
+				CreateItem(
+					$"Version {WtqConstants.AppVersion}",
+					() => { },
+					enabled: false),
 
 				new SeparatorItem(),
 
-				CreateOpenSettingsItem(),
+				CreateItem(
+					$"Open Project Website (GitHub)",
+					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
 
-				CreateExitItem(),
+				new SeparatorItem(),
+
+				CreateItem(
+					"Open Main Window",
+					() => _bus.Publish(new WtqUIRequestedEvent())),
+
+				new SeparatorItem(),
+
+				CreateItem(
+					"Open Settings File",
+					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
+
+				CreateItem(
+					"Open Settings Directory",
+					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+
+				CreateItem(
+					"Open Logs",
+					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+
+				new SeparatorItem(),
+
+				CreateItem(
+					"Quit",
+					() => _lifetime.StopApplication()),
 			]);
 
 		_loop = new(
 			nameof(KWinTrayIconService),
 			ct =>
 			{
-				_ui.RunOnUIThread(() => { _icon.MessageLoopIteration(true); });
+				_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
 
 				return Task.CompletedTask;
 			},
-			TimeSpan.FromMilliseconds(100));
+			TimeSpan.FromMilliseconds(200));
 	}
 
-	private static MenuItem CreateVersionItem()
+	private static MenuItem CreateItem(
+		string text,
+		Action action,
+		bool enabled = true)
 	{
-		var ver = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
-
-		return new MenuItem($"Version {ver}")
+		return new MenuItem(text)
 		{
-			IsDisabled = true,
-		};
-	}
-
-	private MenuItem CreateOpenSettingsItem()
-	{
-		return new MenuItem("Open Settings")
-		{
-			Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
-		};
-	}
-
-	private MenuItem CreateExitItem()
-	{
-		return new MenuItem("Quit")
-		{
-			Click = (s, e) => _lifetime.StopApplication(),
+			Click = (s, e) => action(),
+			IsDisabled = !enabled,
 		};
 	}
 }

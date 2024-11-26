@@ -17,10 +17,11 @@ namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	private readonly IHost _host;
-
-	public WtqHostBase()
+	public async Task RunAsync(string[] args)
 	{
+		// Setup logging ASAP, so we can log stuff if initialization goes awry.
+		Utils.Log.Configure();
+
 		var log = Utils.Log.For(typeof(WtqHostBase));
 
 		var schema = JsonSchema.FromType<WtqOptions>(
@@ -70,35 +71,31 @@ public class WtqHostBase
 						.AddOptionsWithValidateOnStart<WtqOptions>()
 						.Bind(config);
 
-				opt
-					.AddUI()
+					opt
+						.AddUI()
 
 						// Utils
 						.AddWtqCore();
+						// Utils
+						.AddWtqCore();
 
-				ConfigureServices(opt);
-			})
-			.UseSerilog()
-			.Build();
-	}
+					ConfigureServices(opt);
+				})
+				.UseSerilog()
+				.Build()
 
-	public async Task RunAsync()
-	{
-		try
-		{
-			await _host
+				// Run!
 				.RunAsync()
-				.ConfigureAwait(false);
+				.NoCtx();
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error running application: {ex}");
-
-			// MessageBox.Show($"Error running application: {ex}", "Error starting WTQ");
+			log.LogError(ex, "Error running application: {Message}", ex.Message);
 		}
 	}
 
 	protected virtual void ConfigureServices(IServiceCollection services)
 	{
+		// Implemented by OS-specific implementations.
 	}
 }
