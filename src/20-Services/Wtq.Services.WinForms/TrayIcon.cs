@@ -4,9 +4,6 @@ namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
-	private readonly IHostApplicationLifetime _lifetime;
-	private readonly IWtqBus _bus;
-
 	private NotifyIcon? _notificationIcon;
 
 	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
@@ -14,8 +11,8 @@ public sealed class TrayIcon : IDisposable
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus)
 	{
-		_lifetime = Guard.Against.Null(lifetime);
-		_bus = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(lifetime);
+		_ = Guard.Against.Null(bus);
 
 		var waiter = new TaskCompletionSource<bool>();
 
@@ -25,21 +22,42 @@ public sealed class TrayIcon : IDisposable
 
 			contextMenu.Items.AddRange(
 			[
-				CreateVersionItem(),
+				CreateItem(
+					$"Version {WtqConstants.AppVersion}",
+					() => {},
+					enabled: false),
 
 				new ToolStripSeparator(),
 
-				CreateOpenWebsiteItem(),
+				CreateItem(
+					"Open Project Website (GitHub)",
+					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
 
-				CreateOpenSettingsItem(),
+				new ToolStripSeparator(),
 
-				CreateOpenSettingsFileItem(),
+				CreateItem(
+					"Open Main Window",
+					() => bus.Publish(new WtqUIRequestedEvent())),
 
-				CreateOpenSettingsDirItem(),
+				new ToolStripSeparator(),
 
-				CreateOpenLogItem(),
+				CreateItem(
+					"Open Settings File",
+					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
 
-				CreateExitItem(),
+				CreateItem(
+					"Open Settings Directory",
+					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+
+				CreateItem(
+					"Open Logs Directory",
+					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+
+				new ToolStripSeparator(),
+
+				CreateItem(
+					"Exit",
+					() => lifetime.StopApplication()),
 			]);
 
 			// Tray Icon
@@ -61,131 +79,31 @@ public sealed class TrayIcon : IDisposable
 		waiter.Task.GetAwaiter().GetResult();
 	}
 
-	public static void OpenBrowser(Uri uri)
-	{
-		Guard.Against.Null(uri);
-
-		Process.Start(new ProcessStartInfo(uri.ToString())
-		{
-			UseShellExecute = true,
-		});
-	}
-
 	public void Dispose()
 	{
 		_notificationIcon?.Dispose();
 		_notificationIcon = null;
 	}
 
-	private ToolStripMenuItem CreateExitItem()
-	{
-		var mnuExit = new ToolStripMenuItem("Exit");
-
-		mnuExit.Click += (s, a) => _lifetime.StopApplication();
-
-		return mnuExit;
-	}
-
 	private static Icon CreateIcon()
 	{
 		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
+
 		return new Icon(str);
 	}
 
-	private ToolStripMenuItem CreateOpenSettingsItem()
+	private static ToolStripMenuItem CreateItem(
+		string text,
+		Action action,
+		bool enabled = true)
 	{
-		var mnuOpenSettings = new ToolStripMenuItem("Open settings")
+		var mnuOpenSettings = new ToolStripMenuItem(text)
 		{
-			Enabled = true,
+			Enabled = enabled,
 		};
 
-		mnuOpenSettings.Click += (s, a) =>
-		{
-			_bus.Publish(new WtqUIRequestedEvent());
-		};
+		mnuOpenSettings.Click += (s, a) => action();
 
 		return mnuOpenSettings;
-	}
-
-	private static ToolStripMenuItem CreateOpenSettingsFileItem()
-	{
-		var mnuOpenSettings = new ToolStripMenuItem("Open settings file")
-		{
-			Enabled = true,
-		};
-
-		mnuOpenSettings.Click += (s, a) =>
-		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = WtqOptionsPath.Instance.Path,
-				UseShellExecute = true,
-			});
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private static ToolStripMenuItem CreateOpenSettingsDirItem()
-	{
-		var mnuOpenSettings = new ToolStripMenuItem("Open settings directory")
-		{
-			Enabled = true,
-		};
-
-		mnuOpenSettings.Click += (s, a) =>
-		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path),
-				UseShellExecute = true,
-			});
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private static ToolStripMenuItem CreateOpenLogItem()
-	{
-		var mnuOpenSettings = new ToolStripMenuItem("Open logs")
-		{
-			Enabled = true,
-		};
-
-		mnuOpenSettings.Click += (s, a) =>
-		{
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = WtqPaths.GetWtqLogDir(),
-				UseShellExecute = true,
-			});
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private static ToolStripMenuItem CreateOpenWebsiteItem()
-	{
-		var item = new ToolStripMenuItem($"Open GitHub Project Website")
-		{
-			Enabled = true,
-		};
-
-		item.Click += (s, a) =>
-		{
-			OpenBrowser(WtqConstants.GitHubUrl);
-		};
-
-		return item;
-	}
-
-	private static ToolStripMenuItem CreateVersionItem()
-	{
-		var ver = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
-
-		return new ToolStripMenuItem($"Version {ver}")
-		{
-			Enabled = false,
-		};
 	}
 }
