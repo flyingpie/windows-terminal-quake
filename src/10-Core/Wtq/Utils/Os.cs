@@ -31,6 +31,8 @@ public static class Os
 
 	public static void OpenFileOrDirectory(string path)
 	{
+		Guard.Against.NullOrWhiteSpace(path);
+
 		Process.Start(
 			new ProcessStartInfo()
 			{
