@@ -12,9 +12,8 @@ public sealed class KWinTrayIconService
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
 
-	private Thread? _iconThread;
-	private Worker? _loop;
 	private NotifyIcon? _icon;
+	private Worker? _loop;
 
 	public KWinTrayIconService(
 		IHostApplicationLifetime lifetime,
@@ -25,8 +24,7 @@ public sealed class KWinTrayIconService
 		_bus = Guard.Against.Null(bus);
 		_ui = Guard.Against.Null(ui);
 
-		_iconThread = new Thread(ShowStatusIcon);
-		_iconThread.Start();
+		new Thread(ShowStatusIcon).Start();
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
@@ -35,6 +33,7 @@ public sealed class KWinTrayIconService
 
 	public async ValueTask DisposeAsync()
 	{
+		_icon?.Dispose();
 		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
@@ -45,120 +44,58 @@ public sealed class KWinTrayIconService
 		_icon = NotifyIcon.Create(
 			iconPath,
 			[
-				CreateVersionItem(),
+				new MenuItem($"Version {WtqConstants.AppVersion}")
+				{
+					IsDisabled = true,
+				},
 
 				new SeparatorItem(),
 
-				CreateOpenWebsiteItem(),
-
-				CreateOpenSettingsItem(),
-
-				CreateOpenSettingsFileItem(),
-
-				CreateOpenSettingsDirItem(),
-
-				CreateOpenLogItem(),
+				new MenuItem($"Open Project Website (GitHub)")
+				{
+					Click = (s, a) => Os.OpenUrl(WtqConstants.GitHubUrl),
+				},
 
 				new SeparatorItem(),
 
-				CreateExitItem(),
+				new MenuItem("Open Main Window")
+				{
+					Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
+				},
+
+				new SeparatorItem(),
+
+				new MenuItem("Open Settings File")
+				{
+					Click = (s, a) => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path),
+				},
+
+				new MenuItem("Open Settings Directory")
+				{
+					Click = (s, a) => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!),
+				},
+
+				new MenuItem("Open Logs")
+				{
+					Click = (s, a) => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir()),
+				},
+
+				new SeparatorItem(),
+
+				new MenuItem("Quit")
+				{
+					Click = (s, e) => _lifetime.StopApplication(),
+				},
 			]);
 
 		_loop = new(
 			nameof(KWinTrayIconService),
 			ct =>
 			{
-				_ui.RunOnUIThread(() => { _icon.MessageLoopIteration(true); });
+				_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
 
 				return Task.CompletedTask;
 			},
-			TimeSpan.FromMilliseconds(100));
-	}
-
-	private static MenuItem CreateOpenSettingsDirItem()
-	{
-		var mnuOpenSettings = new MenuItem("Open settings directory")
-		{
-			Click = (s, a) =>
-			{
-				Process.Start(
-					new ProcessStartInfo()
-					{
-						FileName = Path.GetDirectoryName(WtqOptionsPath.Instance.Path), UseShellExecute = true,
-					});
-			},
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private static MenuItem CreateOpenLogItem()
-	{
-		var mnuOpenSettings = new MenuItem("Open logs")
-		{
-			Click = (s, a) =>
-			{
-				Process.Start(
-					new ProcessStartInfo()
-					{
-						FileName = WtqPaths.GetWtqLogDir(), UseShellExecute = true,
-					});
-			},
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private static MenuItem CreateVersionItem()
-	{
-		var ver = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
-
-		return new MenuItem($"Version {ver}")
-		{
-			IsDisabled = true,
-		};
-	}
-
-	private static MenuItem CreateOpenWebsiteItem()
-	{
-		var item = new MenuItem($"Open project website (GitHub)")
-		{
-			Click = (s, a) => Os.OpenUrl(WtqConstants.GitHubUrl),
-		};
-
-		return item;
-	}
-
-	private static MenuItem CreateOpenSettingsFileItem()
-	{
-		var mnuOpenSettings = new MenuItem("Open settings file")
-		{
-			Click = (s, a) =>
-			{
-				Process.Start(
-					new ProcessStartInfo()
-					{
-						FileName = WtqOptionsPath.Instance.Path, UseShellExecute = true,
-					});
-			},
-		};
-
-		return mnuOpenSettings;
-	}
-
-	private MenuItem CreateOpenSettingsItem()
-	{
-		return new MenuItem("Open settings")
-		{
-			Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
-		};
-	}
-
-	private MenuItem CreateExitItem()
-	{
-		return new MenuItem("Quit")
-		{
-			Click = (s, e) => _lifetime.StopApplication(),
-		};
+			TimeSpan.FromMilliseconds(200));
 	}
 }

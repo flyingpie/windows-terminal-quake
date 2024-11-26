@@ -29,6 +29,16 @@ public static class Os
 		return null;
 	}
 
+	public static void OpenFileOrDirectory(string path)
+	{
+		Process.Start(
+			new ProcessStartInfo()
+			{
+				FileName = path,
+				UseShellExecute = true,
+			});
+	}
+
 	public static void OpenUrl(Uri url)
 	{
 		Guard.Against.Null(url);
@@ -39,7 +49,7 @@ public static class Os
 		}
 		catch
 		{
-			// hack because of this: https://github.com/dotnet/corefx/issues/10361
+			// Hack because of this: https://github.com/dotnet/corefx/issues/10361
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				var urlstr = url.ToString().Replace("&", "^&", StringComparison.Ordinal);
