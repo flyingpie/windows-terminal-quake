@@ -1,16 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using NJsonSchema;
-using NJsonSchema.Generation;
 using Serilog;
-using System;
-using System.IO;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Wtq.Configuration;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
@@ -24,30 +14,19 @@ public class WtqHostBase
 
 		var log = Utils.Log.For(typeof(WtqHostBase));
 
-		var schema = JsonSchema.FromType<WtqOptions>(
-			new SystemTextJsonSchemaGeneratorSettings()
-			{
-				SerializerOptions =
-				{
-					Converters =
-					{
-						new JsonStringEnumConverter(),
-					},
-				},
-			});
+		try
+		{
+			// Find path to settings files (wtq.jsonc or similar).
+			var pathToWtqConf = WtqOptionsPath.Instance.Path;
 
-		var schemaData = schema.ToJson(Formatting.Indented);
+			// Write wtq.schema.json
+			WtqSchema.WriteFor(pathToWtqConf);
 
-		File.WriteAllText("/home/marco/Downloads/wtq.schema.json", schemaData);
-
-		var dbg = 2;
-
-		// Configuration.
-		var pathToWtqConf = WtqOptionsPath.Instance.Path;
-		var config = new ConfigurationBuilder()
-			.SetBasePath(Path.GetDirectoryName(pathToWtqConf)!)
-			.AddJsonFile(
-				f =>
+			// Load config file.
+			var config = new ConfigurationBuilder()
+				.SetBasePath(Path.GetDirectoryName(pathToWtqConf)!)
+				.AddEnvironmentVariables()
+				.AddJsonFile(f =>
 				{
 					f.ReloadOnChange = true;
 					f.Optional = false;
@@ -55,17 +34,17 @@ public class WtqHostBase
 					f.OnLoadException = x =>
 					{
 						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
-						Console.WriteLine($"Error loading configuration file '{pathToWtqConf}': {x.Exception.Message}");
-
-						// MessageBox.Show($"Error loading configuration file '{pathToWtqConf}': {x.Exception.Message}");
 					};
 				})
-			.Build();
+				.AddCommandLine(args)
+				.Build();
 
-		_host = new HostBuilder()
-			.ConfigureAppConfiguration(opt => { opt.AddConfiguration(config); })
-			.ConfigureServices(
-				opt =>
+			await new HostBuilder()
+				.ConfigureAppConfiguration(opt =>
+				{
+					opt.AddConfiguration(config);
+				})
+				.ConfigureServices(opt =>
 				{
 					opt
 						.AddOptionsWithValidateOnStart<WtqOptions>()
@@ -74,8 +53,6 @@ public class WtqHostBase
 					opt
 						.AddUI()
 
-						// Utils
-						.AddWtqCore();
 						// Utils
 						.AddWtqCore();
 
