@@ -44,48 +44,42 @@ public sealed class KWinTrayIconService
 		_icon = NotifyIcon.Create(
 			iconPath,
 			[
-				new MenuItem($"Version {WtqConstants.AppVersion}")
-				{
-					IsDisabled = true,
-				},
+				CreateItem(
+					$"Version {WtqConstants.AppVersion}",
+					() => { },
+					enabled: false),
 
 				new SeparatorItem(),
 
-				new MenuItem($"Open Project Website (GitHub)")
-				{
-					Click = (s, a) => Os.OpenUrl(WtqConstants.GitHubUrl),
-				},
+				CreateItem(
+					$"Open Project Website (GitHub)",
+					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new SeparatorItem(),
 
-				new MenuItem("Open Main Window")
-				{
-					Click = (s, e) => _bus.Publish(new WtqUIRequestedEvent()),
-				},
+				CreateItem(
+					"Open Main Window",
+					() => _bus.Publish(new WtqUIRequestedEvent())),
 
 				new SeparatorItem(),
 
-				new MenuItem("Open Settings File")
-				{
-					Click = (s, a) => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path),
-				},
+				CreateItem(
+					"Open Settings File",
+					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
 
-				new MenuItem("Open Settings Directory")
-				{
-					Click = (s, a) => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!),
-				},
+				CreateItem(
+					"Open Settings Directory",
+					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
 
-				new MenuItem("Open Logs")
-				{
-					Click = (s, a) => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir()),
-				},
+				CreateItem(
+					"Open Logs",
+					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
 
 				new SeparatorItem(),
 
-				new MenuItem("Quit")
-				{
-					Click = (s, e) => _lifetime.StopApplication(),
-				},
+				CreateItem(
+					"Quit",
+					() => _lifetime.StopApplication()),
 			]);
 
 		_loop = new(
@@ -97,5 +91,17 @@ public sealed class KWinTrayIconService
 				return Task.CompletedTask;
 			},
 			TimeSpan.FromMilliseconds(200));
+	}
+
+	private static MenuItem CreateItem(
+		string text,
+		Action action,
+		bool enabled = true)
+	{
+		return new MenuItem(text)
+		{
+			Click = (s, e) => action(),
+			IsDisabled = !enabled,
+		};
 	}
 }
