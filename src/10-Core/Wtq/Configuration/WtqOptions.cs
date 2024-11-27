@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
@@ -8,8 +7,11 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class WtqOptions
 {
+	/// <summary>
+	/// Path to wtq.schema.json.
+	/// </summary>
 	[JsonPropertyName("$schema")]
-	public string? Schema { get; set; }
+	public string Schema { get; } = "wtq.schema.json";
 
 	private int? _animationDurationMsSwitchingApps;
 
