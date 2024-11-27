@@ -4,6 +4,9 @@ using NJsonSchema.Generation;
 
 namespace Wtq.Configuration;
 
+/// <summary>
+/// Used to generate a JSON schema file based on the <see cref="WtqOptions"/> class.
+/// </summary>
 public static class WtqSchema
 {
 	private static readonly ILogger _log = Log.For(typeof(WtqSchema));
@@ -25,7 +28,16 @@ public static class WtqSchema
 
 		try
 		{
-			var schema = JsonSchema.FromType<WtqOptions>(
+			File.WriteAllText(dst, GenerateSchema());
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error writing settings schema to path '{Path}': {Message}", dst, ex.Message);
+		}
+	}
+
+	public static string GenerateSchema() =>
+		JsonSchema.FromType<WtqOptions>(
 				new SystemTextJsonSchemaGeneratorSettings()
 				{
 					SerializerOptions =
@@ -35,15 +47,6 @@ public static class WtqSchema
 							new JsonStringEnumConverter(),
 						},
 					},
-				});
-
-			var schemaData = schema.ToJson(Formatting.Indented);
-
-			File.WriteAllText(dst, schemaData);
-		}
-		catch (Exception ex)
-		{
-			_log.LogError(ex, "Error writing settings schema to path '{Path}': {Message}", dst, ex.Message);
-		}
-	}
+				})
+			.ToJson(Formatting.Indented);
 }
