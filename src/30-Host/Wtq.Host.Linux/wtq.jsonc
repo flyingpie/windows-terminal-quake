@@ -1,7 +1,6 @@
 {
-	// V2 WIP Discussion: https://github.com/flyingpie/windows-terminal-quake/discussions/119
 	// Docs: https://wtq.flyingpie.nl
-	"$schema": "../schema/wtq.schema.2.json",
+	"$schema": "wtq.schema.json",
 
 	"Apps": [
 		// Example with Dolphin
