@@ -7,6 +7,12 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class WtqOptions
 {
+	/// <summary>
+	/// Path to wtq.schema.json.
+	/// </summary>
+	[JsonPropertyName("$schema")]
+	public string Schema { get; } = "wtq.schema.json";
+
 	private int? _animationDurationMsSwitchingApps;
 
 	/// <summary>
