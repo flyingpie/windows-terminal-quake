@@ -11,6 +11,9 @@ public static class WtqSchema
 {
 	private static readonly ILogger _log = Log.For(typeof(WtqSchema));
 
+	/// <summary>
+	/// Writes a "wtq.schema.json" file next to the specified <paramref name="pathToWtqJson"/>.
+	/// </summary>
 	public static void WriteFor(string pathToWtqJson)
 	{
 		Guard.Against.NullOrWhiteSpace(pathToWtqJson);

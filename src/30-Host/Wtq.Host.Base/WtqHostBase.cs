@@ -19,7 +19,7 @@ public class WtqHostBase
 			// Find path to settings files (wtq.jsonc or similar).
 			var pathToWtqConf = WtqOptionsPath.Instance.Path;
 
-			// Write wtq.schema.json
+			// Write wtq.schema.json.
 			WtqSchema.WriteFor(pathToWtqConf);
 
 			// Load config file.
