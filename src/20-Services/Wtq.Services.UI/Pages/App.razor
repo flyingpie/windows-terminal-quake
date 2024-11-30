@@ -11,27 +11,154 @@
 	public bool valuec;
 }
 
-<h3>App @AppId</h3>
-
 @code {
 
 }
 
+<h1>App @AppId</h1>
 
+<RadzenStack>
+	<RadzenFormField Text="Search" Variant="Variant.Outlined">
+		<RadzenTextBox @bind-Value="@value1"/>
+	</RadzenFormField>
+</RadzenStack>
+
+<h3>Process</h3>
+
+<RadzenStack>
+	<RadzenFieldset Text="Process">
+		<RadzenStack Gap="1rem">
+
+			<RadzenRow AlignItems="AlignItems.Center">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Filename" Component="FileName"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenTextBox @bind-Value="@value1" Name="FileName" style="width: 100%;"/>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Center">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Process name" Component="ProcessName"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenTextBox @bind-Value="@value1" Name="ProcessName" style="width: 100%;"/>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Center">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Arguments" Component="Arguments"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenTextBox Style="width: 100%;" Name="Arguments"/>
+				</RadzenColumn>
+			</RadzenRow>
+
+		</RadzenStack>
+	</RadzenFieldset>
+
+	<RadzenFieldset Text="Behavior">
+		<RadzenStack Gap="1rem">
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Always"/>
+							<RadzenRadioButtonListItem Value="2" Text="Never"/>
+							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
+						</Items>
+					</RadzenRadioButtonList>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Always on top" Component="AlwaysOnTop"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenCheckBox @bind-Value=@valuec Name="AlwaysOnTop"/>
+					<p>Keep the app on top of other windows, even on focus lost.</p>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Hide on focus lost" Component="HideOnFocusLost"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Always"/>
+							<RadzenRadioButtonListItem Value="2" Text="Never"/>
+							<RadzenRadioButtonListItem Value="3" Text="Unless focus changed screen" Disabled="true"/>
+						</Items>
+					</RadzenRadioButtonList>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="HideOnFocusLost" Component="HideOnFocusLost"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenTextBox @bind-Value="@value1" Name="HideOnFocusLost" style="width: 100%;"/>
+				</RadzenColumn>
+			</RadzenRow>
+
+		</RadzenStack>
+	</RadzenFieldset>
+</RadzenStack>
+
+
+<RadzenFormField Text="Filename" Variant="Variant.Outlined">
+	<RadzenTextBox @bind-Value="@value1"/>
+</RadzenFormField>
 
 <RadzenFieldset
 	Style="margin: 2em auto;">
 	<HeaderTemplate>
 		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
-			<b>Always On Top</b>
+			<b>Filename</b>
 		</RadzenStack>
 	</HeaderTemplate>
 	<ChildContent>
-		<RadzenCheckBox @bind-Value=@valuec Name="CheckBox1"/>
-		<RadzenLabel Text="CheckBox" Component="CheckBox1" class="rz-ms-2"/>
 
-		<p class="rz-m-0 rz-mt-4">When checked, the app window will always be on top of other windows, regardless of whether it has focus.</p>
+		<RadzenTextBox @bind-Value="@value1"/>
+
+	</ChildContent>
+</RadzenFieldset>
+
+<RadzenFieldset
+	Style="margin: 2em auto;">
+	<HeaderTemplate>
+		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+			<b>Process name</b>
+		</RadzenStack>
+	</HeaderTemplate>
+	<ChildContent>
+
+		<RadzenTextBox @bind-Value="@value1"/>
+
+	</ChildContent>
+</RadzenFieldset>
+
+<RadzenFieldset
+	Style="margin: 2em auto;">
+	<HeaderTemplate>
+		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+			<b>Startup Arguments</b>
+		</RadzenStack>
+	</HeaderTemplate>
+	<ChildContent>
+
+		<RadzenTextBox @bind-Value="@value1"/>
+
 	</ChildContent>
 </RadzenFieldset>
 
@@ -56,6 +183,43 @@
 		<p class="rz-p-0 rz-m-0">The behavior to use when "attaching" to an app.</p>
 	</ChildContent>
 </RadzenFieldset>
+
+<h3>Hotkeys</h3>
+Hotkeys
+
+<h3>Behavior</h3>
+bool? AlwaysOnTop
+bool? HideOnFocusLost
+int? Opacity
+string? WindowTitleOverride
+TaskBarIconVisibility? TaskbarIconVisibility
+
+<h3>Position</h3>
+float? HorizontalScreenCoverage
+float? VerticalScreenCoverage
+HorizontalAlign? HorizontalAlign
+IEnumerable OffScreenLocation OffScreenLocations
+int? MonitorIndex
+int? VerticalOffset
+PreferMonitor? PreferMonitor
+
+
+<RadzenFieldset
+	Style="margin: 2em auto;">
+	<HeaderTemplate>
+		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
+			<b>Always On Top</b>
+		</RadzenStack>
+	</HeaderTemplate>
+	<ChildContent>
+		<RadzenCheckBox @bind-Value=@valuec Name="CheckBox1"/>
+		<RadzenLabel Text="CheckBox" Component="CheckBox1" class="rz-ms-2"/>
+
+		<p class="rz-m-0 rz-mt-4">When checked, the app window will always be on top of other windows, regardless of whether it has focus.</p>
+	</ChildContent>
+</RadzenFieldset>
+
 
 <h2>Coverage</h2>
 
@@ -103,8 +267,7 @@
 				Shade="Shade.Light"
 				ToggleShade="Shade.Dark"
 				Size="ButtonSize.Large"
-				Text="Left"
-			/>
+				Text="Left"/>
 
 			<RadzenToggleButton
 				Icon="format_align_center"
@@ -112,8 +275,7 @@
 				Shade="Shade.Light"
 				ToggleShade="Shade.Dark"
 				Size="ButtonSize.Large"
-				Text="Center"
-			/>
+				Text="Center"/>
 
 			<RadzenToggleButton
 				Icon="format_align_right"
@@ -121,33 +283,13 @@
 				Shade="Shade.Light"
 				ToggleShade="Shade.Dark"
 				Size="ButtonSize.Large"
-				Text="Right"
-			/>
+				Text="Right"/>
 
 		</RadzenStack>
 
 
 	</ChildContent>
 </RadzenFieldset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <h2>Animation</h2>
@@ -191,35 +333,5 @@
 	<ChildContent>
 		<RadzenCheckBox @bind-Value=@valuec Name="CheckBox1"/>
 		<RadzenLabel Text="CheckBox" Component="CheckBox1" class="rz-ms-2"/>
-	</ChildContent>
-</RadzenFieldset>
-
-<h2>Process</h2>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Filename</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenTextBox @bind-Value="@value1"/>
-
-	</ChildContent>
-</RadzenFieldset>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Startup Arguments</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenTextBox @bind-Value="@value1"/>
-
 	</ChildContent>
 </RadzenFieldset>
