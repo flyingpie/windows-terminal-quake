@@ -6,6 +6,11 @@ namespace Wtq.Services;
 public interface IWtqAppRepo
 {
 	/// <summary>
+	/// Returns all apps as loaded from settings.
+	/// </summary>
+	IEnumerable<WtqApp> GetAll();
+
+	/// <summary>
 	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config (if any).
 	/// </summary>
 	WtqApp? GetByName(
