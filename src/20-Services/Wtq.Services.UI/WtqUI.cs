@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
 using System.Drawing;
@@ -12,7 +13,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
-	private readonly IWtqWindowService _processService;
+	private readonly IWtqAppRepo _appRepo;
 
 	private PhotinoBlazorApp? _app;
 	private Point? _loc;
@@ -21,14 +22,14 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	public WtqUI(
 		IHostApplicationLifetime appLifetime,
+		IWtqAppRepo appRepo,
 		IWtqBus bus,
-		IWtqWindowService windowService,
-		IWtqWindowService processService)
+		IWtqWindowService windowService)
 	{
-		_ = Guard.Against.Null(bus);
 		_appLifetime = Guard.Against.Null(appLifetime);
+		_appRepo = Guard.Against.Null(appRepo);
+		_ = Guard.Against.Null(bus);
 		_windowService = Guard.Against.Null(windowService);
-		_processService = Guard.Against.Null(processService);
 
 		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 	}
@@ -110,7 +111,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 		// TODO: Unify with the main app DI.
 		appBuilder.Services
-			.AddSingleton<IWtqWindowService>(p => _processService)
+			.AddSingleton<IWtqAppRepo>(p => _appRepo)
+			.AddSingleton<IWtqWindowService>(p => _windowService)
 			.AddUI()
 			.AddLogging();
 
@@ -122,11 +124,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
 			.SetTitle(MainWindowTitle);
 
-		_app.MainWindow.RegisterWindowCreatedHandler(
-			(s, a) =>
-			{
-				_ = Task.Run(CloseMainWindowAsync);
-			});
+		_app.MainWindow.RegisterWindowCreatedHandler((s, a) => { _ = Task.Run(CloseMainWindowAsync); });
 
 		_app.MainWindow.RegisterWindowClosingHandler(
 			(s, a) =>
@@ -136,12 +134,13 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 				return !_isClosing;
 			});
 
-		_appLifetime.ApplicationStopping.Register(() =>
-		{
-			_isClosing = true;
+		_appLifetime.ApplicationStopping.Register(
+			() =>
+			{
+				_isClosing = true;
 
-			_app.MainWindow.Close();
-		});
+				_app.MainWindow.Close();
+			});
 
 		_app.Run();
 	}

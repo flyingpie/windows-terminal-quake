@@ -51,6 +51,12 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	}
 
 	/// <inheritdoc/>
+	public IEnumerable<WtqApp> GetAll()
+	{
+		return _apps;
+	}
+
+	/// <inheritdoc/>
 	public WtqApp? GetByName(string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name);

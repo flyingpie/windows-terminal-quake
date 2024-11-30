@@ -1,4 +1,5 @@
 @inherits LayoutComponentBase
+@inject IWtqAppRepo AppRepo
 
 @code {
 
@@ -16,16 +17,16 @@
 <RadzenLayout>
 	<RadzenSidebar>
 		<RadzenPanelMenu Style="margin-top: 1em;">
-			<RadzenPanelMenuItem Text="Welcome" Icon="home" Path="/" />
+			<RadzenPanelMenuItem Text="Welcome" Icon="home" Path="/"/>
 			<hr/>
 			<RadzenPanelMenuItem Text="Global Settings" Icon="public" Path="/GlobalSettings"/>
 			<RadzenPanelMenuItem Text="Apps" Icon="ad_group" Path="/Apps">
-				<RadzenPanelMenuItem Text="WezTerm" Path="/Apps/1" />
-				<RadzenPanelMenuItem Text="Dolphin" Path="/Apps/2" />
-				<RadzenPanelMenuItem Text="System Information" Path="/Apps/3" />
-				<RadzenPanelMenuItem Text="KeePassXC" Path="/Apps/4" />
-				<RadzenPanelMenuItem Text="Spotify" Path="/Apps/5" />
-				<RadzenPanelMenuItem Text="Discord" Path="/Apps/6" />
+
+				@foreach (var app in AppRepo.GetAll())
+				{
+					<RadzenPanelMenuItem Text="@app.Name" Icon="circle" Path="@($"/Apps/{app.Name}")"/>
+				}
+
 			</RadzenPanelMenuItem>
 			<hr/>
 			<RadzenPanelMenuItem Text="Windows" Icon="select_window" Path="/Windows"/>
