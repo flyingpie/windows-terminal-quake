@@ -15,15 +15,13 @@
 
 }
 
-<h1>App @AppId</h1>
+<h1>App '@AppId'</h1>
 
-<RadzenStack>
-	<RadzenFormField Text="Search" Variant="Variant.Outlined">
-		<RadzenTextBox @bind-Value="@value1"/>
-	</RadzenFormField>
-</RadzenStack>
-
-<h3>Process</h3>
+@* <RadzenStack> *@
+@* 	<RadzenFormField Text="Search" Variant="Variant.Outlined"> *@
+@* 		<RadzenTextBox @bind-Value="@value1"/> *@
+@* 	</RadzenFormField> *@
+@* </RadzenStack> *@
 
 <RadzenStack>
 	<RadzenFieldset Text="Process">
@@ -102,7 +100,7 @@
 				</RadzenColumn>
 			</RadzenRow>
 
-			<RadzenRow AlignItems="AlignItems.Opacity">
+			<RadzenRow AlignItems="AlignItems.Start">
 				<RadzenColumn Size="4">
 					<RadzenLabel Text="Opacity" Component="Opacity"/>
 				</RadzenColumn>
@@ -112,7 +110,7 @@
 				</RadzenColumn>
 			</RadzenRow>
 
-			<RadzenRow AlignItems="AlignItems.Center">
+			<RadzenRow AlignItems="AlignItems.Start">
 				<RadzenColumn Size="4">
 					<RadzenLabel Text="WindowTitleOverride" Component="WindowTitleOverride"/>
 				</RadzenColumn>
