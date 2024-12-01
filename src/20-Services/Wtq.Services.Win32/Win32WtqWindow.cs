@@ -161,4 +161,6 @@ public sealed class Win32WtqWindow(
 
 		return Task.CompletedTask;
 	}
+
+	public override Task UpdateAsync() => Task.CompletedTask;
 }

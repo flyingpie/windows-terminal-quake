@@ -64,21 +64,6 @@
 
 			<RadzenRow AlignItems="AlignItems.Start">
 				<RadzenColumn Size="4">
-					<RadzenLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
-				</RadzenColumn>
-				<RadzenColumn Size="8">
-					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
-						<Items>
-							<RadzenRadioButtonListItem Value="1" Text="Always"/>
-							<RadzenRadioButtonListItem Value="2" Text="Never"/>
-							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
-						</Items>
-					</RadzenRadioButtonList>
-				</RadzenColumn>
-			</RadzenRow>
-
-			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
 					<RadzenLabel Text="Always on top" Component="AlwaysOnTop"/>
 				</RadzenColumn>
 				<RadzenColumn Size="8">
@@ -104,10 +89,35 @@
 
 			<RadzenRow AlignItems="AlignItems.Start">
 				<RadzenColumn Size="4">
-					<RadzenLabel Text="HideOnFocusLost" Component="HideOnFocusLost"/>
+					<RadzenLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
 				</RadzenColumn>
 				<RadzenColumn Size="8">
-					<RadzenTextBox @bind-Value="@value1" Name="HideOnFocusLost" style="width: 100%;"/>
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Always"/>
+							<RadzenRadioButtonListItem Value="2" Text="Never"/>
+							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
+						</Items>
+					</RadzenRadioButtonList>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Opacity">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="Opacity" Component="Opacity"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenNumeric @bind-Value="@value" Name="Opacity" class="rz-mr-4" style="width: 80px;"/>
+					<RadzenSlider @bind-Value=@value TValue="int" />
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Center">
+				<RadzenColumn Size="4">
+					<RadzenLabel Text="WindowTitleOverride" Component="WindowTitleOverride"/>
+				</RadzenColumn>
+				<RadzenColumn Size="8">
+					<RadzenTextBox @bind-Value="@value1" Name="WindowTitleOverride" style="width: 100%;"/>
 				</RadzenColumn>
 			</RadzenRow>
 

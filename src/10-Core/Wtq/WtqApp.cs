@@ -226,6 +226,9 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
+		// Ask window to update its state first.
+		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
+
 		// Check that if we have a process handle, the process is still active.
 		if (IsAttached)
 		{

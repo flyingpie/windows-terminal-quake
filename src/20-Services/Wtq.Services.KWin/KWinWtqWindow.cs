@@ -11,6 +11,8 @@ public class KWinWtqWindow(
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 	private readonly KWinWindow _window = Guard.Against.Null(window);
 
+	private bool _isActive = true;
+
 	public override string Id => _window.InternalId ?? "<unknown>";
 
 	/// <summary>
@@ -19,7 +21,7 @@ public class KWinWtqWindow(
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid { get; } = true;
+	public override bool IsValid => _isActive;
 
 	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
 
@@ -81,5 +83,12 @@ public class KWinWtqWindow(
 	{
 		// TODO
 		return Task.CompletedTask;
+	}
+
+	public override async Task UpdateAsync()
+	{
+		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
+
+		_isActive = !string.IsNullOrWhiteSpace(w?.InternalId);
 	}
 }
