@@ -1,4 +1,5 @@
 @page "/Apps/{AppId}"
+@using Wtq.Configuration
 
 @code {
 
@@ -9,51 +10,100 @@
 	public int value;
 	public string? value1;
 	public bool valuec;
+
+	private void HandleKeyDown(KeyboardEventArgs e)
+	{
+		value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
+	}
+
 }
 
-@code {
-
-}
-
-<h1>App '@AppId'</h1>
-
-@* <RadzenStack> *@
-@* 	<RadzenFormField Text="Search" Variant="Variant.Outlined"> *@
-@* 		<RadzenTextBox @bind-Value="@value1"/> *@
-@* 	</RadzenFormField> *@
-@* </RadzenStack> *@
+<h1>App <span class="rz-color-primary">@AppId</span></h1>
 
 <RadzenStack>
 	<RadzenFieldset Text="Process">
 		<RadzenStack Gap="1rem">
 
-			<RadzenRow AlignItems="AlignItems.Center">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Filename" Component="FileName"/>
-				</RadzenColumn>
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Filename" Component="FileName" />
 				<RadzenColumn Size="8">
-					<RadzenTextBox @bind-Value="@value1" Name="FileName" style="width: 100%;"/>
+					<RadzenTextBox @bind-Value="@value1" Name="FileName" style="width: 100%;" />
+
+					<Descr>
+						The <Emph>filename</Emph> to use when starting a new process
+						for the app. Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+					</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
-			<RadzenRow AlignItems="AlignItems.Center">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Process name" Component="ProcessName"/>
-				</RadzenColumn>
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Process name" Component="ProcessName" IsOptional="true" />
 				<RadzenColumn Size="8">
-					<RadzenTextBox @bind-Value="@value1" Name="ProcessName" style="width: 100%;"/>
+					<RadzenTextBox @bind-Value="@value1" Name="ProcessName" style="width: 100%;" />
+
+					<Descr>
+						Apps sometimes have <Emph>process names</Emph> different
+						from their <Emph>filenames</Emph>. This field can be used
+						to look for the process name in such cases. Windows Terminal is
+						an example, with filename <Emph>wt</Emph>, and process name
+						<Emph>WindowsTerminal</Emph>.
+					</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
-			<RadzenRow AlignItems="AlignItems.Center">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Arguments" Component="Arguments"/>
-				</RadzenColumn>
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Arguments" Component="Arguments" IsOptional="true"/>
 				<RadzenColumn Size="8">
-					<RadzenTextBox Style="width: 100%;" Name="Arguments"/>
+					<RadzenTextBox Style="width: 100%;" Name="Arguments" />
+
+					<Descr>
+						Additional <Emph>arguments</Emph> to pass to the process, when
+						starting a new one.
+					</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Attach mode" Component="AttachMode"/>
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Find or Start"/>
+							<RadzenRadioButtonListItem Value="2" Text="Find only"/>
+							<RadzenRadioButtonListItem Value="3" Text="Start always" Disabled="true"/>
+							<RadzenRadioButtonListItem Value="4" Text="Manual"/>
+						</Items>
+					</RadzenRadioButtonList>
+
+					<Descr>
+						How to get a reference to a running app.<br/>
+						<Emph>Find or Start</Emph> looks for an existing instance, and creates one should none exist.<br/>
+						<Emph>Find only</Emph> looks for an existing app instance, and does nothing should none be found.<br/>
+						<Emph>Start always</Emph> always creates a new app instance, even if one already exists.<br/>
+						<Emph>Maual</Emph> attaches to whatever app has focus, when the hotkey is pressed.
+					</Descr>
+				</RadzenColumn>
+			</RadzenRow>
+
+		</RadzenStack>
+	</RadzenFieldset>
+
+	<RadzenFieldset Text="Hotkeys">
+		<RadzenStack Gap="1rem">
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Modifier(s) + key"/>
+				<RadzenColumn Size="8">
+					<RadzenTextBox
+						Style="width: 100%;"
+						Name="s"
+						@onkeydown="HandleKeyDown"
+						Placeholder="Type here to set hotkey."
+						@bind-Value="@value1"
+					/>
+
+					<Descr>What hotkeys should toggle the app. Select the textbox and press the desired key combo.</Descr>
+				</RadzenColumn>
+			</RadzenRow>
 		</RadzenStack>
 	</RadzenFieldset>
 
@@ -61,19 +111,16 @@
 		<RadzenStack Gap="1rem">
 
 			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Always on top" Component="AlwaysOnTop"/>
-				</RadzenColumn>
+				<SettingLabel Text="Always on top" Component="AlwaysOnTop"/>
 				<RadzenColumn Size="8">
 					<RadzenCheckBox @bind-Value=@valuec Name="AlwaysOnTop"/>
-					<p>Keep the app on top of other windows, even on focus lost.</p>
+
+					<Descr>Keep the app on top of other windows, even on focus lost.</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Hide on focus lost" Component="HideOnFocusLost"/>
-				</RadzenColumn>
+				<SettingLabel Text="Hide on focus lost" Component="HideOnFocusLost"/>
 				<RadzenColumn Size="8">
 					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
 						<Items>
@@ -82,13 +129,13 @@
 							<RadzenRadioButtonListItem Value="3" Text="Unless focus changed screen" Disabled="true"/>
 						</Items>
 					</RadzenRadioButtonList>
+
+					<Descr>Whether the app should <Emph>toggle off</Emph> when focus lost.</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
-				</RadzenColumn>
+				<SettingLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
 				<RadzenColumn Size="8">
 					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
 						<Items>
@@ -97,249 +144,127 @@
 							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
 						</Items>
 					</RadzenRadioButtonList>
+
+					<Descr>If and when the app icon should be visible on the <Emph>taskbar</Emph>.</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="Opacity" Component="Opacity"/>
-				</RadzenColumn>
+				<SettingLabel Text="Opacity" Component="Opacity"/>
 				<RadzenColumn Size="8">
 					<RadzenNumeric @bind-Value="@value" Name="Opacity" class="rz-mr-4" style="width: 80px;"/>
 					<RadzenSlider @bind-Value=@value TValue="int" />
+
+					<Descr>Makes the entire app window transparent. Note that this includes the title bar.</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
-				<RadzenColumn Size="4">
-					<RadzenLabel Text="WindowTitleOverride" Component="WindowTitleOverride"/>
-				</RadzenColumn>
+				<SettingLabel Text="Window Title Override" Component="WindowTitleOverride" IsOptional="true"/>
 				<RadzenColumn Size="8">
 					<RadzenTextBox @bind-Value="@value1" Name="WindowTitleOverride" style="width: 100%;"/>
+
+					<Descr>
+						Attempt to set the app <Emph>window title</Emph> to this value.
+						Note that this may work for some apps.
+					</Descr>
 				</RadzenColumn>
 			</RadzenRow>
 
 		</RadzenStack>
 	</RadzenFieldset>
+
+	<RadzenFieldset Text="Position">
+		<RadzenStack Gap="1rem">
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Filename" Component="FileName" />
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Always"/>
+							<RadzenRadioButtonListItem Value="2" Text="Never"/>
+							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
+						</Items>
+					</RadzenRadioButtonList>
+
+					<Descr>
+						The <Emph>filename</Emph> to use when starting a new process
+						for the app. Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+					</Descr>
+				</RadzenColumn>
+			</RadzenRow>
+		</RadzenStack>
+	</RadzenFieldset>
+
+	<RadzenFieldset Text="Monitor">
+		<RadzenStack Gap="1rem">
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Prefer monitor" Component="PreferMonitor" />
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="With cursor"/>
+							<RadzenRadioButtonListItem Value="2" Text="Primary"/>
+							<RadzenRadioButtonListItem Value="3" Text="At index"/>
+						</Items>
+					</RadzenRadioButtonList>
+
+					<Descr>
+						What <Emph>monitor</Emph> to toggle onto.
+					</Descr>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Monitor Index" Component="MonitorIndex" />
+				<RadzenColumn Size="8">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+						<Items>
+							<RadzenRadioButtonListItem Value="1" Text="Always"/>
+							<RadzenRadioButtonListItem Value="2" Text="Never"/>
+							<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
+						</Items>
+					</RadzenRadioButtonList>
+
+					<Descr>
+						The <Emph>filename</Emph> to use when starting a new process
+						for the app. Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+					</Descr>
+				</RadzenColumn>
+			</RadzenRow>
+		</RadzenStack>
+	</RadzenFieldset>
+
+	<RadzenFieldset Text="Animation">
+		<RadzenStack Gap="1rem">
+
+			<RadzenRow AlignItems="AlignItems.Start">
+				<SettingLabel Text="Filename" Component="FileName" />
+				<RadzenColumn Size="8">
+					<RadzenDropDown
+						@bind-Value=@value
+						Data=@(Enum.GetNames(typeof(AnimationType)))
+						Style="width: 100%; max-width: 400px;"
+						Name="DropDownBindValue"
+					/>
+
+					<Descr>
+						The <Emph>filename</Emph> to use when starting a new process
+						for the app. Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+					</Descr>
+				</RadzenColumn>
+			</RadzenRow>
+		</RadzenStack>
+	</RadzenFieldset>
+
 </RadzenStack>
 
 
-<RadzenFormField Text="Filename" Variant="Variant.Outlined">
-	<RadzenTextBox @bind-Value="@value1"/>
-</RadzenFormField>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Filename</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenTextBox @bind-Value="@value1"/>
-
-	</ChildContent>
-</RadzenFieldset>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Process name</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenTextBox @bind-Value="@value1"/>
-
-	</ChildContent>
-</RadzenFieldset>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Startup Arguments</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenTextBox @bind-Value="@value1"/>
-
-	</ChildContent>
-</RadzenFieldset>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
-			<b>Attach Mode</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
-			<Items>
-				<RadzenRadioButtonListItem Value="1" Text="Find or Start"/>
-				<RadzenRadioButtonListItem Value="2" Text="Find"/>
-				<RadzenRadioButtonListItem Value="3" Text="Manual"/>
-			</Items>
-		</RadzenRadioButtonList>
-
-		<p class="rz-p-0 rz-m-0">The behavior to use when "attaching" to an app.</p>
-	</ChildContent>
-</RadzenFieldset>
-
-<h3>Hotkeys</h3>
-Hotkeys
-
-<h3>Behavior</h3>
-bool? AlwaysOnTop
-bool? HideOnFocusLost
-int? Opacity
-string? WindowTitleOverride
-TaskBarIconVisibility? TaskbarIconVisibility
-
-<h3>Position</h3>
-float? HorizontalScreenCoverage
-float? VerticalScreenCoverage
-HorizontalAlign? HorizontalAlign
-IEnumerable OffScreenLocation OffScreenLocations
-int? MonitorIndex
-int? VerticalOffset
-PreferMonitor? PreferMonitor
 
 
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
-			<b>Always On Top</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-		<RadzenCheckBox @bind-Value=@valuec Name="CheckBox1"/>
-		<RadzenLabel Text="CheckBox" Component="CheckBox1" class="rz-ms-2"/>
-
-		<p class="rz-m-0 rz-mt-4">When checked, the app window will always be on top of other windows, regardless of whether it has focus.</p>
-	</ChildContent>
-</RadzenFieldset>
 
 
-<h2>Coverage</h2>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Horizontal Screen Coverage</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-		<RadzenSlider @bind-Value=@value TValue="int"/>
-	</ChildContent>
-</RadzenFieldset>
 
 
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Vertical Screen Coverage</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-		<RadzenSlider @bind-Value=@value TValue="int"/>
-	</ChildContent>
-</RadzenFieldset>
-
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
-			<b>Horizontal Align</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Stretch" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Wrap="FlexWrap.Wrap">
-
-			<RadzenToggleButton
-				Icon="format_align_left"
-				ButtonStyle="ButtonStyle.Light"
-				Shade="Shade.Light"
-				ToggleShade="Shade.Dark"
-				Size="ButtonSize.Large"
-				Text="Left"/>
-
-			<RadzenToggleButton
-				Icon="format_align_center"
-				ButtonStyle="ButtonStyle.Light"
-				Shade="Shade.Light"
-				ToggleShade="Shade.Dark"
-				Size="ButtonSize.Large"
-				Text="Center"/>
-
-			<RadzenToggleButton
-				Icon="format_align_right"
-				ButtonStyle="ButtonStyle.Light"
-				Shade="Shade.Light"
-				ToggleShade="Shade.Dark"
-				Size="ButtonSize.Large"
-				Text="Right"/>
-
-		</RadzenStack>
-
-
-	</ChildContent>
-</RadzenFieldset>
-
-
-<h2>Animation</h2>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Animation Duration</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-		<RadzenSlider @bind-Value=@value TValue="int"/>
-	</ChildContent>
-</RadzenFieldset>
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			<b>Animation Target FPS</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-
-		<RadzenStack>
-			<RadzenSlider @bind-Value=@value TValue="int"/>
-		</RadzenStack>
-	</ChildContent>
-</RadzenFieldset>
-
-
-<RadzenFieldset
-	Style="margin: 2em auto;">
-	<HeaderTemplate>
-		<RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
-			@* <RadzenIcon Icon="account_box"/><b>Attach Mode</b> *@
-			<b>Hide On Focus Lost</b>
-		</RadzenStack>
-	</HeaderTemplate>
-	<ChildContent>
-		<RadzenCheckBox @bind-Value=@valuec Name="CheckBox1"/>
-		<RadzenLabel Text="CheckBox" Component="CheckBox1" class="rz-ms-2"/>
-	</ChildContent>
-</RadzenFieldset>
