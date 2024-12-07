@@ -15,10 +15,11 @@
 }
 
 <RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
-	OVERR:@IsOverridden
+
 	@if (HasGlobalSetting)
 	{
 		<RadzenToggleButton
+			Disabled="@(!IsOverridden)"
 			Icon="public"
 			Size="ButtonSize.Small"
 			ButtonStyle="ButtonStyle.Light"

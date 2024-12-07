@@ -44,6 +44,12 @@
 		value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
 	}
 
+	private void ResetProp(Action reset)
+	{
+		reset();
+
+		StateHasChanged();
+	}
 }
 
 <h1>App <span class="rz-color-primary">@AppId</span></h1>
@@ -280,28 +286,19 @@ APP @_opts?.Name
 				<RadzenColumn Size="7">
 					<RadzenNumeric @bind-Value="@HorizontalScreenCoverage" Name="HorizontalScreenCoverage" class="rz-mr-4" style="width: 80px;"/>
 					<RadzenSlider @bind-Value=@HorizontalScreenCoverage TValue="float"/>
-
-					<Descr>How
-						<Emph>wide</Emph>
-						the app window should be.
-					</Descr>
+					<Descr>How <Emph>wide</Emph> the app window should be.</Descr>
 				</RadzenColumn>
-				<SettingGlobal HasGlobalSetting="true" IsOverridden="@(_opts?.HorizontalScreenCoverage != null)" Reset="() => _opts.HorizontalScreenCoverage = null)" />
+				<SettingGlobal HasGlobalSetting="true" IsOverridden="@(_opts?.HorizontalScreenCoverage != null)" Reset="@(() => ResetProp(() => _opts.HorizontalScreenCoverage = null))" />
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Vertical screen coverage (%)" Component="VerticalScreenCoverage"/>
 				<RadzenColumn Size="7">
-					<RadzenNumeric @bind-Value="@VerticalScreenCoverage" Name="VerticalScreenCoverage" class="rz-mr-4"
-					               style="width: 80px;"/>
+					<RadzenNumeric @bind-Value="@VerticalScreenCoverage" Name="VerticalScreenCoverage" class="rz-mr-4" style="width: 80px;"/>
 					<RadzenSlider @bind-Value="@VerticalScreenCoverage" TValue="float"/>
-
-					<Descr>How
-						<Emph>tall</Emph>
-						the app window should be.
-					</Descr>
+					<Descr>How <Emph>tall</Emph> the app window should be.</Descr>
 				</RadzenColumn>
-				<SettingGlobal HasGlobalSetting="true"/>
+				<SettingGlobal HasGlobalSetting="true" IsOverridden="@(_opts?.VerticalScreenCoverage != null)" Reset="@(() => ResetProp(() => _opts.VerticalScreenCoverage = null))" />
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
