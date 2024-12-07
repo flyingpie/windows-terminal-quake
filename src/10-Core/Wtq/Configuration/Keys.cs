@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Wtq.Configuration;
 
 [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
@@ -476,6 +478,7 @@ public enum Keys
 	/// <summary>
 	/// The 1 key on the numeric keypad.
 	/// </summary>
+	[Description("Numpad 1")]
 	NumPad1 = 0x61,
 
 	/// <summary>

@@ -1,5 +1,6 @@
 @using Microsoft.Extensions.Options
 @using Wtq.Configuration
+@using Wtq.Services.UI.Extensions
 
 @inject IOptions<WtqOptions> WtqOptions
 
@@ -18,6 +19,12 @@
 	public bool valuec;
 
 	public AnimationType animOn;
+
+	public bool AlwaysOnTop
+	{
+		get => _opts?.AlwaysOnTop ?? WtqOptions.Value.AlwaysOnTop;
+		set => _opts.AlwaysOnTop = value;
+	}
 
 	public float HorizontalScreenCoverage
 	{
@@ -39,10 +46,17 @@
 		_opts = WtqOptions.Value.GetAppOptionsByNameRequired(AppId);
 	}
 
-	private void HandleKeyDown(KeyboardEventArgs e)
+	private void HandleKeyDown(KeyboardEventArgs e, HotkeyOptions hk)
 	{
-		value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
+		e.ToModifiersAndKey(out var mod, out var key);
+
+		hk.Modifiers = mod;
+		hk.Key = key;
+
+		//value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
 	}
+
+	private Keys[] KeysValues => Enum.GetValues<Keys>().Distinct().ToArray();
 
 	private void ResetProp(Action reset)
 	{
@@ -53,12 +67,6 @@
 }
 
 <h1>App <span class="rz-color-primary">@AppId</span></h1>
-APP @_opts?.Name
-
-@if (_opts == null)
-{
-	<span>NULL</span>
-}
 
 <RadzenStack>
 	<RadzenFieldset Text="App">
@@ -78,16 +86,75 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Hotkeys"/>
 				<RadzenColumn Size="7">
-					<RadzenTextBox
-						Style="width: 100%;"
-						Name="s"
-						@onkeydown="HandleKeyDown"
-						Placeholder="Type here to set hotkey."
-						@bind-Value="@value1"
-					/>
 
-					<Descr>What hotkeys should toggle the app. Select the textbox and press the desired key combo.
-					</Descr>
+					<RadzenStack>
+						@foreach (var hk in _opts?.Hotkeys ?? [])
+						{
+							@*
+								TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable
+								registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
+							*@
+							@* <RadzenTextBox *@
+							@* 	Style="width: 100%;" *@
+							@* 	@onkeydown="(ev) => HandleKeyDown(ev, hk)" *@
+							@* 	Placeholder="Type here to set hotkey." *@
+							@* 	Value="@hk.ToString()" *@
+							@* /> *@
+
+							<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+
+								<RadzenToggleButton
+									Text="Alt"
+									@bind-Value="hk.IsAlt"
+									Size="ButtonSize.Medium"
+									ButtonStyle="ButtonStyle.Light"
+									ToggleButtonStyle="ButtonStyle.Primary"
+									Style="width: 8em;"
+								/>
+
+								<RadzenToggleButton
+									Text="Ctrl"
+									@bind-Value="hk.IsCtrl"
+									Size="ButtonSize.Medium"
+									ButtonStyle="ButtonStyle.Light"
+									ToggleButtonStyle="ButtonStyle.Primary"
+									Style="width: 8em;"
+								/>
+
+								<RadzenToggleButton
+									Text="Shift"
+									@bind-Value="hk.IsShift"
+									Size="ButtonSize.Medium"
+									ButtonStyle="ButtonStyle.Light"
+									ToggleButtonStyle="ButtonStyle.Primary"
+									Style="width: 8em;"
+								/>
+
+								<RadzenDropDown
+									@bind-Value="hk.Key"
+									Data=@(KeysValues)
+									Style="width: 100%; max-width: 400px;"
+									Name="AnimationTypeToggleOn1"
+								/>
+
+								<RadzenButton
+									Icon="delete"
+									Size="ButtonSize.Medium"
+									Click="@(() => _opts.Hotkeys.Remove(hk))"
+								/>
+							</RadzenStack>
+						}
+
+						<RadzenStack>
+							<RadzenButton
+								Icon="add"
+								Size="ButtonSize.Medium"
+								Click="@(() => _opts.Hotkeys.Add(new()))"
+							/>
+						</RadzenStack>
+					</RadzenStack>
+
+					<Descr>What hotkeys should toggle the app.</Descr>
 				</RadzenColumn>
 				<SettingGlobal/>
 			</RadzenRow>
@@ -100,17 +167,11 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Filename" Component="FileName"/>
 				<RadzenColumn Size="7">
-					<RadzenTextBox @bind-Value="@value1" Name="FileName" style="width: 100%;"/>
+					<RadzenTextBox @bind-Value="_opts.FileName" Name="FileName" style="width: 100%;"/>
 
 					<Descr>
-						The
-						<Emph>filename</Emph>
-						to use when starting a new process
-						for the app. Eg.
-						<Emph>notepad</Emph>
-						,
-						<Emph>dolphin</Emph>
-						, etc.
+						The <Emph>filename</Emph> to use when starting a new process for the app.
+						Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
 					</Descr>
 				</RadzenColumn>
 			</RadzenRow>
@@ -118,21 +179,12 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Process name" Component="ProcessName" IsOptional="true"/>
 				<RadzenColumn Size="7">
-					<RadzenTextBox @bind-Value="@value1" Name="ProcessName" style="width: 100%;"/>
+					<RadzenTextBox @bind-Value="_opts.ProcessName" Name="ProcessName" style="width: 100%;"/>
 
 					<Descr>
-						Apps sometimes have
-						<Emph>process names</Emph>
-						different
-						from their
-						<Emph>filenames</Emph>
-						. This field can be used
-						to look for the process name in such cases. Windows Terminal is
-						an example, with filename
-						<Emph>wt</Emph>
-						, and process name
-						<Emph>WindowsTerminal</Emph>
-						.
+						Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+						This field can be used to look for the process name in such cases. Windows Terminal is an
+						example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 					</Descr>
 				</RadzenColumn>
 				<SettingGlobal/>
@@ -141,13 +193,10 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Arguments" Component="Arguments" IsOptional="true"/>
 				<RadzenColumn Size="7">
-					<RadzenTextBox Style="width: 100%;" Name="Arguments"/>
+					<RadzenTextBox @bind-Value="_opts.Arguments" Style="width: 100%;" Name="Arguments"/>
 
 					<Descr>
-						Additional
-						<Emph>arguments</Emph>
-						to pass to the process, when
-						starting a new one.
+						Additional <Emph>arguments</Emph> to pass to the process, when starting a new one.
 					</Descr>
 				</RadzenColumn>
 				<SettingGlobal/>
@@ -156,8 +205,7 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Attach mode" Component="AttachMode"/>
 				<RadzenColumn Size="7">
-					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int"
-					                       Orientation="Orientation.Vertical">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
 						<Items>
 							<RadzenRadioButtonListItem Value="1" Text="Find or Start"/>
 							<RadzenRadioButtonListItem Value="2" Text="Find only"/>
@@ -168,14 +216,10 @@ APP @_opts?.Name
 
 					<Descr>
 						How to get a reference to a running app.<br/>
-						<Emph>Find or Start</Emph>
-						looks for an existing instance, and creates one should none exist.<br/>
-						<Emph>Find only</Emph>
-						looks for an existing app instance, and does nothing should none be found.<br/>
-						<Emph>Start always</Emph>
-						always creates a new app instance, even if one already exists.<br/>
-						<Emph>Maual</Emph>
-						attaches to whatever app has focus, when the hotkey is pressed.
+						<Emph>Find or Start</Emph> looks for an existing instance, and creates one should none exist.<br/>
+						<Emph>Find only</Emph> looks for an existing app instance, and does nothing should none be found.<br/>
+						<Emph>Start always</Emph> always creates a new app instance, even if one already exists.<br/>
+						<Emph>Maual</Emph> attaches to whatever app has focus, when the hotkey is pressed.
 					</Descr>
 				</RadzenColumn>
 				<SettingGlobal HasGlobalSetting="true"/>
@@ -184,10 +228,11 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Window title" Component="WindowTitle" IsOptional="true"/>
 				<RadzenColumn Size="7">
-					<RadzenTextBox @bind-Value="@value1" Name="WindowTitle" style="width: 100%;"/>
+					<RadzenTextBox @bind-Value="_opts.WindowTitle" Name="WindowTitle" style="width: 100%;"/>
 
 					<Descr>
-
+						Additionally uses the window title to filter app.<br/>
+						Can be useful for attaching to a e.g. browser window.
 					</Descr>
 				</RadzenColumn>
 				<SettingGlobal/>
@@ -202,18 +247,17 @@ APP @_opts?.Name
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Always on top" Component="AlwaysOnTop"/>
 				<RadzenColumn Size="7">
-					<RadzenCheckBox @bind-Value=@valuec Name="AlwaysOnTop"/>
+					<RadzenCheckBox @bind-Value="AlwaysOnTop" Name="AlwaysOnTop"/>
 
 					<Descr>Keep the app on top of other windows, even on focus lost.</Descr>
 				</RadzenColumn>
-				<SettingGlobal HasGlobalSetting="true"/>
+				<SettingGlobal HasGlobalSetting="true" IsOverridden="@(_opts?.AlwaysOnTop != null)" Reset="@(() => ResetProp(() => _opts.AlwaysOnTop = null))"/>
 			</RadzenRow>
 
 			<RadzenRow AlignItems="AlignItems.Start">
 				<SettingLabel Text="Hide on focus lost" Component="HideOnFocusLost"/>
 				<RadzenColumn Size="7">
-					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int"
-					                       Orientation="Orientation.Vertical">
+					<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
 						<Items>
 							<RadzenRadioButtonListItem Value="1" Text="Always"/>
 							<RadzenRadioButtonListItem Value="2" Text="Never"/>
