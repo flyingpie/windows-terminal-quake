@@ -1,9 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Photino.Blazor;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
 
@@ -14,7 +16,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
 	private readonly IWtqAppRepo _appRepo;
-
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
+	private readonly IServiceProvider _provider;
 	private PhotinoBlazorApp? _app;
 	private Point? _loc;
 	private bool _isClosing;
@@ -22,16 +25,20 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	public WtqUI(
 		IHostApplicationLifetime appLifetime,
+		IServiceProvider provider,
 		IWtqAppRepo appRepo,
 		IWtqBus bus,
+		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowService windowService)
 	{
 		_appLifetime = Guard.Against.Null(appLifetime);
 		_appRepo = Guard.Against.Null(appRepo);
 		_ = Guard.Against.Null(bus);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_windowService = Guard.Against.Null(windowService);
 
 		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+		_provider = provider;
 	}
 
 	public Task StartAsync(CancellationToken cancellationToken)
@@ -113,6 +120,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		appBuilder.Services
 			.AddSingleton<IWtqAppRepo>(p => _appRepo)
 			.AddSingleton<IWtqWindowService>(p => _windowService)
+			.AddSingleton<IWtqScreenInfoProvider>(p => _screenInfoProvider)
+			.AddTransient<IOptions<WtqOptions>>(p => _provider.GetRequiredService<IOptions<WtqOptions>>())
 			.AddUI()
 			.AddLogging();
 

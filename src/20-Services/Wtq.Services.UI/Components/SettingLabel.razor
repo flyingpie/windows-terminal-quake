@@ -8,13 +8,17 @@
 
 	[Parameter]
 	public bool IsOptional { get; set; }
+
+	public bool valuec;
 }
 
 <RadzenColumn Size="4" Class="rz-pt-2">
-	<RadzenLabel Text="@Text" Component="@Component"/>
+	<RadzenStack Orientation="Orientation.Vertical">
+		<RadzenLabel Text="@Text" Component="@Component"/>
 
-	@if (IsOptional)
-	{
-		<p class="rz-color-base-500 rz-m-0">optional</p>
-	}
+		@if (IsOptional)
+		{
+			<p class="rz-color-base-500 rz-m-0">optional</p>
+		}
+	</RadzenStack>
 </RadzenColumn>

@@ -69,6 +69,8 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
 	public float? VerticalScreenCoverage { get; set; }
 
+	public string? WindowTitle { get; set; }
+
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>

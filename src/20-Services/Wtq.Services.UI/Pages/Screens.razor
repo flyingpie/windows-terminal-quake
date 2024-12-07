@@ -1,9 +1,75 @@
 @page "/Screens"
+@using System.Drawing
 
-<h3>Screens</h3>
+@inject IWtqScreenInfoProvider ScreenInfoProvider
+
 
 @code {
 
+	private const float Multiplier = .1f;
 
+	private static int Scale(int v) => (int)Math.Round((float)v * Multiplier);
+
+	private Rectangle[] _screens = [];
+	private System.Drawing.Point _offset;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		_screens = await ScreenInfoProvider.GetScreenRectsAsync().NoCtx();
+
+		//_screens =
+		//[
+		//	new() { Width = 2560, Height = 1440, X = 0, Y = 0, },
+		//	new() { Width = 1920, Height = 1080, X = -1920, Y = 200, },
+		//	new() { Width = 1080, Height = 1920, X = 2560, Y = -200, },
+		//];
+
+		var minX = _screens.Min(s => s.X);
+		var maxX = _screens.Max(s => s.X);
+
+		var minY = _screens.Min(s => s.Y);
+		var maxY = _screens.Max(s => s.Y);
+
+		_offset = new(
+			x: -Math.Min(0, _screens.Min(s => s.X)) + 400,
+			y: -Math.Min(0, _screens.Min(s => s.Y)) + 400);
+	}
 
 }
+
+<h3>Screens</h3>
+
+<ul>
+	@foreach (var scr in _screens)
+	{
+		<li>@scr</li>
+	}
+</ul>
+
+
+
+
+	<div style="position: relative; width: 100%; height:400px;">
+		@foreach (var scr in _screens)
+		{
+			<div style="
+				background-color:var(--rz-secondary);
+				border: 1px var(--rz-primary) solid;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				position: absolute;
+				left: @Scale(_offset.X + scr.X)px;
+				top: @Scale(_offset.Y + scr.Y)px;
+				width: @Scale(scr.Width)px;
+				height: @Scale(scr.Height)px"
+			>
+				<div>@scr.Width x @scr.Height</div>
+				<div>(@scr.X, @scr.Y)</div>
+			</div>
+		}
+	</div>
+
