@@ -1,0 +1,45 @@
+@inherits BaseAppPanel
+
+@code {
+
+	public int radioButtonValue;
+	public int value;
+
+}
+
+<RadzenFieldset Text="Monitor">
+	<RadzenStack Gap="1rem">
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Prefer monitor" Component="PreferMonitor"/>
+			<RadzenColumn Size="7">
+				<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int"
+				                       Orientation="Orientation.Vertical">
+					<Items>
+						<RadzenRadioButtonListItem Value="1" Text="With cursor"/>
+						<RadzenRadioButtonListItem Value="2" Text="Primary"/>
+						<RadzenRadioButtonListItem Value="3" Text="At index"/>
+					</Items>
+				</RadzenRadioButtonList>
+
+				<Descr>
+					What
+					<Emph>monitor</Emph>
+					to toggle onto.
+				</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Monitor Index" Component="MonitorIndex"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@value" Name="MonitorIndex" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value=@value TValue="int"/>
+
+				<Descr>Which monitor to toggle the app onto.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+	</RadzenStack>
+</RadzenFieldset>

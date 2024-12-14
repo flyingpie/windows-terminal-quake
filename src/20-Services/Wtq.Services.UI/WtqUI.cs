@@ -133,7 +133,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
 			.SetTitle(MainWindowTitle);
 
-		_app.MainWindow.RegisterWindowCreatedHandler((s, a) => { _ = Task.Run(CloseMainWindowAsync); });
+//		_app.MainWindow.RegisterWindowCreatedHandler((s, a) => { _ = Task.Run(CloseMainWindowAsync); });
 
 		_app.MainWindow.RegisterWindowClosingHandler(
 			(s, a) =>

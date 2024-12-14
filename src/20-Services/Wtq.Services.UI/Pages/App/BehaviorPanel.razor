@@ -1,0 +1,103 @@
+@inherits BaseAppPanel
+
+@code {
+
+	public int radioButtonValue;
+	public string? value1;
+
+	public bool AlwaysOnTop
+	{
+		get => AppOpts?.AlwaysOnTop ?? WtqOptions.AlwaysOnTop;
+		set => AppOpts.AlwaysOnTop = value;
+	}
+
+	public int Opacity
+	{
+		get => AppOpts.Opacity ?? WtqOptions.Opacity;
+		set => AppOpts.Opacity = value;
+	}
+
+}
+
+<RadzenFieldset Text="Behavior">
+	<RadzenStack Gap="1rem">
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Always on top" Component="AlwaysOnTop"/>
+			<RadzenColumn Size="7">
+				<RadzenCheckBox @bind-Value="AlwaysOnTop" Name="AlwaysOnTop"/>
+
+				<Descr>Keep the app on top of other windows, even on focus lost.</Descr>
+			</RadzenColumn>
+			<SettingGlobal
+				HasGlobalSetting="true"
+				IsOverridden="@(AppOpts?.AlwaysOnTop != null)"
+				Reset="@(() => ResetProp(() => AppOpts.AlwaysOnTop = null))"
+			/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Hide on focus lost" Component="HideOnFocusLost"/>
+			<RadzenColumn Size="7">
+				<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+					<Items>
+						<RadzenRadioButtonListItem Value="1" Text="Always"/>
+						<RadzenRadioButtonListItem Value="2" Text="Never"/>
+						<RadzenRadioButtonListItem Value="3" Text="Unless focus changed screen" Disabled="true"/>
+					</Items>
+				</RadzenRadioButtonList>
+
+				<Descr>Whether the app should <Emph>toggle off</Emph> when focus lost.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Taskbar icon visibility" Component="TaskbarIconVisibility"/>
+			<RadzenColumn Size="7">
+				<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int" Orientation="Orientation.Vertical">
+					<Items>
+						<RadzenRadioButtonListItem Value="1" Text="Always"/>
+						<RadzenRadioButtonListItem Value="2" Text="Never"/>
+						<RadzenRadioButtonListItem Value="3" Text="When app visible" Disabled="true"/>
+					</Items>
+				</RadzenRadioButtonList>
+
+				<Descr>If and when the app icon should be visible on the
+					<Emph>taskbar</Emph>
+					.
+				</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Opacity" Component="Opacity"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@Opacity" Name="Opacity" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value=@Opacity TValue="int"/>
+
+				<Descr>Makes the entire app window transparent. Note that this includes the title bar.</Descr>
+			</RadzenColumn>
+			<SettingGlobal
+				HasGlobalSetting="true"
+				IsOverridden="@(AppOpts?.Opacity != null)"
+				Reset="@(() => ResetProp(() => AppOpts.Opacity = null))"
+			/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Window Title Override" Component="WindowTitleOverride" Subtext="optional"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="@value1" Name="WindowTitleOverride" style="width: 100%;"/>
+
+				<Descr>
+					Attempt to set the app <Emph>window title</Emph> to this value.
+					Note that this may work for some apps.
+				</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="false" />
+		</RadzenRow>
+
+	</RadzenStack>
+</RadzenFieldset>

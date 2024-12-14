@@ -1,0 +1,90 @@
+@inherits BaseAppPanel
+
+@code {
+
+	public int radioButtonValue;
+	public string? value1;
+	public int value;
+	private Wtq.Configuration.HorizontalAlign _horizontalAlign;
+
+	public float HorizontalScreenCoverage
+	{
+		get => AppOpts?.HorizontalScreenCoverage ?? WtqOptions.HorizontalScreenCoverage;
+		set => AppOpts.HorizontalScreenCoverage = value;
+	}
+
+	public float VerticalScreenCoverage
+	{
+		get => AppOpts?.VerticalScreenCoverage ?? WtqOptions.VerticalScreenCoverage;
+		set => AppOpts.VerticalScreenCoverage = value;
+	}
+
+}
+
+<RadzenFieldset Text="Position">
+	<RadzenStack Gap="1rem">
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Horizontal screen coverage (%)" Component="HorizontalScreenCoverage"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@HorizontalScreenCoverage" Name="HorizontalScreenCoverage" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value=@HorizontalScreenCoverage TValue="float"/>
+				<Descr>How <Emph>wide</Emph> the app window should be.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true" IsOverridden="@(AppOpts?.HorizontalScreenCoverage != null)" Reset="@(() => ResetProp(() => AppOpts.HorizontalScreenCoverage = null))" />
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Vertical screen coverage (%)" Component="VerticalScreenCoverage"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@VerticalScreenCoverage" Name="VerticalScreenCoverage" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value="@VerticalScreenCoverage" TValue="float"/>
+				<Descr>How <Emph>tall</Emph> the app window should be.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true" IsOverridden="@(AppOpts?.VerticalScreenCoverage != null)" Reset="@(() => ResetProp(() => AppOpts.VerticalScreenCoverage = null))" />
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Horizontal align" Component="HorizontalAlign"/>
+			<RadzenColumn Size="7">
+				<RadzenRadioButtonList
+					@bind-Value="@_horizontalAlign"
+					TValue="Wtq.Configuration.HorizontalAlign"
+					Orientation="Orientation.Vertical"
+				>
+					<Items>
+						<RadzenRadioButtonListItem Value="Wtq.Configuration.HorizontalAlign.Center" Text="Center"/>
+						<RadzenRadioButtonListItem Value="Wtq.Configuration.HorizontalAlign.Left" Text="Left"/>
+						<RadzenRadioButtonListItem Value="Wtq.Configuration.HorizontalAlign.Right" Text="Right"/>
+					</Items>
+				</RadzenRadioButtonList>
+
+				<Descr>How many times per second to update the app position.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Vertical offset" Component="VerticalOffset"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@value" Name="VerticalOffset" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value=@value TValue="int"/>
+
+				<Descr>How many times per second to update the app position.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Off-screen locations" Component="OffScreenLocations"/>
+			<RadzenColumn Size="7">
+				<RadzenNumeric @bind-Value="@value" Name="OffScreenLocations" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value=@value TValue="int"/>
+
+				<Descr>How many times per second to update the app position.</Descr>
+			</RadzenColumn>
+			<SettingGlobal HasGlobalSetting="true"/>
+		</RadzenRow>
+
+	</RadzenStack>
+</RadzenFieldset>

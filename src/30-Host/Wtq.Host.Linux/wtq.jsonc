@@ -8,7 +8,8 @@
 			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "dolphin",
-			"HorizontalScreenCoverage": 80
+			"HorizontalScreenCoverage": 80,
+			"AlwaysOnTop": true
 		}
 	],
 

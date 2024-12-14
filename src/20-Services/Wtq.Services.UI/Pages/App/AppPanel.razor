@@ -1,0 +1,114 @@
+@inherits BaseAppPanel
+
+@code {
+
+	public int radioButtonValue;
+	public string? value1;
+
+	private Keys[] KeysValues => Enum.GetValues<Keys>().Distinct().ToArray();
+
+	public bool AlwaysOnTop
+	{
+		get => AppOpts?.AlwaysOnTop ?? WtqOptions.AlwaysOnTop;
+		set => AppOpts.AlwaysOnTop = value;
+	}
+
+	public int Opacity
+	{
+		get => AppOpts.Opacity ?? WtqOptions.Opacity;
+		set => AppOpts.Opacity = value;
+	}
+
+}
+
+<RadzenFieldset Text="App">
+	<RadzenStack Gap="1rem">
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Name" Component="Name"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="AppOpts.Name" Name="Name" style="width: 100%;"/>
+
+				<Descr>
+					A descriptive name, mostly used for logging.
+				</Descr>
+			</RadzenColumn>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Hotkeys"/>
+			<RadzenColumn Size="7">
+
+				<RadzenStack>
+					@foreach (var hk in AppOpts?.Hotkeys ?? [])
+					{
+						@*
+							TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable
+							registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
+						*@
+						@* <RadzenTextBox *@
+						@* 	Style="width: 100%;" *@
+						@* 	@onkeydown="(ev) => HandleKeyDown(ev, hk)" *@
+						@* 	Placeholder="Type here to set hotkey." *@
+						@* 	Value="@hk.ToString()" *@
+						@* /> *@
+
+						<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+
+							<RadzenToggleButton
+								Text="Alt"
+								@bind-Value="hk.IsAlt"
+								Size="ButtonSize.Medium"
+								ButtonStyle="ButtonStyle.Light"
+								ToggleButtonStyle="ButtonStyle.Primary"
+								Style="width: 8em;"
+							/>
+
+							<RadzenToggleButton
+								Text="Ctrl"
+								@bind-Value="hk.IsCtrl"
+								Size="ButtonSize.Medium"
+								ButtonStyle="ButtonStyle.Light"
+								ToggleButtonStyle="ButtonStyle.Primary"
+								Style="width: 8em;"
+							/>
+
+							<RadzenToggleButton
+								Text="Shift"
+								@bind-Value="hk.IsShift"
+								Size="ButtonSize.Medium"
+								ButtonStyle="ButtonStyle.Light"
+								ToggleButtonStyle="ButtonStyle.Primary"
+								Style="width: 8em;"
+							/>
+
+							<RadzenDropDown
+								@bind-Value="hk.Key"
+								Data=@(KeysValues)
+								Style="width: 100%; max-width: 400px;"
+								Name="AnimationTypeToggleOn1"
+							/>
+
+							<RadzenButton
+								Icon="delete"
+								Size="ButtonSize.Medium"
+								Click="@(() => AppOpts.Hotkeys.Remove(hk))"
+							/>
+						</RadzenStack>
+					}
+
+					<RadzenStack>
+						<RadzenButton
+							Icon="add"
+							Size="ButtonSize.Medium"
+							Click="@(() => AppOpts.Hotkeys.Add(new()))"
+						/>
+					</RadzenStack>
+				</RadzenStack>
+
+				<Descr>What hotkeys should toggle the app.</Descr>
+			</RadzenColumn>
+			<SettingGlobal/>
+		</RadzenRow>
+	</RadzenStack>
+</RadzenFieldset>

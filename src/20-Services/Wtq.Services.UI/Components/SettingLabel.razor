@@ -4,21 +4,19 @@
 	public string? Text { get; set; }
 
 	[Parameter]
-	public string? Component { get; set; }
+	public string? Subtext { get; set; }
 
 	[Parameter]
-	public bool IsOptional { get; set; }
-
-	public bool valuec;
+	public string? Component { get; set; }
 }
 
-<RadzenColumn Size="4" Class="rz-pt-2">
-	<RadzenStack Orientation="Orientation.Vertical">
+<RadzenColumn Size="4">
+	<RadzenStack Orientation="Orientation.Vertical" Gap="2">
 		<RadzenLabel Text="@Text" Component="@Component"/>
 
-		@if (IsOptional)
+		@if (Subtext != null)
 		{
-			<p class="rz-color-base-500 rz-m-0">optional</p>
+			<p class="rz-color-base-500 rz-m-0">@Subtext</p>
 		}
 	</RadzenStack>
 </RadzenColumn>

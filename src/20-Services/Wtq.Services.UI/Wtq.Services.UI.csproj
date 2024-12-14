@@ -22,8 +22,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Pages\App\" />
-	</ItemGroup>
 </Project>
