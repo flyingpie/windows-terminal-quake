@@ -25,7 +25,7 @@ public sealed class WtqAppOptions
 	public string? FileName { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
-	public bool? HideOnFocusLost { get; set; }
+	public HideOnFocusLost? HideOnFocusLost { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
 	public HorizontalAlign? HorizontalAlign { get; set; }
@@ -57,11 +57,11 @@ public sealed class WtqAppOptions
 	/// </summary>
 	public string? ProcessName { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.TaskBarIconVisibility"/>
-	public TaskBarIconVisibility? TaskbarIconVisibility { get; set; }
+	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
+	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
-	public IEnumerable<OffScreenLocation>? OffScreenLocations { get; init; }
+	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
 	public int? VerticalOffset { get; set; }

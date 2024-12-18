@@ -10,6 +10,14 @@
 			"FileName": "dolphin",
 			"HorizontalScreenCoverage": 80,
 			"AlwaysOnTop": true
+		},
+		// Example with Dolphin
+		{
+			"Name": "Dolphin",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "dolphin1",
+			"HorizontalScreenCoverage": 80,
+			"AlwaysOnTop": true
 		}
 	],
 

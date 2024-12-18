@@ -1,34 +1,13 @@
-@using System.ComponentModel.DataAnnotations
+@using Wtq.Services.UI.Extensions
+
 @inherits BaseAppPanel
 
 @code {
 
-	public int radioButtonValue;
-	public string? value1;
+	private KeyModifiers _testKeyModifiers;
+	private Keys _testKey;
 
-	private Keys[] KeysValues => Enum
-		.GetValues<Keys>()
-		.Select(k => new
-		{
-			Description = k.GetAttribute<Keys, DisplayAttribute>(),
-			Key = k,
-		})
-		.Where(k => k.Description != null)
-		.Select(k => k.Key)
-		.Distinct()
-		.ToArray();
-
-	public bool AlwaysOnTop
-	{
-		get => AppOpts?.AlwaysOnTop ?? WtqOptions.AlwaysOnTop;
-		set => AppOpts.AlwaysOnTop = value;
-	}
-
-	public int Opacity
-	{
-		get => AppOpts.Opacity ?? WtqOptions.Opacity;
-		set => AppOpts.Opacity = value;
-	}
+	private Keys[] KeysValues { get; } = WtqConstants.CommonKeys;
 
 	private class KeyDto
 	{
@@ -36,11 +15,22 @@
 
 		public string Description { get; set; }
 	}
+
+	private void HandleKeyDown(KeyboardEventArgs e)
+	{
+		e.ToModifiersAndKey(out var mod, out var key);
+
+		_testKeyModifiers = mod;
+		_testKey = key;
+
+		//value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
+	}
 }
 
 <RadzenFieldset Text="App">
 	<RadzenStack Gap="1rem">
 
+		<!-- Name -->
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Name" Component="Name"/>
 			<RadzenColumn Size="7">
@@ -52,24 +42,30 @@
 			</RadzenColumn>
 		</RadzenRow>
 
+		<!-- Hotkeys -->
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Hotkeys"/>
 			<RadzenColumn Size="7">
 
 				<RadzenStack>
+
+					@* MOD:@(_testKeyModifiers.GetDisplayDescription()) *@
+					@* KEY:@(_testKey.GetDisplayDescription()) *@
+
+					@*
+						TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable
+						registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
+					*@
+
+					@* <RadzenTextBox *@
+					@* 	Style="width: 100%;" *@
+					@* 	@onkeydown="(ev) => HandleKeyDown(ev)" *@
+					@* 	Placeholder="Type here to set hotkey." *@
+					@* 	Value="" *@
+					@* /> *@
+
 					@foreach (var hk in AppOpts?.Hotkeys ?? [])
 					{
-						@*
-							TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable
-							registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
-						*@
-						@* <RadzenTextBox *@
-						@* 	Style="width: 100%;" *@
-						@* 	@onkeydown="(ev) => HandleKeyDown(ev, hk)" *@
-						@* 	Placeholder="Type here to set hotkey." *@
-						@* 	Value="@hk.ToString()" *@
-						@* /> *@
-
 						<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
 							<!-- Alt -->

@@ -2,44 +2,58 @@
 
 @code {
 
-	public int radioButtonValue;
-	public int value;
+	public PreferMonitor PreferMonitor
+	{
+		get => AppOpts.PreferMonitor ?? WtqOptions.PreferMonitor;
+		set => AppOpts.PreferMonitor = value;
+	}
+
+	public int MonitorIndex
+	{
+		get => AppOpts.MonitorIndex ?? WtqOptions.MonitorIndex;
+		set => AppOpts.MonitorIndex = value;
+	}
 
 }
 
 <RadzenFieldset Text="Monitor">
 	<RadzenStack Gap="1rem">
 
+		<!-- Prefer Monitor -->
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Prefer monitor" Component="PreferMonitor"/>
 			<RadzenColumn Size="7">
-				<RadzenRadioButtonList @bind-Value=@radioButtonValue TValue="int"
-				                       Orientation="Orientation.Vertical">
+				<RadzenRadioButtonList @bind-Value="PreferMonitor" TValue="PreferMonitor" Orientation="Orientation.Vertical">
 					<Items>
-						<RadzenRadioButtonListItem Value="1" Text="With cursor"/>
-						<RadzenRadioButtonListItem Value="2" Text="Primary"/>
-						<RadzenRadioButtonListItem Value="3" Text="At index"/>
+						<RadzenRadioButtonListItem	Value="PreferMonitor.WithCursor"	Text="With cursor"/>
+						<RadzenRadioButtonListItem	Value="PreferMonitor.Primary"		Text="Primary"/>
+						<RadzenRadioButtonListItem	Value="PreferMonitor.AtIndex"		Text="At index"/>
 					</Items>
 				</RadzenRadioButtonList>
 
-				<Descr>
-					What
-					<Emph>monitor</Emph>
-					to toggle onto.
-				</Descr>
+				<Descr>What <Emph>monitor</Emph> to toggle onto.</Descr>
 			</RadzenColumn>
-			<SettingGlobal HasGlobalSetting="true"/>
+			<SettingGlobal
+				HasGlobalSetting="true"
+				IsOverridden="@(AppOpts?.PreferMonitor != null)"
+				Reset="@(() => ResetProp(() => AppOpts.PreferMonitor = null))"
+			/>
 		</RadzenRow>
 
+		<!-- Monitor Index -->
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Monitor Index" Component="MonitorIndex"/>
 			<RadzenColumn Size="7">
-				<RadzenNumeric @bind-Value="@value" Name="MonitorIndex" class="rz-mr-4" style="width: 80px;"/>
-				<RadzenSlider @bind-Value=@value TValue="int"/>
+				<RadzenNumeric @bind-Value="MonitorIndex" Name="MonitorIndex" class="rz-mr-4" style="width: 80px;"/>
+				<RadzenSlider @bind-Value="MonitorIndex" TValue="int" Min="0" Max="15"/>
 
 				<Descr>Which monitor to toggle the app onto.</Descr>
 			</RadzenColumn>
-			<SettingGlobal HasGlobalSetting="true"/>
+			<SettingGlobal
+				HasGlobalSetting="true"
+				IsOverridden="@(AppOpts?.MonitorIndex != null)"
+				Reset="@(() => ResetProp(() => AppOpts.MonitorIndex = null))"
+			/>
 		</RadzenRow>
 	</RadzenStack>
 </RadzenFieldset>

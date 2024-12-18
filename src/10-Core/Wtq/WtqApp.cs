@@ -295,13 +295,13 @@ public sealed class WtqApp : IAsyncDisposable
 		// Taskbar icon visibility.
 		switch (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options))
 		{
-			case TaskBarIconVisibility.AlwaysHidden:
+			case TaskbarIconVisibility.AlwaysHidden:
 				await Window.SetTaskbarIconVisibleAsync(false).NoCtx();
 				break;
-			case TaskBarIconVisibility.AlwaysVisible:
+			case TaskbarIconVisibility.AlwaysVisible:
 				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 				break;
-			case TaskBarIconVisibility.WhenAppVisible:
+			case TaskbarIconVisibility.WhenAppVisible:
 				await Window.SetTaskbarIconVisibleAsync(IsOpen).NoCtx();
 				break;
 			default:
