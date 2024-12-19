@@ -44,6 +44,8 @@ public abstract class WtqWindow
 
 	public abstract Task SetWindowTitleAsync(string title);
 
+	public abstract Task UpdateAsync();
+
 	public override string ToString() => $"[{Id}] {Name}";
 
 	#region Equality
