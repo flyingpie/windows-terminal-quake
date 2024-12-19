@@ -16,11 +16,11 @@ public sealed class HotkeyOptions
 		{
 			if (value)
 			{
-				Modifiers = Modifiers | KeyModifiers.Alt;
+				Modifiers |= KeyModifiers.Alt;
 			}
 			else
 			{
-				Modifiers = Modifiers & ~KeyModifiers.Alt;
+				Modifiers &= ~KeyModifiers.Alt;
 			}
 		}
 	}
@@ -32,11 +32,11 @@ public sealed class HotkeyOptions
 		{
 			if (value)
 			{
-				Modifiers = Modifiers | KeyModifiers.Control;
+				Modifiers |= KeyModifiers.Control;
 			}
 			else
 			{
-				Modifiers = Modifiers & ~KeyModifiers.Control;
+				Modifiers &= ~KeyModifiers.Control;
 			}
 		}
 	}
@@ -48,11 +48,11 @@ public sealed class HotkeyOptions
 		{
 			if (value)
 			{
-				Modifiers = Modifiers | KeyModifiers.Shift;
+				Modifiers |= KeyModifiers.Shift;
 			}
 			else
 			{
-				Modifiers = Modifiers & ~KeyModifiers.Shift;
+				Modifiers &= ~KeyModifiers.Shift;
 			}
 		}
 	}
