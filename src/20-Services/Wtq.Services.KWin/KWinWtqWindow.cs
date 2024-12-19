@@ -82,4 +82,6 @@ public class KWinWtqWindow(
 		// TODO
 		return Task.CompletedTask;
 	}
+
+	public override Task UpdateAsync() => Task.CompletedTask;
 }
