@@ -128,8 +128,8 @@ public sealed class WtqOptions
 	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
 	/// Defaults to "AlwaysHidden".
 	/// </summary>
-	public TaskBarIconVisibility TaskBarIconVisibility { get; init; }
-		= TaskBarIconVisibility.AlwaysHidden;
+	public TaskbarIconVisibility TaskbarIconVisibility { get; init; }
+		= TaskbarIconVisibility.AlwaysHidden;
 
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
@@ -194,11 +194,11 @@ public sealed class WtqOptions
 		return opts.Opacity ?? Opacity;
 	}
 
-	public TaskBarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
+	public TaskbarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.TaskbarIconVisibility ?? TaskBarIconVisibility;
+		return opts.TaskbarIconVisibility ?? TaskbarIconVisibility;
 	}
 
 	public IEnumerable<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)

@@ -57,8 +57,8 @@ public sealed class WtqAppOptions
 	/// </summary>
 	public string? ProcessName { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.TaskBarIconVisibility"/>
-	public TaskBarIconVisibility? TaskbarIconVisibility { get; set; }
+	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
+	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
 	public IEnumerable<OffScreenLocation>? OffScreenLocations { get; init; }

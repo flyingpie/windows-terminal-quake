@@ -3,7 +3,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Determines the visibility of the app's taskbar icon.
 /// </summary>
-public enum TaskBarIconVisibility
+public enum TaskbarIconVisibility
 {
 	/// <summary>
 	/// Never show the task bar icon.
