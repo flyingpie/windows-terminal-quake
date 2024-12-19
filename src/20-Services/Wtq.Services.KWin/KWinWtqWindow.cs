@@ -37,7 +37,7 @@ public class KWinWtqWindow(
 	{
 		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
-		return w.FrameGeometry.ToRect(); // TODO: Handle null.
+		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty; // TODO: Handle null.
 	}
 
 	public override bool Matches(WtqAppOptions opts)
