@@ -11,6 +11,8 @@ public class KWinWtqWindow(
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 	private readonly KWinWindow _window = Guard.Against.Null(window);
 
+	private bool _isActive = true;
+
 	public override string Id => _window.InternalId ?? "<unknown>";
 
 	/// <summary>
@@ -19,9 +21,10 @@ public class KWinWtqWindow(
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid { get; } = true;
+	public override bool IsValid => _isActive;
 
-	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
+	public override string? Name
+		=> $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
 
 	public override string? Title => _window?.Caption;
 
@@ -34,7 +37,7 @@ public class KWinWtqWindow(
 	{
 		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
-		return w.FrameGeometry.ToRect(); // TODO: Handle null.
+		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty; // TODO: Handle null.
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -47,9 +50,22 @@ public class KWinWtqWindow(
 			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
-		return
-			searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase) ||
-			searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase);
+		if (searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		if (searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && opts.WindowTitle.Equals(_window.Caption, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public override async Task MoveToAsync(Point location)
@@ -83,5 +99,10 @@ public class KWinWtqWindow(
 		return Task.CompletedTask;
 	}
 
-	public override Task UpdateAsync() => Task.CompletedTask;
+	public override async Task UpdateAsync()
+	{
+		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
+
+		_isActive = !string.IsNullOrWhiteSpace(w?.InternalId);
+	}
 }

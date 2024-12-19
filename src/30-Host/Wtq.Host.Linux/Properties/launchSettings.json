@@ -2,9 +2,9 @@
 	"profiles": {
 		"Wtq.Host.Linux": {
 			"commandName": "Project",
-			"workingDirectory": ".",
 			"environmentVariables": {
-				"WEBKIT_DISABLE_DMABUF_RENDERER": "1"
+				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
+				"WTQ_LOG_LEVEL_": "VERBOSE"
 			}
 		}
 	}

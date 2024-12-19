@@ -319,7 +319,11 @@ cmds["SET_WINDOW_ALWAYS_ON_TOP"] = (cmdInfo) => {
 
 	log.info(`Setting 'always on top'-state for window with internal id '${p.internalId}' to '${p.isAlwaysOnTop}'`);
 
-	w.keepAbove = p.isAlwaysOnTop;
+	// Booleans are currently coming in as strings, because by default booleans are serialized as _True_, which doesn't work in a KWin script.
+	// But if we try to set a boolean to a string, it's going to convert to "true" for anything but "", "0", and such.
+	// So explicitly convert the string to a boolean.
+	// We should look into better JSON boolean conversion, so booleans are non-strings and lower case.
+	w.keepAbove = p.isAlwaysOnTop == "true";
 };
 
 cmds["SET_WINDOW_OPACITY"] = (cmdInfo) => {

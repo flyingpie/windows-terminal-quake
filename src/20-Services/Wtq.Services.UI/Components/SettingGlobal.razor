@@ -1,0 +1,36 @@
+@inject TooltipService TooltipService
+
+@code {
+
+	[Parameter]
+	public bool HasGlobalSetting { get; set; }
+
+	[Parameter]
+	public bool IsOverridden { get; set; }
+
+	[Parameter]
+	public Action? Reset { get; set; }
+
+	void ShowTooltip(ElementReference elementReference, TooltipOptions options)
+		=> TooltipService.Open(
+			elementReference,
+			IsOverridden ? "Revert to global setting" : "Uses global setting",
+			options);
+}
+
+<RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
+
+	@if (HasGlobalSetting)
+	{
+		<RadzenToggleButton
+			Disabled="@(!IsOverridden)"
+			Icon="public"
+			Size="ButtonSize.Small"
+			ButtonStyle="ButtonStyle.Light"
+			ToggleButtonStyle="ButtonStyle.Primary"
+			MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Position = TooltipPosition.Left, }))"
+			Value="IsOverridden"
+			Click="() => Reset?.Invoke()"
+		/>
+	}
+</RadzenColumn>

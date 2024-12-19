@@ -124,8 +124,8 @@ public sealed class WtqService : IDisposable, IHostedService
 		// If the app that LOST focus is a WTQ app, toggle it off (depending on configuration).
 		if (appLostFocus != null)
 		{
-			// If the app has "hide on focus lost" set to FALSE, well, don't hide.
-			if (!_opts.CurrentValue.GetHideOnFocusLostForApp(appLostFocus.Options))
+			// If the app has "hide on focus lost" set to NEVER/FALSE, well, don't hide.
+			if (_opts.CurrentValue.GetHideOnFocusLostForApp(appLostFocus.Options) == HideOnFocusLost.Never)
 			{
 				return;
 			}

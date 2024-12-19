@@ -1,0 +1,151 @@
+@using Microsoft.Extensions.Options
+
+@inject IOptions<WtqOptions> WtqOptions
+@inject DialogService Dialog
+
+@page "/Apps"
+
+@code {
+
+	private static readonly string[] Names =
+	[
+		"Akira",
+		"Ambassador",
+		"Andromeda",
+		"Antares",
+		"Apollo",
+		"Archer",
+		"Bradbury",
+		"Cardenas",
+		"Centaur",
+		"Challenger",
+		"Cheyenne",
+		"Chimera",
+		"Columbia",
+		"Constellation",
+		"Constitution",
+		"Crossfield",
+		"Daedalus",
+		"Danube",
+		"Defiant",
+		"Deneva",
+		"Dreadnought",
+		"Einstein",
+		"Engle",
+		"Erewhon",
+		"Excelsior",
+		"Freedom",
+		"Freedom",
+		"Galaxy",
+		"Galen",
+		"Hokule'a",
+		"Hoover",
+		"Intrepid",
+		"Istanbul",
+		"Korolev",
+		"Luna",
+		"Magee",
+		"Malachowski",
+		"Mediterranean",
+		"Merced",
+		"Merian",
+		"Miranda",
+		"Mulciber",
+		"Nebula",
+		"New Orleans",
+		"Niagara",
+		"Nimitz",
+		"Norway",
+		"Nova",
+		"NX",
+		"Oberth",
+		"Odyssey",
+		"Olympic",
+		"Peregrine",
+		"Prometheus",
+		"Renaissance",
+		"Rigel",
+		"Saber",
+		"Sequoia",
+		"Shepard",
+		"Shuttlecraft",
+		"Sovereign",
+		"Soyuz",
+		"Springfield",
+		"Steamrunner",
+		"Surak",
+		"Sydney",
+		"Theophrastus",
+		"Undetermined",
+		"Universe",
+		"Vesta",
+		"Walker",
+		"Wambundu",
+		"Wells",
+		"Yellowstone",
+		"Yorkshire",
+		"Zodiac",
+	];
+
+	private static readonly Random _r = new();
+
+	private void AddApp()
+	{
+		WtqOptions.Value.Apps.Add(new()
+		{
+			Name = Names[_r.Next(0, Names.Length)],
+		});
+	}
+
+	private async Task DeleteAppAsync(WtqAppOptions app)
+	{
+		if (await Dialog.Confirm(
+			$"Delete app '{app.Name}'?", "Are you sure?",
+			new ConfirmOptions()
+			{
+				OkButtonText = "Yes",
+				CancelButtonText = "No",
+			}) ?? false)
+		{
+			WtqOptions.Value.Apps.Remove(app);
+		}
+	}
+}
+
+<h1>Apps</h1>
+
+<RadzenStack>
+	@foreach (var app in WtqOptions.Value.Apps)
+	{
+		<RadzenCard Variant="Variant.Flat" class="rz-p-0">
+
+			<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween">
+
+				<RadzenColumn Size="8">
+					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+						<h2 class="rz-mx-4">@app.Name</h2>
+					</RadzenStack>
+				</RadzenColumn>
+
+				<RadzenColumn Size="4">
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10" class="rz-m-3">
+						<RadzenButton Size="ButtonSize.Medium" Icon="search"/>
+						<RadzenButton Click="@(() => DeleteAppAsync(app))" Size="ButtonSize.Medium" Icon="delete" ButtonStyle="ButtonStyle.Danger"/>
+					</RadzenStack>
+				</RadzenColumn>
+
+			</RadzenRow>
+		</RadzenCard>
+	}
+
+	<RadzenCard Variant="Variant.Outlined" class="rz-p-0">
+		<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween">
+			<RadzenColumn Size="12">
+				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10" class="rz-m-3">
+					<RadzenButton Click="AddApp" Size="ButtonSize.Medium" Icon="add"/>
+				</RadzenStack>
+			</RadzenColumn>
+		</RadzenRow>
+	</RadzenCard>
+
+</RadzenStack>

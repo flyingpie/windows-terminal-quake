@@ -60,7 +60,7 @@ public sealed class WtqOptions
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
 	[Required]
-	public IEnumerable<WtqAppOptions> Apps { get; init; }
+	public ICollection<WtqAppOptions> Apps { get; init; }
 		= [];
 
 	/// <summary>
@@ -77,8 +77,8 @@ public sealed class WtqOptions
 	/// Whether the app should be toggled out when another app gets focus.<br/>
 	/// Defaults to "true".
 	/// </summary>
-	public bool HideOnFocusLost { get; init; }
-		= true;
+	public HideOnFocusLost HideOnFocusLost { get; init; }
+		= HideOnFocusLost.Always;
 
 	/// <summary>
 	/// Where to position an app on the chosen monitor, horizontally.<br/>
@@ -98,7 +98,7 @@ public sealed class WtqOptions
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	[Required]
-	public IEnumerable<HotkeyOptions> Hotkeys { get; init; }
+	public ICollection<HotkeyOptions> Hotkeys { get; init; }
 		= [];
 
 	/// <summary>
@@ -136,7 +136,7 @@ public sealed class WtqOptions
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </summary>
-	public IEnumerable<OffScreenLocation> OffScreenLocations { get; init; }
+	public ICollection<OffScreenLocation> OffScreenLocations { get; init; }
 		= [Above, Below, Left, Right];
 
 	/// <summary>
@@ -152,6 +152,18 @@ public sealed class WtqOptions
 	public float VerticalScreenCoverage { get; init; }
 		= 95f;
 
+	public WtqAppOptions? GetAppOptionsByName(string name)
+	{
+		Guard.Against.NullOrWhiteSpace(name);
+
+		return Apps.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+	}
+
+	public WtqAppOptions GetAppOptionsByNameRequired(string name)
+	{
+		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'.");
+	}
+
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
@@ -166,7 +178,7 @@ public sealed class WtqOptions
 		return opts.AttachMode ?? AttachMode;
 	}
 
-	public bool GetHideOnFocusLostForApp(WtqAppOptions opts)
+	public HideOnFocusLost GetHideOnFocusLostForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
@@ -201,7 +213,7 @@ public sealed class WtqOptions
 		return opts.TaskbarIconVisibility ?? TaskbarIconVisibility;
 	}
 
-	public IEnumerable<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
+	public ICollection<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 

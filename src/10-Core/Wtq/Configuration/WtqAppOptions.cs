@@ -12,7 +12,7 @@ public sealed class WtqAppOptions
 	public string? Arguments { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
-	public bool? AlwaysOnTop { get; init; }
+	public bool? AlwaysOnTop { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.AttachMode"/>
 	public AttachMode? AttachMode { get; set; }
@@ -25,7 +25,7 @@ public sealed class WtqAppOptions
 	public string? FileName { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
-	public bool? HideOnFocusLost { get; init; }
+	public HideOnFocusLost? HideOnFocusLost { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
 	public HorizontalAlign? HorizontalAlign { get; set; }
@@ -33,7 +33,7 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
 	public float? HorizontalScreenCoverage { get; set; }
 
-	public IEnumerable<HotkeyOptions> Hotkeys { get; set; } = [];
+	public List<HotkeyOptions> Hotkeys { get; set; } = [];
 
 	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
 	public int? MonitorIndex { get; set; }
@@ -61,13 +61,15 @@ public sealed class WtqAppOptions
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
-	public IEnumerable<OffScreenLocation>? OffScreenLocations { get; init; }
+	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
 	public int? VerticalOffset { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
 	public float? VerticalScreenCoverage { get; set; }
+
+	public string? WindowTitle { get; set; }
 
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
