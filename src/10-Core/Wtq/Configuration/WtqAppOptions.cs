@@ -33,7 +33,7 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
 	public float? HorizontalScreenCoverage { get; set; }
 
-	public List<HotkeyOptions> Hotkeys { get; set; } = [];
+	public ICollection<HotkeyOptions> Hotkeys { get; set; } = [];
 
 	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
 	public int? MonitorIndex { get; set; }
