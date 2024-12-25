@@ -23,7 +23,7 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqWindowResolver _windowResolver;
 	private readonly Worker _loop;
 
-	// private Rectangle? _originalRect;
+	private Rectangle? _originalRect;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
@@ -114,9 +114,13 @@ public sealed class WtqApp : IAsyncDisposable
 		await OpenAsync(ToggleModifiers.Instant).NoCtx();
 
 		// Restore original position.
-		var rect = new Rectangle(50, 50, 1280, 1024);
-		await ResizeWindowAsync(rect.Size).NoCtx();
-		await MoveWindowAsync(rect.Location).NoCtx();
+		// TODO: If the app closes when it is off-screen, and we restart WTQ, the "originalRect" will have saved the off-screen position.
+		// So perhaps only use its size here, and center it on the screen instead of using the original position.
+		if (_originalRect.HasValue)
+		{
+			await ResizeWindowAsync(_originalRect.Value.Size).NoCtx();
+			await MoveWindowAsync(_originalRect.Value.Location).NoCtx();
+		}
 
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
@@ -264,6 +268,9 @@ public sealed class WtqApp : IAsyncDisposable
 		_log.LogInformation("Attaching to window handle '{Window}' for app '{App}'", window, this);
 
 		Window = window;
+
+		// TODO: Original rect can be off-screen, in which case we may not want to store it as such.
+		_originalRect = await window.GetWindowRectAsync().NoCtx();
 
 		// Move the window off the screen ASAP (e.g. without animating).
 		await CloseAsync(ToggleModifiers.Instant).NoCtx();

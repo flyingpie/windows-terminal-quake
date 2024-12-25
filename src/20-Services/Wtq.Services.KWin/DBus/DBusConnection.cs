@@ -71,8 +71,6 @@ internal sealed class DBusConnection : IDBusConnection, IDisposable
 		_clientConnection.Dispose();
 		_serverConnection.Dispose();
 		_lock.Dispose();
-
-		Environment.Exit(0);
 	}
 
 	/// <inheritdoc/>
