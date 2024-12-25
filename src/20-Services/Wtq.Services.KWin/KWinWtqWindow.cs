@@ -47,9 +47,25 @@ public class KWinWtqWindow(
 			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
-		return
-			searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase) ||
-			searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase);
+		// Match by resource class (often reverse DNS notation).
+		if (searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by resource name (close to process name).
+		if (searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by window title.
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && opts.WindowTitle.Equals(_window.Caption, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public override async Task MoveToAsync(Point location)
