@@ -152,6 +152,18 @@ public sealed class WtqOptions
 	public float VerticalScreenCoverage { get; init; }
 		= 95f;
 
+	public WtqAppOptions? GetAppOptionsByName(string name)
+	{
+		Guard.Against.NullOrWhiteSpace(name);
+
+		return Apps.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+	}
+
+	public WtqAppOptions GetAppOptionsByNameRequired(string name)
+	{
+		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'.");
+	}
+
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
