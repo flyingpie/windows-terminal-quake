@@ -8,7 +8,10 @@ public static class WtqConstants
 	public static Uri GitHubUrl { get; }
 		= new("https://www.github.com/flyingpie/windows-terminal-quake");
 
-	public static AnimationType[] AnimationTypes { get; } = Enum
+	/// <summary>
+	/// Returns a list of <see cref="AnimationTypes"/> that include a <see cref="DisplayAttribute"/>, and de-duplicated.
+	/// </summary>
+	public static ICollection<AnimationType> AnimationTypes { get; } = Enum
 		.GetValues<AnimationType>()
 		.Select(k => new
 		{
@@ -20,7 +23,10 @@ public static class WtqConstants
 		.Distinct()
 		.ToArray();
 
-	public static Keys[] CommonKeys { get; } = Enum
+	/// <summary>
+	/// Returns a list of <see cref="Keys"/> that include a <see cref="DisplayAttribute"/>, and de-duplicated.
+	/// </summary>
+	public static ICollection<Keys> CommonKeys { get; } = Enum
 		.GetValues<Keys>()
 		.Select(k => new
 		{
