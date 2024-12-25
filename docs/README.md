@@ -1,19 +1,13 @@
 # Setup python virtual env
 https://python.land/virtual-environments/virtualenv
 
-Eg.
-```ps1
+```shell
 py -m venv py3
 ```
 
 # Activate virtual env
 
-Eg.
-```ps1
-py3\Scripts\Activate.ps1
-```
-
-```sh
+```shell
 source py3/bin/activate
 ```
 
@@ -21,25 +15,24 @@ source py3/bin/activate
 
 Under project folder:
 
-```python
+```shell
 pip install -r requirements.txt
 ```
 
 # Run dev server
 
-```ps1
+```shell
 mkdocs serve
 ```
 
 # Build docs
 
-```ps1
+```shell
 mkdocs build
 ```
 
 # Upgrade Pip packages
 
-```ps1
-pip install pip-upgrader
-pip-upgrader
+```shell
+cat requirements.txt | cut -f1 -d= | xargs pip install -U
 ```

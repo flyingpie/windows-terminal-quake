@@ -22,8 +22,6 @@
 
 		_testKeyModifiers = mod;
 		_testKey = key;
-
-		//value1 = $"[CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} META:{e.MetaKey}] KEY:{e.Key} CODE:{e.Code} REPEAT:{e.Repeat} TYPE:{e.Type}";
 	}
 }
 
@@ -53,8 +51,7 @@
 					@* KEY:@(_testKey.GetDisplayDescription()) *@
 
 					@*
-						TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable
-						registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
+						TODO: Textbox to auto-detect the pressed key. Works great, but we need to disable registered hotkeys for this to work properly, otherwise we're triggering already-bound apps.
 					*@
 
 					@* <RadzenTextBox *@

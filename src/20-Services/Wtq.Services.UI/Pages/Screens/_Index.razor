@@ -1,8 +1,8 @@
-@page "/Screens"
 @using System.Drawing
 
-@inject IWtqScreenInfoProvider ScreenInfoProvider
+@page "/screens"
 
+@inject IWtqScreenInfoProvider ScreenInfoProvider
 
 @code {
 
@@ -37,7 +37,7 @@
 
 }
 
-<h3>Screens</h3>
+<PageHead Icon="monitor">Screens</PageHead>
 
 <ul>
 	@foreach (var scr in _screens)
@@ -46,30 +46,26 @@
 	}
 </ul>
 
+<div style="position: relative; width: 100%; height:400px;">
+	@foreach (var scr in _screens)
+	{
+		<div style="
+			background-color:var(--rz-secondary);
+			border: 1px var(--rz-primary) solid;
 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
 
-
-	<div style="position: relative; width: 100%; height:400px;">
-		@foreach (var scr in _screens)
-		{
-			<div style="
-				background-color:var(--rz-secondary);
-				border: 1px var(--rz-primary) solid;
-
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-
-				position: absolute;
-				left: @Scale(_offset.X + scr.X)px;
-				top: @Scale(_offset.Y + scr.Y)px;
-				width: @Scale(scr.Width)px;
-				height: @Scale(scr.Height)px"
-			>
-				<div>@scr.Width x @scr.Height</div>
-				<div>(@scr.X, @scr.Y)</div>
-			</div>
-		}
-	</div>
-
+			position: absolute;
+			left: @Scale(_offset.X + scr.X)px;
+			top: @Scale(_offset.Y + scr.Y)px;
+			width: @Scale(scr.Width)px;
+			height: @Scale(scr.Height)px"
+		>
+			<div>@scr.Width x @scr.Height</div>
+			<div>(@scr.X, @scr.Y)</div>
+		</div>
+	}
+</div>

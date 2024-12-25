@@ -1,5 +1,3 @@
-@using Microsoft.Extensions.Options
-
 @inject IOptions<WtqOptions> WtqOptions
 
 <RadzenPanelMenu Style="margin-top: 1em;">
@@ -8,21 +6,21 @@
 
 	<hr/>
 
-	<RadzenPanelMenuItem	Text="Global Settings"		Icon="public"			Path="/GlobalSettings"/>
-	<RadzenPanelMenuItem	Text="Apps"					Icon="ad_group"			Path="/Apps">
+	<RadzenPanelMenuItem	Text="Global Settings"		Icon="public"			Path="/global-settings"/>
+	<RadzenPanelMenuItem	Text="Apps"					Icon="ad_group"			Path="/apps">
 
 		@foreach (var app in WtqOptions.Value.Apps)
 		{
-			<RadzenPanelMenuItem	Text="@app.Name"	Icon="circle"			Path="@($"/Apps/{app.Name}")"/>
+			<RadzenPanelMenuItem	Text="@app.Name"	Icon="circle"			Path="@($"/apps/{app.Name}")"/>
 		}
 
 	</RadzenPanelMenuItem>
 
 	<hr/>
 
-	<RadzenPanelMenuItem	Text="Windows"				Icon="select_window"	Path="/Windows"/>
-	<RadzenPanelMenuItem	Text="Screens"				Icon="monitor"			Path="/Screens"/>
-	<RadzenPanelMenuItem	Text="Logs"					Icon="subject"			Path="/Logs"/>
-	<RadzenPanelMenuItem	Text="Settings (JSON)"		Icon="data_object"		Path="/SettingsJson"/>
+	<RadzenPanelMenuItem	Text="Windows"				Icon="select_window"	Path="/windows"/>
+	<RadzenPanelMenuItem	Text="Screens"				Icon="monitor"			Path="/screens"/>
+	<RadzenPanelMenuItem	Text="Logs"					Icon="subject"			Path="/logs"/>
+	<RadzenPanelMenuItem	Text="Settings (JSON)"		Icon="data_object"		Path="/settings-json"/>
 
 </RadzenPanelMenu>

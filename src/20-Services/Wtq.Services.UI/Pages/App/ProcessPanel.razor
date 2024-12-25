@@ -2,9 +2,6 @@
 
 @code {
 
-	public int radioButtonValue;
-	public string? value1;
-
 	public AttachMode AttachMode
 	{
 		get => AppOpts.AttachMode ?? WtqOptions.AttachMode;
@@ -47,9 +44,7 @@
 			<RadzenColumn Size="7">
 				<RadzenTextBox @bind-Value="AppOpts.Arguments" Style="width: 100%;" Name="Arguments"/>
 
-				<Descr>
-					Additional <Emph>arguments</Emph> to pass to the process, when starting a new one.
-				</Descr>
+				<Descr>Additional <Emph>arguments</Emph> to pass to the process, when starting a new one.</Descr>
 			</RadzenColumn>
 			<SettingGlobal/>
 		</RadzenRow>
@@ -86,9 +81,7 @@
 					</Items>
 				</RadzenRadioButtonList>
 
-				<Descr>
-					How to get a reference to a running app.
-				</Descr>
+				<Descr>How to get a reference to a running app.</Descr>
 			</RadzenColumn>
 			<SettingGlobal
 				HasGlobalSetting="true"

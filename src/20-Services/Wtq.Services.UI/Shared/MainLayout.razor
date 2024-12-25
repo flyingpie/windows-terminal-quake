@@ -1,21 +1,13 @@
+@using Microsoft.AspNetCore.Components.Sections
 @inherits LayoutComponentBase
-
-@code {
-
-	private string _appVersion;
-
-	protected override void OnInitialized()
-	{
-		_appVersion = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
-	}
-
-}
 
 <RadzenComponents/>
 
 <RadzenLayout>
 	<RadzenSidebar>
 		<LeftNav/>
+
+		<div class="rz-color-base-500" style="margin-top: 1em; text-align: center;">WTQ @WtqConstants.AppVersion</div>
 	</RadzenSidebar>
 	<RadzenBody>
 		<div class="rz-p-4">
@@ -26,15 +18,9 @@
 			</RadzenRow>
 		</div>
 	</RadzenBody>
-	<RadzenFooter Style="padding: 1em;">
-		<RadzenStack Orientation="Orientation.Vertical" Gap="1em;">
-			<RadzenStack
-				Orientation="Orientation.Horizontal"
-				JustifyContent="JustifyContent.Center">
-				<RadzenColumn>WTQ @_appVersion</RadzenColumn>
-			</RadzenStack>
-		</RadzenStack>
-	</RadzenFooter>
+
+	<SectionOutlet SectionName="Footer" />
+
 </RadzenLayout>
 
 <style>
