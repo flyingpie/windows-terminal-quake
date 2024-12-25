@@ -1,10 +1,15 @@
 # Changelog
 
 ## [vFuture]
+- Update docs.
 
 ## [vNext]
-- First version of a graphical UI.
-- Update docs.
+
+## [2.0.12] / 2024-xx-xx
+- Generate a JSON schema file on WTQ start, next to wherever wtq.jsonc is (e.g. wtq.schema.json). This provides autocompletion and validation in supported editors (such as VS Code).
+- Initial work on a graphical UI.
+- Updated tray icon.
+- Apps can now be matched on their window title.
 
 ## [2.0.11] / 2024-11-07
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
