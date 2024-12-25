@@ -11,6 +11,8 @@ public class KWinWtqWindow(
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 	private readonly KWinWindow _window = Guard.Against.Null(window);
 
+	private bool _isValid = true;
+
 	public override string Id => _window.InternalId ?? "<unknown>";
 
 	/// <summary>
@@ -19,7 +21,7 @@ public class KWinWtqWindow(
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid { get; } = true;
+	public override bool IsValid => _isValid;
 
 	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
 
@@ -34,7 +36,8 @@ public class KWinWtqWindow(
 	{
 		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
-		return w.FrameGeometry.ToRect(); // TODO: Handle null.
+		// TODO: Handle null.
+		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty;
 	}
 
 	public override bool Matches(WtqAppOptions opts)
@@ -99,5 +102,10 @@ public class KWinWtqWindow(
 		return Task.CompletedTask;
 	}
 
-	public override Task UpdateAsync() => Task.CompletedTask;
+	public override async Task UpdateAsync()
+	{
+		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
+
+		_isValid = !string.IsNullOrWhiteSpace(w?.InternalId);
+	}
 }
