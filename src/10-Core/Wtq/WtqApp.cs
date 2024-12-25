@@ -114,6 +114,8 @@ public sealed class WtqApp : IAsyncDisposable
 		await OpenAsync(ToggleModifiers.Instant).NoCtx();
 
 		// Restore original position.
+		// TODO: If the app closes when it is off-screen, and we restart WTQ, the "originalRect" will have saved the off-screen position.
+		// So perhaps only use its size here, and center it on the screen instead of using the original position.
 		if (_originalRect.HasValue)
 		{
 			await ResizeWindowAsync(_originalRect.Value.Size).NoCtx();
