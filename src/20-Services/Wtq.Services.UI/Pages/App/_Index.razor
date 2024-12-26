@@ -35,13 +35,20 @@
 
 <SectionContent SectionName="Footer">
 	<RadzenFooter Style="padding: 1em;">
-		<RadzenStack Orientation="Orientation.Vertical" Gap="1em;">
-			<RadzenStack
-				Orientation="Orientation.Horizontal"
-				JustifyContent="JustifyContent.End">
-				<RadzenButton Text="Save" Icon="save" />
-				<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" />
+
+			<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+					<RadzenLabel class="rz-my-3" Text="@(WtqPaths.PreferredWtqConfigPath)" />
+					<RadzenButton Text="Open" />
+				</RadzenStack>
+
+				<RadzenStack
+					Orientation="Orientation.Horizontal"
+					JustifyContent="JustifyContent.End">
+					<RadzenButton Text="Save" Icon="save" />
+					<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" />
+				</RadzenStack>
 			</RadzenStack>
-		</RadzenStack>
+
 	</RadzenFooter>
 </SectionContent>

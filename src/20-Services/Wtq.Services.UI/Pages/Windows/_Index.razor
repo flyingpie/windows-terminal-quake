@@ -14,8 +14,14 @@
 
 <PageHead Icon="select_window">Windows</PageHead>
 
-<RadzenDataGrid Data="@_windows" GridLines="DataGridGridLines.Both" AllowPaging="true" AllowSorting="true"
-                Count="@_windows.Count" PageSize="25">
+<RadzenDataGrid
+	Data="@_windows"
+	GridLines="DataGridGridLines.Both"
+	AllowPaging="true"
+	AllowSorting="true"
+	Count="@_windows.Count"
+	PageSize="25"
+>
 	<Columns>
 		<RadzenDataGridColumn Width="320px" Property="@nameof(WtqWindow.Id)" Title="@nameof(WtqWindow.Id)">
 			<Template Context="item">
@@ -52,14 +58,6 @@
 						<span class="rz-color-base-400">(none)</span>
 					}
 					<RadzenLink Icon="content_copy"/>
-				</RadzenStack>
-			</Template>
-		</RadzenDataGridColumn>
-		<RadzenDataGridColumn>
-			<Template>
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" Gap="0">
-					<RadzenButton Size="ButtonSize.Small" Text="App Settings" Disabled="true"></RadzenButton>
-					<RadzenButton Size="ButtonSize.Small" Text="Create App"></RadzenButton>
 				</RadzenStack>
 			</Template>
 		</RadzenDataGridColumn>
