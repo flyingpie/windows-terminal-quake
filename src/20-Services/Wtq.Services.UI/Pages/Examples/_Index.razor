@@ -1,0 +1,45 @@
+@inject IOptions<WtqOptions> WtqOptions
+@inject DialogService Dialog
+@inject NavigationManager NavMan
+
+@page "/examples"
+
+@code {
+
+	private void AddApp(WtqAppExample example)
+	{
+
+	}
+
+}
+
+<PageHead Icon="preview">Example Configurations</PageHead>
+
+<RadzenRow>
+
+	@foreach (var example in WtqConstants.AppExamples)
+	{
+		<RadzenColumn Size="6">
+			<RadzenCard>
+				<RadzenStack
+					Orientation="Orientation.Horizontal"
+					AlignItems="AlignItems.Center"
+					JustifyContent="JustifyContent.SpaceBetween"
+					Gap="0"
+				>
+					<h2 style="margin: 0;">@example.Title</h2>
+					<RadzenButton Variant="Variant.Filled" Text="Add" />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+					<RadzenImage
+						Path="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.bleepstatic.com%2Fcontent%2Fhl-images%2F2020%2F09%2F22%2Fwindows-terminal-menu.jpg&f=1&nofb=1&ipt=6d332ffe6760995b46f2783487e2905c6126ffd492a229e94b2ca97b395be5f4&ipo=images"
+						style="width: 100%;"
+					/>
+				</RadzenStack>
+
+			</RadzenCard>
+		</RadzenColumn>
+	}
+
+</RadzenRow>

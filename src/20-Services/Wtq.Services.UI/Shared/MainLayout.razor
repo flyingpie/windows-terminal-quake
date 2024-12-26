@@ -1,13 +1,19 @@
-@using Microsoft.AspNetCore.Components.Sections
 @inherits LayoutComponentBase
 
 <RadzenComponents/>
 
 <RadzenLayout>
 	<RadzenSidebar>
-		<LeftNav/>
+		<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" style="height: 100%;">
+			<LeftNav/>
 
-		<div class="rz-color-base-500" style="margin-top: 1em; text-align: center;">WTQ @WtqConstants.AppVersion</div>
+			<RadzenStack AlignItems="AlignItems.Center" class="rz-mb-4" Gap="8">
+				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs</RadzenButton>
+				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub</RadzenButton>
+
+				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion</div>
+			</RadzenStack>
+		</RadzenStack>
 	</RadzenSidebar>
 	<RadzenBody>
 		<div class="rz-p-4">
@@ -18,8 +24,6 @@
 			</RadzenRow>
 		</div>
 	</RadzenBody>
-
-	<SectionOutlet SectionName="Footer" />
 
 </RadzenLayout>
 

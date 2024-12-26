@@ -1,7 +1,6 @@
 @inject IOptions<WtqOptions> WtqOptions
 
 @page "/apps/{AppId}"
-@using Microsoft.AspNetCore.Components.Sections
 
 @code {
 
@@ -33,22 +32,7 @@
 
 </RadzenStack>
 
-<SectionContent SectionName="Footer">
-	<RadzenFooter Style="padding: 1em;">
-
-			<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
-					<RadzenLabel class="rz-my-3" Text="@(WtqPaths.PreferredWtqConfigPath)" />
-					<RadzenButton Text="Open" />
-				</RadzenStack>
-
-				<RadzenStack
-					Orientation="Orientation.Horizontal"
-					JustifyContent="JustifyContent.End">
-					<RadzenButton Text="Save" Icon="save" />
-					<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" />
-				</RadzenStack>
-			</RadzenStack>
-
-	</RadzenFooter>
-</SectionContent>
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;">
+	<RadzenButton Text="Save" Icon="save" />
+	<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" />
+</RadzenStack>
