@@ -15,27 +15,36 @@
 
 <PageHead Icon="preview">Example Configurations</PageHead>
 
+<p>Here are some examples for apps that you can use with WTQ.</p>
+
+<p>Clicking <Emph>Add</Emph> will add an example entry to your settings, and take you there for further customization.</p>
+
 <RadzenRow>
 
 	@foreach (var example in WtqConstants.AppExamples)
 	{
 		<RadzenColumn Size="6">
 			<RadzenCard>
-				<RadzenStack
-					Orientation="Orientation.Horizontal"
-					AlignItems="AlignItems.Center"
-					JustifyContent="JustifyContent.SpaceBetween"
-					Gap="0"
-				>
-					<h2 style="margin: 0;">@example.Title</h2>
-					<RadzenButton Variant="Variant.Filled" Text="Add" />
-				</RadzenStack>
 
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+				<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+					<h2 style="margin: 0;">@example.Title</h2>
+
+					<p class="rz-m-0">@example.Description</p>
+
 					<RadzenImage
 						Path="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.bleepstatic.com%2Fcontent%2Fhl-images%2F2020%2F09%2F22%2Fwindows-terminal-menu.jpg&f=1&nofb=1&ipt=6d332ffe6760995b46f2783487e2905c6126ffd492a229e94b2ca97b395be5f4&ipo=images"
 						style="width: 100%;"
 					/>
+
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+						@if (example.Link != null)
+						{
+							<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" />
+						}
+
+						<RadzenButton Variant="Variant.Filled" Text="Add" />
+					</RadzenStack>
+
 				</RadzenStack>
 
 			</RadzenCard>

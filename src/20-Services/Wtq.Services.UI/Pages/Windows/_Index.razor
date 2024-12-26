@@ -3,9 +3,9 @@
 @inject IWtqWindowService WindowService
 
 @code {
-	private List<WtqWindow> _windows = [];
+	private List<WtqWindow>? _windows;
 
-	protected override async Task OnParametersSetAsync()
+	protected override async Task OnInitializedAsync()
 	{
 		_windows = (await WindowService.GetWindowsAsync(CancellationToken.None)).OrderBy(w => w.Name).ToList();
 	}
@@ -14,52 +14,55 @@
 
 <PageHead Icon="select_window">Windows</PageHead>
 
-<RadzenDataGrid
-	Data="@_windows"
-	GridLines="DataGridGridLines.Both"
-	AllowPaging="true"
-	AllowSorting="true"
-	Count="@_windows.Count"
-	PageSize="25"
->
-	<Columns>
-		<RadzenDataGridColumn Width="320px" Property="@nameof(WtqWindow.Id)" Title="@nameof(WtqWindow.Id)">
-			<Template Context="item">
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-					@item.Id
-					<RadzenLink Icon="content_copy"/>
-				</RadzenStack>
-			</Template>
-		</RadzenDataGridColumn>
-		<RadzenDataGridColumn Property="@nameof(WtqWindow.Name)" Title="@nameof(WtqWindow.Name)">
-			<Template Context="item">
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-					@if (!string.IsNullOrWhiteSpace(item.Name))
-					{
-						@item.Name
-					}
-					else
-					{
-						<span class="rz-color-base-400">(none)</span>
-					}
-					<RadzenLink Icon="content_copy"/>
-				</RadzenStack>
-			</Template>
-		</RadzenDataGridColumn>
-		<RadzenDataGridColumn Property="@nameof(WtqWindow.Title)" Title="@nameof(WtqWindow.Title)">
-			<Template Context="item">
-				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-					@if (!string.IsNullOrWhiteSpace(item.Title))
-					{
-						@item.Title
-					}
-					else
-					{
-						<span class="rz-color-base-400">(none)</span>
-					}
-					<RadzenLink Icon="content_copy"/>
-				</RadzenStack>
-			</Template>
-		</RadzenDataGridColumn>
-	</Columns>
-</RadzenDataGrid>
+@if (_windows != null)
+{
+	<RadzenDataGrid
+		Data="@_windows"
+		GridLines="DataGridGridLines.Both"
+		AllowPaging="true"
+		AllowSorting="true"
+		Count="@_windows.Count"
+		PageSize="25"
+	>
+		<Columns>
+			<RadzenDataGridColumn Width="320px" Property="@nameof(WtqWindow.Id)" Title="@nameof(WtqWindow.Id)">
+				<Template Context="item">
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+						@item.Id
+						<RadzenLink Icon="content_copy"/>
+					</RadzenStack>
+				</Template>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn Property="@nameof(WtqWindow.Name)" Title="@nameof(WtqWindow.Name)">
+				<Template Context="item">
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+						@if (!string.IsNullOrWhiteSpace(item.Name))
+						{
+							@item.Name
+						}
+						else
+						{
+							<span class="rz-color-base-400">(none)</span>
+						}
+						<RadzenLink Icon="content_copy"/>
+					</RadzenStack>
+				</Template>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn Property="@nameof(WtqWindow.Title)" Title="@nameof(WtqWindow.Title)">
+				<Template Context="item">
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+						@if (!string.IsNullOrWhiteSpace(item.Title))
+						{
+							@item.Title
+						}
+						else
+						{
+							<span class="rz-color-base-400">(none)</span>
+						}
+						<RadzenLink Icon="content_copy"/>
+					</RadzenStack>
+				</Template>
+			</RadzenDataGridColumn>
+		</Columns>
+	</RadzenDataGrid>
+}
