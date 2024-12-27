@@ -3,7 +3,7 @@
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Linux</RootNamespace>
 
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<OutputType>Exe</OutputType>
 
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>

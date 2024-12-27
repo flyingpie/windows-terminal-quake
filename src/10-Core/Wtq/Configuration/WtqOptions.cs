@@ -18,7 +18,7 @@ public sealed class WtqOptions
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
-	public int AnimationDurationMs { get; init; }
+	public int AnimationDurationMs { get; set; }
 		= 250;
 
 	/// <summary>
@@ -39,66 +39,66 @@ public sealed class WtqOptions
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
 	/// Defaults to 40.
 	/// </summary>
-	public int AnimationTargetFps { get; init; }
+	public int AnimationTargetFps { get; set; }
 		= 40;
 
 	/// <summary>
 	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
 	/// </summary>
-	public AnimationType AnimationTypeToggleOn { get; init; }
+	public AnimationType AnimationTypeToggleOn { get; set; }
 		= AnimationType.EaseOutQuart;
 
 	/// <summary>
 	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
 	/// </summary>
-	public AnimationType AnimationTypeToggleOff { get; init; }
+	public AnimationType AnimationTypeToggleOff { get; set; }
 		= AnimationType.EaseInQuart;
 
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
 	[Required]
-	public ICollection<WtqAppOptions> Apps { get; init; }
+	public ICollection<WtqAppOptions> Apps { get; set; }
 		= [];
 
 	/// <summary>
 	/// Whether the app should always be on top of other windows, regardless of whether it has focus.<br/>
 	/// Defaults to "false".
 	/// </summary>
-	public bool AlwaysOnTop { get; init; }
+	public bool AlwaysOnTop { get; set; }
 
 	/// <inheritdoc cref="WtqAppOptions.AttachMode"/>
-	public AttachMode AttachMode { get; init; }
+	public AttachMode AttachMode { get; set; }
 		= AttachMode.FindOrStart;
 
 	/// <summary>
 	/// Whether the app should be toggled out when another app gets focus.<br/>
 	/// Defaults to "true".
 	/// </summary>
-	public HideOnFocusLost HideOnFocusLost { get; init; }
+	public HideOnFocusLost HideOnFocusLost { get; set; }
 		= HideOnFocusLost.Always;
 
 	/// <summary>
 	/// Where to position an app on the chosen monitor, horizontally.<br/>
 	/// Defaults to <see cref="HorizontalAlign.Center"/>.
 	/// </summary>
-	public HorizontalAlign HorizontalAlign { get; init; }
+	public HorizontalAlign HorizontalAlign { get; set; }
 		= HorizontalAlign.Center;
 
 	/// <summary>
 	/// Horizontal screen coverage, as a percentage.<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public float HorizontalScreenCoverage { get; init; }
+	public float HorizontalScreenCoverage { get; set; }
 		= 95f;
 
 	/// <summary>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	[Required]
-	public ICollection<HotkeyOptions> Hotkeys { get; init; }
+	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
 	/// <summary>
@@ -106,21 +106,21 @@ public sealed class WtqOptions
 	/// Zero based, eg. 0, 1, etc.<br/>
 	/// Defaults to "0".
 	/// </summary>
-	public int MonitorIndex { get; init; }
+	public int MonitorIndex { get; set; }
 
 	/// <summary>
 	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
 	/// 0 (invisible) - 100 (opaque)..<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public int Opacity { get; init; }
+	public int Opacity { get; set; }
 		= 100;
 
 	/// <summary>
 	/// What monitor to preferrably drop the app.<br/>
 	/// "WithCursor" (default), "Primary" or "AtIndex".
 	/// </summary>
-	public PreferMonitor PreferMonitor { get; init; }
+	public PreferMonitor PreferMonitor { get; set; }
 		= PreferMonitor.WithCursor;
 
 	/// <summary>
@@ -128,7 +128,7 @@ public sealed class WtqOptions
 	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
 	/// Defaults to "AlwaysHidden".
 	/// </summary>
-	public TaskbarIconVisibility TaskbarIconVisibility { get; init; }
+	public TaskbarIconVisibility TaskbarIconVisibility { get; set; }
 		= TaskbarIconVisibility.AlwaysHidden;
 
 	/// <summary>
@@ -136,20 +136,20 @@ public sealed class WtqOptions
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </summary>
-	public ICollection<OffScreenLocation> OffScreenLocations { get; init; }
+	public ICollection<OffScreenLocation> OffScreenLocations { get; set; }
 		= [Above, Below, Left, Right];
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
-	public int VerticalOffset { get; init; }
+	public int VerticalOffset { get; set; }
 
 	/// <summary>
 	/// Vertical screen coverage as a percentage (0-100).<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public float VerticalScreenCoverage { get; init; }
+	public float VerticalScreenCoverage { get; set; }
 		= 95f;
 
 	public WtqAppOptions? GetAppOptionsByName(string name)

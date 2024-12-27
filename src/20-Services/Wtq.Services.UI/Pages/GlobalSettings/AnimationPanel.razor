@@ -9,8 +9,8 @@
 
 	// public AnimationType AnimationTypeToggleOn
 	// {
-	// 	get => AppOpts.AnimationTypeToggleOn ?? WtqOptions.AnimationTypeToggleOn;
-	// 	set => AppOpts.AnimationTypeToggleOn = value;
+	// 	get => WtqOptions.AnimationTypeToggleOn;
+	// 	set => WtqOptions.AnimationTypeToggleOn = value;
 	// }
 
 	// public AnimationType AnimationTypeToggleOff
@@ -29,7 +29,7 @@
 			<SettingLabel Text="Animation type (toggle on)" Component="AnimationTypeToggleOn"/>
 			<RadzenColumn Size="7">
 				<RadzenDropDown
-					@bind-Value="animOn"
+					@bind-Value="@(WtqOptions.AnimationTypeToggleOn)"
 					Data="AnimationTypes"
 					Style="width: 100%; max-width: 400px;"
 					Name="AnimationTypeToggleOn"
@@ -37,7 +37,6 @@
 
 				<Descr>The easing type to use when moving the app <Emph>onto</Emph> the screen.</Descr>
 			</RadzenColumn>
-			<SettingGlobal HasGlobalSetting="true"/>
 		</RadzenRow>
 
 		<!-- Animation Type Toggle Off -->

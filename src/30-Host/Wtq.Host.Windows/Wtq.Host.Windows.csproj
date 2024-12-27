@@ -3,7 +3,7 @@
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
 
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<ApplicationIcon>../../../assets/icon-v2-64.ico</ApplicationIcon>

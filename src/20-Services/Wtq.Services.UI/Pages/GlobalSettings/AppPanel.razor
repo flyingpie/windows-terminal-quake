@@ -7,8 +7,6 @@
 	private KeyModifiers _testKeyModifiers;
 	private Keys _testKey;
 
-	private ICollection<Keys> KeysValues { get; } = WtqConstants.CommonKeys;
-
 	private class KeyDto
 	{
 		public Keys Key { get; set; }
@@ -27,18 +25,6 @@
 
 <RadzenFieldset Text="App">
 	<RadzenStack Gap="1rem">
-
-		<!-- Name -->
-		<RadzenRow AlignItems="AlignItems.Start">
-			<SettingLabel Text="Name" Component="Name"/>
-			<RadzenColumn Size="7">
-				<RadzenTextBox @bind-Value="AppOpts.Name" Name="Name" style="width: 100%;"/>
-
-				<Descr>
-					A descriptive name, mostly used for logging.
-				</Descr>
-			</RadzenColumn>
-		</RadzenRow>
 
 		<!-- Hotkeys -->
 		<RadzenRow AlignItems="AlignItems.Start">

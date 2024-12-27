@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace Wtq.Configuration;
 
 [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
@@ -81,6 +79,7 @@ public enum Keys
 	/// <summary>
 	/// The ENTER key.
 	/// </summary>
+	[Display(Description = "Return (enter)")]
 	Enter = 0xD,
 
 	/// <summary>
@@ -107,27 +106,7 @@ public enum Keys
 	/// The CAPS LOCK key.
 	/// </summary>
 	[Display(Description = "Caps lock")]
-	Capital = 0x14,
-
-	/// <summary>
-	/// The CAPS LOCK key.
-	/// </summary>
 	CapsLock = 0x14,
-
-	/// <summary>
-	/// The IME Kana mode key.
-	/// </summary>
-	KanaMode = 0x15,
-
-	/// <summary>
-	/// The IME Hanguel mode key. (maintained for compatibility; use HangulMode).
-	/// </summary>
-	HanguelMode = 0x15,
-
-	/// <summary>
-	/// The IME Hangul mode key.
-	/// </summary>
-	HangulMode = 0x15,
 
 	/// <summary>
 	/// The IME Junja mode key.
@@ -189,18 +168,8 @@ public enum Keys
 	/// <summary>
 	/// The PAGE UP key.
 	/// </summary>
-	Prior = 0x21,
-
-	/// <summary>
-	/// The PAGE UP key.
-	/// </summary>
 	[Display(Description = "Page up")]
 	PageUp = 0x21,
-
-	/// <summary>
-	/// The PAGE DOWN key.
-	/// </summary>
-	Next = 0x22,
 
 	/// <summary>
 	/// The PAGE DOWN key.
@@ -258,11 +227,6 @@ public enum Keys
 	/// The EXECUTE key.
 	/// </summary>
 	Execute = 0x2B,
-
-	/// <summary>
-	/// The PRINT SCREEN key.
-	/// </summary>
-	Snapshot = 0x2C,
 
 	/// <summary>
 	/// The PRINT SCREEN key.
@@ -871,120 +835,70 @@ public enum Keys
 	LaunchMail = 0xB4,
 
 	/// <summary>
-	/// The select media key (Windows 2000 or later).
-	/// </summary>
-	SelectMedia = 0xB5,
-
-	/// <summary>
-	/// The start application one key (Windows 2000 or later).
-	/// </summary>
-	LaunchApplication1 = 0xB6,
-
-	/// <summary>
-	/// The start application two key (Windows 2000 or later).
-	/// </summary>
-	LaunchApplication2 = 0xB7,
-
-	/// <summary>
 	/// The OEM Semicolon key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = ";")]
+	[Display(Description = "; (semicolon)")]
 	OemSemicolon = 0xBA,
-
-	/// <summary>
-	/// The OEM 1 key.
-	/// </summary>
-	Oem1 = 0xBA,
 
 	/// <summary>
 	/// The OEM plus key on any country/region keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "+")]
+	[Display(Description = "+ (plus)")]
 	Oemplus = 0xBB,
 
 	/// <summary>
 	/// The OEM comma key on any country/region keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = ",")]
+	[Display(Description = ", (comma)")]
 	Oemcomma = 0xBC,
 
 	/// <summary>
 	/// The OEM minus key on any country/region keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "-")]
+	[Display(Description = "- (minus)")]
 	OemMinus = 0xBD,
 
 	/// <summary>
 	/// The OEM period key on any country/region keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = ".")]
+	[Display(Description = ". (period)")]
 	OemPeriod = 0xBE,
 
 	/// <summary>
 	/// The OEM question mark key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "?")]
+	[Display(Description = "? (question mark)")]
 	OemQuestion = 0xBF,
-
-	/// <summary>
-	/// The OEM 2 key.
-	/// </summary>
-	Oem2 = 0xBF,
 
 	/// <summary>
 	/// The OEM tilde key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "~")]
+	[Display(Description = "~ (tilde)")]
 	Oemtilde = 0xC0,
-
-	/// <summary>
-	/// The OEM 3 key.
-	/// </summary>
-	Oem3 = 0xC0,
 
 	/// <summary>
 	/// The OEM open bracket key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "[")]
+	[Display(Description = "[ (open bracket)")]
 	OemOpenBrackets = 0xDB,
-
-	/// <summary>
-	/// The OEM 4 key.
-	/// </summary>
-	Oem4 = 0xDB,
 
 	/// <summary>
 	/// The OEM pipe key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "|")]
+	[Display(Description = "| (pipe)")]
 	OemPipe = 0xDC,
-
-	/// <summary>
-	/// The OEM 5 key.
-	/// </summary>
-	Oem5 = 0xDC,
 
 	/// <summary>
 	/// The OEM close bracket key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "]")]
+	[Display(Description = "] (close bracket)")]
 	OemCloseBrackets = 0xDD,
-
-	/// <summary>
-	/// The OEM 6 key.
-	/// </summary>
-	Oem6 = 0xDD,
 
 	/// <summary>
 	/// The OEM singled/double quote key on a US standard keyboard (Windows 2000 or later).
 	/// </summary>
-	[Display(Description = "\"")]
+	[Display(Description = "\" (double quote)")]
 	OemQuotes = 0xDE,
-
-	/// <summary>
-	/// The OEM 7 key.
-	/// </summary>
-	Oem7 = 0xDE,
 
 	/// <summary>
 	/// The OEM 8 key.
@@ -997,46 +911,8 @@ public enum Keys
 	/// <summary>
 	/// or later).
 	/// </summary>
-	[Display(Description = "\\")]
+	[Display(Description = "\\ (backslash)")]
 	OemBackslash = 0xE2,
-
-	/// <summary>
-	/// The OEM 102 key.
-	/// </summary>
-	Oem102 = 0xE2,
-
-	/// <summary>
-	/// The PROCESS KEY key.
-	/// </summary>
-	ProcessKey = 0xE5,
-
-	/// <summary>
-	/// Used to pass Unicode characters as if they were keystrokes. The Packet key value.
-	/// </summary>
-	/// <summary>
-	/// is the low word of a 32-bit virtual-key value used for non-keyboard input methods.
-	/// </summary>
-	Packet = 0xE7,
-
-	/// <summary>
-	/// The ATTN key.
-	/// </summary>
-	Attn = 0xF6,
-
-	/// <summary>
-	/// The CRSEL key.
-	/// </summary>
-	Crsel = 0xF7,
-
-	/// <summary>
-	/// The EXSEL key.
-	/// </summary>
-	Exsel = 0xF8,
-
-	/// <summary>
-	/// The ERASE EOF key.
-	/// </summary>
-	EraseEof = 0xF9,
 
 	/// <summary>
 	/// The PLAY key.
@@ -1049,32 +925,7 @@ public enum Keys
 	Zoom = 0xFB,
 
 	/// <summary>
-	/// A constant reserved for future use.
-	/// </summary>
-	NoName = 0xFC,
-
-	/// <summary>
-	/// The PA1 key.
-	/// </summary>
-	Pa1 = 0xFD,
-
-	/// <summary>
 	/// The CLEAR key.
 	/// </summary>
 	OemClear = 0xFE,
-
-	/// <summary>
-	/// The SHIFT modifier key.
-	/// </summary>
-	Shift = 0x10000,
-
-	/// <summary>
-	/// The CTRL modifier key.
-	/// </summary>
-	Control = 0x20000,
-
-	/// <summary>
-	/// The ALT modifier key.
-	/// </summary>
-	Alt = 0x40000,
 }

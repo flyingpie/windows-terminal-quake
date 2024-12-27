@@ -1,0 +1,111 @@
+@inherits BaseAppPanel
+
+@code {
+
+	public AttachMode AttachMode
+	{
+		get => AppOpts.AttachMode ?? WtqOptions.AttachMode;
+		set => AppOpts.AttachMode = value;
+	}
+
+}
+
+<RadzenFieldset Text="Process">
+	<RadzenStack Gap="1rem">
+
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
+			See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on what values to use for <Emph>filename</Emph> and/or <Emph>process name</Emph>.
+		</RadzenAlert>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Filename" Component="FileName"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="AppOpts.FileName" Name="FileName" style="width: 100%;"/>
+
+				<Descr>
+					The <Emph>filename</Emph> to use when starting a new process for the app.
+					Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+				</Descr>
+			</RadzenColumn>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Process name" Component="ProcessName" Subtext="optional"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="AppOpts.ProcessName" Name="ProcessName" style="width: 100%;"/>
+
+				<Descr>
+					Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+					This field can be used to look for the process name in such cases. Windows Terminal is an
+					example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
+				</Descr>
+			</RadzenColumn>
+			<SettingGlobal/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Arguments" Component="Arguments" Subtext="optional"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="AppOpts.Arguments" Style="width: 100%;" Name="Arguments"/>
+
+				<Descr>Additional <Emph>arguments</Emph> to pass to the process, when starting a new one.</Descr>
+			</RadzenColumn>
+			<SettingGlobal/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Attach mode" Component="AttachMode"/>
+			<RadzenColumn Size="7">
+				<RadzenRadioButtonList @bind-Value="AttachMode" TValue="AttachMode" Orientation="Orientation.Vertical">
+					<Items>
+
+						<RadzenRadioButtonListItem Value="AttachMode.FindOrStart" Text="Find or Start">
+							<Template>
+								<p class="rz-m-0 rz-mx-2"><Emph>Find or Start;</Emph> looks for an existing instance, and creates one should none exist.</p>
+							</Template>
+						</RadzenRadioButtonListItem>
+
+						<RadzenRadioButtonListItem Value="AttachMode.Find" Text="Find only">
+							<Template>
+								<p class="rz-m-0 rz-mx-2"><Emph>Find only;</Emph> looks for an existing app instance, and does nothing should none be found.</p>
+							</Template>
+						</RadzenRadioButtonListItem>
+
+						<RadzenRadioButtonListItem Value="AttachMode.None" Text="Start always" Disabled="true">
+							<Template>
+								<p class="rz-m-0 rz-mx-2"><Emph>Start always;</Emph> always creates a new app instance, even if one already exists.</p>
+							</Template>
+						</RadzenRadioButtonListItem>
+
+						<RadzenRadioButtonListItem Value="AttachMode.Manual" Text="Manual">
+							<Template>
+								<p class="rz-m-0 rz-mx-2"><Emph>Maual;</Emph> attaches to whatever app has focus, when the hotkey is pressed.</p>
+							</Template>
+						</RadzenRadioButtonListItem>
+					</Items>
+				</RadzenRadioButtonList>
+
+				<Descr>How to get a reference to a running app.</Descr>
+			</RadzenColumn>
+			<SettingGlobal
+				HasGlobalSetting="true"
+				IsOverridden="@(AppOpts?.AttachMode != null)"
+				Reset="@(() => ResetProp(() => AppOpts.AttachMode = null))"
+			/>
+		</RadzenRow>
+
+		<RadzenRow AlignItems="AlignItems.Start">
+			<SettingLabel Text="Window title" Component="WindowTitle" Subtext="optional"/>
+			<RadzenColumn Size="7">
+				<RadzenTextBox @bind-Value="AppOpts.WindowTitle" Name="WindowTitle" style="width: 100%;"/>
+
+				<Descr>
+					Additionally uses the window title to filter app.<br/>
+					Can be useful for attaching to e.g. a browser window.
+				</Descr>
+			</RadzenColumn>
+			<SettingGlobal/>
+		</RadzenRow>
+
+	</RadzenStack>
+</RadzenFieldset>
