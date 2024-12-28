@@ -382,7 +382,6 @@ public sealed class Build : NukeBuild
 
 	private Target PublishLinux64 => _ => _
 		.DependsOn(Clean)
-		.DependsOn(PublishLinux64Aot)
 		.DependsOn(PublishLinux64FrameworkDependent)
 		.DependsOn(PublishLinux64SelfContained)
 		.Executes();
