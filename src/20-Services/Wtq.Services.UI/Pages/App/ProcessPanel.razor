@@ -41,6 +41,11 @@
 			</RadzenColumn>
 		</RadzenRow>
 
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary" Visible="@(AppOpts.FileName == "wt" && AppOpts.ProcessName != "WindowsTerminal")">
+            The filename suggests you're setting up <Emph>Windows Terminal</Emph>. Note that you need to set <Emph>Process name</Emph> to <Emph>WindowsTerminal</Emph>.
+            <RadzenButton Variant="Variant.Text" Click="@(() => AppOpts.ProcessName = "WindowsTerminal")" Text="Click here" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info" /> to do this now.
+		</RadzenAlert>
+
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Process name" Component="ProcessName" Subtext="optional"/>
 			<RadzenColumn Size="7">

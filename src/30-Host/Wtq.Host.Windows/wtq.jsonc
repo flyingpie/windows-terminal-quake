@@ -4,19 +4,19 @@
 
 	"Apps": [
 		// Example with PowerShell
-		{
-			"Name": "PowerShell",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
-		}
+		//{
+		//	"Name": "PowerShell",
+		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"FileName": "powershell"
+		//}
 
 		// Example with Windows Terminal
-		//{
-		//	"Name": "Terminal",
-		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-		//	"FileName": "wt",
-		//	"ProcessName": "WindowsTerminal"
-		//}
+		{
+			"Name": "Terminal",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"FileName": "wt",
+			"ProcessName": "WindowsTerminal"
+		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
@@ -37,5 +37,8 @@
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95
+	"VerticalScreenCoverage": 95,
+
+	"AnimationDurationMs": 150,
+	"AnimationTargetFps": 60
 }
