@@ -4,7 +4,7 @@
 			"commandName": "Project",
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
-				"WTQ_LOG_LEVEL_": "VERBOSE"
+				"__WTQ_LOG_LEVEL": "VERBOSE"
 			}
 		}
 	}

@@ -37,11 +37,7 @@
 					/>
 
 					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-						@if (example.Link != null)
-						{
-							<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" />
-						}
-
+						<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" Disabled="@(example.Link == null)" />
 						<RadzenButton Variant="Variant.Filled" Text="Add" />
 					</RadzenStack>
 

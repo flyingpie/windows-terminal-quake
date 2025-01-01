@@ -1,18 +1,20 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI : IHostedService, IWtqUIService
+public sealed class WtqUI : WtqHostedService, IWtqUIService
 {
 	private const string MainWindowTitle = "WTQ - Main Window";
 
+	private readonly ILogger _log = Log.For<WtqUI>();
 	private readonly IHostApplicationLifetime _appLifetime;
 	private readonly IWtqWindowService _windowService;
 	private readonly IWtqAppRepo _appRepo;
@@ -41,7 +43,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_provider = provider;
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
 		_uiThread = new Thread(StartUI);
 
@@ -55,9 +57,20 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		return Task.CompletedTask;
 	}
 
-	public Task StopAsync(CancellationToken cancellationToken)
+	protected override ValueTask OnDisposeAsync()
 	{
-		return Task.CompletedTask;
+		_uiThread?.Join();
+
+		// On Linux, for some reason, the app lingers a bit when closing.
+		// This seems to be a native thing, possibly around GTK.
+		// Doesn't happen when the UI is disabled, doesn't happen on Windows, and I can't pause the process, suggesting that .Net is already done.
+		// Workaround for now, to kill the entire process.
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			Process.GetCurrentProcess().Kill();
+		}
+
+		return ValueTask.CompletedTask;
 	}
 
 	public async Task CloseMainWindowAsync()
@@ -89,7 +102,20 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	public void RunOnUIThread(Action action)
 	{
-		_app?.MainWindow?.Invoke(action);
+		if (_isClosing)
+		{
+			_log.LogWarning("UI is stopping, skipping '{Name}' action", nameof(RunOnUIThread));
+			return;
+		}
+
+		try
+		{
+			_app?.MainWindow?.Invoke(action);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Error running action on UI thread: {Message}", ex.Message);
+		}
 	}
 
 	private async Task<WtqWindow?> FindWtqMainWindowAsync()
@@ -114,6 +140,8 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 
 	private void StartUI()
 	{
+		_log.LogDebug("UI thread starting");
+
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
 		// TODO: Unify with the main app DI.
@@ -130,10 +158,9 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 		_app = appBuilder.Build();
 
 		_app.MainWindow
+			.SetLogVerbosity(0)
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
 			.SetTitle(MainWindowTitle);
-
-//		_app.MainWindow.RegisterWindowCreatedHandler((s, a) => { _ = Task.Run(CloseMainWindowAsync); });
 
 		_app.MainWindow.RegisterWindowClosingHandler(
 			(s, a) =>
@@ -152,5 +179,7 @@ public sealed class WtqUI : IHostedService, IWtqUIService
 			});
 
 		_app.Run();
+
+		_log.LogDebug("UI thread exiting");
 	}
 }
