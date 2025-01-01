@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddRadzenComponents()
+			.AddTransient<Notifier>()
 			.AddHostedServiceSingleton<IWtqUIService, WtqUI>();
 	}
 }

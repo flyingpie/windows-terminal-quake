@@ -1,3 +1,4 @@
+using Wtq.Services;
 using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
@@ -18,6 +19,7 @@ public sealed class WtqOptions
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
+	[JsonDefaultValue(Default = 250)]
 	public int AnimationDurationMs { get; set; }
 		= 250;
 
@@ -26,6 +28,7 @@ public sealed class WtqOptions
 	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
 	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
 	/// </summary>
+	[JsonIgnore]
 	public int AnimationDurationMsWhenSwitchingApps
 	{
 		get => _animationDurationMsSwitchingApps
@@ -91,6 +94,7 @@ public sealed class WtqOptions
 	/// Horizontal screen coverage, as a percentage.<br/>
 	/// Defaults to "100".
 	/// </summary>
+	[JsonDefaultValue(Default = 95f)]
 	public float HorizontalScreenCoverage { get; set; }
 		= 95f;
 
@@ -149,6 +153,7 @@ public sealed class WtqOptions
 	/// Vertical screen coverage as a percentage (0-100).<br/>
 	/// Defaults to "100".
 	/// </summary>
+	[JsonDefaultValue(Default = 95f)]
 	public float VerticalScreenCoverage { get; set; }
 		= 95f;
 
@@ -161,7 +166,7 @@ public sealed class WtqOptions
 
 	public WtqAppOptions GetAppOptionsByNameRequired(string name)
 	{
-		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'.");
+		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", Apps.Select(a => a.Name))}.");
 	}
 
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)

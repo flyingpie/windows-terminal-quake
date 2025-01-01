@@ -1,0 +1,28 @@
+@inherits BaseSetting
+
+@code {
+
+	public int MonitorIndex
+	{
+		get => AppOpts.MonitorIndex ?? GlobalOpts.MonitorIndex;
+		set => WithNotify(() => AppOpts.MonitorIndex = value);
+	}
+
+	public PreferMonitor PreferMonitor => AppOpts.PreferMonitor ?? GlobalOpts.PreferMonitor;
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start" Visible="@(PreferMonitor == PreferMonitor.AtIndex)">
+	<SettingLabel Text="Monitor Index"/>
+	<RadzenColumn Size="7">
+		<RadzenNumeric @bind-Value="MonitorIndex" class="rz-mr-4" style="width: 80px;"/>
+		<RadzenSlider @bind-Value="MonitorIndex" TValue="int" Min="0" Max="15"/>
+
+		<Descr>Which monitor to toggle the app onto.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.MonitorIndex != null)"
+		Reset="@(() => AppOpts.MonitorIndex = null)"
+	/>
+</RadzenRow>

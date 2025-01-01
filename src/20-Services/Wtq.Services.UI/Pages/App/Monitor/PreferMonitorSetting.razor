@@ -1,0 +1,31 @@
+@inherits BaseSetting
+
+@code {
+
+	public PreferMonitor PreferMonitor
+	{
+		get => AppOpts.PreferMonitor ?? GlobalOpts.PreferMonitor;
+		set => WithNotify(() => AppOpts.PreferMonitor = value);
+	}
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Prefer monitor"/>
+	<RadzenColumn Size="7">
+		<RadzenRadioButtonList @bind-Value="PreferMonitor" TValue="PreferMonitor" Orientation="Orientation.Vertical">
+			<Items>
+				<RadzenRadioButtonListItem	Value="PreferMonitor.WithCursor"	Text="With cursor"/>
+				<RadzenRadioButtonListItem	Value="PreferMonitor.Primary"		Text="Primary"/>
+				<RadzenRadioButtonListItem	Value="PreferMonitor.AtIndex"		Text="At index"/>
+			</Items>
+		</RadzenRadioButtonList>
+
+		<Descr>What <Emph>monitor</Emph> to toggle onto.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.PreferMonitor != null)"
+		Reset="@(() => AppOpts.PreferMonitor = null)"
+	/>
+</RadzenRow>

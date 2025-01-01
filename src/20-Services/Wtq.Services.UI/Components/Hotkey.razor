@@ -6,7 +6,7 @@
 
 	[EditorRequired]
 	[Parameter]
-	public Func<Task> OnRemove { get; set; } = () => Task.CompletedTask;
+	public Action OnRemove { get; set; }
 
 }
 
@@ -54,6 +54,6 @@
 	<RadzenButton
 		Icon="delete"
 		Size="ButtonSize.Medium"
-		Click="@(async () => await OnRemove())"
+		Click="@(() => OnRemove())"
 	/>
 </RadzenStack>

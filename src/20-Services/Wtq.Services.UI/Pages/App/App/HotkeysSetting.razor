@@ -1,0 +1,25 @@
+@inherits BaseSetting
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Hotkeys"/>
+	<RadzenColumn Size="7">
+
+		<RadzenStack>
+
+			@foreach (var hk in AppOpts.Hotkeys)
+			{
+				<Hotkey Options="hk" OnRemove="@(() => AppOpts.Hotkeys.Remove(hk))" />
+			}
+
+			<RadzenStack>
+				<RadzenButton
+					Icon="add"
+					Size="ButtonSize.Medium"
+					Click="@(() => AppOpts.Hotkeys.Add(new()))"
+				/>
+			</RadzenStack>
+		</RadzenStack>
+
+		<Descr>What hotkeys should toggle the app.</Descr>
+	</RadzenColumn>
+</RadzenRow>

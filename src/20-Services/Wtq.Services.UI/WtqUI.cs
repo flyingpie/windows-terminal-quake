@@ -150,6 +150,8 @@ public sealed class WtqUI : WtqHostedService, IWtqUIService
 			.AddSingleton<IWtqWindowService>(p => _windowService)
 			.AddSingleton<IWtqScreenInfoProvider>(p => _screenInfoProvider)
 			.AddTransient<IOptions<WtqOptions>>(p => _provider.GetRequiredService<IOptions<WtqOptions>>())
+			.AddTransient<IOptionsMonitor<WtqOptions>>(p => _provider.GetRequiredService<IOptionsMonitor<WtqOptions>>())
+			.AddSingleton<WtqOptionsSaveService>()
 			.AddUI()
 			.AddLogging();
 

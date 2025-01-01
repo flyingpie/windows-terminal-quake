@@ -2,6 +2,9 @@
 
 @code {
 
+	[CascadingParameter]
+	public Notifier Notifier { get; set; }
+
 	[Parameter]
 	public bool HasGlobalSetting { get; set; }
 
@@ -16,6 +19,13 @@
 			elementReference,
 			IsOverridden ? "Revert to global setting" : "Uses global setting",
 			options);
+
+	void ResetN()
+	{
+		Reset?.Invoke();
+
+		Notifier.Notify();
+	}
 }
 
 <RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
@@ -30,7 +40,7 @@
 			ToggleButtonStyle="ButtonStyle.Primary"
 			MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Position = TooltipPosition.Left, }))"
 			Value="IsOverridden"
-			Click="() => Reset?.Invoke()"
+			Click="ResetN"
 		/>
 	}
 </RadzenColumn>

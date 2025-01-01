@@ -1,0 +1,20 @@
+<RadzenStack
+	Orientation="Orientation.Horizontal"
+	AlignItems="AlignItems.Center"
+	Gap="8"
+>
+
+	<!-- Argument -->
+	<RadzenTextBox
+		@bind-Value="Argument.Argument"
+		Style="width: 100%;"
+	/>
+
+	<!-- Remove button -->
+	<RadzenButton
+		Icon="delete"
+		Size="ButtonSize.Medium"
+		Click="@(() => OnRemove())"
+	/>
+
+</RadzenStack>
