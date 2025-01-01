@@ -20,7 +20,19 @@
 		<RadzenRow AlignItems="AlignItems.Start">
 			<SettingLabel Text="Filename" Component="FileName"/>
 			<RadzenColumn Size="7">
-				<RadzenTextBox @bind-Value="AppOpts.FileName" Name="FileName" style="width: 100%;"/>
+				<RadzenTextBox @bind-Value="AppOpts.FileName" Name="FileName" style="width: 100%;" @oninput="@(i => AppOpts.FileName = i.Value?.ToString())"/>
+
+				@if (!string.IsNullOrWhiteSpace(AppOpts.FileName))
+				{
+					@if (Os.IsCallable(AppOpts.FileName))
+					{
+						<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p>
+					}
+					else
+					{
+						<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p>
+					}
+				}
 
 				<Descr>
 					The <Emph>filename</Emph> to use when starting a new process for the app.

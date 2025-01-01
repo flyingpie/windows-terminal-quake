@@ -4,6 +4,16 @@ namespace Wtq.Utils;
 
 public static class Os
 {
+	public static bool IsCallable(string fileName)
+	{
+		if (File.Exists(fileName))
+		{
+			return true;
+		}
+
+		return ExistsOnPath(fileName);
+	}
+
 	public static bool ExistsOnPath(string fileName)
 	{
 		return GetFullPath(fileName) != null;
@@ -36,8 +46,7 @@ public static class Os
 		Process.Start(
 			new ProcessStartInfo()
 			{
-				FileName = path,
-				UseShellExecute = true,
+				FileName = path, UseShellExecute = true,
 			});
 	}
 

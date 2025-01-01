@@ -34,6 +34,7 @@ public abstract class WtqWindow
 
 	public abstract Task MoveToAsync(Point location);
 
+	// TODO: Warn or disallow sizes below a certain threshold? Seems to happend occasionally.
 	public abstract Task ResizeAsync(Size size);
 
 	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
