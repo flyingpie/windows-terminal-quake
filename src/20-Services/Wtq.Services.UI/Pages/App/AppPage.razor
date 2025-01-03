@@ -48,11 +48,18 @@
 		NavMan.Refresh(forceReload: true);
 	}
 
+	public void DoStuff()
+	{
+		GlobalOpts.OffScreenLocations = [OffScreenLocation.Above, OffScreenLocation.Below];
+	}
+
 }
 
 <PageHead Icon="circle">
 	App <span class="rz-color-primary">@AppId</span>
 </PageHead>
+
+<RadzenButton Click="DoStuff" />
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
