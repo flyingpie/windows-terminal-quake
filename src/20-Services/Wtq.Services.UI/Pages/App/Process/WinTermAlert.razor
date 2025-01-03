@@ -1,0 +1,23 @@
+@inherits BaseSetting
+
+@code {
+	const string WtFilename = "wt";
+	const string WtProcName = "WindowsTerminal";
+}
+
+<RadzenAlert
+	AllowClose="false"
+	AlertStyle="AlertStyle.Secondary"
+	Visible="@(AppOpts.FileName == WtFilename && AppOpts.ProcessName != WtProcName)"
+>
+
+	The filename suggests you're setting up <Emph>Windows Terminal</Emph>. Note that you need to set <Emph>Process name</Emph> to <Emph>@WtProcName</Emph>.
+
+	<RadzenButton
+		Variant="Variant.Text"
+		Click="@(() => AppOpts.ProcessName = WtProcName)"
+		Text="Click here"
+		Size="ButtonSize.Small"
+		ButtonStyle="ButtonStyle.Info"
+	/> to do this now.
+</RadzenAlert>

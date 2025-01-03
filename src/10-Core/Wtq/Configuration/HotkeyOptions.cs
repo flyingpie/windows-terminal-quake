@@ -9,6 +9,7 @@ public sealed class HotkeyOptions
 
 	public KeyModifiers Modifiers { get; set; }
 
+	[JsonIgnore]
 	public bool IsAlt
 	{
 		get => Modifiers.HasFlag(KeyModifiers.Alt);
@@ -25,6 +26,7 @@ public sealed class HotkeyOptions
 		}
 	}
 
+	[JsonIgnore]
 	public bool IsCtrl
 	{
 		get => Modifiers.HasFlag(KeyModifiers.Control);
@@ -41,6 +43,7 @@ public sealed class HotkeyOptions
 		}
 	}
 
+	[JsonIgnore]
 	public bool IsShift
 	{
 		get => Modifiers.HasFlag(KeyModifiers.Shift);

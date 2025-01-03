@@ -1,0 +1,20 @@
+@inherits BaseSetting
+
+@code {
+
+	public int value; // TODO
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Animation duration"/>
+	<RadzenColumn Size="7">
+		<RadzenNumeric @bind-Value="value" class="rz-mr-4" style="width: 80px;"/>
+		<RadzenSlider @bind-Value="value" TValue="int"/>
+
+		<Descr>How long it should take for the app to toggle onto or -off the screen.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+	/>
+</RadzenRow>

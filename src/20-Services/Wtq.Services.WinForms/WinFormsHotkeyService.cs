@@ -2,8 +2,7 @@ using Wtq.Services.WinForms.Native;
 
 namespace Wtq.Services.WinForms;
 
-public sealed class WinFormsHotkeyService
-	: IDisposable, IHostedService
+public sealed class WinFormsHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
@@ -34,19 +33,17 @@ public sealed class WinFormsHotkeyService
 		};
 	}
 
-	public void Dispose()
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		// TODO: Currently necessary to make sure this service is constructed.
+		// Maybe remove IHostedService and manually resolve this type on app startup?
+		return Task.CompletedTask;
+	}
+
+	protected override ValueTask OnDisposeAsync()
 	{
 		HotkeyManager.Exit();
-	}
 
-	public Task StartAsync(CancellationToken cancellationToken)
-	{
-		// Only here to make sure an instance of this class is created.
-		return Task.CompletedTask;
-	}
-
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		return Task.CompletedTask;
+		return ValueTask.CompletedTask;
 	}
 }

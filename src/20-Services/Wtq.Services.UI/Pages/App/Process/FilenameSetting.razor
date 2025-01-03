@@ -1,0 +1,33 @@
+@inherits BaseSetting
+
+@code {
+	public string FileName
+	{
+		get => AppOpts.FileName;
+		set => WithNotify(() => AppOpts.FileName = value);
+	}
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Filename"/>
+	<RadzenColumn Size="7">
+		<RadzenTextBox @bind-Value="FileName" style="width: 100%;" @oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)"/>
+
+		@if (!string.IsNullOrWhiteSpace(FileName))
+		{
+			@if (Os.IsCallable(FileName))
+			{
+				<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p>
+			}
+			else
+			{
+				<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p>
+			}
+		}
+
+		<Descr>
+			The <Emph>filename</Emph> to use when starting a new process for the app.
+			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
+		</Descr>
+	</RadzenColumn>
+</RadzenRow>

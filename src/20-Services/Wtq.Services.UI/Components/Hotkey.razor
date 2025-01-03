@@ -1,0 +1,59 @@
+@code {
+
+	[EditorRequired]
+	[Parameter]
+	public HotkeyOptions Options { get; set; } = new();
+
+	[EditorRequired]
+	[Parameter]
+	public Action OnRemove { get; set; }
+
+}
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+
+	<!-- Alt -->
+	<RadzenToggleButton
+		Text="Alt"
+		@bind-Value="Options.IsAlt"
+		Size="ButtonSize.Medium"
+		ButtonStyle="ButtonStyle.Light"
+		ToggleButtonStyle="ButtonStyle.Primary"
+		Style="width: 8em;"
+	/>
+
+	<!-- Ctrl -->
+	<RadzenToggleButton
+		Text="Ctrl"
+		@bind-Value="Options.IsCtrl"
+		Size="ButtonSize.Medium"
+		ButtonStyle="ButtonStyle.Light"
+		ToggleButtonStyle="ButtonStyle.Primary"
+		Style="width: 8em;"
+	/>
+
+	<!-- Shift -->
+	<RadzenToggleButton
+		Text="Shift"
+		@bind-Value="Options.IsShift"
+		Size="ButtonSize.Medium"
+		ButtonStyle="ButtonStyle.Light"
+		ToggleButtonStyle="ButtonStyle.Primary"
+		Style="width: 8em;"
+	/>
+
+	<!-- Key -->
+	<RadzenDropDown
+		@bind-Value="Options.Key"
+		Data="@(WtqConstants.CommonKeys)"
+		Style="width: 100%; max-width: 400px;"
+		Name="AnimationTypeToggleOn1"
+	/>
+
+	<!-- Remove button -->
+	<RadzenButton
+		Icon="delete"
+		Size="ButtonSize.Medium"
+		Click="@(() => OnRemove())"
+	/>
+</RadzenStack>

@@ -1,0 +1,70 @@
+@inject IOptions<WtqOptions> WtqOptions
+@inject DialogService Dialog
+@inject NavigationManager NavMan
+
+@page "/apps"
+
+@code {
+
+	private static readonly Random _r = new();
+
+	private void AddApp()
+	{
+		WtqOptions.Value.Apps.Add(new()
+		{
+			Name = WtqConstants.GetRandomPlaceholderName(),
+		});
+	}
+
+	private async Task DeleteAppAsync(WtqAppOptions app)
+	{
+		if (await Dialog.Confirm(
+			$"Delete app '{app.Name}'?", "Are you sure?",
+			new ConfirmOptions()
+			{
+				OkButtonText = "Yes",
+				CancelButtonText = "No",
+			}) ?? false)
+		{
+			WtqOptions.Value.Apps.Remove(app);
+		}
+	}
+}
+
+<PageHead Icon="ad_group">Apps</PageHead>
+
+<RadzenStack>
+	@foreach (var app in WtqOptions.Value.Apps)
+	{
+		<RadzenCard Variant="Variant.Flat" class="rz-p-0">
+
+			<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween">
+
+				<RadzenColumn Size="8">
+					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+						<h2 class="rz-mx-4">@app.Name</h2>
+					</RadzenStack>
+				</RadzenColumn>
+
+				<RadzenColumn Size="4">
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10" class="rz-m-3">
+						<RadzenButton Size="ButtonSize.Medium" Icon="search" Text="Settings" Click="@(() => NavMan.NavigateTo($"/apps/{app.Name}"))" />
+						<RadzenButton Click="@(() => DeleteAppAsync(app))" Size="ButtonSize.Medium" Icon="delete" ButtonStyle="ButtonStyle.Danger" Text="Delete" />
+					</RadzenStack>
+				</RadzenColumn>
+
+			</RadzenRow>
+		</RadzenCard>
+	}
+
+	<RadzenCard Variant="Variant.Outlined" class="rz-p-0">
+		<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween">
+			<RadzenColumn Size="12">
+				<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10" class="rz-m-3">
+					<RadzenButton Click="AddApp" Size="ButtonSize.Medium" Icon="add" Text="Add" />
+				</RadzenStack>
+			</RadzenColumn>
+		</RadzenRow>
+	</RadzenCard>
+
+</RadzenStack>

@@ -1,0 +1,23 @@
+@inherits BaseSetting
+
+@code {
+
+	public AnimationType animOn; // TODO
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Animation type (toggle off)"/>
+	<RadzenColumn Size="7">
+		<RadzenDropDown
+			@bind-Value="animOn"
+			Data="WtqConstants.AnimationTypes"
+			Style="width: 100%; max-width: 400px;"
+		/>
+
+		<Descr>The easing type to use when moving the app <Emph>off</Emph> the screen.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+	/>
+</RadzenRow>

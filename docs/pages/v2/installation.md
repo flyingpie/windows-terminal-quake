@@ -70,4 +70,4 @@ src/Wtq.sln
 
 Build the solution (by default Ctrl + Shift + B).
 
-The build output is under **~/_output/build/bin/Wtq.Windows/net8.0-windows**.
+The build output is under **~/_output/build/bin/Wtq.Windows/net9.0-windows**.

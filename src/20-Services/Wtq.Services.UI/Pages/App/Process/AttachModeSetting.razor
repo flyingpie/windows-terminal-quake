@@ -1,0 +1,52 @@
+@inherits BaseSetting
+
+@code {
+
+	public AttachMode AttachMode
+	{
+		get => AppOpts.AttachMode ?? GlobalOpts.AttachMode;
+		set => AppOpts.AttachMode = value;
+	}
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Attach mode" Component="AttachMode"/>
+	<RadzenColumn Size="7">
+		<RadzenRadioButtonList @bind-Value="AttachMode" TValue="AttachMode" Orientation="Orientation.Vertical">
+			<Items>
+
+				<RadzenRadioButtonListItem Value="AttachMode.FindOrStart" Text="Find or Start">
+					<Template>
+						<p class="rz-m-0 rz-mx-2"><Emph>Find or Start;</Emph> looks for an existing instance, and creates one should none exist.</p>
+					</Template>
+				</RadzenRadioButtonListItem>
+
+				<RadzenRadioButtonListItem Value="AttachMode.Find" Text="Find only">
+					<Template>
+						<p class="rz-m-0 rz-mx-2"><Emph>Find only;</Emph> looks for an existing app instance, and does nothing should none be found.</p>
+					</Template>
+				</RadzenRadioButtonListItem>
+
+				<RadzenRadioButtonListItem Value="AttachMode.None" Text="Start always" Disabled="true">
+					<Template>
+						<p class="rz-m-0 rz-mx-2"><Emph>Start always;</Emph> always creates a new app instance, even if one already exists.</p>
+					</Template>
+				</RadzenRadioButtonListItem>
+
+				<RadzenRadioButtonListItem Value="AttachMode.Manual" Text="Manual">
+					<Template>
+						<p class="rz-m-0 rz-mx-2"><Emph>Maual;</Emph> attaches to whatever app has focus, when the hotkey is pressed.</p>
+					</Template>
+				</RadzenRadioButtonListItem>
+			</Items>
+		</RadzenRadioButtonList>
+
+		<Descr>How to get a reference to a running app.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.AttachMode != null)"
+		Reset="@(() => AppOpts.AttachMode = null)"
+	/>
+</RadzenRow>

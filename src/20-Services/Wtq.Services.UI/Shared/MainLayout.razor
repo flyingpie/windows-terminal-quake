@@ -1,54 +1,30 @@
 @inherits LayoutComponentBase
-@inject IWtqAppRepo AppRepo
-
-@code {
-
-	private string _appVersion;
-
-	protected override void OnInitialized()
-	{
-		_appVersion = typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
-	}
-
-}
 
 <RadzenComponents/>
 
 <RadzenLayout>
 	<RadzenSidebar>
-		<RadzenPanelMenu Style="margin-top: 1em;">
-			<RadzenPanelMenuItem Text="Welcome" Icon="home" Path="/"/>
-			<hr/>
-			<RadzenPanelMenuItem Text="Global Settings" Icon="public" Path="/GlobalSettings"/>
-			<RadzenPanelMenuItem Text="Apps" Icon="ad_group" Path="/Apps">
+		<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" style="height: 100%;">
+			<LeftNav/>
 
-				@foreach (var app in AppRepo.GetAll())
-				{
-					<RadzenPanelMenuItem Text="@app.Name" Icon="circle" Path="@($"/Apps/{app.Name}")"/>
-				}
+			<RadzenStack AlignItems="AlignItems.Center" class="rz-mb-4" Gap="8">
+				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs</RadzenButton>
+				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub</RadzenButton>
 
-			</RadzenPanelMenuItem>
-			<hr/>
-			<RadzenPanelMenuItem Text="Windows" Icon="select_window" Path="/Windows"/>
-			<RadzenPanelMenuItem Text="Screens" Icon="monitor" Path="/Screens"/>
-			<RadzenPanelMenuItem Text="Logs" Icon="subject" Path="/Logs"/>
-			<RadzenPanelMenuItem Text="Settings (JSON)" Icon="data_object" Path="/SettingsJson"/>
-		</RadzenPanelMenu>
-	</RadzenSidebar>
-	<RadzenBody>
-		<div class="rz-p-2">
-			@Body
-		</div>
-	</RadzenBody>
-	<RadzenFooter Style="padding: 1em;">
-		<RadzenStack Orientation="Orientation.Vertical" Gap="1em;">
-			<RadzenStack
-				Orientation="Orientation.Horizontal"
-				JustifyContent="JustifyContent.Center">
-				<RadzenColumn>WTQ @_appVersion</RadzenColumn>
+				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion</div>
 			</RadzenStack>
 		</RadzenStack>
-	</RadzenFooter>
+	</RadzenSidebar>
+	<RadzenBody>
+		<div class="rz-p-4">
+			<RadzenRow>
+				<RadzenColumn OffsetLG="2" SizeLG="8">
+					@Body
+				</RadzenColumn>
+			</RadzenRow>
+		</div>
+	</RadzenBody>
+
 </RadzenLayout>
 
 <style>

@@ -3,7 +3,7 @@
 		<AssemblyName>Wtq.Services.KWin.UnitTest</AssemblyName>
 		<RootNamespace>Wtq.Services.KWin.UnitTest</RootNamespace>
 
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

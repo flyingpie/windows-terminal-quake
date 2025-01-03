@@ -1,0 +1,23 @@
+@inherits BaseSetting
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Arguments" Component="Arguments" Subtext="optional"/>
+	<RadzenColumn Size="7">
+		<RadzenStack>
+			@foreach (var arg in AppOpts.ArgumentsList)
+			{
+				<ProcessArg Argument="arg" OnRemove="@(() => AppOpts.ArgumentsList.Remove(arg))" />
+			}
+
+			<RadzenStack>
+				<RadzenButton
+					Icon="add"
+					Size="ButtonSize.Medium"
+					Click="@(() => AppOpts.ArgumentsList.Add(new()))"
+				/>
+			</RadzenStack>
+		</RadzenStack>
+
+		<Descr>Additional <Emph>arguments</Emph> to pass to the process, when starting a new one.</Descr>
+	</RadzenColumn>
+</RadzenRow>
