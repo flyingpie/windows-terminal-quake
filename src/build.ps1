@@ -22,6 +22,7 @@ $DotNetChannel = "STS"
 
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 $env:DOTNET_NOLOGO = 1
+$env:NUKE_TELEMETRY_OPTOUT = 1
 
 ###########################################################################
 # EXECUTION
