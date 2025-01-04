@@ -21,9 +21,10 @@ public sealed class TrayIcon : IDisposable
 			var contextMenu = new ContextMenuStrip();
 
 			contextMenu.Items.AddRange(
+			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion}",
-					() => { },
+					() => {},
 					enabled: false),
 
 				new ToolStripSeparator(),
@@ -56,7 +57,8 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Exit",
-					() => lifetime.StopApplication()));
+					() => lifetime.StopApplication()),
+			]);
 
 			// Tray Icon
 			_notificationIcon = new NotifyIcon()

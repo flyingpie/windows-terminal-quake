@@ -13,16 +13,14 @@
 
 		<AnalysisLevel>9.0-all</AnalysisLevel>
 		<AnalysisMode>all</AnalysisMode>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<RunAnalyzers>true</RunAnalyzers>
-		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
-		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 	</PropertyGroup>
 
 	<!-- Unit Test Projects -->
 	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
 		<Nullable>annotations</Nullable>
+		<RunAnalyzers>false</RunAnalyzers>
 	</PropertyGroup>
 
 	<ItemGroup>

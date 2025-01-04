@@ -6,22 +6,14 @@ public static class Os
 {
 	public static bool IsCallable(string fileName)
 	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-		{
-			return IsCallableLnx(fileName);
-		}
-
-		return IsCallableWin(fileName);
+		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+			? IsCallableLnx(fileName)
+			: IsCallableWin(fileName);
 	}
 
 	public static bool IsCallableLnx(string fileName)
 	{
-		if (File.Exists(fileName))
-		{
-			return true;
-		}
-
-		return ExistsOnPath(fileName);
+		return File.Exists(fileName) || ExistsOnPath(fileName);
 	}
 
 	public static bool IsCallableWin(string fileName)
@@ -78,7 +70,8 @@ public static class Os
 		Process.Start(
 			new ProcessStartInfo()
 			{
-				FileName = path, UseShellExecute = true,
+				FileName = path,
+				UseShellExecute = true,
 			});
 	}
 

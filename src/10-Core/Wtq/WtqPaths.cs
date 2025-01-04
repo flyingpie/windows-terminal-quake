@@ -36,7 +36,7 @@ public static class WtqPaths
 	/// <summary>
 	/// Returns path to the WTQ config file, as specified by an environment variable.
 	/// </summary>
-	public static string WtqConfigFromEnvVar => WtqEnv.ConfigFileFromEnv;
+	public static string WtqConfigFromEnvVar => WtqEnv.ConfigFile;
 
 	/// <summary>
 	/// Ordered list of possible paths to WTQ configuration file.<br/>

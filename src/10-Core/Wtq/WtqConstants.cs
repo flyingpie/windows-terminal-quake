@@ -392,5 +392,4 @@ public static class WtqConstants
 		"Yorkshire",
 		"Zodiac",
 	];
-
 }

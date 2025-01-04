@@ -58,7 +58,7 @@ public static partial class NukeExtensions
 		string ver)
 	{
 		var inCurr = false;
-		var headerRegex = new Regex(@"^## \[(?<semver>\d+\.?\d+\.?\d+)\]");
+		var headerRegex = ChangeLogVersionHeaderRegex();
 
 		var res = new StringBuilder();
 
@@ -158,4 +158,7 @@ public static partial class NukeExtensions
 
 		await client.Repository.Release.UploadAsset(release, assetUpload);
 	}
+
+	[GeneratedRegex(@"^## \[(?<semver>\d+\.?\d+\.?\d+)\]")]
+	private static partial Regex ChangeLogVersionHeaderRegex();
 }

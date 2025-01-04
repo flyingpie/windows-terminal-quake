@@ -31,11 +31,11 @@ public sealed class WtqFocusTracker(
 				{
 					_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
 
-					_bus.Publish(
-						new WtqWindowFocusChangedEvent()
-						{
-							GotFocusWindow = curr, LostFocusWindow = _prev,
-						});
+					_bus.Publish(new WtqWindowFocusChangedEvent()
+					{
+						GotFocusWindow = curr,
+						LostFocusWindow = _prev,
+					});
 				}
 
 				// Store for next cycle.

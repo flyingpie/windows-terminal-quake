@@ -18,7 +18,6 @@ public sealed class WtqOptions
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
-	// [JsonDefaultValue(250)]
 	public int AnimationDurationMs { get; set; }
 		= 250;
 
@@ -41,7 +40,6 @@ public sealed class WtqOptions
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
 	/// Defaults to 40.
 	/// </summary>
-	// [JsonDefaultValue(40)]
 	public int AnimationTargetFps { get; set; }
 		= 40;
 
@@ -49,7 +47,6 @@ public sealed class WtqOptions
 	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
 	/// </summary>
-	// [JsonDefaultValue(AnimationType.EaseOutQuart)]
 	public AnimationType AnimationTypeToggleOn { get; set; }
 		= AnimationType.EaseOutQuart;
 
@@ -63,7 +60,6 @@ public sealed class WtqOptions
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
-	// [Required]
 	public ICollection<WtqAppOptions> Apps { get; set; }
 		= [];
 
@@ -71,7 +67,6 @@ public sealed class WtqOptions
 	/// Whether the app should always be on top of other windows, regardless of whether it has focus.<br/>
 	/// Defaults to "false".
 	/// </summary>
-	// [JsonDefaultValue(false)]
 	public bool AlwaysOnTop { get; set; }
 
 	/// <inheritdoc cref="WtqAppOptions.AttachMode"/>
@@ -96,7 +91,6 @@ public sealed class WtqOptions
 	/// Horizontal screen coverage, as a percentage.<br/>
 	/// Defaults to "100".
 	/// </summary>
-	// [JsonDefaultValue(95f)]
 	public float HorizontalScreenCoverage { get; set; }
 		= 95f;
 
@@ -136,7 +130,8 @@ public sealed class WtqOptions
 	public TaskbarIconVisibility TaskbarIconVisibility { get; set; }
 		= TaskbarIconVisibility.AlwaysHidden;
 
-	private static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } = [Above, Below, Left, Right];
+	private static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
+		[Above, Below, Left, Right];
 
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
@@ -155,7 +150,6 @@ public sealed class WtqOptions
 	/// Vertical screen coverage as a percentage (0-100).<br/>
 	/// Defaults to "100".
 	/// </summary>
-	// [JsonDefaultValue(95f)]
 	public float VerticalScreenCoverage { get; set; }
 		= 95f;
 
