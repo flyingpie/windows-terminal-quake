@@ -23,9 +23,9 @@
 		<RunAnalyzers>false</RunAnalyzers>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json"/>
-	</ItemGroup>
+<!--	<ItemGroup>-->
+<!--		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json"/>-->
+<!--	</ItemGroup>-->
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">
@@ -36,9 +36,9 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="StyleCop.Analyzers.Unstable">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+<!--		<PackageReference Include="StyleCop.Analyzers.Unstable">-->
+<!--			<PrivateAssets>all</PrivateAssets>-->
+<!--			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+<!--		</PackageReference>-->
 	</ItemGroup>
 </Project>
