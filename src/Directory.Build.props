@@ -1,40 +1,62 @@
 <Project>
 	<PropertyGroup>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		
+<!--		<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+
 		<BaseOutputPath>$(MSBuildThisFileDirectory)\..\_output\build</BaseOutputPath>
 		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)\..\_output\build\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
 		<OutputPath>$(MSBuildThisFileDirectory)\..\_output\build\bin\$(MSBuildProjectName)</OutputPath>
 
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
+
+<!--		<Nullable>annotations</Nullable>-->
 	</PropertyGroup>
 
 	<!-- Regular Projects -->
 	<PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('Test'))">
+<!--		<Nullable>annotations</Nullable>-->
+	</PropertyGroup>
+
+	<!-- Unit Test Projects -->
+	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
+<!--		<Nullable>annotations</Nullable>-->
+	</PropertyGroup>
+
+	<!--
+		Code analysis
+	-->
+
+	<!-- Analysis OFF. -->
+	<PropertyGroup Condition="!$(DefineConstants.Contains('ANALYSE'))">
+		<Nullable>annotations</Nullable>
+
+		<AnalysisLevel>none</AnalysisLevel>
+		<AnalysisMode>none</AnalysisMode>
+		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+		<RunAnalyzers>false</RunAnalyzers>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+	</PropertyGroup>
+
+	<!-- Analysis ON. -->
+	<PropertyGroup Condition="$(DefineConstants.Contains('ANALYSE')) And !$(MSBuildProjectName.EndsWith('Test'))">
 		<Nullable>enable</Nullable>
 
-		<!-- Code analysis -->
-		<AnalysisLevel>8.0-all</AnalysisLevel>
+		<AnalysisLevel>9.0-all</AnalysisLevel>
 		<AnalysisMode>all</AnalysisMode>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<RunAnalyzers>true</RunAnalyzers>
 		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
 		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" Link="stylecop.json" />
+	<ItemGroup Condition="$(DefineConstants.Contains('ANALYSE'))">
+		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json"/>
 	</ItemGroup>
 
-	<!-- Unit Test Projects -->
-	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
-		<EnableNETAnalyzers>false</EnableNETAnalyzers>
-		<Nullable>annotations</Nullable>
-	</PropertyGroup>
-
-	<!-- Analyzers (non-test projects only -->
-	<ItemGroup Condition="!$(MSBuildProjectName.EndsWith('Test'))">
+	<ItemGroup Condition="$(DefineConstants.Contains('ANALYSE')) And !$(MSBuildProjectName.EndsWith('Test'))">
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

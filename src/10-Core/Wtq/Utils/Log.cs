@@ -13,7 +13,7 @@ public static class Log
 	public static void Configure()
 	{
 		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
-		var logLevel = WtqEnv.LogLevel;
+		var logLevel = WtqEnv.LogLevelFromEnv;
 
 		Serilog.Log.Logger = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)

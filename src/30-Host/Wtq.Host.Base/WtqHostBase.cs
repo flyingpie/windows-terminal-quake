@@ -6,7 +6,7 @@ namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	public async Task RunAsync(string[] args)
+	public Task RunAsync(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
@@ -52,37 +52,13 @@ public class WtqHostBase
 
 				ConfigureServices(s);
 			});
-
-			// await new HostBuilder()
-			// 	.ConfigureAppConfiguration(opt =>
-			// 	{
-			// 		opt.AddConfiguration(config);
-			// 	})
-			// 	.ConfigureServices(opt =>
-			// 	{
-			// 		opt
-			// 			.AddOptionsWithValidateOnStart<WtqOptions>()
-			// 			.Bind(config);
-			//
-			// 		opt
-			// 			.AddUI()
-			//
-			// 			// Utils
-			// 			.AddWtqCore();
-			//
-			// 		ConfigureServices(opt);
-			// 	})
-			// 	.UseSerilog()
-			// 	.Build()
-			//
-			// 	// Run!
-			// 	.RunAsync()
-			// 	.NoCtx();
 		}
 		catch (Exception ex)
 		{
 			log.LogError(ex, "Error running application: {Message}", ex.Message);
 		}
+
+		return Task.CompletedTask;
 	}
 
 	protected virtual void ConfigureServices(IServiceCollection services)
