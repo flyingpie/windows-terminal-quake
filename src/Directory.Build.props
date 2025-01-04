@@ -1,7 +1,5 @@
 <Project>
 	<PropertyGroup>
-		<LangVersion>12.0</LangVersion>
-
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		
 		<BaseOutputPath>$(MSBuildThisFileDirectory)\..\_output\build</BaseOutputPath>

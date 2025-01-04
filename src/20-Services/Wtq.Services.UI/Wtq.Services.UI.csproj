@@ -4,7 +4,6 @@
 		<RootNamespace>Wtq.Services.UI</RootNamespace>
 
 		<TargetFramework>net9.0</TargetFramework>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
