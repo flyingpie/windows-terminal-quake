@@ -18,7 +18,7 @@ public static class User32
 
 	public static void ForcePaint(IntPtr hWnd)
 	{
-		SendMessage(hWnd, WmPaint, IntPtr.Zero, IntPtr.Zero);
+		_ = SendMessage(hWnd, WmPaint, IntPtr.Zero, IntPtr.Zero);
 	}
 
 	[DllImport("user32.dll", SetLastError = true)]
@@ -58,7 +58,7 @@ public static class User32
 	[return: MarshalAs(UnmanagedType.Bool)]
 	public static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
-	[DllImport("user32.dll", SetLastError = true)]
+	[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 	public static extern int SetWindowText(IntPtr hWnd, string text);
 
 	[DllImport("user32.dll", SetLastError = true)]
