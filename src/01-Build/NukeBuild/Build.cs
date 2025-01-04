@@ -83,6 +83,7 @@ public sealed class Build : NukeBuild
 	private Target ReportInfo => _ => _
 		.Executes(() =>
 		{
+			Log.Information("Configuration:{Configuration}", Configuration);
 			Log.Information("SemVerVersion:{SemVerVersion}", SemVerVersion);
 			Log.Information("AssemblyVersion:{AssemblyVersion}", AssemblyVersion);
 			Log.Information("InformationalVersion:{InformationalVersion}", InformationalVersion);
@@ -196,7 +197,7 @@ public sealed class Build : NukeBuild
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
+				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetProperty("PublishAot", true)
@@ -225,7 +226,7 @@ public sealed class Build : NukeBuild
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
+				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetRuntime("win-x64")
@@ -255,7 +256,7 @@ public sealed class Build : NukeBuild
 				.SetAssemblyVersion(AssemblyVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
+				.SetFramework("net8.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetPublishSingleFile(true)

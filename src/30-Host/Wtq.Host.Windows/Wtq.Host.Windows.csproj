@@ -3,7 +3,7 @@
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
 
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 
 		<OutputType>WinExe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>

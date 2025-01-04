@@ -3,7 +3,7 @@
 		<AssemblyName>Wtq.Services.KWin</AssemblyName>
 		<RootNamespace>Wtq.Services.KWin</RootNamespace>
 
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
