@@ -18,6 +18,7 @@ DOTNET_CHANNEL="STS"
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_NOLOGO=1
+export NUKE_TELEMETRY_OPTOUT=1
 
 ###########################################################################
 # EXECUTION
