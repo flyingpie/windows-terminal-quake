@@ -3,7 +3,7 @@
 		<AssemblyName>Wtq.Services.Win32</AssemblyName>
 		<RootNamespace>Wtq.Services.Win32</RootNamespace>
 
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

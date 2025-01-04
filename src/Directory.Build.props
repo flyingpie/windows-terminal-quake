@@ -8,32 +8,7 @@
 
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-	</PropertyGroup>
 
-	<!-- Unit Test Projects -->
-	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
-		<Nullable>annotations</Nullable>
-	</PropertyGroup>
-
-	<!--
-		Code analysis
-	-->
-
-	<!-- Analysis OFF. -->
-	<PropertyGroup Condition="$(Configuration) != 'Release'">
-		<Nullable>annotations</Nullable>
-
-		<AnalysisLevel>none</AnalysisLevel>
-		<AnalysisMode>none</AnalysisMode>
-		<EnableNETAnalyzers>false</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
-		<RunAnalyzers>false</RunAnalyzers>
-		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-	</PropertyGroup>
-
-	<!-- Analysis ON. -->
-	<PropertyGroup Condition="$(Configuration) == 'Release' And !$(MSBuildProjectName.EndsWith('Test'))">
 		<Nullable>enable</Nullable>
 
 		<AnalysisLevel>9.0-all</AnalysisLevel>
@@ -45,11 +20,16 @@
 		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 	</PropertyGroup>
 
-	<ItemGroup Condition="$(Configuration) == 'Release'">
+	<!-- Unit Test Projects -->
+	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
+		<Nullable>annotations</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
 		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json"/>
 	</ItemGroup>
 
-	<ItemGroup Condition="$(Configuration) == 'Release' And !$(MSBuildProjectName.EndsWith('Test'))">
+	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
