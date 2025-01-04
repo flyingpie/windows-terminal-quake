@@ -18,7 +18,7 @@ public static class User32
 
 	public static void ForcePaint(IntPtr hWnd)
 	{
-		SendMessage(hWnd, WmPaint, IntPtr.Zero, IntPtr.Zero);
+		_ = SendMessage(hWnd, WmPaint, IntPtr.Zero, IntPtr.Zero);
 	}
 
 	[DllImport("user32.dll", SetLastError = true)]
