@@ -2,8 +2,8 @@ namespace Wtq.Host.Linux;
 
 public static class Program
 {
-	public static async Task Main(string[] args)
+	public static void Main(string[] args)
 	{
-		await new WtqLinux().RunAsync(args).NoCtx();
+		new WtqLinux().Run(args);
 	}
 }
