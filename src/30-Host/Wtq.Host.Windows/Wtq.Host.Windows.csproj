@@ -4,10 +4,11 @@
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
 
 		<TargetFramework>net9.0-windows</TargetFramework>
-
 		<OutputType>WinExe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<ApplicationIcon>../../../assets/icon-v2-64.ico</ApplicationIcon>
+
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
 	<ItemGroup>

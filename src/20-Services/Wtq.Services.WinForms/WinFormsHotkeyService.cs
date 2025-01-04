@@ -33,13 +33,6 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 		};
 	}
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
-	{
-		// TODO: Currently necessary to make sure this service is constructed.
-		// Maybe remove IHostedService and manually resolve this type on app startup?
-		return Task.CompletedTask;
-	}
-
 	protected override ValueTask OnDisposeAsync()
 	{
 		HotkeyManager.Exit();

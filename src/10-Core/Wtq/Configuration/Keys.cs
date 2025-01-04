@@ -109,55 +109,10 @@ public enum Keys
 	CapsLock = 0x14,
 
 	/// <summary>
-	/// The IME Junja mode key.
-	/// </summary>
-	JunjaMode = 0x17,
-
-	/// <summary>
-	/// The IME final mode key.
-	/// </summary>
-	FinalMode = 0x18,
-
-	/// <summary>
-	/// The IME Hanja mode key.
-	/// </summary>
-	HanjaMode = 0x19,
-
-	/// <summary>
-	/// The IME Kanji mode key.
-	/// </summary>
-	KanjiMode = 0x19,
-
-	/// <summary>
 	/// The ESC key.
 	/// </summary>
 	[Display(Description = "Escape")]
 	Escape = 0x1B,
-
-	/// <summary>
-	/// The IME convert key.
-	/// </summary>
-	IMEConvert = 0x1C,
-
-	/// <summary>
-	/// The IME nonconvert key.
-	/// </summary>
-	IMENonconvert = 0x1D,
-
-	/// <summary>
-	/// The IME accept key, replaces System.Windows.Forms.Keys.IMEAceept.
-	/// </summary>
-	IMEAccept = 0x1E,
-
-	/// <summary>
-	/// The IME accept key. Obsolete, use System.Windows.Forms.Keys.IMEAccept instead.
-	/// </summary>
-	IMEAceept = 0x1E,
-
-	/// <summary>
-	/// The IME mode change key.
-	/// </summary>
-	IMEModeChange = 0x1F,
 
 	/// <summary>
 	/// The SPACEBAR key.

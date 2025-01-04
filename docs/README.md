@@ -7,6 +7,10 @@ py -m venv py3
 
 # Activate virtual env
 
+```ps1
+py3\Scripts\Activate.ps1
+```
+
 ```shell
 source py3/bin/activate
 ```
