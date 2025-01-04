@@ -135,6 +135,8 @@ public static partial class NukeExtensions
 	{
 		var wwwroot = root / "wwwroot";
 		var wtqUI = wwwroot / "_content/Wtq.Services.UI";
+
+		Log.Information("Moving UI wwwroot from '{Src}' to '{Dst}'", wtqUI, wwwroot);
 		wtqUI.Move(wwwroot, ExistsPolicy.DirectoryMerge);
 	}
 
