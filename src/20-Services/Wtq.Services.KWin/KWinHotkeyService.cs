@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Wtq.Events;
 using Wtq.Services.KWin.DBus;
 
@@ -8,8 +7,7 @@ namespace Wtq.Services.KWin;
 /// TODO: DBus-only shortcut registration (we did get listening to key press events working, actual registration proved more difficult).
 /// TODO: Fetch known WTQ shortcut names, instead of the fixed index-based names.
 /// </summary>
-internal sealed class KWinHotkeyService
-	: IDisposable, IHostedService
+internal sealed class KWinHotkeyService : WtqHostedService
 {
 	/// <summary>
 	/// To de-register any left-over shortcuts on WTQ start, we need to know their names.<br/>
@@ -47,19 +45,21 @@ internal sealed class KWinHotkeyService
 			});
 	}
 
-	public void Dispose()
-	{
-		_init.Dispose();
-	}
-
-	public async Task StartAsync(CancellationToken cancellationToken)
+	protected override async Task OnStartAsync(CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 	}
 
-	public async Task StopAsync(CancellationToken cancellationToken)
+	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
 		await ResetShortcutsAsync().NoCtx();
+	}
+
+	protected override ValueTask OnDisposeAsync()
+	{
+		_init.Dispose();
+
+		return ValueTask.CompletedTask;
 	}
 
 	private static string GetShortcutName(int index) => $"wtq_hotkey_{index:000}";

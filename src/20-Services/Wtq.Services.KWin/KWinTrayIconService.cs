@@ -5,8 +5,7 @@ using Wtq.Events;
 
 namespace Wtq.Services.KWin;
 
-public sealed class KWinTrayIconService
-	: IAsyncDisposable, IHostedService
+public sealed class KWinTrayIconService : WtqHostedService
 {
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
@@ -27,14 +26,19 @@ public sealed class KWinTrayIconService
 		new Thread(ShowStatusIcon).Start();
 	}
 
-	public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-
-	public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-
-	public async ValueTask DisposeAsync()
+	protected override async ValueTask OnDisposeAsync()
 	{
-		_icon?.Dispose();
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		if (_icon != null)
+		{
+			_icon.Dispose();
+			_icon = null;
+		}
+
+		if (_loop != null)
+		{
+			await _loop.DisposeAsync().NoCtx();
+			_loop = null;
+		}
 	}
 
 	private void ShowStatusIcon()
