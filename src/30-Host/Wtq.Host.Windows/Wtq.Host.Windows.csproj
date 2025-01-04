@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
@@ -18,7 +18,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="wtq.jsonc">
+		<Compile Remove="wwwroot\**" />
+		<None Update="wwwroot\**">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
