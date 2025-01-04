@@ -1,7 +1,10 @@
 {
 	"profiles": {
 		"Wtq.Host.Windows": {
-			"commandName": "Project"
+			"commandName": "Project",
+			"environmentVariables": {
+				"WTQ_LOG_LEVEL_": "VERBOSE"
+			}
 		}
 	}
 }
