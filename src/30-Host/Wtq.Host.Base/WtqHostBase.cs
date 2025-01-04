@@ -6,12 +6,12 @@ namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	public Task RunAsync(string[] args)
+	public void Run(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
 
-		var log = Log.For(typeof(WtqHostBase));
+		var log = Log.For<WtqHostBase>();
 
 		try
 		{
@@ -57,8 +57,6 @@ public class WtqHostBase
 		{
 			log.LogError(ex, "Error running application: {Message}", ex.Message);
 		}
-
-		return Task.CompletedTask;
 	}
 
 	protected virtual void ConfigureServices(IServiceCollection services)
