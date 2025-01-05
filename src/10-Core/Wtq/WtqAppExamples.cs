@@ -49,7 +49,7 @@ public class WtqAppExamples
 			Description = "The cross-platform PowerShell, (version 6 and up, a.k.a. 'PowerShell Core').",
 			Image = "/example_apps/powershell_core.png",
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"),
-			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
+			Os = [OSPlatform.Windows,],
 			Factory = () => new()
 			{
 				Name = "PowerShell Core",
