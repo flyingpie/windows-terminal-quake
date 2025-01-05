@@ -5,11 +5,19 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class WtqAppOptions
 {
+	private ICollection<ProcessArgument> _argumentList = [];
+
 	/// <summary>
 	/// Command-line arguments that should be passed to the app when it's started.<br/>
 	/// Note that this only applies when using an <see cref="AttachMode"/> that starts the app.
 	/// </summary>
 	public string? Arguments { get; set; }
+
+	public ICollection<ProcessArgument> ArgumentsList
+	{
+		get => _argumentList;
+		set => _argumentList = value ?? [];
+	}
 
 	/// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
 	public bool? AlwaysOnTop { get; set; }
