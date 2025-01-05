@@ -51,17 +51,17 @@ public sealed class Build : NukeBuild
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
-	private AbsolutePath PathToLinux64AotZip => ArtifactsDirectory / $"linux-x64_aot.zip";
+	private AbsolutePath PathToLinux64AotZip => ArtifactsDirectory / "linux-x64_aot.zip";
 
-	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / $"linux-x64_framework-dependent.zip";
+	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.zip";
 
-	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / $"linux-x64_self-contained.zip";
+	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.zip";
 
-	private AbsolutePath PathToWin64AotZip => ArtifactsDirectory / $"win-x64_aot.zip";
+	private AbsolutePath PathToWin64AotZip => ArtifactsDirectory / "win-x64_aot.zip";
 
-	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / $"win-x64_framework-dependent.zip";
+	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / "win-x64_framework-dependent.zip";
 
-	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / $"win-x64_self-contained.zip";
+	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / "win-x64_self-contained.zip";
 
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
@@ -83,10 +83,15 @@ public sealed class Build : NukeBuild
 	private Target ReportInfo => _ => _
 		.Executes(() =>
 		{
-			Log.Information("Configuration:{Configuration}", Configuration);
-			Log.Information("SemVerVersion:{SemVerVersion}", SemVerVersion);
-			Log.Information("AssemblyVersion:{AssemblyVersion}", AssemblyVersion);
-			Log.Information("InformationalVersion:{InformationalVersion}", InformationalVersion);
+			Log.Information("Configuration:.........{Configuration}", Configuration);
+
+			Log.Information("SemVerVersion:.........{SemVerVersion}", SemVerVersion);
+			Log.Information("AssemblyVersion:.......{AssemblyVersion}", AssemblyVersion);
+			Log.Information("InformationalVersion:..{InformationalVersion}", InformationalVersion);
+
+			Log.Information("OutputDirectory:.......{OutputDirectory}", OutputDirectory);
+			Log.Information("ArtifactsDirectory:....{ArtifactsDirectory}", ArtifactsDirectory);
+			Log.Information("StagingDirectory:......{StagingDirectory}", StagingDirectory);
 		});
 
 	/// <summary>
@@ -259,7 +264,6 @@ public sealed class Build : NukeBuild
 				.SetFramework("net9.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
-				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
