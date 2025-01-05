@@ -83,7 +83,7 @@ public class WtqUIHost
 
 		app.MainWindow
 			.SetLogVerbosity(0)
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png"))
+			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
 			.SetTitle(MainWindowTitle);
 	}
 

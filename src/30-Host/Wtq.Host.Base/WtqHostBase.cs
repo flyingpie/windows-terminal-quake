@@ -46,8 +46,6 @@ public class WtqHostBase
 
 				s
 					.AddUI()
-
-					// Utils
 					.AddWtqCore();
 
 				ConfigureServices(s);
