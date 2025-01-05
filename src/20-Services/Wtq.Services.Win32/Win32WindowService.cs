@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 
@@ -80,9 +81,9 @@ public sealed class Win32WindowService :
 	private static uint GetForegroundProcessId()
 	{
 		var hwnd = User32.GetForegroundWindow();
-		User32.GetWindowThreadProcessId(hwnd, out uint pid);
+		User32.GetWindowThreadProcessId(hwnd, out var pid);
 
-		return pid;
+		return (uint)pid;
 	}
 
 	private async Task CreateProcessAsync(WtqAppOptions opts)
@@ -141,9 +142,47 @@ public sealed class Win32WindowService :
 
 			_log.LogInformation("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
+
+
+			var p = Process.GetProcesses();
+			var w = User32
+				.FindWindows(null)
+				.Select(h => new ProcTest
+				{
+					Handle = h,
+					Title = User32.GetWindowText(h),
+					Proc = User32.GetProcessHandleFromHwnd(h),
+					//Pid = User32.GetWindowThreadProcessId(h, )
+				})
+				.Where(h => !string.IsNullOrWhiteSpace(h.Title))
+				.OrderBy(h => h.Title)
+				.ToList();
+
+			var list = new List<Process>();
+			foreach (var hh in w)
+			{
+				try
+				{
+					var threadId = User32.GetWindowThreadProcessId(hh.Handle, out var processIdentifier);
+
+					hh.ThreadId = threadId;
+					hh.ProcessId = processIdentifier;
+
+					hh.Pid = Kernel32.GetProcessId(processIdentifier);
+
+					//list.Add(p.FirstOrDefault(pp => pp.Handle == hh.Proc));
+				}
+				catch { }
+			}
+
+
 			var res = new List<WtqWindow>();
 			foreach (var proc in Process.GetProcesses())
 			{
+				var x2 = w.Where(xxx => xxx.Title.Contains("WhatsApp", StringComparison.OrdinalIgnoreCase)).ToList();
+				//var h = w.FirstOrDefault(hx => hx.);
+
+
 				if (!proc.TryGetHasExited(out var hasExited) || hasExited)
 				{
 					continue;
@@ -164,5 +203,25 @@ public sealed class Win32WindowService :
 		{
 			_lock.Release();
 		}
+	}
+}
+
+public class ProcTest
+{
+	public	nint Handle;
+
+	public int Proc;
+
+	public string Title;
+
+	public nint ThreadId;
+
+	public nint ProcessId;
+
+	public uint Pid;
+
+	public override string ToString()
+	{
+		return $"[HANDLE:{Handle}] [Proc:{Proc}] [Pid:{ThreadId}] [OtherPid:{ProcessId}] {Title}";
 	}
 }
