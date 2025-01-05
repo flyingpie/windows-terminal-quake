@@ -87,7 +87,8 @@ public sealed class TrayIcon : IDisposable
 
 	private static Icon CreateIcon()
 	{
-		using var str = new MemoryStream(Resources.Resources.icon_v2_64);
+		var path = WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
+		using var str = File.OpenRead(path);
 
 		return new Icon(str);
 	}
