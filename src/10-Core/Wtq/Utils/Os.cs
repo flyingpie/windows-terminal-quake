@@ -4,6 +4,40 @@ namespace Wtq.Utils;
 
 public static class Os
 {
+	public static bool IsCallable(string fileName)
+	{
+		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+			? IsCallableLnx(fileName)
+			: IsCallableWin(fileName);
+	}
+
+	public static bool IsCallableLnx(string fileName)
+	{
+		return File.Exists(fileName) || ExistsOnPath(fileName);
+	}
+
+	public static bool IsCallableWin(string fileName)
+	{
+		string[] exeExts = [string.Empty, ".exe", ".bat", ".cmd"];
+
+		foreach (var ext in exeExts)
+		{
+			var path = fileName + ext;
+
+			if (File.Exists(path))
+			{
+				return true;
+			}
+
+			if (ExistsOnPath(path))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static bool ExistsOnPath(string fileName)
 	{
 		return GetFullPath(fileName) != null;
