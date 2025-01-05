@@ -130,9 +130,6 @@ public sealed class WtqOptions
 	public TaskbarIconVisibility TaskbarIconVisibility { get; set; }
 		= TaskbarIconVisibility.AlwaysHidden;
 
-	private static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
-		[Above, Below, Left, Right];
-
 	/// <summary>
 	/// The default off-screen locations are kept separate, to prevent arrays from mergin during deserialization.
 	/// We could do that by tweaking the JSON serializer, but that's way more complex.
