@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Radzen;
-using System;
 
 namespace Wtq.Services.UI;
 
@@ -12,8 +11,6 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddRadzenComponents()
-			.AddTransient<Notifier>()
-			// .AddHostedServiceSingleton<IWtqUIService, WtqUI>()
-			;
+			.AddTransient<Notifier>();
 	}
 }
