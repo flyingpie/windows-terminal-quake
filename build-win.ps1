@@ -1,1 +1,1 @@
-./src/build.ps1 --target PublishWinSelfContained
+./src/build.ps1 --target PublishWin64SelfContained
