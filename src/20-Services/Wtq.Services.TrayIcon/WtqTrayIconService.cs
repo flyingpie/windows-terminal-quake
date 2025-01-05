@@ -1,12 +1,13 @@
 using Microsoft.Extensions.Hosting;
 using NotificationIcon.NET;
-using Wtq.Configuration;
-using Wtq.Events;
+using System.Runtime.InteropServices;
 
-namespace Wtq.Services.KWin;
+namespace Wtq.Services.TrayIcon;
 
-public sealed class KWinTrayIconService : WtqHostedService
+public sealed class WtqTrayIconService : WtqHostedService
 {
+	private readonly bool _isWin = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
@@ -14,7 +15,7 @@ public sealed class KWinTrayIconService : WtqHostedService
 	private NotifyIcon? _icon;
 	private Worker? _loop;
 
-	public KWinTrayIconService(
+	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus,
 		IWtqUIService ui)
@@ -43,7 +44,11 @@ public sealed class KWinTrayIconService : WtqHostedService
 
 	private void ShowStatusIcon()
 	{
-		var iconPath = WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-64.png");
+		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
+		// Also, on Linux the icon requires some padding.
+		var iconPath = _isWin
+			? WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico")
+			: WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png");
 
 		_icon = NotifyIcon.Create(
 			iconPath,
@@ -86,15 +91,28 @@ public sealed class KWinTrayIconService : WtqHostedService
 					() => _lifetime.StopApplication()),
 			]);
 
-		_loop = new(
-			nameof(KWinTrayIconService),
-			ct =>
-			{
-				_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
+		if (_isWin)
+		{
+			// On Windows, we can just block the thread on the tray icon UI.
+			_icon.Show();
+		}
+		else
+		{
+			// But on Linux, the main UI uses webkitgtk, which is also used by NotificationIcon.NET.
+			// That means the threads can step on each other's state, crashing the UI stack.
+			//
+			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
+			_loop = new(
+				nameof(WtqTrayIconService),
+				ct =>
+				{
+					_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
 
-				return Task.CompletedTask;
-			},
-			TimeSpan.FromMilliseconds(200));
+					return Task.CompletedTask;
+				},
+				TimeSpan.FromMilliseconds(200));
+		}
+
 	}
 
 	private static MenuItem CreateItem(
