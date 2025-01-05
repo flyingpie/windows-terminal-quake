@@ -1,18 +1,17 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	public async Task RunAsync(string[] args)
+	public void Run(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
-		Utils.Log.Configure();
+		Log.Configure();
 
-		var log = Utils.Log.For(typeof(WtqHostBase));
+		var log = Log.For<WtqHostBase>();
 
 		try
 		{
@@ -39,31 +38,18 @@ public class WtqHostBase
 				.AddCommandLine(args)
 				.Build();
 
-			await new HostBuilder()
-				.ConfigureAppConfiguration(opt =>
-				{
-					opt.AddConfiguration(config);
-				})
-				.ConfigureServices(opt =>
-				{
-					opt
-						.AddOptionsWithValidateOnStart<WtqOptions>()
-						.Bind(config);
+			WtqUIHostBuilder.Run(s =>
+			{
+				s
+					.AddOptionsWithValidateOnStart<WtqOptions>()
+					.Bind(config);
 
-					opt
-						.AddUI()
+				s
+					.AddUI()
+					.AddWtqCore();
 
-						// Utils
-						.AddWtqCore();
-
-					ConfigureServices(opt);
-				})
-				.UseSerilog()
-				.Build()
-
-				// Run!
-				.RunAsync()
-				.NoCtx();
+				ConfigureServices(s);
+			});
 		}
 		catch (Exception ex)
 		{
