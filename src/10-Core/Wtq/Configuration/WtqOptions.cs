@@ -134,6 +134,13 @@ public sealed class WtqOptions
 		[Above, Below, Left, Right];
 
 	/// <summary>
+	/// The default off-screen locations are kept separate, to prevent arrays from mergin during deserialization.
+	/// We could do that by tweaking the JSON serializer, but that's way more complex.
+	/// </summary>
+	private static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
+		[Above, Below, Left, Right];
+
+	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
