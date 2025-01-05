@@ -1,0 +1,1 @@
+./src/build.ps1 --target PublishWinSelfContained
