@@ -259,7 +259,6 @@ public sealed class Build : NukeBuild
 				.SetFramework("net9.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
-				.SetPublishSingleFile(true)
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
