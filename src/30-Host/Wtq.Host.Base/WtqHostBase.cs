@@ -38,7 +38,7 @@ public class WtqHostBase
 				.AddCommandLine(args)
 				.Build();
 
-			WtqUI.Run(s =>
+			WtqUIHostBuilder.Run(s =>
 			{
 				s
 					.AddOptionsWithValidateOnStart<WtqOptions>()

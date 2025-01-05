@@ -1,34 +1,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Logging;
 using Photino.Blazor;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace Wtq.Services.UI;
 
-public sealed class WtqUI
+public static class WtqUIHostBuilder
 {
-	private readonly IWtqWindowService _windowService;
-
-	public WtqUI(IWtqWindowService windowService)
-	{
-		_windowService = Guard.Against.Null(windowService);
-	}
-
 	public static void Run(Action<IServiceCollection> services)
 	{
 		Guard.Against.Null(services);
-
-		var log = Log.For<WtqUI>();
-		log.LogDebug("UI thread starting");
 
 		var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
 		using var invoker = new WtqUIInvoker();
 
-		// TODO: Unify with the main app DI.
 		appBuilder.Services
 			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
 			.AddSingleton<IWtqUIService>(_ => invoker);
@@ -41,18 +28,16 @@ public sealed class WtqUI
 
 		invoker.Action = a => app?.MainWindow?.Invoke(a);
 
-		_ = new WtqUIHost(
-			app.Services.GetRequiredService<IWtqBus>(),
-			app.Services.GetRequiredService<IWtqWindowService>(),
-			app.Services.GetRequiredService<IWtqScreenInfoProvider>(),
-			app.Services.GetRequiredService<IHostApplicationLifetime>(),
+		new WtqUIHost(
 			app.Services.GetRequiredService<IEnumerable<IHostedService>>(),
+			app.Services.GetRequiredService<IHostApplicationLifetime>(),
+			app.Services.GetRequiredService<IWtqBus>(),
+			app.Services.GetRequiredService<IWtqScreenInfoProvider>(),
+			app.Services.GetRequiredService<IWtqWindowService>(),
 			app);
 
 		((ApplicationLifetime)app.Services.GetRequiredService<IHostApplicationLifetime>()).NotifyStarted();
 
 		app.Run();
-
-		log.LogDebug("UI thread exiting");
 	}
 }

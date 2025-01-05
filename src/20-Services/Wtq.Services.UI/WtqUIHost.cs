@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -9,57 +8,53 @@ namespace Wtq.Services.UI;
 public class WtqUIHost
 {
 	private const string MainWindowTitle = "WTQ - Main Window";
+	private static readonly Point OffScreenLocation = new(0, -1_000_000);
 
 	private readonly IWtqWindowService _windowService;
-	private readonly IWtqScreenInfoProvider _scrInfoProvider;
-	private readonly PhotinoBlazorApp _app;
+	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private bool _isClosing;
 
 	public WtqUIHost(
-		IWtqBus bus,
-		IWtqWindowService windowService,
-		IWtqScreenInfoProvider scrInfoProvider,
-		IHostApplicationLifetime appLifetime,
 		IEnumerable<IHostedService> hostedServices,
+		IHostApplicationLifetime appLifetime,
+		IWtqBus bus,
+		IWtqScreenInfoProvider screenInfoProvider,
+		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
-		_windowService = windowService;
-		_scrInfoProvider = scrInfoProvider;
-		_app = app;
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+		_windowService = Guard.Against.Null(windowService);
+
+		_ = Guard.Against.Null(app);
+		_ = Guard.Against.Null(appLifetime);
+		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(hostedServices);
 
 		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 
-		app.MainWindow.RegisterWindowClosingHandler(
-			(s, a) =>
-			{
-				_ = Task.Run(CloseMainWindowAsync);
-
-				return !_isClosing;
-			});
-
-		appLifetime.ApplicationStarted.Register(() =>
+		_ = appLifetime.ApplicationStarted.Register(() =>
 		{
 			Task
 				.Run(async () =>
 				{
-					foreach (var xx in hostedServices)
+					foreach (var srv in hostedServices)
 					{
-						await xx.StartAsync(CancellationToken.None);
+						await srv.StartAsync(CancellationToken.None).NoCtx();
 					}
 				})
 				.GetAwaiter()
 				.GetResult();
 		});
 
-		appLifetime.ApplicationStopping.Register(
+		_ = appLifetime.ApplicationStopping.Register(
 			() =>
 			{
 				Task
 					.Run(async () =>
 					{
-						foreach (var xx in hostedServices)
+						foreach (var srv in hostedServices)
 						{
-							await xx.StopAsync(CancellationToken.None);
+							await srv.StopAsync(CancellationToken.None).NoCtx();
 						}
 					})
 					.GetAwaiter()
@@ -72,22 +67,32 @@ public class WtqUIHost
 				Task
 					.Run(async () =>
 					{
-						foreach (var xx in hostedServices.OfType<IAsyncDisposable>())
+						foreach (var srv in hostedServices.OfType<IAsyncDisposable>())
 						{
-							await xx.DisposeAsync();
+							await srv.DisposeAsync().NoCtx();
 						}
 					})
 					.GetAwaiter()
 					.GetResult();
 			});
 
-		app.MainWindow
-			.SetLogVerbosity(0)
+		_ = app.MainWindow
+			.RegisterWindowCreatedHandler((s, a) =>
+			{
+				_ = Task.Run(CloseMainWindowAsync);
+			})
+			.RegisterWindowClosingHandler((s, a) =>
+			{
+				_ = Task.Run(CloseMainWindowAsync);
+
+				return !_isClosing;
+			})
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			.SetLogVerbosity(0)
 			.SetTitle(MainWindowTitle);
 	}
 
-	public async Task CloseMainWindowAsync()
+	private async Task CloseMainWindowAsync()
 	{
 		var w = await FindWtqMainWindowAsync().NoCtx();
 
@@ -96,11 +101,11 @@ public class WtqUIHost
 			return;
 		}
 
-		await w.MoveToAsync(new Point(0, -1_000_000)).NoCtx();
+		await w.MoveToAsync(OffScreenLocation).NoCtx();
 		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
 	}
 
-	public async Task OpenMainWindowAsync()
+	private async Task OpenMainWindowAsync()
 	{
 		var w = await FindWtqMainWindowAsync().NoCtx();
 
@@ -109,15 +114,16 @@ public class WtqUIHost
 			return;
 		}
 
-		// await w.MoveToAsync(_loc ?? Point.Empty).NoCtx();
+		var scrRect = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
+		var wndRect = await w.GetWindowRectAsync().NoCtx();
+
+		var loc = new Point(
+			x: scrRect.X + (scrRect.Width / 2) - (wndRect.Width / 2),
+			y: scrRect.Y + (scrRect.Height / 2) - (wndRect.Height / 2));
+
+		await w.MoveToAsync(loc).NoCtx();
 		await w.BringToForegroundAsync().NoCtx();
 		await w.SetTaskbarIconVisibleAsync(true).NoCtx();
-
-		// TODO: Replace with screen info provider thing.
-		_app.MainWindow.Center();
-
-		var scr = await _scrInfoProvider.GetScreenWithCursorAsync().NoCtx();
-		scr.GetType();
 	}
 
 	private async Task<WtqWindow?> FindWtqMainWindowAsync()
