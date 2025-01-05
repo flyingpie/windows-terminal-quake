@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
-			.AddRadzenComponents();
+			.AddRadzenComponents()
+			.AddTransient<Notifier>();
 	}
 }
