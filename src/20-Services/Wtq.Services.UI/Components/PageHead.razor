@@ -1,0 +1,16 @@
+@code {
+
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	[EditorRequired]
+	[NotNull]
+	[Parameter]
+	public string? Icon { get; set; }
+
+}
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+	<h1>@ChildContent</h1>
+	<h1><RadzenIcon Icon="@Icon" /></h1>
+</RadzenStack>

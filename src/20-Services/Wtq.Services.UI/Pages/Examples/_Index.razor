@@ -1,0 +1,50 @@
+@inject IOptions<WtqOptions> WtqOptions
+@inject DialogService Dialog
+@inject NavigationManager NavMan
+
+@page "/examples"
+
+@code {
+
+	private void AddApp(WtqAppExample example)
+	{
+
+	}
+
+}
+
+<PageHead Icon="preview">Example Configurations</PageHead>
+
+<p>Here are some examples for apps that you can use with WTQ.</p>
+
+<p>Clicking <Emph>Add</Emph> will add an example entry to your settings, and take you there for further customization.</p>
+
+<RadzenRow>
+
+	@foreach (var example in WtqAppExamples.AppExamples)
+	{
+		<RadzenColumn Size="6">
+			<RadzenCard>
+
+				<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+					<h2 style="margin: 0;">@example.Title</h2>
+
+					<p class="rz-m-0" style="height: 3em;">@example.Description</p>
+
+					<RadzenImage
+						Path="@example.Image"
+						style="width: 100%; object-fit: cover; height: 160px;"
+					/>
+
+					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+						<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" Disabled="@(example.Link == null)" />
+						<RadzenButton Variant="Variant.Filled" Text="Add" />
+					</RadzenStack>
+
+				</RadzenStack>
+
+			</RadzenCard>
+		</RadzenColumn>
+	}
+
+</RadzenRow>

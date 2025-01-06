@@ -1,0 +1,31 @@
+@inject IOptions<WtqOptions> WtqOptions
+
+<RadzenPanelMenu Style="margin-top: 1em;">
+
+	<RadzenPanelMenuItem	Text="Welcome"				Icon="home"						Path="/"/>
+	<RadzenPanelMenuItem	Text="Examples"				Icon="gallery_thumbnail"		Path="/examples"/>
+
+	<hr style="color: var(--rz-base-dark); margin: 1em"/>
+
+	<RadzenPanelMenuItem	Text="Global settings"		Icon="public"					Path="/global-settings"/>
+	<RadzenPanelMenuItem	Text="Apps"					Icon="ad_group"					Path="/apps"						Expanded="true">
+
+		@foreach (var app in WtqOptions.Value.Apps)
+		{
+			<RadzenPanelMenuItem	Text="@app.Name"	Icon="circle"					Path="@($"/apps/{app.Name}")"/>
+		}
+
+	</RadzenPanelMenuItem>
+
+	<hr style="color: var(--rz-base-dark); margin: 1em"/>
+
+	<RadzenPanelMenuItem	Text="Windows"				Icon="select_window"			Path="/windows"/>
+	<RadzenPanelMenuItem	Text="Screens"				Icon="monitor"					Path="/screens"/>
+	<RadzenPanelMenuItem	Text="Settings (JSON)"		Icon="data_object"				Path="/settings-json"/>
+
+	<hr style="color: var(--rz-base-dark); margin: 1em"/>
+
+	<RadzenPanelMenuItem	Text="Logs"					Icon="subject"					Path="/logs"/>
+	<RadzenPanelMenuItem	Text="Debug info"			Icon="bug_report"				Path="/debug-info"/>
+
+</RadzenPanelMenu>
