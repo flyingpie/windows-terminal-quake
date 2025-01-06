@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
+			.AddSingleton<WtqOptionsSaveService>()
 
 			.AddHostedService<WtqFocusTracker>()
 			.AddHostedService<WtqHotkeyService>()

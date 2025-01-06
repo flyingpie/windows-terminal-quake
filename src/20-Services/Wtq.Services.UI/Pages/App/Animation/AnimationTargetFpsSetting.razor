@@ -1,0 +1,20 @@
+@inherits BaseSetting
+
+@code {
+
+	public int value; // TODO
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Animation target fps"/>
+	<RadzenColumn Size="7">
+		<RadzenNumeric @bind-Value="value" class="rz-mr-4" style="width: 80px;"/>
+		<RadzenSlider @bind-Value="value" TValue="int"/>
+
+		<Descr>How many times per second to update the app position.</Descr>
+	</RadzenColumn>
+	<SettingGlobal
+		HasGlobalSetting="true"
+	/>
+</RadzenRow>

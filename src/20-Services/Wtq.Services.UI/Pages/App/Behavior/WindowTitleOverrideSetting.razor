@@ -1,0 +1,13 @@
+@inherits BaseSetting
+
+<RadzenRow AlignItems="AlignItems.Start">
+	<SettingLabel Text="Window Title Override" Subtext="optional"/>
+	<RadzenColumn Size="7">
+		<RadzenTextBox @bind-Value="AppOpts.WindowTitleOverride" style="width: 100%;"/>
+
+		<Descr>
+			Attempt to set the app <Emph>window title</Emph> to this value.
+			Note that this may work for some apps.
+		</Descr>
+	</RadzenColumn>
+</RadzenRow>

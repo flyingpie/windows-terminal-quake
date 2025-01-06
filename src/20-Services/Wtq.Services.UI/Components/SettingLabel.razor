@@ -1,0 +1,22 @@
+@code {
+
+	[Parameter]
+	public string? Text { get; set; }
+
+	[Parameter]
+	public string? Subtext { get; set; }
+
+	[Parameter]
+	public string? Component { get; set; }
+}
+
+<RadzenColumn Size="4">
+	<RadzenStack Orientation="Orientation.Vertical" Gap="2">
+		<RadzenLabel Text="@Text" Component="@Component"/>
+
+		@if (Subtext != null)
+		{
+			<p class="rz-color-base-500 rz-m-0">@Subtext</p>
+		}
+	</RadzenStack>
+</RadzenColumn>
