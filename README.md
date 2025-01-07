@@ -15,7 +15,7 @@ On **CachyOS**, with [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolp
 https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf
 
 On **CachyOS**, combined with [Kando](https://github.com/kando-menu/kando).
-https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096
+<video src="https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096" />
 
 - Join the [discussion](https://github.com/flyingpie/windows-terminal-quake/discussions/119)
 - Open an [issue](https://github.com/flyingpie/windows-terminal-quake/issues)
