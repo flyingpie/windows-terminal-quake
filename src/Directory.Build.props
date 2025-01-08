@@ -17,11 +17,11 @@
 		<RunAnalyzers>true</RunAnalyzers>
 -->
 	</PropertyGroup>
-
+<!--
 	<ItemGroup>
 		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json" />
 	</ItemGroup>
-
+-->
 	<!-- Unit Test Projects -->
 	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
 		<Nullable>annotations</Nullable>

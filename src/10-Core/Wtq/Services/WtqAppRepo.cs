@@ -110,7 +110,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private WtqAppOptions GetOptionsByNameRequired(string name)
 	{
 		return GetOptionsByName(name)
-			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'.");
+			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'. These were found: '{string.Join(", ", _opts.CurrentValue.Apps.Select(a => a.Name))}'.");
 	}
 
 	private async Task UpdateAppsAsync(bool allowStartNew)
