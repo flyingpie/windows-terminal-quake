@@ -1,5 +1,14 @@
 @inherits BaseSetting
 
+@code {
+	private void OnRemove(HotkeyOptions hk)
+	{
+		AppOpts.Hotkeys.Remove(hk);
+
+		StateHasChanged();
+	}
+}
+
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Hotkeys"/>
 	<RadzenColumn Size="7">
@@ -8,7 +17,9 @@
 
 			@foreach (var hk in AppOpts.Hotkeys)
 			{
-				<Hotkey Options="hk" OnRemove="@(() => AppOpts.Hotkeys.Remove(hk))" />
+				@* <Hotkey Options="hk" OnRemove="@(() => AppOpts.Hotkeys.Remove(hk))" /> *@
+
+				<Hotkey2 Options="hk" OnRemove="@(() => OnRemove(hk))" />
 			}
 
 			<RadzenStack>

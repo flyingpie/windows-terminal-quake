@@ -1,12 +1,21 @@
 @inherits BaseSetting
 
+@code {
+	public void RemoveArg(ProcessArgument arg)
+	{
+		AppOpts.ArgumentsList.Remove(arg);
+
+		StateHasChanged();
+	}
+}
+
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Arguments" Component="Arguments" Subtext="optional"/>
 	<RadzenColumn Size="7">
 		<RadzenStack>
 			@foreach (var arg in AppOpts.ArgumentsList)
 			{
-				<ProcessArg Argument="arg" OnRemove="@(() => AppOpts.ArgumentsList.Remove(arg))" />
+				<ProcessArg Argument="arg" OnRemove="@(() => RemoveArg(arg))" />
 			}
 
 			<RadzenStack>
