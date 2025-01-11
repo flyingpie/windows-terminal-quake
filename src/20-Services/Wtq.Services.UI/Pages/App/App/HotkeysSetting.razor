@@ -17,8 +17,6 @@
 
 			@foreach (var hk in AppOpts.Hotkeys)
 			{
-				@* <Hotkey Options="hk" OnRemove="@(() => AppOpts.Hotkeys.Remove(hk))" /> *@
-
 				<Hotkey2 Options="hk" OnRemove="@(() => OnRemove(hk))" />
 			}
 

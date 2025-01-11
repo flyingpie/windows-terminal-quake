@@ -45,7 +45,8 @@
 
 	private void Discard()
 	{
-		NavMan.Refresh(forceReload: true);
+		// NavMan.Refresh(forceReload: true);
+		NavMan.NavigateTo($"/apps/{AppOpts.Name}", forceLoad: true);
 	}
 
 }

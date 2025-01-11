@@ -37,6 +37,8 @@ public class WtqOptionsSaveService
 
 	public async Task SaveAsync(WtqOptions options)
 	{
+		options.PrepareForSave();
+
 		var res = JsonSerializer.Serialize(options, _opts);
 
 		await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, res).NoCtx();
