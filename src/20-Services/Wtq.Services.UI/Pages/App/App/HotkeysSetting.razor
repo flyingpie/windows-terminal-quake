@@ -17,7 +17,7 @@
 
 			@foreach (var hk in AppOpts.Hotkeys)
 			{
-				<Hotkey2 Options="hk" OnRemove="@(() => OnRemove(hk))" />
+				<Hotkey Options="hk" OnRemove="@(() => OnRemove(hk))" />
 			}
 
 			<RadzenStack>
@@ -29,6 +29,6 @@
 			</RadzenStack>
 		</RadzenStack>
 
-		<Descr>What hotkeys should toggle the app.</Descr>
+		<Descr>What hotkey(s) should toggle the app.</Descr>
 	</RadzenColumn>
 </RadzenRow>

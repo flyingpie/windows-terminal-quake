@@ -2,15 +2,19 @@
 
 @code {
 
-	public int value; // TODO
+	public int AnimationDurationMs
+	{
+		get => /*AppOpts.AnimationTypeToggleOff ??*/ GlobalOpts.AnimationDurationMs;
+		set => /*AppOpts.AnimationTypeToggleOff = value;*/ GlobalOpts.AnimationDurationMs = value;
+	}
 
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Animation duration"/>
 	<RadzenColumn Size="7">
-		<RadzenNumeric @bind-Value="value" class="rz-mr-4" style="width: 80px;"/>
-		<RadzenSlider @bind-Value="value" TValue="int"/>
+		<RadzenNumeric @bind-Value="AnimationDurationMs" class="rz-mr-4" style="width: 80px;"/>
+		<RadzenSlider @bind-Value="AnimationDurationMs" TValue="int" Min="0" Max="1000" Step="5" />
 
 		<Descr>How long it should take for the app to toggle onto or -off the screen.</Descr>
 	</RadzenColumn>

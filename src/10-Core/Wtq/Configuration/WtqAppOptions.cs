@@ -5,6 +5,18 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class WtqAppOptions
 {
+	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
+	public int? AnimationDurationMs { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
+	public int? AnimationTargetFps { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOn"/>
+	public AnimationType? AnimationTypeToggleOn { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOff"/>
+	public AnimationType? AnimationTypeToggleOff { get; set; }
+
 	private ICollection<ProcessArgument> _argumentList = [];
 
 	/// <summary>

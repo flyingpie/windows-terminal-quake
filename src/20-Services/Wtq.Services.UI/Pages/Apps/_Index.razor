@@ -13,8 +13,6 @@
 
 	protected override void OnInitialized()
 	{
-//		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
-
 		GlobalOpts = WtqOpts.CurrentValue;
 
 		WtqOpts.OnChange(_ => InvokeAsync(StateHasChanged));
@@ -50,6 +48,9 @@
 <PageHead Icon="ad_group">Apps</PageHead>
 
 <RadzenStack>
+	<p class="rz-m-0">Here are the applications who's windows can be toggle on and -off.</p>
+	<p class="rz-m-0">Take a look at the <RadzenLink Path="/examples" Text="Examples" /> page for, well, examples.</p>
+
 	@foreach (var app in GlobalOpts.Apps)
 	{
 		<RadzenCard Variant="Variant.Flat" class="rz-p-0">
