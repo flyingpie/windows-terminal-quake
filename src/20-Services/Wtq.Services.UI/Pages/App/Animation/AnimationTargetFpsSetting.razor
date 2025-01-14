@@ -4,8 +4,8 @@
 
 	public int AnimationTargetFps
 	{
-		get => /*AppOpts.AnimationTargetFps ??*/ GlobalOpts.AnimationTargetFps;
-		set => /*AppOpts.AnimationTargetFps = value;*/ GlobalOpts.AnimationTargetFps = value;
+		get => AppOpts.AnimationTargetFps ?? GlobalOpts.AnimationTargetFps;
+		set => AppOpts.AnimationTargetFps = value;
 	}
 
 }
@@ -20,5 +20,7 @@
 	</RadzenColumn>
 	<SettingGlobal
 		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.AnimationTargetFps != null)"
+		Reset="@(() => AppOpts.AnimationTargetFps = null)"
 	/>
 </RadzenRow>

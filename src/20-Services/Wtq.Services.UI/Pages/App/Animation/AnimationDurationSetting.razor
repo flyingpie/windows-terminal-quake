@@ -4,8 +4,8 @@
 
 	public int AnimationDurationMs
 	{
-		get => /*AppOpts.AnimationTypeToggleOff ??*/ GlobalOpts.AnimationDurationMs;
-		set => /*AppOpts.AnimationTypeToggleOff = value;*/ GlobalOpts.AnimationDurationMs = value;
+		get => AppOpts.AnimationDurationMs ?? GlobalOpts.AnimationDurationMs;
+		set => AppOpts.AnimationDurationMs = value;
 	}
 
 }
@@ -20,5 +20,7 @@
 	</RadzenColumn>
 	<SettingGlobal
 		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.AnimationDurationMs != null)"
+		Reset="@(() => AppOpts.AnimationDurationMs = null)"
 	/>
 </RadzenRow>

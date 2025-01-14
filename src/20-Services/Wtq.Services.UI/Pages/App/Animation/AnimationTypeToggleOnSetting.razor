@@ -4,8 +4,8 @@
 
 	public AnimationType AnimationTypeToggleOn
 	{
-		get => /*AppOpts.AnimationTypeToggleOn ??*/ GlobalOpts.AnimationTypeToggleOn;
-		set => /*AppOpts.AnimationTypeToggleOn = value;*/ GlobalOpts.AnimationTypeToggleOn = value;
+		get => AppOpts.AnimationTypeToggleOn ?? GlobalOpts.AnimationTypeToggleOn;
+		set => AppOpts.AnimationTypeToggleOn = value;
 	}
 
 }
@@ -28,5 +28,7 @@
 	</RadzenColumn>
 	<SettingGlobal
 		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.AnimationTypeToggleOn != null)"
+		Reset="@(() => AppOpts.AnimationTypeToggleOn = null)"
 	/>
 </RadzenRow>

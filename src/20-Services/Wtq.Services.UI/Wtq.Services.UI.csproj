@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="BlazorMonaco" />
 		<PackageReference Include="Flyingpie.Photino.Blazor" />
+		<PackageReference Include="Flyingpie.Photino.Native" />
 		<PackageReference Include="Radzen.Blazor" />
 	</ItemGroup>
 
