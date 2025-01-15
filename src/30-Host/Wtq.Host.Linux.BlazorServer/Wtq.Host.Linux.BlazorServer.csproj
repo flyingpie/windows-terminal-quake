@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.TrayIcon\Wtq.Services.TrayIcon.csproj"/>
+		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>
