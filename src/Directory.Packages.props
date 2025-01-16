@@ -15,9 +15,7 @@
 		<PackageVersion Include="NJsonSchema" Version="11.1.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Nuke.Common" Version="9.0.3"/>
-		<PackageVersion Include="Flyingpie.Photino.Blazor" Version="4.0.0-pre1"/>
-		<PackageVersion Include="Flyingpie.Photino.Native" Version="4.0.0-pre2"/>
-		<PackageVersion Include="Flyingpie.Photino.NET" Version="4.0.0-pre1"/>
+		<PackageVersion Include="Photino.Blazor" Version="3.2.0"/>
 		<PackageVersion Include="Radzen.Blazor" Version="5.7.3"/>
 		<PackageVersion Include="Serilog" Version="4.2.0"/>
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0"/>
