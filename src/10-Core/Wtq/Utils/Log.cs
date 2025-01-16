@@ -15,18 +15,22 @@ public static class Log
 		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
 		var logLevel = WtqEnv.LogLevel;
 
-		Serilog.Log.Logger = new LoggerConfiguration()
+		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
-
-			.WriteTo.Console()
 
 			.WriteTo.File(
 				path: path,
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
-				retainedFileCountLimit: 5)
-			.CreateLogger();
+				retainedFileCountLimit: 5);
 
+		// Log to console?
+		if (WtqEnv.LogToConsole)
+		{
+			logBuilder.WriteTo.Console();
+		}
+
+		Serilog.Log.Logger = logBuilder.CreateLogger(); 
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
 		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
 		_factory.AddProvider(provider);

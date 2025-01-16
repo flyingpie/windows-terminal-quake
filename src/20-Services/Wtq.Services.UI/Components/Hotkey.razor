@@ -1,4 +1,9 @@
+@using System.Text
+@using Wtq.Services.UI.Extensions
+
 @code {
+
+	private bool _isSuper;
 
 	[EditorRequired]
 	[Parameter]
@@ -8,46 +13,74 @@
 	[Parameter]
 	public Action OnRemove { get; set; }
 
+	private string Description
+	{
+		get
+		{
+			if (Options.Key != Keys.None || Options.Modifiers != KeyModifiers.None)
+			{
+				return Options.ToString();
+			}
+
+			return "(press a shortcut here)";
+		}
+	}
+
+	private bool IsSuper(KeyboardEventArgs e)
+	{
+		return (e.Key ?? string.Empty).Equals("super", StringComparison.OrdinalIgnoreCase);
+	}
+
+	private void Clear()
+	{
+		Options.Modifiers = KeyModifiers.None;
+		Options.Key = Keys.None;
+	}
+
+	private void HandleKeyDown(KeyboardEventArgs e)
+	{
+		if (IsSuper(e))
+		{
+			_isSuper = true;
+		}
+
+		e.ToModifiersAndKey(out var mod, out var key);
+
+		if (_isSuper)
+		{
+			mod |= KeyModifiers.Super;
+		}
+
+		Options.Modifiers = mod;
+		Options.Key = key;
+	}
+
+	private void HandleKeyUp(KeyboardEventArgs e)
+	{
+		if (IsSuper(e))
+		{
+			_isSuper = false;
+		}
+	}
+
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-	<!-- Alt -->
-	<RadzenToggleButton
-		Text="Alt"
-		@bind-Value="Options.IsAlt"
-		Size="ButtonSize.Medium"
-		ButtonStyle="ButtonStyle.Light"
-		ToggleButtonStyle="ButtonStyle.Primary"
-		Style="width: 8em;"
+	<!-- Shortcut capturing textbox -->
+	<RadzenTextBox
+		Style="width: 100%;"
+		@onkeydown="(ev) => HandleKeyDown(ev)"
+		@onkeyup="(ev) => HandleKeyUp(ev)"
+		Placeholder="Type here to set hotkey."
+		Value="@Description"
 	/>
 
-	<!-- Ctrl -->
-	<RadzenToggleButton
-		Text="Ctrl"
-		@bind-Value="Options.IsCtrl"
+	<!-- Clear button -->
+	<RadzenButton
+		Icon="backspace"
 		Size="ButtonSize.Medium"
-		ButtonStyle="ButtonStyle.Light"
-		ToggleButtonStyle="ButtonStyle.Primary"
-		Style="width: 8em;"
-	/>
-
-	<!-- Shift -->
-	<RadzenToggleButton
-		Text="Shift"
-		@bind-Value="Options.IsShift"
-		Size="ButtonSize.Medium"
-		ButtonStyle="ButtonStyle.Light"
-		ToggleButtonStyle="ButtonStyle.Primary"
-		Style="width: 8em;"
-	/>
-
-	<!-- Key -->
-	<RadzenDropDown
-		@bind-Value="Options.Key"
-		Data="@(WtqConstants.CommonKeys)"
-		Style="width: 100%; max-width: 400px;"
-		Name="AnimationTypeToggleOn1"
+		Click="@(() => Clear())"
 	/>
 
 	<!-- Remove button -->
@@ -56,4 +89,5 @@
 		Size="ButtonSize.Medium"
 		Click="@(() => OnRemove())"
 	/>
+
 </RadzenStack>

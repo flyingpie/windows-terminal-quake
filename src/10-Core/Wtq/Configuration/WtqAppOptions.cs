@@ -5,6 +5,18 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class WtqAppOptions
 {
+	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
+	public int? AnimationDurationMs { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
+	public int? AnimationTargetFps { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOn"/>
+	public AnimationType? AnimationTypeToggleOn { get; set; }
+
+	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOff"/>
+	public AnimationType? AnimationTypeToggleOff { get; set; }
+
 	private ICollection<ProcessArgument> _argumentList = [];
 
 	/// <summary>
@@ -60,10 +72,16 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.PreferMonitor"/>
 	public PreferMonitor? PreferMonitor { get; set; }
 
+	private string? _processName;
+
 	/// <summary>
 	/// The name of the process to look for, when searching for an existing app instance.
 	/// </summary>
-	public string? ProcessName { get; set; }
+	public string? ProcessName
+	{
+		get => _processName;
+		set => _processName = value?.EmptyOrWhiteSpaceToNull();
+	}
 
 	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
@@ -87,6 +105,17 @@ public sealed class WtqAppOptions
 	public bool HasHotkey(Keys key, KeyModifiers modifiers)
 	{
 		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+	}
+
+	public void PrepareForSave()
+	{
+		foreach (var hk in Hotkeys.ToList())
+		{
+			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
+			{
+				Hotkeys.Remove(hk);
+			}
+		}
 	}
 
 	public override string ToString() => Name;

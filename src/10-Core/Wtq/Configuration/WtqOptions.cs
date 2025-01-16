@@ -239,6 +239,22 @@ public sealed class WtqOptions
 		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage;
 	}
 
+	public void PrepareForSave()
+	{
+		foreach (var app in Apps.ToList())
+		{
+			app.PrepareForSave();
+		}
+
+		foreach (var hk in Hotkeys.ToList())
+		{
+			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
+			{
+				Hotkeys.Remove(hk);
+			}
+		}
+	}
+
 	/// <summary>
 	/// <see cref="HorizontalScreenCoverage"/> as an index (0 - 1).
 	/// </summary>

@@ -13,6 +13,9 @@
 		}
 	],
 
+	"AnimationTargetFps": 60,
+	"AnimationDurationMs": 150,
+
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
 	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 

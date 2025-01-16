@@ -45,12 +45,8 @@
 
 	private void Discard()
 	{
-		NavMan.Refresh(forceReload: true);
-	}
-
-	public void DoStuff()
-	{
-		GlobalOpts.OffScreenLocations = [OffScreenLocation.Above, OffScreenLocation.Below];
+		// NavMan.Refresh(forceReload: true);
+		NavMan.NavigateTo($"/apps/{AppOpts.Name}", forceLoad: true);
 	}
 
 }
@@ -58,8 +54,6 @@
 <PageHead Icon="circle">
 	App <span class="rz-color-primary">@AppId</span>
 </PageHead>
-
-<RadzenButton Click="DoStuff" />
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
@@ -78,7 +72,6 @@
 
 				<NameSetting />
 				<HotkeysSetting />
-				<HotkeyTester />
 
 			</RadzenStack>
 		</RadzenFieldset>

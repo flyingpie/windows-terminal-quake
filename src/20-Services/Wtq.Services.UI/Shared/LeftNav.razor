@@ -1,4 +1,13 @@
-@inject IOptions<WtqOptions> WtqOptions
+@inject IOptionsMonitor<WtqOptions> WtqOptions
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		WtqOptions.OnChange(_ => InvokeAsync(StateHasChanged));
+	}
+
+}
 
 <RadzenPanelMenu Style="margin-top: 1em;">
 
@@ -10,7 +19,7 @@
 	<RadzenPanelMenuItem	Text="Global settings"		Icon="public"					Path="/global-settings"/>
 	<RadzenPanelMenuItem	Text="Apps"					Icon="ad_group"					Path="/apps"						Expanded="true">
 
-		@foreach (var app in WtqOptions.Value.Apps)
+		@foreach (var app in WtqOptions.CurrentValue.Apps)
 		{
 			<RadzenPanelMenuItem	Text="@app.Name"	Icon="circle"					Path="@($"/apps/{app.Name}")"/>
 		}
