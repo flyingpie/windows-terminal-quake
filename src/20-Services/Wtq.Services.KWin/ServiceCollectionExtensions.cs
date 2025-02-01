@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Scripting;
 

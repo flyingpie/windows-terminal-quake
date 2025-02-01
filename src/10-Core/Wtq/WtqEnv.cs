@@ -7,9 +7,7 @@ public static class WtqEnv
 	public static class Names
 	{
 		public const string Config = "WTQ_CONFIG_FILE";
-
 		public const string LogLevel = "WTQ_LOG_LEVEL";
-
 		public const string LogToConsole = "WTQ_LOG_TO_CONSOLE";
 	}
 
