@@ -60,10 +60,16 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.PreferMonitor"/>
 	public PreferMonitor? PreferMonitor { get; set; }
 
+	private string? _processName;
+
 	/// <summary>
 	/// The name of the process to look for, when searching for an existing app instance.
 	/// </summary>
-	public string? ProcessName { get; set; }
+	public string? ProcessName
+	{
+		get => _processName;
+		set => _processName = value?.EmptyOrWhiteSpaceToNull();
+	}
 
 	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
