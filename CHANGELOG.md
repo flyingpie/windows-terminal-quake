@@ -4,12 +4,12 @@
 - Update docs.
 
 ## [vNext]
+- Apps can now be matched on their window title.
 
-## [2.0.12] / 2024-xx-xx
+## [2.0.12] / 2025-xx-xx
 - Generate a JSON schema file on WTQ start, next to wherever wtq.jsonc is (e.g. wtq.schema.json). This provides autocompletion and validation in supported editors (such as VS Code).
 - Initial work on a graphical UI.
 - Updated tray icon.
-- Apps can now be matched on their window title.
 
 ## [2.0.11] / 2024-11-07
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
@@ -27,9 +27,9 @@
 }
 ```
 
-- Added other **off screen locations**, to support vertically-stacked monitors (see [#146](https://github.com/flyingpie/windows-terminal-quake/issues/146)).
+- Added other **off-screen locations**, to support vertically-stacked monitors (see [#146](https://github.com/flyingpie/windows-terminal-quake/issues/146)).
 
-WTQ will look for an empty space outside of the screen, starting above, then below, then to the left, then to the right. Whichever location that does not overlap with a screen wins, in order.
+WTQ will look for an empty space outside the screen, starting above, then below, then to the left, then to the right. Whichever location that does not overlap with a screen wins, in order.
 
 The order can be changed using the "OffScreenLocations" setting:
 ```jsonc
@@ -213,7 +213,7 @@ Currently exploring the direction where an app has an "AttachMode", which dictat
 - **FindOrStart** (default)
 Looks for an existing process as specified by the "FileName"- and/or "ProcessName"-properties. If no process was found, a new one will be started using the value under the "FileName"-property.
 - **Find**
-Just looks for existing processes as specified by the "FileName"- and/or "ProcessName"-properties. No new processes will be started (previous version behavior, where you always had to manually start the app.
+Just looks for existing processes as specified by the "FileName"- and/or "ProcessName"-properties. No new processes will be started (previous version behavior, where you always had to manually start the app).
 - **Start** (very experimental)
 Always starts a new process, specifically to be used by WTQ. Meant for apps that have multiple open instances. Initially meant for (among other things) browsers, but these turn out to be more complicated. This will be documented later.
 - **Manual**
