@@ -31,9 +31,11 @@
 		GlobalOpts = WtqOpts.CurrentValue;
 		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
 
-		WtqOpts.OnChange((opts, str) =>
+		// Notify when the settings file changes, to prevent overwriting settings that were made outside of the UI.
+		WtqOpts.OnChange((_, _) =>
 		{
 			_hasChanged = true;
+
 			InvokeAsync(StateHasChanged);
 		});
 	}
@@ -41,11 +43,12 @@
 	private async Task SaveAsync()
 	{
 		await SaveService.SaveAsync(GlobalOpts).NoCtx();
+
+		Reload();
 	}
 
-	private void Discard()
+	private void Reload()
 	{
-		// NavMan.Refresh(forceReload: true);
 		NavMan.NavigateTo($"/apps/{AppOpts.Name}", forceLoad: true);
 	}
 
@@ -64,7 +67,7 @@
 		@* Warn about outside file changes. *@
 		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
 			The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
-			<RadzenButton Text="Reload" Click="Discard"/>
+			<RadzenButton Text="Reload" Click="Reload"/>
 		</RadzenAlert>
 
 		<RadzenFieldset Text="App">
@@ -147,7 +150,7 @@
 		style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
 	>
 		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
-		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Discard"/>
+		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
 	</RadzenStack>
 
 </CascadingValue>
