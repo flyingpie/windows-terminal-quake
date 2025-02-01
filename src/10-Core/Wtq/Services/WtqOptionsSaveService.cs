@@ -63,33 +63,10 @@ public class WtqOptionsSaveService
 				// Default values for value types.
 				if (val.GetType().IsValueType)
 				{
-					// var def = Activator.CreateInstance(val.GetType());
 					if (val.Equals(xx4))
 					{
 						return false;
 					}
-				}
-
-				// [JsonDefaultValue]
-				var defAttr = propertyInfo
-					?.AttributeProvider
-					?.GetCustomAttributes(true)
-					.OfType<JsonDefaultValueAttribute>()
-					.FirstOrDefault();
-
-				if (defAttr != null)
-				{
-					if (defAttr.DefaultValue == null && val == null)
-					{
-						return false;
-					}
-
-					if (defAttr.DefaultValue?.Equals(val) ?? false)
-					{
-						return false;
-					}
-
-					return false;
 				}
 
 				// Lists.
