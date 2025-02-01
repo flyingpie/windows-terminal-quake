@@ -8,6 +8,10 @@ public sealed class WtqAppOptions
 	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
 	public int? AnimationDurationMs { get; set; }
 
+	/// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
+	[JsonIgnore]
+	public int? AnimationDurationMsWhenSwitchingApps { get; set; }
+
 	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
 	public int? AnimationTargetFps { get; set; }
 
