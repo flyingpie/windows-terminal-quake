@@ -1,6 +1,7 @@
-@inject IOptions<WtqOptions> WtqOptions
+@inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject DialogService Dialog
 @inject NavigationManager NavMan
+@inject WtqOptionsSaveService SaveService
 
 @page "/apps"
 
@@ -8,12 +9,23 @@
 
 	private static readonly Random _r = new();
 
-	private void AddApp()
+	public WtqOptions GlobalOpts { get; set; }
+
+	protected override void OnInitialized()
 	{
-		WtqOptions.Value.Apps.Add(new()
+		GlobalOpts = WtqOpts.CurrentValue;
+
+		WtqOpts.OnChange(_ => InvokeAsync(StateHasChanged));
+	}
+
+	private async Task AddApp()
+	{
+		GlobalOpts.Apps.Add(new()
 		{
 			Name = WtqConstants.GetRandomPlaceholderName(),
 		});
+
+		await SaveService.SaveAsync(GlobalOpts).NoCtx();
 	}
 
 	private async Task DeleteAppAsync(WtqAppOptions app)
@@ -26,7 +38,9 @@
 				CancelButtonText = "No",
 			}) ?? false)
 		{
-			WtqOptions.Value.Apps.Remove(app);
+			GlobalOpts.Apps.Remove(app);
+
+			await SaveService.SaveAsync(GlobalOpts).NoCtx();
 		}
 	}
 }
@@ -34,16 +48,17 @@
 <PageHead Icon="ad_group">Apps</PageHead>
 
 <RadzenStack>
-	@foreach (var app in WtqOptions.Value.Apps)
+	<p class="rz-m-0">Here are the applications who's windows can be toggle on and -off.</p>
+	<p class="rz-m-0">Take a look at the <RadzenLink Path="/examples" Text="Examples" /> page for, well, examples.</p>
+
+	@foreach (var app in GlobalOpts.Apps)
 	{
 		<RadzenCard Variant="Variant.Flat" class="rz-p-0">
 
-			<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween">
+			<RadzenRow Gap="0" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
 
 				<RadzenColumn Size="8">
-					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-						<h2 class="rz-mx-4">@app.Name</h2>
-					</RadzenStack>
+					<h2 class="rz-mx-4">@app.Name</h2>
 				</RadzenColumn>
 
 				<RadzenColumn Size="4">

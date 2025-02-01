@@ -9,9 +9,9 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Filename"/>
+	<SettingLabel Text="Filename" Component="@_id" />
 	<RadzenColumn Size="7">
-		<RadzenTextBox @bind-Value="FileName" style="width: 100%;" @oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)"/>
+		<RadzenTextBox @bind-Value="FileName" style="width: 100%;" @oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)" Name="@_id" />
 
 		@if (!string.IsNullOrWhiteSpace(FileName))
 		{

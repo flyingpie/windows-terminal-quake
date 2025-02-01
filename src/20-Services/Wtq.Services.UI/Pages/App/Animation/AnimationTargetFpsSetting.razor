@@ -2,19 +2,25 @@
 
 @code {
 
-	public int value; // TODO
+	public int AnimationTargetFps
+	{
+		get => AppOpts.AnimationTargetFps ?? GlobalOpts.AnimationTargetFps;
+		set => AppOpts.AnimationTargetFps = value;
+	}
 
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Animation target fps"/>
 	<RadzenColumn Size="7">
-		<RadzenNumeric @bind-Value="value" class="rz-mr-4" style="width: 80px;"/>
-		<RadzenSlider @bind-Value="value" TValue="int"/>
+		<RadzenNumeric @bind-Value="AnimationTargetFps" class="rz-mr-4" style="width: 80px;"/>
+		<RadzenSlider @bind-Value="AnimationTargetFps" TValue="int" Min="0" Max="200" Step="5"/>
 
 		<Descr>How many times per second to update the app position.</Descr>
 	</RadzenColumn>
 	<SettingGlobal
 		HasGlobalSetting="true"
+		IsOverridden="@(AppOpts.AnimationTargetFps != null)"
+		Reset="@(() => AppOpts.AnimationTargetFps = null)"
 	/>
 </RadzenRow>
