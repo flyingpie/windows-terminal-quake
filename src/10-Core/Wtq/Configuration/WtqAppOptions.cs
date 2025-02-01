@@ -95,5 +95,16 @@ public sealed class WtqAppOptions
 		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
 	}
 
+	public void PrepareForSave()
+	{
+		foreach (var hk in Hotkeys.ToList())
+		{
+			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
+			{
+				Hotkeys.Remove(hk);
+			}
+		}
+	}
+
 	public override string ToString() => Name;
 }
