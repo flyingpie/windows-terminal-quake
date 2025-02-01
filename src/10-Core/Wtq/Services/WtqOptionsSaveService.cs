@@ -19,7 +19,6 @@ public class WtqOptionsSaveService
 			{
 				new JsonStringEnumConverter(),
 			},
-//			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 
 			WriteIndented = true,
 			IndentCharacter = '\t',
