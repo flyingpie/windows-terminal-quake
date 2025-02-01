@@ -60,5 +60,69 @@ public sealed class HotkeyOptions
 		}
 	}
 
-	public override string ToString() => $"{Modifiers} + {Key}";
+	[JsonIgnore]
+	public bool IsSuper
+	{
+		get => Modifiers.HasFlag(KeyModifiers.Super);
+		set
+		{
+			if (value)
+			{
+				Modifiers |= KeyModifiers.Super;
+			}
+			else
+			{
+				Modifiers &= ~KeyModifiers.Super;
+			}
+		}
+	}
+
+	public override string ToString()
+	{
+		var s = new StringBuilder();
+
+		if (IsCtrl)
+		{
+			s.Append("Ctrl");
+		}
+
+		if (IsShift)
+		{
+			if (s.Length > 0)
+			{
+				s.Append(" + ");
+			}
+
+			s.Append("Shift");
+		}
+
+		if (IsAlt)
+		{
+			if (s.Length > 0)
+			{
+				s.Append(" + ");
+			}
+
+			s.Append("Alt");
+		}
+
+		if (IsSuper)
+		{
+			if (s.Length > 0)
+			{
+				s.Append(" + ");
+			}
+
+			s.Append("Super");
+		}
+
+		if (s.Length > 0)
+		{
+			s.Append(" + ");
+		}
+
+		s.Append(Key.GetAttribute<Keys, DisplayAttribute>()?.Description ?? Key.ToString());
+
+		return s.ToString();
+	}
 }
