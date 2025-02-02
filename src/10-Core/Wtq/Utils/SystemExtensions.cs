@@ -4,8 +4,14 @@ public static class SystemExtensions
 {
 	private static readonly ILogger Log = Utils.Log.For(typeof(SystemExtensions));
 
-	public static int DistanceTo(this Point src, Point dst)
-		=> (int)Math.Sqrt(Math.Pow(dst.X - src.X, 2) + Math.Pow(dst.Y - src.Y, 2));
+	public static string ExpandEnvVars(this string src)
+	{
+		src ??= string.Empty;
+
+		return Environment
+			.ExpandEnvironmentVariables(src)
+			.Replace("~", WtqPaths.UserHome);
+	}
 
 	public static string? EmptyOrWhiteSpaceToNull(this string? input)
 	{

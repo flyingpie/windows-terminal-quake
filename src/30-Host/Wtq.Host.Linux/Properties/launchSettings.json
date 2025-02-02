@@ -14,7 +14,7 @@
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
 
-				"WTQ_CONFIG_FILE": "/home/marco/.config/wtq/wtq.jsonc",
+				"WTQ_CONFIG_FILE": "~/.config/wtq/wtq.jsonc",
 				"__WTQ_LOG_LEVEL": "VERBOSE",
 				"WTQ_LOG_TO_CONSOLE": "TRUE"
 			}

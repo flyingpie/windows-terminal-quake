@@ -19,6 +19,12 @@ public static class MathUtils
 		};
 
 	/// <summary>
+	/// Returns the distance between two points.
+	/// </summary>
+	public static float DistanceTo(this Point src, Point dst)
+		=> MathF.Sqrt(MathF.Pow(dst.X - src.X, 2) + MathF.Pow(dst.Y - src.Y, 2));
+
+	/// <summary>
 	/// Linear interpolate, returns a <see cref="Point"/> that is between <paramref name="src"/> and <paramref name="dst"/>,
 	/// at <paramref name="by"/> (value of 0.0f, to 1.0f).
 	/// </summary>
