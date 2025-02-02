@@ -105,10 +105,24 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
+	/// Tests.
+	/// </summary>
+	private Target RunTests => _ => _
+		.DependsOn(Clean)
+		.Executes(() =>
+		{
+			DotNetTest(_ => _
+				.SetProjectFile(Solution.Path)
+				.SetVerbosity(DotNetVerbosity.normal)
+			);
+		});
+
+	/// <summary>
 	/// Linux x64 AOT.
 	/// </summary>
 	private Target PublishLinux64Aot => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToLinux64AotZip)
 		.Executes(() =>
 		{
@@ -137,6 +151,7 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target PublishLinux64FrameworkDependent => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToLinux64FrameworkDependentZip)
 		.Executes(() =>
 		{
@@ -164,6 +179,7 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target PublishLinux64SelfContained => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToLinux64SelfContainedZip)
 		.Executes(() =>
 		{
@@ -193,6 +209,7 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target PublishWin64Aot => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToWin64AotZip)
 		.Executes(() =>
 		{
@@ -222,6 +239,7 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target PublishWin64FrameworkDependent => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToWin64FrameworkDependentZip)
 		.Executes(() =>
 		{
@@ -252,6 +270,7 @@ public sealed class Build : NukeBuild
 	/// </summary>
 	private Target PublishWin64SelfContained => _ => _
 		.DependsOn(Clean)
+		.DependsOn(RunTests)
 		.Produces(PathToWin64SelfContainedZip)
 		.Executes(() =>
 		{
@@ -277,10 +296,23 @@ public sealed class Build : NukeBuild
 				fileMode: System.IO.FileMode.CreateNew);
 		});
 
+	private Target PublishLinux64 => _ => _
+		.DependsOn(Clean)
+		.DependsOn(PublishLinux64FrameworkDependent)
+		.DependsOn(PublishLinux64SelfContained)
+		.Executes();
+
+	private Target PublishWin64 => _ => _
+		.DependsOn(Clean)
+		.DependsOn(PublishWin64FrameworkDependent)
+		.DependsOn(PublishWin64SelfContained)
+		.Executes();
+
 	/// <summary>
 	/// Scoop manifest.
 	/// </summary>
 	private Target CreateScoopManifest => _ => _
+		.DependsOn(PublishWin64SelfContained)
 		.Executes(async () =>
 		{
 			var tpl = await File.ReadAllTextAsync(RootDirectory / "scoop" / "_template.json");
@@ -300,6 +332,7 @@ public sealed class Build : NukeBuild
 	/// WinGet manifest.
 	/// </summary>
 	private Target CreateWinGetManifest => _ => _
+		.DependsOn(PublishWin64SelfContained)
 		.Executes(async () =>
 		{
 			var templateRoot = RootDirectory / "winget" / "_template";
@@ -336,6 +369,8 @@ public sealed class Build : NukeBuild
 	/// GitHub release.
 	/// </summary>
 	private Target CreateGitHubRelease => _ => _
+		.DependsOn(PublishLinux64)
+		.DependsOn(PublishWin64)
 		.Description($"Creating release for the publishable version.")
 		.Executes(async () =>
 		{
@@ -385,35 +420,15 @@ public sealed class Build : NukeBuild
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 		});
 
-	private Target PublishLinux64 => _ => _
-		.DependsOn(Clean)
-		.DependsOn(PublishLinux64FrameworkDependent)
-		.DependsOn(PublishLinux64SelfContained)
-		.Executes();
-
-	private Target PublishWin64 => _ => _
-		.DependsOn(Clean)
-		.DependsOn(PublishWin64FrameworkDependent)
-		.DependsOn(PublishWin64SelfContained)
-		.Triggers(CreateScoopManifest)
-		.Triggers(CreateWinGetManifest)
-		.Executes();
-
 	private Target PublishDebug => _ => _
-		.DependsOn(Clean)
-		.DependsOn(PublishLinux64)
-		.DependsOn(PublishWin64)
-		.Triggers(CreateScoopManifest)
-		.Triggers(CreateWinGetManifest)
+		.DependsOn(PublishLinux64FrameworkDependent)
+		.DependsOn(PublishWin64FrameworkDependent)
 		.Executes();
 
 	[SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "MvdO: Invoked manually.")]
 	private Target PublishRelease => _ => _
-		.DependsOn(Clean)
-		.DependsOn(PublishLinux64FrameworkDependent)
-		.DependsOn(PublishLinux64SelfContained)
-		.DependsOn(PublishWin64FrameworkDependent)
-		.DependsOn(PublishWin64SelfContained)
+		.DependsOn(PublishLinux64)
+		.DependsOn(PublishWin64)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)
 		.Triggers(CreateGitHubRelease)
