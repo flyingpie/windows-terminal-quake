@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Photino.Blazor;
-using System.Collections.Generic;
 
 namespace Wtq.Services.UI;
 
@@ -32,7 +31,6 @@ public static class WtqUIHostBuilder
 			app.Services.GetRequiredService<IEnumerable<IHostedService>>(),
 			app.Services.GetRequiredService<IHostApplicationLifetime>(),
 			app.Services.GetRequiredService<IWtqBus>(),
-			app.Services.GetRequiredService<IWtqScreenInfoProvider>(),
 			app.Services.GetRequiredService<IWtqWindowService>(),
 			app);
 

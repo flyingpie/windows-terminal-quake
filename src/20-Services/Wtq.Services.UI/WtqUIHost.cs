@@ -1,31 +1,27 @@
 using Microsoft.Extensions.Hosting;
 using Photino.Blazor;
-using System.Collections.Generic;
-using System.Drawing;
 
 namespace Wtq.Services.UI;
 
 public class WtqUIHost
 {
 	private const string MainWindowTitle = "WTQ - Main Window";
-	private static readonly Point OffScreenLocation = new(0, -1_000_000);
+
+	private readonly PhotinoBlazorApp _app;
 
 	private readonly IWtqWindowService _windowService;
-	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private bool _isClosing;
 
 	public WtqUIHost(
 		IEnumerable<IHostedService> hostedServices,
 		IHostApplicationLifetime appLifetime,
 		IWtqBus bus,
-		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
-		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_windowService = Guard.Against.Null(windowService);
 
-		_ = Guard.Against.Null(app);
+		_app = Guard.Against.Null(app);
 		_ = Guard.Against.Null(appLifetime);
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(hostedServices);
@@ -101,7 +97,8 @@ public class WtqUIHost
 			return;
 		}
 
-		await w.MoveToAsync(OffScreenLocation).NoCtx();
+		_app.MainWindow.SetMinimized(true);
+
 		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
 	}
 
@@ -114,14 +111,8 @@ public class WtqUIHost
 			return;
 		}
 
-		var scrRect = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
-		var wndRect = await w.GetWindowRectAsync().NoCtx();
+		_app.MainWindow.SetMinimized(false);
 
-		var loc = new Point(
-			x: scrRect.X + (scrRect.Width / 2) - (wndRect.Width / 2),
-			y: scrRect.Y + (scrRect.Height / 2) - (wndRect.Height / 2));
-
-		await w.MoveToAsync(loc).NoCtx();
 		await w.BringToForegroundAsync().NoCtx();
 		await w.SetTaskbarIconVisibleAsync(true).NoCtx();
 	}
