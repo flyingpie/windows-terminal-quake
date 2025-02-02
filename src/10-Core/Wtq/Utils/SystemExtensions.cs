@@ -10,7 +10,8 @@ public static class SystemExtensions
 
 		return Environment
 			.ExpandEnvironmentVariables(src)
-			.Replace("~", WtqPaths.UserHome);
+			?.Replace("~", WtqPaths.UserHome)
+			?? string.Empty;
 	}
 
 	public static string? EmptyOrWhiteSpaceToNull(this string? input)
