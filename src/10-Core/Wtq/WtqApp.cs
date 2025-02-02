@@ -14,7 +14,7 @@ namespace Wtq;
 /// </summary>
 public sealed class WtqApp : IAsyncDisposable
 {
-	private readonly ILogger _log = Log.For<WtqApp>();
+	private readonly ILogger _log;
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -33,6 +33,8 @@ public sealed class WtqApp : IAsyncDisposable
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
+		_log = Log.For($"{GetType()}|{name}");
+
 		_opts = Guard.Against.Null(opts);
 		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);
@@ -107,6 +109,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (!IsAttached)
 		{
+			_log.LogInformation("App is not attached, not doing anything for cleanup");
 			return;
 		}
 
