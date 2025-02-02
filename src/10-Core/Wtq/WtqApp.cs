@@ -375,8 +375,7 @@ public sealed class WtqApp : IAsyncDisposable
 			scr = new(Point.Empty, WtqConstants.Sizes._1920x1080);
 		}
 
-		// Calculate a convenient target size for the window.
-		// Calculate center position of the window on the screen.
+		// Calculate a convenient target locatino & size for the window.
 		var dstSize = scr.Size.MultiplyF(.9f);
 		var dstLoc = dstSize.CenterInRectangle(scr);
 
