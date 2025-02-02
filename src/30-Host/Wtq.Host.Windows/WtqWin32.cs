@@ -18,10 +18,10 @@ public class WtqWin32 : WtqHostBase
 			.AddWinFormsScreenInfoProvider()
 
 			// New cross-platform tray icon.
-			.AddTrayIcon()
+			//.AddTrayIcon()
 
 			// WinForms (Windows-only) tray icon, kept around should the cross-platform one causes issues.
-			//.AddWinFormsTrayIcon()
+			.AddWinFormsTrayIcon()
 		;
 	}
 }
