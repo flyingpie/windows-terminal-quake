@@ -124,4 +124,9 @@ public static class WtqConstants
 		"Yorkshire",
 		"Zodiac",
 	];
+
+	public static class Sizes
+	{
+		public static readonly Size _1920x1080 = new(1920, 1080);
+	}
 }
