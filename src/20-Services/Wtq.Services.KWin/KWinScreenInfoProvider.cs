@@ -8,6 +8,7 @@ public sealed class KWinScreenInfoProvider(
 
 	public async Task<Rectangle> GetPrimaryScreenRectAsync()
 	{
+		// TODO: Primary screen is not parsed yet from the KWin support information.
 		return (await GetScreenRectsAsync().NoCtx())
 			.FirstOrDefault();
 	}
