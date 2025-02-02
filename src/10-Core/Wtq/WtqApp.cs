@@ -23,7 +23,6 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqWindowResolver _windowResolver;
 	private readonly Worker _loop;
 
-	private Rectangle? _originalRect;
 	private Point? _lastLoc;
 
 	public WtqApp(
@@ -110,40 +109,18 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (!IsAttached)
 		{
+			_log.LogInformation("App is not attached, not doing anything for cleanup");
 			return;
 		}
 
-		// Toggle app onto the screen again.
-		// await OpenAsync(ToggleModifiers.Instant).NoCtx();
+		// Stop update loop.
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 
-		// Restore original position.
-		// TODO: If the app closes when it is off-screen, and we restart WTQ, the "originalRect" will have saved the off-screen position.
-		// So perhaps only use its size here, and center it on the screen instead of using the original position.
-		if (_originalRect.HasValue)
-		{
-			var scr = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
-			if (scr == null || scr.IsEmpty) // TODO: This can be null in the future.
-			{
-				scr = new(0, 0, 1920, 1080);
-			}
-
-			var sz = new Size((int)(scr.Width * .9), (int)(scr.Height * .9));
-			var loc = new Point(
-				x: scr.X + (scr.Width / 2 - sz.Width / 2),
-				y: scr.Y + (scr.Height / 2 - sz.Height / 2)
-			);
-
-			_log.LogInformation("Resetting window location to {Location} and size to {Size}", loc, sz);
-
-			await MoveWindowAsync(loc).NoCtx();
-			await ResizeWindowAsync(sz).NoCtx();
-		}
+		// Reset window location & size.
+		await ResetLocationAndSizeAsync().NoCtx();
 
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
-
-		// Stop update loop.
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	/// <summary>
@@ -323,9 +300,6 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Window = window;
 
-		// TODO: Original rect can be off-screen, in which case we may not want to store it as such.
-		_originalRect = await window.GetWindowRectAsync().NoCtx();
-
 		// Move the window off the screen ASAP (e.g. without animating).
 		await CloseAsync(ToggleModifiers.Instant).NoCtx();
 	}
@@ -389,5 +363,31 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// Restore opacity.
 		await Window.SetTransparencyAsync(100).NoCtx();
+	}
+
+	/// <summary>
+	/// Moves window back to the center of a screen, and resets to a (hopefully) convenient size.
+	/// </summary>
+	private async Task ResetLocationAndSizeAsync()
+	{
+		// Get the screen with the cursor, to move the window to.
+		var scr = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
+		if (scr == null || scr.IsEmpty) // TODO: This can be null in the future.
+		{
+			scr = new(Point.Empty, WtqConstants.Sizes._1920x1080);
+		}
+
+		// Calculate a convenient target size for the window.
+		// Calculate center position of the window on the screen.
+		var dstSize = scr.Size.MultiplyF(.9f);
+		var dstLoc = dstSize.CenterInRectangle(scr);
+
+		_log.LogInformation("Resetting window location to {Location} and size to {Size}", dstLoc, dstSize);
+
+		// Move first.
+		await MoveWindowAsync(dstLoc).NoCtx();
+
+		// ...then resize, since in some cases (at least on KWin), we can only resize visible windows it seems.
+		await ResizeWindowAsync(dstSize).NoCtx();
 	}
 }

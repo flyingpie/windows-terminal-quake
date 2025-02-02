@@ -2,7 +2,6 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Wtq.Configuration;
 using Wtq.Services;
-using Wtq.Utils;
 
 namespace Wtq.Core.UnitTest.Services;
 
