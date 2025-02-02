@@ -8,6 +8,8 @@ namespace Wtq.Utils;
 // TODO: Dispose or something on app close, we're dropping logs now due to lack of flush.
 public static class Log
 {
+	private const string LogTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+
 	private static ILoggerFactory _factory;
 
 	public static void Configure()
@@ -19,6 +21,7 @@ public static class Log
 			.MinimumLevel.Is(logLevel)
 
 			.WriteTo.File(
+				outputTemplate: LogTemplate,
 				path: path,
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
@@ -27,7 +30,7 @@ public static class Log
 		// Log to console?
 		if (WtqEnv.LogToConsole)
 		{
-			logBuilder.WriteTo.Console();
+			logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
 		}
 
 		Serilog.Log.Logger = logBuilder.CreateLogger(); 
@@ -36,6 +39,8 @@ public static class Log
 		_factory.AddProvider(provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
+		Serilog.Log.Information("Logging to file at '{Path}'", path);
+		Serilog.Log.Information("Logging to console: {IsEnable}", WtqEnv.LogToConsole);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()

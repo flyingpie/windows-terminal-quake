@@ -5,10 +5,12 @@
 	<ItemGroup>
 		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
 		<PackageVersion Include="BlazorMonaco" Version="3.3.0" />
+		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.12.19" />
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19" />
+		<PackageVersion Include="Moq" Version="4.20.72" />
 		<PackageVersion Include="MSTest.TestAdapter" Version="3.7.3" />
 		<PackageVersion Include="MSTest.TestFramework" Version="3.7.3" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
