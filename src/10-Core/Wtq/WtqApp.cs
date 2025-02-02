@@ -24,6 +24,7 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly Worker _loop;
 
 	private Rectangle? _originalRect;
+	private Point? _lastLoc;
 
 	public WtqApp(
 		IOptionsMonitor<WtqOptions> opts,
@@ -180,6 +181,8 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		await Window.MoveToAsync(location).NoCtx();
+
+		_lastLoc = location;
 	}
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
@@ -234,6 +237,11 @@ public sealed class WtqApp : IAsyncDisposable
 		// Check that if we have a process handle, the process is still active.
 		if (IsAttached)
 		{
+			if (_lastLoc != null)
+			{
+				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
+			}
+
 			_log.LogTrace("Window handle '{Window}' for app '{App}' is still active, skipping update", Window, this);
 			return;
 		}
@@ -256,6 +264,36 @@ public sealed class WtqApp : IAsyncDisposable
 		_log.LogInformation("Got window for app {App}, attaching", this);
 
 		await AttachToWindowAsync(window).NoCtx();
+	}
+
+	/// <summary>
+	/// App windows can sometimes move around the screen due to external interaction.<br/>
+	/// For example, when the screen resolution changes, a monitor is (dis)connected, or when the shell restarts.<br/>
+	/// <br/>
+	/// Compares the current location of the app window, to the one we last set it to.<br/>
+	/// If they don't match, moves it back to where we last put it.
+	/// </summary>
+	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc) 
+	{
+		// Fetch current window location.
+		var rect = await window.GetWindowRectAsync().NoCtx();
+
+		// Check the distance between where we last left the window, and where it is now.
+		//var distX = Math.Abs(rect.Location.X - lastLoc.X);
+		//var distY = Math.Abs(rect.Location.Y - lastLoc.Y);
+		var dist = rect.Location.DistanceTo(lastLoc);
+
+		// Allow a little bit of drift, but restore location when the distance gets too large.
+		if (dist > 10)
+		{
+			_log.LogWarning(
+				"Window seems to have moved externally, restoring location (currently {CurrentLoc}, moving to {MovingToLoc}, distance of {Distance})",
+				rect,
+				lastLoc,
+				dist);
+
+			await MoveWindowAsync(lastLoc).NoCtx();
+		}
 	}
 
 	/// <summary>
