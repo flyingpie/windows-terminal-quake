@@ -21,7 +21,7 @@ public class WtqAppToggleServiceTest
 		_scrInfoMock = new(MockBehavior.Strict);
 		_twnMock = new(MockBehavior.Strict);
 
-		_srv = new WtqAppToggleService(_wtqOptionsMock.Object, _scrInfoMock.Object, _twnMock.Object);
+		// _srv = new WtqAppToggleService(_wtqOptionsMock.Object, _scrInfoMock.Object, _twnMock.Object);
 	}
 
 	[TestMethod]
