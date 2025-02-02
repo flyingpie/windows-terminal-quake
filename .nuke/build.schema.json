@@ -38,7 +38,8 @@
         "PublishWin64Aot",
         "PublishWin64FrameworkDependent",
         "PublishWin64SelfContained",
-        "ReportInfo"
+        "ReportInfo",
+        "RunTests"
       ]
     },
     "Verbosity": {
