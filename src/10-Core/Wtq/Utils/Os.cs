@@ -4,6 +4,8 @@ namespace Wtq.Utils;
 
 public static class Os
 {
+	private static readonly ILogger Log = Utils.Log.For(typeof(Os));
+
 	public static bool IsCallable(string fileName)
 	{
 		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
@@ -67,12 +69,19 @@ public static class Os
 	{
 		Guard.Against.NullOrWhiteSpace(path);
 
-		Process.Start(
-			new ProcessStartInfo()
-			{
-				FileName = path,
-				UseShellExecute = true,
-			});
+		try
+		{
+			Process.Start(
+				new ProcessStartInfo()
+				{
+					FileName = path,
+					UseShellExecute = true,
+				});
+		}
+		catch (Exception ex)
+		{
+			Log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
+		}
 	}
 
 	public static void OpenUrl(Uri url)
