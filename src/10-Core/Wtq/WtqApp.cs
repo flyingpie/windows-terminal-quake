@@ -266,14 +266,12 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Compares the current location of the app window, to the one we last set it to.<br/>
 	/// If they don't match, moves it back to where we last put it.
 	/// </summary>
-	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc) 
+	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc)
 	{
 		// Fetch current window location.
 		var rect = await window.GetWindowRectAsync().NoCtx();
 
 		// Check the distance between where we last left the window, and where it is now.
-		//var distX = Math.Abs(rect.Location.X - lastLoc.X);
-		//var distY = Math.Abs(rect.Location.Y - lastLoc.Y);
 		var dist = rect.Location.DistanceTo(lastLoc);
 
 		// Allow a little bit of drift, but restore location when the distance gets too large.

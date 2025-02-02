@@ -31,7 +31,8 @@ public static class MathUtils
 	public static Point Lerp(Point src, Point dst, float by) =>
 		new()
 		{
-			X = (int)float.Lerp(src.X, dst.X, by), Y = (int)float.Lerp(src.Y, dst.Y, by),
+			X = (int)float.Lerp(src.X, dst.X, by),
+			Y = (int)float.Lerp(src.Y, dst.Y, by),
 		};
 
 	/// <summary>
