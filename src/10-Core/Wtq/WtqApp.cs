@@ -14,7 +14,7 @@ namespace Wtq;
 /// </summary>
 public sealed class WtqApp : IAsyncDisposable
 {
-	private readonly ILogger _log = Log.For<WtqApp>();
+	private readonly ILogger _log;
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
@@ -34,6 +34,8 @@ public sealed class WtqApp : IAsyncDisposable
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
+		_log = Log.For($"{GetType()}|{name}");
+
 		_opts = Guard.Against.Null(opts);
 		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);
@@ -112,15 +114,29 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Toggle app onto the screen again.
-		await OpenAsync(ToggleModifiers.Instant).NoCtx();
+		// await OpenAsync(ToggleModifiers.Instant).NoCtx();
 
 		// Restore original position.
 		// TODO: If the app closes when it is off-screen, and we restart WTQ, the "originalRect" will have saved the off-screen position.
 		// So perhaps only use its size here, and center it on the screen instead of using the original position.
 		if (_originalRect.HasValue)
 		{
-			await ResizeWindowAsync(_originalRect.Value.Size).NoCtx();
-			await MoveWindowAsync(_originalRect.Value.Location).NoCtx();
+			var scr = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
+			if (scr == null || scr.IsEmpty) // TODO: This can be null in the future.
+			{
+				scr = new(0, 0, 1920, 1080);
+			}
+
+			var sz = new Size((int)(scr.Width * .9), (int)(scr.Height * .9));
+			var loc = new Point(
+				x: scr.X + (scr.Width / 2 - sz.Width / 2),
+				y: scr.Y + (scr.Height / 2 - sz.Height / 2)
+			);
+
+			_log.LogInformation("Resetting window location to {Location} and size to {Size}", loc, sz);
+
+			await MoveWindowAsync(loc).NoCtx();
+			await ResizeWindowAsync(sz).NoCtx();
 		}
 
 		// Reset app props.
