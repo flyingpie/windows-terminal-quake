@@ -21,4 +21,11 @@ public static class SystemExtensions
 
 		return input;
 	}
+
+	public static string? StringJoin<T>(this IEnumerable<T> values, string separator = ", ")
+	{
+		ArgumentNullException.ThrowIfNull(values);
+
+		return string.Join(separator, values);
+	}
 }
