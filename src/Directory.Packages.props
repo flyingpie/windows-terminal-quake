@@ -1,34 +1,35 @@
 <Project>
-	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
-		<PackageVersion Include="BlazorMonaco" Version="3.3.0" />
-		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
-		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.12.19" />
-		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19" />
-		<PackageVersion Include="Moq" Version="4.20.72" />
-		<PackageVersion Include="MSTest.TestAdapter" Version="3.7.3" />
-		<PackageVersion Include="MSTest.TestFramework" Version="3.7.3" />
-		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageVersion Include="NJsonSchema" Version="11.1.0" />
-		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
-		<PackageVersion Include="Nuke.Common" Version="9.0.4" />
-		<PackageVersion Include="Photino.Blazor" Version="4.0.13" />
-		<PackageVersion Include="Radzen.Blazor" Version="5.9.6" />
-		<PackageVersion Include="Serilog" Version="4.2.0" />
-		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-		<PackageVersion Include="Serilog.Sinks.File" Version="6.0.0" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.4.0.108396" />
-		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
-		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />
-		<PackageVersion Include="System.Resources.Extensions" Version="9.0.1" />
-		<PackageVersion Include="Tmds.DBus" Version="0.21.2" />
-		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2" />
-	</ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
+    <PackageVersion Include="BlazorMonaco" Version="3.3.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.12.19" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.7.3" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.7.3" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="NJsonSchema" Version="11.1.0" />
+    <PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
+    <PackageVersion Include="Nuke.Common" Version="9.0.4" />
+    <PackageVersion Include="Photino.Blazor" Version="4.0.13" />
+    <PackageVersion Include="Radzen.Blazor" Version="5.9.6" />
+    <PackageVersion Include="Serilog" Version="4.2.0" />
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.4.0.108396" />
+    <PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
+    <PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageVersion Include="System.Resources.Extensions" Version="9.0.1" />
+    <PackageVersion Include="SystemTextJson.JsonDiffPatch.MSTest" Version="2.0.0" />
+    <PackageVersion Include="Tmds.DBus" Version="0.21.2" />
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2" />
+  </ItemGroup>
 </Project>
