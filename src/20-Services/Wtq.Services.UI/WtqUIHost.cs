@@ -30,46 +30,19 @@ public class WtqUIHost
 
 		_ = appLifetime.ApplicationStarted.Register(() =>
 		{
-			Task
-				.Run(async () =>
-				{
-					foreach (var srv in hostedServices)
-					{
-						await srv.StartAsync(CancellationToken.None).NoCtx();
-					}
-				})
-				.GetAwaiter()
-				.GetResult();
+			Task.WaitAll(hostedServices.Select(srv => srv.StartAsync(CancellationToken.None)));
 		});
 
 		_ = appLifetime.ApplicationStopping.Register(
 			() =>
 			{
-				Task
-					.Run(async () =>
-					{
-						foreach (var srv in hostedServices)
-						{
-							await srv.StopAsync(CancellationToken.None).NoCtx();
-						}
-					})
-					.GetAwaiter()
-					.GetResult();
+				Task.WaitAll(hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
 
 				_isClosing = true;
 
 				app.MainWindow.Close();
 
-				Task
-					.Run(async () =>
-					{
-						foreach (var srv in hostedServices.OfType<IAsyncDisposable>())
-						{
-							await srv.DisposeAsync().NoCtx();
-						}
-					})
-					.GetAwaiter()
-					.GetResult();
+				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
 			});
 
 		_ = app.MainWindow
