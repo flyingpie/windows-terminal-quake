@@ -7,9 +7,13 @@
 - Apps can now be matched on their window title.
 
 ## [2.0.12] / 2025-xx-xx
-- Generate a JSON schema file on WTQ start, next to wherever wtq.jsonc is (e.g. wtq.schema.json). This provides autocompletion and validation in supported editors (such as VS Code).
-- Initial work on a graphical UI.
-- Updated tray icon.
+- Generate a JSON schema file on WTQ start, next to wherever **wtq.jsonc** is (e.g. **wtq.schema.json**). This provides autocompletion and validation in supported editors (such as VS Code).
+- Initial work on a graphical UI. It can be accessed through the tray icon.
+- Updated tray icon to fit in with other icons better.
+- Automatically restore app window positions, when they've moved due to e.g. (dis)connecting a monitor, or when the shell restarts.
+- Simpler reset of location & size when WTQ exits. Windows are now centered onto the screen with the cursor with 90% of the screen size. Previous method of moving back to where WTQ found the window was less reliable, as said location & size could sometimes be problematic (like really small or off screen).
+- Disable console log by default. Can be turned on using environment variable **"WTQ_LOG_TO_CONSOLE"="TRUE"**.
+- Handle cases where we can't find an off-screen location when toggling, by falling back to instantly toggling into- and out of a black hole, instead of animating anywhere.
 
 ## [2.0.11] / 2024-11-07
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
