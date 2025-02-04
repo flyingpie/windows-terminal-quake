@@ -278,12 +278,20 @@ public sealed class WtqApp : IAsyncDisposable
 		if (dist > 10)
 		{
 			_log.LogWarning(
-				"Window seems to have moved externally, restoring location (currently {CurrentLoc}, moving to {MovingToLoc}, distance of {Distance})",
-				rect,
+				"Window seems to have moved externally, restoring position (moved from {LastLoc} to {CurrentLoc}, distance of {Distance})",
 				lastLoc,
+				rect,
 				dist);
 
-			await MoveWindowAsync(lastLoc).NoCtx();
+			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
+			if (IsOpen)
+			{
+				await _toggler.ToggleOnAsync(this, ToggleModifiers.Instant).NoCtx();
+			}
+			else
+			{
+				await _toggler.ToggleOffAsync(this, ToggleModifiers.Instant).NoCtx();
+			}
 		}
 	}
 
