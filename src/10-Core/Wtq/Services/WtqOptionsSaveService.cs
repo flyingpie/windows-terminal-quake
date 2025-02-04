@@ -36,11 +36,14 @@ public class WtqOptionsSaveService
 
 	public async Task SaveAsync(WtqOptions options)
 	{
+		await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, Write(options)).NoCtx();
+	}
+
+	public string Write(WtqOptions options)
+	{
 		options.PrepareForSave();
 
-		var res = JsonSerializer.Serialize(options, _opts);
-
-		await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, res).NoCtx();
+		return JsonSerializer.Serialize(options, _opts);
 	}
 
 	private static void DefaultValuesModifier(JsonTypeInfo typeInfo)
