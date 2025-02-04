@@ -81,9 +81,9 @@ public sealed class WtqApp : IAsyncDisposable
 	/// <summary>
 	/// Toggle the app off the screen.
 	/// </summary>
-	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None, bool force = false)
+	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (!IsOpen && !force)
+		if (!IsOpen)
 		{
 			return;
 		}
@@ -178,9 +178,9 @@ public sealed class WtqApp : IAsyncDisposable
 		_lastLoc = location;
 	}
 
-	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None, bool force = false)
+	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (IsOpen && !force)
+		if (IsOpen)
 		{
 			return false;
 		}
@@ -277,8 +277,13 @@ public sealed class WtqApp : IAsyncDisposable
 		// Allow a little bit of drift, but restore location when the distance gets too large.
 		if (dist > 10)
 		{
-			_log.LogWarning("Window seems to have moved externally, restoring position (moved from {OriginalLoc} to {CurrentLoc}, distance of {Distance})", lastLoc, rect, dist);
+			_log.LogWarning(
+				"Window seems to have moved externally, restoring position (moved from {LastLoc} to {CurrentLoc}, distance of {Distance})",
+				lastLoc,
+				rect,
+				dist);
 
+			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
 			if (IsOpen)
 			{
 				await _toggler.ToggleOnAsync(this, ToggleModifiers.Instant).NoCtx();
