@@ -13,20 +13,6 @@ public class WtqHostBase
 
 		var log = Log.For<WtqHostBase>();
 
-
-		AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-		{
-			// appLifetime.StopApplication();
-			Console.WriteLine("ProcessExit");
-		};
-
-		Console.CancelKeyPress += (_, _) =>
-		{
-			// appLifetime.StopApplication();
-			Console.WriteLine("CancelKeyPress");
-		};
-
-
 		try
 		{
 			// Find path to settings files (wtq.jsonc or similar).

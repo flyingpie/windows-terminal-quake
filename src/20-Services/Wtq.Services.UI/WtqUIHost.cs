@@ -28,31 +28,9 @@ public class WtqUIHost
 
 		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 
-		AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-		{
-			// appLifetime.StopApplication();
-			Console.WriteLine("ProcessExit");
-		};
-
-		Console.CancelKeyPress += (_, _) =>
-		{
-			Console.WriteLine("CancelKeyPress");
-			appLifetime.StopApplication();
-		};
-
-
 		_ = appLifetime.ApplicationStarted.Register(() =>
 		{
-			Task
-				.Run(async () =>
-				{
-					foreach (var srv in hostedServices)
-					{
-						await srv.StartAsync(CancellationToken.None).NoCtx();
-					}
-				})
-				.GetAwaiter()
-				.GetResult();
+			Task.WaitAll(hostedServices.Select(srv => srv.StartAsync(CancellationToken.None)));
 		});
 
 		_ = appLifetime.ApplicationStopping.Register(
@@ -60,33 +38,11 @@ public class WtqUIHost
 			{
 				Task.WaitAll(hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
 
-				// Task
-				// 	.Run(async () =>
-				// 	{
-				// 		foreach (var srv in hostedServices)
-				// 		{
-				// 			await srv.StopAsync(CancellationToken.None).NoCtx();
-				// 		}
-				// 	})
-				// 	.GetAwaiter()
-				// 	.GetResult();
-
 				_isClosing = true;
 
 				app.MainWindow.Close();
 
 				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
-
-				// Task
-				// 	.Run(async () =>
-				// 	{
-				// 		foreach (var srv in hostedServices.OfType<IAsyncDisposable>())
-				// 		{
-				// 			await srv.DisposeAsync().NoCtx();
-				// 		}
-				// 	})
-				// 	.GetAwaiter()
-				// 	.GetResult();
 			});
 
 		_ = app.MainWindow
