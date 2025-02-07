@@ -319,7 +319,7 @@ public sealed class Build : NukeBuild
 			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
 
 			var manifest = tpl
-				.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
+				.Replace("$GH_RELEASE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 				.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
@@ -356,7 +356,7 @@ public sealed class Build : NukeBuild
 				var target = manifestRoot / fn;
 
 				var manifest = tpl
-					.Replace("$GH_RELEASE_VERSION$", $"v{SemVerVersion}", StringComparison.OrdinalIgnoreCase)
+					.Replace("$GH_RELEASE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
 					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
