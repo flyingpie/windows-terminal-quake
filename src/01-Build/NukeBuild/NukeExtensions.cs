@@ -159,6 +159,6 @@ public static partial class NukeExtensions
 		await client.Repository.Release.UploadAsset(release, assetUpload);
 	}
 
-	[GeneratedRegex(@"^## \[(?<semver>\d+\.?\d+\.?\d+)\]")]
+	[GeneratedRegex(@"^## \[(?<semver>.+?)\]")]
 	private static partial Regex ChangeLogVersionHeaderRegex();
 }
