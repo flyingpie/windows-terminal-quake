@@ -381,7 +381,7 @@ public sealed class Build : NukeBuild
 			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, GitHubRelease);
 
 			// Update release notes.
-			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, SemVerVersion);
+			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, GitHubRelease);
 
 			await GitHubTasks
 				.GitHubClient
