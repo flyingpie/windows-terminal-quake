@@ -6,7 +6,12 @@
 ## [vNext]
 - Apps can now be matched on their window title.
 
-## [2.0.12] / 2025-xx-xx
+## [2.0.13] / 2025-02-07
+- Bugfix: [169](https://github.com/flyingpie/windows-terminal-quake/issues/169), missing entry from the "Keys" list, for some specific keyboard layouts.
+- Bugfix: Issue where the WinGet release wouldn't work straight away, due to working directories being weird because of the shim WinGet creates.
+- Added banner to the GUI, to highlight that it's still in preview.
+
+## [2.0.12] / 2025-02-06
 - Generate a JSON schema file on WTQ start, next to wherever **wtq.jsonc** is (e.g. **wtq.schema.json**). This provides autocompletion and validation in supported editors (such as VS Code).
 - Initial work on a graphical UI. It can be accessed through the tray icon.
 - Updated tray icon to fit in with other icons better.
