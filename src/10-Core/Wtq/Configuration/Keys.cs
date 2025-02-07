@@ -1,86 +1,87 @@
 namespace Wtq.Configuration;
 
 [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
+[Flags]
 public enum Keys
 {
 	/// <summary>
 	/// The bitmask to extract a key code from a key value.
 	/// </summary>
-	KeyCode = 0xFFFF,
+	KeyCode = 0x0000FFFF,
 
 	/// <summary>
 	/// The bitmask to extract modifiers from a key value.
 	/// </summary>
-	Modifiers = -65536,
+	Modifiers = unchecked((int)0xFFFF0000),
 
 	/// <summary>
 	/// No key pressed.
 	/// </summary>
-	None = 0,
+	None = 0x00,
 
 	/// <summary>
 	/// The left mouse button.
 	/// </summary>
-	LButton = 1,
+	LButton = 0x01,
 
 	/// <summary>
 	/// The right mouse button.
 	/// </summary>
-	RButton = 2,
+	RButton = 0x02,
 
 	/// <summary>
 	/// The CANCEL key.
 	/// </summary>
-	Cancel = 3,
+	Cancel = 0x03,
 
 	/// <summary>
 	/// The middle mouse button (three-button mouse).
 	/// </summary>
-	MButton = 4,
+	MButton = 0x04,
 
 	/// <summary>
 	/// The first x mouse button (five-button mouse).
 	/// </summary>
-	XButton1 = 5,
+	XButton1 = 0x05,
 
 	/// <summary>
 	/// The second x mouse button (five-button mouse).
 	/// </summary>
-	XButton2 = 6,
+	XButton2 = 0x06,
 
 	/// <summary>
 	/// The BACKSPACE key.
 	/// </summary>
 	[Display(Description = "Backspace")]
-	Back = 8,
+	Back = 0x08,
 
 	/// <summary>
 	/// The TAB key.
 	/// </summary>
 	[Display(Description = "Tab")]
-	Tab = 9,
+	Tab = 0x09,
 
 	/// <summary>
 	/// The LINEFEED key.
 	/// </summary>
-	LineFeed = 0xA,
+	LineFeed = 0x0A,
 
 	/// <summary>
 	/// The CLEAR key.
 	/// </summary>
-	Clear = 0xC,
+	Clear = 0x0C,
 
 	/// <summary>
 	/// The RETURN key.
 	/// </summary>
 	[Display(Description = "Return (enter)")]
-	Return = 0xD,
+	Return = 0x0D,
 
 	/// <summary>
 	/// The ENTER key.
 	/// </summary>
 	[Display(Description = "Return (enter)")]
-	Enter = 0xD,
+	Enter = Return,
 
 	/// <summary>
 	/// The SHIFT key.
@@ -105,14 +106,79 @@ public enum Keys
 	/// <summary>
 	/// The CAPS LOCK key.
 	/// </summary>
+	Capital = 0x14,
+
+	/// <summary>
+	/// The CAPS LOCK key.
+	/// </summary>
 	[Display(Description = "Caps lock")]
 	CapsLock = 0x14,
+
+	/// <summary>
+	/// The IME Kana mode key.
+	/// </summary>
+	KanaMode = 0x15,
+
+	/// <summary>
+	/// The IME Hanguel mode key.
+	/// </summary>
+	HanguelMode = 0x15,
+
+	/// <summary>
+	/// The IME Hangul mode key.
+	/// </summary>
+	HangulMode = 0x15,
+
+	/// <summary>
+	/// The IME Junja mode key.
+	/// </summary>
+	JunjaMode = 0x17,
+
+	/// <summary>
+	/// The IME Final mode key.
+	/// </summary>
+	FinalMode = 0x18,
+
+	/// <summary>
+	/// The IME Hanja mode key.
+	/// </summary>
+	HanjaMode = 0x19,
+
+	/// <summary>
+	/// The IME Kanji mode key.
+	/// </summary>
+	KanjiMode = 0x19,
 
 	/// <summary>
 	/// The ESC key.
 	/// </summary>
 	[Display(Description = "Escape")]
 	Escape = 0x1B,
+
+	/// <summary>
+	/// The IME Convert key.
+	/// </summary>
+	IMEConvert = 0x1C,
+
+	/// <summary>
+	/// The IME NonConvert key.
+	/// </summary>
+	IMENonconvert = 0x1D,
+
+	/// <summary>
+	/// The IME Accept key.
+	/// </summary>
+	IMEAccept = 0x1E,
+
+	/// <summary>
+	/// The IME Accept key.
+	/// </summary>
+	IMEAceept = IMEAccept,
+
+	/// <summary>
+	/// The IME Mode change request.
+	/// </summary>
+	IMEModeChange = 0x1F,
 
 	/// <summary>
 	/// The SPACEBAR key.
@@ -123,14 +189,24 @@ public enum Keys
 	/// <summary>
 	/// The PAGE UP key.
 	/// </summary>
+	Prior = 0x21,
+
+	/// <summary>
+	/// The PAGE UP key.
+	/// </summary>
 	[Display(Description = "Page up")]
-	PageUp = 0x21,
+	PageUp = Prior,
+
+	/// <summary>
+	/// The PAGE DOWN key.
+	/// </summary>
+	Next = 0x22,
 
 	/// <summary>
 	/// The PAGE DOWN key.
 	/// </summary>
 	[Display(Description = "Page down")]
-	PageDown = 0x22,
+	PageDown = Next,
 
 	/// <summary>
 	/// The END key.
@@ -186,8 +262,13 @@ public enum Keys
 	/// <summary>
 	/// The PRINT SCREEN key.
 	/// </summary>
+	Snapshot = 0x2C,
+
+	/// <summary>
+	/// The PRINT SCREEN key.
+	/// </summary>
 	[Display(Description = "Print screen")]
-	PrintScreen = 0x2C,
+	PrintScreen = Snapshot,
 
 	/// <summary>
 	/// The INS key.
@@ -715,159 +796,241 @@ public enum Keys
 	RMenu = 0xA5,
 
 	/// <summary>
-	/// The browser back key (Windows 2000 or later).
+	/// The browser back key.
 	/// </summary>
 	BrowserBack = 0xA6,
 
 	/// <summary>
-	/// The browser forward key (Windows 2000 or later).
+	/// The browser forward key.
 	/// </summary>
 	BrowserForward = 0xA7,
 
 	/// <summary>
-	/// The browser refresh key (Windows 2000 or later).
+	/// The browser refresh key.
 	/// </summary>
 	BrowserRefresh = 0xA8,
 
 	/// <summary>
-	/// The browser stop key (Windows 2000 or later).
+	/// The browser stop key.
 	/// </summary>
 	BrowserStop = 0xA9,
 
 	/// <summary>
-	/// The browser search key (Windows 2000 or later).
+	/// The browser search key.
 	/// </summary>
 	BrowserSearch = 0xAA,
 
 	/// <summary>
-	/// The browser favorites key (Windows 2000 or later).
+	/// The browser favorites key.
 	/// </summary>
 	BrowserFavorites = 0xAB,
 
 	/// <summary>
-	/// The browser home key (Windows 2000 or later).
+	/// The browser home key.
 	/// </summary>
 	BrowserHome = 0xAC,
 
 	/// <summary>
-	/// The volume mute key (Windows 2000 or later).
+	/// The volume mute key.
 	/// </summary>
 	VolumeMute = 0xAD,
 
 	/// <summary>
-	/// The volume down key (Windows 2000 or later).
+	/// The volume down key.
 	/// </summary>
 	VolumeDown = 0xAE,
 
 	/// <summary>
-	/// The volume up key (Windows 2000 or later).
+	/// The volume up key.
 	/// </summary>
 	VolumeUp = 0xAF,
 
 	/// <summary>
-	/// The media next track key (Windows 2000 or later).
+	/// The media next track key.
 	/// </summary>
 	MediaNextTrack = 0xB0,
 
 	/// <summary>
-	/// The media previous track key (Windows 2000 or later).
+	/// The media previous track key.
 	/// </summary>
 	MediaPreviousTrack = 0xB1,
 
 	/// <summary>
-	/// The media Stop key (Windows 2000 or later).
+	/// The media stop key.
 	/// </summary>
 	MediaStop = 0xB2,
 
 	/// <summary>
-	/// The media play pause key (Windows 2000 or later).
+	/// The media play pause key.
 	/// </summary>
 	MediaPlayPause = 0xB3,
 
 	/// <summary>
-	/// The launch mail key (Windows 2000 or later).
+	/// The launch mail key.
 	/// </summary>
 	LaunchMail = 0xB4,
 
 	/// <summary>
-	/// The OEM Semicolon key on a US standard keyboard (Windows 2000 or later).
+	/// The select media key.
+	/// </summary>
+	SelectMedia = 0xB5,
+
+	/// <summary>
+	/// The Launch Application1 key.
+	/// </summary>
+	LaunchApplication1 = 0xB6,
+
+	/// <summary>
+	/// The Launch Application2 key.
+	/// </summary>
+	LaunchApplication2 = 0xB7,
+
+	/// <summary>
+	/// The OEM Semicolon key.
 	/// </summary>
 	[Display(Description = "; (semicolon)")]
 	OemSemicolon = 0xBA,
 
 	/// <summary>
-	/// The OEM plus key on any country/region keyboard (Windows 2000 or later).
+	/// The OEM 1 key.
 	/// </summary>
 	[Display(Description = "+ (plus)")]
+	Oem1 = OemSemicolon,
+
+	/// <summary>
+	/// The OEM plus key.
+	/// </summary>
 	Oemplus = 0xBB,
 
 	/// <summary>
-	/// The OEM comma key on any country/region keyboard (Windows 2000 or later).
+	/// The OEM comma key.
 	/// </summary>
 	[Display(Description = ", (comma)")]
 	Oemcomma = 0xBC,
 
 	/// <summary>
-	/// The OEM minus key on any country/region keyboard (Windows 2000 or later).
+	/// The OEM Minus key.
 	/// </summary>
 	[Display(Description = "- (minus)")]
 	OemMinus = 0xBD,
 
 	/// <summary>
-	/// The OEM period key on any country/region keyboard (Windows 2000 or later).
+	/// The OEM Period key.
 	/// </summary>
 	[Display(Description = ". (period)")]
 	OemPeriod = 0xBE,
 
 	/// <summary>
-	/// The OEM question mark key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM question key.
 	/// </summary>
 	[Display(Description = "? (question mark)")]
 	OemQuestion = 0xBF,
 
 	/// <summary>
-	/// The OEM tilde key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM 2 key.
 	/// </summary>
-	[Display(Description = "~ (tilde)")]
-	Oemtilde = 0xC0,
+	Oem2 = OemQuestion,
 
 	/// <summary>
-	/// The OEM open bracket key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM 3 key.
+	/// </summary>
+	Oem3 = 0xC0,
+
+	/// <summary>
+	/// The OEM tilde key.
+	/// </summary>
+	[Display(Description = "~ (tilde)")]
+	Oemtilde = Oem3,
+
+	/// <summary>
+	/// The OEM open brackets key.
 	/// </summary>
 	[Display(Description = "[ (open bracket)")]
 	OemOpenBrackets = 0xDB,
 
 	/// <summary>
-	/// The OEM pipe key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM 4 key.
+	/// </summary>
+	Oem4 = OemOpenBrackets,
+
+	/// <summary>
+	/// The OEM Pipe key.
 	/// </summary>
 	[Display(Description = "| (pipe)")]
 	OemPipe = 0xDC,
 
 	/// <summary>
-	/// The OEM close bracket key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM 5 key.
+	/// </summary>
+	Oem5 = OemPipe,
+
+	/// <summary>
+	/// The OEM close brackets key.
 	/// </summary>
 	[Display(Description = "] (close bracket)")]
 	OemCloseBrackets = 0xDD,
 
 	/// <summary>
-	/// The OEM singled/double quote key on a US standard keyboard (Windows 2000 or later).
+	/// The OEM 6 key.
 	/// </summary>
-	[Display(Description = "\" (double quote)")]
-	OemQuotes = 0xDE,
+	Oem6 = OemCloseBrackets,
 
 	/// <summary>
-	/// The OEM 8 key.
+	/// The OEM 7 key.
+	/// </summary>
+	Oem7 = 0xDE,
+
+	/// <summary>
+	/// The OEM Quotes key.
+	/// </summary>
+	[Display(Description = "\" (double quote)")]
+	OemQuotes = Oem7,
+
+	/// <summary>
+	/// The OEM8 key.
 	/// </summary>
 	Oem8 = 0xDF,
 
 	/// <summary>
-	/// The OEM angle bracket or backslash key on the RT 102 key keyboard (Windows 2000.
+	/// The OEM 102 key.
 	/// </summary>
+	Oem102 = 0xE2,
+
 	/// <summary>
-	/// or later).
+	/// The OEM Backslash key.
 	/// </summary>
 	[Display(Description = "\\ (backslash)")]
-	OemBackslash = 0xE2,
+	OemBackslash = Oem102,
+
+	/// <summary>
+	/// The PROCESS KEY key.
+	/// </summary>
+	ProcessKey = 0xE5,
+
+	/// <summary>
+	/// The Packet KEY key.
+	/// </summary>
+	Packet = 0xE7,
+
+	/// <summary>
+	/// The ATTN key.
+	/// </summary>
+	Attn = 0xF6,
+
+	/// <summary>
+	/// The CRSEL key.
+	/// </summary>
+	Crsel = 0xF7,
+
+	/// <summary>
+	/// The EXSEL key.
+	/// </summary>
+	Exsel = 0xF8,
+
+	/// <summary>
+	/// The ERASE EOF key.
+	/// </summary>
+	EraseEof = 0xF9,
 
 	/// <summary>
 	/// The PLAY key.
@@ -880,7 +1043,32 @@ public enum Keys
 	Zoom = 0xFB,
 
 	/// <summary>
+	/// A constant reserved for future use.
+	/// </summary>
+	NoName = 0xFC,
+
+	/// <summary>
+	/// The PA1 key.
+	/// </summary>
+	Pa1 = 0xFD,
+
+	/// <summary>
 	/// The CLEAR key.
 	/// </summary>
 	OemClear = 0xFE,
+
+	/// <summary>
+	/// The SHIFT modifier key.
+	/// </summary>
+	Shift = 0x00010000,
+
+	/// <summary>
+	/// The CTRL modifier key.
+	/// </summary>
+	Control = 0x00020000,
+
+	/// <summary>
+	/// The ALT modifier key.
+	/// </summary>
+	Alt = 0x00040000,
 }

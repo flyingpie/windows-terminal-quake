@@ -79,8 +79,19 @@ public static class WtqPaths
 	/// </summary>
 	public static string GetWtqAppDir()
 	{
-		return _pathToAppDir ??= Path.GetDirectoryName(Environment.ProcessPath)
-			?? throw new WtqException($"Could not get path to app directory.");
+		if (_pathToAppDir == null)
+		{
+			_pathToAppDir = Path.GetDirectoryName(typeof(WtqPaths).Assembly.Location);
+
+			Console.WriteLine($"GetWtqAppDir() => {_pathToAppDir}");
+
+			if (string.IsNullOrWhiteSpace(_pathToAppDir))
+			{
+				throw new WtqException("Could not get path to app directory.");
+			}
+		}
+
+		return _pathToAppDir;
 	}
 
 	/// <summary>
