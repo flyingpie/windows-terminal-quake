@@ -121,9 +121,17 @@
             "Release"
           ]
         },
+        "GitHubRelease": {
+          "type": "string",
+          "description": "GitHubRelease"
+        },
         "GitHubToken": {
           "type": "string",
           "description": "GitHub Token"
+        },
+        "SemVerVersion": {
+          "type": "string",
+          "description": "Version"
         },
         "Solution": {
           "type": "string",

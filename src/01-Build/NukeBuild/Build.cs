@@ -31,16 +31,20 @@ public sealed class Build : NukeBuild
 	[Nuke.Common.Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
 	private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-	[Required]
-	[GitRepository]
-	private readonly GitRepository GitRepository;
+	[Nuke.Common.Parameter("GitHubRelease")]
+	private string GitHubRelease = "preview";
+
+	[Nuke.Common.Parameter("Version")]
+	private string SemVerVersion => "9.9.9";
 
 	[Nuke.Common.Parameter("GitHub Token")]
 	private readonly string GitHubToken;
 
-	private AbsolutePath ChangeLogFile => RootDirectory / "CHANGELOG.md";
+	[Required]
+	[GitRepository]
+	private readonly GitRepository GitRepository;
 
-	private AbsolutePath VersionFile => RootDirectory / "VERSION";
+	private AbsolutePath ChangeLogFile => RootDirectory / "CHANGELOG.md";
 
 	private AbsolutePath OutputDirectory => RootDirectory / "_output";
 
@@ -66,16 +70,6 @@ public sealed class Build : NukeBuild
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 
 	/// <summary>
-	/// Returns the version as defined by VERSION (eg. "2.3.4").
-	/// </summary>
-	private string SemVerVersion => File.ReadAllText(VersionFile).Trim();
-
-	/// <summary>
-	/// Returns the version for use in assembly versioning.
-	/// </summary>
-	private string AssemblyVersion => $"{SemVerVersion}";
-
-	/// <summary>
 	/// Returns the version for use in assembly versioning.
 	/// </summary>
 	private string InformationalVersion => $"{SemVerVersion}.{DateTimeOffset.UtcNow:yyyyMMdd}+{GitRepository.Commit}";
@@ -85,8 +79,8 @@ public sealed class Build : NukeBuild
 		{
 			Log.Information("Configuration:.........{Configuration}", Configuration);
 
+			Log.Information("GitHubRelease:.........{GitHubRelease}", GitHubRelease);
 			Log.Information("SemVerVersion:.........{SemVerVersion}", SemVerVersion);
-			Log.Information("AssemblyVersion:.......{AssemblyVersion}", AssemblyVersion);
 			Log.Information("InformationalVersion:..{InformationalVersion}", InformationalVersion);
 
 			Log.Information("OutputDirectory:.......{OutputDirectory}", OutputDirectory);
@@ -129,7 +123,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "linux-x64_aot";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
@@ -158,7 +152,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "linux-x64_framework-dependent";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
@@ -186,7 +180,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "linux-x64_self-contained";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
@@ -216,7 +210,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "win-x64_aot";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetFramework("net9.0-windows")
@@ -246,7 +240,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "win-x64_framework-dependent";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetFramework("net9.0-windows")
@@ -277,7 +271,7 @@ public sealed class Build : NukeBuild
 			var st = StagingDirectory / "win-x64_self-contained";
 
 			DotNetPublish(_ => _
-				.SetAssemblyVersion(AssemblyVersion)
+				.SetAssemblyVersion(SemVerVersion)
 				.SetInformationalVersion(InformationalVersion)
 				.SetConfiguration(Configuration)
 				.SetFramework("net9.0-windows")
