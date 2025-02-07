@@ -98,7 +98,7 @@ public static partial class NukeExtensions
 		string name,
 		string version)
 	{
-		var tagName = $"v{version}";
+		var tagName = version;
 
 		try
 		{
