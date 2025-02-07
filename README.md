@@ -34,7 +34,9 @@ A shortcut is then available named 'WTQ - Windows Terminal Quake', or you can ju
 ```
 winget install windows-terminal-quake
 ```
-A shortcut is then available named 'wtq', or you can just run 'wtq' from a command line or Win+R.
+You can then call 'wtq' from the command line.
+
+After having done that at least once, a shortcut will appear in the start menu, called 'WTQ - Main Window'.
 
 ## Flatpak (Linux)
 ```
