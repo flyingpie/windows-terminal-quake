@@ -32,7 +32,7 @@ public sealed class Build : NukeBuild
 	private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
 	[Nuke.Common.Parameter("GitHubRelease")]
-	private string GitHubRelease = "preview";
+	private string GitHubRelease = "vNext";
 
 	[Nuke.Common.Parameter("Version")]
 	private string SemVerVersion => "9.9.9";
@@ -378,7 +378,7 @@ public sealed class Build : NukeBuild
 
 			var (owner, name) = (GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName());
 
-			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, SemVerVersion);
+			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, GitHubRelease);
 
 			// Update release notes.
 			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, SemVerVersion);
