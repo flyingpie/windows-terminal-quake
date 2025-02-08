@@ -4,20 +4,17 @@ For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
-# Showcase
-
 ![Preview](./assets/logo-01.webp)
+
+# Showcase
 
 On **Windows 10**, with [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
 
 https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
 
-On **CachyOS**, with [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/).
-
-https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf
-
-On **CachyOS**, combined with [Kando](https://github.com/kando-menu/kando).
-<video src="https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096" />
+| On **CachyOS**, with [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/). | On **CachyOS**, combined with [Kando](https://github.com/kando-menu/kando). |
+| --- | --- |
+| <video src="https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf" /> | <video src="https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096" />  |
 
 # Installation
 
