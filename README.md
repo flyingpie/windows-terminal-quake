@@ -38,6 +38,8 @@ You can then call 'wtq' from the command line.
 
 After having done that at least once, a shortcut will appear in the start menu, called 'WTQ - Main Window'.
 
+![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
+
 ## Flatpak (Linux)
 ```
 TODO
