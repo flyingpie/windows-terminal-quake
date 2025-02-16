@@ -18,7 +18,7 @@ https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e
 
 # Installation
 
-## Manual Download (Windows & Linux)
+## Manual Download (Windows)
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
 ## Scoop (Windows)
@@ -41,6 +41,25 @@ After having done that at least once, a shortcut will appear in the start menu, 
 ```
 TODO
 ```
+
+## Manual (Linux)
+See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ~/.local/share/wtq, and creates a wtq.desktop file.
+
+As a 1-liner:
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+```
+
+> [!NOTE]
+> A [couple changes](https://github.com/flyingpie/windows-terminal-quake/commit/ce6ab74c5903d37ad900a50c4517dee506ad25c1) to make the Linux out-of-box-experience nicer aren't part of a stable release yet, so this script currently references the "vNext" release.
+
+And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+```
+
+> [!NOTE]
+> The WTQ configuration is not removed by this script. These are usually located at ~/.config/wtq.
 
 # Configuration
 After starting WTQ, an icon will appear in the tray, which has some useful buttons in the context menu:
