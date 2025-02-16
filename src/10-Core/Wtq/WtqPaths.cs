@@ -14,7 +14,7 @@ public static class WtqPaths
 	/// <summary>
 	/// Path to wtq app data:<br/>
 	/// Windows:   C:/users/username/AppData/Roaming/wtq<br/>
-	/// Linux:     /home/username/.config/wqt.
+	/// Linux:     /home/username/.config/wtq.
 	/// </summary>
 	public static string AppDataWtq => Path.Combine(AppData, "wtq");
 
@@ -27,11 +27,10 @@ public static class WtqPaths
 
 	/// <summary>
 	/// When creating a WTQ configuration file at runtime, place it here.
-	/// Windows:   C:/Users/username/wtq.jsonc<br/>
-	/// Linux:     /home/username/wtq.jsonc.
+	/// Windows:   C:/Users/username/.config/wtq/wtq.jsonc<br/>
+	/// Linux:     /home/username/.config/wtq/wtq.jsonc.
 	/// </summary>
-	// TODO: Put Linux version under "/home/username/.wtq.jsonc".
-	public static string PreferredWtqConfigPath => Path.Combine(UserHome, "wtq.jsonc");
+	public static string PreferredWtqConfigPath => Path.Combine(AppDataWtq, "wtq.jsonc");
 
 	/// <summary>
 	/// Returns path to the WTQ config file, as specified by an environment variable.
