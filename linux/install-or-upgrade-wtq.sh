@@ -11,8 +11,8 @@ echo "Installing WTQ to directory '$WTQ_DIR'..."
 echo "Creating .desktop file at '$WTQ_DESKTOP_FILE'..."
 
 # Download WTQ.
-mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/download/vNext/linux-x64_self-contained.zip | bsdtar -xvf - -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
-# mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/latest/download/linux-x64_self-contained.zip | bsdtar -xvf - -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
+mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/download/vNext/linux-x64_self-contained.tar.gz | tar -zx -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
+# mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/latest/download/linux-x64_self-contained.tar.gz | tar -zx -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
 
 # Create .desktop file.
 mkdir -p $APP_DIR
