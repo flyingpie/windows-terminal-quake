@@ -55,13 +55,9 @@ public sealed class Build : NukeBuild
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
-	private AbsolutePath PathToLinux64AotZip => ArtifactsDirectory / "linux-x64_aot.zip";
+	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz";
 
-	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.zip";
-
-	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.zip";
-
-	private AbsolutePath PathToWin64AotZip => ArtifactsDirectory / "win-x64_aot.zip";
+	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.tar.gz";
 
 	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / "win-x64_framework-dependent.zip";
 
@@ -112,35 +108,6 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
-	/// Linux x64 AOT.
-	/// </summary>
-	private Target PublishLinux64Aot => _ => _
-		.DependsOn(Clean)
-		.DependsOn(RunTests)
-		.Produces(PathToLinux64AotZip)
-		.Executes(() =>
-		{
-			var st = StagingDirectory / "linux-x64_aot";
-
-			DotNetPublish(_ => _
-				.SetAssemblyVersion(SemVerVersion)
-				.SetInformationalVersion(InformationalVersion)
-				.SetConfiguration(Configuration)
-				.SetProject(Solution._0_Host.Wtq_Host_Linux)
-				.SetOutput(st)
-				.SetProperty("PublishAot", true)
-				.SetProperty("InvariantGlobalization", true)
-				.SetRuntime("linux-x64"));
-
-			// TODO: Remove unnecessary files.
-
-			st.ZipTo(
-				PathToLinux64AotZip,
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: System.IO.FileMode.CreateNew);
-		});
-
-	/// <summary>
 	/// Linux x64 framework dependent.
 	/// </summary>
 	private Target PublishLinux64FrameworkDependent => _ => _
@@ -162,14 +129,13 @@ public sealed class Build : NukeBuild
 
 			st.MoveWtqUI();
 
-			st.ZipTo(
+			st.TarGZipTo(
 				PathToLinux64FrameworkDependentZip,
-				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
 
 	/// <summary>
-	/// Windows x64 self contained.
+	/// Windows x64 self-contained.
 	/// </summary>
 	private Target PublishLinux64SelfContained => _ => _
 		.DependsOn(Clean)
@@ -192,39 +158,8 @@ public sealed class Build : NukeBuild
 
 			st.MoveWtqUI();
 
-			st.ZipTo(
+			st.TarGZipTo(
 				PathToLinux64SelfContainedZip,
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: System.IO.FileMode.CreateNew);
-		});
-
-	/// <summary>
-	/// Windows x64 AOT.
-	/// </summary>
-	private Target PublishWin64Aot => _ => _
-		.DependsOn(Clean)
-		.DependsOn(RunTests)
-		.Produces(PathToWin64AotZip)
-		.Executes(() =>
-		{
-			var st = StagingDirectory / "win-x64_aot";
-
-			DotNetPublish(_ => _
-				.SetAssemblyVersion(SemVerVersion)
-				.SetInformationalVersion(InformationalVersion)
-				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
-				.SetProject(Solution._0_Host.Wtq_Host_Windows)
-				.SetOutput(st)
-				.SetProperty("PublishAot", true)
-				.SetProperty("InvariantGlobalization", true)
-				.SetRuntime("win-x64"));
-
-			// TODO: Remove unnecessary files.
-
-			st.ZipTo(
-				PathToWin64AotZip,
-				compressionLevel: CompressionLevel.SmallestSize,
 				fileMode: System.IO.FileMode.CreateNew);
 		});
 
@@ -260,7 +195,7 @@ public sealed class Build : NukeBuild
 		});
 
 	/// <summary>
-	/// Windows x64 self contained.
+	/// Windows x64 self-contained.
 	/// </summary>
 	private Target PublishWin64SelfContained => _ => _
 		.DependsOn(Clean)
