@@ -56,13 +56,13 @@ jobs:
         with:
           name: win-x64_framework-dependent.zip
           path: _output/artifacts/win-x64_framework-dependent.zip
-      - name: 'Publish: linux-x64_self-contained.zip'
+      - name: 'Publish: linux-x64_self-contained.tar.gz'
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64_self-contained.zip
-          path: _output/artifacts/linux-x64_self-contained.zip
-      - name: 'Publish: linux-x64_framework-dependent.zip'
+          name: linux-x64_self-contained.tar.gz
+          path: _output/artifacts/linux-x64_self-contained.tar.gz
+      - name: 'Publish: linux-x64_framework-dependent.tar.gz'
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64_framework-dependent.zip
-          path: _output/artifacts/linux-x64_framework-dependent.zip
+          name: linux-x64_framework-dependent.tar.gz
+          path: _output/artifacts/linux-x64_framework-dependent.tar.gz
