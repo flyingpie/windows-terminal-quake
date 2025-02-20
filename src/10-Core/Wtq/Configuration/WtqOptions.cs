@@ -30,7 +30,7 @@ public sealed class WtqOptions
 	public int AnimationDurationMsWhenSwitchingApps
 	{
 		get => _animationDurationMsSwitchingApps
-				?? (int)Math.Round(AnimationDurationMs * .5f);
+			?? (int)Math.Round(AnimationDurationMs * .5f);
 		set => _animationDurationMsSwitchingApps = value;
 	}
 
@@ -93,6 +93,23 @@ public sealed class WtqOptions
 	/// </summary>
 	public float HorizontalScreenCoverage { get; set; }
 		= 95f;
+
+	/// <summary>
+	/// KWin-only.<br/>
+	/// <br/>
+	/// Whether the shortcut configuration in the KWin config panel should always follow WTQ's settings.<br/>
+	/// <br/>
+	/// When set to "true" (the default), WTQ is assumed to be authoritative on shortcuts, and will remove any
+	/// shortcut configuration already present in the KWin config panel. This means that any changes made through
+	/// the KWin config panel will quickly be overriden by WTQ.<br/>
+	/// <br/>
+	/// When set to "false", the only thing that WTQ will do, is keep shortcut slots around. I.e. if there are 2 hotkeys
+	/// configured for app Y, WTQ will add 2 shortcut slots for said app in the KWin config panel. The actually
+	/// configured keys are not touched, however. This makes the KWin config panel authoritative on what keys are
+	/// configured for a shortcut.
+	/// </summary>
+	public bool HotkeyReset { get; set; }
+		= true;
 
 	/// <summary>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.

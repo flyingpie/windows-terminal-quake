@@ -115,10 +115,10 @@ public sealed class WtqAppOptions
 	{
 		foreach (var hk in Hotkeys.ToList())
 		{
-			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
-			{
-				Hotkeys.Remove(hk);
-			}
+			// if (hk is { Modifiers: KeyModifiers.None, Key: Keys.None })
+			// {
+			// 	Hotkeys.Remove(hk);
+			// }
 		}
 	}
 
