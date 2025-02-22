@@ -77,6 +77,8 @@ public sealed class HotkeyOptions
 		}
 	}
 
+	public bool IsEmpty => Modifiers == KeyModifiers.None && Key == Keys.None;
+
 	public override string ToString()
 	{
 		var s = new StringBuilder();

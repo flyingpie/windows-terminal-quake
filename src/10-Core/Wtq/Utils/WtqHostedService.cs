@@ -1,10 +1,5 @@
 namespace Wtq.Utils;
 
-public interface IWtqHotkeyService
-{
-//	Task RegisterAllAsync();
-}
-
 /// <summary>
 /// Wrapper around <see cref="IHostedService"/> and <see cref="IAsyncDisposable"/>, makes inheriting
 /// types more to the point, by only overriding which of these are necessary.
