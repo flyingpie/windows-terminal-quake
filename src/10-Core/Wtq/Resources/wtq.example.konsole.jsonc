@@ -8,7 +8,7 @@
 			// We're defaulting to Konsole, as this is usually present on KDE Plasma (WTQ only supports KDE Plasma 5 & 6 currently).
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "non-existent"
+			"FileName": "konsole"
 		}
 	],
 

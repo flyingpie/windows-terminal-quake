@@ -1,10 +1,10 @@
-@using System.Text.Json
 @using Wtq.Services.UI.Pages.App.Animation
 @using Wtq.Services.UI.Pages.App.App
 @using Wtq.Services.UI.Pages.App.Behavior
 @using Wtq.Services.UI.Pages.App.Monitor
 @using Wtq.Services.UI.Pages.App.Position
 @using Wtq.Services.UI.Pages.App.Process
+@using System.Text.Json
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject Notifier Notifier
@@ -64,7 +64,7 @@
 
 		await SaveService.SaveAsync(GlobalOpts).NoCtx();
 
-		//		Reload();
+		Reload();
 	}
 
 	private void Reload()
@@ -90,95 +90,89 @@
 					<RadzenButton Text="Reload" Click="Reload"/>
 				</RadzenAlert>
 
-				<RadzenFieldset Text="App">
-					<RadzenStack Gap="1rem">
+		<RadzenFieldset Text="App">
+			<RadzenStack Gap="1rem">
 
-						<NameSetting/>
-						<HotkeysSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
-
-				<RadzenFieldset Text="Process">
-					<RadzenStack Gap="1rem">
-
-						@* Refer to examples page. *@
-						<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
-							See the
-							<RadzenLink Path="/windows" Text="Windows"/>
-							page for open windows, to get suggestions on
-							what values to use for
-							<Emph>filename</Emph>
-							and/or
-							<Emph>process name</Emph>
-							.
-						</RadzenAlert>
-
-						<FilenameSetting/>
-						<WinTermAlert/>
-						<ProcessNameSetting/>
-						<ArgumentsSetting/>
-						<AttachModeSetting/>
-						<WindowTitleSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
-
-				<RadzenFieldset Text="Behavior">
-					<RadzenStack Gap="1rem">
-
-						<AlwaysOnTopSetting/>
-						<HideOnFocusLostSetting/>
-						<TaskbarIconVisibilitySetting/>
-						<OpacitySetting/>
-						<WindowTitleOverrideSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
-
-				<RadzenFieldset Text="Position">
-					<RadzenStack Gap="1rem">
-
-						<HorizontalScreenCoverageSetting/>
-						<HorizontalAlignSetting/>
-						<VerticalScreenCoverageSetting/>
-						<VerticalOffsetSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
-
-				<RadzenFieldset Text="Monitor">
-					<RadzenStack Gap="1rem">
-
-						<PreferMonitorSetting/>
-						<MonitorIndexSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
-
-				<RadzenFieldset Text="Animation">
-					<RadzenStack Gap="1rem">
-
-						<AnimationDurationSetting/>
-						<AnimationTargetFpsSetting/>
-						<AnimationTypeToggleOnSetting/>
-						<AnimationTypeToggleOffSetting/>
-
-					</RadzenStack>
-				</RadzenFieldset>
+				<NameSetting />
+				<HotkeysSetting />
 
 			</RadzenStack>
+		</RadzenFieldset>
 
-			@* Save/Discard *@
-			<RadzenStack
-				Orientation="Orientation.Horizontal"
-				JustifyContent="JustifyContent.End"
-				style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
-			>
-				<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
-				<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
+		<RadzenFieldset Text="Process">
+			<RadzenStack Gap="1rem">
+
+				@* Refer to examples page. *@
+				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
+					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
+					what values to use for <Emph>filename</Emph> and/or <Emph>process name</Emph>.
+				</RadzenAlert>
+
+				<FilenameSetting />
+				<WinTermAlert />
+				<ProcessNameSetting />
+				<ArgumentsSetting />
+				<AttachModeSetting />
+				<WindowTitleSetting />
+
 			</RadzenStack>
+		</RadzenFieldset>
 
-		</CascadingValue>
-	</CascadingValue>
+		<RadzenFieldset Text="Behavior">
+			<RadzenStack Gap="1rem">
+
+				<AlwaysOnTopSetting/>
+				<HideOnFocusLostSetting/>
+				<TaskbarIconVisibilitySetting/>
+				<OpacitySetting/>
+				<WindowTitleOverrideSetting/>
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Position">
+			<RadzenStack Gap="1rem">
+
+				<HorizontalScreenCoverageSetting />
+				<HorizontalAlignSetting />
+				<VerticalScreenCoverageSetting />
+				<VerticalOffsetSetting />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Monitor">
+			<RadzenStack Gap="1rem">
+
+				<PreferMonitorSetting/>
+				<MonitorIndexSetting/>
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Animation">
+			<RadzenStack Gap="1rem">
+
+				<AnimationDurationSetting/>
+				<AnimationTargetFpsSetting/>
+				<AnimationTypeToggleOnSetting/>
+				<AnimationTypeToggleOffSetting/>
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+	</RadzenStack>
+
+	@* Save/Discard *@
+	<RadzenStack
+		Orientation="Orientation.Horizontal"
+		JustifyContent="JustifyContent.End"
+		style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
+	>
+		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
+		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
+	</RadzenStack>
+
+</CascadingValue>
+</CascadingValue>
 </CascadingValue>
