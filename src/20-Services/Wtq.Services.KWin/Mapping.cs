@@ -73,7 +73,6 @@ public static class Mapping
 			VolumeDown => "Volume Down",
 			VolumeUp => "Volume Up",
 
-			// _ => throw new WtqException($"Unsupported key '{key}'."),
 			_ => string.Empty,
 		};
 
@@ -90,12 +89,9 @@ public static class Mapping
 				=> "Meta",
 			KeyModifiers.None
 				=> string.Empty,
-				// => throw new WtqException($"Unsupported modifier '{modifiers}'."),
 			KeyModifiers.NoRepeat
 				=> string.Empty,
-				// => throw new WtqException($"Unsupported modifier '{modifiers}'."),
 			_
 				=> string.Empty,
-				// => throw new WtqException($"Unsupported modifier '{modifiers}'."),
 		};
 }

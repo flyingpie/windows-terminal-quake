@@ -9,7 +9,7 @@ namespace Wtq.Services.KWin;
 /// TODO: DBus-only shortcut registration (we did get listening to key press events working, actual registration proved more difficult).
 /// TODO: Fetch known WTQ shortcut names, instead of the fixed index-based names.
 /// </summary>
-internal sealed class KWinWtqHotkeyService : WtqHostedService
+internal sealed class KWinHotkeyService : WtqHostedService
 {
 	/// <summary>
 	/// Hotkeys are registered as "shortcuts" in KWin, and they need at least an id, by which they're uniquely identified.<br/>
@@ -18,7 +18,7 @@ internal sealed class KWinWtqHotkeyService : WtqHostedService
 	/// </summary>
 	private const string WtqShortcutPrefix = "wtq_hotkey";
 
-	private readonly ILogger _log = Log.For<KWinWtqHotkeyService>();
+	private readonly ILogger _log = Log.For<KWinHotkeyService>();
 	private readonly WtqSemaphoreSlim _lock = new();
 
 	// Set in constructor.
@@ -31,7 +31,7 @@ internal sealed class KWinWtqHotkeyService : WtqHostedService
 	private KGlobalAccel _kGlobalAccel = null!;
 	private Component _kwinComponent = null!;
 
-	public KWinWtqHotkeyService(
+	public KWinHotkeyService(
 		IDBusConnection dbus,
 		IOptionsMonitor<WtqOptions> opts,
 		IKWinClient kwinClient)
