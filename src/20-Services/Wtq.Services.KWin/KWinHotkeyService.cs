@@ -71,7 +71,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	public async Task RegisterAllAsync(CancellationToken cancellationToken)
 	{
 		// Make this part thread-safe.
-		_ = await _lock.WaitAsync(cancellationToken).NoCtx();
+		using var l = await _lock.WaitAsync(cancellationToken).NoCtx();
 
 		// Reset all shortcuts.
 		await RemoveWtqShortcutsAsync();

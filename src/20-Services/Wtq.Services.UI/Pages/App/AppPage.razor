@@ -10,6 +10,7 @@
 @inject Notifier Notifier
 @inject NavigationManager NavMan
 @inject WtqOptionsSaveService SaveService
+@inject NotificationService NotificationService
 
 @page "/apps/{AppId}"
 
@@ -39,23 +40,27 @@
 	{
 		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
 
-		GlobalOpts = JsonDeepClone(WtqOpts.CurrentValue);
-		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
-
 		// Notify when the settings file changes, to prevent overwriting settings that were made outside the UI.
-		WtqOpts.OnChange((_, _) =>
+		WtqOpts.OnChange((a, b) =>
 		{
-			_hasChanged = true;
-
 			if (_noWarn)
 			{
 				Reload();
+
+				_noWarn = false;
 			}
 			else
 			{
+				_hasChanged = true;
+
 				InvokeAsync(StateHasChanged);
 			}
 		});
+	}
+
+	protected override void OnParametersSet()
+	{
+		Reload();
 	}
 
 	private async Task SaveAsync()
@@ -64,12 +69,15 @@
 
 		await SaveService.SaveAsync(GlobalOpts).NoCtx();
 
-		Reload();
+		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
 	}
 
 	private void Reload()
 	{
-		NavMan.NavigateTo($"/apps/{AppOpts.Name}", forceLoad: true);
+		_hasChanged = false;
+
+		GlobalOpts = JsonDeepClone(WtqOpts.CurrentValue);
+		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
 	}
 
 }
@@ -85,10 +93,16 @@
 			<RadzenStack>
 
 				@* Warn about outside file changes. *@
+				@*
+					TODO: Disabled for now, as the check based on option reloads isn't super reliable.
+					TODO:
+					TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
+					TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
 				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
 					The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
 					<RadzenButton Text="Reload" Click="Reload"/>
 				</RadzenAlert>
+				*@
 
 		<RadzenFieldset Text="App">
 			<RadzenStack Gap="1rem">

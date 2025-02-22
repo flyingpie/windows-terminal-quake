@@ -3,7 +3,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
-public sealed class WtqAppOptions
+public sealed class WtqAppOptions : IValidatableObject
 {
 	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
 	public int? AnimationDurationMs { get; set; }
@@ -123,4 +123,12 @@ public sealed class WtqAppOptions
 	}
 
 	public override string ToString() => Name;
+
+	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+	{
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			yield return new("A name is required", [nameof(Name)]);
+		}
+	}
 }
