@@ -1,3 +1,4 @@
+@using System.ComponentModel.DataAnnotations
 @using Wtq.Services.UI.Pages.App.Animation
 @using Wtq.Services.UI.Pages.App.App
 @using Wtq.Services.UI.Pages.App.Behavior
@@ -87,10 +88,10 @@
 </PageHead>
 
 <CascadingValue Value="GlobalOpts">
-	<CascadingValue Value="AppOpts">
-		<CascadingValue Value="Notifier">
+<CascadingValue Value="AppOpts">
+<CascadingValue Value="Notifier">
 
-			<RadzenStack>
+	<RadzenStack>
 
 				@* Warn about outside file changes. *@
 				@*
@@ -103,6 +104,11 @@
 					<RadzenButton Text="Reload" Click="Reload"/>
 				</RadzenAlert>
 				*@
+
+		@foreach (var v in AppOpts.Validate(new ValidationContext(new object())))
+		{
+			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
+		}
 
 		<RadzenFieldset Text="App">
 			<RadzenStack Gap="1rem">

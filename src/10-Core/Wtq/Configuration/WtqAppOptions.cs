@@ -128,7 +128,12 @@ public sealed class WtqAppOptions : IValidatableObject
 	{
 		if (string.IsNullOrWhiteSpace(Name))
 		{
-			yield return new("A name is required", [nameof(Name)]);
+			yield return new("A name is required.", [nameof(Name)]);
+		}
+
+		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
+		{
+			yield return new("Either a file name, a process name or a window title needs to be set.");
 		}
 	}
 }
