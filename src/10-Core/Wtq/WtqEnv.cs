@@ -1,4 +1,5 @@
 using Serilog.Events;
+using System.Runtime.InteropServices;
 
 namespace Wtq;
 
@@ -8,7 +9,6 @@ public static class WtqEnv
 	{
 		public const string Config = "WTQ_CONFIG_FILE";
 		public const string LogLevel = "WTQ_LOG_LEVEL";
-		public const string LogToConsole = "WTQ_LOG_TO_CONSOLE";
 	}
 
 	/// <summary>
@@ -18,11 +18,16 @@ public static class WtqEnv
 		=> Environment.GetEnvironmentVariable(Names.Config)?.ExpandEnvVars()?.EmptyOrWhiteSpaceToNull();
 
 	/// <summary>
-	/// Whether to log to the console.
-	/// Should generally be turned off, as it can spam the journal on Linux.
+	/// Whether to log to the console.<br/>
+	/// Always enabled, unless we're running on Linux, without the "TERM" environment variable (i.e. non-interactive).
 	/// </summary>
-	public static bool LogToConsole
-		=> Environment.GetEnvironmentVariable(Names.LogToConsole)?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+	// public static bool LogToConsole;
+
+	public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+	public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+	public static bool HasTermEnvVar => !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
 
 	/// <summary>
 	/// Returns the requested log level, as specified by an environment variable.

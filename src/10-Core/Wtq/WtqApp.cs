@@ -43,11 +43,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
 
-		// Start loop that updates app state periodically.
-		_loop = new(
-			$"{nameof(WtqApp)}.{name}",
-			_ => UpdateLocalAppStateAsync(allowStartNew: false),
-			TimeSpan.FromSeconds(1));
+		// // Start loop that updates app state periodically.
+		// _loop = new(
+		// 	$"{nameof(WtqApp)}.{name}",
+		// 	_ => UpdateLocalAppStateAsync(allowStartNew: false),
+		// 	TimeSpan.FromSeconds(1));
 	}
 
 	/// <summary>

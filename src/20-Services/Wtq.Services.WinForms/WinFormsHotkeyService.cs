@@ -6,6 +6,9 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
+	// TODO: Implement.
+	private bool _isSuspended;
+
 	public WinFormsHotkeyService(IWtqBus bus)
 	{
 		Guard.Against.Null(bus);
@@ -25,11 +28,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 
 		HotkeyManager.HotkeyPressed += (s, a) =>
 		{
-			bus.Publish(new WtqHotkeyPressedEvent()
-			{
-				Key = a.Key.ToWtqKeys(),
-				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
-			});
+			bus.Publish(new WtqHotkeyPressedEvent(a.Modifiers.ToWtqKeyModifiers(), a.Key.ToWtqKeys()));
 		};
 	}
 

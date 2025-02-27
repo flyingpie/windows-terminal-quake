@@ -10,6 +10,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private readonly IWtqWindowResolver _windowResolver;
 
 	private readonly List<WtqApp> _apps = [];
+	private readonly Worker _loop;
 
 	public WtqAppRepo(
 		IHostApplicationLifetime lifetime,
@@ -40,6 +41,12 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			// TODO: Find a nicer way to handle this.
 			DisposeAsync().GetAwaiter().GetResult();
 		});
+
+		// Start loop that updates app state periodically.
+		_loop = new(
+			$"{nameof(WtqAppRepo)}.UpdateAppStates",
+			_ => UpdateAppsAsync(allowStartNew: false),
+			TimeSpan.FromSeconds(1));
 	}
 
 	public async ValueTask DisposeAsync()
@@ -120,6 +127,12 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		// Add app handles for options that don't have one yet.
 		foreach (var opt in _opts.CurrentValue.Apps)
 		{
+			if (!opt.IsValid)
+			{
+				_log.LogWarning("App '{App}' has validation errors, skipping during state updates", opt);
+				continue;
+			}
+
 			var app = GetByName(opt.Name);
 
 			if (app != null)

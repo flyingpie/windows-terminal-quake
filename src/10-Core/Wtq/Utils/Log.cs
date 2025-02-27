@@ -19,7 +19,6 @@ public static class Log
 
 		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
-
 			.WriteTo.File(
 				outputTemplate: LogTemplate,
 				path: path,
@@ -27,20 +26,24 @@ public static class Log
 				rollingInterval: RollingInterval.Day,
 				retainedFileCountLimit: 5);
 
-		// Log to console?
-		if (WtqEnv.LogToConsole)
+		// Log to console.
+		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
+
+		if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
 		{
-			logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
+			Console.WriteLine(
+				"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
+
+			console.MinimumLevel.Warning();
 		}
 
-		Serilog.Log.Logger = logBuilder.CreateLogger(); 
+		Serilog.Log.Logger = logBuilder.CreateLogger();
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
 		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
 		_factory.AddProvider(provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
 		Serilog.Log.Information("Logging to file at '{Path}'", path);
-		Serilog.Log.Information("Logging to console: {IsEnable}", WtqEnv.LogToConsole);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()

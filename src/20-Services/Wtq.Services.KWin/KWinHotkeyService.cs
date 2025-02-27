@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Wtq.Configuration;
+using Wtq.Events;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.DBus.Generated;
 
@@ -25,6 +26,8 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	private readonly IDBusConnection _dbus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IKWinClient _kwinClient;
+	private readonly WtqDBusObject _dbusObj;
+	private readonly IWtqBus _bus;
 
 	// Set on service init.
 	private KWinService _kwinService = null!;
@@ -33,15 +36,22 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	public KWinHotkeyService(
 		IDBusConnection dbus,
+		IWtqDBusObject dbusObj,
 		IOptionsMonitor<WtqOptions> opts,
-		IKWinClient kwinClient)
+		IKWinClient kwinClient,
+		IWtqBus bus)
 	{
 		_kwinClient = Guard.Against.Null(kwinClient);
 		_opts = Guard.Against.Null(opts);
 		_dbus = Guard.Against.Null(dbus);
+		_dbusObj = Guard.Against.Null(dbusObj as WtqDBusObject); // TODO: Make nicer.
+		_bus = Guard.Against.Null(bus);
 
 		// Update registrations every time the settings file is reloaded.
 		opts.OnChange((opt, someString) => _ = Task.Run(async () => await RegisterAllAsync(CancellationToken.None)));
+
+		_bus.OnEvent<WtqSuspendHotkeysEvent>(async _ => await UnregisterAllAsync(CancellationToken.None));
+		_bus.OnEvent<WtqResumeHotkeysEvent>(async _ => await RegisterAllAsync(CancellationToken.None));
 	}
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
@@ -51,6 +61,13 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		_kGlobalAccel = _kwinService.CreateKGlobalAccel("/kglobalaccel");
 		_kwinComponent = _kwinService.CreateComponent("/component/kwin");
 
+		_dbusObj.OnPressShortcut((arg) =>
+		{
+			_bus.Publish(new WtqHotkeyPressedEvent(arg.Mod, arg.Key));
+
+			return Task.CompletedTask;
+		});
+
 		// Register hotkeys on WTQ start.
 		await RegisterAllAsync(cancellationToken);
 	}
@@ -58,7 +75,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
 		// Cleanup shortcuts (unless hotkey reset has been disabled).
-		await RemoveWtqShortcutsAsync().NoCtx();
+		await UnregisterAllAsync(cancellationToken).NoCtx();
 	}
 
 	protected override ValueTask OnDisposeAsync()
@@ -70,11 +87,13 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	public async Task RegisterAllAsync(CancellationToken cancellationToken)
 	{
+		_log.LogInformation("Registering hotkeys");
+
 		// Make this part thread-safe.
 		using var l = await _lock.WaitAsync(cancellationToken).NoCtx();
 
 		// Reset all shortcuts.
-		await RemoveWtqShortcutsAsync();
+		await UnregisterAllAsync(cancellationToken);
 
 		// Global.
 		await RegisterGlobalHotkeysAsync(cancellationToken);
@@ -83,8 +102,10 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		await RegisterAppHotkeysAsync(cancellationToken);
 	}
 
-	private async Task RemoveWtqShortcutsAsync()
+	public async Task UnregisterAllAsync(CancellationToken cancellationToken)
 	{
+		_log.LogInformation("Unregistering hotkeys");
+
 		// Fetch existing WTQ shortcuts from KWin.
 		var kwinShortcutNames = (await _kwinComponent.ShortcutNamesAsync())
 			.Where(n => n.StartsWith(WtqShortcutPrefix, StringComparison.OrdinalIgnoreCase))

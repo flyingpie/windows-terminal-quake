@@ -130,6 +130,8 @@ public sealed class WtqAppOptions : IValidatableObject
 
 	public override string ToString() => Name;
 
+	public bool IsValid => !Validate(new ValidationContext(new object())).Any();
+
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 	{
 		if (string.IsNullOrWhiteSpace(Name))

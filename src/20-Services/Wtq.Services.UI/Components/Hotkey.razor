@@ -1,5 +1,6 @@
-@using System.Text
 @using Wtq.Services.UI.Extensions
+
+@inject IWtqBus Bus
 
 @code {
 
@@ -37,6 +38,10 @@
 		Options.Key = Keys.None;
 	}
 
+	private void HandleFocusGained(FocusEventArgs e) => Bus.Publish<WtqSuspendHotkeysEvent>();
+
+	private void HandleFocusLost(FocusEventArgs e) => Bus.Publish<WtqResumeHotkeysEvent>();
+
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
 		if (IsSuper(e))
@@ -70,8 +75,10 @@
 	<!-- Shortcut capturing textbox -->
 	<RadzenTextBox
 		Style="width: 100%;"
-		@onkeydown="(ev) => HandleKeyDown(ev)"
-		@onkeyup="(ev) => HandleKeyUp(ev)"
+		@onkeydown="HandleKeyDown"
+		@onkeyup="HandleKeyUp"
+		@onfocus="HandleFocusGained"
+		@onblur="HandleFocusLost"
 		Placeholder="Type here to set hotkey."
 		Value="@Description"
 	/>

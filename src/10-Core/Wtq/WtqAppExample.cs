@@ -7,6 +7,15 @@ namespace Wtq;
 /// </summary>
 public class WtqAppExample
 {
+	public WtqAppExample()
+	{
+		Factory = () => new WtqAppOptions()
+		{
+			Name = Title,
+			FileName = FileName,
+		};
+	}
+
 	/// <summary>
 	/// Name of the app the example is for.
 	/// </summary>
@@ -23,7 +32,7 @@ public class WtqAppExample
 	public Uri? Link { get; set; }
 
 	/// <summary>
-	/// Path to to a thumbnail to show in the UI.
+	/// Path to a thumbnail to show in the UI.
 	/// </summary>
 	public string? Image { get; set; }
 
@@ -34,8 +43,12 @@ public class WtqAppExample
 	/// </summary>
 	public required ICollection<OSPlatform> Os { get; init; }
 
+	public bool IsLinux => Os.Contains(OSPlatform.Linux);
+
+	public bool IsWindows => Os.Contains(OSPlatform.Windows);
+
 	/// <summary>
 	/// Function that creates an instance of <see cref="WtqAppOptions" />, for use in the settings file.
 	/// </summary>
-	public required Func<WtqAppOptions> Factory { get; init; }
+	public Func<WtqAppOptions> Factory { get; init; }
 }

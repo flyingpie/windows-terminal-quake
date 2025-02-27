@@ -19,6 +19,9 @@
 		NavMan.NavigateTo($"/apps/{app.Name}");
 	}
 
+	private bool _isLinux = WtqEnv.IsLinux;
+	private bool _isWindows = WtqEnv.IsWindows;
+
 }
 
 <PageHead Icon="preview">Example Configurations</PageHead>
@@ -27,9 +30,20 @@
 
 <p>Clicking <Emph>Add</Emph> will add an example entry to your settings, and take you there for further customization.</p>
 
+<div class="rz-m-1">
+	<span>
+		<RadzenCheckBox @bind-Value="_isLinux" Name="Linux" />
+		<RadzenLabel Text="Linux" Component="Linux" class="rz-ms-2" />
+	</span>
+	<span class="rz-ml-4">
+		<RadzenCheckBox @bind-Value="_isWindows" Name="Windows" />
+		<RadzenLabel Text="Windows" Component="Windows" class="rz-ms-2" />
+	</span>
+</div>
+
 <RadzenRow>
 
-	@foreach (var example in WtqAppExamples.AppExamples)
+	@foreach (var example in WtqAppExamples.AppExamples.Where(ex => _isLinux && ex.IsLinux || _isWindows && ex.IsWindows))
 	{
 		<RadzenColumn Size="6">
 			<RadzenCard>

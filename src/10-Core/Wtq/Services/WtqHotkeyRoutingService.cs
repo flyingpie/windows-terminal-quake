@@ -4,17 +4,19 @@ namespace Wtq.Services;
 /// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotkeyService : WtqHostedService
+public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 {
-	private readonly ILogger _log = Log.For<WtqHotkeyService>();
+	private readonly ILogger _log = Log.For<WtqHotkeyRoutingService>();
 
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 
+	// private bool _isSuspended;
+
 	private WtqApp? _prevApp;
 
-	public WtqHotkeyService(
+	public WtqHotkeyRoutingService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -28,6 +30,11 @@ public class WtqHotkeyService : WtqHostedService
 		_bus.OnEvent<WtqHotkeyPressedEvent>(
 			e =>
 			{
+				// if (_isSuspended)
+				// {
+				// 	return Task.CompletedTask;
+				// }
+
 				// Look for app that has the specified hotkey configured.
 				// Fall back to most recently toggled app.
 				// Fall back to first configured app after that.
@@ -50,6 +57,24 @@ public class WtqHotkeyService : WtqHostedService
 				return Task.CompletedTask;
 			});
 	}
+
+	// public Task SuspendAsync(CancellationToken cancellationToken)
+	// {
+	// 	_isSuspended = true;
+	//
+	// 	_log.LogInformation("Suspending hotkey handling");
+	//
+	// 	return Task.CompletedTask;
+	// }
+	//
+	// public Task ResumeAsync(CancellationToken cancellationToken)
+	// {
+	// 	_isSuspended = false;
+	//
+	// 	_log.LogInformation("Resuming hotkey handling");
+	//
+	// 	return Task.CompletedTask;
+	// }
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
@@ -76,9 +101,7 @@ public class WtqHotkeyService : WtqHostedService
 				_bus.Publish(
 					new WtqHotkeyDefinedEvent()
 					{
-						AppOptions = app,
-						Key = hk.Key,
-						Modifiers = hk.Modifiers,
+						AppOptions = app, Key = hk.Key, Modifiers = hk.Modifiers,
 					});
 			}
 		}
@@ -88,8 +111,7 @@ public class WtqHotkeyService : WtqHostedService
 			_bus.Publish(
 				new WtqHotkeyDefinedEvent()
 				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
+					Key = hk.Key, Modifiers = hk.Modifiers,
 				});
 		}
 	}

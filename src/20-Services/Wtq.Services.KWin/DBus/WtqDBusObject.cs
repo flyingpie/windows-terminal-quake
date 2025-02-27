@@ -167,8 +167,15 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
+	private readonly List<Func<(KeyModifiers, Keys), Task>> _handlers = [];
+
+	public void OnPressShortcut(Func<(KeyModifiers Mod, Keys Key), Task> handler)
+	{
+		_handlers.Add(handler);
+	}
+
 	/// <inheritdoc/>
-	public Task OnPressShortcutAsync(string modStr, string keyStr)
+	public async Task OnPressShortcutAsync(string modStr, string keyStr)
 	{
 		_log.LogInformation(
 			"{MethodName}({Modifier}, {Key})",
@@ -176,17 +183,19 @@ internal sealed class WtqDBusObject(
 			modStr,
 			keyStr);
 
-		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
+		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
 
-		_bus.Publish(
-			new WtqHotkeyPressedEvent()
-			{
-				Key = key,
-				Modifiers = mod,
-			});
+		await Task.WhenAll(_handlers.Select(h => h((mod, key))));
 
-		return Task.CompletedTask;
+		// _bus.Publish(
+		// 	new WtqHotkeyPressedEvent()
+		// 	{
+		// 		Key = key,
+		// 		Modifiers = mod,
+		// 	});
+
+		// return Task.CompletedTask;
 	}
 
 	public Task ToggleAppAsync(string appName)
