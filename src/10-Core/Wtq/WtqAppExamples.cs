@@ -17,10 +17,12 @@ public class WtqAppExamples
 			Image = "/example_apps/windows_terminal.jpg",
 			Link = new("https://learn.microsoft.com/en-us/windows/terminal/install"),
 			Os = [OSPlatform.Windows,],
+			FileName = "wt",
+
 			Factory = () => new()
 			{
 				Name = "Windows Terminal",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "wt",
 				ProcessName = "WindowsTerminal",
 			},
@@ -34,10 +36,11 @@ public class WtqAppExamples
 			Image = "/example_apps/powershell_5.jpg",
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1"),
 			Os = [OSPlatform.Windows,],
+			FileName = "powershell",
 			Factory = () => new()
 			{
 				Name = "PowerShell 5",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "powershell",
 			},
 		},
@@ -50,10 +53,11 @@ public class WtqAppExamples
 			Image = "/example_apps/powershell_core.png",
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"),
 			Os = [OSPlatform.Windows,],
+			FileName = "pwsh",
 			Factory = () => new()
 			{
 				Name = "PowerShell Core",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "pwsh",
 			},
 		},
@@ -66,11 +70,12 @@ public class WtqAppExamples
 			Image = "/example_apps/wezterm.png",
 			Link = new("https://wezfurlong.org/wezterm/index.html"),
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
+			FileName = "wezterm",
 			Factory = () => new()
 			{
 				Name = "Wezterm",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Hotkeys = [],
+				FileName = "wezterm",
 			},
 		},
 
@@ -82,11 +87,12 @@ public class WtqAppExamples
 			Image = "/example_apps/kitty.png",
 			Link = new("https://sw.kovidgoyal.net/kitty/"),
 			Os = [OSPlatform.Windows,],
+			FileName = "kitty",
 			Factory = () => new()
 			{
-				Name = "Wezterm",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Name = "Kitty",
+				Hotkeys = [],
+				FileName = "kitty",
 			},
 		},
 
@@ -98,11 +104,12 @@ public class WtqAppExamples
 			Image = "/example_apps/ptyxis.webp",
 			Link = null,
 			Os = [OSPlatform.Linux,],
+			FileName = "ptyxis",
 			Factory = () => new()
 			{
 				Name = "Ptyxis",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Hotkeys = [],
+				FileName = "ptyxis",
 			},
 		},
 
@@ -114,11 +121,12 @@ public class WtqAppExamples
 			Image = "/example_apps/konsole.png",
 			Link = null,
 			Os = [OSPlatform.Linux,],
+			FileName = "konsole",
 			Factory = () => new()
 			{
 				Name = "Konsole",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Hotkeys = [],
+				FileName = "konsole",
 			},
 		},
 
@@ -131,11 +139,12 @@ public class WtqAppExamples
 			Description = "Windows explorer, the default file browser on Windows.",
 			Image = "/example_apps/windows_explorer.png",
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
+			FileName = "explorer",
 			Factory = () => new()
 			{
 				Name = "Windows Explorer",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "pwsh",
+				Hotkeys = [],
+				FileName = "explorer",
 			},
 		},
 
@@ -147,10 +156,11 @@ public class WtqAppExamples
 			Image = "/example_apps/double_commander.png",
 			Link = new("https://doublecommander.com"),
 			Os = [OSPlatform.Windows,],
+			FileName = "TODO",
 			Factory = () => new()
 			{
 				Name = "Double Commander",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},
@@ -163,10 +173,11 @@ public class WtqAppExamples
 			Image = "/example_apps/q_dir.png",
 			Link = new("http://q-dir.com/"),
 			Os = [OSPlatform.Windows,],
+			FileName = "TODO",
 			Factory = () => new()
 			{
 				Name = "Double Commander",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},
@@ -179,11 +190,12 @@ public class WtqAppExamples
 			Image = "/example_apps/dolphin.jpg",
 			Link = null,
 			Os = [OSPlatform.Windows,],
+			FileName = "dolphin",
 			Factory = () => new()
 			{
 				Name = "Dolphin",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Hotkeys = [],
+				FileName = "dolphin",
 			},
 		},
 
@@ -197,11 +209,12 @@ public class WtqAppExamples
 			Image = "/example_apps/spotify.jpg",
 			Link = new("https://www.spotify.com/us/download/"),
 			Os = [OSPlatform.Windows,],
+			FileName = "spotify",
 			Factory = () => new()
 			{
 				Name = "Spotify",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
+				Hotkeys = [],
+				FileName = "spotify",
 			},
 		},
 
@@ -213,10 +226,11 @@ public class WtqAppExamples
 			Image = "/example_apps/discord.png",
 			Link = new("https://discord.com/"),
 			Os = [OSPlatform.Windows,],
+			FileName = "discord",
 			Factory = () => new()
 			{
 				Name = "Discord",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},
@@ -229,10 +243,11 @@ public class WtqAppExamples
 			Image = "/example_apps/keepassxc.png",
 			Link = new("https://keepassxc.org/"),
 			Os = [OSPlatform.Windows,],
+			FileName = "keepassxc",
 			Factory = () => new()
 			{
 				Name = "KeePassXC",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},
@@ -245,10 +260,11 @@ public class WtqAppExamples
 			Image = "/example_apps/process_explorer.jpg",
 			Link = new("https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"),
 			Os = [OSPlatform.Windows,],
+			FileName = "procexp64",
 			Factory = () => new()
 			{
 				Name = "Process Explorer",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},
@@ -261,10 +277,11 @@ public class WtqAppExamples
 			Image = "/example_apps/system_monitor.jpg",
 			Link = null,
 			Os = [OSPlatform.Linux,],
+			FileName = "TODO",
 			Factory = () => new()
 			{
 				Name = "System Monitor",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
+				Hotkeys = [],
 				FileName = "TODO",
 			},
 		},

@@ -27,6 +27,8 @@ public class WtqAppExample
 	/// </summary>
 	public string? Image { get; set; }
 
+	public string? FileName { get; set; }
+
 	/// <summary>
 	/// What operating systems the app runs on. Used for indication and filtering in the UI.
 	/// </summary>

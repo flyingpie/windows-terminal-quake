@@ -57,7 +57,13 @@ public sealed class WtqAppOptions : IValidatableObject
 	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
 	public float? HorizontalScreenCoverage { get; set; }
 
-	public ICollection<HotkeyOptions> Hotkeys { get; set; } = [];
+	private ICollection<HotkeyOptions> _hotkeys = [];
+
+	public ICollection<HotkeyOptions> Hotkeys
+	{
+		get => _hotkeys;
+		set => _hotkeys = value ?? [];
+	}
 
 	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
 	public int? MonitorIndex { get; set; }
@@ -133,7 +139,12 @@ public sealed class WtqAppOptions : IValidatableObject
 
 		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
 		{
-			yield return new("Either a file name, a process name or a window title needs to be set.");
+			yield return new("Either a file name, a process name or a window title needs to be set.", [nameof(FileName), nameof(ProcessName)]);
+		}
+
+		if (Hotkeys.Count == 0)
+		{
+			yield return new("Specify at least 1 hotkey.", [nameof(Hotkeys)]);
 		}
 	}
 }
