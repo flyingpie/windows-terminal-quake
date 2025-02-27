@@ -105,10 +105,10 @@
 				</RadzenAlert>
 				*@
 
-		@foreach (var v in AppOpts.Validate(new ValidationContext(new object())))
-		{
-			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
-		}
+		@* @foreach (var v in AppOpts.Validate(new ValidationContext(new object()))) *@
+		@* { *@
+		@* 	<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert> *@
+		@* } *@
 
 		<RadzenFieldset Text="App">
 			<RadzenStack Gap="1rem">

@@ -7,10 +7,11 @@
 
 		StateHasChanged();
 	}
+
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Hotkeys"/>
+	<SettingLabel Text="Hotkeys" Component="Hotkeys" />
 	<RadzenColumn Size="7">
 
 		<RadzenStack>
@@ -30,5 +31,11 @@
 		</RadzenStack>
 
 		<Descr>What hotkey(s) should toggle the app.</Descr>
+
+		@foreach (var v in ValidationResultsFor("Hotkeys"))
+		{
+			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
+		}
+
 	</RadzenColumn>
 </RadzenRow>
