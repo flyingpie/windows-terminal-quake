@@ -1,6 +1,7 @@
 @inherits BaseSetting
 
 @code {
+
 	private void OnRemove(HotkeyOptions hk)
 	{
 		AppOpts.Hotkeys.Remove(hk);
@@ -11,14 +12,14 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Hotkeys" Component="Hotkeys" />
+	<SettingLabel Text="Hotkeys" Component="Hotkeys"/>
 	<RadzenColumn Size="7">
 
 		<RadzenStack>
 
 			@foreach (var hk in AppOpts.Hotkeys)
 			{
-				<Hotkey Options="hk" OnRemove="@(() => OnRemove(hk))" />
+				<Hotkey Options="hk" OnRemove="@(() => OnRemove(hk))"/>
 			}
 
 			<RadzenStack>
@@ -32,10 +33,7 @@
 
 		<Descr>What hotkey(s) should toggle the app.</Descr>
 
-		@foreach (var v in ValidationResultsFor("Hotkeys"))
-		{
-			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
-		}
+		@* <ValidationMessages ValidationResults="@ValidationResultsFor(x => x.Hotkeys)"/> *@
 
 	</RadzenColumn>
 </RadzenRow>

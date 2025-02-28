@@ -1,4 +1,4 @@
-@using System.ComponentModel.DataAnnotations
+@using System.Linq.Expressions
 @code {
 
 	[Parameter]
@@ -7,26 +7,24 @@
 	[Parameter]
 	public string? Subtext { get; set; }
 
+	// [Parameter]
+	// public string? Component { get; set; }
+
 	[Parameter]
-	public string? Component { get; set; }
+	public Expression<Func<WtqAppOptions, object>> Component { get; set; }
 
 	[CascadingParameter]
 	public WtqAppOptions AppOpts { get; set; } = null!;
 
-	public IEnumerable<ValidationResult> ValidationResults
-	{
-		get => AppOpts.Validate(new ValidationContext(new object())).Where(v => v.MemberNames.Any(m => m.Equals(Component, StringComparison.Ordinal)));
-	}
-
 	private string LabelClass
-		=> ValidationResults.Any()
+		=> AppOpts.IsValid(Component)
 		? "rz-color-danger-light"
 		: "";
 }
 
 <RadzenColumn Size="4">
 	<RadzenStack Orientation="Orientation.Vertical" Gap="2">
-		<RadzenLabel Text="@Text" Component="@Component" class="@LabelClass"/>
+		<RadzenLabel Text="@Text" Component="@SystemExtensions.GetMemberName(Component)" class="@LabelClass"/>
 
 		@if (Subtext != null)
 		{

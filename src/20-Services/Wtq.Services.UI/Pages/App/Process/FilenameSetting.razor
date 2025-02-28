@@ -9,7 +9,7 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Filename" Component="@_id" />
+	<SettingLabel Text="Filename" Component="x => x.FileName" />
 	<RadzenColumn Size="7">
 		<RadzenTextBox @bind-Value="FileName" style="width: 100%;" @oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)" Name="@_id" />
 
@@ -30,11 +30,6 @@
 			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
 		</Descr>
 
-		@* @foreach (var v in ValidationResultsFor(x => x.FileName)) *@
-		@foreach (var v in ValidationResultsFor("FileName"))
-		{
-			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
-		}
-
+		<ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" />
 	</RadzenColumn>
 </RadzenRow>

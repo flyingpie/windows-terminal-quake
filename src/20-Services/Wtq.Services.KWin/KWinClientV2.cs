@@ -142,6 +142,15 @@ internal sealed class KWinClientV2(
 				},
 				cancellationToken)
 			.NoCtx();
+
+		var pos = await GetWindowAsync(window, cancellationToken).NoCtx();
+
+		if (pos?.FrameGeometry != null)
+		{
+			var p = pos.FrameGeometry.ToPoint();
+			var diff = location.DistanceTo(p);
+			Console.WriteLine($"DIFF:{diff} {p}");
+		}
 	}
 
 	public async Task RegisterHotkeyAsync(

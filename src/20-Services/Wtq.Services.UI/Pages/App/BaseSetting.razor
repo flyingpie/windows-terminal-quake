@@ -1,5 +1,3 @@
-@using System.ComponentModel.DataAnnotations
-@using System.Linq.Expressions
 @code {
 
 	protected string _id = Guid.NewGuid().ToString();
@@ -15,22 +13,6 @@
 	[CascadingParameter]
 	public Notifier Notifier { get; set; } = null!;
 
-	public IEnumerable<ValidationResult> ValidationResults
-	{
-		get => AppOpts.Validate(new ValidationContext(new object())).Where(v => v.MemberNames.Any(m => m.Equals(SettingName, StringComparison.Ordinal)));
-	}
-
-	public IEnumerable<ValidationResult> ValidationResultsFor(Expression<Func<WtqAppOptions, object>> expr)
-		=> AppOpts.Validate(new ValidationContext(new object())).Where(v => v.MemberNames.Any(m => m.Equals("x", StringComparison.Ordinal)));
-
-	public IEnumerable<ValidationResult> ValidationResultsFor(string componentName)
-		=> AppOpts.Validate(new ValidationContext(new object())).Where(v => v.MemberNames.Any(m => m.Equals(componentName, StringComparison.Ordinal)));
-
-	// private string LabelClass
-	// 	=> AppOpts.Validate(new ValidationContext(new object())).Any(v => v.MemberNames.Any(m => m.Equals(Component, StringComparison.Ordinal)))
-	// 	? "rz-color-danger-light"
-	// 	: "";
-
 	protected override void OnInitialized()
 	{
 		Notifier.OnNotify(() => InvokeAsync(() => StateHasChanged()));
@@ -42,5 +24,4 @@
 
 		Notifier.Notify();
 	}
-
 }

@@ -12,11 +12,13 @@
 
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Always on top" Component="@_id"/>
+
 	<RadzenColumn Size="7">
 		<RadzenCheckBox @bind-Value="AlwaysOnTop" Name="@_id"/>
 
 		<Descr>Keep the app on top of other windows, even on focus lost.</Descr>
 	</RadzenColumn>
+
 	<SettingGlobal
 		HasGlobalSetting="true"
 		IsOverridden="@(AppOpts.AlwaysOnTop != null)"

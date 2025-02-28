@@ -1,9 +1,5 @@
 @inherits BaseSetting
 
-@code {
-
-}
-
 <RadzenRow AlignItems="AlignItems.Start">
 	<SettingLabel Text="Name" Component="@_id"/>
 	<RadzenColumn Size="7">
@@ -12,5 +8,7 @@
 		<Descr>
 			A descriptive name, mostly used for logging.
 		</Descr>
+
+		@* <ValidationMessages ValidationResults="@ValidationResultsFor(x => x.Name)"/> *@
 	</RadzenColumn>
 </RadzenRow>

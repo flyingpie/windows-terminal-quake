@@ -1,0 +1,13 @@
+@using System.ComponentModel.DataAnnotations
+
+@code {
+
+	[Parameter]
+	public IEnumerable<ValidationResult> ValidationResults { get; set; }
+
+}
+
+@foreach (var v in ValidationResults)
+{
+	<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
+}

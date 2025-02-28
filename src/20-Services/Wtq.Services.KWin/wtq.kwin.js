@@ -260,7 +260,7 @@ cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
 	// So we split it off, and now do a single RESIZE_WINDOW before a bunch of MOVE_WINDOWs.
 	let w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Moving win ${p.internalId} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
+	log.info(`Moving window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
 
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
 	// allowing us to eg. only set the width, and not the height, or vice versa.
@@ -277,10 +277,10 @@ cmds["RESIZE_WINDOW"] = (cmdInfo) => {
 	const p = cmdInfo.params;
 	let w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	log.info(`Moving win ${p.internalId} to x:${p.x}, y:${p.y}, width: ${p.width}, height:${p.height}`);
+	log.info(`Resizing window with id '${p.internalId}' to width: ${p.width}, height:${p.height}`);
 
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
-	// allowing us to eg. only set the width, and not the height, or vice versa.
+	// allowing us to e.g. only set the width, and not the height, or vice versa.
 	// Not sure if this is a bug, but it took a bunch of time to figure out.
 
 	let q = Object.assign({}, w.frameGeometry);

@@ -93,17 +93,17 @@
 
 	<RadzenStack>
 
-				@* Warn about outside file changes. *@
-				@*
-					TODO: Disabled for now, as the check based on option reloads isn't super reliable.
-					TODO:
-					TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
-					TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
-				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
-					The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
-					<RadzenButton Text="Reload" Click="Reload"/>
-				</RadzenAlert>
-				*@
+		@* Warn about outside file changes. *@
+		@*
+			TODO: Disabled for now, as the check based on option reloads isn't super reliable.
+			TODO:
+			TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
+			TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
+			The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
+			<RadzenButton Text="Reload" Click="Reload"/>
+		</RadzenAlert>
+		*@
 
 		@* @foreach (var v in AppOpts.Validate(new ValidationContext(new object()))) *@
 		@* { *@
