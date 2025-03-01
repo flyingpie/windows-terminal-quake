@@ -2,6 +2,8 @@
 	// Docs: https://wtq.flyingpie.nl
 	"$schema": "wtq.schema.json",
 
+	"ShowUiOnStart": true,
+
 	"Apps": [
 		// Example with Dolphin
 		{

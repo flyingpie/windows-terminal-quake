@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Wtq.Utils;
 
@@ -31,6 +32,9 @@ public static class SystemExtensions
 		return string.Join(separator, values);
 	}
 
+	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
+		=> validatable.Validate(new ValidationContext(new object()));
+
 
 	// public static bool IsValid(this IValidatableObject validatable)
 	// 	=> !validatable.Validate().Any();
@@ -41,8 +45,7 @@ public static class SystemExtensions
 	// public static bool IsValid(this IValidatableObject validatable, string componentName)
 	// 	=> !validatable.ValidationResultsFor(componentName).Any();
 	//
-	// public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
-	// 	=> validatable.Validate(new ValidationContext(new object()));
+
 	//
 	// public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
 	// 	=> validatable.ValidationResultsFor(GetMemberName(expr));
@@ -72,4 +75,17 @@ public static class SystemExtensions
 	// 			throw new NotSupportedException(expression.NodeType.ToString());
 	// 	}
 	// }
+
+	public static void SetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda, TValue value)
+	{
+		var memberSelectorExpression = memberLamda.Body as MemberExpression;
+		if (memberSelectorExpression != null)
+		{
+			var property = memberSelectorExpression.Member as PropertyInfo;
+			if (property != null)
+			{
+				property.SetValue(target, value, null);
+			}
+		}
+	}
 }

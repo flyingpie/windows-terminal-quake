@@ -136,21 +136,19 @@ internal sealed class KWinClientV2(
 				"MOVE_WINDOW",
 				new
 				{
-					internalId = window.InternalId,
-					x = location.X,
-					y = location.Y,
+					internalId = window.InternalId, x = location.X, y = location.Y,
 				},
 				cancellationToken)
 			.NoCtx();
 
-		var pos = await GetWindowAsync(window, cancellationToken).NoCtx();
-
-		if (pos?.FrameGeometry != null)
-		{
-			var p = pos.FrameGeometry.ToPoint();
-			var diff = location.DistanceTo(p);
-			Console.WriteLine($"DIFF:{diff} {p}");
-		}
+		// var pos = await GetWindowAsync(window, cancellationToken).NoCtx();
+		//
+		// if (pos?.FrameGeometry != null)
+		// {
+		// 	var p = pos.FrameGeometry.ToPoint();
+		// 	var diff = location.DistanceTo(p);
+		// 	Console.WriteLine($"DIFF:{diff} {p}");
+		// }
 	}
 
 	public async Task RegisterHotkeyAsync(
@@ -191,9 +189,7 @@ internal sealed class KWinClientV2(
 				"RESIZE_WINDOW",
 				new
 				{
-					internalId = window.InternalId,
-					width = size.Width,
-					height = size.Height,
+					internalId = window.InternalId, width = size.Width, height = size.Height,
 				},
 				cancellationToken)
 			.NoCtx();
@@ -211,8 +207,7 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
 				new
 				{
-					internalId = window.InternalId,
-					isVisible = JsUtils.ToJsBoolean(isVisible),
+					internalId = window.InternalId, isVisible = JsUtils.ToJsBoolean(isVisible),
 				},
 				cancellationToken)
 			.NoCtx();
@@ -230,8 +225,7 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_ALWAYS_ON_TOP",
 				new
 				{
-					internalId = window.InternalId,
-					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
+					internalId = window.InternalId, isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
 				},
 				cancellationToken)
 			.NoCtx();
@@ -249,8 +243,7 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_OPACITY",
 				new
 				{
-					internalId = window.InternalId,
-					opacity = opacity,
+					internalId = window.InternalId, opacity = opacity,
 				},
 				cancellationToken)
 			.NoCtx();

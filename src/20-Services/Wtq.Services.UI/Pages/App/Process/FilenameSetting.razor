@@ -1,39 +1,50 @@
-@inherits BaseSetting
+@using System.Linq.Expressions
+
+@* @inherits WtqSettingBase<string?> *@
 
 @code {
-	public string FileName
-	{
-		get => AppOpts.FileName;
-		set => WithNotify(() => AppOpts.FileName = value);
-	}
+
+	// public string FileName
+	// {
+	// 	get => AppOpts.FileName;
+	// 	set => WithNotify(() => AppOpts.FileName = value);
+	// }
+
 }
 
-<RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Filename" Property="x => x.FileName" />
-	<RadzenColumn Size="7">
-		<RadzenTextBox
-			@bind-Value="FileName"
-			style="width: 100%;"
-			@oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)"
-		/>
+@* <RadzenRow AlignItems="AlignItems.Start"> *@
+@* 	<SettingLabel Text="Filename" Property="x => x.FileName" /> *@
+@* 	<RadzenColumn Size="7"> *@
+@* *@
+@* 		<Descr> *@
+@* 			The <Emph>filename</Emph> to use when starting a new process for the app. *@
+@* 			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc. *@
+@* 		</Descr> *@
+@* *@
+@* 		$1$ <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" /> #1# *@
+@* 	</RadzenColumn> *@
+@* </RadzenRow> *@
 
-		@if (!string.IsNullOrWhiteSpace(FileName))
-		{
-			@if (Os.IsCallable(FileName))
-			{
-				<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p>
-			}
-			else
-			{
-				<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p>
-			}
-		}
+@* <WtqSetting> *@
+@* 	<Content> *@
 
-		<Descr>
-			The <Emph>filename</Emph> to use when starting a new process for the app.
-			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
-		</Descr>
+		@* <RadzenTextBox *@
+		@* 	@bind-Value="PropertyValue" *@
+		@* 	style="width: 100%;" *@
+		@* 	@oninput="@(i => PropertyValue = i.Value?.ToString() ?? string.Empty)" *@
+		@* /> *@
+		@* *@
+		@* @if (!string.IsNullOrWhiteSpace(PropertyValue)) *@
+		@* { *@
+		@* 	@if (Os.IsCallable(PropertyValue)) *@
+		@* 	{ *@
+		@* 		<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p> *@
+		@* 	} *@
+		@* 	else *@
+		@* 	{ *@
+		@* 		<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p> *@
+		@* 	} *@
+		@* } *@
 
-		@* <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" /> *@
-	</RadzenColumn>
-</RadzenRow>
+@* 	</Content> *@
+@* </WtqSetting> *@

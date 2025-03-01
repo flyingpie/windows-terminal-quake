@@ -91,6 +91,8 @@
 <CascadingValue Value="AppOpts">
 <CascadingValue Value="Notifier">
 
+<CascadingValue Value="AppOpts.ValidationResults">
+
 	<RadzenStack>
 
 		@* Warn about outside file changes. *@
@@ -113,8 +115,8 @@
 		<RadzenFieldset Text="App">
 			<RadzenStack Gap="1rem">
 
-				<NameSetting />
-				<HotkeysSetting Property="() => AppOpts.Hotkeys" />
+				@* <NameSetting /> *@
+				@* <HotkeysSetting Property="() => AppOpts.Hotkeys" /> *@
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -128,12 +130,16 @@
 					what values to use for <Emph>filename</Emph> and/or <Emph>process name</Emph>.
 				</RadzenAlert>
 
-				<FilenameSetting />
-				<WinTermAlert />
-				<ProcessNameSetting />
-				<ArgumentsSetting />
-				<AttachModeSetting />
-				<WindowTitleSetting />
+				@* <FilenameSetting Property="() => AppOpts.FileName" /> *@
+				@* <WinTermAlert /> *@
+				@* <ProcessNameSetting /> *@
+				@* <ArgumentsSetting /> *@
+				AM1
+				<AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Property="() => AppOpts.AttachMode" Default="() => GlobalOpts.AttachMode ?? AttachMode.FindOrStart" />
+				@* <WindowTitleSetting /> *@
+
+				AM2
+				<AttachModeSetting Get="() => GlobalOpts.AttachMode" Set="v => GlobalOpts.AttachMode = v" Property="() => GlobalOpts.AttachMode" Default="() => AttachMode.Find" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -141,11 +147,11 @@
 		<RadzenFieldset Text="Behavior">
 			<RadzenStack Gap="1rem">
 
-				<AlwaysOnTopSetting/>
-				<HideOnFocusLostSetting/>
-				<TaskbarIconVisibilitySetting/>
-				<OpacitySetting/>
-				<WindowTitleOverrideSetting/>
+				@* <AlwaysOnTopSetting/> *@
+				@* <HideOnFocusLostSetting/> *@
+				@* <TaskbarIconVisibilitySetting/> *@
+				@* <OpacitySetting/> *@
+				@* <WindowTitleOverrideSetting/> *@
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -153,10 +159,10 @@
 		<RadzenFieldset Text="Position">
 			<RadzenStack Gap="1rem">
 
-				<HorizontalScreenCoverageSetting />
-				<HorizontalAlignSetting />
-				<VerticalScreenCoverageSetting />
-				<VerticalOffsetSetting />
+				@* <HorizontalScreenCoverageSetting /> *@
+				@* <HorizontalAlignSetting /> *@
+				@* <VerticalScreenCoverageSetting /> *@
+				@* <VerticalOffsetSetting /> *@
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -164,8 +170,8 @@
 		<RadzenFieldset Text="Monitor">
 			<RadzenStack Gap="1rem">
 
-				<PreferMonitorSetting/>
-				<MonitorIndexSetting/>
+				@* <PreferMonitorSetting/> *@
+				@* <MonitorIndexSetting/> *@
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -173,10 +179,10 @@
 		<RadzenFieldset Text="Animation">
 			<RadzenStack Gap="1rem">
 
-				<AnimationDurationSetting/>
-				<AnimationTargetFpsSetting/>
-				<AnimationTypeToggleOnSetting/>
-				<AnimationTypeToggleOffSetting/>
+				@* <AnimationDurationSetting/> *@
+				@* <AnimationTargetFpsSetting/> *@
+				@* <AnimationTypeToggleOnSetting/> *@
+				@* <AnimationTypeToggleOffSetting/> *@
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -192,6 +198,8 @@
 		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
 		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
 	</RadzenStack>
+
+</CascadingValue>
 
 </CascadingValue>
 </CascadingValue>

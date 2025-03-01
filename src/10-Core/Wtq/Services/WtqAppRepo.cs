@@ -135,19 +135,17 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 			var app = GetByName(opt.Name);
 
-			if (app != null)
+			if (app == null)
 			{
-				continue;
+				_log.LogInformation("Missing app handle for {Options}, creating one now", opt);
+
+				// Create & update app handle.
+				app = Create(opt);
+				// continue;
+				_apps.Add(app);
 			}
 
-			_log.LogInformation("Missing app handle for {Options}, creating one now", opt);
-
-			// Create & update app handle.
-			app = Create(opt);
-
 			await app.UpdateLocalAppStateAsync(allowStartNew).NoCtx();
-
-			_apps.Add(app);
 		}
 
 		// Remove app handles for dropped options.

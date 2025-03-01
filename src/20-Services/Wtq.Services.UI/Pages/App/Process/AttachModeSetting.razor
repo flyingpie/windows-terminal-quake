@@ -1,19 +1,21 @@
-@inherits BaseSetting
+@inherits WtqSettingBase<AttachMode>
 
 @code {
 
-	public AttachMode AttachMode
-	{
-		get => AppOpts.AttachMode ?? GlobalOpts.AttachMode;
-		set => AppOpts.AttachMode = value;
-	}
+	// public AttachMode AttachMode { get; set; }
+	// {
+	// 	get => AppOpts.AttachMode ?? GlobalOpts.AttachMode;
+	// 	set => AppOpts.AttachMode = value;
+	// }
 
 }
 
-<RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Attach mode" Property="x => x.AttachMode"/>
-	<RadzenColumn Size="7">
-		<RadzenRadioButtonList @bind-Value="AttachMode" TValue="AttachMode" Orientation="Orientation.Vertical">
+<WtqSetting TProperty="AttachMode" Get="Get" Set="Set">
+	<Content>
+
+		WTQ SETTING THING
+
+		<RadzenRadioButtonList @bind-Value="EffectiveValue" TValue="AttachMode" Orientation="Orientation.Vertical">
 			<Items>
 
 				<RadzenRadioButtonListItem Value="AttachMode.FindOrStart" Text="Find or Start">
@@ -42,11 +44,5 @@
 			</Items>
 		</RadzenRadioButtonList>
 
-		<Descr>How to get a reference to a running app.</Descr>
-	</RadzenColumn>
-	<SettingGlobal
-		HasGlobalSetting="true"
-		IsOverridden="@(AppOpts.AttachMode != null)"
-		Reset="@(() => AppOpts.AttachMode = null)"
-	/>
-</RadzenRow>
+	</Content>
+</WtqSetting>

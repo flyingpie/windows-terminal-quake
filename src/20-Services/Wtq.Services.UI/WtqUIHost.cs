@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
 
@@ -13,6 +15,7 @@ public class WtqUIHost
 	private bool _isClosing;
 
 	public WtqUIHost(
+		IOptions<WtqOptions> opts,
 		IEnumerable<IHostedService> hostedServices,
 		IHostApplicationLifetime appLifetime,
 		IWtqBus bus,
@@ -48,7 +51,10 @@ public class WtqUIHost
 		_ = app.MainWindow
 			.RegisterWindowCreatedHandler((s, a) =>
 			{
-				_ = Task.Run(CloseMainWindowAsync);
+				if (!opts.Value.ShowUiOnStart)
+				{
+					_ = Task.Run(CloseMainWindowAsync);
+				}
 			})
 			.RegisterWindowClosingHandler((s, a) =>
 			{

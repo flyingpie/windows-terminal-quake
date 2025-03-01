@@ -3,7 +3,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
-public sealed class WtqAppOptions : IValidatableObject
+public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 {
 	private ICollection<ProcessArgument> _argumentList = [];
 	private ICollection<HotkeyOptions> _hotkeys = [];
@@ -63,9 +63,9 @@ public sealed class WtqAppOptions : IValidatableObject
 		set => _argumentList = value ?? [];
 	}
 
-	/// <inheritdoc cref="WtqOptions.AttachMode"/>
-	[JsonPropertyOrder(14)]
-	public AttachMode? AttachMode { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AttachMode"/>
+	// [JsonPropertyOrder(14)]
+	// public AttachMode? AttachMode { get; set; }
 
 	[JsonPropertyOrder(15)]
 	public string? WindowTitle { get; set; }
@@ -162,6 +162,8 @@ public sealed class WtqAppOptions : IValidatableObject
 
 	[JsonIgnore]
 	public bool IsValid => true; //!this.Validate().Any();
+
+	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 	{

@@ -1,0 +1,126 @@
+@using System.ComponentModel.DataAnnotations
+
+@typeparam TProperty where TProperty : struct
+
+@inject TooltipService TooltipService
+
+@code {
+
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+	public string? Subtitle { get; set; }
+
+	[Parameter]
+	public RenderFragment Content { get; set; }
+
+	private string LabelClass
+		=> false //AppOpts.IsValid(Property)
+			? "rz-color-danger-light"
+			: "";
+
+	[CascadingParameter]
+	public IEnumerable<ValidationResult> ValidationResults { get; set; }
+
+
+	[Parameter]
+	public Func<TProperty?> Get { get; set; }
+
+	[Parameter]
+	public Action<TProperty?> Set { get; set; }
+
+	public bool IsOverridden
+	{
+		get
+		{
+			try
+			{
+				return Get() != null;
+			}
+			catch (Exception ex)
+			{
+				var dbg = 2;
+			}
+
+			return false;
+		}
+	}
+
+	public void Reset() => Set(default);
+
+	void ShowTooltip(ElementReference elementReference, TooltipOptions options)
+		=> TooltipService.Open(
+			elementReference,
+			IsOverridden ? "Revert to global setting" : "Uses global setting",
+			options);
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+	WTQ SETTING
+	@* <SettingLabel Text="Filename" Property="x => x.FileName" /> *@
+
+	<!-- Label -->
+	<RadzenColumn Size="4">
+		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
+			<RadzenLabel Text="@Title" Component="" class="@LabelClass"/>
+
+			@if (Subtitle != null)
+			{
+				<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
+			}
+		</RadzenStack>
+	</RadzenColumn>
+
+	<RadzenColumn Size="7">
+
+		<!-- Control -->
+		@Content
+
+		<!-- Description -->
+		<Descr>
+			The
+			<Emph>filename</Emph>
+			to use when starting a new process for the app.
+			Eg.
+			<Emph>notepad</Emph>
+			,
+			<Emph>dolphin</Emph>
+			, etc.
+		</Descr>
+
+		<!-- Validation -->
+		@foreach (var v in ValidationResults)
+		{
+			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
+		}
+
+	</RadzenColumn>
+
+	@* <SettingGlobal *@
+	@* 	HasGlobalSetting="true" *@
+	@* 	IsOverridden="@(AppOpts.AttachMode != null)" *@
+	@* 	Reset="@(() => AppOpts.AttachMode = null)" *@
+	@* /> *@
+
+	<!-- Override -->
+	<RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
+
+		@* @if (HasGlobalSetting) *@
+		@* { *@
+		<RadzenToggleButton
+			Disabled="@(!IsOverridden)"
+			Icon="public"
+			Size="ButtonSize.Small"
+			ButtonStyle="ButtonStyle.Light"
+			ToggleButtonStyle="ButtonStyle.Primary"
+			MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Position = TooltipPosition.Left, }))"
+			Value="IsOverridden"
+			Click="Reset"
+		/>
+		@* } *@
+
+	</RadzenColumn>
+
+</RadzenRow>

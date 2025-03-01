@@ -5,7 +5,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines WTQ-wide options, including the list of configured apps.
 /// </summary>
-public sealed class WtqOptions
+public sealed class WtqOptions : WtqSharedOptions
 {
 	/// <summary>
 	/// Path to wtq.schema.json.
@@ -69,9 +69,9 @@ public sealed class WtqOptions
 	/// </summary>
 	public bool AlwaysOnTop { get; set; }
 
-	/// <inheritdoc cref="WtqAppOptions.AttachMode"/>
-	public AttachMode AttachMode { get; set; }
-		= AttachMode.FindOrStart;
+	// /// <inheritdoc cref="WtqAppOptions.AttachMode"/>
+	// public AttachMode AttachMode { get; set; }
+	// 	= AttachMode.FindOrStart;
 
 	/// <summary>
 	/// Whether the app should be toggled out when another app gets focus.<br/>
@@ -157,6 +157,8 @@ public sealed class WtqOptions
 	public float VerticalScreenCoverage { get; set; }
 		= 95f;
 
+	public bool ShowUiOnStart { get; set; }
+
 	public WtqAppOptions? GetAppOptionsByName(string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name);
@@ -180,7 +182,8 @@ public sealed class WtqOptions
 	{
 		Guard.Against.Null(opts);
 
-		return opts.AttachMode ?? AttachMode;
+		return Configuration.AttachMode.FindOrStart;
+		// return opts.AttachMode ?? AttachMode;
 	}
 
 	public HideOnFocusLost GetHideOnFocusLostForApp(WtqAppOptions opts)
