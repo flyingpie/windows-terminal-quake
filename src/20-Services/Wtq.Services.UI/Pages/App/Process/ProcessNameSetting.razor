@@ -11,9 +11,14 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Process name" Component="ProcessName" Subtext="optional"/>
+	<SettingLabel Text="Process name" Property="x => x.ProcessName" Subtext="optional"/>
 	<RadzenColumn Size="7">
-		<RadzenTextBox @bind-Value="ProcessName" Name="ProcessName" @oninput="@(i => ProcessName = i.Value?.ToString() ?? string.Empty)" style="width: 100%;"/>
+		<RadzenTextBox
+			@bind-Value="ProcessName"
+			Name="ProcessName"
+			@oninput="@(i => ProcessName = i.Value?.ToString() ?? string.Empty)"
+			style="width: 100%;"
+		/>
 
 		<Descr>
 			Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.

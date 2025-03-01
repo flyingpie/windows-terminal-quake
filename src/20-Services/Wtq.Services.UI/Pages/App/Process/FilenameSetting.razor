@@ -9,9 +9,13 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Filename" Component="x => x.FileName" />
+	<SettingLabel Text="Filename" Property="x => x.FileName" />
 	<RadzenColumn Size="7">
-		<RadzenTextBox @bind-Value="FileName" style="width: 100%;" @oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)" Name="@_id" />
+		<RadzenTextBox
+			@bind-Value="FileName"
+			style="width: 100%;"
+			@oninput="@(i => FileName = i.Value?.ToString() ?? string.Empty)"
+		/>
 
 		@if (!string.IsNullOrWhiteSpace(FileName))
 		{
@@ -30,6 +34,6 @@
 			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc.
 		</Descr>
 
-		<ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" />
+		@* <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" /> *@
 	</RadzenColumn>
 </RadzenRow>

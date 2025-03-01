@@ -1,9 +1,5 @@
 @code {
 
-	protected string _id = Guid.NewGuid().ToString();
-
-	public string SettingName { get; set; }
-
 	[CascadingParameter]
 	public WtqOptions GlobalOpts { get; set; } = null!;
 

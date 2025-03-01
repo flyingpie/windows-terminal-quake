@@ -1,14 +1,14 @@
 @inherits BaseSetting
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Name" Component="@_id"/>
+	<SettingLabel Text="Name" Property="x => x.Name"/>
 	<RadzenColumn Size="7">
-		<RadzenTextBox @bind-Value="AppOpts.Name" Name="@_id" style="width: 100%;"/>
+		<RadzenTextBox @bind-Value="AppOpts.Name" Name="Name" style="width: 100%;"/>
 
 		<Descr>
 			A descriptive name, mostly used for logging.
 		</Descr>
 
-		@* <ValidationMessages ValidationResults="@ValidationResultsFor(x => x.Name)"/> *@
+		@* <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.Name)"/> *@
 	</RadzenColumn>
 </RadzenRow>

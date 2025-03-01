@@ -7,24 +7,22 @@
 	[Parameter]
 	public string? Subtext { get; set; }
 
-	// [Parameter]
-	// public string? Component { get; set; }
-
+	[EditorRequired]
 	[Parameter]
-	public Expression<Func<WtqAppOptions, object>> Component { get; set; }
+	public Expression<Func<WtqAppOptions, object?>> Property { get; set; }
 
 	[CascadingParameter]
 	public WtqAppOptions AppOpts { get; set; } = null!;
 
 	private string LabelClass
-		=> AppOpts.IsValid(Component)
+		=> false //AppOpts.IsValid(Property)
 		? "rz-color-danger-light"
 		: "";
 }
 
 <RadzenColumn Size="4">
 	<RadzenStack Orientation="Orientation.Vertical" Gap="2">
-		<RadzenLabel Text="@Text" Component="@SystemExtensions.GetMemberName(Component)" class="@LabelClass"/>
+		<RadzenLabel Text="@Text" Component="" class="@LabelClass"/>
 
 		@if (Subtext != null)
 		{

@@ -11,9 +11,14 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Hide on focus lost" Component="@_id"/>
+	<SettingLabel Text="Hide on focus lost" Property="x => x.HideOnFocusLost"/>
 	<RadzenColumn Size="7">
-		<RadzenRadioButtonList @bind-Value="HideOnFocusLost" TValue="HideOnFocusLost" Orientation="Orientation.Vertical" Name="@_id">
+		<RadzenRadioButtonList
+			Name="@nameof(AppOpts.HideOnFocusLost)"
+			Orientation="Orientation.Vertical"
+			@bind-Value="HideOnFocusLost"
+			TValue="HideOnFocusLost"
+		>
 			<Items>
 				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Always"						Text="Always"/>
 				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Never"						Text="Never"/>

@@ -11,7 +11,7 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Attach mode" Component="AttachMode"/>
+	<SettingLabel Text="Attach mode" Property="x => x.AttachMode"/>
 	<RadzenColumn Size="7">
 		<RadzenRadioButtonList @bind-Value="AttachMode" TValue="AttachMode" Orientation="Orientation.Vertical">
 			<Items>

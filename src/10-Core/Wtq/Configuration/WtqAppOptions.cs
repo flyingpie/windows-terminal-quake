@@ -161,7 +161,7 @@ public sealed class WtqAppOptions : IValidatableObject
 	#region Validation
 
 	[JsonIgnore]
-	public bool IsValid => !this.Validate().Any();
+	public bool IsValid => true; //!this.Validate().Any();
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 	{

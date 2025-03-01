@@ -1,9 +1,9 @@
 @inherits BaseSetting
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Window title" Component="@_id" Subtext="optional"/>
+	<SettingLabel Text="Window title" Property="x => x.WindowTitleOverride" Subtext="optional"/>
 	<RadzenColumn Size="7">
-		<RadzenTextBox @bind-Value="AppOpts.WindowTitle" Name="@_id" style="width: 100%;"/>
+		<RadzenTextBox @bind-Value="AppOpts.WindowTitle" style="width: 100%;"/>
 
 		<Descr>
 			Additionally uses the window title to filter app.<br/>

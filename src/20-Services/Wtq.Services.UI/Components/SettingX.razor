@@ -1,0 +1,75 @@
+@using System.Linq.Expressions
+@typeparam TProperty
+
+@code {
+
+	// private void OnRemove(HotkeyOptions hk)
+	// {
+	// 	AppOpts.Hotkeys.Remove(hk);
+	//
+	// 	StateHasChanged();
+	// }
+
+
+
+
+
+
+	[EditorRequired]
+	[Parameter]
+	public Expression<Func<TProperty>> Property { get; set; }
+
+	public TProperty Prop => Property.Compile()();
+
+
+	[CascadingParameter]
+	public Notifier Notifier { get; set; } = null!;
+
+	[Parameter]
+	public RenderFragment Stuff { get; set; }
+
+
+	[Parameter]
+	public string? Text { get; set; }
+
+	[Parameter]
+	public string? Subtext { get; set; }
+
+
+	// [EditorRequired]
+	// [Parameter]
+	// public Expression<Func<WtqAppOptions, object?>> Property { get; set; }
+
+	[CascadingParameter]
+	public WtqAppOptions AppOpts { get; set; } = null!;
+
+	private string LabelClass
+		=> false //AppOpts.IsValid(Property)
+		? "rz-color-danger-light"
+		: "";
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+
+	<RadzenColumn Size="4">
+		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
+			<RadzenLabel Text="@Text" Component="" class="@LabelClass"/>
+
+			@if (Subtext != null)
+			{
+				<p class="rz-color-base-500 rz-m-0">@Subtext</p>
+			}
+		</RadzenStack>
+	</RadzenColumn>
+
+	<RadzenColumn Size="7">
+
+		@Stuff
+
+		<Descr>What hotkey(s) should toggle the app.</Descr>
+
+		@* <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.Hotkeys)"/> *@
+
+	</RadzenColumn>
+</RadzenRow>

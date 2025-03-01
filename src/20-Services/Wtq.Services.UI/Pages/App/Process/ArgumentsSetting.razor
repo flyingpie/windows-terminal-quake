@@ -10,7 +10,7 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Arguments" Component="Arguments" Subtext="optional"/>
+	<SettingLabel Text="Arguments" Property="x => x.Arguments" Subtext="optional"/>
 	<RadzenColumn Size="7">
 		<RadzenStack>
 			@foreach (var arg in AppOpts.ArgumentsList)

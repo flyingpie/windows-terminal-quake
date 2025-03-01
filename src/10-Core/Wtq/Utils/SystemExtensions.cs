@@ -32,36 +32,44 @@ public static class SystemExtensions
 	}
 
 
-	public static bool IsValid(this IValidatableObject validatable) => !validatable.Validate().Any();
-
-	public static bool IsValid(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
-		=> !validatable.ValidationResultsFor(expr).Any();
-
-	public static bool IsValid(this IValidatableObject validatable, string componentName)
-		=> !validatable.ValidationResultsFor(componentName).Any();
-
-	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
-		=> validatable.Validate(new ValidationContext(new object()));
-
-	public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
-		=> validatable.ValidationResultsFor(GetMemberName(expr));
-
-	public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, string componentName)
-		=> validatable.Validate().Where(v => v.MemberNames.Any(m => m.Equals(componentName, StringComparison.Ordinal)));
-
-
-	public static string GetMemberName(Expression expression)
-	{
-		switch (expression.NodeType)
-		{
-			case ExpressionType.Convert:
-				return GetMemberName(((UnaryExpression)expression).Operand);
-			case ExpressionType.Lambda:
-				return GetMemberName(((LambdaExpression)expression).Body);
-			case ExpressionType.MemberAccess:
-				return ((MemberExpression)expression).Member.Name;
-			default:
-				throw new NotSupportedException(expression.NodeType.ToString());
-		}
-	}
+	// public static bool IsValid(this IValidatableObject validatable)
+	// 	=> !validatable.Validate().Any();
+	//
+	// public static bool IsValid(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
+	// 	=> !validatable.ValidationResultsFor(expr).Any();
+	//
+	// public static bool IsValid(this IValidatableObject validatable, string componentName)
+	// 	=> !validatable.ValidationResultsFor(componentName).Any();
+	//
+	// public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
+	// 	=> validatable.Validate(new ValidationContext(new object()));
+	//
+	// public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
+	// 	=> validatable.ValidationResultsFor(GetMemberName(expr));
+	//
+	// public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, string componentName)
+	// 	=> validatable.Validate().Where(v => v.MemberNames.Any(m => m.Equals(componentName, StringComparison.Ordinal)));
+	//
+	//
+	// public static string GetMemberName(this Expression expression)
+	// {
+	// 	if (expression == null)
+	// 	{
+	// 		var dbg = 2;
+	// 	}
+	//
+	// 	switch (expression.NodeType)
+	// 	{
+	// 		case ExpressionType.Convert:
+	// 			return GetMemberName(((UnaryExpression)expression).Operand);
+	// 		case ExpressionType.Lambda:
+	// 			return GetMemberName(((LambdaExpression)expression).Body);
+	// 		case ExpressionType.MemberAccess:
+	// 			return ((MemberExpression)expression).Member.Name;
+	// 		default:
+	// 			Console.WriteLine($"Unsupported node type '{expression}' => '{expression.NodeType}'.");
+	// 			return "";
+	// 			throw new NotSupportedException(expression.NodeType.ToString());
+	// 	}
+	// }
 }
