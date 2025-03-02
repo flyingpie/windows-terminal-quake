@@ -1,6 +1,7 @@
 @using System.ComponentModel.DataAnnotations
+@using System.Linq.Expressions
 
-@typeparam TProperty where TProperty : struct
+@typeparam TProperty
 
 @inject TooltipService TooltipService
 
@@ -23,29 +24,16 @@
 	[CascadingParameter]
 	public IEnumerable<ValidationResult> ValidationResults { get; set; }
 
-
 	[Parameter]
-	public Func<TProperty?> Get { get; set; }
+	public Expression<Func<object?>> Get { get; set; }
 
 	[Parameter]
 	public Action<TProperty?> Set { get; set; }
 
-	public bool IsOverridden
-	{
-		get
-		{
-			try
-			{
-				return Get() != null;
-			}
-			catch (Exception ex)
-			{
-				var dbg = 2;
-			}
+	[Parameter]
+	public Func<object?>? Default { get; set; }
 
-			return false;
-		}
-	}
+	public bool IsOverridden => Get.Compile()() != null;
 
 	public void Reset() => Set(default);
 
@@ -58,8 +46,6 @@
 }
 
 <RadzenRow AlignItems="AlignItems.Start">
-	WTQ SETTING
-	@* <SettingLabel Text="Filename" Property="x => x.FileName" /> *@
 
 	<!-- Label -->
 	<RadzenColumn Size="4">
@@ -79,16 +65,7 @@
 		@Content
 
 		<!-- Description -->
-		<Descr>
-			The
-			<Emph>filename</Emph>
-			to use when starting a new process for the app.
-			Eg.
-			<Emph>notepad</Emph>
-			,
-			<Emph>dolphin</Emph>
-			, etc.
-		</Descr>
+		<p>@((MarkupString)SystemExtensions.GetMemberDoc(Get))</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResults)
@@ -98,29 +75,20 @@
 
 	</RadzenColumn>
 
-	@* <SettingGlobal *@
-	@* 	HasGlobalSetting="true" *@
-	@* 	IsOverridden="@(AppOpts.AttachMode != null)" *@
-	@* 	Reset="@(() => AppOpts.AttachMode = null)" *@
-	@* /> *@
-
 	<!-- Override -->
 	<RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
 
-		@* @if (HasGlobalSetting) *@
-		@* { *@
 		<RadzenToggleButton
+			ButtonStyle="ButtonStyle.Light"
+			Click="Reset"
 			Disabled="@(!IsOverridden)"
 			Icon="public"
-			Size="ButtonSize.Small"
-			ButtonStyle="ButtonStyle.Light"
-			ToggleButtonStyle="ButtonStyle.Primary"
 			MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Position = TooltipPosition.Left, }))"
+			Size="ButtonSize.Small"
+			ToggleButtonStyle="ButtonStyle.Primary"
 			Value="IsOverridden"
-			Click="Reset"
+			Visible="@(Default != null)"
 		/>
-		@* } *@
 
 	</RadzenColumn>
-
 </RadzenRow>

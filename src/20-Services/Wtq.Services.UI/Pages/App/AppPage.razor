@@ -127,19 +127,15 @@
 				@* Refer to examples page. *@
 				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
 					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
-					what values to use for <Emph>filename</Emph> and/or <Emph>process name</Emph>.
+					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
 				</RadzenAlert>
 
-				@* <FilenameSetting Property="() => AppOpts.FileName" /> *@
+				<FilenameSetting Get="() => AppOpts.FileName" Set="v => AppOpts.FileName = v" />
 				@* <WinTermAlert /> *@
 				@* <ProcessNameSetting /> *@
 				@* <ArgumentsSetting /> *@
-				AM1
-				<AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Property="() => AppOpts.AttachMode" Default="() => GlobalOpts.AttachMode ?? AttachMode.FindOrStart" />
+				<AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Default="() => GlobalOpts.AttachMode" />
 				@* <WindowTitleSetting /> *@
-
-				AM2
-				<AttachModeSetting Get="() => GlobalOpts.AttachMode" Set="v => GlobalOpts.AttachMode = v" Property="() => GlobalOpts.AttachMode" Default="() => AttachMode.Find" />
 
 			</RadzenStack>
 		</RadzenFieldset>

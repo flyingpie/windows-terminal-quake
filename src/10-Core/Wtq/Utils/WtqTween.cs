@@ -31,7 +31,7 @@ public sealed class WtqTween(
 		var swFrame = Stopwatch.StartNew();
 		var animFunc = GetAnimationFunction(animType);
 
-		var targetFps = _opts.CurrentValue.AnimationTargetFps;
+		var targetFps = _opts.CurrentValue.GetAnimationTargetFps();
 		var frameTimeMs = 1000f / targetFps;
 
 		var frameCount = 0;

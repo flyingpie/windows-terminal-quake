@@ -1,50 +1,25 @@
-@using System.Linq.Expressions
+@inherits WtqSettingBase<string?>
 
-@* @inherits WtqSettingBase<string?> *@
+<WtqSetting TProperty="string" Get="Get" Set="Set" Title="Attach mode">
+	<Content>
 
-@code {
+		<RadzenTextBox
+			@bind-Value="Value"
+			style="width: 100%;"
+			@oninput="@(i => Value = i.Value?.ToString() ?? string.Empty)"
+		/>
 
-	// public string FileName
-	// {
-	// 	get => AppOpts.FileName;
-	// 	set => WithNotify(() => AppOpts.FileName = value);
-	// }
+		@if (!string.IsNullOrWhiteSpace(Value))
+		{
+			@if (Os.IsCallable(Value))
+			{
+				<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p>
+			}
+			else
+			{
+				<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p>
+			}
+		}
 
-}
-
-@* <RadzenRow AlignItems="AlignItems.Start"> *@
-@* 	<SettingLabel Text="Filename" Property="x => x.FileName" /> *@
-@* 	<RadzenColumn Size="7"> *@
-@* *@
-@* 		<Descr> *@
-@* 			The <Emph>filename</Emph> to use when starting a new process for the app. *@
-@* 			Eg. <Emph>notepad</Emph>, <Emph>dolphin</Emph>, etc. *@
-@* 		</Descr> *@
-@* *@
-@* 		$1$ <ValidationMessages ValidationResults="@AppOpts.ValidationResultsFor(x => x.FileName)" /> #1# *@
-@* 	</RadzenColumn> *@
-@* </RadzenRow> *@
-
-@* <WtqSetting> *@
-@* 	<Content> *@
-
-		@* <RadzenTextBox *@
-		@* 	@bind-Value="PropertyValue" *@
-		@* 	style="width: 100%;" *@
-		@* 	@oninput="@(i => PropertyValue = i.Value?.ToString() ?? string.Empty)" *@
-		@* /> *@
-		@* *@
-		@* @if (!string.IsNullOrWhiteSpace(PropertyValue)) *@
-		@* { *@
-		@* 	@if (Os.IsCallable(PropertyValue)) *@
-		@* 	{ *@
-		@* 		<p class="rz-color-success-light rz-mt-1">Filename seems to exist!</p> *@
-		@* 	} *@
-		@* 	else *@
-		@* 	{ *@
-		@* 		<p class="rz-color-danger-light rz-mt-1">File does NOT seem to exist!</p> *@
-		@* 	} *@
-		@* } *@
-
-@* 	</Content> *@
-@* </WtqSetting> *@
+	</Content>
+</WtqSetting>

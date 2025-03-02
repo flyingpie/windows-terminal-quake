@@ -126,7 +126,8 @@ public class WtqAppToggleService(
 
 			case ToggleModifiers.None:
 			default:
-				return _opts.CurrentValue.AnimationDurationMs;
+				return 250;
+				// return _opts.CurrentValue.AnimationDurationMs;
 		}
 	}
 

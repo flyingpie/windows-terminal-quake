@@ -1,9 +1,177 @@
+@using System.ComponentModel.DataAnnotations
+@using Wtq.Services.UI.Pages.App.Animation
+@using Wtq.Services.UI.Pages.App.App
+@using Wtq.Services.UI.Pages.App.Behavior
+@using Wtq.Services.UI.Pages.App.Monitor
+@using Wtq.Services.UI.Pages.App.Position
+@using Wtq.Services.UI.Pages.App.Process
+@using System.Text.Json
+
+@inject IOptionsMonitor<WtqOptions> WtqOpts
+@inject Notifier Notifier
+@inject NavigationManager NavMan
+@inject WtqOptionsSaveService SaveService
+@inject NotificationService NotificationService
+
 @page "/global-settings"
 
 @code {
+
+	public WtqOptions GlobalOpts { get; set; }
+
+	public T JsonDeepClone<T>(T obj)
+	{
+		var json = JsonSerializer.Serialize(obj);
+
+		var res = JsonSerializer.Deserialize<T>(json);
+
+		return res;
+	}
+
+	protected override void OnInitialized()
+	{
+		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
+
+		// Notify when the settings file changes, to prevent overwriting settings that were made outside the UI.
+		WtqOpts.OnChange((a, b) =>
+		{
+			Reload();
+		});
+	}
+
+	protected override void OnParametersSet()
+	{
+		Reload();
+	}
+
+	private async Task SaveAsync()
+	{
+		await SaveService.SaveAsync(GlobalOpts).NoCtx();
+
+		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
+	}
+
+	private void Reload()
+	{
+		GlobalOpts = JsonDeepClone(WtqOpts.CurrentValue);
+	}
 
 }
 
 <PageHead Icon="public">Global settings</PageHead>
 
 <h2><RadzenIcon Icon="construction" />&nbsp;TODO</h2>
+
+<CascadingValue Value="GlobalOpts">
+<CascadingValue Value="Notifier">
+<CascadingValue Value="GlobalOpts.ValidationResults">
+
+	<RadzenStack>
+
+		@* Warn about outside file changes. *@
+		@*
+			TODO: Disabled for now, as the check based on option reloads isn't super reliable.
+			TODO:
+			TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
+			TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
+			The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
+			<RadzenButton Text="Reload" Click="Reload"/>
+		</RadzenAlert>
+		*@
+
+		@* @foreach (var v in AppOpts.Validate(new ValidationContext(new object()))) *@
+		@* { *@
+		@* 	<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert> *@
+		@* } *@
+
+		<RadzenFieldset Text="App">
+			<RadzenStack Gap="1rem">
+
+				@* <NameSetting /> *@
+				@* <HotkeysSetting Property="() => AppOpts.Hotkeys" /> *@
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Process">
+			<RadzenStack Gap="1rem">
+
+				@* Refer to examples page. *@
+				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
+					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
+					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
+				</RadzenAlert>
+
+				@* <FilenameSetting Get="() => AppOpts.FileName" Set="v => AppOpts.FileName = v" /> *@
+				@* <WinTermAlert /> *@
+				@* <ProcessNameSetting /> *@
+				@* <ArgumentsSetting /> *@
+
+				@* <AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Default="() => GlobalOpts.AttachMode ?? AttachMode.FindOrStart" /> *@
+				@* <WindowTitleSetting /> *@
+
+
+				<AttachModeSetting Get="() => GlobalOpts.AttachMode" Set="v => GlobalOpts.AttachMode = v" Default="() => AttachMode.Find" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Behavior">
+			<RadzenStack Gap="1rem">
+
+				@* <AlwaysOnTopSetting/> *@
+				@* <HideOnFocusLostSetting/> *@
+				@* <TaskbarIconVisibilitySetting/> *@
+				@* <OpacitySetting/> *@
+				@* <WindowTitleOverrideSetting/> *@
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Position">
+			<RadzenStack Gap="1rem">
+
+				@* <HorizontalScreenCoverageSetting /> *@
+				@* <HorizontalAlignSetting /> *@
+				@* <VerticalScreenCoverageSetting /> *@
+				@* <VerticalOffsetSetting /> *@
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Monitor">
+			<RadzenStack Gap="1rem">
+
+				@* <PreferMonitorSetting/> *@
+				@* <MonitorIndexSetting/> *@
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Animation">
+			<RadzenStack Gap="1rem">
+
+				@* <AnimationDurationSetting/> *@
+				@* <AnimationTargetFpsSetting/> *@
+				@* <AnimationTypeToggleOnSetting/> *@
+				@* <AnimationTypeToggleOffSetting/> *@
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+	</RadzenStack>
+
+	@* Save/Discard *@
+	<RadzenStack
+		Orientation="Orientation.Horizontal"
+		JustifyContent="JustifyContent.End"
+		style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
+	>
+		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
+		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
+	</RadzenStack>
+
+</CascadingValue>
+</CascadingValue>
+</CascadingValue>

@@ -1,54 +1,44 @@
-@using System.ComponentModel.DataAnnotations
 @using System.Linq.Expressions
 
-@typeparam TProperty where TProperty : struct
+@typeparam TProperty
 
 @code {
 
 	[EditorRequired]
 	[Parameter]
-	public Expression<Func<object?>> Property { get; set; }
+	public Expression<Func<object?>> Get { get; set; }
 
-	[Parameter]
-	public Func<object> Default { get; set; }
-
-	// [Parameter]
-	// public TProperty? ActualValue { get; set; }
-
-
-	[Parameter]
-	public Func<TProperty?> Get { get; set; }
-
+	[EditorRequired]
 	[Parameter]
 	public Action<TProperty?> Set { get; set; }
 
-	// [Parameter]
-	protected TProperty EffectiveValue
+	[Parameter]
+	public Func<object?>? Default { get; set; }
+
+	protected TProperty Value
 	{
 		get
 		{
-			return Get() ?? (TProperty)Default();
+			var r = Get.Compile()();
+			if (r != null)
+			{
+				return (TProperty)r;
+			}
 
-			// return default;
-			// try
-			// {
-			// 	return (TProperty)Property.Compile()();
-			// }
-			// catch
-			// {
-			// 	return default;
-			// }
+			if (Default == null)
+			{
+				return default;
+			}
+
+			var b = Default();
+			if (b != null)
+			{
+				return (TProperty?)b;
+			}
+
+			return default;
 		}
-		set
-		{
-			// Property.Compile().Method.Invoke()
-			// ActualValue = value;
-			Set(value);
-		}
+		set { Set(value); }
 	}
-
-
-	// [CascadingParameter]
-	// public IEnumerable<ValidationResult> ValidationResults { get; }
 
 }

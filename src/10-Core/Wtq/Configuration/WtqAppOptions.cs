@@ -32,7 +32,8 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	#region Process
 
 	/// <summary>
-	/// Path to an executable that should be run when we're starting an app instance ourselves.
+	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
+	/// Eg. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
 	[JsonPropertyOrder(10)]
 	[NotNull]
@@ -136,9 +137,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#region Animation
 
-	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
-	[JsonPropertyOrder(50)]
-	public int? AnimationDurationMs { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
+	// [JsonPropertyOrder(50)]
+	// public int? AnimationDurationMs { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
 	[JsonIgnore]
@@ -163,6 +164,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	[JsonIgnore]
 	public bool IsValid => true; //!this.Validate().Any();
 
+	[JsonIgnore]
 	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

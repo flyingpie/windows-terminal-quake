@@ -1,5 +1,7 @@
+using Namotion.Reflection;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Wtq.Utils;
 
@@ -75,6 +77,39 @@ public static class SystemExtensions
 	// 			throw new NotSupportedException(expression.NodeType.ToString());
 	// 	}
 	// }
+
+	public static string GetMemberDoc(Expression expr)
+	{
+		var m = SystemExtensions.GetMemberInfo(expr);
+
+		var x = m.GetXmlDocsElement();
+
+		// return m.GetXmlDocsSummary();
+
+		return x.Descendants("summary").FirstOrDefault().ToString(SaveOptions.None);
+	}
+
+	public static MemberInfo GetMemberInfo(this Expression expression)
+	{
+		if (expression == null)
+		{
+			var dbg = 2;
+		}
+
+		switch (expression.NodeType)
+		{
+			case ExpressionType.Convert:
+				return GetMemberInfo(((UnaryExpression)expression).Operand);
+			case ExpressionType.Lambda:
+				return GetMemberInfo(((LambdaExpression)expression).Body);
+			case ExpressionType.MemberAccess:
+				return ((MemberExpression)expression).Member;
+			default:
+				// Console.WriteLine($"Unsupported node type '{expression}' => '{expression.NodeType}'.");
+				return null;
+				// throw new NotSupportedException(expression.NodeType.ToString());
+		}
+	}
 
 	public static void SetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda, TValue value)
 	{

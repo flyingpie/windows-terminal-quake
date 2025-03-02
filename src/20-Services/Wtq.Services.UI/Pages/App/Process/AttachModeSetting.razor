@@ -2,20 +2,12 @@
 
 @code {
 
-	// public AttachMode AttachMode { get; set; }
-	// {
-	// 	get => AppOpts.AttachMode ?? GlobalOpts.AttachMode;
-	// 	set => AppOpts.AttachMode = value;
-	// }
-
 }
 
-<WtqSetting TProperty="AttachMode" Get="Get" Set="Set">
+<WtqSetting TProperty="AttachMode" Get="Get" Set="Set" Title="Attach mode">
 	<Content>
 
-		WTQ SETTING THING
-
-		<RadzenRadioButtonList @bind-Value="EffectiveValue" TValue="AttachMode" Orientation="Orientation.Vertical">
+		<RadzenRadioButtonList @bind-Value="Value" TValue="AttachMode" Orientation="Orientation.Vertical">
 			<Items>
 
 				<RadzenRadioButtonListItem Value="AttachMode.FindOrStart" Text="Find or Start">
@@ -41,6 +33,7 @@
 						<p class="rz-m-0 rz-mx-2"><Emph>Maual;</Emph> attaches to whatever app has focus, when the hotkey is pressed.</p>
 					</Template>
 				</RadzenRadioButtonListItem>
+
 			</Items>
 		</RadzenRadioButtonList>
 
