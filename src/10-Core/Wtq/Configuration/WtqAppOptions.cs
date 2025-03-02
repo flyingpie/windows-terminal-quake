@@ -33,16 +33,20 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	/// <summary>
 	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
-	/// Eg. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
+	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
+	[DisplayName("Filename")]
 	[JsonPropertyOrder(10)]
 	[NotNull]
 	[Required]
 	public string? FileName { get; set; }
 
 	/// <summary>
-	/// The name of the process to look for, when searching for an existing app instance.
+	/// Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+	/// This field can be used to look for the process name in such cases. Windows Terminal is an
+	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 	/// </summary>
+	// [DisplayName("Process name")]
 	[JsonPropertyOrder(11)]
 	public string? ProcessName
 	{
@@ -137,9 +141,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#region Animation
 
-	// /// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
-	// [JsonPropertyOrder(50)]
-	// public int? AnimationDurationMs { get; set; }
+	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
+	[JsonPropertyOrder(50)]
+	public int? AnimationDurationMs { get; set; }
 
 	/// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
 	[JsonIgnore]
@@ -148,14 +152,6 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
 	[JsonPropertyOrder(51)]
 	public int? AnimationTargetFps { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOn"/>
-	[JsonPropertyOrder(52)]
-	public AnimationType? AnimationTypeToggleOn { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOff"/>
-	[JsonPropertyOrder(53)]
-	public AnimationType? AnimationTypeToggleOff { get; set; }
 
 	#endregion
 
@@ -176,7 +172,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
 		{
-			yield return new("Either a file name, a process name or a window title needs to be set.", [nameof(FileName), nameof(ProcessName)]);
+			yield return new("Either a <strong>filename</strong>, a <strong>process name</strong> or a <strong>window title</strong> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
 		}
 
 		if (Hotkeys.Count == 0)

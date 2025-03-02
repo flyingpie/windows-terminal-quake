@@ -4,6 +4,9 @@
 
 @code {
 
+	[CascadingParameter]
+	public Notifier Notifier { get; set; } = null!;
+
 	[EditorRequired]
 	[Parameter]
 	public Expression<Func<object?>> Get { get; set; }
@@ -38,7 +41,12 @@
 
 			return default;
 		}
-		set { Set(value); }
+		set
+		{
+			Set(value);
+
+			Notifier.Notify();
+		}
 	}
 
 }

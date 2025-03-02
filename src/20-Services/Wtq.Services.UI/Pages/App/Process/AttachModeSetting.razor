@@ -1,10 +1,6 @@
 @inherits WtqSettingBase<AttachMode>
 
-@code {
-
-}
-
-<WtqSetting TProperty="AttachMode" Get="Get" Set="Set" Title="Attach mode">
+<WtqSetting TProperty="AttachMode" Get="Get" Set="Set">
 	<Content>
 
 		<RadzenRadioButtonList @bind-Value="Value" TValue="AttachMode" Orientation="Orientation.Vertical">

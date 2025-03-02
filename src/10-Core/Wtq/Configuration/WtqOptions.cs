@@ -9,17 +9,17 @@ namespace Wtq.Configuration;
 public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 {
 	/// <summary>
-	/// Path to wtq.schema.json.
-	/// </summary>
-	[JsonPropertyName("$schema")]
-	public string Schema { get; } = "wtq.schema.json";
-
-	/// <summary>
 	/// The default off-screen locations are kept separate, to prevent arrays from mergin during deserialization.
 	/// We could do that by tweaking the JSON serializer, but that's way more complex.
 	/// </summary>
 	private static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
 		[Above, Below, Left, Right];
+
+	/// <summary>
+	/// Path to wtq.schema.json.
+	/// </summary>
+	[JsonPropertyName("$schema")]
+	public string Schema { get; } = "wtq.schema.json";
 
 	#region Animation
 
@@ -111,7 +111,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		Guard.Against.Null(opts);
 
-		return opts.AlwaysOnTop ?? AlwaysOnTop;
+		return opts.AlwaysOnTop ?? AlwaysOnTop ?? false; // TODO: Default
 	}
 
 	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
@@ -126,35 +126,40 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		Guard.Against.Null(opts);
 
-		return opts.HideOnFocusLost ?? HideOnFocusLost;
+		return Configuration.HideOnFocusLost.Always;
+		// return opts.HideOnFocusLost ?? HideOnFocusLost;
 	}
 
 	public HorizontalAlign GetHorizontalAlignForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.HorizontalAlign ?? HorizontalAlign;
+		return Configuration.HorizontalAlign.Center;
+		// return opts.HorizontalAlign ?? HorizontalAlign;
 	}
 
 	public float GetHorizontalScreenCoverageForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.HorizontalScreenCoverage ?? HorizontalScreenCoverage;
+		return 80;
+		// return opts.HorizontalScreenCoverage ?? HorizontalScreenCoverage;
 	}
 
 	public int GetOpacityForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.Opacity ?? Opacity;
+		return 90;
+		// return opts.Opacity ?? Opacity;
 	}
 
 	public TaskbarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.TaskbarIconVisibility ?? TaskbarIconVisibility;
+		return Configuration.TaskbarIconVisibility.AlwaysHidden;
+		// return opts.TaskbarIconVisibility ?? TaskbarIconVisibility;
 	}
 
 	public ICollection<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
@@ -176,6 +181,21 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		Guard.Against.Null(opts);
 
 		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage;
+	}
+
+	public int GetMonitorIndex(WtqAppOptions opts)
+	{
+		return 0;
+	}
+
+	public AnimationType GetAnimationTypeToggleOn(WtqAppOptions opts)
+	{
+		return AnimationType.Linear;
+	}
+
+	public AnimationType GetAnimationTypeToggleOff(WtqAppOptions opts)
+	{
+		return AnimationType.Linear;
 	}
 
 	public void PrepareForSave()

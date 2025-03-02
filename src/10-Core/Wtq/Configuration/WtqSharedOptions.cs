@@ -92,25 +92,11 @@ public class WtqSharedOptions
 	[DefaultValue(95f)]
 	public float? HorizontalScreenCoverage { get; set; }
 
-	#endregion
-
-	#region Process
-
-	/// <summary>
-	///	<p>The paragraph. With <strong>words</strong> and <em>empahisized</em> ones.</p>
-	/// <p>Another paragraph<br/>
-	/// With line breaks.</p>
-	/// </summary>
-	[DefaultValue(Wc.AttachMode.FindOrStart)]
-	[JsonPropertyOrder(14)]
-	public AttachMode? AttachMode { get; set; }
-
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </summary>
-	// [DefaultValue([Above, Below, Left, Right])]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <summary>
@@ -125,6 +111,21 @@ public class WtqSharedOptions
 	/// </summary>
 	public float VerticalScreenCoverage { get; set; }
 		= 95f;
+
+	#endregion
+
+	#region Process
+
+	/// <summary>
+	///	<p>The paragraph. With <strong>words</strong> and <em>empahisized</em> ones.</p>
+	/// <p>Another paragraph<br/>
+	/// With line breaks.</p>
+	/// </summary>
+	[DefaultValue(Wc.AttachMode.FindOrStart)]
+	[JsonPropertyOrder(14)]
+	public AttachMode? AttachMode { get; set; }
+
+
 
 	#endregion
 }

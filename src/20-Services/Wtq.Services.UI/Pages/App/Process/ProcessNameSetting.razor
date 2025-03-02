@@ -1,29 +1,11 @@
-@inherits BaseSetting
+@inherits WtqSettingBase<string>
 
-@code {
-
-	public string ProcessName
-	{
-		get => AppOpts.ProcessName;
-		set => WithNotify(() => AppOpts.ProcessName = value);
-	}
-
-}
-
-<RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Process name" Property="x => x.ProcessName" Subtext="optional"/>
-	<RadzenColumn Size="7">
+<WtqSetting TProperty="string" Get="Get" Set="Set">
+	<Content>
 		<RadzenTextBox
-			@bind-Value="ProcessName"
-			Name="ProcessName"
-			@oninput="@(i => ProcessName = i.Value?.ToString() ?? string.Empty)"
+			@bind-Value="Value"
+			@oninput="@(i => Value = i.Value?.ToString() ?? string.Empty)"
 			style="width: 100%;"
 		/>
-
-		<Descr>
-			Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
-			This field can be used to look for the process name in such cases. Windows Terminal is an
-			example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
-		</Descr>
-	</RadzenColumn>
-</RadzenRow>
+	</Content>
+</WtqSetting>

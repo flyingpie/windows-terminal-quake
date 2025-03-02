@@ -132,7 +132,7 @@
 
 				<FilenameSetting Get="() => AppOpts.FileName" Set="v => AppOpts.FileName = v" />
 				@* <WinTermAlert /> *@
-				@* <ProcessNameSetting /> *@
+				<ProcessNameSetting Get="() => AppOpts.ProcessName" Set="v => AppOpts.ProcessName = v" />
 				@* <ArgumentsSetting /> *@
 				<AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Default="() => GlobalOpts.AttachMode" />
 				@* <WindowTitleSetting /> *@

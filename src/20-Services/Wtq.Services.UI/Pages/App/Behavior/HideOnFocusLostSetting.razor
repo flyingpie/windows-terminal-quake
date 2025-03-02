@@ -1,36 +1,36 @@
-@inherits BaseSetting
-
-@code {
-
-	public HideOnFocusLost HideOnFocusLost
-	{
-		get => AppOpts.HideOnFocusLost ?? GlobalOpts.HideOnFocusLost;
-		set => AppOpts.HideOnFocusLost = value;
-	}
-
-}
-
-<RadzenRow AlignItems="AlignItems.Start">
-	<SettingLabel Text="Hide on focus lost" Property="x => x.HideOnFocusLost"/>
-	<RadzenColumn Size="7">
-		<RadzenRadioButtonList
-			Name="@nameof(AppOpts.HideOnFocusLost)"
-			Orientation="Orientation.Vertical"
-			@bind-Value="HideOnFocusLost"
-			TValue="HideOnFocusLost"
-		>
-			<Items>
-				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Always"						Text="Always"/>
-				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Never"						Text="Never"/>
-				<RadzenRadioButtonListItem	Value="HideOnFocusLost.UnlessFocusChangedScreen"	Text="Unless focus changed screen"	Disabled="true"/>
-			</Items>
-		</RadzenRadioButtonList>
-
-		<Descr>Whether the app should <Emph>toggle off</Emph> when focus lost.</Descr>
-	</RadzenColumn>
-	<SettingGlobal
-		HasGlobalSetting="true"
-		IsOverridden="@(AppOpts.HideOnFocusLost != null)"
-		Reset="@(() => AppOpts.HideOnFocusLost = null)"
-	/>
-</RadzenRow>
+@* @inherits BaseSetting *@
+@* *@
+@* @code { *@
+@* *@
+@* 	public HideOnFocusLost HideOnFocusLost *@
+@* 	{ *@
+@* 		get => AppOpts.HideOnFocusLost ?? GlobalOpts.HideOnFocusLost; *@
+@* 		set => AppOpts.HideOnFocusLost = value; *@
+@* 	} *@
+@* *@
+@* } *@
+@* *@
+@* <RadzenRow AlignItems="AlignItems.Start"> *@
+@* 	<SettingLabel Text="Hide on focus lost" Property="x => x.HideOnFocusLost"/> *@
+@* 	<RadzenColumn Size="7"> *@
+@* 		<RadzenRadioButtonList *@
+@* 			Name="@nameof(AppOpts.HideOnFocusLost)" *@
+@* 			Orientation="Orientation.Vertical" *@
+@* 			@bind-Value="HideOnFocusLost" *@
+@* 			TValue="HideOnFocusLost" *@
+@* 		> *@
+@* 			<Items> *@
+@* 				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Always"						Text="Always"/> *@
+@* 				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Never"						Text="Never"/> *@
+@* 				<RadzenRadioButtonListItem	Value="HideOnFocusLost.UnlessFocusChangedScreen"	Text="Unless focus changed screen"	Disabled="true"/> *@
+@* 			</Items> *@
+@* 		</RadzenRadioButtonList> *@
+@* *@
+@* 		<Descr>Whether the app should <Emph>toggle off</Emph> when focus lost.</Descr> *@
+@* 	</RadzenColumn> *@
+@* 	<SettingGlobal *@
+@* 		HasGlobalSetting="true" *@
+@* 		IsOverridden="@(AppOpts.HideOnFocusLost != null)" *@
+@* 		Reset="@(() => AppOpts.HideOnFocusLost = null)" *@
+@* 	/> *@
+@* </RadzenRow> *@

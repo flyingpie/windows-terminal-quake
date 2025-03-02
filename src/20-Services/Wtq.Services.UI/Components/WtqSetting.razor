@@ -7,8 +7,9 @@
 
 @code {
 
-	[Parameter]
-	public string? Title { get; set; }
+
+	// [Parameter]
+	public string? Title => SystemExtensions.GetDisplayName(Get);
 
 	[Parameter]
 	public string? Subtitle { get; set; }
@@ -17,7 +18,7 @@
 	public RenderFragment Content { get; set; }
 
 	private string LabelClass
-		=> false //AppOpts.IsValid(Property)
+		=> ValidationResultsForProperty.Any()
 			? "rz-color-danger-light"
 			: "";
 
@@ -34,6 +35,12 @@
 	public Func<object?>? Default { get; set; }
 
 	public bool IsOverridden => Get.Compile()() != null;
+
+	private string? _propertyName;
+
+	private string PropertyName => _propertyName ??= SystemExtensions.GetMemberInfo(Get).Name;
+
+	private IEnumerable<ValidationResult> ValidationResultsForProperty => ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
 
 	public void Reset() => Set(default);
 
@@ -68,9 +75,9 @@
 		<p>@((MarkupString)SystemExtensions.GetMemberDoc(Get))</p>
 
 		<!-- Validation -->
-		@foreach (var v in ValidationResults)
+		@foreach (var v in ValidationResultsForProperty)
 		{
-			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert>
+			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@((MarkupString)v.ErrorMessage)</RadzenAlert>
 		}
 
 	</RadzenColumn>

@@ -78,6 +78,15 @@ public static class SystemExtensions
 	// 	}
 	// }
 
+	public static string GetDisplayName(Expression expr)
+	{
+		var m = expr.GetMemberInfo();
+
+		var attr = m.GetCustomAttribute<DisplayNameAttribute>();
+
+		return attr?.DisplayName ?? m.Name;
+	}
+
 	public static string GetMemberDoc(Expression expr)
 	{
 		var m = SystemExtensions.GetMemberInfo(expr);
@@ -107,7 +116,7 @@ public static class SystemExtensions
 			default:
 				// Console.WriteLine($"Unsupported node type '{expression}' => '{expression.NodeType}'.");
 				return null;
-				// throw new NotSupportedException(expression.NodeType.ToString());
+			// throw new NotSupportedException(expression.NodeType.ToString());
 		}
 	}
 

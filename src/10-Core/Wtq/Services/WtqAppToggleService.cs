@@ -61,7 +61,7 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Value.Location,
 				dst: windowRectDst.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.AnimationTypeToggleOn,
+				animType: _opts.CurrentValue.GetAnimationTypeToggleOn(app.Options),
 				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
@@ -106,7 +106,7 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Location,
 				dst: windowRectDst.Value.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.AnimationTypeToggleOff,
+				animType: _opts.CurrentValue.GetAnimationTypeToggleOff(app.Options),
 				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
@@ -261,7 +261,7 @@ public class WtqAppToggleService(
 			case PreferMonitor.AtIndex:
 			{
 				// Get configured screen index.
-				var screenIndex = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+				var screenIndex = _opts.CurrentValue.GetMonitorIndex(app.Options);
 
 				_log.LogTrace("Using screen with index {Index}", screenIndex);
 
