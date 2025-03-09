@@ -25,4 +25,46 @@ public static class EnumExtensions
 
 		return null;
 	}
+
+	public static IEnumerable<EnumItem<TEnum>> GetEnumItems<TEnum>(bool isVisibleOnly = true)
+		where TEnum : struct, Enum
+	{
+		var list = new List<EnumItem<TEnum>>();
+		var vals = Enum.GetValues<TEnum>();
+
+		foreach (var val in vals)
+		{
+			var displ = val.GetAttribute<DisplayAttribute>();
+			var flags = val.GetAttribute<DisplayFlagsAttribute>();
+
+			if (isVisibleOnly && flags != null && !flags.IsVisible)
+			{
+				continue;
+			}
+
+			list.Add(new EnumItem<TEnum>()
+			{
+				Display = displ,
+				Flags = flags,
+				Value = val,
+			});
+		}
+
+		return list;
+	}
+}
+
+public class EnumItem<TValue>
+{
+	public DisplayFlagsAttribute? Flags { get; set; }
+
+	public DisplayAttribute? Display { get; set; }
+
+	public bool IsVisible => Flags?.IsVisible ?? true;
+
+	public TValue Value { get; set; }
+
+	public string DisplayName => Display?.Name ?? Value.ToString();
+
+	public string Doc => SystemExtensions.GetMemberDocEnum<TValue>(Value);
 }

@@ -1,8 +1,12 @@
 #pragma warning disable
 
 using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using Serilog.Extensions.Logging;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
+using System.Collections.Concurrent;
 
 namespace Wtq.Utils;
 
@@ -15,18 +19,18 @@ public static class Log
 
 	public static void Configure()
 	{
-		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.json");
+		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "log.json");
 		var logLevel = WtqEnv.LogLevel;
 
 		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
+			.WriteTo.Sink(InAppLogSink.Instance, LogEventLevel.Debug)
 			.WriteTo.File(
-				// outputTemplate: LogTemplate,
-				formatter: new CompactJsonFormatter(),
+				formatter: new RenderedCompactJsonFormatter(),
 				path: path,
-				fileSizeLimitBytes: 10_000_000,
-				rollingInterval: RollingInterval.Day,
-				retainedFileCountLimit: 5);
+				fileSizeLimitBytes: 50_000_000,
+				rollingInterval: RollingInterval.Infinite,
+				retainedFileCountLimit: 1);
 
 		// Log to console.
 		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
@@ -80,5 +84,28 @@ public static class Log
 		}
 
 		return _factory.CreateLogger(category);
+	}
+
+	public static void CloseAndFlush()
+	{
+		Serilog.Log.CloseAndFlush();
+	}
+}
+
+public class InAppLogSink : ILogEventSink
+{
+	public static InAppLogSink Instance { get; } = new();
+
+	public ConcurrentQueue<LogEvent> Events { get; } = new();
+
+	public Action? OnEvent { get; set; }
+
+	public void Emit(LogEvent logEvent)
+	{
+		Events.Enqueue(logEvent);
+
+		while (Events.Count > 200) Events.TryDequeue(out _);
+
+		OnEvent?.Invoke();
 	}
 }

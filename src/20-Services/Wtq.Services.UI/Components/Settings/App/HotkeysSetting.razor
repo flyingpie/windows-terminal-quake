@@ -1,0 +1,35 @@
+@inherits WtqSettingBase<ICollection<HotkeyOptions>>
+
+@code {
+
+	private void Remove(HotkeyOptions hk)
+	{
+		Value.Remove(hk);
+
+		StateHasChanged();
+	}
+
+}
+
+<WtqSetting TProperty="ICollection<HotkeyOptions>" Get="Get" Set="Set">
+	<Content>
+
+		<RadzenStack>
+
+			@foreach (var hk in Value)
+			{
+				<Hotkey Options="hk" OnRemove="@(() => Remove(hk))"/>
+			}
+
+			<RadzenStack>
+				<RadzenButton
+					Icon="add"
+					Size="ButtonSize.Medium"
+					Click="@(() => Value.Add(new()))"
+				/>
+			</RadzenStack>
+
+		</RadzenStack>
+
+	</Content>
+</WtqSetting>

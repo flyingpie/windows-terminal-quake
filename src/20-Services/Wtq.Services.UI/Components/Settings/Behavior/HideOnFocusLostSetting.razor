@@ -1,0 +1,30 @@
+@inherits WtqSettingBase<HideOnFocusLost?>
+
+@code {
+
+	private HideOnFocusLost Val
+	{
+		get => Value ?? HideOnFocusLost.None;
+		set => Value = value;
+	}
+
+}
+
+<WtqSetting TProperty="HideOnFocusLost?" Get="Get" Set="Set" Default="Default">
+	<Content>
+
+		<RadzenRadioButtonList
+			Name="@Id"
+			Orientation="Orientation.Vertical"
+			@bind-Value="Val"
+			TValue="HideOnFocusLost"
+		>
+			<Items>
+				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Always"						Text="Always"/>
+				<RadzenRadioButtonListItem	Value="HideOnFocusLost.Never"						Text="Never"/>
+				<RadzenRadioButtonListItem	Value="HideOnFocusLost.UnlessFocusChangedScreen"	Text="Unless focus changed screen"	Disabled="true"/>
+			</Items>
+		</RadzenRadioButtonList>
+
+	</Content>
+</WtqSetting>

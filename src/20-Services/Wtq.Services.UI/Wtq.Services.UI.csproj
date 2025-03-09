@@ -21,4 +21,54 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Components\Settings\Animation\AnimationDurationSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Animation\AnimationTargetFpsSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Animation\AnimationTypeToggleOffSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Animation\AnimationTypeToggleOnSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\App\HotkeysSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\App\NameSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Behavior\AlwaysOnTopSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Behavior\HideOnFocusLostSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Behavior\OpacitySetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Behavior\TaskbarIconVisibilitySetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Behavior\WindowTitleOverrideSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Monitor\MonitorIndexSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Monitor\PreferMonitorSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Position\HorizontalAlignSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Position\HorizontalScreenCoverageSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Position\OffScreenLocationsSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Position\VerticalOffsetSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Position\VerticalScreenCoverageSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\ArgumentsSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\AttachModeSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\FilenameSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\ProcessNameSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\WindowTitleSetting.razor" />
+	  <AdditionalFiles Include="Components\Settings\Process\WinTermAlert.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\App\App\HotkeysSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\App\NameSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Behavior\AlwaysOnTopSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Behavior\HideOnFocusLostSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Behavior\OpacitySetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Behavior\TaskbarIconVisibilitySetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Behavior\WindowTitleOverrideSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Monitor\MonitorIndexSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Monitor\PreferMonitorSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Position\HorizontalAlignSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Position\HorizontalScreenCoverageSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Position\OffScreenLocationsSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Position\VerticalOffsetSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Position\VerticalScreenCoverageSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\ArgumentsSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\AttachModeSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\FilenameSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\ProcessNameSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\WindowTitleSetting.razor" />
+	  <UpToDateCheckInput Remove="Pages\App\Process\WinTermAlert.razor" />
+	</ItemGroup>
 </Project>

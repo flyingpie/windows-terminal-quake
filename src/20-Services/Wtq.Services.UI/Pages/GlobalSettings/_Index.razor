@@ -1,11 +1,7 @@
-@using System.ComponentModel.DataAnnotations
-@using Wtq.Services.UI.Pages.App.Animation
-@using Wtq.Services.UI.Pages.App.App
-@using Wtq.Services.UI.Pages.App.Behavior
-@using Wtq.Services.UI.Pages.App.Monitor
-@using Wtq.Services.UI.Pages.App.Position
-@using Wtq.Services.UI.Pages.App.Process
 @using System.Text.Json
+@using Wtq.Services.UI.Components.Settings.Process
+@using Wtq.Services.UI.Components.Settings.App
+@using Wtq.Services.UI.Components.Settings.Behavior
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject Notifier Notifier
@@ -31,12 +27,7 @@
 	protected override void OnInitialized()
 	{
 		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
-
-		// Notify when the settings file changes, to prevent overwriting settings that were made outside the UI.
-		WtqOpts.OnChange((a, b) =>
-		{
-			Reload();
-		});
+		WtqOpts.OnChange((a, b) => Reload());
 	}
 
 	protected override void OnParametersSet()
@@ -85,11 +76,10 @@
 		@* 	<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert> *@
 		@* } *@
 
-		<RadzenFieldset Text="App">
+		<RadzenFieldset Text="Apps">
 			<RadzenStack Gap="1rem">
 
-				@* <NameSetting /> *@
-				@* <HotkeysSetting Property="() => AppOpts.Hotkeys" /> *@
+				<HotkeysSetting							Get="() => GlobalOpts.Hotkeys"						Set="v => GlobalOpts.Hotkeys = v" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -97,22 +87,7 @@
 		<RadzenFieldset Text="Process">
 			<RadzenStack Gap="1rem">
 
-				@* Refer to examples page. *@
-				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
-					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
-					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
-				</RadzenAlert>
-
-				@* <FilenameSetting Get="() => AppOpts.FileName" Set="v => AppOpts.FileName = v" /> *@
-				@* <WinTermAlert /> *@
-				@* <ProcessNameSetting /> *@
-				@* <ArgumentsSetting /> *@
-
-				@* <AttachModeSetting Get="() => AppOpts.AttachMode" Set="v => AppOpts.AttachMode = v" Default="() => GlobalOpts.AttachMode ?? AttachMode.FindOrStart" /> *@
-				@* <WindowTitleSetting /> *@
-
-
-				<AttachModeSetting Get="() => GlobalOpts.AttachMode" Set="v => GlobalOpts.AttachMode = v" Default="() => AttachMode.Find" />
+				<AttachModeSetting						Get="() => GlobalOpts.AttachMode"					Set="v => GlobalOpts.AttachMode = v" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -120,11 +95,10 @@
 		<RadzenFieldset Text="Behavior">
 			<RadzenStack Gap="1rem">
 
-				@* <AlwaysOnTopSetting/> *@
-				@* <HideOnFocusLostSetting/> *@
-				@* <TaskbarIconVisibilitySetting/> *@
-				@* <OpacitySetting/> *@
-				@* <WindowTitleOverrideSetting/> *@
+				<AlwaysOnTopSetting						Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v" />
+				<HideOnFocusLostSetting					Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v" />
+				<TaskbarIconVisibilitySetting			Get="() => GlobalOpts.TaskbarIconVisibility"		Set="v => GlobalOpts.TaskbarIconVisibility = v" />
+				<OpacitySetting							Get="() => GlobalOpts.Opacity"						Set="v => GlobalOpts.Opacity = v" />
 
 			</RadzenStack>
 		</RadzenFieldset>

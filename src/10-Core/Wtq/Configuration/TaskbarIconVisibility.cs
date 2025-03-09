@@ -5,18 +5,23 @@ namespace Wtq.Configuration;
 /// </summary>
 public enum TaskbarIconVisibility
 {
+	None = 0,
+
 	/// <summary>
-	/// Never show the task bar icon.
+	/// <strong>Never</strong> show the task bar icon.
 	/// </summary>
+	[Display(Name = "Always hidden")]
 	AlwaysHidden,
 
 	/// <summary>
-	/// Always show the task bar icon (note that this can look a bit weird when the app is toggled off).
+	/// <strong>Always</strong> show the task bar icon (note that this can look a bit weird when the app is toggled off).
 	/// </summary>
+	[Display(Name = "Always visible")]
 	AlwaysVisible,
 
 	/// <summary>
-	/// Only show the task bar icon when the app is toggled on.
+	/// Only show the task bar icon when the app is toggled <strong>on</strong>.
 	/// </summary>
+	[Display(Name = "When the app is visible")]
 	WhenAppVisible,
 }
