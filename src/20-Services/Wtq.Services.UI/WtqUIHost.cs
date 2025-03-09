@@ -46,6 +46,8 @@ public class WtqUIHost
 				app.MainWindow.Close();
 
 				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
+
+				Log.CloseAndFlush();
 			});
 
 		_ = app.MainWindow

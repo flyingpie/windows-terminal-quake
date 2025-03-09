@@ -1,8 +1,10 @@
-@inherits BaseSetting
-
 @code {
 	const string WtFilename = "wt";
 	const string WtProcName = "WindowsTerminal";
+
+	[EditorRequired]
+	[Parameter]
+	public WtqAppOptions? AppOpts { get; set; } = null!;
 }
 
 <RadzenAlert

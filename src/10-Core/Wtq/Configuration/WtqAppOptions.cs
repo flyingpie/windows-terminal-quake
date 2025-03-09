@@ -20,6 +20,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	[Required]
 	public string? Name { get; set; }
 
+	/// <summary>
+	/// One or more keyboard shortcuts that toggle in- and out this particular app.
+	/// </summary>
 	[JsonPropertyOrder(2)]
 	public ICollection<HotkeyOptions> Hotkeys
 	{
@@ -46,7 +49,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// This field can be used to look for the process name in such cases. Windows Terminal is an
 	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 	/// </summary>
-	// [DisplayName("Process name")]
+	[DisplayName("Process name")]
 	[JsonPropertyOrder(11)]
 	public string? ProcessName
 	{
@@ -62,16 +65,22 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	public string? Arguments { get; set; }
 
 	[JsonPropertyOrder(13)]
+	[DisplayName("Arguments list")]
 	public ICollection<ProcessArgument> ArgumentsList
 	{
 		get => _argumentList;
 		set => _argumentList = value ?? [];
 	}
 
+	/// <summary>
+	/// Additionally uses the window title to filter app.<br/>
+	/// Can be useful for attaching to e.g. a browser window.
+	/// </summary>
 	// /// <inheritdoc cref="WtqOptions.AttachMode"/>
 	// [JsonPropertyOrder(14)]
 	// public AttachMode? AttachMode { get; set; }
 
+	[DisplayName("Window title")]
 	[JsonPropertyOrder(15)]
 	public string? WindowTitle { get; set; }
 
@@ -79,57 +88,57 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#region Behavior
 
-	/// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
-	[JsonPropertyOrder(99)]
-	public bool? AlwaysOnTop { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
+	// [JsonPropertyOrder(99)]
+	// public bool? AlwaysOnTop { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
-	[JsonPropertyOrder(99)]
-	public HideOnFocusLost? HideOnFocusLost { get; set; }
+	// /// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
+	// [JsonPropertyOrder(99)]
+	// public HideOnFocusLost? HideOnFocusLost { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.Opacity"/>
-	[JsonPropertyOrder(99)]
-	public int? Opacity { get; set; }
+	// /// <inheritdoc cref="WtqOptions.Opacity"/>
+	// [JsonPropertyOrder(99)]
+	// public int? Opacity { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
-	[JsonPropertyOrder(99)]
-	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
+	// /// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
+	// [JsonPropertyOrder(99)]
+	// public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	#endregion
 
 	#region Position
 
-	/// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
-	[JsonPropertyOrder(99)]
-	public HorizontalAlign? HorizontalAlign { get; set; }
+	// /// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
+	// [JsonPropertyOrder(99)]
+	// public HorizontalAlign? HorizontalAlign { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
-	[JsonPropertyOrder(99)]
-	public float? HorizontalScreenCoverage { get; set; }
+	// /// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
+	// [JsonPropertyOrder(99)]
+	// public float? HorizontalScreenCoverage { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
-	[JsonPropertyOrder(99)]
-	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
+	// /// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
+	// [JsonPropertyOrder(99)]
+	// public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
-	[JsonPropertyOrder(99)]
-	public int? VerticalOffset { get; set; }
+	// /// <inheritdoc cref="WtqOptions.VerticalOffset"/>
+	// [JsonPropertyOrder(99)]
+	// public int? VerticalOffset { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
-	[JsonPropertyOrder(99)]
-	public float? VerticalScreenCoverage { get; set; }
+	// /// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
+	// [JsonPropertyOrder(99)]
+	// public float? VerticalScreenCoverage { get; set; }
 
 	#endregion
 
 	#region Monitor
 
-	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
-	[JsonPropertyOrder(99)]
-	public int? MonitorIndex { get; set; }
+	// /// <inheritdoc cref="WtqOptions.MonitorIndex"/>
+	// [JsonPropertyOrder(99)]
+	// public int? MonitorIndex { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.PreferMonitor"/>
-	[JsonPropertyOrder(99)]
-	public PreferMonitor? PreferMonitor { get; set; }
+	// /// <inheritdoc cref="WtqOptions.PreferMonitor"/>
+	// [JsonPropertyOrder(99)]
+	// public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
@@ -141,17 +150,17 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#region Animation
 
-	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
-	[JsonPropertyOrder(50)]
-	public int? AnimationDurationMs { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
+	// [JsonPropertyOrder(50)]
+	// public int? AnimationDurationMs { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
-	[JsonIgnore]
-	public int? AnimationDurationMsWhenSwitchingApps { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
+	// [JsonIgnore]
+	// public int? AnimationDurationMsWhenSwitchingApps { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
-	[JsonPropertyOrder(51)]
-	public int? AnimationTargetFps { get; set; }
+	// /// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
+	// [JsonPropertyOrder(51)]
+	// public int? AnimationTargetFps { get; set; }
 
 	#endregion
 

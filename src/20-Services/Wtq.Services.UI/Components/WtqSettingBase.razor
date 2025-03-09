@@ -1,8 +1,12 @@
+@using System.ComponentModel
 @using System.Linq.Expressions
+@using System.Reflection
 
 @typeparam TProperty
 
 @code {
+
+	public string Id { get; } = Guid.NewGuid().ToString();
 
 	[CascadingParameter]
 	public Notifier Notifier { get; set; } = null!;
@@ -16,7 +20,7 @@
 	public Action<TProperty?> Set { get; set; }
 
 	[Parameter]
-	public Func<object?>? Default { get; set; }
+	public Expression<Func<object?>>? Default { get; set; }
 
 	protected TProperty Value
 	{
@@ -33,10 +37,17 @@
 				return default;
 			}
 
-			var b = Default();
+			var b = Default.Compile()();
 			if (b != null)
 			{
 				return (TProperty?)b;
+			}
+
+			var def = Default.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
+
+			if (def != null)
+			{
+				return (TProperty?)def;
 			}
 
 			return default;

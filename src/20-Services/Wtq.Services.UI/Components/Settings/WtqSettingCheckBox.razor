@@ -1,0 +1,11 @@
+@typeparam TProperty
+
+@inherits WtqSettingBase<TProperty?>
+
+<WtqSetting TProperty="TProperty?" Get="Get" Set="Set" Default="Default">
+	<Content>
+
+		<RadzenCheckBox @bind-Value="Value" Name="@Id"/>
+
+	</Content>
+</WtqSetting>

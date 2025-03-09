@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
@@ -23,35 +24,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 	#region Animation
 
-	private int? _animationDurationMsSwitchingApps;
 
-	/// <summary>
-	/// How long the animation should take, in milliseconds.
-	/// </summary>
-	[DefaultValue(250)]
-	public int? AnimationDurationMs { get; set; }
-
-	/// <summary>
-	/// How many frames per second the animation should be.<br/>
-	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
-	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
-	/// Defaults to 40.
-	/// </summary>
-	[DefaultValue(40)]
-	public int? AnimationTargetFps { get; set; }
-
-	/// <summary>
-	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
-	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
-	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
-	/// </summary>
-	[JsonIgnore]
-	public int AnimationDurationMsWhenSwitchingApps
-	{
-		get => 125; //_animationDurationMsSwitchingApps
-			// ?? (int)Math.Round(AnimationDurationMs * .5f);
-		set => _animationDurationMsSwitchingApps = value;
-	}
 
 	#endregion
 
@@ -67,7 +40,10 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
+	[DefaultValue(false)]
 	public bool ShowUiOnStart { get; set; }
+
+
 
 	public int GetAnimationTargetFps()
 	{
@@ -81,13 +57,13 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		return x;
 	}
 
-	// public TValue GetValue<TValue>(Func<WtqOptions, TValue> accessor)
+	// public TValue GetValue<TValue>(WtqAppOptions app, Func<WtqSharedOptions, TValue> accessor)
 	// {
-	// 	var val
+	// 	var val = accessor(app);
 	//
-	// 	if (AnimationTargetFps != null)
+	// 	if (val != default)
 	// 	{
-	// 		return AnimationTargetFps.Value;
+	// 		return val;
 	// 	}
 	//
 	// 	var x = (int)SystemExtensions.GetMemberInfo(() => AnimationDurationMs).GetCustomAttribute<DefaultValueAttribute>().Value;
@@ -107,19 +83,16 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", Apps.Select(a => a.Name))}.");
 	}
 
-	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
 
-		return opts.AlwaysOnTop ?? AlwaysOnTop ?? false; // TODO: Default
-	}
+
+	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
+		=> Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? GetDefaultValue<bool>(() => AlwaysOnTop);
 
 	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return Configuration.AttachMode.FindOrStart;
-		// return opts.AttachMode ?? AttachMode;
+		return opts.AttachMode ?? AttachMode ?? GetDefaultValue<AttachMode>(() => AttachMode);
 	}
 
 	public HideOnFocusLost GetHideOnFocusLostForApp(WtqAppOptions opts)
@@ -173,14 +146,14 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		Guard.Against.Null(opts);
 
-		return opts.VerticalOffset ?? VerticalOffset;
+		return opts.VerticalOffset ?? VerticalOffset ?? 0; // TODO: Default
 	}
 
 	public float GetVerticalScreenCoverageForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage;
+		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage ?? 0; // TODO: Default
 	}
 
 	public int GetMonitorIndex(WtqAppOptions opts)
@@ -229,9 +202,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 				p.SetValue(this, default);
 			}
 		}
-
 	}
-
 
 	[JsonIgnore]
 	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
@@ -240,8 +211,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		yield return new ValidationResult("Sup");
 	}
-
-
 
 	/// <summary>
 	/// <see cref="HorizontalScreenCoverage"/> as an index (0 - 1).

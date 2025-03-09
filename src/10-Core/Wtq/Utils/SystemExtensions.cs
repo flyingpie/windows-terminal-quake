@@ -7,6 +7,32 @@ namespace Wtq.Utils;
 
 public static class SystemExtensions
 {
+	public static string GetDisplayName(this Enum enumValue, Func<string, string> translationFunction = null)
+	{
+		var enumValueAsString = enumValue.ToString();
+		var val = enumValue.GetType().GetMember(enumValueAsString).FirstOrDefault();
+		var enumVal = val?.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? enumValueAsString;
+
+		if (translationFunction != null)
+			return translationFunction(enumVal);
+
+		return enumVal;
+	}
+
+	/// <summary>
+	///     A generic extension method that aids in reflecting
+	///     and retrieving any attribute that is applied to an `Enum`.
+	/// </summary>
+	public static TAttribute GetAttribute<TAttribute>(this Enum enumValue)
+		where TAttribute : Attribute
+	{
+		return enumValue.GetType()
+			.GetMember(enumValue.ToString())
+			.First()
+			.GetCustomAttribute<TAttribute>();
+	}
+
+
 	public static string ExpandEnvVars(this string src)
 	{
 		src ??= string.Empty;
@@ -87,6 +113,25 @@ public static class SystemExtensions
 		return attr?.DisplayName ?? m.Name;
 	}
 
+	public static string GetMemberDocEnum<TEnum>(object val)
+	{
+		var mem = typeof(TEnum).GetMember(val.ToString()).FirstOrDefault();
+		// var m = SystemExtensions.GetMemberInfo(expr);
+		//
+		var x = mem.GetXmlDocsElement(new XmlDocsOptions()
+		{
+			FormattingMode = XmlDocsFormattingMode.Html
+		});
+
+		// return m.GetXmlDocsSummary();
+
+		return x
+				?.Descendants("summary") // TODO: Use FormattingMode on GetXmlDocs instead.
+				?.FirstOrDefault()
+				?.ToString(SaveOptions.None)
+			?? string.Empty;
+	}
+
 	public static string GetMemberDoc(Expression expr)
 	{
 		var m = SystemExtensions.GetMemberInfo(expr);
@@ -95,7 +140,11 @@ public static class SystemExtensions
 
 		// return m.GetXmlDocsSummary();
 
-		return x.Descendants("summary").FirstOrDefault().ToString(SaveOptions.None);
+		return x
+				?.Descendants("summary") // TODO: Use FormattingMode on GetXmlDocs instead.
+				?.FirstOrDefault()
+				?.ToString(SaveOptions.None)
+			?? string.Empty;
 	}
 
 	public static MemberInfo GetMemberInfo(this Expression expression)
@@ -132,4 +181,9 @@ public static class SystemExtensions
 			}
 		}
 	}
+}
+
+public class Box<TValue>
+{
+	public TValue Value { get; set; }
 }

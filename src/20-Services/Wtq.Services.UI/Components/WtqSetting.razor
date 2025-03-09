@@ -7,20 +7,15 @@
 
 @code {
 
+	private string? _propertyName;
 
-	// [Parameter]
-	public string? Title => SystemExtensions.GetDisplayName(Get);
+	private string? Title => SystemExtensions.GetDisplayName(Get);
 
 	[Parameter]
 	public string? Subtitle { get; set; }
 
 	[Parameter]
 	public RenderFragment Content { get; set; }
-
-	private string LabelClass
-		=> ValidationResultsForProperty.Any()
-			? "rz-color-danger-light"
-			: "";
 
 	[CascadingParameter]
 	public IEnumerable<ValidationResult> ValidationResults { get; set; }
@@ -32,22 +27,27 @@
 	public Action<TProperty?> Set { get; set; }
 
 	[Parameter]
-	public Func<object?>? Default { get; set; }
+	public Expression<Func<object?>>? Default { get; set; }
 
 	public bool IsOverridden => Get.Compile()() != null;
 
-	private string? _propertyName;
+	private string LabelClass
+		=> ValidationResultsForProperty.Any()
+			? "rz-color-danger-light"
+			: "";
 
-	private string PropertyName => _propertyName ??= SystemExtensions.GetMemberInfo(Get).Name;
+	private string PropertyName
+		=> _propertyName ??= SystemExtensions.GetMemberInfo(Get).Name;
 
-	private IEnumerable<ValidationResult> ValidationResultsForProperty => ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
+	private IEnumerable<ValidationResult> ValidationResultsForProperty
+		=> ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
 
-	public void Reset() => Set(default);
+	private void Reset() => Set(default);
 
-	void ShowTooltip(ElementReference elementReference, TooltipOptions options)
+	private void ShowTooltip(ElementReference elementReference, TooltipOptions options)
 		=> TooltipService.Open(
 			elementReference,
-			IsOverridden ? "Revert to global setting" : "Uses global setting",
+			IsOverridden ? "Revert to default" : "Using default value",
 			options);
 
 }
@@ -57,12 +57,13 @@
 	<!-- Label -->
 	<RadzenColumn Size="4">
 		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
-			<RadzenLabel Text="@Title" Component="" class="@LabelClass"/>
+			<RadzenLabel class="@LabelClass"><strong>@Title</strong></RadzenLabel>
 
 			@if (Subtitle != null)
 			{
 				<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
 			}
+
 		</RadzenStack>
 	</RadzenColumn>
 
@@ -72,12 +73,12 @@
 		@Content
 
 		<!-- Description -->
-		<p>@((MarkupString)SystemExtensions.GetMemberDoc(Get))</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)SystemExtensions.GetMemberDoc(Get))</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)
 		{
-			<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@((MarkupString)v.ErrorMessage)</RadzenAlert>
+			<RadzenAlert AlertStyle="AlertStyle.Warning" AllowClose="false" Shade="Shade.Lighter">@((MarkupString)v.ErrorMessage!)</RadzenAlert>
 		}
 
 	</RadzenColumn>

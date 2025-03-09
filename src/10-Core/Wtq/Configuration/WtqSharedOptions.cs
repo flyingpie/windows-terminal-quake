@@ -1,5 +1,6 @@
+using System.Linq.Expressions;
+using System.Reflection;
 using Wc = Wtq.Configuration;
-using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
@@ -7,10 +8,44 @@ public class WtqSharedOptions
 {
 	#region Animation
 
+	private int? _animationDurationMsSwitchingApps;
+
+	/// <summary>
+	/// How long the animation should take, in milliseconds.
+	/// </summary>
+	[DisplayName("Animation duration (ms)")]
+	[DefaultValue(250)]
+	public int? AnimationDurationMs { get; set; }
+
+	/// <summary>
+	/// How many frames per second the animation should be.<br/>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
+	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
+	/// Defaults to 40.
+	/// </summary>
+	[DisplayName("Animation target FPS")]
+	[DefaultValue(40)]
+	public int? AnimationTargetFps { get; set; }
+
+	/// <summary>
+	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
+	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
+	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
+	/// </summary>
+	[JsonIgnore]
+	public int AnimationDurationMsWhenSwitchingApps
+	{
+		get => (int)Math.Round(GetAnimationDurationMs() * .5f);
+	}
+
+	public float GetAnimationDurationMs()
+		=> AnimationDurationMs ?? GetDefaultValue<float>(() => AnimationDurationMs);
+
 	/// <summary>
 	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
 	/// </summary>
+	[DisplayName("TODO")]
 	[DefaultValue(AnimationType.EaseOutQuart)]
 	public AnimationType? AnimationTypeToggleOn { get; set; }
 
@@ -41,7 +76,7 @@ public class WtqSharedOptions
 
 	/// <summary>
 	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
-	/// 0 (invisible) - 100 (opaque)..<br/>
+	/// 0 (invisible) - 100 (opaque).<br/>
 	/// Defaults to "100".
 	/// </summary>
 	[DefaultValue(100)]
@@ -103,14 +138,15 @@ public class WtqSharedOptions
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
-	public int VerticalOffset { get; set; }
+	[DefaultValue(0f)]
+	public float? VerticalOffset { get; set; }
 
 	/// <summary>
 	/// Vertical screen coverage as a percentage (0-100).<br/>
 	/// Defaults to "100".
 	/// </summary>
-	public float VerticalScreenCoverage { get; set; }
-		= 95f;
+	[DefaultValue(95f)]
+	public float? VerticalScreenCoverage { get; set; }
 
 	#endregion
 
@@ -125,7 +161,19 @@ public class WtqSharedOptions
 	[JsonPropertyOrder(14)]
 	public AttachMode? AttachMode { get; set; }
 
-
-
 	#endregion
+
+	public static TValue? GetDefaultValue<TValue>(Expression<Func<object?>> expr)
+	{
+		Guard.Against.Null(expr);
+
+		var val = expr.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
+
+		if (val != null)
+		{
+			return (TValue)val;
+		}
+
+		return default;
+	}
 }

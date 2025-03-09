@@ -1,0 +1,27 @@
+@* @inherits BaseSetting *@
+@* *@
+@* @code { *@
+@* *@
+@* 	public ICollection<OffScreenLocation> OffScreenLocations *@
+@* 	{ *@
+@* 		get => AppOpts.OffScreenLocations ?? GlobalOpts.OffScreenLocations; *@
+@* 		set => AppOpts.OffScreenLocations = value; *@
+@* 	} *@
+@* *@
+@* } *@
+@* *@
+@* <!-- OffScreenLocations --> *@
+@* <RadzenRow AlignItems="AlignItems.Start"> *@
+@* 	<SettingLabel Text="Off-screen locations"/> *@
+@* 	<RadzenColumn Size="7"> *@
+@* 		$1$ <RadzenNumeric @bind-Value="value" Name="OffScreenLocations" class="rz-mr-4" style="width: 80px;"/> #1# *@
+@* 		$1$ <RadzenSlider @bind-Value="value" TValue="int"/> #1# *@
+@* *@
+@* 		<Descr>How many times per second to update the app position.</Descr> *@
+@* 	</RadzenColumn> *@
+@* 	<SettingGlobal *@
+@* 		HasGlobalSetting="true" *@
+@* 		IsOverridden="@(AppOpts.OffScreenLocations != null)" *@
+@* 		Reset="@(() => AppOpts.OffScreenLocations = null)" *@
+@* 	/> *@
+@* </RadzenRow> *@
