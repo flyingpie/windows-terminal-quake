@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
@@ -22,12 +21,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	[JsonPropertyName("$schema")]
 	public string Schema { get; } = "wtq.schema.json";
 
-	#region Animation
-
-
-
-	#endregion
-
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
@@ -43,8 +36,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	[DefaultValue(false)]
 	public bool ShowUiOnStart { get; set; }
 
-
-
 	public int GetAnimationTargetFps()
 	{
 		if (AnimationTargetFps != null)
@@ -57,20 +48,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		return x;
 	}
 
-	// public TValue GetValue<TValue>(WtqAppOptions app, Func<WtqSharedOptions, TValue> accessor)
-	// {
-	// 	var val = accessor(app);
-	//
-	// 	if (val != default)
-	// 	{
-	// 		return val;
-	// 	}
-	//
-	// 	var x = (int)SystemExtensions.GetMemberInfo(() => AnimationDurationMs).GetCustomAttribute<DefaultValueAttribute>().Value;
-	//
-	// 	return x;
-	// }
-
 	public WtqAppOptions? GetAppOptionsByName(string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name);
@@ -82,8 +59,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", Apps.Select(a => a.Name))}.");
 	}
-
-
 
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
 		=> Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? GetDefaultValue<bool>(() => AlwaysOnTop);
