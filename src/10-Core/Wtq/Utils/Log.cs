@@ -2,6 +2,7 @@
 
 using Serilog;
 using Serilog.Extensions.Logging;
+using Serilog.Formatting.Compact;
 
 namespace Wtq.Utils;
 
@@ -14,13 +15,14 @@ public static class Log
 
 	public static void Configure()
 	{
-		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
+		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.json");
 		var logLevel = WtqEnv.LogLevel;
 
 		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
 			.WriteTo.File(
-				outputTemplate: LogTemplate,
+				// outputTemplate: LogTemplate,
+				formatter: new CompactJsonFormatter(),
 				path: path,
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
