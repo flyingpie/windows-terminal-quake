@@ -109,7 +109,7 @@
 			<RadzenStack Gap="1rem">
 
 				<!-- App name -->
-				<NameSetting															Get="() => AppOpts.Name"						Set="v => AppOpts.Name = v" />
+				<WtqSettingTextBox														Get="() => AppOpts.Name"						Set="v => AppOpts.Name = v" />
 
 				<!-- Hotkeys -->
 				<HotkeysSetting															Get="() => AppOpts.Hotkeys"						Set="v => AppOpts.Hotkeys = v" />
@@ -136,7 +136,7 @@
 				<WtqSettingTextBox														Get="() => AppOpts.ProcessName"					Set="v => AppOpts.ProcessName = v" />
 
 				<!-- Startup arguments -->
-				<ArgumentsSetting														Get="() => AppOpts.ArgumentsList"				Set="v => AppOpts.ArgumentsList = v!" />
+				<ArgumentsSetting														Get="() => AppOpts.ArgumentList"				Set="v => AppOpts.ArgumentList = v!" />
 
 				<!-- Attach mode -->
 				<WtqSettingRadio					TProperty="AttachMode"				Get="() => AppOpts.AttachMode"					Set="v => AppOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />

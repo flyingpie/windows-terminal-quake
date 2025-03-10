@@ -7,6 +7,13 @@ namespace Wtq.Utils;
 
 public static class SystemExtensions
 {
+	public static bool HasHotkey(this ICollection<HotkeyOptions> hotkeys, Keys key, KeyModifiers modifiers)
+	{
+		Guard.Against.Null(hotkeys);
+
+		return hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+	}
+
 	public static string GetDisplayName(this Enum enumValue, Func<string, string> translationFunction = null)
 	{
 		var enumValueAsString = enumValue.ToString();
@@ -20,13 +27,14 @@ public static class SystemExtensions
 	}
 
 	/// <summary>
-	///     A generic extension method that aids in reflecting
-	///     and retrieving any attribute that is applied to an `Enum`.
+	/// A generic extension method that aids in reflecting
+	/// and retrieving any attribute that is applied to an `Enum`.
 	/// </summary>
-	public static TAttribute GetAttribute<TAttribute>(this Enum enumValue)
+	public static TAttribute? GetAttribute<TAttribute>(this Enum enumValue)
 		where TAttribute : Attribute
 	{
-		return enumValue.GetType()
+		return enumValue
+			.GetType()
 			.GetMember(enumValue.ToString())
 			.First()
 			.GetCustomAttribute<TAttribute>();
@@ -108,9 +116,16 @@ public static class SystemExtensions
 	{
 		var m = expr.GetMemberInfo();
 
-		var attr = m.GetCustomAttribute<DisplayNameAttribute>();
+		var attr = m.GetCustomAttribute<DisplayAttribute>();
 
-		return attr?.DisplayName ?? m.Name;
+		return attr?.Name ?? m.Name;
+	}
+
+	public static DisplayAttribute? GetDisplay(Expression expr)
+	{
+		var m = expr.GetMemberInfo();
+
+		return m.GetCustomAttribute<DisplayAttribute>();
 	}
 
 	public static string GetMemberDocEnum<TEnum>(object val)

@@ -52,13 +52,13 @@ public enum Keys
 	/// <summary>
 	/// The BACKSPACE key.
 	/// </summary>
-	[Display(Description = "Backspace")]
+	[Display(Name = "Backspace")]
 	Back = 0x08,
 
 	/// <summary>
 	/// The TAB key.
 	/// </summary>
-	[Display(Description = "Tab")]
+	[Display(Name = "Tab")]
 	Tab = 0x09,
 
 	/// <summary>
@@ -74,13 +74,13 @@ public enum Keys
 	/// <summary>
 	/// The RETURN key.
 	/// </summary>
-	[Display(Description = "Return (enter)")]
+	[Display(Name = "Return (enter)")]
 	Return = 0x0D,
 
 	/// <summary>
 	/// The ENTER key.
 	/// </summary>
-	[Display(Description = "Return (enter)")]
+	[Display(Name = "Return (enter)")]
 	Enter = Return,
 
 	/// <summary>
@@ -111,7 +111,7 @@ public enum Keys
 	/// <summary>
 	/// The CAPS LOCK key.
 	/// </summary>
-	[Display(Description = "Caps lock")]
+	[Display(Name = "Caps lock")]
 	CapsLock = 0x14,
 
 	/// <summary>
@@ -152,7 +152,7 @@ public enum Keys
 	/// <summary>
 	/// The ESC key.
 	/// </summary>
-	[Display(Description = "Escape")]
+	[Display(Name = "Escape")]
 	Escape = 0x1B,
 
 	/// <summary>
@@ -183,7 +183,7 @@ public enum Keys
 	/// <summary>
 	/// The SPACEBAR key.
 	/// </summary>
-	[Display(Description = "Space bar")]
+	[Display(Name = "Space bar")]
 	Space = 0x20,
 
 	/// <summary>
@@ -194,7 +194,7 @@ public enum Keys
 	/// <summary>
 	/// The PAGE UP key.
 	/// </summary>
-	[Display(Description = "Page up")]
+	[Display(Name = "Page up")]
 	PageUp = Prior,
 
 	/// <summary>
@@ -205,43 +205,43 @@ public enum Keys
 	/// <summary>
 	/// The PAGE DOWN key.
 	/// </summary>
-	[Display(Description = "Page down")]
+	[Display(Name = "Page down")]
 	PageDown = Next,
 
 	/// <summary>
 	/// The END key.
 	/// </summary>
-	[Display(Description = "End")]
+	[Display(Name = "End")]
 	End = 0x23,
 
 	/// <summary>
 	/// The HOME key.
 	/// </summary>
-	[Display(Description = "Home")]
+	[Display(Name = "Home")]
 	Home = 0x24,
 
 	/// <summary>
 	/// The LEFT ARROW key.
 	/// </summary>
-	[Display(Description = "Left arrow")]
+	[Display(Name = "Left arrow")]
 	Left = 0x25,
 
 	/// <summary>
 	/// The UP ARROW key.
 	/// </summary>
-	[Display(Description = "Up arrow")]
+	[Display(Name = "Up arrow")]
 	Up = 0x26,
 
 	/// <summary>
 	/// The RIGHT ARROW key.
 	/// </summary>
-	[Display(Description = "Right arrow")]
+	[Display(Name = "Right arrow")]
 	Right = 0x27,
 
 	/// <summary>
 	/// The DOWN ARROW key.
 	/// </summary>
-	[Display(Description = "Down arrow")]
+	[Display(Name = "Down arrow")]
 	Down = 0x28,
 
 	/// <summary>
@@ -267,19 +267,19 @@ public enum Keys
 	/// <summary>
 	/// The PRINT SCREEN key.
 	/// </summary>
-	[Display(Description = "Print screen")]
+	[Display(Name = "Print screen")]
 	PrintScreen = Snapshot,
 
 	/// <summary>
 	/// The INS key.
 	/// </summary>
-	[Display(Description = "Insert")]
+	[Display(Name = "Insert")]
 	Insert = 0x2D,
 
 	/// <summary>
 	/// The DEL key.
 	/// </summary>
-	[Display(Description = "Delete")]
+	[Display(Name = "Delete")]
 	Delete = 0x2E,
 
 	/// <summary>
@@ -290,229 +290,229 @@ public enum Keys
 	/// <summary>
 	/// The 0 key.
 	/// </summary>
-	[Display(Description = "0")]
+	[Display(Name = "0")]
 	D0 = 0x30,
 
 	/// <summary>
 	/// The 1 key.
 	/// </summary>
-	[Display(Description = "1")]
+	[Display(Name = "1")]
 	D1 = 0x31,
 
 	/// <summary>
 	/// The 2 key.
 	/// </summary>
-	[Display(Description = "2")]
+	[Display(Name = "2")]
 	D2 = 0x32,
 
 	/// <summary>
 	/// The 3 key.
 	/// </summary>
-	[Display(Description = "3")]
+	[Display(Name = "3")]
 	D3 = 0x33,
 
 	/// <summary>
 	/// The 4 key.
 	/// </summary>
-	[Display(Description = "4")]
+	[Display(Name = "4")]
 	D4 = 0x34,
 
 	/// <summary>
 	/// The 5 key.
 	/// </summary>
-	[Display(Description = "5")]
+	[Display(Name = "5")]
 	D5 = 0x35,
 
 	/// <summary>
 	/// The 6 key.
 	/// </summary>
-	[Display(Description = "6")]
+	[Display(Name = "6")]
 	D6 = 0x36,
 
 	/// <summary>
 	/// The 7 key.
 	/// </summary>
-	[Display(Description = "7")]
+	[Display(Name = "7")]
 	D7 = 0x37,
 
 	/// <summary>
 	/// The 8 key.
 	/// </summary>
-	[Display(Description = "8")]
+	[Display(Name = "8")]
 	D8 = 0x38,
 
 	/// <summary>
 	/// The 9 key.
 	/// </summary>
-	[Display(Description = "9")]
+	[Display(Name = "9")]
 	D9 = 0x39,
 
 	/// <summary>
 	/// The A key.
 	/// </summary>
-	[Display(Description = "A")]
+	[Display(Name = "A")]
 	A = 0x41,
 
 	/// <summary>
 	/// The B key.
 	/// </summary>
-	[Display(Description = "B")]
+	[Display(Name = "B")]
 	B = 0x42,
 
 	/// <summary>
 	/// The C key.
 	/// </summary>
-	[Display(Description = "C")]
+	[Display(Name = "C")]
 	C = 0x43,
 
 	/// <summary>
 	/// The D key.
 	/// </summary>
-	[Display(Description = "D")]
+	[Display(Name = "D")]
 	D = 0x44,
 
 	/// <summary>
 	/// The E key.
 	/// </summary>
-	[Display(Description = "E")]
+	[Display(Name = "E")]
 	E = 0x45,
 
 	/// <summary>
 	/// The F key.
 	/// </summary>
-	[Display(Description = "F")]
+	[Display(Name = "F")]
 	F = 0x46,
 
 	/// <summary>
 	/// The G key.
 	/// </summary>
-	[Display(Description = "G")]
+	[Display(Name = "G")]
 	G = 0x47,
 
 	/// <summary>
 	/// The H key.
 	/// </summary>
-	[Display(Description = "H")]
+	[Display(Name = "H")]
 	H = 0x48,
 
 	/// <summary>
 	/// The I key.
 	/// </summary>
-	[Display(Description = "I")]
+	[Display(Name = "I")]
 	I = 0x49,
 
 	/// <summary>
 	/// The J key.
 	/// </summary>
-	[Display(Description = "J")]
+	[Display(Name = "J")]
 	J = 0x4A,
 
 	/// <summary>
 	/// The K key.
 	/// </summary>
-	[Display(Description = "K")]
+	[Display(Name = "K")]
 	K = 0x4B,
 
 	/// <summary>
 	/// The L key.
 	/// </summary>
-	[Display(Description = "L")]
+	[Display(Name = "L")]
 	L = 0x4C,
 
 	/// <summary>
 	/// The M key.
 	/// </summary>
-	[Display(Description = "M")]
+	[Display(Name = "M")]
 	M = 0x4D,
 
 	/// <summary>
 	/// The N key.
 	/// </summary>
-	[Display(Description = "N")]
+	[Display(Name = "N")]
 	N = 0x4E,
 
 	/// <summary>
 	/// The O key.
 	/// </summary>
-	[Display(Description = "O")]
+	[Display(Name = "O")]
 	O = 0x4F,
 
 	/// <summary>
 	/// The P key.
 	/// </summary>
-	[Display(Description = "P")]
+	[Display(Name = "P")]
 	P = 0x50,
 
 	/// <summary>
 	/// The Q key.
 	/// </summary>
-	[Display(Description = "Q")]
+	[Display(Name = "Q")]
 	Q = 0x51,
 
 	/// <summary>
 	/// The R key.
 	/// </summary>
-	[Display(Description = "R")]
+	[Display(Name = "R")]
 	R = 0x52,
 
 	/// <summary>
 	/// The S key.
 	/// </summary>
-	[Display(Description = "S")]
+	[Display(Name = "S")]
 	S = 0x53,
 
 	/// <summary>
 	/// The T key.
 	/// </summary>
-	[Display(Description = "T")]
+	[Display(Name = "T")]
 	T = 0x54,
 
 	/// <summary>
 	/// The U key.
 	/// </summary>
-	[Display(Description = "U")]
+	[Display(Name = "U")]
 	U = 0x55,
 
 	/// <summary>
 	/// The V key.
 	/// </summary>
-	[Display(Description = "V")]
+	[Display(Name = "V")]
 	V = 0x56,
 
 	/// <summary>
 	/// The W key.
 	/// </summary>
-	[Display(Description = "W")]
+	[Display(Name = "W")]
 	W = 0x57,
 
 	/// <summary>
 	/// The X key.
 	/// </summary>
-	[Display(Description = "X")]
+	[Display(Name = "X")]
 	X = 0x58,
 
 	/// <summary>
 	/// The Y key.
 	/// </summary>
-	[Display(Description = "Y")]
+	[Display(Name = "Y")]
 	Y = 0x59,
 
 	/// <summary>
 	/// The Z key.
 	/// </summary>
-	[Display(Description = "Z")]
+	[Display(Name = "Z")]
 	Z = 0x5A,
 
 	/// <summary>
 	/// The left Windows logo key (Microsoft Natural Keyboard).
 	/// </summary>
-	[Display(Description = "Left super")]
+	[Display(Name = "Left super")]
 	LWin = 0x5B,
 
 	/// <summary>
 	/// The right Windows logo key (Microsoft Natural Keyboard).
 	/// </summary>
-	[Display(Description = "Right super")]
+	[Display(Name = "Right super")]
 	RWin = 0x5C,
 
 	/// <summary>
@@ -528,73 +528,73 @@ public enum Keys
 	/// <summary>
 	/// The 0 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 0")]
+	[Display(Name = "Numpad 0")]
 	NumPad0 = 0x60,
 
 	/// <summary>
 	/// The 1 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 1")]
+	[Display(Name = "Numpad 1")]
 	NumPad1 = 0x61,
 
 	/// <summary>
 	/// The 2 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 2")]
+	[Display(Name = "Numpad 2")]
 	NumPad2 = 0x62,
 
 	/// <summary>
 	/// The 3 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 3")]
+	[Display(Name = "Numpad 3")]
 	NumPad3 = 0x63,
 
 	/// <summary>
 	/// The 4 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 4")]
+	[Display(Name = "Numpad 4")]
 	NumPad4 = 0x64,
 
 	/// <summary>
 	/// The 5 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 5")]
+	[Display(Name = "Numpad 5")]
 	NumPad5 = 0x65,
 
 	/// <summary>
 	/// The 6 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 6")]
+	[Display(Name = "Numpad 6")]
 	NumPad6 = 0x66,
 
 	/// <summary>
 	/// The 7 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 7")]
+	[Display(Name = "Numpad 7")]
 	NumPad7 = 0x67,
 
 	/// <summary>
 	/// The 8 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 8")]
+	[Display(Name = "Numpad 8")]
 	NumPad8 = 0x68,
 
 	/// <summary>
 	/// The 9 key on the numeric keypad.
 	/// </summary>
-	[Display(Description = "Numpad 9")]
+	[Display(Name = "Numpad 9")]
 	NumPad9 = 0x69,
 
 	/// <summary>
 	/// The multiply key.
 	/// </summary>
-	[Display(Description = "Numpad *")]
+	[Display(Name = "Numpad *")]
 	Multiply = 0x6A,
 
 	/// <summary>
 	/// The add key.
 	/// </summary>
-	[Display(Description = "Numpad +")]
+	[Display(Name = "Numpad +")]
 	Add = 0x6B,
 
 	/// <summary>
@@ -605,7 +605,7 @@ public enum Keys
 	/// <summary>
 	/// The subtract key.
 	/// </summary>
-	[Display(Description = "Numpad -")]
+	[Display(Name = "Numpad -")]
 	Subtract = 0x6D,
 
 	/// <summary>
@@ -618,79 +618,79 @@ public enum Keys
 	/// <summary>
 	/// The divide key.
 	/// </summary>
-	[Display(Description = "Numpad /")]
+	[Display(Name = "Numpad /")]
 	Divide = 0x6F,
 
 	/// <summary>
 	/// The F1 key.
 	/// </summary>
-	[Display(Description = "F1")]
+	[Display(Name = "F1")]
 	F1 = 0x70,
 
 	/// <summary>
 	/// The F2 key.
 	/// </summary>
-	[Display(Description = "F2")]
+	[Display(Name = "F2")]
 	F2 = 0x71,
 
 	/// <summary>
 	/// The F3 key.
 	/// </summary>
-	[Display(Description = "F3")]
+	[Display(Name = "F3")]
 	F3 = 0x72,
 
 	/// <summary>
 	/// The F4 key.
 	/// </summary>
-	[Display(Description = "F4")]
+	[Display(Name = "F4")]
 	F4 = 0x73,
 
 	/// <summary>
 	/// The F5 key.
 	/// </summary>
-	[Display(Description = "F5")]
+	[Display(Name = "F5")]
 	F5 = 0x74,
 
 	/// <summary>
 	/// The F6 key.
 	/// </summary>
-	[Display(Description = "F6")]
+	[Display(Name = "F6")]
 	F6 = 0x75,
 
 	/// <summary>
 	/// The F7 key.
 	/// </summary>
-	[Display(Description = "F7")]
+	[Display(Name = "F7")]
 	F7 = 0x76,
 
 	/// <summary>
 	/// The F8 key.
 	/// </summary>
-	[Display(Description = "F8")]
+	[Display(Name = "F8")]
 	F8 = 0x77,
 
 	/// <summary>
 	/// The F9 key.
 	/// </summary>
-	[Display(Description = "F9")]
+	[Display(Name = "F9")]
 	F9 = 0x78,
 
 	/// <summary>
 	/// The F10 key.
 	/// </summary>
-	[Display(Description = "F10")]
+	[Display(Name = "F10")]
 	F10 = 0x79,
 
 	/// <summary>
 	/// The F11 key.
 	/// </summary>
-	[Display(Description = "F11")]
+	[Display(Name = "F11")]
 	F11 = 0x7A,
 
 	/// <summary>
 	/// The F12 key.
 	/// </summary>
-	[Display(Description = "F12")]
+	[Display(Name = "F12")]
 	F12 = 0x7B,
 
 	/// <summary>
@@ -756,13 +756,13 @@ public enum Keys
 	/// <summary>
 	/// The NUM LOCK key.
 	/// </summary>
-	[Display(Description = "Num lock")]
+	[Display(Name = "Num lock")]
 	NumLock = 0x90,
 
 	/// <summary>
 	/// The SCROLL LOCK key.
 	/// </summary>
-	[Display(Description = "Scroll lock")]
+	[Display(Name = "Scroll lock")]
 	Scroll = 0x91,
 
 	/// <summary>
@@ -888,13 +888,13 @@ public enum Keys
 	/// <summary>
 	/// The OEM Semicolon key.
 	/// </summary>
-	[Display(Description = "; (semicolon)")]
+	[Display(Name = "; (semicolon)")]
 	OemSemicolon = 0xBA,
 
 	/// <summary>
 	/// The OEM 1 key.
 	/// </summary>
-	[Display(Description = "+ (plus)")]
+	[Display(Name = "+ (plus)")]
 	Oem1 = OemSemicolon,
 
 	/// <summary>
@@ -905,25 +905,25 @@ public enum Keys
 	/// <summary>
 	/// The OEM comma key.
 	/// </summary>
-	[Display(Description = ", (comma)")]
+	[Display(Name = ", (comma)")]
 	Oemcomma = 0xBC,
 
 	/// <summary>
 	/// The OEM Minus key.
 	/// </summary>
-	[Display(Description = "- (minus)")]
+	[Display(Name = "- (minus)")]
 	OemMinus = 0xBD,
 
 	/// <summary>
 	/// The OEM Period key.
 	/// </summary>
-	[Display(Description = ". (period)")]
+	[Display(Name = ". (period)")]
 	OemPeriod = 0xBE,
 
 	/// <summary>
 	/// The OEM question key.
 	/// </summary>
-	[Display(Description = "? (question mark)")]
+	[Display(Name = "? (question mark)")]
 	OemQuestion = 0xBF,
 
 	/// <summary>
@@ -939,13 +939,13 @@ public enum Keys
 	/// <summary>
 	/// The OEM tilde key.
 	/// </summary>
-	[Display(Description = "~ (tilde)")]
+	[Display(Name = "~ (tilde)")]
 	Oemtilde = Oem3,
 
 	/// <summary>
 	/// The OEM open brackets key.
 	/// </summary>
-	[Display(Description = "[ (open bracket)")]
+	[Display(Name = "[ (open bracket)")]
 	OemOpenBrackets = 0xDB,
 
 	/// <summary>
@@ -956,7 +956,7 @@ public enum Keys
 	/// <summary>
 	/// The OEM Pipe key.
 	/// </summary>
-	[Display(Description = "| (pipe)")]
+	[Display(Name = "| (pipe)")]
 	OemPipe = 0xDC,
 
 	/// <summary>
@@ -967,7 +967,7 @@ public enum Keys
 	/// <summary>
 	/// The OEM close brackets key.
 	/// </summary>
-	[Display(Description = "] (close bracket)")]
+	[Display(Name = "] (close bracket)")]
 	OemCloseBrackets = 0xDD,
 
 	/// <summary>
@@ -983,7 +983,7 @@ public enum Keys
 	/// <summary>
 	/// The OEM Quotes key.
 	/// </summary>
-	[Display(Description = "\" (double quote)")]
+	[Display(Name = "\" (double quote)")]
 	OemQuotes = Oem7,
 
 	/// <summary>
@@ -999,7 +999,7 @@ public enum Keys
 	/// <summary>
 	/// The OEM Backslash key.
 	/// </summary>
-	[Display(Description = "\\ (backslash)")]
+	[Display(Name = "\\ (backslash)")]
 	OemBackslash = Oem102,
 
 	/// <summary>

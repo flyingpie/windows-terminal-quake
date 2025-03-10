@@ -18,5 +18,6 @@ public enum ToggleModifiers
 	/// <summary>
 	/// Moving from one app to another (usually slightly faster).
 	/// </summary>
+	[Display(Name = "Switching apps")]
 	SwitchingApps,
 }

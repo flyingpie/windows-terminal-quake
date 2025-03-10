@@ -33,6 +33,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
+	[Display(Name = "Show UI on start")]
 	[DefaultValue(false)]
 	public bool ShowUiOnStart { get; set; }
 
@@ -43,9 +44,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 			return AnimationTargetFps.Value;
 		}
 
-		var x = (int)SystemExtensions.GetMemberInfo(() => AnimationDurationMs).GetCustomAttribute<DefaultValueAttribute>().Value;
-
-		return x;
+		return DefaultValue.For<int>(() => AnimationTargetFps);
 	}
 
 	public WtqAppOptions? GetAppOptionsByName(string name)
@@ -61,13 +60,13 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
-		=> Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? GetDefaultValue<bool>(() => AlwaysOnTop);
+		=> Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? DefaultValue.For<bool>(() => AlwaysOnTop);
 
 	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.AttachMode ?? AttachMode ?? GetDefaultValue<AttachMode>(() => AttachMode);
+		return opts.AttachMode ?? AttachMode ?? DefaultValue.For<AttachMode>(() => AttachMode);
 	}
 
 	public HideOnFocusLost GetHideOnFocusLostForApp(WtqAppOptions opts)
@@ -179,6 +178,8 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		}
 	}
 
+	#region Validation
+
 	[JsonIgnore]
 	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
 
@@ -206,4 +207,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 		return GetVerticalScreenCoverageForApp(opts) / 100f;
 	}
+
+	#endregion
 }

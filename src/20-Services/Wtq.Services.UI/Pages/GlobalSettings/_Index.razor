@@ -2,6 +2,8 @@
 @using Wtq.Services.UI.Components.Settings.Process
 @using Wtq.Services.UI.Components.Settings.App
 @using Wtq.Services.UI.Components.Settings.Behavior
+@using Wtq.Services.UI.Components.Settings
+@using Wc = Wtq.Configuration
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject Notifier Notifier
@@ -50,8 +52,7 @@
 }
 
 <PageHead Icon="public">Global settings</PageHead>
-
-<h2><RadzenIcon Icon="construction" />&nbsp;TODO</h2>
+<p class="rz-color-base-500 rz-mt-0">Settings that apply to all apps (unless overridden).</p>
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="Notifier">
@@ -71,10 +72,7 @@
 		</RadzenAlert>
 		*@
 
-		@* @foreach (var v in AppOpts.Validate(new ValidationContext(new object()))) *@
-		@* { *@
-		@* 	<RadzenAlert AlertStyle="AlertStyle.Warning" Shade="Shade.Lighter">@v.ErrorMessage</RadzenAlert> *@
-		@* } *@
+		<ValidationMessages />
 
 		<RadzenFieldset Text="Apps">
 			<RadzenStack Gap="1rem">
@@ -87,7 +85,9 @@
 		<RadzenFieldset Text="Process">
 			<RadzenStack Gap="1rem">
 
-				<AttachModeSetting						Get="() => GlobalOpts.AttachMode"					Set="v => GlobalOpts.AttachMode = v" />
+				@* <AttachModeSetting						Get="() => GlobalOpts.AttachMode"					Set="v => GlobalOpts.AttachMode = v" /> *@
+				<!-- Attach mode -->
+				<WtqSettingRadio					TProperty="AttachMode"				Get="() => GlobalOpts.AttachMode"					Set="v => GlobalOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -95,10 +95,22 @@
 		<RadzenFieldset Text="Behavior">
 			<RadzenStack Gap="1rem">
 
-				<AlwaysOnTopSetting						Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v" />
-				<HideOnFocusLostSetting					Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v" />
-				<TaskbarIconVisibilitySetting			Get="() => GlobalOpts.TaskbarIconVisibility"		Set="v => GlobalOpts.TaskbarIconVisibility = v" />
-				<OpacitySetting							Get="() => GlobalOpts.Opacity"						Set="v => GlobalOpts.Opacity = v" />
+				@* <AlwaysOnTopSetting						Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v" /> *@
+				@* <HideOnFocusLostSetting					Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v" /> *@
+				@* <TaskbarIconVisibilitySetting			Get="() => GlobalOpts.TaskbarIconVisibility"		Set="v => GlobalOpts.TaskbarIconVisibility = v" /> *@
+				@* <OpacitySetting							Get="() => GlobalOpts.Opacity"						Set="v => GlobalOpts.Opacity = v" /> *@
+
+				<!-- Always on top -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v"					Default="() => GlobalOpts.AlwaysOnTop" />
+
+				<!-- Hide on focus lost -->
+				<WtqSettingRadio					TProperty="HideOnFocusLost"			Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v"				Default="() => GlobalOpts.HideOnFocusLost" />
+
+				<!-- Taskbar icon visibility -->
+				<WtqSettingRadio					TProperty="TaskbarIconVisibility"	Get="() => GlobalOpts.TaskbarIconVisibility"		Set="v => GlobalOpts.TaskbarIconVisibility = v"			Default="() => GlobalOpts.TaskbarIconVisibility" />
+
+				<!-- Opacity -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.Opacity"						Set="v => GlobalOpts.Opacity = v"						Default="() => GlobalOpts.Opacity" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -111,6 +123,18 @@
 				@* <VerticalScreenCoverageSetting /> *@
 				@* <VerticalOffsetSetting /> *@
 
+				<!-- Horizontal screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.HorizontalScreenCoverage"		Set="v => GlobalOpts.HorizontalScreenCoverage = v"		Default="() => GlobalOpts.HorizontalScreenCoverage" />
+
+				<!-- Horizontal align -->
+				<WtqSettingRadio					TProperty="Wc.HorizontalAlign"		Get="() => GlobalOpts.HorizontalAlign"				Set="v => GlobalOpts.HorizontalAlign = v"				Default="() => GlobalOpts.HorizontalAlign" />
+
+				<!-- Vertical screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.VerticalScreenCoverage"		Set="v => GlobalOpts.VerticalScreenCoverage = v"		Default="() => GlobalOpts.VerticalScreenCoverage" />
+
+				<!-- Vertical offset -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.VerticalOffset"				Set="v => GlobalOpts.VerticalOffset = v"				Default="() => GlobalOpts.VerticalOffset" />
+
 			</RadzenStack>
 		</RadzenFieldset>
 
@@ -119,6 +143,12 @@
 
 				@* <PreferMonitorSetting/> *@
 				@* <MonitorIndexSetting/> *@
+
+				<!-- Prefer monitor -->
+				<WtqSettingRadio					TProperty="PreferMonitor"			Get="() => GlobalOpts.PreferMonitor"				Set="v => GlobalOpts.PreferMonitor = v"					Default="() => GlobalOpts.PreferMonitor" />
+
+				<!-- Monitor index -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.MonitorIndex"					Set="v => GlobalOpts.MonitorIndex = v"					Default="() => GlobalOpts.MonitorIndex" />
 
 			</RadzenStack>
 		</RadzenFieldset>
@@ -130,6 +160,18 @@
 				@* <AnimationTargetFpsSetting/> *@
 				@* <AnimationTypeToggleOnSetting/> *@
 				@* <AnimationTypeToggleOffSetting/> *@
+
+				<!-- Animation duration -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.AnimationDurationMs"			Set="v => GlobalOpts.AnimationDurationMs = v"			Default="() => GlobalOpts.AnimationDurationMs" />
+
+				<!-- Animation target FPS -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.AnimationTargetFps"			Set="v => GlobalOpts.AnimationTargetFps = v"			Default="() => GlobalOpts.AnimationTargetFps" />
+
+				<!-- Animation type (toggle ON) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => GlobalOpts.AnimationTypeToggleOn"		Set="v => GlobalOpts.AnimationTypeToggleOn = v"		Default="() => GlobalOpts.AnimationTypeToggleOn" />
+
+				<!-- Animation type (toggle OFF) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => GlobalOpts.AnimationTypeToggleOff"		Set="v => GlobalOpts.AnimationTypeToggleOff = v"		Default="() => GlobalOpts.AnimationTypeToggleOff" />
 
 			</RadzenStack>
 		</RadzenFieldset>

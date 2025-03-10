@@ -85,7 +85,7 @@ public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 
 	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(key, keyMods));
 
 		return opt == null
 			? null

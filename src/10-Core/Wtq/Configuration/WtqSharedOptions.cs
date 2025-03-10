@@ -13,7 +13,7 @@ public class WtqSharedOptions
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
-	[DisplayName("Animation duration (ms)")]
+	[Display(Name = "Animation duration (ms)")]
 	[DefaultValue(250)]
 	public int? AnimationDurationMs { get; set; }
 
@@ -23,7 +23,7 @@ public class WtqSharedOptions
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
 	/// Defaults to 40.
 	/// </summary>
-	[DisplayName("Animation target FPS")]
+	[Display(Name = "Animation target FPS")]
 	[DefaultValue(40)]
 	public int? AnimationTargetFps { get; set; }
 
@@ -39,13 +39,13 @@ public class WtqSharedOptions
 	}
 
 	public float GetAnimationDurationMs()
-		=> AnimationDurationMs ?? GetDefaultValue<float>(() => AnimationDurationMs);
+		=> AnimationDurationMs ?? DefaultValue.For<float>(() => AnimationDurationMs);
 
 	/// <summary>
 	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
 	/// </summary>
-	[DisplayName("TODO")]
+	[Display(Name = "Animation type (toggle ON)")]
 	[DefaultValue(AnimationType.EaseOutQuart)]
 	public AnimationType? AnimationTypeToggleOn { get; set; }
 
@@ -53,6 +53,7 @@ public class WtqSharedOptions
 	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
 	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
 	/// </summary>
+	[Display(Name = "Animation type (toggle OFF)")]
 	[DefaultValue(AnimationType.EaseInQuart)]
 	public AnimationType? AnimationTypeToggleOff { get; set; }
 
@@ -65,12 +66,14 @@ public class WtqSharedOptions
 	/// Defaults to "false".
 	/// </summary>
 	[DefaultValue(false)]
+	[Display(Name = "Always on top")]
 	public bool? AlwaysOnTop { get; set; }
 
 	/// <summary>
 	/// Whether the app should be toggled out when another app gets focus.<br/>
 	/// Defaults to "true".
 	/// </summary>
+	[Display(Name = "Hide on focus lost")]
 	[DefaultValue(Wc.HideOnFocusLost.Always)]
 	public HideOnFocusLost? HideOnFocusLost { get; set; }
 
@@ -87,6 +90,7 @@ public class WtqSharedOptions
 	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
 	/// Defaults to "AlwaysHidden".
 	/// </summary>
+	[Display(Name = "Taskbar icon visibility")]
 	[DefaultValue(Wc.TaskbarIconVisibility.AlwaysHidden)]
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
@@ -96,16 +100,18 @@ public class WtqSharedOptions
 
 	/// <summary>
 	/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
-	/// Zero based, eg. 0, 1, etc.<br/>
+	/// Zero based, e.g. 0, 1, etc.<br/>
 	/// Defaults to "0".
 	/// </summary>
+	[Display(Name = "Monitor index")]
 	[DefaultValue(0)]
 	public int? MonitorIndex { get; set; }
 
 	/// <summary>
-	/// What monitor to preferrably drop the app.<br/>
+	/// Which monitor to preferably drop the app.<br/>
 	/// "WithCursor" (default), "Primary" or "AtIndex".
 	/// </summary>
+	[Display(Name = "Prefer monitor")]
 	[DefaultValue(Wc.PreferMonitor.WithCursor)]
 	public PreferMonitor? PreferMonitor { get; set; }
 
@@ -117,6 +123,7 @@ public class WtqSharedOptions
 	/// Where to position an app on the chosen monitor, horizontally.<br/>
 	/// Defaults to <see cref="HorizontalAlign.Center"/>.
 	/// </summary>
+	[Display(Name = "Horizontal align")]
 	[DefaultValue(Wc.HorizontalAlign.Center)]
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
@@ -124,6 +131,7 @@ public class WtqSharedOptions
 	/// Horizontal screen coverage, as a percentage.<br/>
 	/// Defaults to "100".
 	/// </summary>
+	[Display(Name = "Horizontal screen coverage", Prompt = "Percentage")]
 	[DefaultValue(95f)]
 	public float? HorizontalScreenCoverage { get; set; }
 
@@ -132,12 +140,14 @@ public class WtqSharedOptions
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </summary>
+	[Display(Name = "Off-screen locations")]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <summary>
 	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
 	/// Defaults to "0".
 	/// </summary>
+	[Display(Name = "Vertical offset", Prompt = "In pixels")]
 	[DefaultValue(0f)]
 	public float? VerticalOffset { get; set; }
 
@@ -163,17 +173,17 @@ public class WtqSharedOptions
 
 	#endregion
 
-	public static TValue? GetDefaultValue<TValue>(Expression<Func<object?>> expr)
-	{
-		Guard.Against.Null(expr);
-
-		var val = expr.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
-
-		if (val != null)
-		{
-			return (TValue)val;
-		}
-
-		return default;
-	}
+	// public static TValue? GetDefaultValue<TValue>(Expression<Func<object?>> expr)
+	// {
+	// 	Guard.Against.Null(expr);
+	//
+	// 	var val = expr.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
+	//
+	// 	if (val != null)
+	// 	{
+	// 		return (TValue)val;
+	// 	}
+	//
+	// 	return default;
+	// }
 }

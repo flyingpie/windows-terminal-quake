@@ -38,7 +38,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
 	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
-	[DisplayName("Filename")]
+	[Display(Name = "Filename")]
 	[JsonPropertyOrder(10)]
 	[NotNull]
 	[Required]
@@ -49,7 +49,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// This field can be used to look for the process name in such cases. Windows Terminal is an
 	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 	/// </summary>
-	[DisplayName("Process name")]
+	[Display(Name = "Process name")]
 	[JsonPropertyOrder(11)]
 	public string? ProcessName
 	{
@@ -65,22 +65,14 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	public string? Arguments { get; set; }
 
 	[JsonPropertyOrder(13)]
-	[DisplayName("Arguments list")]
-	public ICollection<ProcessArgument> ArgumentsList
+	[Display(Name = "Argument list")]
+	public ICollection<ProcessArgument> ArgumentList
 	{
 		get => _argumentList;
 		set => _argumentList = value ?? [];
 	}
 
-	/// <summary>
-	/// Additionally uses the window title to filter app.<br/>
-	/// Can be useful for attaching to e.g. a browser window.
-	/// </summary>
-	// /// <inheritdoc cref="WtqOptions.AttachMode"/>
-	// [JsonPropertyOrder(14)]
-	// public AttachMode? AttachMode { get; set; }
-
-	[DisplayName("Window title")]
+	[Display(Name = "Window title")]
 	[JsonPropertyOrder(15)]
 	public string? WindowTitle { get; set; }
 
@@ -88,86 +80,19 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#region Behavior
 
-	// /// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
-	// [JsonPropertyOrder(99)]
-	// public bool? AlwaysOnTop { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
-	// [JsonPropertyOrder(99)]
-	// public HideOnFocusLost? HideOnFocusLost { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.Opacity"/>
-	// [JsonPropertyOrder(99)]
-	// public int? Opacity { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
-	// [JsonPropertyOrder(99)]
-	// public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
-
-	#endregion
-
-	#region Position
-
-	// /// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
-	// [JsonPropertyOrder(99)]
-	// public HorizontalAlign? HorizontalAlign { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
-	// [JsonPropertyOrder(99)]
-	// public float? HorizontalScreenCoverage { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
-	// [JsonPropertyOrder(99)]
-	// public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.VerticalOffset"/>
-	// [JsonPropertyOrder(99)]
-	// public int? VerticalOffset { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
-	// [JsonPropertyOrder(99)]
-	// public float? VerticalScreenCoverage { get; set; }
-
-	#endregion
-
-	#region Monitor
-
-	// /// <inheritdoc cref="WtqOptions.MonitorIndex"/>
-	// [JsonPropertyOrder(99)]
-	// public int? MonitorIndex { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.PreferMonitor"/>
-	// [JsonPropertyOrder(99)]
-	// public PreferMonitor? PreferMonitor { get; set; }
-
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>
+	[Display(Name = "Window title override")]
 	[JsonPropertyOrder(99)]
 	public string? WindowTitleOverride { get; set; }
-
-	#endregion
-
-	#region Animation
-
-	// /// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
-	// [JsonPropertyOrder(50)]
-	// public int? AnimationDurationMs { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
-	// [JsonIgnore]
-	// public int? AnimationDurationMsWhenSwitchingApps { get; set; }
-
-	// /// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
-	// [JsonPropertyOrder(51)]
-	// public int? AnimationTargetFps { get; set; }
 
 	#endregion
 
 	#region Validation
 
 	[JsonIgnore]
-	public bool IsValid => true; //!this.Validate().Any();
+	public bool IsValid => !this.Validate().Any();
 
 	[JsonIgnore]
 	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
@@ -191,11 +116,6 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	#endregion
-
-	public bool HasHotkey(Keys key, KeyModifiers modifiers)
-	{
-		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
-	}
 
 	/// <summary>
 	/// Called before the settings are persisted to a file.

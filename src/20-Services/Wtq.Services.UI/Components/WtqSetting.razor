@@ -11,8 +11,8 @@
 
 	private string? Title => SystemExtensions.GetDisplayName(Get);
 
-	[Parameter]
-	public string? Subtitle { get; set; }
+	// [Parameter]
+	public string? Subtitle => SystemExtensions.GetDisplay(Get)?.Prompt;
 
 	[Parameter]
 	public RenderFragment Content { get; set; }
@@ -59,11 +59,7 @@
 		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
 			<RadzenLabel class="@LabelClass"><strong>@Title</strong></RadzenLabel>
 
-			@if (Subtitle != null)
-			{
-				<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
-			}
-
+			<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
 		</RadzenStack>
 	</RadzenColumn>
 
