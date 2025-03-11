@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
@@ -56,86 +55,53 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	public WtqAppOptions GetAppOptionsByNameRequired(string name)
-	{
-		return GetAppOptionsByName(name) ?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", Apps.Select(a => a.Name))}.");
-	}
+		=> GetAppOptionsByName(name)
+			?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", Apps.Select(a => a.Name))}.");
 
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? DefaultValue.For<bool>(() => AlwaysOnTop);
-	}
+		=> GetCascadingValue<bool>(o => o.AlwaysOnTop, opts);
 
 	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.AttachMode ?? AttachMode ?? DefaultValue.For<AttachMode>(() => AttachMode);
-	}
+		=> GetCascadingValue<AttachMode>(o => o.AttachMode, opts);
 
 	public HideOnFocusLost GetHideOnFocusLostForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.HideOnFocusLost ?? HideOnFocusLost ?? DefaultValue.For<HideOnFocusLost>(() => HideOnFocusLost);
-	}
+		=> GetCascadingValue<HideOnFocusLost>(o => o.AttachMode, opts);
 
 	public HorizontalAlign GetHorizontalAlignForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.HorizontalAlign ?? HorizontalAlign ?? DefaultValue.For<HorizontalAlign>(() => HorizontalAlign);
-	}
+		=> GetCascadingValue<HorizontalAlign>(o => o.HorizontalAlign, opts);
 
 	public float GetHorizontalScreenCoverageForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
+		=> GetCascadingValue<float>(o => o.HorizontalScreenCoverage, opts);
 
-		return opts.HorizontalScreenCoverage ?? HorizontalScreenCoverage ?? DefaultValue.For<float>(() => HorizontalScreenCoverage);
-	}
+	/// <summary>
+	/// <see cref="WtqSharedOptions.HorizontalScreenCoverage"/> as an index (0 - 1).
+	/// </summary>
+	public float HorizontalScreenCoverageIndexForApp(WtqAppOptions opts)
+		=> GetHorizontalScreenCoverageForApp(opts) / 100f;
 
 	public int GetOpacityForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.Opacity ?? Opacity ?? DefaultValue.For<int>(() => Opacity);
-	}
+		=> GetCascadingValue<int>(o => o.Opacity, opts);
 
 	public TaskbarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.TaskbarIconVisibility ?? TaskbarIconVisibility ?? DefaultValue.For<TaskbarIconVisibility>(() => TaskbarIconVisibility);
-	}
+		=> GetCascadingValue<TaskbarIconVisibility>(o => o.TaskbarIconVisibility, opts);
 
 	public ICollection<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.OffScreenLocations ?? OffScreenLocations ?? DefaultOffScreenLocations;
-	}
+		=> GetCascadingValue<ICollection<OffScreenLocation>>(o => o.OffScreenLocations, opts) ?? DefaultOffScreenLocations;
 
 	public float GetVerticalOffsetForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.VerticalOffset ?? VerticalOffset ?? DefaultValue.For<float>(() => VerticalOffset);
-	}
+		=> GetCascadingValue<float>(o => o.VerticalOffset, opts);
 
 	public float GetVerticalScreenCoverageForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
+		=> GetCascadingValue<float>(o => o.VerticalScreenCoverage, opts);
 
-		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage ?? DefaultValue.For<float>(() => VerticalScreenCoverage);
-	}
+	/// <summary>
+	/// <see cref="WtqSharedOptions.VerticalScreenCoverage"/> as an index (0 - 1).
+	/// </summary>
+	public float VerticalScreenCoverageIndexForApp(WtqAppOptions opts)
+		=> GetVerticalScreenCoverageForApp(opts) / 100f;
 
 	public int GetMonitorIndex(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return opts.MonitorIndex ?? MonitorIndex ?? DefaultValue.For<int>(() => MonitorIndex);
-	}
+		=> GetCascadingValue<int>(o => o.MonitorIndex, opts);
 
 	#region Animation
 
@@ -145,7 +111,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
 	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
-	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
+	/// Defaults to <see cref="WtqSharedOptions.AnimationDurationMs"/> / 2.
 	/// </summary>
 	public int GetAnimationDurationMsWhenSwitchingApps(WtqAppOptions opts)
 		=> (int)Math.Round(GetAnimationDurationMs(opts) * .5f);
@@ -157,15 +123,9 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		=> GetCascadingValue<AnimationType>(o => o.AnimationTypeToggleOn, opts);
 
 	public AnimationType GetAnimationTypeToggleOff(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		// return opts.AnimationTypeToggleOff ?? AnimationTypeToggleOff ?? DefaultValue.For<AnimationType>(() => AnimationTypeToggleOff);
-		return GetCascadingValue<AnimationType>(o => o.AnimationTypeToggleOff, opts);
-	}
+		=> GetCascadingValue<AnimationType>(o => o.AnimationTypeToggleOff, opts);
 
 	#endregion
-
 
 	public void PrepareForSave()
 	{
@@ -194,7 +154,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 			if (val != null && val.Equals(attr.Value))
 			{
-				Console.WriteLine($"Clearing default '{p.Name}'");
 				p.SetValue(this, default);
 			}
 		}
@@ -208,26 +167,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public IEnumerable<ValidationResult> Validate(ValidationContext context)
 	{
 		yield return new ValidationResult("Sup");
-	}
-
-	/// <summary>
-	/// <see cref="HorizontalScreenCoverage"/> as an index (0 - 1).
-	/// </summary>
-	internal float HorizontalScreenCoverageIndexForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return GetHorizontalScreenCoverageForApp(opts) / 100f;
-	}
-
-	/// <summary>
-	/// <see cref="VerticalScreenCoverage"/> as an index (0 - 1).
-	/// </summary>
-	internal float VerticalScreenCoverageIndexForApp(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		return GetVerticalScreenCoverageForApp(opts) / 100f;
 	}
 
 	#endregion
