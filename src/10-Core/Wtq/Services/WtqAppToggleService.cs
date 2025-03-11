@@ -26,7 +26,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Animation duration.
-		var durationMs = GetDurationMs(mods);
+		var durationMs = GetDurationMs(app, mods);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
@@ -72,7 +72,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Animation duration.
-		var durationMs = GetDurationMs(mods);
+		var durationMs = GetDurationMs(app, mods);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
@@ -114,7 +114,7 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Returns the time the animation should take in milliseconds.
 	/// </summary>
-	private int GetDurationMs(ToggleModifiers mods)
+	private int GetDurationMs(WtqApp app, ToggleModifiers mods)
 	{
 		switch (mods)
 		{
@@ -122,12 +122,11 @@ public class WtqAppToggleService(
 				return 0;
 
 			case ToggleModifiers.SwitchingApps:
-				return _opts.CurrentValue.AnimationDurationMsWhenSwitchingApps;
+				return _opts.CurrentValue.GetAnimationDurationMsWhenSwitchingApps(app.Options);
 
 			case ToggleModifiers.None:
 			default:
-				return 250;
-				// return _opts.CurrentValue.AnimationDurationMs;
+				return _opts.CurrentValue.GetAnimationDurationMs(app.Options);
 		}
 	}
 

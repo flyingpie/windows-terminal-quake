@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
@@ -37,15 +38,15 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	[DefaultValue(false)]
 	public bool ShowUiOnStart { get; set; }
 
-	public int GetAnimationTargetFps()
-	{
-		if (AnimationTargetFps != null)
-		{
-			return AnimationTargetFps.Value;
-		}
-
-		return DefaultValue.For<int>(() => AnimationTargetFps);
-	}
+	/// <summary>
+	/// How many frames per second the animation should be.<br/>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
+	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
+	/// Defaults to 40.
+	/// </summary>
+	[Display(Name = "Animation target FPS")]
+	[DefaultValue(40)]
+	public int? AnimationTargetFps { get; set; }
 
 	public WtqAppOptions? GetAppOptionsByName(string name)
 	{
@@ -60,7 +61,11 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	public bool GetAlwaysOnTopForApp(WtqAppOptions opts)
-		=> Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? DefaultValue.For<bool>(() => AlwaysOnTop);
+	{
+		Guard.Against.Null(opts);
+
+		return Guard.Against.Null(opts).AlwaysOnTop ?? AlwaysOnTop ?? DefaultValue.For<bool>(() => AlwaysOnTop);
+	}
 
 	public AttachMode GetAttachModeForApp(WtqAppOptions opts)
 	{
@@ -73,40 +78,35 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		Guard.Against.Null(opts);
 
-		return Configuration.HideOnFocusLost.Always;
-		// return opts.HideOnFocusLost ?? HideOnFocusLost;
+		return opts.HideOnFocusLost ?? HideOnFocusLost ?? DefaultValue.For<HideOnFocusLost>(() => HideOnFocusLost);
 	}
 
 	public HorizontalAlign GetHorizontalAlignForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return Configuration.HorizontalAlign.Center;
-		// return opts.HorizontalAlign ?? HorizontalAlign;
+		return opts.HorizontalAlign ?? HorizontalAlign ?? DefaultValue.For<HorizontalAlign>(() => HorizontalAlign);
 	}
 
 	public float GetHorizontalScreenCoverageForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return 80;
-		// return opts.HorizontalScreenCoverage ?? HorizontalScreenCoverage;
+		return opts.HorizontalScreenCoverage ?? HorizontalScreenCoverage ?? DefaultValue.For<float>(() => HorizontalScreenCoverage);
 	}
 
 	public int GetOpacityForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return 90;
-		// return opts.Opacity ?? Opacity;
+		return opts.Opacity ?? Opacity ?? DefaultValue.For<int>(() => Opacity);
 	}
 
 	public TaskbarIconVisibility GetTaskbarIconVisibilityForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return Configuration.TaskbarIconVisibility.AlwaysHidden;
-		// return opts.TaskbarIconVisibility ?? TaskbarIconVisibility;
+		return opts.TaskbarIconVisibility ?? TaskbarIconVisibility ?? DefaultValue.For<TaskbarIconVisibility>(() => TaskbarIconVisibility);
 	}
 
 	public ICollection<OffScreenLocation> GetOffScreenLocationsForApp(WtqAppOptions opts)
@@ -120,30 +120,52 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	{
 		Guard.Against.Null(opts);
 
-		return opts.VerticalOffset ?? VerticalOffset ?? 0; // TODO: Default
+		return opts.VerticalOffset ?? VerticalOffset ?? DefaultValue.For<float>(() => VerticalOffset);
 	}
 
 	public float GetVerticalScreenCoverageForApp(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage ?? 0; // TODO: Default
+		return opts.VerticalScreenCoverage ?? VerticalScreenCoverage ?? DefaultValue.For<float>(() => VerticalScreenCoverage);
 	}
 
 	public int GetMonitorIndex(WtqAppOptions opts)
 	{
-		return 0;
+		Guard.Against.Null(opts);
+
+		return opts.MonitorIndex ?? MonitorIndex ?? DefaultValue.For<int>(() => MonitorIndex);
 	}
 
+	#region Animation
+
+	public int GetAnimationDurationMs(WtqAppOptions opts)
+		=> GetCascadingValue<int>(o => o.AnimationDurationMs, opts);
+
+	/// <summary>
+	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
+	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
+	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
+	/// </summary>
+	public int GetAnimationDurationMsWhenSwitchingApps(WtqAppOptions opts)
+		=> (int)Math.Round(GetAnimationDurationMs(opts) * .5f);
+
+	public int GetAnimationTargetFps()
+		=> AnimationTargetFps ?? DefaultValue.For<int>(() => AnimationTargetFps);
+
 	public AnimationType GetAnimationTypeToggleOn(WtqAppOptions opts)
-	{
-		return AnimationType.Linear;
-	}
+		=> GetCascadingValue<AnimationType>(o => o.AnimationTypeToggleOn, opts);
 
 	public AnimationType GetAnimationTypeToggleOff(WtqAppOptions opts)
 	{
-		return AnimationType.Linear;
+		Guard.Against.Null(opts);
+
+		// return opts.AnimationTypeToggleOff ?? AnimationTypeToggleOff ?? DefaultValue.For<AnimationType>(() => AnimationTypeToggleOff);
+		return GetCascadingValue<AnimationType>(o => o.AnimationTypeToggleOff, opts);
 	}
+
+	#endregion
+
 
 	public void PrepareForSave()
 	{
@@ -209,4 +231,29 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	#endregion
+
+	private TValue GetCascadingValue<TValue>(
+		Expression<Func<WtqSharedOptions, object?>> expr,
+		// WtqOptions global,
+		WtqAppOptions app)
+	{
+		Guard.Against.Null(expr);
+		Guard.Against.Null(app);
+
+		var v = expr.Compile();
+
+		var fromApp = v(app);
+		if (fromApp != null)
+		{
+			return (TValue)fromApp;
+		}
+
+		var fromGlb = v(this);
+		if (fromGlb != null)
+		{
+			return (TValue)fromGlb;
+		}
+
+		return DefaultValue.For<TValue>(expr);
+	}
 }

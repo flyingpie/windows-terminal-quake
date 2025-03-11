@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using System.Reflection;
 using Wc = Wtq.Configuration;
 
 namespace Wtq.Configuration;
@@ -8,38 +6,12 @@ public class WtqSharedOptions
 {
 	#region Animation
 
-	private int? _animationDurationMsSwitchingApps;
-
 	/// <summary>
 	/// How long the animation should take, in milliseconds.
 	/// </summary>
 	[Display(Name = "Animation duration (ms)")]
 	[DefaultValue(250)]
 	public int? AnimationDurationMs { get; set; }
-
-	/// <summary>
-	/// How many frames per second the animation should be.<br/>
-	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
-	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
-	/// Defaults to 40.
-	/// </summary>
-	[Display(Name = "Animation target FPS")]
-	[DefaultValue(40)]
-	public int? AnimationTargetFps { get; set; }
-
-	/// <summary>
-	/// How long the animation should take, in milliseconds, when switching between 2 WTQ-attached applications.<br/>
-	/// This is a separate value, to prevent having 2 animation cycles stack, (one for toggling off the previous app, one for toggling on the next app).
-	/// Defaults to <see cref="AnimationDurationMs"/> / 2.
-	/// </summary>
-	[JsonIgnore]
-	public int AnimationDurationMsWhenSwitchingApps
-	{
-		get => (int)Math.Round(GetAnimationDurationMs() * .5f);
-	}
-
-	public float GetAnimationDurationMs()
-		=> AnimationDurationMs ?? DefaultValue.For<float>(() => AnimationDurationMs);
 
 	/// <summary>
 	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
@@ -172,18 +144,4 @@ public class WtqSharedOptions
 	public AttachMode? AttachMode { get; set; }
 
 	#endregion
-
-	// public static TValue? GetDefaultValue<TValue>(Expression<Func<object?>> expr)
-	// {
-	// 	Guard.Against.Null(expr);
-	//
-	// 	var val = expr.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
-	//
-	// 	if (val != null)
-	// 	{
-	// 		return (TValue)val;
-	// 	}
-	//
-	// 	return default;
-	// }
 }
