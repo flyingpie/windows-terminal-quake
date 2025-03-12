@@ -6,8 +6,7 @@ public class WtqAppExamples
 {
 	public static ICollection<WtqAppExample> AppExamples { get; } =
 	[
-
-		// Terminals ////////////////////////////////////////
+		#region Terminal Emulators & Shells
 
 		// Windows Terminal
 		new()
@@ -17,10 +16,10 @@ public class WtqAppExamples
 			Image = "/example_apps/windows_terminal.jpg",
 			Link = new("https://learn.microsoft.com/en-us/windows/terminal/install"),
 			Os = [OSPlatform.Windows,],
+			FileName = "wt",
 			Factory = () => new()
 			{
 				Name = "Windows Terminal",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
 				FileName = "wt",
 				ProcessName = "WindowsTerminal",
 			},
@@ -34,12 +33,7 @@ public class WtqAppExamples
 			Image = "/example_apps/powershell_5.jpg",
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "PowerShell 5",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "powershell",
-			},
+			FileName = "powershell",
 		},
 
 		// PowerShell >=6 (Cross-platform)
@@ -50,12 +44,7 @@ public class WtqAppExamples
 			Image = "/example_apps/powershell_core.png",
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "PowerShell Core",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "pwsh",
-			},
+			FileName = "pwsh",
 		},
 
 		// Wezterm
@@ -66,12 +55,7 @@ public class WtqAppExamples
 			Image = "/example_apps/wezterm.png",
 			Link = new("https://wezfurlong.org/wezterm/index.html"),
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
-			Factory = () => new()
-			{
-				Name = "Wezterm",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "wezterm",
 		},
 
 		// Kitty
@@ -82,12 +66,7 @@ public class WtqAppExamples
 			Image = "/example_apps/kitty.png",
 			Link = new("https://sw.kovidgoyal.net/kitty/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Wezterm",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "kitty",
 		},
 
 		// Ptyxis
@@ -96,14 +75,9 @@ public class WtqAppExamples
 			Title = "Ptyxis",
 			Description = "Ptyxis is a terminal for GNOME that focuses on ease-of-use in a world of containers.",
 			Image = "/example_apps/ptyxis.webp",
-			Link = null,
+			Link = new("https://gitlab.gnome.org/chergert/ptyxis"),
 			Os = [OSPlatform.Linux,],
-			Factory = () => new()
-			{
-				Name = "Ptyxis",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "ptyxis",
 		},
 
 		// Konsole
@@ -112,17 +86,14 @@ public class WtqAppExamples
 			Title = "Konsole",
 			Description = "The default console emulator for KDE.",
 			Image = "/example_apps/konsole.png",
-			Link = null,
+			Link = new("https://konsole.kde.org/"),
 			Os = [OSPlatform.Linux,],
-			Factory = () => new()
-			{
-				Name = "Konsole",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "konsole",
 		},
 
-		// File Browsers ////////////////////////////////////
+		#endregion
+
+		#region File Managers
 
 		// Windows Explorer
 		new()
@@ -131,12 +102,7 @@ public class WtqAppExamples
 			Description = "Windows explorer, the default file browser on Windows.",
 			Image = "/example_apps/windows_explorer.png",
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
-			Factory = () => new()
-			{
-				Name = "Windows Explorer",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "pwsh",
-			},
+			FileName = "explorer",
 		},
 
 		// Double Commander
@@ -147,12 +113,7 @@ public class WtqAppExamples
 			Image = "/example_apps/double_commander.png",
 			Link = new("https://doublecommander.com"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Double Commander",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "TODO",
 		},
 
 		// Q-Dir
@@ -163,12 +124,7 @@ public class WtqAppExamples
 			Image = "/example_apps/q_dir.png",
 			Link = new("http://q-dir.com/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Double Commander",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "TODO",
 		},
 
 		// Dolphin
@@ -177,17 +133,14 @@ public class WtqAppExamples
 			Title = "Dolphin",
 			Description = "The default file manager for KDE.",
 			Image = "/example_apps/dolphin.jpg",
-			Link = null,
+			Link = new("https://apps.kde.org/dolphin/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Dolphin",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "dolphin",
 		},
 
-		// Misc /////////////////////////////////////////////
+		#endregion
+
+		#region Misc
 
 		// Spotify
 		new()
@@ -197,12 +150,7 @@ public class WtqAppExamples
 			Image = "/example_apps/spotify.jpg",
 			Link = new("https://www.spotify.com/us/download/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Spotify",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "spotify",
 		},
 
 		// Discord
@@ -213,12 +161,7 @@ public class WtqAppExamples
 			Image = "/example_apps/discord.png",
 			Link = new("https://discord.com/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Discord",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "discord",
 		},
 
 		// KeePassXC
@@ -229,12 +172,7 @@ public class WtqAppExamples
 			Image = "/example_apps/keepassxc.png",
 			Link = new("https://keepassxc.org/"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "KeePassXC",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "keepassxc",
 		},
 
 		// Process Explorer
@@ -245,12 +183,7 @@ public class WtqAppExamples
 			Image = "/example_apps/process_explorer.jpg",
 			Link = new("https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"),
 			Os = [OSPlatform.Windows,],
-			Factory = () => new()
-			{
-				Name = "Process Explorer",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "procexp64",
 		},
 
 		// System Monitor (KDE)
@@ -259,14 +192,11 @@ public class WtqAppExamples
 			Title = "System Monitor",
 			Description = "Default task manager for KDE.",
 			Image = "/example_apps/system_monitor.jpg",
-			Link = null,
+			Link = new("https://apps.kde.org/plasma-systemmonitor/"),
 			Os = [OSPlatform.Linux,],
-			Factory = () => new()
-			{
-				Name = "System Monitor",
-				Hotkeys = [new() { Modifiers = KeyModifiers.Control, Key = Keys.D1, }],
-				FileName = "TODO",
-			},
+			FileName = "plasma-systemmonitor",
 		},
+
+		#endregion
 	];
 }
