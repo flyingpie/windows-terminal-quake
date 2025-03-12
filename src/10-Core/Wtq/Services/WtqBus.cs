@@ -29,6 +29,13 @@ public class WtqBus : IWtqBus
 	}
 
 	/// <inheritdoc/>
+	public void Publish<TEvent>()
+		where TEvent : WtqEvent, new()
+	{
+		Publish(new TEvent());
+	}
+
+	/// <inheritdoc/>
 	public void Publish(
 		WtqEvent eventType)
 	{

@@ -23,6 +23,12 @@ public interface IWtqBus
 	/// <summary>
 	/// Publish an event.
 	/// </summary>
+	void Publish<TEvent>()
+		where TEvent : WtqEvent, new();
+
+	/// <summary>
+	/// Publish an event.
+	/// </summary>
 	void Publish(
 		WtqEvent eventType);
 }
