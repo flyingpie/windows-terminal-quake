@@ -18,6 +18,7 @@ public enum AttachMode
 	/// <summary>
 	/// Look for an existing app instance, create one of one does not exist yet.
 	/// </summary>
+	[Display(Name = "Find or start")]
 	FindOrStart,
 
 	/// <summary>
