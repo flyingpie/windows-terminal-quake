@@ -77,6 +77,9 @@ public sealed class HotkeyOptions
 		}
 	}
 
+	/// <summary>
+	/// Whether both the modifier and the key are set to "None".
+	/// </summary>
 	public bool IsEmpty => Modifiers == KeyModifiers.None && Key == Keys.None;
 
 	public override string ToString()

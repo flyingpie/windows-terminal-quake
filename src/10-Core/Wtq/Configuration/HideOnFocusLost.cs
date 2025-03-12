@@ -18,7 +18,7 @@ public enum HideOnFocusLost
 	Always = 1,
 
 	/// <summary>
-	/// Same as <see cref="Always"/>, here for backward compat from when <see cref="WtqAppOptions.HideOnFocusLost"/> was a boolean.
+	/// Same as <see cref="Always"/>, here for backward compat from when <see cref="WtqSharedOptions.HideOnFocusLost"/> was a boolean.
 	/// </summary>
 	[DisplayFlags(IsVisible = false)]
 	True = 1001, // TODO: Use explicitly
@@ -30,7 +30,7 @@ public enum HideOnFocusLost
 	Never = 2,
 
 	/// <summary>
-	/// Same as <see cref="Never"/>, here for backward compat from when <see cref="WtqAppOptions.HideOnFocusLost"/> was a boolean.
+	/// Same as <see cref="Never"/>, here for backward compat from when <see cref="WtqSharedOptions.HideOnFocusLost"/> was a boolean.
 	/// </summary>
 	[DisplayFlags(IsVisible = false)]
 	False = 1002, // TODO: Use explicitly
