@@ -42,12 +42,6 @@ public sealed class WtqApp : IAsyncDisposable
 		_optionsAccessor = Guard.Against.Null(optionsAccessor);
 
 		Name = Guard.Against.NullOrWhiteSpace(name);
-
-		// Start loop that updates app state periodically.
-		_loop = new(
-			$"{nameof(WtqApp)}.{name}",
-			_ => UpdateLocalAppStateAsync(allowStartNew: false),
-			TimeSpan.FromSeconds(1));
 	}
 
 	/// <summary>
