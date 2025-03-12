@@ -6,23 +6,23 @@ namespace Wtq.Configuration;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "MvdO: See link for more information on the easing types.")]
 public enum AnimationType
 {
-	[Display(Description = "Linear")]
+	[Display(Name = "Linear")]
 	Linear = 0,
 
-	[Display(Description = "Ease in+out (sine)")]
+	[Display(Name = "Ease in+out (sine)")]
 	EaseInOutSine,
 
-	[Display(Description = "Ease in back")]
+	[Display(Name = "Ease in back")]
 	EaseInBack,
-	[Display(Description = "Ease in cubic")]
+	[Display(Name = "Ease in cubic")]
 	EaseInCubic,
-	[Display(Description = "Ease in quadratic")]
+	[Display(Name = "Ease in quadratic")]
 	EaseInQuart,
 
-	[Display(Description = "Ease out back")]
+	[Display(Name = "Ease out back")]
 	EaseOutBack,
-	[Display(Description = "Ease out cubic")]
+	[Display(Name = "Ease out cubic")]
 	EaseOutCubic,
-	[Display(Description = "Ease out quadratic")]
+	[Display(Name = "Ease out quadratic")]
 	EaseOutQuart,
 }
