@@ -45,19 +45,24 @@ public class KWinWtqWindow(
 		Guard.Against.Null(opts);
 
 		var searchTerm = opts.ProcessName;
-		if (string.IsNullOrWhiteSpace(searchTerm))
+		if (string.IsNullOrWhiteSpace(searchTerm) && !string.IsNullOrWhiteSpace(opts.FileName))
 		{
 			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
+		if (string.IsNullOrWhiteSpace(searchTerm))
+		{
+			searchTerm = null;
+		}
+
 		// Match by resource class (often reverse DNS notation).
-		if (searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
+		if (searchTerm != null && searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
 		{
 			return true;
 		}
 
 		// Match by resource name (close to process name).
-		if (searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		if (searchTerm != null && searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
 		{
 			return true;
 		}
