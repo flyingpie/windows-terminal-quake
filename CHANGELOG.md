@@ -5,6 +5,11 @@
 
 ## [vNext]
 - Apps can now be matched on their window title.
+- Bugfix: GUI - Properly reload app data when switching from one app to the other.
+- Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
+- Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
+- Bugfix: Save/Load - Allow hotkeys without a modifier and/or key. Would cause these to be removed altogether on save.
+- Refactor: KWin - Reworked when and how shortcuts are (un)registered with KWin, to be more reliably and robust, especially in combination with the GUI.
 
 ## [2.0.13] / 2025-02-07
 - Bugfix: [169](https://github.com/flyingpie/windows-terminal-quake/issues/169), missing entry from the "Keys" list, for some specific keyboard layouts.
