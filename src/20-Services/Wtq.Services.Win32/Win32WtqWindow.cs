@@ -105,19 +105,7 @@ public sealed class Win32WtqWindow(
 
 		_log.LogInformation("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
 
-		// Get current window properties
-		var props = User32.GetWindowLong(handle, User32.GWLEXSTYLE);
-
-		if (isVisible)
-		{
-			// Show
-			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & User32.WSEXAPPWINDOW);
-		}
-		else
-		{
-			// Hide
-			User32.SetWindowLong(handle, User32.GWLEXSTYLE, (props | User32.WSEXTOOLWINDOW) & ~User32.WSEXAPPWINDOW);
-		}
+		Shell32.SetTaskbarIconVisible(handle, isVisible);
 
 		return Task.CompletedTask;
 	}
