@@ -1,3 +1,4 @@
+using System.Text;
 using Wtq.Configuration;
 using static Wtq.Configuration.Keys;
 
@@ -7,16 +8,27 @@ public static class Mapping
 {
 	public static string Sequence(KeyModifiers modifiers, Keys key)
 	{
-		var kwinMod = Modifier(modifiers);
+		var sb = new StringBuilder();
 
-		var kwinKey = Key(key);
+		if (modifiers != KeyModifiers.None)
+		{
+			sb.Append(ModifierToKWinString(modifiers));
+		}
 
-		var kwinSequence = $"{kwinMod}+{kwinKey}";
+		if (key != None)
+		{
+			if(sb.Length > 0)
+			{
+				sb.Append("+");
+			}
 
-		return kwinSequence;
+			sb.Append(KeyToKWinString(key));
+		}
+
+		return sb.ToString();
 	}
 
-	private static string Key(Keys key) =>
+	private static string KeyToKWinString(Keys key) =>
 		key switch
 		{
 			Oemtilde => "`",
@@ -73,10 +85,10 @@ public static class Mapping
 			VolumeDown => "Volume Down",
 			VolumeUp => "Volume Up",
 
-			_ => throw new WtqException($"Unsupported key '{key}'."),
+			_ => string.Empty,
 		};
 
-	private static string Modifier(KeyModifiers modifiers) =>
+	private static string ModifierToKWinString(KeyModifiers modifiers) =>
 		modifiers switch
 		{
 			KeyModifiers.Control
@@ -88,10 +100,10 @@ public static class Mapping
 			KeyModifiers.Super
 				=> "Meta",
 			KeyModifiers.None
-				=> throw new WtqException($"Unsupported modifier '{modifiers}'."),
+				=> string.Empty,
 			KeyModifiers.NoRepeat
-				=> throw new WtqException($"Unsupported modifier '{modifiers}'."),
+				=> string.Empty,
 			_
-				=> throw new WtqException($"Unsupported modifier '{modifiers}'."),
+				=> string.Empty,
 		};
 }
