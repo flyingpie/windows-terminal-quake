@@ -10,6 +10,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 	{
 		Guard.Against.Null(bus);
 
+		// TODO: Handle suspend/resume
 		bus.OnEvent<WtqHotkeyDefinedEvent>(
 			e =>
 			{
@@ -25,11 +26,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 
 		HotkeyManager.HotkeyPressed += (s, a) =>
 		{
-			bus.Publish(new WtqHotkeyPressedEvent()
-			{
-				Key = a.Key.ToWtqKeys(),
-				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
-			});
+			bus.Publish(new WtqHotkeyPressedEvent(a.Modifiers.ToWtqKeyModifiers(), a.Key.ToWtqKeys()));
 		};
 	}
 

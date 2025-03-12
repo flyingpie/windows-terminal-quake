@@ -1,5 +1,8 @@
+using Microsoft.Extensions.Options;
+using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.DBus;
+using Wtq.Services.KWin.DBus.Generated;
 
 namespace Wtq.Services.KWin;
 
@@ -10,86 +13,157 @@ namespace Wtq.Services.KWin;
 internal sealed class KWinHotkeyService : WtqHostedService
 {
 	/// <summary>
-	/// To de-register any left-over shortcuts on WTQ start, we need to know their names.<br/>
-	/// However, we don't have a nice way of finding out what those names are.<br/>
-	///
-	/// So instead, we use an index-based naming scheme, so we get deterministic names.
+	/// Hotkeys are registered as "shortcuts" in KWin, and they need at least an id, by which they're uniquely identified.<br/>
+	/// We're using a prefix for all WTQ-generated shortcuts, so we can easily find them between application restarts and such,
+	/// without keeping around state.
 	/// </summary>
-	private const int MaxShortcutCount = 50;
+	private const string WtqShortcutPrefix = "wtq_hotkey";
 
 	private readonly ILogger _log = Log.For<KWinHotkeyService>();
-	private readonly InitLock _init = new();
+	private readonly WtqSemaphoreSlim _lock = new();
 
+	// Set in constructor.
 	private readonly IDBusConnection _dbus;
+	private readonly IOptionsMonitor<WtqOptions> _opts;
+	private readonly IKWinClient _kwinClient;
+	private readonly WtqDBusObject _dbusObj;
+	private readonly IWtqBus _bus;
 
-	private int _shortcutIndex;
+	// Set on service init.
+	private KWinService _kwinService = null!;
+	private KGlobalAccel _kGlobalAccel = null!;
+	private Component _kwinComponent = null!;
 
 	public KWinHotkeyService(
-		IKWinClient kwinClient,
 		IDBusConnection dbus,
+		IWtqDBusObject dbusObj,
+		IOptionsMonitor<WtqOptions> opts,
+		IKWinClient kwinClient,
 		IWtqBus bus)
 	{
+		_kwinClient = Guard.Against.Null(kwinClient);
+		_opts = Guard.Against.Null(opts);
 		_dbus = Guard.Against.Null(dbus);
-		_ = Guard.Against.Null(bus);
+		_dbusObj = Guard.Against.Null(dbusObj as WtqDBusObject); // TODO: Make nicer.
+		_bus = Guard.Against.Null(bus);
 
-		bus.OnEvent<WtqHotkeyDefinedEvent>(
-			async e =>
-			{
-				await InitAsync().NoCtx();
+		// Update registrations every time the settings file is reloaded.
+		opts.OnChange((opt, someString) => _ = Task.Run(async () => await RegisterAllAsync(CancellationToken.None)));
 
-				var name = GetShortcutName(_shortcutIndex++);
-
-				_log.LogInformation("Registering shortcut with name '{Name}', modifiers '{Modifiers}' and key '{Key}'", name, e.Modifiers, e.Key);
-
-				await kwinClient.RegisterHotkeyAsync(name, e.AppOptions?.Name ?? string.Empty, e.Modifiers, e.Key, CancellationToken.None).NoCtx();
-			});
+		_bus.OnEvent<WtqSuspendHotkeysEvent>(async _ => await UnregisterAllAsync(CancellationToken.None));
+		_bus.OnEvent<WtqResumeHotkeysEvent>(async _ => await RegisterAllAsync(CancellationToken.None));
 	}
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		await InitAsync().NoCtx();
+		_kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
+		_kGlobalAccel = _kwinService.CreateKGlobalAccel("/kglobalaccel");
+		_kwinComponent = _kwinService.CreateComponent("/component/kwin");
+
+		_dbusObj.OnPressShortcut((arg) =>
+		{
+			_bus.Publish(new WtqHotkeyPressedEvent(arg.Mod, arg.Key));
+
+			return Task.CompletedTask;
+		});
+
+		// Register hotkeys on WTQ start.
+		await RegisterAllAsync(cancellationToken);
 	}
 
 	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
-		await ResetShortcutsAsync().NoCtx();
+		// Cleanup shortcuts (unless hotkey reset has been disabled).
+		await UnregisterAllAsync(cancellationToken).NoCtx();
 	}
 
 	protected override ValueTask OnDisposeAsync()
 	{
-		_init.Dispose();
+		_lock.Dispose();
 
 		return ValueTask.CompletedTask;
 	}
 
-	private static string GetShortcutName(int index) => $"wtq_hotkey_{index:000}";
-
-	private async Task InitAsync()
+	public async Task RegisterAllAsync(CancellationToken cancellationToken)
 	{
-		await _init.InitAsync(ResetShortcutsAsync).NoCtx();
+		_log.LogInformation("Registering hotkeys");
+
+		// Make this part thread-safe.
+		using var l = await _lock.WaitAsync(cancellationToken).NoCtx();
+
+		// Reset all shortcuts.
+		await UnregisterAllAsync(cancellationToken);
+
+		// Global.
+		await RegisterGlobalHotkeysAsync(cancellationToken);
+
+		// App-specific.
+		await RegisterAppHotkeysAsync(cancellationToken);
 	}
 
-	private async Task ResetShortcutsAsync()
+	public async Task UnregisterAllAsync(CancellationToken cancellationToken)
 	{
-		_log.LogDebug("Removing shortcuts");
+		_log.LogInformation("Unregistering hotkeys");
 
-		var kwin = await _dbus.GetKWinServiceAsync().NoCtx();
+		// Fetch existing WTQ shortcuts from KWin.
+		var kwinShortcutNames = (await _kwinComponent.ShortcutNamesAsync())
+			.Where(n => n.StartsWith(WtqShortcutPrefix, StringComparison.OrdinalIgnoreCase))
+			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-		var gl = kwin.CreateKGlobalAccel("/kglobalaccel");
-		var comp = kwin.CreateComponent("/component/kwin");
+		_log.LogInformation("Existing KWin shortcuts: {Shortcuts}", string.Join(", ", kwinShortcutNames));
 
-		// Remove individual shortcut registrations.
-		for (var i = 0; i < MaxShortcutCount; i++)
+		foreach (var kwinShortcutName in kwinShortcutNames)
 		{
-			var name = GetShortcutName(i);
-
-			if (await gl.UnregisterAsync("kwin", name).NoCtx())
+			if (await _kGlobalAccel.UnregisterAsync("kwin", kwinShortcutName).NoCtx())
 			{
-				_log.LogDebug("Unregistered {Name}", name);
+				_log.LogInformation("Unregistered {Name}", kwinShortcutName);
+			}
+			else
+			{
+				_log.LogWarning("Unregistered {Name} failed, not sure why :(", kwinShortcutName);
 			}
 		}
 
 		// Some GC-like flush.
-		await comp.CleanUpAsync().NoCtx();
+		await _kwinComponent.CleanUpAsync().NoCtx();
+	}
+
+	private async Task RegisterGlobalHotkeysAsync(CancellationToken cancellationToken)
+	{
+		var globalHkIndex = 0;
+		foreach (var hk in _opts.CurrentValue.Hotkeys)
+		{
+			// Unique identifier.
+			var id = $"{WtqShortcutPrefix}_global_{globalHkIndex++}";
+
+			// Descriptive name that shows up in the "Shortcuts" window.
+			var name = "WTQ hotkey - Global";
+
+			_log.LogInformation("Registering global hotkey '{Key}' with id '{Id}'", hk, id);
+
+			await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+		}
+	}
+
+	private async Task RegisterAppHotkeysAsync(CancellationToken cancellationToken)
+	{
+		foreach (var app in _opts.CurrentValue.Apps.OrderBy(a => a.Name))
+		{
+			var appName = app.Name.ToLowerInvariant();
+
+			var appHkIndex = 0;
+			foreach (var hk in app.Hotkeys)
+			{
+				// Unique identifier.
+				var id = $"{WtqShortcutPrefix}_app_{appName}_{appHkIndex++}";
+
+				// Descriptive name that shows up in the "Shortcuts" window.
+				var name = $"WTQ hotkey - App - {app.Name}";
+
+				_log.LogInformation("Registering app hotkey '{Key}' with id '{Id}', for app '{App}'", hk, id, app);
+
+				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+			}
+		}
 	}
 }

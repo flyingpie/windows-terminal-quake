@@ -160,7 +160,7 @@ internal sealed class KWinClientV2(
 					Params = new
 					{
 						name = name,
-						title = $"WTQ {(!string.IsNullOrWhiteSpace(description) ? $"- {description} - " : string.Empty)}(configured through WTQ settings)",
+						title = description,
 						sequence = Mapping.Sequence(modifiers, key),
 						mod = modifiers.ToString(),
 						key = key.ToString(),
