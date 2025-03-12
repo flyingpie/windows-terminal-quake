@@ -4,9 +4,9 @@ namespace Wtq.Services;
 /// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotkeyService : WtqHostedService
+public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 {
-	private readonly ILogger _log = Log.For<WtqHotkeyService>();
+	private readonly ILogger _log = Log.For<WtqHotkeyRoutingService>();
 
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
@@ -14,7 +14,7 @@ public class WtqHotkeyService : WtqHostedService
 
 	private WtqApp? _prevApp;
 
-	public WtqHotkeyService(
+	public WtqHotkeyRoutingService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -60,7 +60,7 @@ public class WtqHotkeyService : WtqHostedService
 
 	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.HasHotkey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(key, keyMods));
 
 		return opt == null
 			? null

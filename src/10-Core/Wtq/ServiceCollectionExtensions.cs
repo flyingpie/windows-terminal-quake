@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<WtqOptionsSaveService>()
 
 			.AddHostedService<WtqFocusTracker>()
-			.AddHostedService<WtqHotkeyService>()
+			.AddHostedService<WtqHotkeyRoutingService>()
 			.AddHostedService<WtqService>();
 	}
 }
