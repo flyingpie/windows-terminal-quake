@@ -44,7 +44,7 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
-		var searchTerm = opts.ProcessName ?? string.Empty;
+		var searchTerm = opts.ProcessName;
 		if (string.IsNullOrWhiteSpace(searchTerm) && !string.IsNullOrWhiteSpace(opts.FileName))
 		{
 			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);

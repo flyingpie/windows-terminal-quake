@@ -56,7 +56,6 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		// Setup services (move to constructor?).
 		_kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
 		_kGlobalAccel = _kwinService.CreateKGlobalAccel("/kglobalaccel");
 		_kwinComponent = _kwinService.CreateComponent("/component/kwin");

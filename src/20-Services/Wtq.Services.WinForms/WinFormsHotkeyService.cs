@@ -13,6 +13,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 	{
 		Guard.Against.Null(bus);
 
+		// TODO: Handle suspend/resume
 		bus.OnEvent<WtqHotkeyDefinedEvent>(
 			e =>
 			{

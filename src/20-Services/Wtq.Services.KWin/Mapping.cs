@@ -25,8 +25,6 @@ public static class Mapping
 			sb.Append(KeyToKWinString(key));
 		}
 
-		Console.WriteLine($"SEQUENCE:{sb.ToString()}");
-
 		return sb.ToString();
 	}
 

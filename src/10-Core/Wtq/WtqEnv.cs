@@ -17,17 +17,14 @@ public static class WtqEnv
 	public static string? ConfigFile
 		=> Environment.GetEnvironmentVariable(Names.Config)?.ExpandEnvVars()?.EmptyOrWhiteSpaceToNull();
 
-	/// <summary>
-	/// Whether to log to the console.<br/>
-	/// Always enabled, unless we're running on Linux, without the "TERM" environment variable (i.e. non-interactive).
-	/// </summary>
-	// public static bool LogToConsole;
+	public static bool IsLinux
+		=> RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-	public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+	public static bool IsWindows
+		=> RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-	public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
-	public static bool HasTermEnvVar => !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
+	public static bool HasTermEnvVar
+		=> !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
 
 	/// <summary>
 	/// Returns the requested log level, as specified by an environment variable.

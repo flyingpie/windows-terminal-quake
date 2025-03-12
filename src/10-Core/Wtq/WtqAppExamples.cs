@@ -34,11 +34,6 @@ public class WtqAppExamples
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1"),
 			Os = [OSPlatform.Windows,],
 			FileName = "powershell",
-			// Factory = () => new()
-			// {
-			// 	Name = "PowerShell 5",
-			// 	FileName = "powershell",
-			// },
 		},
 
 		// PowerShell >=6 (Cross-platform)
@@ -50,11 +45,6 @@ public class WtqAppExamples
 			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"),
 			Os = [OSPlatform.Windows,],
 			FileName = "pwsh",
-			// Factory = () => new()
-			// {
-			// 	Name = "PowerShell Core",
-			// 	FileName = "pwsh",
-			// },
 		},
 
 		// Wezterm
@@ -66,11 +56,6 @@ public class WtqAppExamples
 			Link = new("https://wezfurlong.org/wezterm/index.html"),
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
 			FileName = "wezterm",
-			// Factory = () => new()
-			// {
-			// 	Name = "Wezterm",
-			// 	FileName = "wezterm",
-			// },
 		},
 
 		// Kitty
@@ -82,11 +67,6 @@ public class WtqAppExamples
 			Link = new("https://sw.kovidgoyal.net/kitty/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "kitty",
-			// Factory = () => new()
-			// {
-			// 	Name = "Kitty",
-			// 	FileName = "kitty",
-			// },
 		},
 
 		// Ptyxis
@@ -98,11 +78,6 @@ public class WtqAppExamples
 			Link = new("https://gitlab.gnome.org/chergert/ptyxis"),
 			Os = [OSPlatform.Linux,],
 			FileName = "ptyxis",
-			// Factory = () => new()
-			// {
-			// 	Name = "Ptyxis",
-			// 	FileName = "ptyxis",
-			// },
 		},
 
 		// Konsole
@@ -114,11 +89,6 @@ public class WtqAppExamples
 			Link = new("https://konsole.kde.org/"),
 			Os = [OSPlatform.Linux,],
 			FileName = "konsole",
-			// Factory = () => new()
-			// {
-			// 	Name = "Konsole",
-			// 	FileName = "konsole",
-			// },
 		},
 
 		#endregion
@@ -133,11 +103,6 @@ public class WtqAppExamples
 			Image = "/example_apps/windows_explorer.png",
 			Os = [OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
 			FileName = "explorer",
-			// Factory = () => new()
-			// {
-			// 	Name = "Windows Explorer",
-			// 	FileName = "explorer",
-			// },
 		},
 
 		// Double Commander
@@ -149,11 +114,6 @@ public class WtqAppExamples
 			Link = new("https://doublecommander.com"),
 			Os = [OSPlatform.Windows,],
 			FileName = "TODO",
-			// Factory = () => new()
-			// {
-			// 	Name = "Double Commander",
-			// 	FileName = "TODO",
-			// },
 		},
 
 		// Q-Dir
@@ -165,11 +125,6 @@ public class WtqAppExamples
 			Link = new("http://q-dir.com/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "TODO",
-			// Factory = () => new()
-			// {
-			// 	Name = "Double Commander",
-			// 	FileName = "TODO",
-			// },
 		},
 
 		// Dolphin
@@ -181,11 +136,6 @@ public class WtqAppExamples
 			Link = new("https://apps.kde.org/dolphin/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "dolphin",
-			// Factory = () => new()
-			// {
-			// 	Name = "Dolphin",
-			// 	FileName = "dolphin",
-			// },
 		},
 
 		#endregion
@@ -201,11 +151,6 @@ public class WtqAppExamples
 			Link = new("https://www.spotify.com/us/download/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "spotify",
-			// Factory = () => new()
-			// {
-			// 	Name = "Spotify",
-			// 	FileName = "spotify",
-			// },
 		},
 
 		// Discord
@@ -217,11 +162,6 @@ public class WtqAppExamples
 			Link = new("https://discord.com/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "discord",
-			// Factory = () => new()
-			// {
-			// 	Name = "Discord",
-			// 	FileName = "TODO",
-			// },
 		},
 
 		// KeePassXC
@@ -233,11 +173,6 @@ public class WtqAppExamples
 			Link = new("https://keepassxc.org/"),
 			Os = [OSPlatform.Windows,],
 			FileName = "keepassxc",
-			// Factory = () => new()
-			// {
-			// 	Name = "KeePassXC",
-			// 	FileName = "TODO",
-			// },
 		},
 
 		// Process Explorer
@@ -249,11 +184,6 @@ public class WtqAppExamples
 			Link = new("https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"),
 			Os = [OSPlatform.Windows,],
 			FileName = "procexp64",
-			// Factory = () => new()
-			// {
-			// 	Name = "Process Explorer",
-			// 	FileName = "TODO",
-			// },
 		},
 
 		// System Monitor (KDE)
@@ -265,11 +195,6 @@ public class WtqAppExamples
 			Link = new("https://apps.kde.org/plasma-systemmonitor/"),
 			Os = [OSPlatform.Linux,],
 			FileName = "plasma-systemmonitor",
-			// Factory = () => new()
-			// {
-			// 	Name = "System Monitor",
-			// 	FileName = "plasma-systemmonitor",
-			// },
 		},
 
 		#endregion
