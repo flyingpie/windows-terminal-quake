@@ -26,7 +26,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Animation duration.
-		var durationMs = GetDurationMs(mods);
+		var durationMs = GetDurationMs(app, mods);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
@@ -61,7 +61,7 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Value.Location,
 				dst: windowRectDst.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.AnimationTypeToggleOn,
+				animType: _opts.CurrentValue.GetAnimationTypeToggleOn(app.Options),
 				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
@@ -72,7 +72,7 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Animation duration.
-		var durationMs = GetDurationMs(mods);
+		var durationMs = GetDurationMs(app, mods);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
@@ -106,7 +106,7 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Location,
 				dst: windowRectDst.Value.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.AnimationTypeToggleOff,
+				animType: _opts.CurrentValue.GetAnimationTypeToggleOff(app.Options),
 				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
@@ -114,7 +114,7 @@ public class WtqAppToggleService(
 	/// <summary>
 	/// Returns the time the animation should take in milliseconds.
 	/// </summary>
-	private int GetDurationMs(ToggleModifiers mods)
+	private int GetDurationMs(WtqApp app, ToggleModifiers mods)
 	{
 		switch (mods)
 		{
@@ -122,11 +122,11 @@ public class WtqAppToggleService(
 				return 0;
 
 			case ToggleModifiers.SwitchingApps:
-				return _opts.CurrentValue.AnimationDurationMsWhenSwitchingApps;
+				return _opts.CurrentValue.GetAnimationDurationMsWhenSwitchingApps(app.Options);
 
 			case ToggleModifiers.None:
 			default:
-				return _opts.CurrentValue.AnimationDurationMs;
+				return _opts.CurrentValue.GetAnimationDurationMs(app.Options);
 		}
 	}
 
@@ -260,7 +260,7 @@ public class WtqAppToggleService(
 			case PreferMonitor.AtIndex:
 			{
 				// Get configured screen index.
-				var screenIndex = app.Options.MonitorIndex ?? _opts.CurrentValue.MonitorIndex;
+				var screenIndex = _opts.CurrentValue.GetMonitorIndex(app.Options);
 
 				_log.LogTrace("Using screen with index {Index}", screenIndex);
 
