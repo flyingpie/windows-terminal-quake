@@ -10,6 +10,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private readonly IWtqWindowResolver _windowResolver;
 
 	private readonly List<WtqApp> _apps = [];
+	private readonly Worker _loop;
 
 	public WtqAppRepo(
 		IHostApplicationLifetime lifetime,
@@ -40,10 +41,18 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			// TODO: Find a nicer way to handle this.
 			DisposeAsync().GetAwaiter().GetResult();
 		});
+
+		// Start loop that updates app state periodically.
+		_loop = new(
+			$"{nameof(WtqAppRepo)}.UpdateAppStates",
+			_ => UpdateAppsAsync(allowStartNew: false),
+			TimeSpan.FromSeconds(1));
 	}
 
 	public async ValueTask DisposeAsync()
 	{
+		await _loop.DisposeAsync().NoCtx();
+
 		foreach (var app in _apps)
 		{
 			await app.DisposeAsync().NoCtx();
@@ -120,21 +129,29 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		// Add app handles for options that don't have one yet.
 		foreach (var opt in _opts.CurrentValue.Apps)
 		{
-			var app = GetByName(opt.Name);
-
-			if (app != null)
+			// Only update apps when their configuration is valid.
+			// Otherwise we would could be missing settings that are required later on.
+			if (!opt.IsValid)
 			{
+				_log.LogWarning("App '{App}' has validation errors, skipping during state updates", opt);
 				continue;
 			}
 
-			_log.LogInformation("Missing app handle for {Options}, creating one now", opt);
+			// Fetch WtqApp object by name as defined in settings.
+			var app = GetByName(opt.Name);
+			if (app == null)
+			{
+				// Create one now if we don't have one yet.
+				_log.LogInformation("Missing app handle for {Options}, creating one now", opt);
 
-			// Create & update app handle.
-			app = Create(opt);
+				// Create & update app handle.
+				app = Create(opt);
 
+				_apps.Add(app);
+			}
+
+			// Update the app's local state, which may include starting a new process.
 			await app.UpdateLocalAppStateAsync(allowStartNew).NoCtx();
-
-			_apps.Add(app);
 		}
 
 		// Remove app handles for dropped options.
