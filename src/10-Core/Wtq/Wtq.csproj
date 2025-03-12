@@ -9,10 +9,12 @@
 	<ItemGroup>
 		<PackageReference Include="Ardalis.GuardClauses" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Namotion.Reflection" />
 		<PackageReference Include="NJsonSchema" />
 		<PackageReference Include="Serilog" />
 		<PackageReference Include="Serilog.Extensions.Hosting" />
 		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Formatting.Compact" />
 		<PackageReference Include="Serilog.Sinks.Console" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="System.Resources.Extensions" />
