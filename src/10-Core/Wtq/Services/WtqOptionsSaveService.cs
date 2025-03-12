@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 
@@ -62,13 +61,6 @@ public class WtqOptionsSaveService
 					return false;
 				}
 
-				// // By attribute
-				// var defValAttr = propertyInfo.AttributeProvider.GetCustomAttributes(true).OfType<DefaultValueAttribute>().FirstOrDefault();
-				// if (defValAttr != null && val.Equals(defValAttr.Value))
-				// {
-				// 	return false;
-				// }
-
 				// Default values for value types.
 				if (val.GetType().IsValueType)
 				{
@@ -77,8 +69,6 @@ public class WtqOptionsSaveService
 						return false;
 					}
 				}
-
-				// var dbg = 2;
 
 				// Lists.
 				if (val is not string && val is IEnumerable asEnum && xx4 is IEnumerable origAsEnumr)
