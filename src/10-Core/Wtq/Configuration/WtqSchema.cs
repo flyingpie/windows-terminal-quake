@@ -43,6 +43,7 @@ public static class WtqSchema
 		JsonSchema.FromType<WtqOptions>(
 				new SystemTextJsonSchemaGeneratorSettings()
 				{
+					FlattenInheritanceHierarchy = true,
 					SerializerOptions =
 					{
 						Converters =
@@ -50,6 +51,7 @@ public static class WtqSchema
 							new JsonStringEnumConverter(),
 						},
 					},
+					UseXmlDocumentation = true,
 				})
 			.ToJson(Formatting.Indented);
 }
