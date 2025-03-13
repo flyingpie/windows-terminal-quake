@@ -1,5 +1,6 @@
 using Namotion.Reflection;
 using System.Reflection;
+using System.Text.Json;
 using System.Xml.Linq;
 
 namespace Wtq.Utils;
@@ -8,13 +9,10 @@ public static class Opts
 {
 	public static TValue Cascade<TValue>(
 		Expression<Func<WtqSharedOptions, object?>> expr,
-		// WtqOptions global,
-		// WtqAppOptions app,
 		params WtqSharedOptions[] opts
 	)
 	{
 		Guard.Against.Null(expr);
-		// Guard.Against.Null(app);
 
 		var v = expr.Compile();
 
@@ -27,24 +25,19 @@ public static class Opts
 			}
 		}
 
-		// var fromApp = v(app);
-		// if (fromApp != null)
-		// {
-		// 	return (TValue)fromApp;
-		// }
-		//
-		// var fromGlb = v(global);
-		// if (fromGlb != null)
-		// {
-		// 	return (TValue)fromGlb;
-		// }
-
 		return DefaultValue.For<TValue>(expr);
 	}
 }
 
 public static class SystemExtensions
 {
+	public static TValue JsonDeepClone<TValue>(this TValue value)
+	{
+		var json = JsonSerializer.Serialize(value);
+
+		return JsonSerializer.Deserialize<TValue>(json)!;
+	}
+
 	public static bool HasHotkey(this ICollection<HotkeyOptions> hotkeys, Keys key, KeyModifiers modifiers)
 	{
 		Guard.Against.Null(hotkeys);
@@ -59,7 +52,9 @@ public static class SystemExtensions
 		var enumVal = val?.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? enumValueAsString;
 
 		if (translationFunction != null)
+		{
 			return translationFunction(enumVal);
+		}
 
 		return enumVal;
 	}
@@ -101,54 +96,17 @@ public static class SystemExtensions
 
 	public static string? StringJoin<T>(this IEnumerable<T> values, string separator = ", ")
 	{
-		ArgumentNullException.ThrowIfNull(values);
+		Guard.Against.Null(values);
 
 		return string.Join(separator, values);
 	}
 
 	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
-		=> validatable.Validate(new ValidationContext(new object()));
+	{
+		Guard.Against.Null(validatable);
 
-
-	// public static bool IsValid(this IValidatableObject validatable)
-	// 	=> !validatable.Validate().Any();
-	//
-	// public static bool IsValid(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
-	// 	=> !validatable.ValidationResultsFor(expr).Any();
-	//
-	// public static bool IsValid(this IValidatableObject validatable, string componentName)
-	// 	=> !validatable.ValidationResultsFor(componentName).Any();
-	//
-
-	//
-	// public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, Expression<Func<WtqAppOptions, object>> expr)
-	// 	=> validatable.ValidationResultsFor(GetMemberName(expr));
-	//
-	// public static IEnumerable<ValidationResult> ValidationResultsFor(this IValidatableObject validatable, string componentName)
-	// 	=> validatable.Validate().Where(v => v.MemberNames.Any(m => m.Equals(componentName, StringComparison.Ordinal)));
-	//
-	//
-	// public static string GetMemberName(this Expression expression)
-	// {
-	// 	if (expression == null)
-	// 	{
-	// 		var dbg = 2;
-	// 	}
-	//
-	// 	switch (expression.NodeType)
-	// 	{
-	// 		case ExpressionType.Convert:
-	// 			return GetMemberName(((UnaryExpression)expression).Operand);
-	// 		case ExpressionType.Lambda:
-	// 			return GetMemberName(((LambdaExpression)expression).Body);
-	// 		case ExpressionType.MemberAccess:
-	// 			return ((MemberExpression)expression).Member.Name;
-	// 		default:
-	// 			Console.WriteLine($"Unsupported node type '{expression}' => '{expression.NodeType}'.");
-	// 			return "";
-	// 			throw new NotSupportedException(expression.NodeType.ToString());
-	// 	}
-	// }
+		return validatable.Validate(new ValidationContext(new object()));
+	}
 
 	public static string GetDisplayName(Expression expr)
 	{
@@ -187,8 +145,6 @@ public static class SystemExtensions
 			FormattingMode = XmlDocsFormattingMode.Html,
 		});
 
-		// return m.GetXmlDocsSummary();
-
 		return x
 				?.Descendants("summary") // TODO: Use FormattingMode on GetXmlDocs instead.
 				?.FirstOrDefault()
@@ -198,11 +154,8 @@ public static class SystemExtensions
 
 	public static string GetMemberDoc(Expression expr)
 	{
-		var m = SystemExtensions.GetMemberInfo(expr);
-
+		var m = expr.GetMemberInfo();
 		var x = m.GetXmlDocsElement();
-
-		// return m.GetXmlDocsSummary();
 
 		return x
 				?.Descendants("summary") // TODO: Use FormattingMode on GetXmlDocs instead.
@@ -211,12 +164,9 @@ public static class SystemExtensions
 			?? string.Empty;
 	}
 
-	public static MemberInfo GetMemberInfo(this Expression expression)
+	public static MemberInfo? GetMemberInfo(this Expression expression)
 	{
-		if (expression == null)
-		{
-			var dbg = 2;
-		}
+		Guard.Against.Null(expression);
 
 		switch (expression.NodeType)
 		{
@@ -227,27 +177,7 @@ public static class SystemExtensions
 			case ExpressionType.MemberAccess:
 				return ((MemberExpression)expression).Member;
 			default:
-				// Console.WriteLine($"Unsupported node type '{expression}' => '{expression.NodeType}'.");
 				return null;
-			// throw new NotSupportedException(expression.NodeType.ToString());
 		}
 	}
-
-	public static void SetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda, TValue value)
-	{
-		var memberSelectorExpression = memberLamda.Body as MemberExpression;
-		if (memberSelectorExpression != null)
-		{
-			var property = memberSelectorExpression.Member as PropertyInfo;
-			if (property != null)
-			{
-				property.SetValue(target, value, null);
-			}
-		}
-	}
-}
-
-public class Box<TValue>
-{
-	public TValue Value { get; set; }
 }

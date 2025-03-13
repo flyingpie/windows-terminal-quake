@@ -1,6 +1,5 @@
 @using Wtq.Services.UI.Components.Settings.App
 @using Wtq.Services.UI.Components.Settings.Process
-@using System.Text.Json
 @using Wtq.Services.UI.Components.Settings
 @using HorizontalAlign = Wtq.Configuration.HorizontalAlign
 @using Wtq.Services.UI.Components.Settings.Position
@@ -14,9 +13,6 @@
 
 @code {
 
-	// private bool _hasChanged;
-	// private bool _noWarn;
-
 	[NotNull]
 	[Parameter]
 	public string? AppId { get; set; }
@@ -25,35 +21,12 @@
 
 	public WtqOptions GlobalOpts { get; set; }
 
-	public T JsonDeepClone<T>(T obj)
-	{
-		var json = JsonSerializer.Serialize(obj);
-
-		var res = JsonSerializer.Deserialize<T>(json);
-
-		return res;
-	}
-
 	protected override void OnInitialized()
 	{
 		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
 
 		// Notify when the settings file changes, to prevent overwriting settings that were made outside the UI.
-		WtqOpts.OnChange((a, b) =>
-		{
-			// if (_noWarn)
-			// {
-				Reload();
-
-			// 	_noWarn = false;
-			// }
-			// else
-			// {
-			// 	_hasChanged = true;
-
-				// InvokeAsync(StateHasChanged);
-			// }
-		});
+		WtqOpts.OnChange((a, b) => Reload());
 	}
 
 	protected override void OnParametersSet()
@@ -63,8 +36,6 @@
 
 	private async Task SaveAsync()
 	{
-		// _noWarn = true;
-
 		await SaveService.SaveAsync(GlobalOpts).NoCtx();
 
 		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
@@ -72,9 +43,7 @@
 
 	private void Reload()
 	{
-		// _hasChanged = false;
-
-		GlobalOpts = JsonDeepClone(WtqOpts.CurrentValue);
+		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
 		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
 	}
 
@@ -84,6 +53,8 @@
 	App <span class="rz-color-primary">@AppId</span>
 </PageHead>
 
+<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
 <CascadingValue Value="Notifier">
@@ -92,7 +63,7 @@
 
 	<RadzenStack>
 
-		@* Warn about outside file changes. *@
+		<!-- Warn about outside file changes. -->
 		@*
 			TODO: Disabled for now, as the check based on option reloads isn't super reliable.
 			TODO:
@@ -121,7 +92,7 @@
 		<RadzenFieldset Text="Process">
 			<RadzenStack Gap="1rem">
 
-				@* Refer to examples page. *@
+				<!-- Refer to examples page. -->
 				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
 					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
 					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
@@ -219,7 +190,7 @@
 
 	</RadzenStack>
 
-	@* Save/Discard *@
+	<!-- Save/Discard -->
 	<RadzenStack
 		Orientation="Orientation.Horizontal"
 		JustifyContent="JustifyContent.End"
