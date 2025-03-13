@@ -12,6 +12,10 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
 
+	/// <summary>
+	/// Used to refer from the app options object back to the global one, for cascading.
+	/// </summary>
+	[JsonIgnore]
 	public WtqOptions Global { get; set; } = null!;
 
 	#region 1000 - App
