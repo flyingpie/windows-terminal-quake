@@ -2,44 +2,34 @@ using Wc = Wtq.Configuration;
 
 namespace Wtq.Configuration;
 
+/// <summary>
+/// Options that are both in global <see cref="WtqOptions"/> and per-app <see cref="WtqAppOptions"/>.
+/// </summary>
 public class WtqSharedOptions
 {
-	#region Animation
+	#region 2000 - Process
 
 	/// <summary>
-	/// How long the animation should take, in milliseconds.
+	///	<p>The paragraph. With <strong>words</strong> and <em>empahisized</em> ones.</p>
+	/// <p>Another paragraph<br/>
+	/// With line breaks.</p>
 	/// </summary>
-	[Display(Name = "Animation duration (ms)")]
-	[DefaultValue(250)]
-	[Range(0, 1000)]
-	public int? AnimationDurationMs { get; set; }
-
-	/// <summary>
-	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
-	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
-	/// </summary>
-	[Display(Name = "Animation type (toggle ON)")]
-	[DefaultValue(AnimationType.EaseOutQuart)]
-	public AnimationType? AnimationTypeToggleOn { get; set; }
-
-	/// <summary>
-	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
-	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
-	/// </summary>
-	[Display(Name = "Animation type (toggle OFF)")]
-	[DefaultValue(AnimationType.EaseInQuart)]
-	public AnimationType? AnimationTypeToggleOff { get; set; }
+	[Display(Name = "Attach mode")]
+	[DefaultValue(Wc.AttachMode.FindOrStart)]
+	[JsonPropertyOrder(2005)]
+	public AttachMode? AttachMode { get; set; }
 
 	#endregion
 
-	#region Behavior
+	#region 3000 - Behavior
 
 	/// <summary>
 	/// Whether the app should always be on top of other windows, regardless of whether it has focus.<br/>
 	/// Defaults to "false".
 	/// </summary>
-	[DefaultValue(false)]
 	[Display(Name = "Always on top")]
+	[DefaultValue(false)]
+	[JsonPropertyOrder(3001)]
 	public bool? AlwaysOnTop { get; set; }
 
 	/// <summary>
@@ -48,15 +38,8 @@ public class WtqSharedOptions
 	/// </summary>
 	[Display(Name = "Hide on focus lost")]
 	[DefaultValue(Wc.HideOnFocusLost.Always)]
+	[JsonPropertyOrder(3002)]
 	public HideOnFocusLost? HideOnFocusLost { get; set; }
-
-	/// <summary>
-	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
-	/// 0 (invisible) - 100 (opaque).<br/>
-	/// Defaults to "100".
-	/// </summary>
-	[DefaultValue(100)]
-	public int? Opacity { get; set; }
 
 	/// <summary>
 	/// When to show the terminal window icon on the taskbar.<br/>
@@ -65,11 +48,80 @@ public class WtqSharedOptions
 	/// </summary>
 	[Display(Name = "Taskbar icon visibility")]
 	[DefaultValue(Wc.TaskbarIconVisibility.AlwaysHidden)]
+	[JsonPropertyOrder(3003)]
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
+
+	/// <summary>
+	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
+	/// 0 (invisible) - 100 (opaque).<br/>
+	/// Defaults to "100".
+	/// </summary>
+	[DefaultValue(100)]
+	[JsonPropertyOrder(3004)]
+	public int? Opacity { get; set; }
 
 	#endregion
 
-	#region Monitor
+	#region 4000 - Position
+
+	/// <summary>
+	/// Horizontal screen coverage, as a percentage.<br/>
+	/// Defaults to "100".
+	/// </summary>
+	[Display(Name = "Horizontal screen coverage", Prompt = "Percentage")]
+	[DefaultValue(95f)]
+	[JsonPropertyOrder(4001)]
+	public float? HorizontalScreenCoverage { get; set; }
+
+	/// <summary>
+	/// Where to position an app on the chosen monitor, horizontally.<br/>
+	/// Defaults to <see cref="HorizontalAlign.Center"/>.
+	/// </summary>
+	[Display(Name = "Horizontal align")]
+	[DefaultValue(Wc.HorizontalAlign.Center)]
+	[JsonPropertyOrder(4002)]
+	public HorizontalAlign? HorizontalAlign { get; set; }
+
+	/// <summary>
+	/// Vertical screen coverage as a percentage (0-100).<br/>
+	/// Defaults to "100".
+	/// </summary>
+	[Display(Name = "Vertical screen coverage", Prompt = "Percentage")]
+	[DefaultValue(95f)]
+	[JsonPropertyOrder(4003)]
+	public float? VerticalScreenCoverage { get; set; }
+
+	/// <summary>
+	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
+	/// Defaults to "0".
+	/// </summary>
+	[Display(Name = "Vertical offset", Prompt = "In pixels")]
+	[DefaultValue(0f)]
+	[Range(0, 1000)]
+	[JsonPropertyOrder(4004)]
+	public float? VerticalOffset { get; set; }
+
+	/// <summary>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
+	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
+	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+	/// </summary>
+	[Display(Name = "Off-screen locations")]
+	[JsonPropertyOrder(4005)]
+	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
+
+	#endregion
+
+	#region 5000 - Monitor
+
+	/// <summary>
+	/// Which monitor to preferably drop the app.<br/>
+	/// "WithCursor" (default), "Primary" or "AtIndex".
+	/// </summary>
+	[Display(Name = "Prefer monitor")]
+	[DefaultValue(Wc.PreferMonitor.WithCursor)]
+	[JsonPropertyOrder(5001)]
+	public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
 	/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
@@ -79,72 +131,39 @@ public class WtqSharedOptions
 	[Display(Name = "Monitor index")]
 	[DefaultValue(0)]
 	[Range(0, 10)]
+	[JsonPropertyOrder(5002)]
 	public int? MonitorIndex { get; set; }
 
-	/// <summary>
-	/// Which monitor to preferably drop the app.<br/>
-	/// "WithCursor" (default), "Primary" or "AtIndex".
-	/// </summary>
-	[Display(Name = "Prefer monitor")]
-	[DefaultValue(Wc.PreferMonitor.WithCursor)]
-	public PreferMonitor? PreferMonitor { get; set; }
-
 	#endregion
 
-	#region Position
+	#region 6000 - Animation
 
 	/// <summary>
-	/// Where to position an app on the chosen monitor, horizontally.<br/>
-	/// Defaults to <see cref="HorizontalAlign.Center"/>.
+	/// How long the animation should take, in milliseconds.
 	/// </summary>
-	[Display(Name = "Horizontal align")]
-	[DefaultValue(Wc.HorizontalAlign.Center)]
-	public HorizontalAlign? HorizontalAlign { get; set; }
-
-	/// <summary>
-	/// Horizontal screen coverage, as a percentage.<br/>
-	/// Defaults to "100".
-	/// </summary>
-	[Display(Name = "Horizontal screen coverage", Prompt = "Percentage")]
-	[DefaultValue(95f)]
-	public float? HorizontalScreenCoverage { get; set; }
-
-	/// <summary>
-	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
-	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
-	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
-	/// </summary>
-	[Display(Name = "Off-screen locations")]
-	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
-
-	/// <summary>
-	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
-	/// Defaults to "0".
-	/// </summary>
-	[Display(Name = "Vertical offset", Prompt = "In pixels")]
-	[DefaultValue(0f)]
+	[Display(Name = "Animation duration", Prompt = "In milliseconds")]
+	[DefaultValue(250)]
 	[Range(0, 1000)]
-	public float? VerticalOffset { get; set; }
+	[JsonPropertyOrder(6001)]
+	public int? AnimationDurationMs { get; set; }
 
 	/// <summary>
-	/// Vertical screen coverage as a percentage (0-100).<br/>
-	/// Defaults to "100".
+	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
+	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
 	/// </summary>
-	[DefaultValue(95f)]
-	public float? VerticalScreenCoverage { get; set; }
-
-	#endregion
-
-	#region Process
+	[Display(Name = "Animation type (toggle ON)")]
+	[DefaultValue(AnimationType.EaseOutQuart)]
+	[JsonPropertyOrder(6003)]
+	public AnimationType? AnimationTypeToggleOn { get; set; }
 
 	/// <summary>
-	///	<p>The paragraph. With <strong>words</strong> and <em>empahisized</em> ones.</p>
-	/// <p>Another paragraph<br/>
-	/// With line breaks.</p>
+	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
+	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
 	/// </summary>
-	[DefaultValue(Wc.AttachMode.FindOrStart)]
-	[JsonPropertyOrder(14)]
-	public AttachMode? AttachMode { get; set; }
+	[Display(Name = "Animation type (toggle OFF)")]
+	[DefaultValue(AnimationType.EaseInQuart)]
+	[JsonPropertyOrder(6004)]
+	public AnimationType? AnimationTypeToggleOff { get; set; }
 
 	#endregion
 }

@@ -12,21 +12,21 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
 
-	#region App
+	#region 1000 - App
 
 	/// <summary>
 	/// A logical name for the app, used to identify it across config reloads.<br/>
 	/// Appears in logs.
 	/// </summary>
-	[JsonPropertyOrder(1)]
 	[NotNull]
 	[Required]
+	[JsonPropertyOrder(1001)]
 	public string? Name { get; set; }
 
 	/// <summary>
 	/// One or more keyboard shortcuts that toggle in- and out this particular app.
 	/// </summary>
-	[JsonPropertyOrder(2)]
+	[JsonPropertyOrder(1002)]
 	public ICollection<HotkeyOptions> Hotkeys
 	{
 		get => _hotkeys;
@@ -35,14 +35,14 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#endregion
 
-	#region Process
+	#region 2000 - Process
 
 	/// <summary>
 	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
 	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
 	[Display(Name = "Filename")]
-	[JsonPropertyOrder(10)]
+	[JsonPropertyOrder(2001)]
 	[Required]
 	public string? FileName
 	{
@@ -56,7 +56,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 	/// </summary>
 	[Display(Name = "Process name")]
-	[JsonPropertyOrder(11)]
+	[JsonPropertyOrder(2003)]
 	public string? ProcessName
 	{
 		get => _processName;
@@ -67,11 +67,11 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// Command-line arguments that should be passed to the app when it's started.<br/>
 	/// Note that this only applies when using an <see cref="AttachMode"/> that starts the app.
 	/// </summary>
-	[JsonPropertyOrder(12)]
+	[JsonPropertyOrder(2004)]
 	public string? Arguments { get; set; }
 
-	[JsonPropertyOrder(13)]
 	[Display(Name = "Argument list")]
+	[JsonPropertyOrder(2004)]
 	public ICollection<ProcessArgument> ArgumentList
 	{
 		get => _argumentList;
@@ -79,7 +79,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	[Display(Name = "Window title")]
-	[JsonPropertyOrder(15)]
+	[JsonPropertyOrder(2006)]
 	public string? WindowTitle
 	{
 		get => _windowTitle;
@@ -88,13 +88,13 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#endregion
 
-	#region Behavior
+	#region 3000 - Behavior
 
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>
 	[Display(Name = "Window title override")]
-	[JsonPropertyOrder(99)]
+	[JsonPropertyOrder(3005)]
 	public string? WindowTitleOverride
 	{
 		get => _windowTitleOverride;

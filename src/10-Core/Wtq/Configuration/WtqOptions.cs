@@ -18,22 +18,26 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// Path to wtq.schema.json.
 	/// </summary>
 	[JsonPropertyName("$schema")]
+	[JsonPropertyOrder(0)]
 	public string Schema { get; } = "wtq.schema.json";
 
 	/// <summary>
 	/// Applications to enable Quake-style dropdown for.
 	/// </summary>
+	[JsonPropertyOrder(101)]
 	public ICollection<WtqAppOptions> Apps { get; set; }
 		= [];
 
 	/// <summary>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
+	[JsonPropertyOrder(102)]
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
 	[Display(Name = "Show UI on start")]
 	[DefaultValue(false)]
+	[JsonPropertyOrder(103)]
 	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
@@ -102,7 +106,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public int GetMonitorIndex(WtqAppOptions opts)
 		=> GetCascadingValue<int>(o => o.MonitorIndex, opts);
 
-	#region Animation
+	#region 6000 - Animation
 
 	public int GetAnimationDurationMs(WtqAppOptions opts)
 		=> GetCascadingValue<int>(o => o.AnimationDurationMs, opts);
