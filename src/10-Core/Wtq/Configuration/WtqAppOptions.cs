@@ -109,6 +109,11 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#endregion
 
+	public void OnPostConfigure(WtqOptions options)
+	{
+		Global = Guard.Against.Null(options);
+	}
+
 	#region Validation
 
 	[JsonIgnore]

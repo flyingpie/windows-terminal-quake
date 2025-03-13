@@ -57,6 +57,14 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		}
 	}
 
+	public void OnPostConfigure()
+	{
+		foreach (var app in Apps ?? [])
+		{
+			app.OnPostConfigure(this);
+		}
+	}
+
 	[JsonIgnore]
 	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
 

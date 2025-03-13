@@ -42,16 +42,7 @@ public class WtqHostBase
 			{
 				s
 					.AddOptionsWithValidateOnStart<WtqOptions>()
-					.PostConfigure(o =>
-					{
-						Console.WriteLine("POST CONF");
-						var dbg = 2;
-
-						foreach (var app in (o.Apps ?? []))
-						{
-							app.Global = o;
-						}
-					})
+					.PostConfigure(o => o.OnPostConfigure())
 					.Bind(config);
 
 				s

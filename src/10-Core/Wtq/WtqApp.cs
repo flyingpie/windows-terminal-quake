@@ -51,7 +51,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Whether the app is currently toggled onto the screen.<br/>
 	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
 	/// </summary>
-	public bool IsOpen { get; private set; } = true;
+	public bool IsOpen { get; private set; } // TODO: Refactor to ask the window for its state? This has a tendency of diverging.
 
 	/// <summary>
 	/// The name of the app, as configured in the settings file.<br/>
@@ -76,7 +76,7 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		if (!IsOpen)
 		{
-			return;
+			// return;
 		}
 
 		IsOpen = false;
@@ -173,7 +173,7 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		if (IsOpen)
 		{
-			return false;
+			// return false;
 		}
 
 		_log.LogInformation("Opening app '{App}'", this);
