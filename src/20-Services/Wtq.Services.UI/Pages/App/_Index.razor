@@ -24,8 +24,6 @@
 	protected override void OnInitialized()
 	{
 		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
-
-		// Notify when the settings file changes, to prevent overwriting settings that were made outside the UI.
 		WtqOpts.OnChange((a, b) => Reload());
 	}
 
@@ -75,7 +73,8 @@
 		</RadzenAlert>
 		*@
 
-		<ValidationMessages />
+		@* TODO: Messages without a member name only *@
+		@* <ValidationMessages /> *@
 
 		<RadzenFieldset Text="App">
 			<RadzenStack Gap="1rem">

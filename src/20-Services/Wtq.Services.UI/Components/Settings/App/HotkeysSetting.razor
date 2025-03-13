@@ -2,11 +2,18 @@
 
 @code {
 
+	private void Add()
+	{
+		Value.Add(new());
+
+		Notifier.Notify();
+	}
+
 	private void Remove(HotkeyOptions hk)
 	{
 		Value.Remove(hk);
 
-		StateHasChanged();
+		Notifier.Notify();
 	}
 
 }
@@ -25,7 +32,7 @@
 				<RadzenButton
 					Icon="add"
 					Size="ButtonSize.Medium"
-					Click="@(() => Value.Add(new()))"
+					Click="Add"
 				/>
 			</RadzenStack>
 
