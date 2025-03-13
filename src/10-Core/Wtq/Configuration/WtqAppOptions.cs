@@ -12,6 +12,8 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
 
+	public WtqOptions Global { get; set; } = null!;
+
 	#region 1000 - App
 
 	/// <summary>

@@ -122,7 +122,7 @@ public sealed class WtqService : WtqHostedService
 		if (appLostFocus != null)
 		{
 			// If the app has "hide on focus lost" set to NEVER/FALSE, well, don't hide.
-			if (_opts.CurrentValue.GetHideOnFocusLostForApp(appLostFocus.Options) == HideOnFocusLost.Never)
+			if (appLostFocus.Options.GetHideOnFocusLost() == HideOnFocusLost.Never)
 			{
 				return;
 			}

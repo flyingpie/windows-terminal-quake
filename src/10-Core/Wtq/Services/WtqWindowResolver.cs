@@ -2,13 +2,11 @@ namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqWindowResolver"/>
 public sealed class WtqWindowResolver(
-	IOptionsMonitor<WtqOptions> opts,
 	IWtqWindowService procService)
 	: IWtqWindowResolver
 {
 	private readonly ILogger _log = Log.For<WtqWindowResolver>();
 
-	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(procService);
 
 	/// <inheritdoc/>
@@ -16,7 +14,7 @@ public sealed class WtqWindowResolver(
 	{
 		Guard.Against.Null(opts);
 
-		var attachMode = _opts.CurrentValue.GetAttachModeForApp(opts);
+		var attachMode = opts.GetAttachMode();
 
 		switch (attachMode)
 		{

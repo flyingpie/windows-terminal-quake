@@ -1,3 +1,5 @@
+using static Wtq.Configuration.OffScreenLocation;
+
 namespace Wtq;
 
 public static class WtqConstants
@@ -10,6 +12,13 @@ public static class WtqConstants
 
 	public static Uri GitHubUrl { get; }
 		= new("https://www.github.com/flyingpie/windows-terminal-quake");
+
+	/// <summary>
+	/// The default off-screen locations are kept separate, to prevent arrays from mergin during deserialization.
+	/// We could do that by tweaking the JSON serializer, but that's way more complex.
+	/// </summary>
+	public static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
+		[Above, Below, Left, Right];
 
 	/// <summary>
 	/// Returns a list of <see cref="AnimationTypes"/> that include a <see cref="DisplayAttribute"/>, and de-duplicated.

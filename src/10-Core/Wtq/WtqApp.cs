@@ -17,7 +17,6 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly ILogger _log;
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
-	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppToggleService _toggler;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
@@ -26,7 +25,6 @@ public sealed class WtqApp : IAsyncDisposable
 	private Point? _lastLoc;
 
 	public WtqApp(
-		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggler,
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowResolver windowResolver,
@@ -35,7 +33,6 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		_log = Log.For($"{GetType()}|{name}");
 
-		_opts = Guard.Against.Null(opts);
 		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
@@ -315,10 +312,10 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Always on top.
-		await Window.SetAlwaysOnTopAsync(_opts.CurrentValue.GetAlwaysOnTopForApp(Options)).NoCtx();
+		await Window.SetAlwaysOnTopAsync(Options.GetAlwaysOnTop()).NoCtx();
 
 		// Opacity.
-		await Window.SetTransparencyAsync(_opts.CurrentValue.GetOpacityForApp(Options)).NoCtx();
+		await Window.SetTransparencyAsync(Options.GetOpacity()).NoCtx();
 
 		// Window Title.
 		var title = Options.WindowTitleOverride;
@@ -328,7 +325,7 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Taskbar icon visibility.
-		switch (_opts.CurrentValue.GetTaskbarIconVisibilityForApp(Options))
+		switch (Options.GetTaskbarIconVisibility())
 		{
 			case TaskbarIconVisibility.AlwaysHidden:
 				await Window.SetTaskbarIconVisibleAsync(false).NoCtx();

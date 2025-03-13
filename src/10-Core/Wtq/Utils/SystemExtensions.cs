@@ -4,6 +4,45 @@ using System.Xml.Linq;
 
 namespace Wtq.Utils;
 
+public static class Opts
+{
+	public static TValue Cascade<TValue>(
+		Expression<Func<WtqSharedOptions, object?>> expr,
+		// WtqOptions global,
+		// WtqAppOptions app,
+		params WtqSharedOptions[] opts
+	)
+	{
+		Guard.Against.Null(expr);
+		// Guard.Against.Null(app);
+
+		var v = expr.Compile();
+
+		foreach (var opt in opts)
+		{
+			var fromApp = v(opt);
+			if (fromApp != null)
+			{
+				return (TValue)fromApp;
+			}
+		}
+
+		// var fromApp = v(app);
+		// if (fromApp != null)
+		// {
+		// 	return (TValue)fromApp;
+		// }
+		//
+		// var fromGlb = v(global);
+		// if (fromGlb != null)
+		// {
+		// 	return (TValue)fromGlb;
+		// }
+
+		return DefaultValue.For<TValue>(expr);
+	}
+}
+
 public static class SystemExtensions
 {
 	public static bool HasHotkey(this ICollection<HotkeyOptions> hotkeys, Keys key, KeyModifiers modifiers)
