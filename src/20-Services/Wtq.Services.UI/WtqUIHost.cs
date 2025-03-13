@@ -53,7 +53,7 @@ public class WtqUIHost
 		_ = app.MainWindow
 			.RegisterWindowCreatedHandler((s, a) =>
 			{
-				if (!opts.Value.ShowUiOnStart)
+				if (!opts.Value.ShowUiOnStart ?? false)
 				{
 					_ = Task.Run(CloseMainWindowAsync);
 				}

@@ -127,14 +127,25 @@ public static class SystemExtensions
 		return m.GetCustomAttribute<DisplayAttribute>();
 	}
 
+	public static (int Min, int Max)? GetRange(Expression expr)
+	{
+		var m = expr.GetMemberInfo();
+		var attr = m.GetCustomAttribute<RangeAttribute>();
+
+		if (attr == null)
+		{
+			return null;
+		}
+
+		return ((int)attr.Minimum, (int)attr.Maximum);
+	}
+
 	public static string GetMemberDocEnum<TEnum>(object val)
 	{
 		var mem = typeof(TEnum).GetMember(val.ToString()).FirstOrDefault();
-		// var m = SystemExtensions.GetMemberInfo(expr);
-		//
 		var x = mem.GetXmlDocsElement(new XmlDocsOptions()
 		{
-			FormattingMode = XmlDocsFormattingMode.Html
+			FormattingMode = XmlDocsFormattingMode.Html,
 		});
 
 		// return m.GetXmlDocsSummary();

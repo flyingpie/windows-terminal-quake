@@ -2,12 +2,22 @@
 
 @inherits WtqSettingBase<TProperty>
 
+@code {
+
+	private (decimal Min, decimal Max)? _range;
+
+	protected override void OnInitialized()
+	{
+		_range = SystemExtensions.GetRange(Get);
+	}
+
+}
+
 <WtqSetting TProperty="TProperty" Get="Get" Set="Set" Default="Default">
 	<Content>
 
-		<!-- TODO: Min/Max configurable -->
 		<RadzenNumeric @bind-Value="Value" class="rz-mr-4" style="width: 80px;" Min="0" Max="1000" />
-		<RadzenSlider @bind-Value="Value" TValue="TProperty?" Min="0" Max="1000" />
+		<RadzenSlider @bind-Value="Value" TValue="TProperty?" Min="_range?.Min ?? 0" Max="_range?.Max ?? 100" />
 
 	</Content>
 </WtqSetting>

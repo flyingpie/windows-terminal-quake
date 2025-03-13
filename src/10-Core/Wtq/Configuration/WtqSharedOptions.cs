@@ -11,6 +11,7 @@ public class WtqSharedOptions
 	/// </summary>
 	[Display(Name = "Animation duration (ms)")]
 	[DefaultValue(250)]
+	[Range(0, 1000)]
 	public int? AnimationDurationMs { get; set; }
 
 	/// <summary>
@@ -77,6 +78,7 @@ public class WtqSharedOptions
 	/// </summary>
 	[Display(Name = "Monitor index")]
 	[DefaultValue(0)]
+	[Range(0, 10)]
 	public int? MonitorIndex { get; set; }
 
 	/// <summary>
@@ -121,6 +123,7 @@ public class WtqSharedOptions
 	/// </summary>
 	[Display(Name = "Vertical offset", Prompt = "In pixels")]
 	[DefaultValue(0f)]
+	[Range(0, 1000)]
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>

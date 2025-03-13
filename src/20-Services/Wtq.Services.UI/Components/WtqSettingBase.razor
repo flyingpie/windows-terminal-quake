@@ -22,11 +22,15 @@
 	[Parameter]
 	public Expression<Func<object?>>? Default { get; set; }
 
+	private Func<object?>? _get;
+	private Func<object?>? _default;
+	private DefaultValueAttribute? _defaultAttr;
+
 	protected TProperty Value
 	{
 		get
 		{
-			var r = Get.Compile()();
+			var r = (_get ??= Get.Compile())();
 			if (r != null)
 			{
 				return (TProperty)r;
@@ -37,14 +41,13 @@
 				return default;
 			}
 
-			var b = Default.Compile()();
+			var b = (_default ??= Default.Compile())();
 			if (b != null)
 			{
 				return (TProperty?)b;
 			}
 
-			var def = Default.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>()?.Value;
-
+			var def = (_defaultAttr ??= Default.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>())?.Value;
 			if (def != null)
 			{
 				return (TProperty?)def;

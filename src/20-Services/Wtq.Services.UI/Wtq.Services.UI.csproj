@@ -21,4 +21,13 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Settings\Animation\AnimationDurationSetting.razor" />
+	  <UpToDateCheckInput Remove="Components\Settings\Animation\AnimationTargetFpsSetting.razor" />
+	  <UpToDateCheckInput Remove="Components\Settings\Animation\AnimationTypeToggleOffSetting.razor" />
+	  <UpToDateCheckInput Remove="Components\Settings\Animation\AnimationTypeToggleOnSetting.razor" />
+	  <UpToDateCheckInput Remove="Components\Settings\Monitor\MonitorIndexSetting.razor" />
+	  <UpToDateCheckInput Remove="Components\Settings\Monitor\PreferMonitorSetting.razor" />
+	</ItemGroup>
 </Project>

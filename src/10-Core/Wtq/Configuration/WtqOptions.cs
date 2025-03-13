@@ -1,4 +1,3 @@
-using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
@@ -35,7 +34,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 	[Display(Name = "Show UI on start")]
 	[DefaultValue(false)]
-	public bool ShowUiOnStart { get; set; }
+	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
 	/// How many frames per second the animation should be.<br/>
@@ -141,22 +140,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 				Hotkeys.Remove(hk);
 			}
 		}
-
-		foreach (var p in GetType().GetProperties())
-		{
-			var attr = p.GetCustomAttribute<DefaultValueAttribute>();
-			if (attr == null)
-			{
-				continue;
-			}
-
-			var val = p.GetValue(this);
-
-			if (val != null && val.Equals(attr.Value))
-			{
-				p.SetValue(this, default);
-			}
-		}
 	}
 
 	#region Validation
@@ -173,7 +156,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 	private TValue GetCascadingValue<TValue>(
 		Expression<Func<WtqSharedOptions, object?>> expr,
-		// WtqOptions global,
 		WtqAppOptions app)
 	{
 		Guard.Against.Null(expr);

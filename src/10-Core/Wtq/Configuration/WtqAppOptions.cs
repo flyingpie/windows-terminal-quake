@@ -7,7 +7,10 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 {
 	private ICollection<ProcessArgument> _argumentList = [];
 	private ICollection<HotkeyOptions> _hotkeys = [];
+	private string? _fileName;
 	private string? _processName;
+	private string? _windowTitle;
+	private string? _windowTitleOverride;
 
 	#region App
 
@@ -40,9 +43,12 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[Display(Name = "Filename")]
 	[JsonPropertyOrder(10)]
-	[NotNull]
 	[Required]
-	public string? FileName { get; set; }
+	public string? FileName
+	{
+		get => _fileName;
+		set => _fileName = value?.EmptyOrWhiteSpaceToNull();
+	}
 
 	/// <summary>
 	/// Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
@@ -74,7 +80,11 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	[Display(Name = "Window title")]
 	[JsonPropertyOrder(15)]
-	public string? WindowTitle { get; set; }
+	public string? WindowTitle
+	{
+		get => _windowTitle;
+		set => _windowTitle = value?.EmptyOrWhiteSpaceToNull();
+	}
 
 	#endregion
 
@@ -85,7 +95,11 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[Display(Name = "Window title override")]
 	[JsonPropertyOrder(99)]
-	public string? WindowTitleOverride { get; set; }
+	public string? WindowTitleOverride
+	{
+		get => _windowTitleOverride;
+		set => _windowTitleOverride = value?.EmptyOrWhiteSpaceToNull();
+	}
 
 	#endregion
 

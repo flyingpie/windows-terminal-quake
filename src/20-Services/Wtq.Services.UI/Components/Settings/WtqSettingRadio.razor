@@ -22,19 +22,16 @@
 			TValue="TProperty"
 		>
 			<Items>
-				@* <RadzenRadioButtonListItem	Value="HideOnFocusLost.Always"						Text="Always"/> *@
-				@* <RadzenRadioButtonListItem	Value="HideOnFocusLost.Never"						Text="Never"/> *@
-				@* <RadzenRadioButtonListItem	Value="HideOnFocusLost.UnlessFocusChangedScreen"	Text="Unless focus changed screen"	Disabled="true"/> *@
 
 				@foreach (var v in Wtq.Utils.EnumExtensions.GetEnumItems<TProperty>())
 				{
 
 					<RadzenRadioButtonListItem Value="v.Value">
 						<Template>
-							<strong>@(v.DisplayName)</strong>
-							<p class="rz-color-base-500 rz-m-0" style="cursor: pointer; max-width: 300px;">
-								@((MarkupString?)v.Doc)
-							</p>
+							<div style="cursor: pointer; max-width: 300px;">
+								<strong>@(v.DisplayName)</strong>
+								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)v.Doc)</p>
+							</div>
 						</Template>
 					</RadzenRadioButtonListItem>
 
