@@ -6,6 +6,9 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
+	// TODO: Implement.
+	private bool _isSuspended;
+
 	public WinFormsHotkeyService(IWtqBus bus)
 	{
 		Guard.Against.Null(bus);
