@@ -42,6 +42,7 @@ public class WtqHostBase
 			{
 				s
 					.AddOptionsWithValidateOnStart<WtqOptions>()
+					.PostConfigure(o => o.OnPostConfigure())
 					.Bind(config);
 
 				s

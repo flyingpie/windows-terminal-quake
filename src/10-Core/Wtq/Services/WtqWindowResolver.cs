@@ -2,13 +2,11 @@ namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqWindowResolver"/>
 public sealed class WtqWindowResolver(
-	IOptionsMonitor<WtqOptions> opts,
 	IWtqWindowService procService)
 	: IWtqWindowResolver
 {
 	private readonly ILogger _log = Log.For<WtqWindowResolver>();
 
-	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(procService);
 
 	/// <inheritdoc/>
@@ -16,7 +14,7 @@ public sealed class WtqWindowResolver(
 	{
 		Guard.Against.Null(opts);
 
-		var attachMode = _opts.CurrentValue.GetAttachModeForApp(opts);
+		var attachMode = opts.GetAttachMode();
 
 		switch (attachMode)
 		{
@@ -35,7 +33,7 @@ public sealed class WtqWindowResolver(
 
 	private async Task<WtqWindow?> FindOrStartAsync(WtqAppOptions opts, bool allowStartNew)
 	{
-		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process", opts);
+		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})", opts, allowStartNew);
 
 		// Look for an existing window first.
 		var window1 = await _windowService.FindWindowAsync(opts, CancellationToken.None).NoCtx();

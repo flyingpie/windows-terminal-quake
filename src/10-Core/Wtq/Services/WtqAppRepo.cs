@@ -98,28 +98,11 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		Guard.Against.Null(app);
 
 		return new WtqApp(
-			_opts,
 			_toggleService,
 			_screenInfoProvider,
 			_windowResolver,
-			() => GetOptionsByNameRequired(app.Name),
+			() => _opts.CurrentValue.GetAppOptionsByNameRequired(app.Name),
 			app.Name);
-	}
-
-	private WtqAppOptions? GetOptionsByName(string name)
-	{
-		Guard.Against.NullOrWhiteSpace(name);
-
-		return _opts
-			.CurrentValue
-			.Apps
-			.FirstOrDefault(o => o.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false);
-	}
-
-	private WtqAppOptions GetOptionsByNameRequired(string name)
-	{
-		return GetOptionsByName(name)
-			?? throw new WtqException($"No instance found of type '{nameof(WtqAppOptions)}' found with name '{name}'. These were found: '{string.Join(", ", _opts.CurrentValue.Apps.Select(a => a.Name))}'.");
 	}
 
 	private async Task UpdateAppsAsync(bool allowStartNew)

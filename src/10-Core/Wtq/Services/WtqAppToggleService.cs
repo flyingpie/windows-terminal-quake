@@ -4,7 +4,6 @@ namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
 public class WtqAppToggleService(
-	IOptionsMonitor<WtqOptions> opts,
 	IWtqScreenInfoProvider screenInfoProvider,
 	IWtqTween tween)
 	: IWtqAppToggleService
@@ -16,7 +15,6 @@ public class WtqAppToggleService(
 	private static readonly Point BehindScreenLocation = new(0, -100_000);
 
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
-	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
 
@@ -61,9 +59,12 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Value.Location,
 				dst: windowRectDst.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.GetAnimationTypeToggleOn(app.Options),
+				animType: app.Options.GetAnimationTypeToggleOn(),
 				move: app.MoveWindowAsync)
 			.NoCtx();
+
+		// Resize window.
+		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 	}
 
 	/// <inheritdoc/>
@@ -106,7 +107,7 @@ public class WtqAppToggleService(
 				src: windowRectSrc.Location,
 				dst: windowRectDst.Value.Location,
 				durationMs: durationMs,
-				animType: _opts.CurrentValue.GetAnimationTypeToggleOff(app.Options),
+				animType: app.Options.GetAnimationTypeToggleOff(),
 				move: app.MoveWindowAsync)
 			.NoCtx();
 	}
@@ -122,11 +123,11 @@ public class WtqAppToggleService(
 				return 0;
 
 			case ToggleModifiers.SwitchingApps:
-				return _opts.CurrentValue.GetAnimationDurationMsWhenSwitchingApps(app.Options);
+				return app.Options.GetAnimationDurationMsWhenSwitchingApps();
 
 			case ToggleModifiers.None:
 			default:
-				return _opts.CurrentValue.GetAnimationDurationMs(app.Options);
+				return app.Options.GetAnimationDurationMs();
 		}
 	}
 
@@ -138,11 +139,11 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Calculate app window size.
-		var windowWidth = (int)(screenRect.Width * _opts.CurrentValue.HorizontalScreenCoverageIndexForApp(app.Options));
-		var windowHeight = (int)(screenRect.Height * _opts.CurrentValue.VerticalScreenCoverageIndexForApp(app.Options));
+		var windowWidth = (int)(screenRect.Width * app.Options.HorizontalScreenCoverageIndex());
+		var windowHeight = (int)(screenRect.Height * app.Options.VerticalScreenCoverageIndex());
 
 		// Calculate horizontal position.
-		var x = app.Options.HorizontalAlign switch
+		var x = app.Options.GetHorizontalAlign() switch
 		{
 			// Left
 			HorizontalAlign.Left => screenRect.X,
@@ -160,7 +161,7 @@ public class WtqAppToggleService(
 			X = x,
 
 			// Y, top of the screen + offset
-			Y = screenRect.Y + (int)_opts.CurrentValue.GetVerticalOffsetForApp(app.Options),
+			Y = screenRect.Y + (int)app.Options.GetVerticalOffset(),
 
 			// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
 			Width = windowWidth,
@@ -210,8 +211,8 @@ public class WtqAppToggleService(
 
 		var margin = 100;
 
-		return _opts.CurrentValue
-			.GetOffScreenLocationsForApp(app.Options)
+		return app.Options
+			.GetOffScreenLocations()
 			.Select(dir => dir switch
 			{
 				Above or None => windowRect with
@@ -253,14 +254,14 @@ public class WtqAppToggleService(
 		_log.LogTrace("Looking for target screen rect for app {App}", this);
 
 		// Determine what monitor we want to use.
-		var preferMonitor = app.Options.PreferMonitor ?? _opts.CurrentValue.PreferMonitor;
+		var preferMonitor = app.Options.GetPreferMonitor();
 
 		switch (preferMonitor)
 		{
 			case PreferMonitor.AtIndex:
 			{
 				// Get configured screen index.
-				var screenIndex = _opts.CurrentValue.GetMonitorIndex(app.Options);
+				var screenIndex = app.Options.GetMonitorIndex();
 
 				_log.LogTrace("Using screen with index {Index}", screenIndex);
 
