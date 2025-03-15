@@ -70,6 +70,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext context)
 	{
-		yield return new ValidationResult("Sup");
+		yield break;
 	}
 }
