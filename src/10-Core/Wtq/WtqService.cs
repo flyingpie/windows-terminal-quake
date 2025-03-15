@@ -63,17 +63,20 @@ public sealed class WtqService : WtqHostedService
 
 		// "Switching apps"
 		// If a previously toggled app (that is not the to-be-toggled app) is still open, close it first.
-		var open = _appRepo.GetOpen();
-		if (open != null && open != app)
+		var open = await _appRepo.GetOnScreenAsync();
+		if (open.Count > 0 && !open.Contains(app))
 		{
-			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
-			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+			foreach (var op in open)
+			{
+				_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+				await op.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+			}
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
 
 		// "Toggling app"
-		if (app.IsOpen)
+		if (await app.IsOnScreenAsync())
 		{
 			_log.LogInformation("Closing previously open app '{App}'", app);
 

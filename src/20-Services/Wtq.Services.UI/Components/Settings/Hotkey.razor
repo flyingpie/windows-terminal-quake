@@ -4,6 +4,8 @@
 
 @code {
 
+	private RadzenTextBox _textBox = null!;
+
 	private bool _isSuper;
 
 	[EditorRequired]
@@ -13,6 +15,8 @@
 	[EditorRequired]
 	[Parameter]
 	public Action OnRemove { get; set; }
+
+	public ValueTask FocusAsync() => _textBox.FocusAsync();
 
 	private string Description
 	{
@@ -74,6 +78,7 @@
 
 	<!-- Shortcut capturing textbox -->
 	<RadzenTextBox
+		@ref="_textBox"
 		Style="width: 100%;"
 		@onkeydown="HandleKeyDown"
 		@onkeyup="HandleKeyUp"

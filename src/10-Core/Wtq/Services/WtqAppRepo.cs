@@ -82,9 +82,19 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	}
 
 	/// <inheritdoc/>
-	public WtqApp? GetOpen()
+	public async Task<ICollection<WtqApp>> GetOnScreenAsync()
 	{
-		return _apps.FirstOrDefault(a => a.IsOpen);
+		var res = new List<WtqApp>();
+
+		foreach (var app in _apps)
+		{
+			if (await app.IsOnScreenAsync())
+			{
+				res.Add(app);
+			}
+		}
+
+		return res;
 	}
 
 	/// <inheritdoc/>

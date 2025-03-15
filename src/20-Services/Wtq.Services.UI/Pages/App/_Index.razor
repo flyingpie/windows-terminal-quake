@@ -24,7 +24,7 @@
 	protected override void OnInitialized()
 	{
 		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
-		WtqOpts.OnChange((a, b) => Reload());
+		WtqOpts.OnChange((a, b) => InvokeAsync(Reload));
 	}
 
 	protected override void OnParametersSet()
@@ -43,6 +43,8 @@
 	{
 		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
 		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
+
+		StateHasChanged();
 	}
 
 }

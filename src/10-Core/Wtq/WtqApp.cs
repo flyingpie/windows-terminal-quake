@@ -51,7 +51,18 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Whether the app is currently toggled onto the screen.<br/>
 	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
 	/// </summary>
-	public bool IsOpen { get; private set; } // TODO: Refactor to ask the window for its state? This has a tendency of diverging.
+	public async Task<bool> IsOnScreenAsync()
+	{
+		if (!IsAttached)
+		{
+			return false;
+		}
+
+		var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
+		var pos = await Window.GetWindowRectAsync().NoCtx();
+
+		return screens.Any(scr => scr.IntersectsWith(pos));
+	}
 
 	/// <summary>
 	/// The name of the app, as configured in the settings file.<br/>
@@ -74,13 +85,6 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (!IsOpen)
-		{
-			// return;
-		}
-
-		IsOpen = false;
-
 		if (!IsAttached)
 		{
 			_log.LogWarning("Attempted to close inactive app {App}", this);
@@ -171,14 +175,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
-		if (IsOpen)
-		{
-			// return false;
-		}
-
 		_log.LogInformation("Opening app '{App}'", this);
-
-		IsOpen = true;
 
 		await UpdateLocalAppStateAsync(allowStartNew: true).NoCtx();
 		await UpdateWindowPropsAsync().NoCtx();
@@ -275,7 +272,7 @@ public sealed class WtqApp : IAsyncDisposable
 				dist);
 
 			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
-			if (IsOpen)
+			if (await IsOnScreenAsync())
 			{
 				await _toggler.ToggleOnAsync(this, ToggleModifiers.Instant).NoCtx();
 			}
@@ -334,7 +331,7 @@ public sealed class WtqApp : IAsyncDisposable
 				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 				break;
 			case TaskbarIconVisibility.WhenAppVisible:
-				await Window.SetTaskbarIconVisibleAsync(IsOpen).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(await IsOnScreenAsync()).NoCtx();
 				break;
 			default:
 				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
