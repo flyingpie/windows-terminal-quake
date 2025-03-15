@@ -3,13 +3,22 @@ namespace Wtq.Core.UnitTest.Configuration;
 [TestClass]
 public class WtqOptionsTest
 {
-	private readonly WtqOptions _glbl = new();
-	private readonly WtqAppOptions _app = new();
+	private WtqOptions _glbl = null!;
+	private WtqAppOptions _app = null!;
+
+	[TestInitialize]
+	public void Setup()
+	{
+		_glbl = new();
+		_app = new();
+
+		_app.Global = _glbl;
+	}
 
 	[TestMethod]
 	public void Cascades_Default()
 	{
-		var res = _glbl.GetAnimationDurationMs(_app);
+		var res = _app.GetAnimationDurationMs();
 
 		Assert.AreEqual(250, res);
 	}
@@ -19,7 +28,7 @@ public class WtqOptionsTest
 	{
 		_glbl.AnimationDurationMs = 1234;
 
-		var res = _glbl.GetAnimationDurationMs(_app);
+		var res = _app.GetAnimationDurationMs();
 
 		Assert.AreEqual(1234, res);
 	}
@@ -30,7 +39,7 @@ public class WtqOptionsTest
 		_glbl.AnimationDurationMs = 1234;
 		_app.AnimationDurationMs = 4321;
 
-		var res = _glbl.GetAnimationDurationMs(_app);
+		var res = _app.GetAnimationDurationMs();
 
 		Assert.AreEqual(4321, res);
 	}

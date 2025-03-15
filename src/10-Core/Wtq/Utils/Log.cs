@@ -1,7 +1,7 @@
-#pragma warning disable
-
 using Serilog;
+using Serilog.Events;
 using Serilog.Extensions.Logging;
+using Serilog.Formatting.Compact;
 
 namespace Wtq.Utils;
 
@@ -14,33 +14,49 @@ public static class Log
 
 	public static void Configure()
 	{
-		var path = Path.Combine(WtqPaths.GetWtqLogDir(), "logs-.txt");
+		var path = WtqPaths.GetWtqLogDir();
 		var logLevel = WtqEnv.LogLevel;
 
 		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
 
+			// In-app.
+			.WriteTo.Sink(InAppLogSink.Instance, LogEventLevel.Debug)
+
+			// JSON.
+			.WriteTo.File(
+				formatter: new RenderedCompactJsonFormatter(),
+				path: Path.Combine(path, "logs-.json"),
+				fileSizeLimitBytes: 50_000_000,
+				rollingInterval: RollingInterval.Infinite,
+				retainedFileCountLimit: 1)
+
+			// Plain text.
 			.WriteTo.File(
 				outputTemplate: LogTemplate,
-				path: path,
+				path: Path.Combine(path, "logs-.txt"),
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
 				retainedFileCountLimit: 5);
 
-		// Log to console?
-		if (WtqEnv.LogToConsole)
+		// Log to console.
+		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
+
+		if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
 		{
-			logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
+			Console.WriteLine(
+				"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
+
+			console.MinimumLevel.Warning();
 		}
 
-		Serilog.Log.Logger = logBuilder.CreateLogger(); 
+		Serilog.Log.Logger = logBuilder.CreateLogger();
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
 		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
 		_factory.AddProvider(provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
 		Serilog.Log.Information("Logging to file at '{Path}'", path);
-		Serilog.Log.Information("Logging to console: {IsEnable}", WtqEnv.LogToConsole);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()
@@ -75,5 +91,10 @@ public static class Log
 		}
 
 		return _factory.CreateLogger(category);
+	}
+
+	public static void CloseAndFlush()
+	{
+		Serilog.Log.CloseAndFlush();
 	}
 }

@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
 
 			// Utils
 			.AddSingleton<IWtqTween, WtqTween>()
+			.AddSingleton(_ => InAppLogSink.Instance)
 
 			// Core App Logic
 			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
