@@ -23,14 +23,14 @@
 		>
 			<Items>
 
-				@foreach (var v in Wtq.Utils.EnumExtensions.GetEnumItems<TProperty>())
+				@foreach (var v in EnumUtils.GetValues<TProperty>())
 				{
 
 					<RadzenRadioButtonListItem Value="v.Value">
 						<Template>
 							<div style="cursor: pointer; max-width: 300px;">
 								<strong>@(v.DisplayName)</strong>
-								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)v.Doc)</p>
+								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)(v.Doc ?? string.Empty))</p>
 							</div>
 						</Template>
 					</RadzenRadioButtonListItem>

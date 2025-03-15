@@ -9,10 +9,9 @@
 
 	private string? _propertyName;
 
-	private string? Title => SystemExtensions.GetDisplayName(Get);
+	private string? Title => AttrUtils.GetDisplayName(Get);
 
-	// [Parameter]
-	public string? Subtitle => SystemExtensions.GetDisplay(Get)?.Prompt;
+	public string? Subtitle => AttrUtils.GetPrompt(Get);
 
 	[Parameter]
 	public RenderFragment Content { get; set; }
@@ -37,7 +36,7 @@
 			: "";
 
 	private string PropertyName
-		=> _propertyName ??= SystemExtensions.GetMemberInfo(Get).Name;
+		=> _propertyName ??= AttrUtils.GetMemberInfo(Get).Name;
 
 	private IEnumerable<ValidationResult> ValidationResultsForProperty
 		=> ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
@@ -69,7 +68,7 @@
 		@Content
 
 		<!-- Description -->
-		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)SystemExtensions.GetMemberDoc(Get))</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)AttrUtils.GetMemberDocExpr(Get))</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)

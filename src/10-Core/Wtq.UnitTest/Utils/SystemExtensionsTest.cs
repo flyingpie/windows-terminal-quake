@@ -4,26 +4,13 @@ namespace Wtq.Core.UnitTest.Utils;
 public class SystemExtensionsTest
 {
 	[TestMethod]
-	public void StringJoin_Empty()
+	[DataRow(null, null)]
+	[DataRow("", null)]
+	[DataRow(" ", null)]
+	[DataRow("\t", null)]
+	[DataRow("not-empty", "not-empty")]
+	public void EmptyOrWhiteSpaceToNull(string inp, string expected)
 	{
-		Assert.AreEqual("", Array.Empty<string>().StringJoin());
-	}
-
-	[TestMethod]
-	public void StringJoin_Single()
-	{
-		Assert.AreEqual("String 1", new[] { "String 1" }.StringJoin());
-	}
-
-	[TestMethod]
-	public void StringJoin_Multiple()
-	{
-		Assert.AreEqual("String 1, String 2", new[] { "String 1", "String 2" }.StringJoin());
-	}
-
-	[TestMethod]
-	public void StringJoin_Delimiter()
-	{
-		Assert.AreEqual("String 1 | String 2", new[] { "String 1", "String 2" }.StringJoin(" | "));
+		Assert.AreEqual(expected, inp.EmptyOrWhiteSpaceToNull());
 	}
 }

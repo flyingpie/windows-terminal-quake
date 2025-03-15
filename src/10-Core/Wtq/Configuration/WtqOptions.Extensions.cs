@@ -22,6 +22,6 @@ public static class WtqOptionsExtensions
 	{
 		Guard.Against.Null(global);
 
-		return global.AnimationTargetFps ?? DefaultValue.For<int>(() => global.AnimationTargetFps);
+		return global.AnimationTargetFps ?? AttrUtils.GetDefaultValueFor<int>(() => global.AnimationTargetFps);
 	}
 }
