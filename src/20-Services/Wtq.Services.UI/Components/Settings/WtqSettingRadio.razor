@@ -1,0 +1,44 @@
+@typeparam TProperty where TProperty : struct, Enum
+
+@inherits WtqSettingBase<TProperty?>
+
+@code {
+
+	private TProperty Val
+	{
+		get => Value ?? default;
+		set => Value = value;
+	}
+
+}
+
+<WtqSetting TProperty="TProperty?" Get="Get" Set="Set" Default="Default">
+	<Content>
+
+		<RadzenRadioButtonList
+			Name="@Id"
+			Orientation="Orientation.Vertical"
+			@bind-Value="Val"
+			TValue="TProperty"
+		>
+			<Items>
+
+				@foreach (var v in EnumUtils.GetValues<TProperty>())
+				{
+
+					<RadzenRadioButtonListItem Value="v.Value">
+						<Template>
+							<div style="cursor: pointer; max-width: 300px;">
+								<strong>@(v.DisplayName)</strong>
+								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)(v.Doc ?? string.Empty))</p>
+							</div>
+						</Template>
+					</RadzenRadioButtonListItem>
+
+				}
+
+			</Items>
+		</RadzenRadioButtonList>
+
+	</Content>
+</WtqSetting>

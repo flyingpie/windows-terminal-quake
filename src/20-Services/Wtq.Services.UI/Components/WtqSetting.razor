@@ -1,0 +1,97 @@
+@using System.ComponentModel.DataAnnotations
+@using System.Linq.Expressions
+
+@typeparam TProperty
+
+@inject TooltipService TooltipService
+
+@code {
+
+	private string? _propertyName;
+
+	private string? Title => AttrUtils.GetDisplayName(Get);
+
+	public string? Subtitle => AttrUtils.GetPrompt(Get);
+
+	[Parameter]
+	public RenderFragment Content { get; set; }
+
+	[CascadingParameter]
+	public IEnumerable<ValidationResult> ValidationResults { get; set; }
+
+	[Parameter]
+	public Expression<Func<object?>> Get { get; set; }
+
+	[Parameter]
+	public Action<TProperty?> Set { get; set; }
+
+	[Parameter]
+	public Expression<Func<object?>>? Default { get; set; }
+
+	public bool IsOverridden => Get.Compile()() != null;
+
+	private string LabelClass
+		=> ValidationResultsForProperty.Any()
+			? "rz-color-danger-light"
+			: "";
+
+	private string PropertyName
+		=> _propertyName ??= AttrUtils.GetMemberInfo(Get).Name;
+
+	private IEnumerable<ValidationResult> ValidationResultsForProperty
+		=> ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
+
+	private void Reset() => Set(default);
+
+	private void ShowTooltip(ElementReference elementReference, TooltipOptions options)
+		=> TooltipService.Open(
+			elementReference,
+			IsOverridden ? "Revert to default" : "Using default value",
+			options);
+
+}
+
+<RadzenRow AlignItems="AlignItems.Start">
+
+	<!-- Label -->
+	<RadzenColumn Size="4">
+		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
+			<RadzenLabel class="@LabelClass"><strong>@Title</strong></RadzenLabel>
+
+			<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
+		</RadzenStack>
+	</RadzenColumn>
+
+	<RadzenColumn Size="7">
+
+		<!-- Control -->
+		@Content
+
+		<!-- Description -->
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)AttrUtils.GetMemberDocExpr(Get))</p>
+
+		<!-- Validation -->
+		@foreach (var v in ValidationResultsForProperty)
+		{
+			<RadzenAlert AlertStyle="AlertStyle.Warning" AllowClose="false" Shade="Shade.Lighter">@((MarkupString)v.ErrorMessage!)</RadzenAlert>
+		}
+
+	</RadzenColumn>
+
+	<!-- Override -->
+	<RadzenColumn Size="1" class="rz-text-end" style="text-align: right;">
+
+		<RadzenToggleButton
+			ButtonStyle="ButtonStyle.Light"
+			Click="Reset"
+			Disabled="@(!IsOverridden)"
+			Icon="public"
+			MouseEnter="@(args => ShowTooltip(args, new TooltipOptions() { Position = TooltipPosition.Left, }))"
+			Size="ButtonSize.Small"
+			ToggleButtonStyle="ButtonStyle.Primary"
+			Value="IsOverridden"
+			Visible="@(Default != null)"
+		/>
+
+	</RadzenColumn>
+</RadzenRow>

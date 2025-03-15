@@ -1,0 +1,208 @@
+@using Wtq.Services.UI.Components.Settings.App
+@using Wtq.Services.UI.Components.Settings.Process
+@using Wtq.Services.UI.Components.Settings
+@using HorizontalAlign = Wtq.Configuration.HorizontalAlign
+@using Wtq.Services.UI.Components.Settings.Position
+
+@inject IOptionsMonitor<WtqOptions> WtqOpts
+@inject Notifier Notifier
+@inject WtqOptionsSaveService SaveService
+@inject NotificationService NotificationService
+
+@page "/apps/{AppId}"
+
+@code {
+
+	[NotNull]
+	[Parameter]
+	public string? AppId { get; set; }
+
+	public WtqAppOptions AppOpts { get; set; }
+
+	public WtqOptions GlobalOpts { get; set; }
+
+	protected override void OnInitialized()
+	{
+		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
+		WtqOpts.OnChange((a, b) => InvokeAsync(Reload));
+	}
+
+	protected override void OnParametersSet()
+	{
+		Reload();
+	}
+
+	private async Task SaveAsync()
+	{
+		await SaveService.SaveAsync(GlobalOpts).NoCtx();
+
+		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
+	}
+
+	private void Reload()
+	{
+		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+		AppOpts = GlobalOpts.GetAppOptionsByNameRequired(AppId);
+
+		StateHasChanged();
+	}
+
+}
+
+<PageHead Icon="circle">
+	App <span class="rz-color-primary">@AppId</span>
+</PageHead>
+
+<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+
+<CascadingValue Value="GlobalOpts">
+<CascadingValue Value="AppOpts">
+<CascadingValue Value="Notifier">
+
+<CascadingValue Value="AppOpts.ValidationResults">
+
+	<RadzenStack>
+
+		<!-- Warn about outside file changes. -->
+		@*
+			TODO: Disabled for now, as the check based on option reloads isn't super reliable.
+			TODO:
+			TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
+			TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
+			The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
+			<RadzenButton Text="Reload" Click="Reload"/>
+		</RadzenAlert>
+		*@
+
+		@* TODO: Messages without a member name only *@
+		@* <ValidationMessages /> *@
+
+		<RadzenFieldset Text="App">
+			<RadzenStack Gap="1rem">
+
+				<!-- App name -->
+				<WtqSettingTextBox														Get="() => AppOpts.Name"						Set="v => AppOpts.Name = v" />
+
+				<!-- Hotkeys -->
+				<HotkeysSetting															Get="() => AppOpts.Hotkeys"						Set="v => AppOpts.Hotkeys = v" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Process">
+			<RadzenStack Gap="1rem">
+
+				<!-- Refer to examples page. -->
+				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
+					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
+					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
+				</RadzenAlert>
+
+				<!-- Filename -->
+				<FilenameSetting														Get="() => AppOpts.FileName"					Set="v => AppOpts.FileName = v" />
+
+				<!-- Alerts about known apps, and any specific configuration they require. -->
+				<KnownAppAlerts AppOpts="AppOpts" />
+
+				<!-- Process name -->
+				<WtqSettingTextBox														Get="() => AppOpts.ProcessName"					Set="v => AppOpts.ProcessName = v" />
+
+				<!-- Startup arguments -->
+				<ArgumentsSetting														Get="() => AppOpts.ArgumentList"				Set="v => AppOpts.ArgumentList = v!" />
+
+				<!-- Attach mode -->
+				<WtqSettingRadio					TProperty="AttachMode"				Get="() => AppOpts.AttachMode"					Set="v => AppOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />
+
+				<!-- Window title -->
+				<WtqSettingTextBox														Get="() => AppOpts.WindowTitle"					Set="v => AppOpts.WindowTitle = v" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Behavior">
+			<RadzenStack Gap="1rem">
+
+				<!-- Always on top -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => AppOpts.AlwaysOnTop"					Set="v => AppOpts.AlwaysOnTop = v"					Default="() => GlobalOpts.AlwaysOnTop" />
+
+				<!-- Hide on focus lost -->
+				<WtqSettingRadio					TProperty="HideOnFocusLost"			Get="() => AppOpts.HideOnFocusLost"				Set="v => AppOpts.HideOnFocusLost = v"				Default="() => GlobalOpts.HideOnFocusLost" />
+
+				<!-- Taskbar icon visibility -->
+				<WtqSettingRadio					TProperty="TaskbarIconVisibility"	Get="() => AppOpts.TaskbarIconVisibility"		Set="v => AppOpts.TaskbarIconVisibility = v"		Default="() => GlobalOpts.TaskbarIconVisibility" />
+
+				<!-- Opacity -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => AppOpts.Opacity"						Set="v => AppOpts.Opacity = v"						Default="() => GlobalOpts.Opacity" />
+
+				<!-- Window title override -->
+				<WtqSettingTextBox														Get="() => AppOpts.WindowTitleOverride"			Set="v => AppOpts.WindowTitleOverride = v" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Position">
+			<RadzenStack Gap="1rem">
+
+				<!-- Horizontal screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.HorizontalScreenCoverage"	Set="v => AppOpts.HorizontalScreenCoverage = v"		Default="() => GlobalOpts.HorizontalScreenCoverage" />
+
+				<!-- Horizontal align -->
+				<WtqSettingRadio					TProperty="HorizontalAlign"			Get="() => AppOpts.HorizontalAlign"				Set="v => AppOpts.HorizontalAlign = v"				Default="() => GlobalOpts.HorizontalAlign" />
+
+				<!-- Vertical screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.VerticalScreenCoverage"		Set="v => AppOpts.VerticalScreenCoverage = v"		Default="() => GlobalOpts.VerticalScreenCoverage" />
+
+				<!-- Vertical offset -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.VerticalOffset"				Set="v => AppOpts.VerticalOffset = v"				Default="() => GlobalOpts.VerticalOffset" />
+
+				<!-- Off-screen locations -->
+				<OffScreenLocationsSetting												Get="() => GlobalOpts.OffScreenLocations"		Set="v => GlobalOpts.OffScreenLocations = v"		Default="() => GlobalOpts.OffScreenLocations" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Monitor">
+			<RadzenStack Gap="1rem">
+
+				<!-- Prefer monitor -->
+				<WtqSettingRadio					TProperty="PreferMonitor"			Get="() => AppOpts.PreferMonitor"				Set="v => AppOpts.PreferMonitor = v"				Default="() => GlobalOpts.PreferMonitor" />
+
+				<!-- Monitor index -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => AppOpts.MonitorIndex"				Set="v => AppOpts.MonitorIndex = v"					Default="() => GlobalOpts.MonitorIndex" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Animation">
+			<RadzenStack Gap="1rem">
+
+				<!-- Animation duration -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => AppOpts.AnimationDurationMs"			Set="v => AppOpts.AnimationDurationMs = v"			Default="() => GlobalOpts.AnimationDurationMs" />
+
+				<!-- Animation type (toggle ON) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => AppOpts.AnimationTypeToggleOn"		Set="v => AppOpts.AnimationTypeToggleOn = v"		Default="() => GlobalOpts.AnimationTypeToggleOn" />
+
+				<!-- Animation type (toggle OFF) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => AppOpts.AnimationTypeToggleOff"		Set="v => AppOpts.AnimationTypeToggleOff = v"		Default="() => GlobalOpts.AnimationTypeToggleOff" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+	</RadzenStack>
+
+	<!-- Save/Discard -->
+	<RadzenStack
+		Orientation="Orientation.Horizontal"
+		JustifyContent="JustifyContent.End"
+		style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
+	>
+		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
+		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
+	</RadzenStack>
+
+</CascadingValue>
+
+</CascadingValue>
+</CascadingValue>
+</CascadingValue>

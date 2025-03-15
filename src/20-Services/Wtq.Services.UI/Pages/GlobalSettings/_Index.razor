@@ -1,9 +1,177 @@
+@using Wtq.Services.UI.Components.Settings.App
+@using Wtq.Services.UI.Components.Settings
+@using Wc = Wtq.Configuration
+@using Wtq.Services.UI.Components.Settings.Position
+
+@inject IOptionsMonitor<WtqOptions> WtqOpts
+@inject Notifier Notifier
+@inject WtqOptionsSaveService SaveService
+@inject NotificationService NotificationService
+
 @page "/global-settings"
 
 @code {
 
+	public WtqOptions GlobalOpts { get; set; }
+
+	protected override void OnInitialized()
+	{
+		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
+		WtqOpts.OnChange((a, b) => Reload());
+	}
+
+	protected override void OnParametersSet()
+	{
+		Reload();
+	}
+
+	private async Task SaveAsync()
+	{
+		await SaveService.SaveAsync(GlobalOpts).NoCtx();
+
+		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
+	}
+
+	private void Reload()
+	{
+		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+	}
+
 }
 
 <PageHead Icon="public">Global settings</PageHead>
+<p class="rz-color-base-500 rz-mt-0">Settings that apply to all apps (unless overridden).</p>
 
-<h2><RadzenIcon Icon="construction" />&nbsp;TODO</h2>
+<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+
+<CascadingValue Value="GlobalOpts">
+<CascadingValue Value="Notifier">
+<CascadingValue Value="GlobalOpts.ValidationResults">
+
+	<RadzenStack>
+
+		<!-- Warn about outside file changes. -->
+		@*
+			TODO: Disabled for now, as the check based on option reloads isn't super reliable.
+			TODO:
+			TODO: On save. the "OnChange" delegate gets called multiple times. Either just how it is, or we're doing something broken somewhere else.
+			TODO: In any case, it's not a particularly robust way of checking, it'd be nicer to directly compare the UI options state against the disk one.
+		<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Warning" Icon="warning" Visible="_hasChanged">
+			The settings file has changed, be aware that saving anything here will overwrite on-disk changes.
+			<RadzenButton Text="Reload" Click="Reload"/>
+		</RadzenAlert>
+		*@
+
+		@* TODO: Messages without a member name only *@
+		@* <ValidationMessages /> *@
+
+		<RadzenFieldset Text="Apps">
+			<RadzenStack Gap="1rem">
+
+				<HotkeysSetting															Get="() => GlobalOpts.Hotkeys"						Set="v => GlobalOpts.Hotkeys = v" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Process">
+			<RadzenStack Gap="1rem">
+
+				<!-- Attach mode -->
+				<WtqSettingRadio					TProperty="AttachMode"				Get="() => GlobalOpts.AttachMode"					Set="v => GlobalOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Behavior">
+			<RadzenStack Gap="1rem">
+
+				<!-- Always on top -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v"					Default="() => GlobalOpts.AlwaysOnTop" />
+
+				<!-- Hide on focus lost -->
+				<WtqSettingRadio					TProperty="HideOnFocusLost"			Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v"				Default="() => GlobalOpts.HideOnFocusLost" />
+
+				<!-- Taskbar icon visibility -->
+				<WtqSettingRadio					TProperty="TaskbarIconVisibility"	Get="() => GlobalOpts.TaskbarIconVisibility"		Set="v => GlobalOpts.TaskbarIconVisibility = v"			Default="() => GlobalOpts.TaskbarIconVisibility" />
+
+				<!-- Opacity -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.Opacity"						Set="v => GlobalOpts.Opacity = v"						Default="() => GlobalOpts.Opacity" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Position">
+			<RadzenStack Gap="1rem">
+
+				<!-- Horizontal screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.HorizontalScreenCoverage"		Set="v => GlobalOpts.HorizontalScreenCoverage = v"		Default="() => GlobalOpts.HorizontalScreenCoverage" />
+
+				<!-- Horizontal align -->
+				<WtqSettingRadio					TProperty="Wc.HorizontalAlign"		Get="() => GlobalOpts.HorizontalAlign"				Set="v => GlobalOpts.HorizontalAlign = v"				Default="() => GlobalOpts.HorizontalAlign" />
+
+				<!-- Vertical screen coverage -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.VerticalScreenCoverage"		Set="v => GlobalOpts.VerticalScreenCoverage = v"		Default="() => GlobalOpts.VerticalScreenCoverage" />
+
+				<!-- Vertical offset -->
+				<WtqSettingNumberSlider				TProperty="float?"					Get="() => GlobalOpts.VerticalOffset"				Set="v => GlobalOpts.VerticalOffset = v"				Default="() => GlobalOpts.VerticalOffset" />
+
+				<!-- Off-screen locations -->
+				<OffScreenLocationsSetting												Get="() => GlobalOpts.OffScreenLocations"			Set="v => GlobalOpts.OffScreenLocations = v" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Monitor">
+			<RadzenStack Gap="1rem">
+
+				<!-- Prefer monitor -->
+				<WtqSettingRadio					TProperty="PreferMonitor"			Get="() => GlobalOpts.PreferMonitor"				Set="v => GlobalOpts.PreferMonitor = v"					Default="() => GlobalOpts.PreferMonitor" />
+
+				<!-- Monitor index -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.MonitorIndex"					Set="v => GlobalOpts.MonitorIndex = v"					Default="() => GlobalOpts.MonitorIndex" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Animation">
+			<RadzenStack Gap="1rem">
+
+				<!-- Animation duration -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.AnimationDurationMs"			Set="v => GlobalOpts.AnimationDurationMs = v"			Default="() => GlobalOpts.AnimationDurationMs" />
+
+				<!-- Animation target FPS -->
+				<WtqSettingNumberSlider				TProperty="int?"					Get="() => GlobalOpts.AnimationTargetFps"			Set="v => GlobalOpts.AnimationTargetFps = v"			Default="() => GlobalOpts.AnimationTargetFps" />
+
+				<!-- Animation type (toggle ON) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => GlobalOpts.AnimationTypeToggleOn"		Set="v => GlobalOpts.AnimationTypeToggleOn = v"			Default="() => GlobalOpts.AnimationTypeToggleOn" />
+
+				<!-- Animation type (toggle OFF) -->
+				<WtqSettingRadio					TProperty="AnimationType"			Get="() => GlobalOpts.AnimationTypeToggleOff"		Set="v => GlobalOpts.AnimationTypeToggleOff = v"		Default="() => GlobalOpts.AnimationTypeToggleOff" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="GUI">
+			<RadzenStack Stack="1rem">
+
+				<!-- Show UI on start -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.ShowUiOnStart"				Set="v => GlobalOpts.ShowUiOnStart = v"					Default="() => GlobalOpts.ShowUiOnStart" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+	</RadzenStack>
+
+	<!-- Save/Discard -->
+	<RadzenStack
+		Orientation="Orientation.Horizontal"
+		JustifyContent="JustifyContent.End"
+		style="position: sticky; right: 0; bottom: -1.2em; left: 0; padding: 1em 0 1em 0; margin-top: 2em; background-color: #19191a;"
+	>
+		<RadzenButton Text="Save" Icon="save" Click="SaveAsync"/>
+		<RadzenButton Text="Discard Changes" Icon="undo" ButtonStyle="ButtonStyle.Danger" Click="Reload"/>
+	</RadzenStack>
+
+</CascadingValue>
+</CascadingValue>
+</CascadingValue>

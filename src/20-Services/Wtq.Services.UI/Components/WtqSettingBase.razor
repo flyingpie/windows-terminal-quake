@@ -1,0 +1,66 @@
+@using System.ComponentModel
+@using System.Linq.Expressions
+@using System.Reflection
+
+@typeparam TProperty
+
+@code {
+
+	public string Id { get; } = Guid.NewGuid().ToString();
+
+	[CascadingParameter]
+	public Notifier Notifier { get; set; } = null!;
+
+	[EditorRequired]
+	[Parameter]
+	public Expression<Func<object?>> Get { get; set; }
+
+	[EditorRequired]
+	[Parameter]
+	public Action<TProperty?> Set { get; set; }
+
+	[Parameter]
+	public Expression<Func<object?>>? Default { get; set; }
+
+	private Func<object?>? _get;
+	private Func<object?>? _default;
+	private DefaultValueAttribute? _defaultAttr;
+
+	protected TProperty Value
+	{
+		get
+		{
+			var r = (_get ??= Get.Compile())();
+			if (r != null)
+			{
+				return (TProperty)r;
+			}
+
+			if (Default == null)
+			{
+				return default;
+			}
+
+			var b = (_default ??= Default.Compile())();
+			if (b != null)
+			{
+				return (TProperty?)b;
+			}
+
+			var def = (_defaultAttr ??= Default.GetMemberInfo().GetCustomAttribute<DefaultValueAttribute>())?.Value;
+			if (def != null)
+			{
+				return (TProperty?)def;
+			}
+
+			return default;
+		}
+		set
+		{
+			Set(value);
+
+			Notifier.Notify();
+		}
+	}
+
+}

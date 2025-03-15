@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Wtq.Configuration;
 
-namespace Wtq.Services.UI.Components;
+namespace Wtq.Services.UI.Components.Settings.Process;
 
 public partial class ProcessArg : ComponentBase
 {
