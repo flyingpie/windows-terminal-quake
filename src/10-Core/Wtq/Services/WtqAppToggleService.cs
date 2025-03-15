@@ -139,8 +139,8 @@ public class WtqAppToggleService(
 		Guard.Against.Null(app);
 
 		// Calculate app window size.
-		var windowWidth = (int)(screenRect.Width * app.Options.HorizontalScreenCoverageIndex());
-		var windowHeight = (int)(screenRect.Height * app.Options.VerticalScreenCoverageIndex());
+		var windowWidth = (int)(screenRect.Width * app.Options.GetHorizontalScreenCoverageIndex());
+		var windowHeight = (int)(screenRect.Height * app.Options.GetVerticalScreenCoverageIndex());
 
 		// Calculate horizontal position.
 		var x = app.Options.GetHorizontalAlign() switch

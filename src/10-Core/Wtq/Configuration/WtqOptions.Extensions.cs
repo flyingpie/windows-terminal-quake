@@ -18,13 +18,11 @@ public static class WtqOptionsExtensions
 			?? throw new WtqException($"No options found for app with name '{name}'. These were found: {string.Join(", ", global.Apps.Select(a => a.Name))}.");
 	}
 
-	public static int GetAnimationTargetFps(this WtqOptions global)
-	{
-		Guard.Against.Null(global);
+	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
+	public static int GetAnimationTargetFps(this WtqOptions global) =>
+		Guard.Against.Null(global).AnimationTargetFps ?? AttrUtils.GetDefaultValueFor<int>(() => global.AnimationTargetFps);
 
-		return global.AnimationTargetFps ?? AttrUtils.GetDefaultValueFor<int>(() => global.AnimationTargetFps);
-	}
-
+	/// <inheritdoc cref="WtqOptions.ShowUiOnStart"/>
 	public static bool GetShowUiOnStart(this WtqOptions global) =>
 		Guard.Against.Null(global).ShowUiOnStart ?? AttrUtils.GetDefaultValueFor<bool>(() => global.ShowUiOnStart);
 }
