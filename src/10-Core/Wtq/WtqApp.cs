@@ -47,9 +47,10 @@ public sealed class WtqApp : IAsyncDisposable
 	[MemberNotNullWhen(true, nameof(Window))]
 	public bool IsAttached => Window?.IsValid ?? false;
 
+	public bool IsOpen { get; private set; }
+
 	/// <summary>
-	/// Whether the app is currently toggled onto the screen.<br/>
-	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
+	/// Whether the app is currently toggled onto the screen.
 	/// </summary>
 	public async Task<bool> IsOnScreenAsync()
 	{
@@ -97,6 +98,8 @@ public sealed class WtqApp : IAsyncDisposable
 		await _toggler.ToggleOffAsync(this, mods).NoCtx();
 
 		await UpdateWindowPropsAsync().NoCtx();
+
+		IsOpen = false;
 	}
 
 	public async ValueTask DisposeAsync()
@@ -192,6 +195,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// Move app onto screen.
 		await _toggler.ToggleOnAsync(this, mods).NoCtx();
 
+		IsOpen = true;
+
 		return true;
 	}
 
@@ -272,7 +277,7 @@ public sealed class WtqApp : IAsyncDisposable
 				dist);
 
 			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
-			if (await IsOnScreenAsync())
+			if (IsOpen)
 			{
 				await _toggler.ToggleOnAsync(this, ToggleModifiers.Instant).NoCtx();
 			}
@@ -331,7 +336,7 @@ public sealed class WtqApp : IAsyncDisposable
 				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();
 				break;
 			case TaskbarIconVisibility.WhenAppVisible:
-				await Window.SetTaskbarIconVisibleAsync(await IsOnScreenAsync()).NoCtx();
+				await Window.SetTaskbarIconVisibleAsync(IsOpen).NoCtx();
 				break;
 			default:
 				await Window.SetTaskbarIconVisibleAsync(true).NoCtx();

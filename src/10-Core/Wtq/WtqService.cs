@@ -76,7 +76,7 @@ public sealed class WtqService : WtqHostedService
 		}
 
 		// "Toggling app"
-		if (await app.IsOnScreenAsync())
+		if (app.IsOpen)
 		{
 			_log.LogInformation("Closing previously open app '{App}'", app);
 

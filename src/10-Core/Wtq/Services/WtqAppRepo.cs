@@ -123,7 +123,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		foreach (var opt in _opts.CurrentValue.Apps)
 		{
 			// Only update apps when their configuration is valid.
-			// Otherwise we would could be missing settings that are required later on.
+			// Otherwise, we could be missing settings that are required later on.
 			if (!opt.IsValid)
 			{
 				_log.LogWarning("App '{App}' has validation errors, skipping during state updates", opt);
