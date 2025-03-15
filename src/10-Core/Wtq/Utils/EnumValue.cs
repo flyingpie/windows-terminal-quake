@@ -3,7 +3,8 @@ namespace Wtq.Utils;
 /// <summary>
 /// Wrapper for enum values, where we can include additional data such as display name.
 /// </summary>
-public class EnumValue<TValue> where TValue : struct
+public class EnumValue<TValue>
+	where TValue : struct
 {
 	private string? _displayName;
 	private string? _doc;
