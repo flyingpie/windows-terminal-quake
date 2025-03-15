@@ -3,64 +3,22 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
-public sealed class WtqAppOptions
+public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 {
-	/// <inheritdoc cref="WtqOptions.AnimationDurationMs"/>
-	public int? AnimationDurationMs { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationDurationMsWhenSwitchingApps"/>
-	[JsonIgnore]
-	public int? AnimationDurationMsWhenSwitchingApps { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationTargetFps"/>
-	public int? AnimationTargetFps { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOn"/>
-	public AnimationType? AnimationTypeToggleOn { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AnimationTypeToggleOff"/>
-	public AnimationType? AnimationTypeToggleOff { get; set; }
-
 	private ICollection<ProcessArgument> _argumentList = [];
+	private ICollection<HotkeyOptions> _hotkeys = [];
+	private string? _fileName;
+	private string? _processName;
+	private string? _windowTitle;
+	private string? _windowTitleOverride;
 
 	/// <summary>
-	/// Command-line arguments that should be passed to the app when it's started.<br/>
-	/// Note that this only applies when using an <see cref="AttachMode"/> that starts the app.
+	/// Used to refer from the app options object back to the global one, for cascading.
 	/// </summary>
-	public string? Arguments { get; set; }
+	[JsonIgnore]
+	public WtqOptions Global { get; set; } = null!;
 
-	public ICollection<ProcessArgument> ArgumentsList
-	{
-		get => _argumentList;
-		set => _argumentList = value ?? [];
-	}
-
-	/// <inheritdoc cref="WtqOptions.AlwaysOnTop"/>
-	public bool? AlwaysOnTop { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.AttachMode"/>
-	public AttachMode? AttachMode { get; set; }
-
-	/// <summary>
-	/// Path to an executable that should be run when we're starting an app instance ourselves.
-	/// </summary>
-	[NotNull]
-	[Required]
-	public string? FileName { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.HideOnFocusLost"/>
-	public HideOnFocusLost? HideOnFocusLost { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.HorizontalAlign"/>
-	public HorizontalAlign? HorizontalAlign { get; set; }
-
-	/// <inheritdoc cref="WtqOptions.HorizontalScreenCoverage"/>
-	public float? HorizontalScreenCoverage { get; set; }
-
-	public ICollection<HotkeyOptions> Hotkeys { get; set; } = [];
-
-	/// <inheritdoc cref="WtqOptions.MonitorIndex"/>
-	public int? MonitorIndex { get; set; }
+	#region 1000 - App
 
 	/// <summary>
 	/// A logical name for the app, used to identify it across config reloads.<br/>
@@ -68,54 +26,130 @@ public sealed class WtqAppOptions
 	/// </summary>
 	[NotNull]
 	[Required]
+	[JsonPropertyOrder(1001)]
 	public string? Name { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.Opacity"/>
-	public int? Opacity { get; set; }
+	/// <summary>
+	/// One or more keyboard shortcuts that toggle in- and out this particular app.
+	/// </summary>
+	[JsonPropertyOrder(1002)]
+	public ICollection<HotkeyOptions> Hotkeys
+	{
+		get => _hotkeys;
+		set => _hotkeys = value ?? [];
+	}
 
-	/// <inheritdoc cref="WtqOptions.PreferMonitor"/>
-	public PreferMonitor? PreferMonitor { get; set; }
+	#endregion
 
-	private string? _processName;
+	#region 2000 - Process
 
 	/// <summary>
-	/// The name of the process to look for, when searching for an existing app instance.
+	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
+	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
+	[Display(Name = "Filename")]
+	[JsonPropertyOrder(2001)]
+	[Required]
+	public string? FileName
+	{
+		get => _fileName;
+		set => _fileName = value?.EmptyOrWhiteSpaceToNull();
+	}
+
+	/// <summary>
+	/// Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+	/// This field can be used to look for the process name in such cases. Windows Terminal is an
+	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
+	/// </summary>
+	[Display(Name = "Process name")]
+	[JsonPropertyOrder(2003)]
 	public string? ProcessName
 	{
 		get => _processName;
 		set => _processName = value?.EmptyOrWhiteSpaceToNull();
 	}
 
-	/// <inheritdoc cref="WtqOptions.TaskbarIconVisibility"/>
-	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
+	/// <summary>
+	/// Command-line arguments that should be passed to the app when it's started.<br/>
+	/// Note that this only applies when using an <see cref="AttachMode"/> that starts the app.
+	/// </summary>
+	[JsonPropertyOrder(2004)]
+	public string? Arguments { get; set; }
 
-	/// <inheritdoc cref="WtqOptions.OffScreenLocations"/>
-	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
+	[Display(Name = "Argument list")]
+	[JsonPropertyOrder(2004)]
+	public ICollection<ProcessArgument> ArgumentList
+	{
+		get => _argumentList;
+		set => _argumentList = value ?? [];
+	}
 
-	/// <inheritdoc cref="WtqOptions.VerticalOffset"/>
-	public int? VerticalOffset { get; set; }
+	[Display(Name = "Window title")]
+	[JsonPropertyOrder(2006)]
+	public string? WindowTitle
+	{
+		get => _windowTitle;
+		set => _windowTitle = value?.EmptyOrWhiteSpaceToNull();
+	}
 
-	/// <inheritdoc cref="WtqOptions.VerticalScreenCoverage"/>
-	public float? VerticalScreenCoverage { get; set; }
+	#endregion
 
-	public string? WindowTitle { get; set; }
+	#region 3000 - Behavior
 
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>
-	public string? WindowTitleOverride { get; set; }
-
-	public bool HasHotkey(Keys key, KeyModifiers modifiers)
+	[Display(Name = "Window title override")]
+	[JsonPropertyOrder(3005)]
+	public string? WindowTitleOverride
 	{
-		return Hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+		get => _windowTitleOverride;
+		set => _windowTitleOverride = value?.EmptyOrWhiteSpaceToNull();
 	}
 
+	#endregion
+
+	public void OnPostConfigure(WtqOptions options)
+	{
+		Global = Guard.Against.Null(options);
+	}
+
+	#region Validation
+
+	[JsonIgnore]
+	public bool IsValid => !this.Validate().Any();
+
+	[JsonIgnore]
+	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
+
+	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+	{
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			yield return new("A name is required.", [nameof(Name)]);
+		}
+
+		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
+		{
+			yield return new("Either a <strong>filename</strong>, a <strong>process name</strong> or a <strong>window title</strong> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
+		}
+
+		if (Hotkeys.Count == 0)
+		{
+			yield return new("Specify at least 1 hotkey.", [nameof(Hotkeys)]);
+		}
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Called before the settings are persisted to a file.
+	/// </summary>
 	public void PrepareForSave()
 	{
 		foreach (var hk in Hotkeys.ToList())
 		{
-			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
+			if (hk.IsEmpty)
 			{
 				Hotkeys.Remove(hk);
 			}
