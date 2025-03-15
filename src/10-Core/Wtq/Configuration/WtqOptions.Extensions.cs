@@ -24,4 +24,7 @@ public static class WtqOptionsExtensions
 
 		return global.AnimationTargetFps ?? AttrUtils.GetDefaultValueFor<int>(() => global.AnimationTargetFps);
 	}
+
+	public static bool GetShowUiOnStart(this WtqOptions global) =>
+		Guard.Against.Null(global).ShowUiOnStart ?? AttrUtils.GetDefaultValueFor<bool>(() => global.ShowUiOnStart);
 }

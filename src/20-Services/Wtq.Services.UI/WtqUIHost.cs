@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
 using Wtq.Configuration;
@@ -9,6 +10,7 @@ public class WtqUIHost
 {
 	private const string MainWindowTitle = "WTQ - Main Window";
 
+	private readonly ILogger _log = Log.For<WtqUIHost>();
 	private readonly PhotinoBlazorApp _app;
 
 	private readonly IWtqWindowService _windowService;
@@ -53,7 +55,7 @@ public class WtqUIHost
 		_ = app.MainWindow
 			.RegisterWindowCreatedHandler((s, a) =>
 			{
-				if (!opts.Value.ShowUiOnStart ?? false)
+				if (!opts.Value.GetShowUiOnStart())
 				{
 					_ = Task.Run(CloseMainWindowAsync);
 				}
@@ -71,14 +73,15 @@ public class WtqUIHost
 
 	private async Task CloseMainWindowAsync()
 	{
+		_app.MainWindow.SetMinimized(true);
+
 		var w = await FindWtqMainWindowAsync().NoCtx();
 
 		if (w == null)
 		{
+			_log.LogWarning("Could not find WTQ main window");
 			return;
 		}
-
-		_app.MainWindow.SetMinimized(true);
 
 		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
 	}

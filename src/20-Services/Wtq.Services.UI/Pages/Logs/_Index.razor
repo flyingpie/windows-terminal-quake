@@ -6,7 +6,7 @@
 
 	protected override void OnInitialized()
 	{
-		Logs.OnEvent = () => StateHasChanged();
+		Logs.OnEvent = () => InvokeAsync(StateHasChanged);
 	}
 
 }
@@ -17,10 +17,11 @@
 
 <table>
 	<tbody>
-		@foreach (var ev in Logs.Events)
+		@foreach (var ev in Logs.Events.Reverse())
 		{
 			<tr>
-				<td>@ev.Level</td>
+				<td style="min-width: 150px;">@ev.Timestamp.ToString("s")</td>
+				<td style="min-width: 100px;">@ev.Level</td>
 				<td>@ev.RenderMessage(null)</td>
 			</tr>
 		}
