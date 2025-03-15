@@ -31,13 +31,6 @@ public static class Opts
 
 public static class SystemExtensions
 {
-	// public static OptionsBuilder<WtqOptions> AddWtqOptionsPostConfigure(this OptionsBuilder<WtqOptions> builder)
-	// {
-	// 	Guard.Against.Null(builder);
-	//
-	// 	return builder.PostConfigure(o => o.OnPostConfigure());
-	// }
-
 	public static TValue JsonDeepClone<TValue>(this TValue value)
 	{
 		var json = JsonSerializer.Serialize(value);
