@@ -1,9 +1,29 @@
 @page "/logs"
 
+@inject InAppLogSink Logs
+
 @code {
+
+	protected override void OnInitialized()
+	{
+		Logs.OnEvent = () => InvokeAsync(StateHasChanged);
+	}
 
 }
 
 <PageHead Icon="subject">Logs</PageHead>
 
 <h2><RadzenIcon Icon="construction" />&nbsp;TODO</h2>
+
+<table>
+	<tbody>
+		@foreach (var ev in Logs.Events.Reverse())
+		{
+			<tr>
+				<td style="min-width: 150px;">@ev.Timestamp.ToString("s")</td>
+				<td style="min-width: 100px;">@ev.Level</td>
+				<td>@ev.RenderMessage(null)</td>
+			</tr>
+		}
+	</tbody>
+</table>

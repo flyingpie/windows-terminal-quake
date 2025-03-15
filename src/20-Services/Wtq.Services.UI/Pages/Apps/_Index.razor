@@ -1,21 +1,26 @@
 @inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject DialogService Dialog
 @inject NavigationManager NavMan
+@inject Notifier Notifier
 @inject WtqOptionsSaveService SaveService
 
 @page "/apps"
 
 @code {
 
-	private static readonly Random _r = new();
-
 	public WtqOptions GlobalOpts { get; set; }
 
 	protected override void OnInitialized()
 	{
-		GlobalOpts = WtqOpts.CurrentValue;
+		Notifier.OnNotify(() => InvokeAsync(StateHasChanged));
+		WtqOpts.OnChange((a, b) => Reload());
 
-		WtqOpts.OnChange(_ => InvokeAsync(StateHasChanged));
+		Reload();
+	}
+
+	private void Reload()
+	{
+		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
 	}
 
 	private async Task AddApp()
@@ -43,9 +48,12 @@
 			await SaveService.SaveAsync(GlobalOpts).NoCtx();
 		}
 	}
+
 }
 
 <PageHead Icon="ad_group">Apps</PageHead>
+
+<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
 
 <RadzenStack>
 	<p class="rz-m-0">Here are the applications who's windows can be toggle on and -off.</p>

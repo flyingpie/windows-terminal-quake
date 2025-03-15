@@ -1,0 +1,33 @@
+@inherits WtqSettingBase<ICollection<ProcessArgument>>
+
+@code {
+
+	private void Remove(ProcessArgument arg)
+	{
+		Value.Remove(arg);
+
+		StateHasChanged();
+	}
+
+}
+
+<WtqSetting TProperty="ICollection<ProcessArgument>" Get="Get" Set="Set">
+	<Content>
+
+		<RadzenStack>
+			@foreach (var arg in Value)
+			{
+				<ProcessArg Argument="arg" OnRemove="@(() => Remove(arg))" />
+			}
+
+			<RadzenStack>
+				<RadzenButton
+					Icon="add"
+					Size="ButtonSize.Medium"
+					Click="@(() => Value.Add(new()))"
+				/>
+			</RadzenStack>
+		</RadzenStack>
+
+	</Content>
+</WtqSetting>

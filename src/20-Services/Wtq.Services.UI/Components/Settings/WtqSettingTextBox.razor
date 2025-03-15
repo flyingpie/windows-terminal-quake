@@ -1,0 +1,13 @@
+@inherits WtqSettingBase<string?>
+
+@code {
+
+}
+
+<WtqSetting TProperty="string?" Get="Get" Set="Set" Default="Default">
+	<Content>
+
+		<RadzenTextBox @bind-Value="Value" style="width: 100%;"/>
+
+	</Content>
+</WtqSetting>
