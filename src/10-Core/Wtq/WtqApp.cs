@@ -47,23 +47,11 @@ public sealed class WtqApp : IAsyncDisposable
 	[MemberNotNullWhen(true, nameof(Window))]
 	public bool IsAttached => Window?.IsValid ?? false;
 
-	public bool IsOpen { get; private set; }
-
 	/// <summary>
-	/// Whether the app is currently toggled onto the screen.
+	/// Whether the app is currently toggled onto the screen.<br/>
+	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
 	/// </summary>
-	public async Task<bool> IsOnScreenAsync()
-	{
-		if (!IsAttached)
-		{
-			return false;
-		}
-
-		var screens = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
-		var pos = await Window.GetWindowRectAsync().NoCtx();
-
-		return screens.Any(scr => scr.IntersectsWith(pos));
-	}
+	public bool IsOpen { get; private set; } = false;
 
 	/// <summary>
 	/// The name of the app, as configured in the settings file.<br/>
@@ -86,6 +74,8 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		IsOpen = false;
+
 		if (!IsAttached)
 		{
 			_log.LogWarning("Attempted to close inactive app {App}", this);
@@ -98,8 +88,6 @@ public sealed class WtqApp : IAsyncDisposable
 		await _toggler.ToggleOffAsync(this, mods).NoCtx();
 
 		await UpdateWindowPropsAsync().NoCtx();
-
-		IsOpen = false;
 	}
 
 	public async ValueTask DisposeAsync()
@@ -189,13 +177,13 @@ public sealed class WtqApp : IAsyncDisposable
 			return false;
 		}
 
+		IsOpen = true;
+
 		// Make sure the app has focus.
 		await Window.BringToForegroundAsync().NoCtx();
 
 		// Move app onto screen.
 		await _toggler.ToggleOnAsync(this, mods).NoCtx();
-
-		IsOpen = true;
 
 		return true;
 	}
@@ -261,20 +249,20 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc)
 	{
-		// Fetch current window location.
-		var rect = await window.GetWindowRectAsync().NoCtx();
+		// // Fetch current window location.
+		// var rect = await window.GetWindowRectAsync().NoCtx();
 
-		// Check the distance between where we last left the window, and where it is now.
-		var dist = rect.Location.DistanceTo(lastLoc);
+		// // Check the distance between where we last left the window, and where it is now.
+		// var dist = rect.Location.DistanceTo(lastLoc);
 
-		// Allow a little bit of drift, but restore location when the distance gets too large.
-		if (dist > 10)
-		{
-			_log.LogWarning(
-				"Window seems to have moved externally, restoring position (moved from {LastLoc} to {CurrentLoc}, distance of {Distance})",
-				lastLoc,
-				rect,
-				dist);
+		// // Allow a little bit of drift, but restore location when the distance gets too large.
+		// if (dist > 10)
+		// {
+		// 	_log.LogWarning(
+		// 		"Window seems to have moved externally, restoring position (moved from {LastLoc} to {CurrentLoc}, distance of {Distance})",
+		// 		lastLoc,
+		// 		rect,
+		// 		dist);
 
 			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
 			if (IsOpen)
@@ -285,7 +273,7 @@ public sealed class WtqApp : IAsyncDisposable
 			{
 				await _toggler.ToggleOffAsync(this, ToggleModifiers.Instant).NoCtx();
 			}
-		}
+		// }
 	}
 
 	/// <summary>

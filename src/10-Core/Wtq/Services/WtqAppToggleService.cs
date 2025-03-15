@@ -35,9 +35,16 @@ public class WtqAppToggleService(
 		var screenRect = await GetTargetScreenRectAsync(app).NoCtx();
 
 		// Source & target rects.
-		// Source & target rects.
 		var windowRectSrc = GetOffScreenWindowRect(app, screenRect, screenRects);
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
+
+		// TODO: Check if window is already at/close to the destination?
+		var windowRectCur = await app.GetWindowRectAsync().NoCtx();
+		if (windowRectCur.Location.DistanceTo(windowRectDst.Location) < 10 && windowRectCur.Size == windowRectDst.Size)
+		{
+			_log.LogWarning("Window already at destination, skipping tween");
+			return;
+		}
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
@@ -52,9 +59,6 @@ public class WtqAppToggleService(
 			await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 			return;
 		}
-
-		// TODO: Check if window is already at/close to the destination?
-		// var windowRectCur = await app.GetWindowRectAsync().NoCtx();
 
 		Console.WriteLine($"PREP TOOK {sw.ElapsedMilliseconds}ms");
 

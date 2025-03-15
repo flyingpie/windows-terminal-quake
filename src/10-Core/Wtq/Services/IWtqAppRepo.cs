@@ -25,7 +25,7 @@ public interface IWtqAppRepo
 	/// <summary>
 	/// Returns the app that is currently toggled onto the screen (if any).
 	/// </summary>
-	Task<ICollection<WtqApp>> GetOnScreenAsync();
+	WtqApp? GetOpen();
 
 	/// <summary>
 	/// Returns the "primary" app, currently just the first one in the settings list (if any).
