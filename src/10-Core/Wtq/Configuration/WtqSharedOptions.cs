@@ -1,18 +1,18 @@
 using Wc = Wtq.Configuration;
+using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
 /// <summary>
 /// Options that are both in global <see cref="WtqOptions"/> and per-app <see cref="WtqAppOptions"/>.
 /// </summary>
-public class WtqSharedOptions
+public abstract class WtqSharedOptions : IValidatableObject
 {
 	#region 2000 - Process
 
 	/// <summary>
-	///	<p>The paragraph. With <strong>words</strong> and <em>empahisized</em> ones.</p>
-	/// <p>Another paragraph<br/>
-	/// With line breaks.</p>
+	/// How WTQ should get to an instance of a running app.<br/>
+	/// I.e. whether to start an app instance if one cannot be found.
 	/// </summary>
 	[Display(Name = "Attach mode")]
 	[DefaultValue(Wc.AttachMode.FindOrStart)]
@@ -24,8 +24,7 @@ public class WtqSharedOptions
 	#region 3000 - Behavior
 
 	/// <summary>
-	/// Whether the app should always be on top of other windows, regardless of whether it has focus.<br/>
-	/// Defaults to "false".
+	/// Whether the app should always be on top of other windows, regardless of whether it has focus.
 	/// </summary>
 	[Display(Name = "Always on top")]
 	[DefaultValue(false)]
@@ -33,8 +32,7 @@ public class WtqSharedOptions
 	public bool? AlwaysOnTop { get; set; }
 
 	/// <summary>
-	/// Whether the app should be toggled out when another app gets focus.<br/>
-	/// Defaults to "true".
+	/// Whether the app should be toggled off when another app gets focus.
 	/// </summary>
 	[Display(Name = "Hide on focus lost")]
 	[DefaultValue(Wc.HideOnFocusLost.Always)]
@@ -42,9 +40,7 @@ public class WtqSharedOptions
 	public HideOnFocusLost? HideOnFocusLost { get; set; }
 
 	/// <summary>
-	/// When to show the terminal window icon on the taskbar.<br/>
-	/// "AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".<br/>
-	/// Defaults to "AlwaysHidden".
+	/// When to show the app window icon on the taskbar.
 	/// </summary>
 	[Display(Name = "Taskbar icon visibility")]
 	[DefaultValue(Wc.TaskbarIconVisibility.AlwaysHidden)]
@@ -53,8 +49,7 @@ public class WtqSharedOptions
 
 	/// <summary>
 	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
-	/// 0 (invisible) - 100 (opaque).<br/>
-	/// Defaults to "100".
+	/// 0 (invisible) - 100 (opaque).
 	/// </summary>
 	[DefaultValue(100)]
 	[JsonPropertyOrder(3004)]
@@ -65,8 +60,7 @@ public class WtqSharedOptions
 	#region 4000 - Position
 
 	/// <summary>
-	/// Horizontal screen coverage, as a percentage.<br/>
-	/// Defaults to "100".
+	/// Horizontal screen coverage, as a percentage.
 	/// </summary>
 	[Display(Name = "Horizontal screen coverage", Prompt = "Percentage")]
 	[DefaultValue(95f)]
@@ -74,8 +68,7 @@ public class WtqSharedOptions
 	public float? HorizontalScreenCoverage { get; set; }
 
 	/// <summary>
-	/// Where to position an app on the chosen monitor, horizontally.<br/>
-	/// Defaults to <see cref="HorizontalAlign.Center"/>.
+	/// Where to position an app on the chosen monitor, horizontally.
 	/// </summary>
 	[Display(Name = "Horizontal align")]
 	[DefaultValue(Wc.HorizontalAlign.Center)]
@@ -83,8 +76,7 @@ public class WtqSharedOptions
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
-	/// Vertical screen coverage as a percentage (0-100).<br/>
-	/// Defaults to "100".
+	/// Vertical screen coverage as a percentage (0-100).
 	/// </summary>
 	[Display(Name = "Vertical screen coverage", Prompt = "Percentage")]
 	[DefaultValue(95f)]
@@ -92,8 +84,7 @@ public class WtqSharedOptions
 	public float? VerticalScreenCoverage { get; set; }
 
 	/// <summary>
-	/// How much room to leave between the top of the terminal and the top of the screen, in pixels.<br/>
-	/// Defaults to "0".
+	/// How much room to leave between the top of the app window and the top of the screen, in pixels.
 	/// </summary>
 	[Display(Name = "Vertical offset", Prompt = "In pixels")]
 	[DefaultValue(0f)]
@@ -107,6 +98,7 @@ public class WtqSharedOptions
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </summary>
 	[Display(Name = "Off-screen locations")]
+	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
 	[JsonPropertyOrder(4005)]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
@@ -115,8 +107,7 @@ public class WtqSharedOptions
 	#region 5000 - Monitor
 
 	/// <summary>
-	/// Which monitor to preferably drop the app.<br/>
-	/// "WithCursor" (default), "Primary" or "AtIndex".
+	/// Which monitor to preferably drop the app.
 	/// </summary>
 	[Display(Name = "Prefer monitor")]
 	[DefaultValue(Wc.PreferMonitor.WithCursor)]
@@ -125,8 +116,7 @@ public class WtqSharedOptions
 
 	/// <summary>
 	/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
-	/// Zero based, e.g. 0, 1, etc.<br/>
-	/// Defaults to "0".
+	/// Zero based, e.g. 0, 1, etc.
 	/// </summary>
 	[Display(Name = "Monitor index")]
 	[DefaultValue(0)]
@@ -148,8 +138,7 @@ public class WtqSharedOptions
 	public int? AnimationDurationMs { get; set; }
 
 	/// <summary>
-	/// The <see cref="AnimationType"/> to use when toggling on an application.<br/>
-	/// Defaults to <see cref="AnimationType.EaseOutQuart"/>.
+	/// The animation type to use when toggling on an application.
 	/// </summary>
 	[Display(Name = "Animation type (toggle ON)")]
 	[DefaultValue(AnimationType.EaseOutQuart)]
@@ -157,13 +146,41 @@ public class WtqSharedOptions
 	public AnimationType? AnimationTypeToggleOn { get; set; }
 
 	/// <summary>
-	/// The <see cref="AnimationType"/> to use when toggling off an application.<br/>
-	/// Defaults to <see cref="AnimationType.EaseInQuart"/>.
+	/// The animation type to use when toggling off an application.
 	/// </summary>
 	[Display(Name = "Animation type (toggle OFF)")]
 	[DefaultValue(AnimationType.EaseInQuart)]
 	[JsonPropertyOrder(6004)]
 	public AnimationType? AnimationTypeToggleOff { get; set; }
+
+	#endregion
+
+	#region Validation
+
+	/// <summary>
+	/// Convenience property.
+	/// </summary>
+	[JsonIgnore]
+	public bool IsValid => !this.Validate().Any();
+
+	/// <summary>
+	/// Convenience property to make binding from the GUI easier.
+	/// </summary>
+	[JsonIgnore]
+	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
+
+	public IEnumerable<ValidationResult> Validate(ValidationContext context)
+	{
+		// TODO: Validate properties from this (WtqSharedOptions) class.
+
+		foreach (var v in OnValidate(context))
+		{
+			yield return v;
+		}
+	}
+
+	protected virtual IEnumerable<ValidationResult> OnValidate(ValidationContext context) =>
+		[];
 
 	#endregion
 }

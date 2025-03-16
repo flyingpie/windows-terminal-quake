@@ -8,21 +8,22 @@ public enum AttachMode
 	/// <summary>
 	/// Used to detect serialization issues.
 	/// </summary>
+	[DisplayFlags(IsVisible = false)] // Don't show this in the GUI, it's purely for internal use.
 	None = 0,
 
 	/// <summary>
-	/// Only look for existing app instances.
+	/// Only look for existing app instances (but don't create one).
 	/// </summary>
 	Find,
 
 	/// <summary>
-	/// Look for an existing app instance, create one of one does not exist yet.
+	/// Look for an existing app instance, create one if one does not exist yet.
 	/// </summary>
 	[Display(Name = "Find or start")]
 	FindOrStart,
 
 	/// <summary>
-	/// Attach to the foreground app when pressing the assigned hotkey.
+	/// Attach to whatever app is in the foreground when pressing an assigned hotkey.
 	/// </summary>
 	Manual,
 }
