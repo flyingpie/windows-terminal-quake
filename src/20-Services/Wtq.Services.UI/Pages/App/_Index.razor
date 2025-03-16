@@ -53,7 +53,9 @@
 	App <span class="rz-color-primary">@AppId</span>
 </PageHead>
 
-<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+<p>Settings specific to <strong>@AppId</strong>.</p>
+
+<SettingsFileLink />
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
