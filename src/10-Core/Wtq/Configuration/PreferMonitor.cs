@@ -12,13 +12,13 @@ public enum PreferMonitor
 	WithCursor = 0,
 
 	/// <summary>
-	/// The monitor at the index specified as specified by "MonitorIndex" (0-based).
+	/// The monitor at the index as specified by <strong>MonitorIndex</strong> (0-based).
 	/// </summary>
 	[Display(Name = "At index")]
 	AtIndex,
 
 	/// <summary>
-	/// The monitor considered "primary" by the OS.
+	/// The monitor considered <strong>primary</strong> by the OS.
 	/// </summary>
 	Primary,
 }

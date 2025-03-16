@@ -38,7 +38,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// How many frames per second the animation should be.<br/>
 	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br/>
-	/// Defaults to 40.
 	/// </summary>
 	[Display(Name = "Animation target FPS")]
 	[DefaultValue(40)]
