@@ -115,7 +115,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
-	/// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.<br/>
+	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.<br/>
 	/// Zero based, e.g. 0, 1, etc.
 	/// </summary>
 	[Display(Name = "Monitor index")]
