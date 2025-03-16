@@ -26,6 +26,9 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
+	/// <summary>
+	/// Whether to show the GUI when WTQ is started.
+	/// </summary>
 	[Display(Name = "Show UI on start")]
 	[DefaultValue(false)]
 	[JsonPropertyOrder(103)]
@@ -39,24 +42,12 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[Display(Name = "Animation target FPS")]
 	[DefaultValue(40)]
+	[Range(5, 120)]
 	public int? AnimationTargetFps { get; set; }
 
-	public void PrepareForSave()
-	{
-		foreach (var app in Apps.ToList())
-		{
-			app.PrepareForSave();
-		}
-
-		foreach (var hk in Hotkeys.ToList())
-		{
-			if (hk.Modifiers == KeyModifiers.None || hk.Key == Keys.None)
-			{
-				Hotkeys.Remove(hk);
-			}
-		}
-	}
-
+	/// <summary>
+	/// Called right after the options are loaded from file.
+	/// </summary>
 	public void OnPostConfigure()
 	{
 		foreach (var app in Apps ?? [])
@@ -65,11 +56,25 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		}
 	}
 
-	[JsonIgnore]
-	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
-
-	public IEnumerable<ValidationResult> Validate(ValidationContext context)
+	/// <summary>
+	/// Called right before the options are saved to file.
+	/// </summary>
+	public void PrepareForSave()
 	{
-		yield break;
+		foreach (var app in Apps.ToList())
+		{
+			app.PrepareForSave();
+		}
+
+		foreach (var hk in Hotkeys.Where(hk => hk.IsEmpty).ToList()) // Explicit ToList() since we're modifying it from within the loop.
+		{
+			Hotkeys.Remove(hk);
+		}
+	}
+
+	protected override IEnumerable<ValidationResult> OnValidate(ValidationContext context)
+	{
+		// TODO
+		return [];
 	}
 }

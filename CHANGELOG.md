@@ -2,14 +2,23 @@
 
 ## [vFuture]
 - Update docs.
+- Apps can now be matched on their window title.
+- Feature: Suspend key presses when the hotkey field has focus (for Windows).
 
 ## [vNext]
-- Apps can now be matched on their window title.
 - Bugfix: GUI - Properly reload app data when switching from one app to the other.
 - Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
 - Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
 - Bugfix: Save/Load - Allow hotkeys without a modifier and/or key. Would cause these to be removed altogether on save.
 - Refactor: KWin - Reworked when and how shortcuts are (un)registered with KWin, to be more reliably and robust, especially in combination with the GUI.
+- Feature: Make logs visible in the GUI.
+- Feature: Suspend key presses when the hotkey field has focus (currently Linux only).
+- Refactor: Always turn on console log, unless running non-interactively on Linux (in which case the journal would get spammed).
+- Feature: Added "wtqc" for Windows, which runs WTQ as a command line app. Useful for troubleshooting cases where the entire app won't start.
+- Feature: GUI - Example apps now work.
+- Refactor: GUI - Simplified the whole thing, pull docs from xml doc.
+- Refactor: Option cascading, from app-specific to global, to default. Makes use of the settings easier in the rest of the app and integrates nicer with the GUI.
+- Bugfix: GUI - Don't hide the sidebar (that was a feature, but it doesn't work for this use case).
 
 ## [2.0.13] / 2025-02-07
 - Bugfix: [169](https://github.com/flyingpie/windows-terminal-quake/issues/169), missing entry from the "Keys" list, for some specific keyboard layouts.

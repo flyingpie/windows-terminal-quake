@@ -109,50 +109,43 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	#endregion
 
+	/// <summary>
+	/// Called right after the options are loaded from file.
+	/// </summary>
 	public void OnPostConfigure(WtqOptions options)
 	{
 		Global = Guard.Against.Null(options);
 	}
-
-	#region Validation
-
-	[JsonIgnore]
-	public bool IsValid => !this.Validate().Any();
-
-	[JsonIgnore]
-	public IEnumerable<ValidationResult> ValidationResults => this.Validate();
-
-	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-	{
-		if (string.IsNullOrWhiteSpace(Name))
-		{
-			yield return new("A name is required.", [nameof(Name)]);
-		}
-
-		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
-		{
-			yield return new("Either a <strong>filename</strong>, a <strong>process name</strong> or a <strong>window title</strong> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
-		}
-
-		if (Hotkeys.Count == 0)
-		{
-			yield return new("Specify at least 1 hotkey.", [nameof(Hotkeys)]);
-		}
-	}
-
-	#endregion
 
 	/// <summary>
 	/// Called before the settings are persisted to a file.
 	/// </summary>
 	public void PrepareForSave()
 	{
-		foreach (var hk in Hotkeys.ToList())
+		foreach (var hk in Hotkeys.Where(hk => hk.IsEmpty).ToList()) // Explicit ToList() since we're modifying it from within the loop.
 		{
-			if (hk.IsEmpty)
-			{
-				Hotkeys.Remove(hk);
-			}
+			Hotkeys.Remove(hk);
+		}
+	}
+
+	protected override IEnumerable<ValidationResult> OnValidate(ValidationContext validationContext)
+	{
+		// App name.
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			yield return new("A name is required.", [nameof(Name)]);
+		}
+
+		// Require a filename, process name or window title.
+		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
+		{
+			yield return new("Either a <strong>filename</strong>, a <strong>process name</strong> or a <strong>window title</strong> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
+		}
+
+		// Require at least 1 hotkey.
+		if (Hotkeys.Count == 0)
+		{
+			yield return new("Specify at least 1 hotkey.", [nameof(Hotkeys)]);
 		}
 	}
 

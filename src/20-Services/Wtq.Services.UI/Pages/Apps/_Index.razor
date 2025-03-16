@@ -5,6 +5,7 @@
 @inject WtqOptionsSaveService SaveService
 
 @page "/apps"
+@using Wtq.Services.UI.Components.Settings
 
 @code {
 
@@ -53,11 +54,12 @@
 
 <PageHead Icon="ad_group">Apps</PageHead>
 
-<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+<p>Here are the applications who's windows can be toggle on and -off.</p>
+<p>Take a look at the <RadzenLink Path="/examples" Text="Examples" /> page for, well, examples.</p>
+
+<SettingsFileLink />
 
 <RadzenStack>
-	<p class="rz-m-0">Here are the applications who's windows can be toggle on and -off.</p>
-	<p class="rz-m-0">Take a look at the <RadzenLink Path="/examples" Text="Examples" /> page for, well, examples.</p>
 
 	@foreach (var app in GlobalOpts.Apps)
 	{

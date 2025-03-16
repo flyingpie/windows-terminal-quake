@@ -9,10 +9,11 @@ public enum HideOnFocusLost
 	/// <summary>
 	/// For detecting serialization issues.
 	/// </summary>
+	[DisplayFlags(IsVisible = false)] // Don't show this in the GUI, it's purely for internal use.
 	None = 0,
 
 	/// <summary>
-	/// Toggle <strong>off</strong> the app when focus is lost.
+	/// Toggle off the app when focus is lost.
 	/// </summary>
 	[Display(Name = "Always")]
 	Always = 1,
@@ -39,5 +40,6 @@ public enum HideOnFocusLost
 	/// Only toggle off the app when focus went to an app on a different screen.
 	/// </summary>
 	[Display(Name = "Unless focus changed screen")]
+	[DisplayFlags(IsVisible = false)] // Not supported yet.
 	UnlessFocusChangedScreen = 3,
 }
