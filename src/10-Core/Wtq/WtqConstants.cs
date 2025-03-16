@@ -14,7 +14,7 @@ public static class WtqConstants
 		= new("https://www.github.com/flyingpie/windows-terminal-quake");
 
 	/// <summary>
-	/// The default off-screen locations are kept separate, to prevent arrays from mergin during deserialization.
+	/// The default off-screen locations are kept separate, to prevent arrays from merging during deserialization.
 	/// We could do that by tweaking the JSON serializer, but that's way more complex.
 	/// </summary>
 	public static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =

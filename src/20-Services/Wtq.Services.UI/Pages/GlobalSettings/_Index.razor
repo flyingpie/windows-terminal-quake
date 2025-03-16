@@ -40,9 +40,10 @@
 }
 
 <PageHead Icon="public">Global settings</PageHead>
-<p class="rz-color-base-500 rz-mt-0">Settings that apply to all apps (unless overridden).</p>
+<p>Settings that apply to all apps (unless overridden).</p>
 
-<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton>
+@* <RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path</RadzenButton> *@
+<SettingsFileLink />
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="Notifier">
