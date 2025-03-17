@@ -6,6 +6,8 @@
 - Feature: Suspend key presses when the hotkey field has focus (for Windows).
 
 ## [vNext]
+
+## [2.0.14] / 2025-03-17
 - Bugfix: GUI - Properly reload app data when switching from one app to the other.
 - Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
 - Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
