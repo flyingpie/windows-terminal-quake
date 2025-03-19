@@ -50,9 +50,6 @@ As a 1-liner:
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
 ```
 
-> [!NOTE]
-> A [couple changes](https://github.com/flyingpie/windows-terminal-quake/commit/ce6ab74c5903d37ad900a50c4517dee506ad25c1) to make the Linux out-of-box-experience nicer aren't part of a stable release yet, so this script currently references the "vNext" release.
-
 And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
 ```shell
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
@@ -72,7 +69,7 @@ A JSON schema file should be generated next to the settings file, enabling intel
 
 ## Up Next
 
-The main thing for the next release (**2.12.0**) is a GUI to assist with configuring WTQ.
+Available since version **2.0.12**, and currently in development, is a GUI to assist with configuring WTQ.
 ![image](https://github.com/user-attachments/assets/511f167e-a0b9-4882-bcb3-0d4a4fe0fb26)
 ![image](https://github.com/user-attachments/assets/9d172f29-53eb-47b6-9fc3-0f5b71d7cff9)
 
