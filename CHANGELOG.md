@@ -7,27 +7,27 @@
 
 ## [vNext]
 
-## [2.0.14] / 2025-03-17
-- Bugfix: GUI - Properly reload app data when switching from one app to the other.
+## [v2.0.14] / 2025-03-17
 - Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
-- Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
+- Bugfix: GUI - Don't hide the sidebar (that was a feature, but it doesn't work for this use case).
+- Bugfix: GUI - Properly reload app data when switching from one app to the other.
 - Bugfix: Save/Load - Allow hotkeys without a modifier and/or key. Would cause these to be removed altogether on save.
-- Refactor: KWin - Reworked when and how shortcuts are (un)registered with KWin, to be more reliably and robust, especially in combination with the GUI.
+- Feature: Added "wtqc" for Windows, which runs WTQ as a command line app. Useful for troubleshooting cases where the entire app won't start.
+- Feature: GUI - Example apps now work.
 - Feature: Make logs visible in the GUI.
 - Feature: Suspend key presses when the hotkey field has focus (currently Linux only).
 - Refactor: Always turn on console log, unless running non-interactively on Linux (in which case the journal would get spammed).
-- Feature: Added "wtqc" for Windows, which runs WTQ as a command line app. Useful for troubleshooting cases where the entire app won't start.
-- Feature: GUI - Example apps now work.
 - Refactor: GUI - Simplified the whole thing, pull docs from xml doc.
+- Refactor: KWin - Reworked when and how shortcuts are (un)registered with KWin, to be more reliably and robust, especially in combination with the GUI.
 - Refactor: Option cascading, from app-specific to global, to default. Makes use of the settings easier in the rest of the app and integrates nicer with the GUI.
-- Bugfix: GUI - Don't hide the sidebar (that was a feature, but it doesn't work for this use case).
+- Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
 
-## [2.0.13] / 2025-02-07
+## [v2.0.13] / 2025-02-07
 - Bugfix: [169](https://github.com/flyingpie/windows-terminal-quake/issues/169), missing entry from the "Keys" list, for some specific keyboard layouts.
 - Bugfix: Issue where the WinGet release wouldn't work straight away, due to working directories being weird because of the shim WinGet creates.
 - Added banner to the GUI, to highlight that it's still in preview.
 
-## [2.0.12] / 2025-02-06
+## [v2.0.12] / 2025-02-06
 - Generate a JSON schema file on WTQ start, next to wherever **wtq.jsonc** is (e.g. **wtq.schema.json**). This provides autocompletion and validation in supported editors (such as VS Code).
 - Initial work on a graphical UI. It can be accessed through the tray icon.
 - Updated tray icon to fit in with other icons better.
@@ -36,7 +36,7 @@
 - Disable console log by default. Can be turned on using environment variable **"WTQ_LOG_TO_CONSOLE"="TRUE"**.
 - Handle cases where we can't find an off-screen location when toggling, by falling back to instantly toggling into- and out of a black hole, instead of animating anywhere.
 
-## [2.0.11] / 2024-11-07
+## [v2.0.11] / 2024-11-07
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
 - Reworked how apps are started (mostly when WTQ starts), should fix a lot of cases where multiple instances of an app (such as Windows Terminal) are started (fixes [145](https://github.com/flyingpie/windows-terminal-quake/issues/145)).
 - Added **WindowTitleOverride**, which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
@@ -73,7 +73,7 @@ The order can be changed using the "OffScreenLocations" setting:
 }
 ```
 
-## [2.0.10] / 2024-07-16
+## [v2.0.10] / 2024-07-16
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
 
 - Added options to control the animation speed and style: 
@@ -95,7 +95,7 @@ This was especially problematic when starting a conhost-hosted app (such as Powe
 
 - Added **AlwaysOnTop**, which forces an app to always be above other windows, even if it doesn't have focus.
 
-## [2.0.9] / 2024-05-20
+## [v2.0.9] / 2024-05-20
 - When an app is toggled up, it retains its original screen (fixes [#64](https://github.com/flyingpie/windows-terminal-quake/issues/64)).
 - Reworked how windows are tracked and attached to, should fix a lot of "Main window handle not available yet"-issues.
 - Added support for multiple configuration file locations (see docs for more info).
@@ -123,11 +123,11 @@ Or per app:
 }
 ```
 
-## [2.0.8] / 2024-04-28
+## [v2.0.8] / 2024-04-28
 - Automated Scoop and WinGet manifest generation.
 - Automated GitHub release creation.
 
-## [2.0.7] / 2024-04-19
+## [v2.0.7] / 2024-04-19
 - Added opacity;
 - Toggleable task bar icon visibility.
 
@@ -156,7 +156,7 @@ Or per app:
 }
 ```
 
-## [2.0.6] / 2024-04-1
+## [v2.0.6] / 2024-04-1
 - Added sizing.
 
 ![wtq-sizing-01](https://github.com/flyingpie/windows-terminal-quake/assets/1295673/0f0a8f81-b0d5-4256-a15d-ac384e6386a1)
@@ -196,7 +196,7 @@ Or per app:
 }
 ```
 
-## [2.0.5] / 2024-03-17
+## [v2.0.5] / 2024-03-17
 Initial support for auto-starting apps.
 
 **BREAKING CHANGES**
@@ -257,7 +257,7 @@ The mode can be specified per app (note that "FindOrStart" is the default:
 ]
 ```
 
-## [2.0.4] / 2024-02-13
+## [v2.0.4] / 2024-02-13
 - The ["PreferMonitor" and "MonitorIndex"](https://wtq.flyingpie.nl/v2/settings/prefer-monitor/) settings, to control what monitor an app toggles on.
 
 The setting is available at the root config level, and can be overridden per application.
@@ -276,10 +276,10 @@ The setting is available at the root config level, and can be overridden per app
 }
 ```
 
-## [2.0.3] / 2024-02-11
+## [v2.0.3] / 2024-02-11
 - WinGet release preparation.
 
-## [2.0.2] / 2024-02-01
+## [v2.0.2] / 2024-02-01
 - Re-introduced tray icon, app runs in the background now
 - Toggle out on focus lost (not configurable yet)
 - Alternative method for toggling focus back to previous app, that does not change app state, reduces flickering
@@ -299,7 +299,7 @@ Comes in 2 flavors:
 **Self Contained**: Runs without any prerequisites, but is massive.
 **Requires Net8**: You'll need to download the [.Net 8 runtime first](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.1-windows-x64-installer).
 
-## [2.0.1] / 2024-01-22
+## [v2.0.1] / 2024-01-22
 The next major version of Windows-Terminal-Quake, with support for multiple apps, including terminals other than Windows Terminal.
 
 <video autoplay loop width="800">

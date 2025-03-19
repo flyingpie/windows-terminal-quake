@@ -35,7 +35,7 @@ public sealed class Build : NukeBuild
 	private string GitHubRelease = "vNext";
 
 	[Nuke.Common.Parameter("Version")]
-	private string SemVerVersion => "9.9.9";
+	private string SemVerVersion = "9.9.9";
 
 	[Nuke.Common.Parameter("GitHub Token")]
 	private readonly string GitHubToken;
@@ -248,7 +248,7 @@ public sealed class Build : NukeBuild
 			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
 
 			var manifest = tpl
-				.Replace("$GH_RELEASE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+				.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
 				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 				.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
 
@@ -285,7 +285,7 @@ public sealed class Build : NukeBuild
 				var target = manifestRoot / fn;
 
 				var manifest = tpl
-					.Replace("$GH_RELEASE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+					.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
 					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
 					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
 					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
