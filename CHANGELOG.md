@@ -7,6 +7,9 @@
 
 ## [vNext]
 
+## [v2.0.15] / 2025-03-21
+- Bugfix: HideOnFocusLost broke
+
 ## [v2.0.14] / 2025-03-17
 - Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
 - Bugfix: GUI - Don't hide the sidebar (that was a feature, but it doesn't work for this use case).
