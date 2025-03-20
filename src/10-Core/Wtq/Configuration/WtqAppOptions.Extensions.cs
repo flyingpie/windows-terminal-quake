@@ -57,7 +57,7 @@ public static class WtqAppOptionsExtensions
 	{
 		Guard.Against.Null(app);
 
-		return OptionUtils.Cascade<HideOnFocusLost>(o => o.AttachMode, app, app.Global);
+		return OptionUtils.Cascade<HideOnFocusLost>(o => o.HideOnFocusLost, app, app.Global);
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.HorizontalAlign"/>
