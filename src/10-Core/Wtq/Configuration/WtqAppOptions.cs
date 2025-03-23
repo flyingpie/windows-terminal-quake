@@ -24,6 +24,15 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// A logical name for the app, used to identify it across config reloads.<br/>
 	/// Appears in logs.
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///		"Name": "Terminal",
+	///		// ...
+	/// }
+	/// </code>
+	/// </example>
+	[Display(GroupName = "App")]
 	[NotNull]
 	[Required]
 	[JsonPropertyOrder(1001)]
@@ -32,6 +41,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// One or more keyboard shortcuts that toggle in- and out this particular app.
 	/// </summary>
+	[Display(GroupName = "App")]
 	[JsonPropertyOrder(1002)]
 	public ICollection<HotkeyOptions> Hotkeys
 	{
@@ -47,7 +57,10 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
 	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </summary>
-	[Display(Name = "Filename")]
+	/// <remarks>
+	/// See the "Examples" page in the GUI for, well, examples.
+	/// </remarks>
+	[Display(Name = "Filename", GroupName = "Process")]
 	[JsonPropertyOrder(2001)]
 	[Required]
 	public string? FileName
@@ -61,7 +74,18 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// This field can be used to look for the process name in such cases. Windows Terminal is an
 	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
 	/// </summary>
-	[Display(Name = "Process name")]
+	/// <example>
+	/// <code>
+	///	{
+	///		// Using with Windows Terminal requires both "Filename" and "ProcessName".
+	///		"Apps": {
+	///			"Filename": "wt",
+	///			"ProcessName": "WindowsTerminal"
+	///		}
+	/// }
+	/// </code>
+	/// </example>
+	[Display(Name = "Process name", GroupName = "Process")]
 	[JsonPropertyOrder(2003)]
 	public string? ProcessName
 	{
@@ -76,7 +100,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	[JsonPropertyOrder(2004)]
 	public string? Arguments { get; set; }
 
-	[Display(Name = "Argument list")]
+	[Display(Name = "Argument list", GroupName = "Process")]
 	[JsonPropertyOrder(2004)]
 	public ICollection<ProcessArgument> ArgumentList
 	{
@@ -84,7 +108,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 		set => _argumentList = value ?? [];
 	}
 
-	[Display(Name = "Window title")]
+	[Display(Name = "Window title", GroupName = "Process")]
 	[JsonPropertyOrder(2006)]
 	public string? WindowTitle
 	{
@@ -99,7 +123,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>
-	[Display(Name = "Window title override")]
+	[Display(Name = "Window title override", GroupName = "Behavior")]
 	[JsonPropertyOrder(3005)]
 	public string? WindowTitleOverride
 	{

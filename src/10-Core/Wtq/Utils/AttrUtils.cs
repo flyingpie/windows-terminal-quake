@@ -86,11 +86,15 @@ public static class AttrUtils
 	public static string? GetMemberDocExpr(this Expression expr) =>
 		Guard.Against.Null(expr).GetMemberInfo()?.GetMemberDoc();
 
+
+	public static XElement? GetMemberDocElement(this MemberInfo memberInfo) =>
+		Guard.Against.Null(memberInfo).GetXmlDocsElement();
+
 	public static string? GetMemberDoc(this MemberInfo memberInfo) =>
 		Guard.Against.Null(memberInfo)
-			.GetXmlDocsElement()
-			?.Descendants("summary")
-			?.FirstOrDefault()
+			.GetXmlDocsElement(new XmlDocsOptions() { FormattingMode = XmlDocsFormattingMode.Markdown, })
+			// ?.Descendants("summary")
+			// ?.FirstOrDefault()
 			?.ToString(SaveOptions.None)
 		?? string.Empty;
 
