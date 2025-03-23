@@ -11,24 +11,28 @@ body, input {
 
 /* Remove navbar color transition */
 .md-header {
-	transition: none;
+/*	transition: none;*/
 }
 
 /* Hide top label of left navigation, since it's the same as the title in the top navbar */
 .md-nav__title[for=__drawer] {
-	display: none;
+/*	display: none;*/
 }
 
 li.md-nav__item--section:nth-child(1) {
-	margin-top: 0;
+/*	margin-top: 0;*/
 }
 
 /* Indent sections of the left nav to make it more readable */ 
 .md-nav__list {
-	margin-left: .5rem;
+/*	margin-left: .5rem;*/
 }
 
 .by {
 	color: var(--md-default-fg-color--light);
 	font-style: italic;
+}
+
+.md-sidebar--secondary {
+
 }
