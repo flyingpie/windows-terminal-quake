@@ -13,6 +13,20 @@ public static class WtqConstants
 	public static Uri GitHubUrl { get; }
 		= new("https://www.github.com/flyingpie/windows-terminal-quake");
 
+	public static class Settings
+	{
+		public static class GroupNames
+		{
+			public const string Animation = nameof(Animation);
+			public const string App = nameof(App);
+			public const string Behavior = nameof(Behavior);
+			public const string General = nameof(General);
+			public const string Monitor = nameof(Monitor);
+			public const string Position = nameof(Position);
+			public const string Process = nameof(Process);
+		}
+	}
+
 	/// <summary>
 	/// The default off-screen locations are kept separate, to prevent arrays from merging during deserialization.
 	/// We could do that by tweaking the JSON serializer, but that's way more complex.

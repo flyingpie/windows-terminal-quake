@@ -6,7 +6,7 @@ site_dir: 'build'
 
 nav:
 - WTQ v2: index.md
-- WTQ v2 gen: gen.md
+- WTQ v2 template: index.tpl.md
 - WTQ v1: v1.md
 - Reporting Issues: reporting-issues.md
 - FAQ: faq.md
@@ -70,3 +70,6 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true
+
+plugins:
+  - include-markdown

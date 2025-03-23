@@ -1,8 +1,11 @@
+using Gn = Wtq.WtqConstants.Settings.GroupNames;
+
 namespace Wtq.Configuration;
 
 /// <summary>
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
+[Display(Name = ":material-application-outline: App options")]
 public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 {
 	private ICollection<ProcessArgument> _argumentList = [];
@@ -15,6 +18,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// Used to refer from the app options object back to the global one, for cascading.
 	/// </summary>
+	[DisplayFlags(IsVisible = false)]
 	[JsonIgnore]
 	public WtqOptions Global { get; set; } = null!;
 
@@ -32,7 +36,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// }
 	/// </code>
 	/// </example>
-	[Display(GroupName = "App")]
+	[Display(GroupName = Gn.App)]
 	[NotNull]
 	[Required]
 	[JsonPropertyOrder(1001)]
@@ -41,7 +45,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// One or more keyboard shortcuts that toggle in- and out this particular app.
 	/// </summary>
-	[Display(GroupName = "App")]
+	[Display(GroupName = Gn.App)]
 	[JsonPropertyOrder(1002)]
 	public ICollection<HotkeyOptions> Hotkeys
 	{
@@ -60,7 +64,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <remarks>
 	/// See the "Examples" page in the GUI for, well, examples.
 	/// </remarks>
-	[Display(Name = "Filename", GroupName = "Process")]
+	[Display(GroupName = Gn.Process, Name = "Filename")]
 	[JsonPropertyOrder(2001)]
 	[Required]
 	public string? FileName
@@ -85,7 +89,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// }
 	/// </code>
 	/// </example>
-	[Display(Name = "Process name", GroupName = "Process")]
+	[Display(GroupName = Gn.Process, Name = "Process name")]
 	[JsonPropertyOrder(2003)]
 	public string? ProcessName
 	{
@@ -97,10 +101,11 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// Command-line arguments that should be passed to the app when it's started.<br/>
 	/// Note that this only applies when using an <see cref="AttachMode"/> that starts the app.
 	/// </summary>
+	[Display(GroupName = Gn.Process)]
 	[JsonPropertyOrder(2004)]
 	public string? Arguments { get; set; }
 
-	[Display(Name = "Argument list", GroupName = "Process")]
+	[Display(GroupName = Gn.Process, Name = "Argument list")]
 	[JsonPropertyOrder(2004)]
 	public ICollection<ProcessArgument> ArgumentList
 	{
@@ -108,7 +113,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 		set => _argumentList = value ?? [];
 	}
 
-	[Display(Name = "Window title", GroupName = "Process")]
+	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[JsonPropertyOrder(2006)]
 	public string? WindowTitle
 	{
@@ -123,7 +128,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <summary>
 	/// Attempt to set the window title to a specific value.
 	/// </summary>
-	[Display(Name = "Window title override", GroupName = "Behavior")]
+	[Display(GroupName = Gn.Behavior, Name = "Window title override")]
 	[JsonPropertyOrder(3005)]
 	public string? WindowTitleOverride
 	{
