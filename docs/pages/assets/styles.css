@@ -11,7 +11,7 @@ body, input {
 
 /* Footer padding */
 .md-footer-meta__inner {
-	padding: 1em .2em 2em .2em;
+	padding: 1em 1em 2em 1em;
 }
 
 .by {
