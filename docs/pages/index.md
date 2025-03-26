@@ -120,9 +120,18 @@ Optional.
 
 Whether to show the GUI when WTQ is started.
 
+Defaults to ```False```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"ShowUiOnStart": "False",
+	// ...
+}
+```
+
 
 ---
 
@@ -131,11 +140,20 @@ Whether to show the GUI when WTQ is started.
 
 How many frames per second the animation should be.<br />
 Note that this may not be hit if moving windows takes too long, hence "target" fps.<br />
-Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.<br />
+Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
+
+Defaults to ```40```
 
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AnimationTargetFps": "40",
+	// ...
+}
+```
+
 
 ---
 
@@ -144,6 +162,8 @@ Must be between 5 and 120, to prevent issues that can arise with values that are
 Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 #### App
 ##### Name
+
+**REQUIRED**
 
 A logical name for the app, used to identify it across config reloads.<br />
 Appears in logs.
@@ -167,12 +187,25 @@ One or more keyboard shortcuts that toggle in- and out this particular app.
 
 <remarks />
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"Hotkeys": "",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
 #### Process
 ##### Filename
+
+**REQUIRED**
 
 The <strong>filename</strong> to use when starting a new process for the app.<br />
 E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
@@ -180,15 +213,26 @@ E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 !!! note
 	See the "Examples" page in the GUI for, well, examples.
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"FileName": "wt",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
 ##### Process name
 
-Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
 This field can be used to look for the process name in such cases. Windows Terminal is an
-example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
+example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
 
 <remarks />
 
@@ -213,7 +257,18 @@ Note that this only applies when using an <see cref="T:Wtq.Configuration.AttachM
 
 <remarks />
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"Arguments": "",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -223,7 +278,18 @@ Note that this only applies when using an <see cref="T:Wtq.Configuration.AttachM
 
 <remarks />
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"ArgumentList": "",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -233,7 +299,18 @@ Note that this only applies when using an <see cref="T:Wtq.Configuration.AttachM
 
 <remarks />
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"WindowTitle": "Mozilla Firefox - WhatsApp",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -244,7 +321,18 @@ Attempt to set the window title to a specific value.
 
 <remarks />
 
-<div />
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"WindowTitleOverride": "",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -257,9 +345,41 @@ Options that are both in global WtqOptions and per-app WtqAppOptions.
 How WTQ should get to an instance of a running app.<br />
 I.e. whether to start an app instance if one cannot be found.
 
+Defaults to ```FindOrStart```
+
+- **Find** <div>
+            Only look for existing app instances (but don't create one).
+            </div>
+
+- **Find or start** <div>
+            Look for an existing app instance, create one if one does not exist yet.
+            </div>
+
+- **Manual** <div>
+            Attach to whatever app is in the foreground when pressing an assigned hotkey.
+            </div>
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AttachMode": "Find | FindOrStart | Manual",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"AttachMode": "Find | FindOrStart | Manual",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -268,9 +388,29 @@ I.e. whether to start an app instance if one cannot be found.
 
 Whether the app should always be on top of other windows, regardless of whether it has focus.
 
+Defaults to ```False```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AlwaysOnTop": "False",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"AlwaysOnTop": "False",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -278,9 +418,37 @@ Whether the app should always be on top of other windows, regardless of whether 
 
 Whether the app should be toggled off when another app gets focus.
 
+Defaults to ```Always```
+
+- **Always** <div>
+            Toggle off the app when focus is lost.
+            </div>
+
+- **Never** <div>
+            Do not toggle off the app when focus is lost.
+            </div>
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"HideOnFocusLost": "Always | Never",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"HideOnFocusLost": "Always | Never",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -288,9 +456,41 @@ Whether the app should be toggled off when another app gets focus.
 
 When to show the app window icon on the taskbar.
 
+Defaults to ```AlwaysHidden```
+
+- **Always hidden** <div>
+            <strong>Never</strong> show the taskbar icon.
+            </div>
+
+- **Always visible** <div>
+            <strong>Always</strong> show the taskbar icon (note that this can look a bit weird when the app is toggled off).
+            </div>
+
+- **When the app is visible** <div>
+            Only show the taskbar icon when the app is toggled <strong>on</strong>.
+            </div>
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"TaskbarIconVisibility": "AlwaysHidden | AlwaysVisible | WhenAppVisible",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"TaskbarIconVisibility": "AlwaysHidden | AlwaysVisible | WhenAppVisible",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -299,9 +499,29 @@ When to show the app window icon on the taskbar.
 Make the window see-through (applies to the entire window, including the title bar).<br />
 0 (invisible) - 100 (opaque).
 
+Defaults to ```100```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"Opacity": "100",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"Opacity": "100",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -310,9 +530,29 @@ Make the window see-through (applies to the entire window, including the title b
 
 Horizontal screen coverage, as a percentage.
 
+Defaults to ```95```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"HorizontalScreenCoverage": "95",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"HorizontalScreenCoverage": "95",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -320,9 +560,41 @@ Horizontal screen coverage, as a percentage.
 
 Where to position an app on the chosen monitor, horizontally.
 
+Defaults to ```Center```
+
+- **Center** <div>
+            Center of the screen.
+            </div>
+
+- **Left** <div>
+            Left of the screen.
+            </div>
+
+- **Right** <div>
+            Right of the screen.
+            </div>
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"HorizontalAlign": "Center | Left | Right",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"HorizontalAlign": "Center | Left | Right",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -330,9 +602,29 @@ Where to position an app on the chosen monitor, horizontally.
 
 Vertical screen coverage as a percentage (0-100).
 
+Defaults to ```95```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"VerticalScreenCoverage": "95",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"VerticalScreenCoverage": "95",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -340,9 +632,29 @@ Vertical screen coverage as a percentage (0-100).
 
 How much room to leave between the top of the app window and the top of the screen, in pixels.
 
+Defaults to ```0```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"VerticalOffset": "0",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"VerticalOffset": "0",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -354,7 +666,25 @@ By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"OffScreenLocations": "",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"OffScreenLocations": "",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -363,9 +693,41 @@ By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 
 Which monitor to preferably drop the app.
 
+Defaults to ```WithCursor```
+
+- **With cursor** <div>
+            The monitor where the mouse cursor is currently at.
+            </div>
+
+- **At index** <div>
+            The monitor at the index as specified by <strong>MonitorIndex</strong> (0-based).
+            </div>
+
+- **Primary** <div>
+            The monitor considered <strong>primary</strong> by the OS.
+            </div>
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"PreferMonitor": "WithCursor | AtIndex | Primary",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"PreferMonitor": "WithCursor | AtIndex | Primary",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -374,9 +736,29 @@ Which monitor to preferably drop the app.
 If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.<br />
 Zero based, e.g. 0, 1, etc.
 
+Defaults to ```0```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"MonitorIndex": "0",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"MonitorIndex": "0",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -385,9 +767,29 @@ Zero based, e.g. 0, 1, etc.
 
 How long the animation should take, in milliseconds.
 
+Defaults to ```250```
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AnimationDurationMs": "250",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"AnimationDurationMs": "250",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -395,9 +797,45 @@ How long the animation should take, in milliseconds.
 
 The animation type to use when toggling on an application.
 
+Defaults to ```EaseOutQuart```
+
+- **Linear** <div />
+
+- **Ease in+out (sine)** <div />
+
+- **Ease in back** <div />
+
+- **Ease in cubic** <div />
+
+- **Ease in quadratic** <div />
+
+- **Ease out back** <div />
+
+- **Ease out cubic** <div />
+
+- **Ease out quadratic** <div />
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AnimationTypeToggleOn": "Linear | EaseInOutSine | EaseInBack | EaseInCubic | EaseInQuart | EaseOutBack | EaseOutCubic | EaseOutQuart",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"AnimationTypeToggleOn": "Linear | EaseInOutSine | EaseInBack | EaseInCubic | EaseInQuart | EaseOutBack | EaseOutCubic | EaseOutQuart",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 
@@ -405,9 +843,45 @@ The animation type to use when toggling on an application.
 
 The animation type to use when toggling off an application.
 
+Defaults to ```EaseInQuart```
+
+- **Linear** <div />
+
+- **Ease in+out (sine)** <div />
+
+- **Ease in back** <div />
+
+- **Ease in cubic** <div />
+
+- **Ease in quadratic** <div />
+
+- **Ease out back** <div />
+
+- **Ease out cubic** <div />
+
+- **Ease out quadratic** <div />
+
 <remarks />
 
-<div />
+Globally:
+```json
+{
+	"AnimationTypeToggleOff": "Linear | EaseInOutSine | EaseInBack | EaseInCubic | EaseInQuart | EaseOutBack | EaseOutCubic | EaseOutQuart",
+	// ...
+}
+```
+For a single app:
+```json
+{
+	"Apps": [
+		{
+			"AnimationTypeToggleOff": "Linear | EaseInOutSine | EaseInBack | EaseInCubic | EaseInQuart | EaseOutBack | EaseOutCubic | EaseOutQuart",
+			// ...
+		}
+	]
+}
+```
+
 
 ---
 

@@ -46,6 +46,17 @@ public static class AttrUtils
 		return null;
 	}
 
+	public static object GetDefaultValueFor(this Expression expr)
+	{
+		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+		if (val != null)
+		{
+			return val;
+		}
+
+		return default;
+	}
+
 	public static TValue GetDefaultValueFor<TValue>(this Expression expr)
 	{
 		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
@@ -80,8 +91,14 @@ public static class AttrUtils
 		return ((int)attr.Minimum, (int)attr.Maximum);
 	}
 
+	public static string? GetMemberDocEnum(this object val, Type enumType) =>
+		enumType.GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDoc();
+
+	public static XElement? GetMemberDocEnumElement(this object val, Type enumType) =>
+		enumType.GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDocElement();
+
 	public static string? GetMemberDocEnum<TEnum>(this object val) =>
-		typeof(TEnum).GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDoc();
+		val.GetMemberDocEnum(typeof(TEnum));
 
 	public static string? GetMemberDocExpr(this Expression expr) =>
 		Guard.Against.Null(expr).GetMemberInfo()?.GetMemberDoc();

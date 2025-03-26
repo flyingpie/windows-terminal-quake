@@ -65,6 +65,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// See the "Examples" page in the GUI for, well, examples.
 	/// </remarks>
 	[Display(GroupName = Gn.Process, Name = "Filename")]
+	[ExampleValue("wt")]
 	[JsonPropertyOrder(2001)]
 	[Required]
 	public string? FileName
@@ -74,9 +75,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	/// <summary>
-	/// Apps sometimes have <Emph>process names</Emph> different from their <Emph>filenames</Emph>.
+	/// Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
 	/// This field can be used to look for the process name in such cases. Windows Terminal is an
-	/// example, with filename <Emph>wt</Emph>, and process name <Emph>WindowsTerminal</Emph>.
+	/// example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -114,6 +115,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	[Display(GroupName = Gn.Process, Name = "Window title")]
+	[ExampleValue("Mozilla Firefox - WhatsApp")]
 	[JsonPropertyOrder(2006)]
 	public string? WindowTitle
 	{

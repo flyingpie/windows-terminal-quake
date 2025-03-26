@@ -1,10 +1,12 @@
-﻿using Namotion.Reflection;
+using Namotion.Reflection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -36,30 +38,34 @@ public static class Program
 			typeof(WtqOptions), typeof(WtqAppOptions), typeof(WtqSharedOptions),
 		};
 
-		foreach (var item in list)
-		{
-			var disp = item.GetCustomAttribute<DisplayAttribute>();
-			var doc = XmlDocsExtensions.GetXmlDocsSummary(item);
-			// var doc = AttrUtils.GetMemberDocElement()
-
-			// File.AppendAllText(path, $"### {item.Name}");
-			// File.AppendAllText(path, "\n\n");
-			await wr.WriteLineAsync($"### {disp?.Name ?? item.Name}");
-			await wr.WriteLineAsync(doc);
-
-			var props = item
-				.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
-				.Select(p => new SettingPropertyInfo(p))
-				.Where(p => p.IsVisible)
-				.ToList();
-
-			await WritePropertyListAsync(props, wr);
-
-			// File.AppendAllText(path, "\n\n");
-			await wr.WriteLineAsync();
-		}
+		await NewMethod(typeof(WtqOptions), wr, SettingPropertyInfo.Scope.Global);
+		await NewMethod(typeof(WtqAppOptions), wr, SettingPropertyInfo.Scope.App);
+		await NewMethod(typeof(WtqSharedOptions), wr, SettingPropertyInfo.Scope.App | SettingPropertyInfo.Scope.Global);
 
 		File.WriteAllText(target, tplStr.Replace("{{TEMPLATE__SETTINGS}}", wr.ToString()));
+	}
+
+	private static async Task NewMethod(Type item, StringWriter wr, SettingPropertyInfo.Scope scope)
+	{
+		var disp = item.GetCustomAttribute<DisplayAttribute>();
+		var doc = XmlDocsExtensions.GetXmlDocsSummary(item);
+		// var doc = AttrUtils.GetMemberDocElement()
+
+		// File.AppendAllText(path, $"### {item.Name}");
+		// File.AppendAllText(path, "\n\n");
+		await wr.WriteLineAsync($"### {disp?.Name ?? item.Name}");
+		await wr.WriteLineAsync(doc);
+
+		var props = item
+			.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
+			.Select(p => new SettingPropertyInfo(p, scope))
+			.Where(p => p.IsVisible)
+			.ToList();
+
+		await WritePropertyListAsync(props, wr);
+
+		// File.AppendAllText(path, "\n\n");
+		await wr.WriteLineAsync();
 	}
 
 	private static async Task WritePropertyListAsync(ICollection<SettingPropertyInfo> props, StringWriter wr)
@@ -103,20 +109,56 @@ public static class Program
 				await wr.WriteLineAsync();
 				// File.AppendAllText(path, "\n\n");
 
+				if (prop.IsRequired)
+				{
+					await wr.WriteLineAsync("**REQUIRED**");
+					await wr.WriteLineAsync();
+				}
+
 				await wr.WriteLineAsync(prop.Summary);
 				await wr.WriteLineAsync();
 				// File.AppendAllText(path, "\n\n");
+
+				if (prop.DefaultAttr?.Value != null)
+				{
+					await wr.WriteLineAsync($"Defaults to ```{prop.DefaultAttr?.Value}```");
+					await wr.WriteLineAsync();
+				}
+
+				// Enum values ///////////////////
+				var propType = Nullable.GetUnderlyingType(prop.Property.PropertyType);
+				if (propType != null && propType.IsEnum)
+				{
+					var enumVals = EnumUtils.GetValues(propType);
+
+					foreach (var enumVal in enumVals)
+					{
+						// var summ = enumVal.GetMemberDocEnumElement(enumVal.Value.GetType())?.Descendants("summary")?.FirstOrDefault() ?? new XElement("summary");
+						// summ.Name = "div";
+						var summ = enumVal.Doc;
+						var xxx = enumVal.DocElement?.Descendants("summary")?.FirstOrDefault() ?? new XElement("summary");
+						xxx.Name = "div";
+
+						await wr.WriteLineAsync($"- **{enumVal.DisplayName}** {xxx.ToString()}");
+						await wr.WriteLineAsync();
+					}
+
+					var dbg = 2;
+				}
 
 				// var remstr = rem.ToString().Replace("\n", "").Trim().Replace("    ", "").Replace("<remarks>", "!!! note\n\t").Replace("</remarks>", "");
 				await wr.WriteLineAsync(prop.Remarks);
 				await wr.WriteLineAsync();
 				// File.AppendAllText(path, "\n\n");
 
+
+				// Example ////////////////////////////
 				// var code = ex.ToString().Replace("<code>", "```json").Replace("</code>", "```");
 				await wr.WriteLineAsync(prop.Example);
 				await wr.WriteLineAsync();
 				// File.AppendAllText(path, "\n\n");
 
+				// Ruler //////////////////////////////
 				await wr.WriteLineAsync("---");
 				await wr.WriteLineAsync();
 				// File.AppendAllText(path, "\n\n");
@@ -132,23 +174,45 @@ public static class Program
 
 public class SettingPropertyInfo
 {
-	public SettingPropertyInfo(PropertyInfo prop)
+	private readonly Scope _scope;
+
+	[Flags]
+	public enum Scope
 	{
+		None = 0,
+		Global = 2,
+		App = 4,
+	}
+
+	public SettingPropertyInfo(PropertyInfo prop, Scope scope)
+	{
+		_scope = scope;
 		Property = prop;
 
 		DisplayAttr = prop.GetCustomAttribute<DisplayAttribute>();
 		OrderProp = prop.GetCustomAttribute<JsonPropertyOrderAttribute>();
 		Doc = prop.GetMemberDocElement();
 		FlagsAttr = prop.GetCustomAttribute<DisplayFlagsAttribute>();
+		DefaultAttr = prop.GetCustomAttribute<DefaultValueAttribute>();
+		ExampleAttr = prop.GetCustomAttribute<ExampleValueAttribute>();
+		RequiredAttribute = prop.GetCustomAttribute<RequiredAttribute>();
 	}
 
 	public PropertyInfo Property { get; set; }
 
 	public DisplayAttribute? DisplayAttr { get; set; }
 
-	public DisplayFlagsAttribute? FlagsAttr {get;set;}
+	public DisplayFlagsAttribute? FlagsAttr { get; set; }
 
 	public JsonPropertyOrderAttribute? OrderProp { get; set; }
+
+	public DefaultValueAttribute? DefaultAttr { get; set; }
+
+	public ExampleValueAttribute? ExampleAttr { get; set; }
+
+	public RequiredAttribute? RequiredAttribute { get; set; }
+
+	public bool IsRequired => RequiredAttribute != null;
 
 	public XElement? Doc { get; set; }
 
@@ -160,17 +224,79 @@ public class SettingPropertyInfo
 
 	public bool IsVisible => FlagsAttr?.IsVisible ?? true;
 
+	public IEnumerable<EnumValue>? EnumValues
+	{
+		get
+		{
+			var propType = Nullable.GetUnderlyingType(Property.PropertyType);
+			if (propType != null && propType.IsEnum)
+			{
+				return EnumUtils.GetValues(propType);
+			}
+
+			return null;
+		}
+	}
+
 	public string Example
 	{
 		get
 		{
-			var ex = Doc?.Descendants("example")?.FirstOrDefault() ?? new XElement("example");
-			ex.Name = "div";
+			var ex = Doc?.Descendants("example")?.FirstOrDefault();
+			if (ex != null)
+			{
+				ex.Name = "div";
+				var code = ex.ToString().Replace("<code>", "```json").Replace("</code>", "```").Replace("    ", "");
 
-			var code = ex.ToString().Replace("<code>", "```json").Replace("</code>", "```").Replace("    ", "");
+				return code;
+			}
 
-			// return ex.ToString();
-			return code;
+			var values = DefaultAttr?.Value?.ToString() ?? string.Empty;
+
+			var enumVals = EnumValues;
+			if (enumVals != null)
+			{
+				values = string.Join(" | ", enumVals.Select(v => v.Value));
+			}
+
+			if (ExampleAttr != null)
+			{
+				values = ExampleAttr.Value;
+			}
+
+			var example1 = new StringBuilder();
+
+			if (_scope.HasFlag(Scope.Global))
+			{
+				example1.AppendLine($$"""
+					Globally:
+					```json
+					{
+						"{{Property.Name}}": "{{values}}",
+						// ...
+					}
+					```
+					""");
+			}
+
+			if (_scope.HasFlag(Scope.App))
+			{
+				example1.AppendLine($$"""
+					For a single app:
+					```json
+					{
+						"Apps": [
+							{
+								"{{Property.Name}}": "{{values}}",
+								// ...
+							}
+						]
+					}
+					```
+					""");
+			}
+
+			return example1.ToString();
 		}
 	}
 
