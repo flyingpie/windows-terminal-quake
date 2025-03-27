@@ -1,13 +1,13 @@
 # About
 
-Welcome to the WTQ docs!
+**Welcome to the WTQ docs!**
 
-WTQ runs in the background, and allows sliding applications on- and off the screen in Quake style.
+WTQ runs in the background, and enables sliding applications on- :material-arrow-down: and off :material-arrow-up: the screen in Quake style.
 
 Supports:
 
-- Windows 10 and 11;
-- KDE Plasma 5 & 6 (Wayland only).
+- Windows **10** and **11**
+- KDE Plasma **5** & **6** (Wayland only)
 
 See [Installation](#installation) to get started.
 
@@ -37,26 +37,186 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Mo
 
 ## :material-download: Installation 
 
-### Windows - Manual
+### :fontawesome-brands-windows: Windows
 
-### Windows - Scoop
+#### Scoop
 
-### Windows - WinGet
+```shell
+scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
+```
+A shortcut is then available named "**WTQ - Windows Terminal Quake**", or you can just run "**wtq**" from a command line or **Win+R**.
 
-### Linux - Manual
+Update (WTQ only):
+```shell
+scoop update wtq-latest
+```
 
-### Linux - Flatpak
+#### WinGet
+
+```shell
+winget install windows-terminal-quake
+```
+You can then call "**wtq**" from the command line.
+
+After having done that at least once, a shortcut will appear in the start menu, called "**WTQ - Main Window**".
+
+![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
+
+Update (WTQ only):
+```shell
+winget upgrade windows-terminal-quake
+```
+
+See [the WinGet docs](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for more information on how to use Winget.
+
+!!! note "Where's WTQ Installed?"
+	You can run
+
+	```shell
+	winget --info
+	```
+
+	To find out where apps are installed:
+	```
+	Windows Package Manager v1.10.340
+	(...)
+	Portable Package Root (User)       %LOCALAPPDATA%\Microsoft\WinGet\Packages
+	```
+
+#### Manual
+
+See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
+### :fontawesome-brands-linux: Linux
+
+#### Manual
+
+See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a ```wtq.desktop``` file.
+
+As a 1-liner:
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+```
+
+And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+```
+
+!!! note "Settings File Remains"
+	The WTQ settings are not removed by this script. These are usually located at ```~/.config/wtq```, also see [Settings](#settings).
+
+#### Flatpak
+
+!!! danger "TODO"
 
 ## :material-lightbulb: App examples
 
-TODO
+!!! danger "TODO"
 
 ## :material-cog: Settings
 
-Settings are stored in a ```.json``` file, which can be in various locations, depending mostly on preference.
+Settings are stored in a JSON file. The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**.
 
-!!! danger
+!!! note "Where's My Settings File?"
+	The file can be in several places, to support different use cases and preferences.
+
+	You can quickly open either the settings _file_, or the _directory_ that contains the settings file by clicking the tray icon -> **Open Settings File**, or **Open Settings Directory**.
+
+	<figure markdown="span">
+		![](assets/tray-icon.png)
+		<figcaption>Tray icon menu options.</figcaption>
+	</figure>
+
+	Additionally, it's also displayed in the GUI, with a link for convenience.
+
+	<figure markdown="span">
+		![](assets/link-to-settings.png)
+		<figcaption>Settings location in the GUI.</figcaption>
+	</figure>
+
+### Settings File Locations
+
+#### :fontawesome-brands-windows: On Windows
+
+These locations are considered, in order:
+
+1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+2. Next to the WTQ executable
+	- When using **Scoop**: ```C:\Users\username\scoop\apps\wtq-latest\current```
+	- When using **WinGet**: ```C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe```
+	- Or wherever else the ```wtq.exe``` file is
+4. In **~/.config**
+	- ```C:\users\username\.config\wtq.json```
+5. In user home
+	- ```C:\users\username\wtq.json```
+6. In user home, as a dot file
+	- ```C:\users\username\.wtq.json```
+7. In app data 
+	- ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+
+If no settings were found at any of these locations, WTQ creates a settings file at ```C:\Users\username\AppData\Roaming\wtq\wtq.jsonc```.
+
+#### :fontawesome-brands-linux: On Linux
+
+These locations are considered, in order:
+
+1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+2. Next to the WTQ executable
+	- When using the install script: ```/home/username/.local/share/wtq```
+3. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
+	- ```/home/username/.config/wtq.json```
+4. In **~/.config** (the default for XDG_CONFIG_HOME, if is it not defined)
+	- ```/home/username/.config/wtq.json```
+5. In user home
+	- ```/home/username/wtq.json```
+6. In user home, as a dot file
+	- ```/home/username/.wtq.json```
+7. :fontawesome-brands-windows: In app data
+	- ```/home/username/.config/wtq.json```
+
+If no settings were found at any of these locations, WTQ creates a settings file at ```$XDG_CONFIG_HOME```: ```/home/username/.config/wtq/wtq.jsonc```.
+
+!!! danger "TODO"
 	TODO: Detail how settings file is found.
+
+!!! danger "TODO"
+	TODO: Mention wtq.schema.json
+
+!!! danger "TODO"
+	TODO: Mention GUI
+
+{{TEMPLATE__SETTINGS}}
+
+
+TESTTESTTEST
+
+{{ testvar1 }}
+
+{{ wtqsettings }}
+
+{% for category in wtqsettings.categories %}
+
+### {{ category.name }}
+
+{% for group in category.groups %}
+
+#### {{ group.name }}
+
+{% endfor %}
+
+{% endfor %}
+
+TESTTESTTEST
+
+
+## :material-excavator: Building From Source
+
+!!! danger "TODO"
+
+## :material-pencil-ruler: Architecture
+
+!!! danger "TODO"
 
 ``` mermaid
 graph LR
@@ -66,19 +226,3 @@ graph LR
   D --> B;
   B ---->|No| E[Yay!];
 ```
-
-!!! danger
-	TODO: Mention wtq.schema.json
-
-!!! danger
-	TODO: Mention GUI
-
-{{TEMPLATE__SETTINGS}}
-
-## :material-excavator: Building From Source
-
-TODO
-
-## :material-pencil-ruler: Architecture
-
-TODO

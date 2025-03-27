@@ -46,6 +46,9 @@ theme:
 repo_name: windows-terminal-quake
 repo_url: http://github.com/flyingpie/windows-terminal-quake
 
+extra:
+  testvar1: 1234
+
 extra_javascript:
   - assets/highlight/highlight.pack.js
   - assets/config.js
@@ -69,7 +72,11 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
+      toc_depth: 5
       permalink: true
 
 plugins:
   - include-markdown
+  - macros:
+      include_yaml:
+        - wtqsettings.yml

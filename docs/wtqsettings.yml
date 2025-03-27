@@ -1,0 +1,36 @@
+wtqsettings:
+  categories:
+    - global:
+      name: "Global Settings"
+
+      groups:
+        - process:
+          name: abc
+          settings:
+            - setting1:
+              name: aaa
+            - setting2:
+              name: bbb
+
+        - behavior:
+
+    - app:
+      name: "App Settings"
+      groups:
+        - abc
+        - def
+
+    - shared:
+      name: "Shared Settings"
+      groups:
+        - abc
+        - def
+
+  child1:
+    - list1
+    - list2
+    - list3
+  child2:
+    - list1
+    - list2
+    - list3

@@ -1,13 +1,13 @@
 # About
 
-Welcome to the WTQ docs!
+**Welcome to the WTQ docs!**
 
-WTQ runs in the background, and allows sliding applications on- and off the screen in Quake style.
+WTQ runs in the background, and enables sliding applications on- :material-arrow-down: and off :material-arrow-up: the screen in Quake style.
 
 Supports:
 
-- Windows 10 and 11;
-- KDE Plasma 5 & 6 (Wayland only).
+- Windows **10** and **11**
+- KDE Plasma **5** & **6** (Wayland only)
 
 See [Installation](#installation) to get started.
 
@@ -37,40 +37,117 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Mo
 
 ## :material-download: Installation 
 
-### Windows - Manual
-
 ### Windows - Scoop
+
+```shell
+scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
+```
+A shortcut is then available named "**WTQ - Windows Terminal Quake**", or you can just run "**wtq**" from a command line or **Win+R**.
 
 ### Windows - WinGet
 
+```shell
+winget install windows-terminal-quake
+```
+You can then call "**wtq**" from the command line.
+
+After having done that at least once, a shortcut will appear in the start menu, called "**WTQ - Main Window**".
+
+![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
+
+### Windows - Manual
+
+See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
 ### Linux - Manual
+
+See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a ```wtq.desktop``` file.
+
+As a 1-liner:
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+```
+
+And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+```shell
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+```
+
+!!! note
+	The WTQ configuration is not removed by this script. These are usually located at ```~/.config/wtq```, also see [Settings](#settings).
 
 ### Linux - Flatpak
 
+!!! danger "TODO"
+
 ## :material-lightbulb: App examples
 
-TODO
+!!! danger "TODO"
 
 ## :material-cog: Settings
 
-Settings are stored in a ```.json``` file, which can be in various locations, depending mostly on preference.
+Settings are stored in a JSON file. The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. Using ```.jsonc``` or ```.json5``` are supported so that editors like VSCode automatically switch to "JSON with Comments".
 
-!!! danger
+The file can be in several places, to support different use cases and preferences.
+
+!!! note "Where's My Settings File?"
+	You can quickly open either the settings file, or the directory that contains the settings file by clicking the tray icon -> **Open Settings File**, or **Open Settings Directory**.
+
+	Additionally, it's also displayed in the GUI.
+
+These locations are considered, in this order:
+
+1. Environment variable named ```WTQ_CONFIG_FILE``` exists and points to an existing file (regardless of filename or extension)
+2. Next to the WTQ executable
+	- :fontawesome-brands-windows: ```wtq.exe```
+	- :fontawesome-brands-linux: ```wtq```
+3. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
+	- :fontawesome-brands-windows: ```C:\users\username\.config\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+4. In **~/.config**
+	- :fontawesome-brands-windows: ```C:\users\username\.config\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+5. In user home
+	- :fontawesome-brands-windows: ```C:\users\username\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/wtq.json```
+6. In user home, as a dot file
+	- :fontawesome-brands-windows: ```C:\users\username\.wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.wtq.json```
+7. :fontawesome-brands-windows: In app data
+	- :fontawesome-brands-windows: ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+
+### Locations
+
+#### On Windows
+
+1. Environment variable named ```WTQ_CONFIG_FILE``` exists and points to an existing file (regardless of filename or extension)
+2. Next to the WTQ executable
+	- :fontawesome-brands-windows: ```wtq.exe```
+	- :fontawesome-brands-linux: ```wtq```
+3. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
+	- :fontawesome-brands-windows: ```C:\users\username\.config\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+4. In **~/.config**
+	- :fontawesome-brands-windows: ```C:\users\username\.config\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+5. In user home
+	- :fontawesome-brands-windows: ```C:\users\username\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/wtq.json```
+6. In user home, as a dot file
+	- :fontawesome-brands-windows: ```C:\users\username\.wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.wtq.json```
+7. :fontawesome-brands-windows: In app data
+	- :fontawesome-brands-windows: ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+	- :fontawesome-brands-linux: ```/home/username/.config/wtq.json```
+
+!!! danger "TODO"
 	TODO: Detail how settings file is found.
 
-``` mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
-```
-
-!!! danger
+!!! danger "TODO"
 	TODO: Mention wtq.schema.json
 
-!!! danger
+!!! danger "TODO"
 	TODO: Mention GUI
 
 ### :material-earth: Global options
@@ -890,8 +967,17 @@ For a single app:
 
 ## :material-excavator: Building From Source
 
-TODO
+!!! danger "TODO"
 
 ## :material-pencil-ruler: Architecture
 
-TODO
+!!! danger "TODO"
+
+``` mermaid
+graph LR
+  A[Start] --> B{Error?};
+  B -->|Yes| C[Hmm...];
+  C --> D[Debug];
+  D --> B;
+  B ---->|No| E[Yay!];
+```
