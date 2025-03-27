@@ -13,14 +13,14 @@ See [Installation](#installation) to get started.
 
 ---
 
-Here's an example where WTQ runs on **Windows 10**, toggling [Windows Terminal](), [Double Commander]() and [Process Hacker]().
-<video controls loop autoplay>
-<source src="/assets/video/wtq-v2.mp4" />
+Here's an example where WTQ runs on **Windows 10**, toggling [Windows Terminal](), [Double Commander](), [Process Hacker]() and [KeePassXC]().
+<video controls loop>
+<source src="/assets/video/wtq-win10.mp4" />
 </video>
 
-And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Monitor]() and [Spotify]().
-<video controls loop autoplay>
-<source src="/assets/video/wtq-v2-linux.mp4" />
+And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Monitor]() and [KeePassXC]().
+<video controls loop>
+<source src="/assets/video/wtq-kde6.mp4" />
 </video>
 
 !!! note "Why "Quake" Style"
@@ -41,17 +41,26 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Mo
 
 #### Scoop
 
+[A command-line installer for Windows.](https://scoop.sh/)
+
 ```shell
 scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
 ```
 A shortcut is then available named "**WTQ - Windows Terminal Quake**", or you can just run "**wtq**" from a command line or **Win+R**.
 
-Update (WTQ only):
+![](assets/screenshots/win-startmenu-scoop.png)
+/// caption
+Start menu entry after installation.
+///
+
+Update (just WTQ):
 ```shell
 scoop update wtq-latest
 ```
 
 #### WinGet
+
+[The Windows package manager.](https://github.com/microsoft/winget-cli)
 
 ```shell
 winget install windows-terminal-quake
@@ -60,9 +69,12 @@ You can then call "**wtq**" from the command line.
 
 After having done that at least once, a shortcut will appear in the start menu, called "**WTQ - Main Window**".
 
-![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
+![](assets/screenshots/win-startmenu-winget.png)
+/// caption
+Start menu entry after installation.
+///
 
-Update (WTQ only):
+Update (just WTQ):
 ```shell
 winget upgrade windows-terminal-quake
 ```
@@ -86,6 +98,9 @@ See [the WinGet docs](https://learn.microsoft.com/en-us/windows/package-manager/
 #### Manual
 
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
+- **Self-Contained** Slightly larger, but does not require dependencies to be installed (i.e. .Net).
+- **Framework-Dependent** Smaller, but requires .Net 9 to be installed.
 
 ### :fontawesome-brands-linux: Linux
 
@@ -123,17 +138,17 @@ Settings are stored in a JSON file. The file can use the extension ```.json```, 
 
 	You can quickly open either the settings _file_, or the _directory_ that contains the settings file by clicking the tray icon -> **Open Settings File**, or **Open Settings Directory**.
 
-	<figure markdown="span">
-		![](assets/tray-icon.png)
-		<figcaption>Tray icon menu options.</figcaption>
-	</figure>
+	![](assets/tray-icon.png)
+	/// caption
+	Tray icon menu options.
+	///
 
 	Additionally, it's also displayed in the GUI, with a link for convenience.
 
-	<figure markdown="span">
-		![](assets/link-to-settings.png)
-		<figcaption>Settings location in the GUI.</figcaption>
-	</figure>
+	![](assets/link-to-settings.png)
+	/// caption
+	Settings location in the GUI.
+	///
 
 ### Settings File Locations
 
