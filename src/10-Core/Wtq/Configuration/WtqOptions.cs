@@ -35,6 +35,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// </example>
 	[Display(GroupName = Gn.General)]
 	[JsonPropertyOrder(101)]
+	[Required]
 	public ICollection<WtqAppOptions> Apps { get; set; }
 		= [];
 

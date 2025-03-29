@@ -106,6 +106,24 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	[JsonPropertyOrder(2004)]
 	public string? Arguments { get; set; }
 
+	/// <summary>
+	///
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///		"Apps": [
+	///			{
+	///				"ArgumentList": [
+	///					"--allow-screencapture",
+	///					"--debug-info",
+	///				],
+	///				// ...
+	///			}
+	///		]
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Argument list")]
 	[JsonPropertyOrder(2004)]
 	public ICollection<ProcessArgument> ArgumentList

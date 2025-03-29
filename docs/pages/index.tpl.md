@@ -131,7 +131,9 @@ bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quak
 
 ## :material-cog: Settings
 
-Settings are stored in a JSON file. The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**.
+Settings are stored in a JSON file, usually named ```wtq.jsonc```.
+
+The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**, making working with comments nicer.
 
 !!! note "Where's My Settings File?"
 	The file can be in several places, to support different use cases and preferences.
@@ -161,14 +163,14 @@ These locations are considered, in order:
 	- When using **Scoop**: ```C:\Users\username\scoop\apps\wtq-latest\current```
 	- When using **WinGet**: ```C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe```
 	- Or wherever else the ```wtq.exe``` file is
-4. In **~/.config**
-	- ```C:\users\username\.config\wtq.json```
+4. In **%USERPROFILE%\\.config**
+	- E.g. ```C:\users\username\.config\wtq.json```
 5. In user home
-	- ```C:\users\username\wtq.json```
+	- E.g. ```C:\users\username\wtq.json```
 6. In user home, as a dot file
-	- ```C:\users\username\.wtq.json```
+	- E.g. ```C:\users\username\.wtq.json```
 7. In app data 
-	- ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+	- E.g. ```C:\users\username\AppData\Roaming\wtq\wtq.json```
 
 If no settings were found at any of these locations, WTQ creates a settings file at ```C:\Users\username\AppData\Roaming\wtq\wtq.jsonc```.
 
@@ -203,27 +205,99 @@ If no settings were found at any of these locations, WTQ creates a settings file
 
 {{TEMPLATE__SETTINGS}}
 
+---
 
 TESTTESTTEST
 
-{{ testvar1 }}
+{% for Category in WtqSettings.Categories %}
 
-{{ wtqsettings }}
+### {{ Category.Name }}
 
-{% for category in wtqsettings.categories %}
+{{ Category.Description }}
 
-### {{ category.name }}
+{% for Group in Category.Groups %}
 
-{% for group in category.groups %}
+#### {{ Group.Name }}
 
-#### {{ group.name }}
+{% for Setting in Group.Settings %}
+
+##### {{ Setting.DisplayName }}
+
+{{ Setting.Description }}
+
+{% if not Setting.IsRequired %}
+
+Defaults to ```{{ Setting.DefaultValue }}```
+
+{% endif %}
+
+{% if Setting.IsEnum %}
+{% for EnumVal in Setting.EnumValues %}
+
+- **{{ EnumVal.Value }}**<br/>{{ EnumVal.Doc }}
 
 {% endfor %}
+{% endif %}
 
+{% if Setting.HasExample %}
+
+```json
+{{ Setting.Example }}
+```
+
+{% elif Setting.IsGlobal and Setting.IsApp %}
+
+Globally:
+```json
+{
+	"{{ Setting.Name }}": "{{ Setting.ExampleValue }}",
+	// ...
+}
+```
+
+For one app only:
+```json
+{
+	"Apps": [
+		{
+			"{{ Setting.Name }}": "{{ Setting.ExampleValue }}"
+			// ...
+		}
+	]
+}
+```
+
+{% elif Setting.IsGlobal %}
+
+```json
+{
+	"{{ Setting.Name }}": "{{ Setting.ExampleValue }}",
+	// ...
+}
+```
+
+{% elif Setting.IsApp %}
+
+```json
+{
+	"Apps": [
+		{
+			"{{ Setting.Name }}": "{{ Setting.ExampleValue }}"
+			// ...
+		}
+	]
+}
+```
+
+{% endif %}
+
+{% endfor %}
+{% endfor %}
 {% endfor %}
 
 TESTTESTTEST
 
+---
 
 ## :material-excavator: Building From Source
 

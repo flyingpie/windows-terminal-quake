@@ -18,6 +18,7 @@
 		<PackageReference Include="Serilog.Sinks.Console" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="System.Resources.Extensions" />
+		<PackageReference Include="YamlDotNet" />
 	</ItemGroup>
 
 	<ItemGroup>

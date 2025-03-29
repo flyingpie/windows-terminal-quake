@@ -2,9 +2,9 @@ namespace Wtq.Utils;
 
 public sealed class ExampleValueAttribute : Attribute
 {
-	public string Value { get; }
+	public object Value { get; }
 
-	public ExampleValueAttribute(string value)
+	public ExampleValueAttribute(object value)
 	{
 		Value = value;
 	}

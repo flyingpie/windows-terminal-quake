@@ -55,6 +55,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[Display(GroupName = Gn.Behavior)]
 	[DefaultValue(100)]
+	[ExampleValue(80)]
 	[JsonPropertyOrder(3004)]
 	public int? Opacity { get; set; }
 
