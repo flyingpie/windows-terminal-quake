@@ -6,7 +6,6 @@ site_dir: 'build'
 
 nav:
 - WTQ v2: index.md
-- WTQ v2 template: index.tpl.md
 - WTQ v1: v1.md
 - Reporting Issues: reporting-issues.md
 - FAQ: faq.md

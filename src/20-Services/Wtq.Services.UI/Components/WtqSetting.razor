@@ -68,7 +68,7 @@
 		@Content
 
 		<!-- Description -->
-		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)AttrUtils.GetMemberDocExpr(Get))</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)Get.GetMemberInfo().GetExample())</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)

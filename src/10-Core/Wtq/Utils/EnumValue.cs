@@ -19,7 +19,7 @@ public class EnumValue<TValue>
 
 	public string? DisplayName => _displayName ??= Display?.Name ?? Value.ToString();
 
-	public string? Doc => _doc ??= Value.GetMemberDocEnum<TValue>();
+	public string? Doc => _doc ??= XmlDocUtils.GetSummaryEnum(Value, typeof(TValue));
 }
 
 public class EnumValue
@@ -37,7 +37,7 @@ public class EnumValue
 
 	public string? DisplayName => _displayName ??= Display?.Name ?? Value.ToString();
 
-	public string? Doc => _doc ??= Value.GetMemberDocEnum(Value.GetType());
+	public string? DocSummary => _doc ??= XmlDocUtils.GetSummaryEnum(Value, Value.GetType());
 
-	public XElement? DocElement => Value.GetMemberDocEnumElement(Value.GetType());
+	// public XElement? DocElement => Value.GetMemberDocEnumElement(Value.GetType());
 }

@@ -1,6 +1,4 @@
-using Namotion.Reflection;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace Wtq.Utils;
 
@@ -90,30 +88,6 @@ public static class AttrUtils
 
 		return ((int)attr.Minimum, (int)attr.Maximum);
 	}
-
-	public static string? GetMemberDocEnum(this object val, Type enumType) =>
-		enumType.GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDoc();
-
-	public static XElement? GetMemberDocEnumElement(this object val, Type enumType) =>
-		enumType.GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDocElement();
-
-	public static string? GetMemberDocEnum<TEnum>(this object val) =>
-		val.GetMemberDocEnum(typeof(TEnum));
-
-	public static string? GetMemberDocExpr(this Expression expr) =>
-		Guard.Against.Null(expr).GetMemberInfo()?.GetMemberDoc();
-
-
-	public static XElement? GetMemberDocElement(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo).GetXmlDocsElement();
-
-	public static string? GetMemberDoc(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo)
-			.GetXmlDocsElement(new XmlDocsOptions() { FormattingMode = XmlDocsFormattingMode.Markdown, })
-			// ?.Descendants("summary")
-			// ?.FirstOrDefault()
-			?.ToString(SaveOptions.None)
-		?? string.Empty;
 
 	public static MemberInfo? GetMemberInfo(this Expression expression)
 	{

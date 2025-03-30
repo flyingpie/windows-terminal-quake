@@ -112,15 +112,15 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// <example>
 	/// <code>
 	/// {
-	///		"Apps": [
-	///			{
-	///				"ArgumentList": [
-	///					"--allow-screencapture",
-	///					"--debug-info",
-	///				],
-	///				// ...
-	///			}
-	///		]
+	/// 	"Apps": [
+	/// 		{
+	/// 			"ArgumentList": [
+	/// 				"--allow-screencapture",
+	/// 				"--debug-info",
+	/// 			],
+	/// 			// ...
+	/// 		}
+	/// 	]
 	/// }
 	/// </code>
 	/// </example>
