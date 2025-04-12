@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Host.Docs</AssemblyName>
+		<RootNamespace>Wtq.Host.Docs</RootNamespace>
+
+		<TargetFramework>net9.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+	</ItemGroup>
+</Project>

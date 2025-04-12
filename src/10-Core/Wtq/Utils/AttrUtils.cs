@@ -1,6 +1,4 @@
-using Namotion.Reflection;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace Wtq.Utils;
 
@@ -46,6 +44,17 @@ public static class AttrUtils
 		return null;
 	}
 
+	public static object GetDefaultValueFor(this Expression expr)
+	{
+		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+		if (val != null)
+		{
+			return val;
+		}
+
+		return default;
+	}
+
 	public static TValue GetDefaultValueFor<TValue>(this Expression expr)
 	{
 		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
@@ -79,20 +88,6 @@ public static class AttrUtils
 
 		return ((int)attr.Minimum, (int)attr.Maximum);
 	}
-
-	public static string? GetMemberDocEnum<TEnum>(this object val) =>
-		typeof(TEnum).GetMember(val.ToString()!).FirstOrDefault()?.GetMemberDoc();
-
-	public static string? GetMemberDocExpr(this Expression expr) =>
-		Guard.Against.Null(expr).GetMemberInfo()?.GetMemberDoc();
-
-	public static string? GetMemberDoc(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo)
-			.GetXmlDocsElement()
-			?.Descendants("summary")
-			?.FirstOrDefault()
-			?.ToString(SaveOptions.None)
-		?? string.Empty;
 
 	public static MemberInfo? GetMemberInfo(this Expression expression)
 	{
