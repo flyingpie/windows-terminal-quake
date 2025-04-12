@@ -1,0 +1,553 @@
+WtqSettings:
+  Categories:
+  - Name: ':material-earth: Global options'
+    Description: Defines WTQ-wide options, including the list of configured apps.
+    Groups:
+    - Name: General
+      Settings:
+      - DisplayName: Apps
+        SettingName: Apps
+        Description: Applications to enable Quake-style dropdown for.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: true
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+          	"Apps": [
+          		{ "Name": "App 1" },
+          		{ "Name": "App 2" },
+          		// ...
+          	]
+          }
+        Remarks: See the GUI and the [docs](#app-examples) for some examples.
+      - DisplayName: Hotkeys
+        SettingName: Hotkeys
+        Description: >-
+          Global hotkeys, that toggle either the first, or the most recently toggled app.
+
+          Optional.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+          	"Hotkeys": [
+          		{ "Modifiers": "Control", "Key": "Q" }
+          	]
+          }
+        Remarks: ""
+      - DisplayName: Show UI on start
+        SettingName: ShowUiOnStart
+        Description: Whether to show the GUI when WTQ is started.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: false
+        ExampleValue: false
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Animation
+      Settings:
+      - DisplayName: Animation target FPS
+        SettingName: AnimationTargetFps
+        Description: >-
+          How many frames per second the animation should be.
+
+          Note that this may not be hit if moving windows takes too long, hence "target" fps.
+
+          Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 40
+        ExampleValue: 40
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+  - Name: ':material-application-outline: App options'
+    Description: Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
+    Groups:
+    - Name: App
+      Settings:
+      - DisplayName: Name
+        SettingName: Name
+        Description: >-
+          A logical name for the app, used to identify it across config reloads.
+
+          Appears in logs.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: true
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+          	"Name": "Terminal",
+          	// ...
+          }
+        Remarks: ""
+      - DisplayName: Hotkeys
+        SettingName: Hotkeys
+        Description: One or more keyboard shortcuts that toggle in- and out this particular app.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Process
+      Settings:
+      - DisplayName: Filename
+        SettingName: FileName
+        Description: >-
+          The **filename** to use when starting a new process for the app.
+
+          E.g. **notepad**, **dolphin**, etc.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: true
+        DefaultValue: 
+        ExampleValue: wt
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: See the "Examples" page in the GUI for, well, examples.
+      - DisplayName: Process name
+        SettingName: ProcessName
+        Description: >-
+          Apps sometimes have **process names** different from their **filenames**.
+
+          This field can be used to look for the process name in such cases. Windows Terminal is an
+
+          example, with filename **wt**, and process name **WindowsTerminal**.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+          	// Using with Windows Terminal requires both "Filename" and "ProcessName".
+          	"Apps": {
+          		"Filename": "wt",
+          		"ProcessName": "WindowsTerminal"
+          	}
+          }
+        Remarks: ""
+      - DisplayName: Arguments
+        SettingName: Arguments
+        Description: >-
+          Command-line arguments that should be passed to the app when it's started.
+
+          Note that this only applies when using an **AttachMode** that starts the app.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Argument list
+        SettingName: ArgumentList
+        Description: >-
+          Command-line arguments that should be passed to the app when it's started.
+
+          Note that this only applies when using an **AttachMode** that starts the app.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+          	"Apps": [
+          		{
+          			"ArgumentList": [
+          				"--allow-screencapture",
+          				"--debug-info",
+          			],
+          			// ...
+          		}
+          	]
+          }
+        Remarks: ""
+      - DisplayName: Window title
+        SettingName: WindowTitle
+        Description: ""
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: Mozilla Firefox - WhatsApp
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Behavior
+      Settings:
+      - DisplayName: Window title override
+        SettingName: WindowTitleOverride
+        Description: >-
+          Attempt to set the window title to a specific value.
+
+
+          Useful for cases where multiple programs control window placement (such as when
+
+          using WTQ together with a window manager) and the window title can be used to
+
+          opt-out in the other program.
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: Note that this doesn't work for all windows, as it depends on factors like the app's GUI kit.
+  - Name: ':material-cogs: Shared options'
+    Description: Options that are available both in global- and per-app options.
+    Groups:
+    - Name: Process
+      Settings:
+      - DisplayName: Attach mode
+        SettingName: AttachMode
+        Description: >-
+          How WTQ should get to an instance of a running app.
+
+          I.e. whether to start an app instance if one cannot be found.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: FindOrStart
+        ExampleValue: FindOrStart
+        EnumValues:
+        - Value: Find
+          DisplayName: Find
+          Description: Only look for existing app instances (but don't create one).
+        - Value: FindOrStart
+          DisplayName: Find or start
+          Description: Look for an existing app instance, create one if one does not exist yet.
+        - Value: Manual
+          DisplayName: Manual
+          Description: Attach to whatever app is in the foreground when pressing an assigned hotkey.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Behavior
+      Settings:
+      - DisplayName: Always on top
+        SettingName: AlwaysOnTop
+        Description: Whether the app should always be on top of other windows, regardless of whether it has focus.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: false
+        ExampleValue: false
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Hide on focus lost
+        SettingName: HideOnFocusLost
+        Description: Whether the app should be toggled off when another app gets focus.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Always
+        ExampleValue: Always
+        EnumValues:
+        - Value: Always
+          DisplayName: Always
+          Description: Toggle off the app when focus is lost.
+        - Value: Never
+          DisplayName: Never
+          Description: Do not toggle off the app when focus is lost.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Taskbar icon visibility
+        SettingName: TaskbarIconVisibility
+        Description: When to show the app window icon on the taskbar.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: AlwaysHidden
+        ExampleValue: AlwaysHidden
+        EnumValues:
+        - Value: AlwaysHidden
+          DisplayName: Always hidden
+          Description: '**Never** show the taskbar icon.'
+        - Value: AlwaysVisible
+          DisplayName: Always visible
+          Description: '**Always** show the taskbar icon (note that this can look a bit weird when the app is toggled off).'
+        - Value: WhenAppVisible
+          DisplayName: When the app is visible
+          Description: Only show the taskbar icon when the app is toggled **on**.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Opacity
+        SettingName: Opacity
+        Description: >-
+          Make the window see-through (applies to the entire window, including the title bar).
+
+          0 (invisible) - 100 (opaque).
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 100
+        ExampleValue: 80
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Position
+      Settings:
+      - DisplayName: Horizontal screen coverage
+        SettingName: HorizontalScreenCoverage
+        Description: Horizontal screen coverage, as a percentage.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 95
+        ExampleValue: 95
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Horizontal align
+        SettingName: HorizontalAlign
+        Description: Where to position an app on the chosen monitor, horizontally.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Center
+        ExampleValue: Center
+        EnumValues:
+        - Value: Center
+          DisplayName: Center
+          Description: Center of the screen.
+        - Value: Left
+          DisplayName: Left
+          Description: Left of the screen.
+        - Value: Right
+          DisplayName: Right
+          Description: Right of the screen.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Vertical screen coverage
+        SettingName: VerticalScreenCoverage
+        Description: Vertical screen coverage as a percentage (0-100).
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 95
+        ExampleValue: 95
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Vertical offset
+        SettingName: VerticalOffset
+        Description: How much room to leave between the top of the app window and the top of the screen, in pixels.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 0
+        ExampleValue: 0
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Off-screen locations
+        SettingName: OffScreenLocations
+        Description: >-
+          When moving an app off the screen, WTQ looks for an empty space to move the window to.
+
+          Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.
+
+          By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Monitor
+      Settings:
+      - DisplayName: Prefer monitor
+        SettingName: PreferMonitor
+        Description: Which monitor to preferably drop the app.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: WithCursor
+        ExampleValue: WithCursor
+        EnumValues:
+        - Value: WithCursor
+          DisplayName: With cursor
+          Description: The monitor where the mouse cursor is currently at.
+        - Value: AtIndex
+          DisplayName: At index
+          Description: The monitor at the index as specified by **MonitorIndex** (0-based).
+        - Value: Primary
+          DisplayName: Primary
+          Description: The monitor considered **primary** by the OS.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Monitor index
+        SettingName: MonitorIndex
+        Description: >-
+          If **PreferMonitor** is set to **AtIndex**, this setting determines what monitor to choose.
+
+          Zero based, e.g. 0, 1, etc.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 0
+        ExampleValue: 0
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Animation
+      Settings:
+      - DisplayName: Animation duration
+        SettingName: AnimationDurationMs
+        Description: How long the animation should take, in milliseconds.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 250
+        ExampleValue: 250
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Animation type (toggle ON)
+        SettingName: AnimationTypeToggleOn
+        Description: The animation type to use when toggling on an application.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: EaseOutQuart
+        ExampleValue: EaseOutQuart
+        EnumValues:
+        - Value: Linear
+          DisplayName: Linear
+          Description: ""
+        - Value: EaseInOutSine
+          DisplayName: Ease in+out (sine)
+          Description: ""
+        - Value: EaseInBack
+          DisplayName: Ease in back
+          Description: ""
+        - Value: EaseInCubic
+          DisplayName: Ease in cubic
+          Description: ""
+        - Value: EaseInQuart
+          DisplayName: Ease in quadratic
+          Description: ""
+        - Value: EaseOutBack
+          DisplayName: Ease out back
+          Description: ""
+        - Value: EaseOutCubic
+          DisplayName: Ease out cubic
+          Description: ""
+        - Value: EaseOutQuart
+          DisplayName: Ease out quadratic
+          Description: ""
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Animation type (toggle OFF)
+        SettingName: AnimationTypeToggleOff
+        Description: The animation type to use when toggling off an application.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: EaseInQuart
+        ExampleValue: EaseInQuart
+        EnumValues:
+        - Value: Linear
+          DisplayName: Linear
+          Description: ""
+        - Value: EaseInOutSine
+          DisplayName: Ease in+out (sine)
+          Description: ""
+        - Value: EaseInBack
+          DisplayName: Ease in back
+          Description: ""
+        - Value: EaseInCubic
+          DisplayName: Ease in cubic
+          Description: ""
+        - Value: EaseInQuart
+          DisplayName: Ease in quadratic
+          Description: ""
+        - Value: EaseOutBack
+          DisplayName: Ease out back
+          Description: ""
+        - Value: EaseOutCubic
+          DisplayName: Ease out cubic
+          Description: ""
+        - Value: EaseOutQuart
+          DisplayName: Ease out quadratic
+          Description: ""
+        HasExample: false
+        Example: ""
+        Remarks: ""
