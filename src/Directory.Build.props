@@ -10,26 +10,16 @@
 		<DebugSymbols>true</DebugSymbols>
 
 		<Nullable>enable</Nullable>
-<!--
-		<AnalysisLevel>9.0-all</AnalysisLevel>
-		<AnalysisMode>all</AnalysisMode>
+		<AnalysisMode>Recommended</AnalysisMode>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<RunAnalyzers>true</RunAnalyzers>
--->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json" />
+		<AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" Link="stylecop.json"/>
 	</ItemGroup>
 
-	<!-- Unit Test Projects -->
-	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
-		<Nullable>annotations</Nullable>
-		<RunAnalyzers>false</RunAnalyzers>
-	</PropertyGroup>
-
 	<ItemGroup>
-<!--
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -42,6 +32,5 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
--->
 	</ItemGroup>
 </Project>
