@@ -1,3 +1,4 @@
+using System.Text;
 using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 
@@ -56,7 +57,7 @@ public sealed class Win32WindowService :
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				return new Win32WtqWindow(Process.GetProcessById((int)fg));
+				//return new Win32WtqWindow(Process.GetProcessById((int)fg));
 			}
 		}
 		catch (Exception ex)
@@ -77,10 +78,10 @@ public sealed class Win32WindowService :
 		return _processes;
 	}
 
-	private static uint GetForegroundProcessId()
+	private static nint GetForegroundProcessId()
 	{
 		var hwnd = User32.GetForegroundWindow();
-		User32.GetWindowThreadProcessId(hwnd, out uint pid);
+		User32.GetWindowThreadProcessId(hwnd, out nint pid);
 
 		return pid;
 	}
@@ -141,24 +142,32 @@ public sealed class Win32WindowService :
 
 			_log.LogInformation("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
-			var res = new List<WtqWindow>();
-			foreach (var proc in Process.GetProcesses())
-			{
-				if (!proc.TryGetHasExited(out var hasExited) || hasExited)
-				{
-					continue;
-				}
 
-				if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
-				{
-					continue;
-				}
+			//var res = new List<WtqWindow>();
+			//foreach (var proc in Process.GetProcesses())
+			//{
+			//	if (!proc.TryGetHasExited(out var hasExited) || hasExited)
+			//	{
+			//		continue;
+			//	}
 
-				var wtqProcess = new Win32WtqWindow(proc);
-				res.Add(wtqProcess);
-			}
+			//	if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
+			//	{
+			//		continue;
+			//	}
 
-			_processes = res;
+			//	var wtqProcess = new Win32WtqWindow(proc);
+			//	res.Add(wtqProcess);
+			//}
+
+			//_processes = res;
+
+			_processes = User32
+				.GetWin32Windows()
+				//.Where(w => w.IsVisible)
+				.Where(w => !w.Size.IsEmpty)
+				.Select(w => (WtqWindow)new Win32WtqWindow(w))
+				.ToList();
 		}
 		finally
 		{

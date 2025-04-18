@@ -12,6 +12,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	private ICollection<HotkeyOptions> _hotkeys = [];
 	private string? _fileName;
 	private string? _processName;
+	private string? _windowClass;
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
 
@@ -131,6 +132,15 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	{
 		get => _argumentList;
 		set => _argumentList = value ?? [];
+	}
+
+	[Display(GroupName = Gn.Process, Name = "Window class")]
+	//[ExampleValue("Mozilla Firefox - WhatsApp")]
+	[JsonPropertyOrder(2006)]
+	public string? WindowClass
+	{
+		get => _windowClass;
+		set => _windowClass = value?.EmptyOrWhiteSpaceToNull();
 	}
 
 	[Display(GroupName = Gn.Process, Name = "Window title")]

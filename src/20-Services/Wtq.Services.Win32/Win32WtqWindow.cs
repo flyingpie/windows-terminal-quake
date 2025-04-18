@@ -3,25 +3,36 @@ using Wtq.Services.Win32.Native;
 namespace Wtq.Services.Win32;
 
 public sealed class Win32WtqWindow(
-	Process process)
+	Win32Window window)
 	: WtqWindow
 {
 	private static readonly ILogger _log = Log.For<Win32WtqWindow>();
 
-	private readonly Process _process = Guard.Against.Null(process);
+	private readonly Win32Window _window = Guard.Against.Null(window);
 
-	public override string Id => _process.Id.ToString(CultureInfo.InvariantCulture);
+	//public override string Id => _window.Process.Id.ToString(CultureInfo.InvariantCulture);
+	public override string Id => _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
+	//public override string Id { get; } = Guid.NewGuid().ToString();
 
-	public override bool IsValid => !_process.HasExited;
+	public override bool IsValid => !_window.Process.HasExited;
 
-	public override string? Name => _process.ProcessName;
+	public override string? Name => _window.Process.ProcessName;
 
-	public override string? Title => _process.MainWindowTitle;
+	//public override string? Title => _window.Process.MainWindowTitle;
+	public override string? Title => _window.WindowCaption;
+
+	public override IEnumerable<KeyValuePair<string, object>> GetAdditionalProperties() =>
+		[
+			new KeyValuePair<string, object>("SIZE", _window.Size),
+			new KeyValuePair<string, object>("IS_VISIBLE", _window.IsVisible),
+			//new KeyValuePair<string, object>("WINDOW_CAPTION", _window.WindowCaption),
+			new KeyValuePair<string, object>("WINDOW_CLASS", _window.WindowClass),
+		];
 
 	public override Task BringToForegroundAsync()
 	{
-		User32.SetForegroundWindow(_process.MainWindowHandle);
-		User32.ForcePaint(_process.MainWindowHandle);
+		User32.SetForegroundWindow(_window.WindowHandle);
+		User32.ForcePaint(_window.WindowHandle);
 
 		return Task.CompletedTask;
 	}
@@ -30,7 +41,7 @@ public sealed class Win32WtqWindow(
 	{
 		var bounds = default(Bounds);
 
-		User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
+		User32.GetWindowRect(_window.WindowHandle, ref bounds);
 
 		return Task.FromResult(bounds.ToRectangle());
 	}
@@ -45,7 +56,25 @@ public sealed class Win32WtqWindow(
 			expectedProcName = System.IO.Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
-		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
+		// Window class
+		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !opts.WindowClass.Equals(_window.WindowClass, StringComparison.OrdinalIgnoreCase))
+		{
+			return false;
+		}
+
+		// Window title
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !opts.WindowTitle.Equals(_window.WindowCaption, StringComparison.OrdinalIgnoreCase))
+		{
+			return false;
+		}
+
+		// Process name
+		if (!expectedProcName.Equals(_window.Process.ProcessName, StringComparison.OrdinalIgnoreCase))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	public override async Task MoveToAsync(Point location)
@@ -53,7 +82,7 @@ public sealed class Win32WtqWindow(
 		var r = await GetWindowRectAsync().NoCtx();
 
 		User32.MoveWindow(
-			hWnd: _process.MainWindowHandle,
+			hWnd: _window.WindowHandle,
 			x: location.X,
 			y: location.Y,
 			nWidth: r.Width,
@@ -66,7 +95,7 @@ public sealed class Win32WtqWindow(
 		var r = await GetWindowRectAsync().NoCtx();
 
 		User32.MoveWindow(
-			hWnd: _process.MainWindowHandle,
+			hWnd: _window.WindowHandle,
 			x: r.X,
 			y: r.Y,
 			nWidth: size.Width,
@@ -76,13 +105,13 @@ public sealed class Win32WtqWindow(
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
-		if (_process.MainWindowHandle == IntPtr.Zero)
+		if (_window.WindowHandle == IntPtr.Zero)
 		{
 			throw new WtqException("Process handle zero");
 		}
 
 		var isSet = User32.SetWindowPos(
-			_process.MainWindowHandle,
+			_window.WindowHandle,
 			isAlwaysOnTop ? User32.HWNDTOPMOST : User32.HWNDNOTOPMOST,
 			0,
 			0,
@@ -101,7 +130,7 @@ public sealed class Win32WtqWindow(
 	public override Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
 		// Get handle to the main window
-		var handle = _process.MainWindowHandle;
+		var handle = _window.WindowHandle;
 
 		_log.LogInformation("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
 
@@ -117,20 +146,20 @@ public sealed class Win32WtqWindow(
 			return Task.CompletedTask;
 		}
 
-		if (_process.MainWindowHandle == IntPtr.Zero)
+		if (_window.WindowHandle == IntPtr.Zero)
 		{
 			throw new WtqException("Process handle zero");
 		}
 
 		// Get original window properties
-		var props = User32.GetWindowLong(_process.MainWindowHandle, User32.GWLEXSTYLE);
+		var props = User32.GetWindowLong(_window.WindowHandle, User32.GWLEXSTYLE);
 
 		// Add "WS_EX_LAYERED"-flag (required for transparency).
-		User32.SetWindowLong(_process.MainWindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
+		User32.SetWindowLong(_window.WindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
 
 		// Set transparency
 		var isSet = User32.SetLayeredWindowAttributes(
-			_process.MainWindowHandle,
+			_window.WindowHandle,
 			0,
 			(byte)Math.Ceiling(255f / 100f * transparency),
 			User32.LWAALPHA);
@@ -145,7 +174,7 @@ public sealed class Win32WtqWindow(
 
 	public override Task SetWindowTitleAsync(string title)
 	{
-		User32.SetWindowText(_process.MainWindowHandle, title);
+		User32.SetWindowText(_window.WindowHandle, title);
 
 		return Task.CompletedTask;
 	}

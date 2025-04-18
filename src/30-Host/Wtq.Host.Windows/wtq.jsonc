@@ -3,11 +3,27 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// Example with PowerShell
+
 		{
-			"Name": "PowerShell",
+			"Name": "wt",
+			"ProcessName": "WindowsTerminal",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
+			"FileName": "wt"
+		},
+
+		{
+			"Name": "explorer",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "explorer",
+			"WindowClass": "CabinetWClass"
+		},
+
+		{
+			"Name": "WhatsApp",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"ProcessName": "ApplicationFrameHost",
+			"WindowClass": "ApplicationFrameWindow",
+			"WindowTitle": "WhatsApp"
 		}
 
 		// Example with Windows Terminal

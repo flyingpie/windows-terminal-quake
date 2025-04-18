@@ -47,6 +47,8 @@ public abstract class WtqWindow
 
 	public abstract Task UpdateAsync();
 
+	public virtual IEnumerable<KeyValuePair<string, object>> GetAdditionalProperties() => Enumerable.Empty<KeyValuePair<string, object>>();
+
 	public override string ToString() => $"[{Id}] {Name}";
 
 	#region Equality
