@@ -67,7 +67,11 @@ public sealed class WtqService : WtqHostedService
 		if (open != null && open != app)
 		{
 			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+
+			_bus.Publish(new WtqAppSwitchedOffEvent() { AppName = open.Name });
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+
+			_bus.Publish(new WtqAppSwitchedOnEvent() { AppName = app.Name });
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
@@ -76,6 +80,8 @@ public sealed class WtqService : WtqHostedService
 		if (app.IsOpen)
 		{
 			_log.LogInformation("Closing previously open app '{App}'", app);
+
+			_bus.Publish(new WtqAppToggledOffEvent() { AppName = app.Name });
 
 			// Close app.
 			await app.CloseAsync().NoCtx();
@@ -86,6 +92,8 @@ public sealed class WtqService : WtqHostedService
 		else
 		{
 			_log.LogInformation("Opening previously closed app '{App}'", app);
+
+			_bus.Publish(new WtqAppToggledOnEvent() { AppName = app.Name });
 
 			// Open app.
 			await app.OpenAsync().NoCtx();
