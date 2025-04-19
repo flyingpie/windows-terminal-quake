@@ -16,7 +16,7 @@
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
 			"FileName": "dolphin",
 			"HorizontalScreenCoverage": 80,
-			"AlwaysOnTop": true,
+			"AlwaysOnTop": true
 			//"EventHooks": {
 			//	"AppToggledOn": {
 			//		"FileName": "ffplay",
@@ -39,18 +39,11 @@
 	"PreferMonitor": "WithCursor",
 
 	"EventHooks": {
-		"AppToggledOn": {
-			"FileName": "ffplay",
-			"ArgumentList": [ "-nodisp", "-autoexit", "/home/marco/Downloads/notification-pluck-on-slower-269285.mp3" ]
-		},
-		"AppToggledOff": {
-			"FileName": "ffplay",
-			"ArgumentList": [ "-nodisp", "-autoexit", "/home/marco/Downloads/notification-pluck-off-269290.mp3" ]
-		},
-		"AppSwitchedOn": {
-			"FileName": "ffplay",
-			"ArgumentList": [ "-nodisp", "-autoexit", "/home/marco/Downloads/notification-1-reversed-317859.mp3" ]
-		},
+		".*":		{ "FileName": "wtq-sound", "ArgumentList": [] }
+
+//		"AppToggledOn":		{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/on.mp3" ] },
+//		"AppToggledOff":	{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/off.mp3" ] },
+//		"AppSwitchedOn":	{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/switch.mp3" ] }
 	},
 
 	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.

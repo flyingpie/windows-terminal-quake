@@ -1,6 +1,6 @@
-namespace Wtq.Events;
-
-[DisplayName("AppSwitchedOff")]
-public class WtqAppSwitchedOffEvent : WtqAppEvent
-{
-}
+// namespace Wtq.Events;
+//
+// [DisplayName("AppSwitchedOff")]
+// public class WtqAppSwitchedOffEvent : WtqAppEvent
+// {
+// }

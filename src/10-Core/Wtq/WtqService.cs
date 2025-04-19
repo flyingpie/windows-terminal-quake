@@ -68,10 +68,10 @@ public sealed class WtqService : WtqHostedService
 		{
 			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
 
-			_bus.Publish(new WtqAppSwitchedOffEvent() { AppName = open.Name });
+			_bus.Publish(new WtqAppToggledOffEvent() { AppName = open.Name, IsSwitching = true});
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
 
-			_bus.Publish(new WtqAppSwitchedOnEvent() { AppName = app.Name });
+			_bus.Publish(new WtqAppToggledOnEvent() { AppName = app.Name, IsSwitching = true });
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
