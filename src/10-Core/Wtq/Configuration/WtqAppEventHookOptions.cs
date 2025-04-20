@@ -32,6 +32,7 @@ public class WtqAppEventHookOptions
 				p.StartInfo.ArgumentList.Add(a.ExpandEnvVars());
 			}
 
+			p.StartInfo.CreateNoWindow = true;
 			p.StartInfo.UseShellExecute = true;
 
 			var result = p.Start();
