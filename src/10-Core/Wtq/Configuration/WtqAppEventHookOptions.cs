@@ -18,8 +18,12 @@ public class WtqAppEventHookOptions
 
 	public async Task ExecuteAsync(IDictionary<string, object?> parameters)
 	{
+		_log.LogInformation("Running event hook '{EventHook}'", this);
+
 		try
 		{
+			var sw = Stopwatch.StartNew();
+
 			var p = new Process();
 			foreach (var k in parameters)
 			{
@@ -33,13 +37,22 @@ public class WtqAppEventHookOptions
 			}
 
 			p.StartInfo.CreateNoWindow = true;
-			p.StartInfo.UseShellExecute = true;
+			p.StartInfo.UseShellExecute = false;
+
+			p.StartInfo.RedirectStandardError = true;
+			p.StartInfo.RedirectStandardOutput = true;
+
+			p.OutputDataReceived += (s, a) => _log.LogInformation(a.Data);
+			p.ErrorDataReceived += (s, a) => _log.LogWarning(a.Data);
 
 			var result = p.Start();
 
-			_log.LogInformation("Starting process (RESULT:{Result})", result);
+			p.BeginErrorReadLine();
+			p.BeginOutputReadLine();
 
 			await p.WaitForExitAsync();
+
+			_log.LogInformation("Finished event hook '{EventHook}', result: {Result}, took {Elapsed}", this, result, sw.Elapsed);
 		}
 		catch (Exception ex)
 		{

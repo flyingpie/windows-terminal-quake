@@ -161,7 +161,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 
 	#region 7000 - EventHooks
 
-	public WtqAppEventHooksOptions EventHooks { get; set; }
+	public WtqAppEventHooksOptions EventHooks { get; set; } = new();
 
 	#endregion
 

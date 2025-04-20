@@ -18,45 +18,51 @@ public class WtqUserEventHandler(
 		_bus.OnEvent<WtqEvent>(
 			async ev =>
 			{
-				// Event name
-				var n = ev.GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? ev.GetType().Name;
-
-				var p = ev
-					.GetType()
-					.GetProperties()
-					.ToDictionary(p => p.Name, p => p.GetValue(ev));
-
-				p["EventName"] = n;
 
 				// Per-app event hooks
 				if (ev is WtqAppEvent appEvent)
 				{
 					var app = _appRepo.GetByName(appEvent.AppName);
-
-					if (app?.Options?.EventHooks?.TryGetValue(n, out var appHook) ?? false)
+					if (await ExecuteEventHooksAsync(app.Options.EventHooks, ev))
 					{
-						await appHook.ExecuteAsync(p).NoCtx();
 						return;
 					}
 				}
 
 				// Global event hooks
-				if (_opts.CurrentValue.EventHooks.TryGetValue(n, out var globalHook))
-				{
-					await globalHook.ExecuteAsync(p).NoCtx();
-				}
-
-				foreach (var hook in _opts.CurrentValue.EventHooks)
-				{
-					var r = new Regex(hook.Key, RegexOptions.IgnoreCase);
-
-					if (r.IsMatch(n))
-					{
-						hook.Value.ExecuteAsync(p).NoCtx();
-					}
-				}
+				await ExecuteEventHooksAsync(_opts.CurrentValue.EventHooks, ev);
 			});
 
 		return Task.CompletedTask;
+	}
+
+	private async Task<bool> ExecuteEventHooksAsync(WtqAppEventHooksOptions hooks, WtqEvent ev)
+	{
+		Guard.Against.Null(hooks);
+		Guard.Against.Null(ev);
+
+		// Event name
+		var n = ev.GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? ev.GetType().Name;
+
+		var p = ev
+			.GetType()
+			.GetProperties()
+			.ToDictionary(p => p.Name, p => p.GetValue(ev));
+
+		p["EventName"] = n;
+
+		foreach (var hook in hooks)
+		{
+			var r = new Regex(hook.Key, RegexOptions.IgnoreCase);
+
+			if (r.IsMatch(n))
+			{
+				await hook.Value.ExecuteAsync(p).NoCtx();
+
+				return hook.Value.StopPropagation;
+			}
+		}
+
+		return false;
 	}
 }
