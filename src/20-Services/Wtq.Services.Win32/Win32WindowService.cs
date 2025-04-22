@@ -68,6 +68,14 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
+	public async Task<List<(string, Func<WtqWindow, object>)>> GetWindowPropertiesAsync()
+	{
+		return new List<(string, Func<WtqWindow, object>)>()
+		{
+			("", w => w.Id),
+		};
+	}
+
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{

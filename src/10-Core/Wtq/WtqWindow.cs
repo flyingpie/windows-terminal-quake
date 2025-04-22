@@ -9,6 +9,7 @@ public abstract class WtqWindow
 	/// <summary>
 	/// A string that uniquely identifies this window across the system.
 	/// </summary>
+	[Key]
 	public abstract string Id { get; }
 
 	/// <summary>
@@ -19,8 +20,10 @@ public abstract class WtqWindow
 	/// <summary>
 	/// A descriptive name of the window, often (close to) the process name.
 	/// </summary>
+	[Key]
 	public abstract string? Name { get; }
 
+	[Key]
 	public abstract string? Title { get; }
 
 	public abstract Task BringToForegroundAsync();

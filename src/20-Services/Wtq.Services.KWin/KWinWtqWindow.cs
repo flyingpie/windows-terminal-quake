@@ -27,6 +27,12 @@ public class KWinWtqWindow(
 
 	public override string? Title => _window?.Caption;
 
+	public string? ResourceClass => _window?.ResourceClass;
+
+	public string? ResourceName => _window?.ResourceName;
+
+	public string? FrameGeometry => _window?.FrameGeometry?.ToString();
+
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();

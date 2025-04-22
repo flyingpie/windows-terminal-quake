@@ -59,6 +59,19 @@ public class KWinWindowService(
 			: null;
 	}
 
+	public async Task<List<(string, Func<WtqWindow, object>)>> GetWindowPropertiesAsync()
+	{
+		return new List<(string, Func<WtqWindow, object>)>()
+		{
+			(nameof(KWinWtqWindow.Id), w => w.Id),
+			(nameof(KWinWtqWindow.Name), w => w.Name),
+			(nameof(KWinWtqWindow.Title), w => w.Title),
+			(nameof(KWinWtqWindow.ResourceClass), w => ((KWinWtqWindow)w).ResourceClass),
+			(nameof(KWinWtqWindow.ResourceName), w => ((KWinWtqWindow)w).ResourceName),
+			(nameof(KWinWtqWindow.FrameGeometry), w => ((KWinWtqWindow)w).FrameGeometry),
+		};
+	}
+
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{
