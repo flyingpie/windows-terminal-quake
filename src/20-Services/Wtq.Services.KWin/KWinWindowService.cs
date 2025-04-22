@@ -2,8 +2,7 @@ using Wtq.Configuration;
 
 namespace Wtq.Services.KWin;
 
-public class KWinWindowService(
-	IKWinClient kwinClient)
+public class KWinWindowService(IKWinClient kwinClient)
 	: IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<KWinWindowService>();
@@ -20,8 +19,7 @@ public class KWinWindowService(
 
 		process.StartInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
+			FileName = opts.FileName, Arguments = opts.Arguments,
 		};
 
 		process.Start();
@@ -49,8 +47,7 @@ public class KWinWindowService(
 		return null;
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync(
-		CancellationToken cancellationToken)
+	public async Task<WtqWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
 	{
 		var w = await _kwinClient.GetForegroundWindowAsync(cancellationToken).NoCtx();
 
@@ -59,17 +56,17 @@ public class KWinWindowService(
 			: null;
 	}
 
-	public Task<List<(string, Func<WtqWindow, object?>)>> GetWindowPropertiesAsync() =>
-		Task.FromResult<List<(string, Func<WtqWindow, object?>)>>([
-			(nameof(KWinWtqWindow.Id), w => w.Id),
-			(nameof(KWinWtqWindow.WindowTitle), w => w.WindowTitle),
-			(nameof(KWinWtqWindow.ResourceClass), w => ((KWinWtqWindow)w).ResourceClass),
-			(nameof(KWinWtqWindow.ResourceName), w => ((KWinWtqWindow)w).ResourceName),
-			(nameof(KWinWtqWindow.FrameGeometry), w => ((KWinWtqWindow)w).FrameGeometry),
-		]);
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+		new("Filename", w => ((KWinWtqWindow)w).DesktopFileName),
+		new("Resource Class", w => ((KWinWtqWindow)w).ResourceClass),
+		new("Resource Name", w => ((KWinWtqWindow)w).ResourceName),
+		new("Window Title", w => w.WindowTitle),
+		new("Frame Geometry", w => ((KWinWtqWindow)w).FrameGeometry),
+		new("Id", w => w.Id),
+	];
 
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
-		CancellationToken cancellationToken)
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)
 	{
 		return (await _kwinClient.GetWindowListAsync(cancellationToken).NoCtx())
 			.Select(WtqWindow (c) => new KWinWtqWindow(_kwinClient, c))

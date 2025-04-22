@@ -68,18 +68,18 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
-	public async Task<List<(string, Func<WtqWindow, object?>)>> GetWindowPropertiesAsync() =>
-		[
-			(nameof(Win32WtqWindow.ProcessName), w => ((Win32WtqWindow)w).ProcessName),
-			(nameof(Win32WtqWindow.WindowTitle), w => w.WindowTitle),
-			(nameof(Win32WtqWindow.WindowClass), w => ((Win32WtqWindow)w).WindowClass),
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+		new("Process Name", w => ((Win32WtqWindow)w).ProcessName),
+		new("Window Title", w => w.WindowTitle),
+		new("Window Class", w => ((Win32WtqWindow)w).WindowClass),
 
-			(nameof(Win32WtqWindow.Rect), w => ((Win32WtqWindow)w).Rect),
+		new("Window Rectangle", w => ((Win32WtqWindow)w).Rect),
 
-			(nameof(Win32WtqWindow.ProcessId), w => ((Win32WtqWindow)w).ProcessId),
-			(nameof(Win32WtqWindow.ThreadId), w => ((Win32WtqWindow)w).ThreadId),
-			(nameof(Win32WtqWindow.WindowHandle), w => ((Win32WtqWindow)w).WindowHandle),
-		];
+		new("Process Id", w => ((Win32WtqWindow)w).ProcessId),
+		new("Thread Id", w => ((Win32WtqWindow)w).ThreadId),
+		new("Window Handle", w => ((Win32WtqWindow)w).WindowHandle),
+	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)

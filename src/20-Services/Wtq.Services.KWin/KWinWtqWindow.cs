@@ -25,6 +25,8 @@ public class KWinWtqWindow(
 
 	public override string? Name => _window?.ResourceName;
 
+	public string? DesktopFileName => _window?.DesktopFileName;
+
 	public override string? WindowTitle => _window?.Caption;
 
 	public string? ResourceClass => _window?.ResourceClass;
