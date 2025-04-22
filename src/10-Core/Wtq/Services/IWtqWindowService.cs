@@ -25,7 +25,7 @@ public interface IWtqWindowService
 	Task<WtqWindow?> GetForegroundWindowAsync(
 		CancellationToken cancellationToken);
 
-	Task<List<(string, Func<WtqWindow, object>)>> GetWindowPropertiesAsync();
+	Task<List<(string, Func<WtqWindow, object?>)>> GetWindowPropertiesAsync();
 
 	/// <summary>
 	/// Returns a list of all windows that can be attached to.<br/>

@@ -10,24 +10,35 @@ public sealed class Win32WtqWindow(
 
 	private readonly Win32Window _window = Guard.Against.Null(window);
 
-	//public override string Id => _window.Process.Id.ToString(CultureInfo.InvariantCulture);
-	public override string Id => _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
-	//public override string Id { get; } = Guid.NewGuid().ToString();
+	public override string Id =>
+		_window.WindowHandle.ToString(CultureInfo.InvariantCulture);
 
-	public override bool IsValid => !_window.Process.HasExited;
+	public override bool IsValid =>
+		!_window.Process.HasExited;
 
-	public override string? Name => _window.Process.ProcessName;
+	public override string? Name =>
+		_window.Process.ProcessName;
 
-	//public override string? Title => _window.Process.MainWindowTitle;
-	public override string? Title => _window.WindowCaption;
+	public override string? WindowTitle =>
+		_window.WindowCaption;
 
-	public override IEnumerable<KeyValuePair<string, object>> GetAdditionalProperties() =>
-		[
-			new KeyValuePair<string, object>("SIZE", _window.Size),
-			new KeyValuePair<string, object>("IS_VISIBLE", _window.IsVisible),
-			//new KeyValuePair<string, object>("WINDOW_CAPTION", _window.WindowCaption),
-			new KeyValuePair<string, object>("WINDOW_CLASS", _window.WindowClass),
-		];
+	public string? ProcessName =>
+		_window.Process.ProcessName;
+
+	public uint ProcessId =>
+		_window.ProcessId;
+
+	public uint ThreadId
+		=> _window.ThreadId;
+
+	public nint WindowHandle
+		=> _window.WindowHandle;
+
+	public Rectangle Rect
+		=> _window.Rect;
+
+	public string WindowClass =>
+		_window.WindowClass;
 
 	public override Task BringToForegroundAsync()
 	{

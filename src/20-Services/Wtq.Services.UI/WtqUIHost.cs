@@ -107,7 +107,7 @@ public class WtqUIHost
 		{
 			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
 
-			var mainWindow = windows.FirstOrDefault(w => w.Title == MainWindowTitle);
+			var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
 
 			if (mainWindow != null)
 			{
