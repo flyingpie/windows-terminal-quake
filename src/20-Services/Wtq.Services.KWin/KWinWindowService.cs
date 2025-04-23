@@ -2,7 +2,8 @@ using Wtq.Configuration;
 
 namespace Wtq.Services.KWin;
 
-public class KWinWindowService(IKWinClient kwinClient)
+public class KWinWindowService(
+	IKWinClient kwinClient)
 	: IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<KWinWindowService>();
@@ -19,7 +20,8 @@ public class KWinWindowService(IKWinClient kwinClient)
 
 		process.StartInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName, Arguments = opts.Arguments,
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
 		};
 
 		process.Start();
@@ -47,7 +49,8 @@ public class KWinWindowService(IKWinClient kwinClient)
 		return null;
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
+	public async Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		var w = await _kwinClient.GetForegroundWindowAsync(cancellationToken).NoCtx();
 

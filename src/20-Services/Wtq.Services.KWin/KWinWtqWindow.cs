@@ -21,19 +21,26 @@ public class KWinWtqWindow(
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid => _isValid;
+	public override bool IsValid =>
+		_isValid;
 
-	public override string? Name => _window?.ResourceName;
+	public override string? Name =>
+		_window?.ResourceName;
 
-	public string? DesktopFileName => _window?.DesktopFileName;
+	public string? DesktopFileName =>
+		_window?.DesktopFileName;
 
-	public override string? WindowTitle => _window?.Caption;
+	public override string? WindowTitle =>
+		_window?.Caption;
 
-	public string? ResourceClass => _window?.ResourceClass;
+	public string? ResourceClass =>
+		_window?.ResourceClass;
 
-	public string? ResourceName => _window?.ResourceName;
+	public string? ResourceName =>
+		_window?.ResourceName;
 
-	public string? FrameGeometry => _window?.FrameGeometry?.ToString();
+	public string? FrameGeometry =>
+		_window?.FrameGeometry?.ToString();
 
 	public override async Task BringToForegroundAsync()
 	{
