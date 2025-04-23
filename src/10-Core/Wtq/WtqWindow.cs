@@ -9,7 +9,6 @@ public abstract class WtqWindow
 	/// <summary>
 	/// A string that uniquely identifies this window across the system.
 	/// </summary>
-	[Key]
 	public abstract string Id { get; }
 
 	/// <summary>
@@ -20,11 +19,9 @@ public abstract class WtqWindow
 	/// <summary>
 	/// A descriptive name of the window, often (close to) the process name.
 	/// </summary>
-	[Key]
 	public abstract string? Name { get; }
 
-	[Key]
-	public abstract string? Title { get; }
+	public abstract string? WindowTitle { get; }
 
 	public abstract Task BringToForegroundAsync();
 
@@ -49,8 +46,6 @@ public abstract class WtqWindow
 	public abstract Task SetWindowTitleAsync(string title);
 
 	public abstract Task UpdateAsync();
-
-	public virtual IEnumerable<KeyValuePair<string, object>> GetAdditionalProperties() => Enumerable.Empty<KeyValuePair<string, object>>();
 
 	public override string ToString() => $"[{Id}] {Name}";
 

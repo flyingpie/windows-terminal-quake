@@ -1,5 +1,3 @@
-using System.Text;
-using Wtq.Services.Win32.Extensions;
 using Wtq.Services.Win32.Native;
 
 namespace Wtq.Services.Win32;
@@ -57,7 +55,9 @@ public sealed class Win32WindowService :
 			var fg = GetForegroundProcessId();
 			if (fg > 0)
 			{
-				//return new Win32WtqWindow(Process.GetProcessById((int)fg));
+				return (await GetWindowsAsync(cancellationToken))
+					.Cast<Win32WtqWindow>()
+					.FirstOrDefault(w => w.ProcessId == fg);
 			}
 		}
 		catch (Exception ex)
@@ -68,13 +68,18 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
-	public async Task<List<(string, Func<WtqWindow, object>)>> GetWindowPropertiesAsync()
-	{
-		return new List<(string, Func<WtqWindow, object>)>()
-		{
-			("", w => w.Id),
-		};
-	}
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+		new("Process Name", w => ((Win32WtqWindow)w).ProcessName),
+		new("Window Title", w => w.WindowTitle),
+		new("Window Class", w => ((Win32WtqWindow)w).WindowClass),
+
+		new("Window Rectangle", w => ((Win32WtqWindow)w).Rect),
+
+		new("Process Id", w => ((Win32WtqWindow)w).ProcessId),
+		new("Thread Id", w => ((Win32WtqWindow)w).ThreadId),
+		new("Window Handle", w => ((Win32WtqWindow)w).WindowHandle),
+	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
@@ -151,28 +156,8 @@ public sealed class Win32WindowService :
 			_log.LogInformation("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 
-			//var res = new List<WtqWindow>();
-			//foreach (var proc in Process.GetProcesses())
-			//{
-			//	if (!proc.TryGetHasExited(out var hasExited) || hasExited)
-			//	{
-			//		continue;
-			//	}
-
-			//	if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
-			//	{
-			//		continue;
-			//	}
-
-			//	var wtqProcess = new Win32WtqWindow(proc);
-			//	res.Add(wtqProcess);
-			//}
-
-			//_processes = res;
-
 			_processes = User32
 				.GetWin32Windows()
-				//.Where(w => w.IsVisible)
 				.Where(w => !w.Size.IsEmpty)
 				.Select(w => (WtqWindow)new Win32WtqWindow(w))
 				.ToList();

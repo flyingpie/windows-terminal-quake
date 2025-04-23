@@ -59,21 +59,17 @@ public class KWinWindowService(
 			: null;
 	}
 
-	public async Task<List<(string, Func<WtqWindow, object>)>> GetWindowPropertiesAsync()
-	{
-		return new List<(string, Func<WtqWindow, object>)>()
-		{
-			(nameof(KWinWtqWindow.Id), w => w.Id),
-			(nameof(KWinWtqWindow.Name), w => w.Name),
-			(nameof(KWinWtqWindow.Title), w => w.Title),
-			(nameof(KWinWtqWindow.ResourceClass), w => ((KWinWtqWindow)w).ResourceClass),
-			(nameof(KWinWtqWindow.ResourceName), w => ((KWinWtqWindow)w).ResourceName),
-			(nameof(KWinWtqWindow.FrameGeometry), w => ((KWinWtqWindow)w).FrameGeometry),
-		};
-	}
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+		new("Filename", w => ((KWinWtqWindow)w).DesktopFileName),
+		new("Resource Class", w => ((KWinWtqWindow)w).ResourceClass),
+		new("Resource Name", w => ((KWinWtqWindow)w).ResourceName),
+		new("Window Title", w => w.WindowTitle),
+		new("Frame Geometry", w => ((KWinWtqWindow)w).FrameGeometry),
+		new("Id", w => w.Id),
+	];
 
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
-		CancellationToken cancellationToken)
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)
 	{
 		return (await _kwinClient.GetWindowListAsync(cancellationToken).NoCtx())
 			.Select(WtqWindow (c) => new KWinWtqWindow(_kwinClient, c))

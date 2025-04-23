@@ -206,6 +206,8 @@ cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
 	const w = kwin.getActiveWindow();
 
 	return {
+		caption: w.caption,
+		desktopFileName: w.desktopFileName,
 		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
 		internalId: w.internalId,
@@ -225,6 +227,8 @@ cmds["GET_WINDOW"] = (cmdInfo) => {
 	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
 	return {
+		caption: w.caption,
+		desktopFileName: w.desktopFileName,
 		frameGeometry: utils.mapRect(w.frameGeometry),
 		hidden: w.hidden,
 		internalId: w.internalId,
@@ -246,9 +250,18 @@ cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 			.map(w => {
 				return {
 					caption: w.caption,
+					desktopFileName: w.desktopFileName,
+					frameGeometry: utils.mapRect(w.frameGeometry),
+					hidden: w.hidden,
 					internalId: w.internalId,
+					keepAbove: w.keepAbove,
+					layer: w.layer,
+					minimized: w.minimized,
 					resourceClass: w.resourceClass,
-					resourceName: w.resourceName
+					resourceName: w.resourceName,
+					skipPager: w.skipPager,
+					skipSwitcher: w.skipSwitcher,
+					skipTaskbar: w.skipTaskbar,
 				};
 			}),
 	};
