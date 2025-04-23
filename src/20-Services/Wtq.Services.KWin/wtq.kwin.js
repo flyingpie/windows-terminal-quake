@@ -35,6 +35,24 @@ utils.mapRect = (rect) => {
 	};
 };
 
+utils.mapWindow = (w) => {
+	return {
+		caption: w.caption,
+		desktopFileName: w.desktopFileName,
+		frameGeometry: utils.mapRect(w.frameGeometry),
+		hidden: w.hidden,
+		internalId: w.internalId,
+		keepAbove: w.keepAbove,
+		layer: w.layer,
+		minimized: w.minimized,
+		resourceClass: w.resourceClass,
+		resourceName: w.resourceName,
+		skipPager: w.skipPager,
+		skipSwitcher: w.skipSwitcher,
+		skipTaskbar: w.skipTaskbar,
+	};
+};
+
 ////////////////////////////////////////////////////////////
 
 // KWin Helper Functions ///////////////////////////////////
@@ -77,7 +95,7 @@ kwin.getWindowByInternalIdRequired = (internalId) => {
 	return w;
 };
 
-kwin.getActiveWindow = (window) => {
+kwin.getActiveWindow = () => {
 	// KWin5
 	if (typeof workspace.activeClient === "object") {
 		log.info("Using KWin5 interface 'workspace.activeClient'");
@@ -205,65 +223,21 @@ cmds["GET_CURSOR_POS"] = (cmdInfo) => {
 cmds["GET_FOREGROUND_WINDOW"] = (cmdInfo) => {
 	const w = kwin.getActiveWindow();
 
-	return {
-		caption: w.caption,
-		desktopFileName: w.desktopFileName,
-		frameGeometry: utils.mapRect(w.frameGeometry),
-		hidden: w.hidden,
-		internalId: w.internalId,
-		keepAbove: w.keepAbove,
-		layer: w.layer,
-		minimized: w.minimized,
-		resourceClass: w.resourceClass,
-		resourceName: w.resourceName,
-		skipPager: w.skipPager,
-		skipSwitcher: w.skipSwitcher,
-		skipTaskbar: w.skipTaskbar,
-	};
+	return utils.mapWindow(w);
 };
 
 cmds["GET_WINDOW"] = (cmdInfo) => {
 	const p = cmdInfo.params;
 	const w = kwin.getWindowByInternalIdRequired(p.internalId);
 
-	return {
-		caption: w.caption,
-		desktopFileName: w.desktopFileName,
-		frameGeometry: utils.mapRect(w.frameGeometry),
-		hidden: w.hidden,
-		internalId: w.internalId,
-		keepAbove: w.keepAbove,
-		layer: w.layer,
-		minimized: w.minimized,
-		resourceClass: w.resourceClass,
-		resourceName: w.resourceName,
-		skipPager: w.skipPager,
-		skipSwitcher: w.skipSwitcher,
-		skipTaskbar: w.skipTaskbar,
-	};
+	return utils.mapWindow(w);
 };
 
 cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 	return {
 		windows: kwin
 			.getWindows()
-			.map(w => {
-				return {
-					caption: w.caption,
-					desktopFileName: w.desktopFileName,
-					frameGeometry: utils.mapRect(w.frameGeometry),
-					hidden: w.hidden,
-					internalId: w.internalId,
-					keepAbove: w.keepAbove,
-					layer: w.layer,
-					minimized: w.minimized,
-					resourceClass: w.resourceClass,
-					resourceName: w.resourceName,
-					skipPager: w.skipPager,
-					skipSwitcher: w.skipSwitcher,
-					skipTaskbar: w.skipTaskbar,
-				};
-			}),
+			.map(w => utils.mapWindow(w)),
 	};
 };
 
