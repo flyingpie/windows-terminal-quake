@@ -1,19 +1,35 @@
 @page "/settings-json"
+@layout NarrowLayout
 
-<PageHead Icon="data_object">Settings (JSON)</PageHead>
+@inject IOptionsMonitor<WtqOptions> WtqOpts
+@inject WtqOptionsSaveService SaveService
 
 @code {
-	private static StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor) =>
+
+	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor) =>
 		new()
 		{
 			AutomaticLayout = true,
 			Theme = "vs-dark",
-			Language = "xml",
-			Value = "<root></root>",
+			Language = "json",
+			Value = _json,
 		};
+
+	private StandaloneCodeEditor? _code;
+	private string? _json;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_json = SaveService.Write(WtqOpts.CurrentValue);
+
+		// _code.SetValue(json);
+	}
+
 }
 
-<StandaloneCodeEditor Id="my-editor-instance-id" ConstructionOptions="EditorConstructionOptions" />
+<PageHead Icon="data_object">Settings (JSON)</PageHead>
+
+<StandaloneCodeEditor @ref="_code" ConstructionOptions="EditorConstructionOptions"/>
 
 <style>
 	.monaco-editor-container {
