@@ -66,8 +66,10 @@ public class WtqUIHost
 
 				return !_isClosing;
 			})
+			.Center()
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
 			.SetLogVerbosity(0)
+			.SetSize(1280, 800)
 			.SetTitle(MainWindowTitle);
 	}
 
@@ -107,7 +109,7 @@ public class WtqUIHost
 		{
 			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
 
-			var mainWindow = windows.FirstOrDefault(w => w.Title == MainWindowTitle);
+			var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
 
 			if (mainWindow != null)
 			{
