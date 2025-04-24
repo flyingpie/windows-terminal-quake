@@ -21,7 +21,7 @@ public abstract class WtqWindow
 	/// </summary>
 	public abstract string? Name { get; }
 
-	public abstract string? Title { get; }
+	public abstract string? WindowTitle { get; }
 
 	public abstract Task BringToForegroundAsync();
 
