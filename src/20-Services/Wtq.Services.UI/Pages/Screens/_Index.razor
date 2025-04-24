@@ -1,6 +1,7 @@
 @using System.Drawing
 
 @page "/screens"
+@layout NarrowLayout
 
 @inject IWtqScreenInfoProvider ScreenInfoProvider
 
@@ -16,19 +17,6 @@
 	protected override async Task OnParametersSetAsync()
 	{
 		_screens = await ScreenInfoProvider.GetScreenRectsAsync().NoCtx();
-
-		//_screens =
-		//[
-		//	new() { Width = 2560, Height = 1440, X = 0, Y = 0, },
-		//	new() { Width = 1920, Height = 1080, X = -1920, Y = 200, },
-		//	new() { Width = 1080, Height = 1920, X = 2560, Y = -200, },
-		//];
-
-		var minX = _screens.Min(s => s.X);
-		var maxX = _screens.Max(s => s.X);
-
-		var minY = _screens.Min(s => s.Y);
-		var maxY = _screens.Max(s => s.Y);
 
 		_offset = new(
 			x: -Math.Min(0, _screens.Min(s => s.X)) + 400,
