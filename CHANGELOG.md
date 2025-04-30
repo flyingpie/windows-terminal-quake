@@ -1,11 +1,17 @@
 # Changelog
 
 ## [vFuture]
-- Update docs.
-- Apps can now be matched on their window title.
-- Feature: Suspend key presses when the hotkey field has focus (for Windows).
+- Feature: GUI - Suspend key presses when the hotkey field has focus (for Windows).
 
 ## [vNext]
+
+## [v2.0.16] / 2025-xx-xx
+- Refactor: Docs - Updated documentation page.
+- Feature: User events - Run command when an event is fired (such as when an app toggles on or off).
+- Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
+- Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
+- Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
+- Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
 
 ## [v2.0.15] / 2025-03-21
 - Bugfix: HideOnFocusLost broke
