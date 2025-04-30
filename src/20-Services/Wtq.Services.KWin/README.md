@@ -1,5 +1,8 @@
 # Wtq.Services.KWin
 
+## API Docs
+https://develop.kde.org/docs/plasma/kwin/api/
+
 Example of a KWin "Window" object:
 ```json
 {
