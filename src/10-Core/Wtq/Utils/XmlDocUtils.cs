@@ -5,7 +5,10 @@ namespace Wtq.Utils;
 
 public static class XmlDocUtils
 {
-	private static XmlDocsOptions _xmlDocsOptions = new() { FormattingMode = XmlDocsFormattingMode.Markdown, };
+	private static XmlDocsOptions _xmlDocsOptions = new()
+	{
+		FormattingMode = XmlDocsFormattingMode.Html,
+	};
 
 	public static string? GetExample(this MemberInfo memberInfo) =>
 		Guard.Against.Null(memberInfo).GetXmlDocsTag("example", _xmlDocsOptions);
@@ -24,13 +27,6 @@ public static class XmlDocUtils
 
 		return GetSummary(memb);
 	}
-
-	#endregion
-
-	#region Expressions
-
-	public static string? GetExampleFromExpression(Expression expression) =>
-		GetExample(expression.GetMemberInfo());
 
 	#endregion
 }
