@@ -31,7 +31,7 @@
 
 		@foreach (var prop in _props)
 		{
-			<RadzenDataGridColumn Width="320px" Property="@prop.Name" Title="@prop.Name">
+			<RadzenDataGridColumn Property="@prop.Name" Title="@prop.Name">
 				<Template Context="item">
 					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
 						<span>@prop.Accessor(item)</span>

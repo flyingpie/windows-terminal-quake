@@ -15,11 +15,18 @@ public class KWinWtqWindow(
 
 	public override string Id => _window.InternalId ?? "<unknown>";
 
+	#region Generic Stuff
+
+	public string? FileName =>
+		_window?.DesktopFileName;
+
+	#endregion
+
 	public string? DesktopFileName =>
 		_window?.DesktopFileName;
 
-	public string? FrameGeometry =>
-		_window?.FrameGeometry?.ToString();
+	public Rectangle? FrameGeometry =>
+		_window?.FrameGeometry?.ToRect();
 
 	/// <summary>
 	/// TODO: Add proper window activity checking.

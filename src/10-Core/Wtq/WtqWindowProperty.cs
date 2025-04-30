@@ -1,8 +1,25 @@
 namespace Wtq;
 
-public class WtqWindowProperty(string name, Func<WtqWindow, object?> accessor)
+public class WtqWindowProperty
 {
-	public string Name { get; } = Guard.Against.NullOrWhiteSpace(name);
+	public WtqWindowProperty(string name, Func<WtqWindow, object?> accessor)
+	{
+		Name = Guard.Against.NullOrWhiteSpace(name);
+		Accessor = Guard.Against.Null(accessor);
+	}
 
-	public Func<WtqWindow, object?> Accessor { get; } = Guard.Against.Null(accessor);
+	public WtqWindowProperty()
+	{
+
+	}
+
+	public string Name { get; set; }
+
+	public string? Description { get; set; } = "Does a thing";
+
+	public string? SettingsPropertyName { get; set; } = "ResourceClass";
+
+	public int? ColumnWidth { get; set; }
+
+	public Func<WtqWindow, object?> Accessor { get; set; }
 }
