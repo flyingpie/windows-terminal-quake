@@ -4,6 +4,7 @@
 		<RootNamespace>Wtq.Services.Win32</RootNamespace>
 
 		<TargetFramework>net9.0</TargetFramework>
+		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -11,9 +11,9 @@ using Wtq.Services.Win32.Native;
 
 namespace Wtq.Services.Win32;
 
-public class Exp
+public static class Program
 {
-	public async Task RunAsync()
+	public static void Main(string[] args)
 	{
 
 

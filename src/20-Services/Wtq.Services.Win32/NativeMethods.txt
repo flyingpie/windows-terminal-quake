@@ -2,3 +2,6 @@ CreateFile
 EnumWindows
 GetWindowThreadProcessId
 GetWindowRect
+GetWindowLong
+GetClassName
+GetWindowText
