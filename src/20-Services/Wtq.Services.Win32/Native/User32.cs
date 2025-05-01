@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Wtq.Services.Win32.Native;
 
@@ -90,11 +92,11 @@ public static class User32
 	[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 	private static extern int GetWindowTextLength(IntPtr hWnd);
 
-	[DllImport("user32.dll")]
-	private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+	// [DllImport("user32.dll")]
+	// private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
 
-	// Delegate to filter which windows to include 
-	public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+	// // Delegate to filter which windows to include 
+	// public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
 	/// <summary> Get the text for the window pointed to by hWnd </summary>
 	public static string GetWindowText(IntPtr hWnd)
@@ -114,34 +116,34 @@ public static class User32
 	/// <param name="filter"> A delegate that returns true for windows
 	///    that should be returned and false for windows that should
 	///    not be returned </param>
-	public static IEnumerable<IntPtr> FindWindows(EnumWindowsProc filter)
-	{
-		IntPtr found = IntPtr.Zero;
-		List<IntPtr> windows = new List<IntPtr>();
+	// public static IEnumerable<IntPtr> FindWindows(EnumWindowsProc filter)
+	// {
+	// 	IntPtr found = IntPtr.Zero;
+	// 	List<IntPtr> windows = new List<IntPtr>();
+	//
+	// 	EnumWindows(
+	// 		delegate(IntPtr wnd, IntPtr param)
+	// 		{
+	// 			//if (filter(wnd, param))
+	// 			{
+	// 				// only add the windows that pass the filter
+	// 				windows.Add(wnd);
+	// 			}
+	//
+	// 			// but return true here so that we iterate all windows
+	// 			return true;
+	// 		},
+	// 		IntPtr.Zero);
+	//
+	// 	return windows;
+	// }
 
-		EnumWindows(
-			delegate(IntPtr wnd, IntPtr param)
-			{
-				//if (filter(wnd, param))
-				{
-					// only add the windows that pass the filter
-					windows.Add(wnd);
-				}
-
-				// but return true here so that we iterate all windows
-				return true;
-			},
-			IntPtr.Zero);
-
-		return windows;
-	}
-
-	/// <summary> Find all windows that contain the given title text </summary>
-	/// <param name="titleText"> The text that the window title must contain. </param>
-	public static IEnumerable<IntPtr> FindWindowsWithText(string titleText)
-	{
-		return FindWindows(delegate(IntPtr wnd, IntPtr param) { return GetWindowText(wnd).Contains(titleText); });
-	}
+	// /// <summary> Find all windows that contain the given title text </summary>
+	// /// <param name="titleText"> The text that the window title must contain. </param>
+	// public static IEnumerable<IntPtr> FindWindowsWithText(string titleText)
+	// {
+	// 	return FindWindows(delegate(IntPtr wnd, IntPtr param) { return GetWindowText(wnd).Contains(titleText); });
+	// }
 
 	[DllImport("user32.dll")]
 	static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
@@ -158,28 +160,31 @@ public static class User32
 	[DllImport("user32.dll", SetLastError = true)]
 	static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-	public delegate bool EnumWindowsCallback(IntPtr hwnd, int lParam);
+	// public delegate bool EnumWindowsCallback(IntPtr hwnd, int lParam);
 
-	[DllImport("user32.dll")]
-	private static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
+	// [DllImport("user32.dll")]
+	// private static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
 
-	public static bool ReportWindow(nint hwnd, int lParam)
+	public static unsafe BOOL ReportWindow(HWND windowHandle, LPARAM lParam)
 	{
-		var style = GetWindowLong(hwnd, GWLSTYLE);
+		var style = GetWindowLong(windowHandle, GWLSTYLE);
 
 		//var isVisible = (style & WS_VISIBLE) == WS_VISIBLE;
 
-		nint processId = 0;
-		nint threadId = GetWindowThreadProcessId(hwnd, out processId);
+		// nint processId = 0;
+		// nint threadId = GetWindowThreadProcessId(windowHandle, out processId);
+
+		uint processId = 0;
+		uint threadId = Windows.Win32.PInvoke.GetWindowThreadProcessId(windowHandle, &processId);
 
 		var rt = new RECT();
-		var locationLookupSucceeded = GetWindowRect(hwnd, out rt);
+		var locationLookupSucceeded = GetWindowRect(windowHandle, out rt);
 		var area = (rt.Right - rt.Left) * (rt.Bottom - rt.Top);
 
 		var ownerProcess = Process.GetProcessById((int)processId);
-		bool isMainWindow = ownerProcess.MainWindowHandle.Equals(hwnd);
+		bool isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
 
-		var cl = User32.GetClassName(hwnd);
+		var cl = User32.GetClassName(windowHandle);
 
 		var p = new Win32Window(ownerProcess)
 		{
@@ -187,9 +192,9 @@ public static class User32
 			ThreadId = threadId,
 			Rect = new(rt.Left, rt.Top, rt.Right - rt.Left, rt.Bottom - rt.Top),
 			Style = style,
-			WindowCaption = User32.GetWindowText(hwnd),
+			WindowCaption = User32.GetWindowText(windowHandle),
 			WindowClass = cl,
-			WindowHandle = hwnd,
+			WindowHandle = windowHandle,
 		};
 
 		_procs.Add(p);
@@ -201,16 +206,15 @@ public static class User32
 
 	public static List<Win32Window> GetWin32Windows()
 	{
-		lock (_procs)
-		{
-			_procs.Clear();
+		_procs.Clear();
 
-			// Have to declare a delegate so that a thunk is created, so that win32 may call us back.
-			EnumWindowsCallback callBackFn = new EnumWindowsCallback(ReportWindow);
+		// Have to declare a delegate so that a thunk is created, so that win32 may call us back.
+		// EnumWindowsCallback callBackFn = new EnumWindowsCallback(ReportWindow);
 
-			EnumWindows(callBackFn, 0);
+		Windows.Win32.PInvoke.EnumWindows(ReportWindow, 0); // TODO: Pass result collection as lparam
 
-			return _procs;
-		}
+		// EnumWindows(callBackFn, 0);
+
+		return _procs;
 	}
 }

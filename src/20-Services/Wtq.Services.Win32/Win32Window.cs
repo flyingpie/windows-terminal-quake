@@ -11,7 +11,7 @@ public class Win32Window(Process process)
 
 	public Process Process { get; } = Guard.Against.Null(process);
 
-	public nint ProcessId { get; set; }
+	public uint ProcessId { get; set; }
 
 	public Rectangle Rect { get; set; }
 
@@ -19,7 +19,7 @@ public class Win32Window(Process process)
 
 	public nint Style { get; set; }
 
-	public nint ThreadId { get; set; }
+	public uint ThreadId { get; set; }
 
 	public string? WindowCaption { get; set; }
 

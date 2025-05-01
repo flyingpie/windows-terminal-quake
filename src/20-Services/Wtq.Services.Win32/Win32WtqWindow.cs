@@ -25,10 +25,10 @@ public sealed class Win32WtqWindow(
 	public string? ProcessName =>
 		_window.Process.ProcessName;
 
-	public nint ProcessId =>
+	public uint ProcessId =>
 		_window.ProcessId;
 
-	public nint ThreadId =>
+	public uint ThreadId =>
 		_window.ThreadId;
 
 	public nint WindowHandle =>
