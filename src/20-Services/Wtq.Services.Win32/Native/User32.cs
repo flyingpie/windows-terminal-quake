@@ -68,21 +68,15 @@ public static class User32
 	[DllImport("user32.dll", SetLastError = true)]
 	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
 
-
-
-
 	[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 	static extern int GetClassName(nint hWnd, StringBuilder lpClassName, int nMaxCount);
 
 	public static string GetClassName(nint hWnd)
 	{
-
 		var sb = new StringBuilder(256);
 		GetClassName(hWnd, sb, 256);
 		return sb.ToString();
 	}
-
-
 
 	[DllImport("oleacc.dll", CharSet = CharSet.Unicode)]
 	public static extern int GetProcessHandleFromHwnd(IntPtr hWnd);
@@ -125,17 +119,19 @@ public static class User32
 		IntPtr found = IntPtr.Zero;
 		List<IntPtr> windows = new List<IntPtr>();
 
-		EnumWindows(delegate (IntPtr wnd, IntPtr param)
-		{
-			//if (filter(wnd, param))
+		EnumWindows(
+			delegate(IntPtr wnd, IntPtr param)
 			{
-				// only add the windows that pass the filter
-				windows.Add(wnd);
-			}
+				//if (filter(wnd, param))
+				{
+					// only add the windows that pass the filter
+					windows.Add(wnd);
+				}
 
-			// but return true here so that we iterate all windows
-			return true;
-		}, IntPtr.Zero);
+				// but return true here so that we iterate all windows
+				return true;
+			},
+			IntPtr.Zero);
 
 		return windows;
 	}
@@ -144,23 +140,8 @@ public static class User32
 	/// <param name="titleText"> The text that the window title must contain. </param>
 	public static IEnumerable<IntPtr> FindWindowsWithText(string titleText)
 	{
-		return FindWindows(delegate (IntPtr wnd, IntPtr param)
-		{
-			return GetWindowText(wnd).Contains(titleText);
-		});
+		return FindWindows(delegate(IntPtr wnd, IntPtr param) { return GetWindowText(wnd).Contains(titleText); });
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	[DllImport("user32.dll")]
 	static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
@@ -168,43 +149,42 @@ public static class User32
 	[StructLayout(LayoutKind.Sequential)]
 	public struct RECT
 	{
-		public int Left;        // x position of upper-left corner
-		public int Top;         // y position of upper-left corner
-		public int Right;       // x position of lower-right corner
-		public int Bottom;      // y position of lower-right corner
+		public int Left; // x position of upper-left corner
+		public int Top; // y position of upper-left corner
+		public int Right; // x position of lower-right corner
+		public int Bottom; // y position of lower-right corner
 	}
 
 	[DllImport("user32.dll", SetLastError = true)]
 	static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-	// Callback Declaration
 	public delegate bool EnumWindowsCallback(IntPtr hwnd, int lParam);
+
 	[DllImport("user32.dll")]
 	private static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
 
 	public static bool ReportWindow(nint hwnd, int lParam)
 	{
 		var style = GetWindowLong(hwnd, GWLSTYLE);
+
 		//var isVisible = (style & WS_VISIBLE) == WS_VISIBLE;
 
-		uint processId = 0;
-		uint threadId = GetWindowThreadProcessId(hwnd, out processId);
+		nint processId = 0;
+		nint threadId = GetWindowThreadProcessId(hwnd, out processId);
 
-		RECT rt = new RECT();
-		bool locationLookupSucceeded = GetWindowRect(hwnd, out rt);
+		var rt = new RECT();
+		var locationLookupSucceeded = GetWindowRect(hwnd, out rt);
 		var area = (rt.Right - rt.Left) * (rt.Bottom - rt.Top);
 
-		Process ownerProcess = Process.GetProcessById((int)processId);
+		var ownerProcess = Process.GetProcessById((int)processId);
 		bool isMainWindow = ownerProcess.MainWindowHandle.Equals(hwnd);
-		//Console.WriteLine(string.Format("  Process: {0}{1}", ownerProcess.ProcessName, isMainWindow ? " (MainWindow)" : " (Other Window)"));
 
 		var cl = User32.GetClassName(hwnd);
 
-		var p = new Win32Window()
+		var p = new Win32Window(ownerProcess)
 		{
 			ProcessId = processId,
 			ThreadId = threadId,
-			Process = ownerProcess,
 			Rect = new(rt.Left, rt.Top, rt.Right - rt.Left, rt.Bottom - rt.Top),
 			Style = style,
 			WindowCaption = User32.GetWindowText(hwnd),
@@ -214,34 +194,23 @@ public static class User32
 
 		_procs.Add(p);
 
-		//try
-		//{
-
-
-		//	Console.WriteLine($"{ownerProcess.ProcessName} CLASS:{cl} WINDOW_HANDLE:{hwnd} OWNER_PROCESS:{ownerProcess.Id} SELF_PROCESS:{processId} THREAD_ID:{threadId} IS_MAIN:{isMainWindow} AREA:{area} VISIBLE:{isVisible}");
-		//}
-		//catch (Exception ex)
-		//{
-		//	//Console.WriteLine(string.Format("  Unable to lookup Process Information for pid {0}", processId));
-		//	//Console.WriteLine(string.Format("    - Exception of type {0} occurred.", ex.GetType().Name));
-		//}
-
 		return true;
 	}
-
 
 	private static List<Win32Window> _procs = new();
 
 	public static List<Win32Window> GetWin32Windows()
 	{
+		lock (_procs)
+		{
+			_procs.Clear();
 
-		_procs.Clear();
+			// Have to declare a delegate so that a thunk is created, so that win32 may call us back.
+			EnumWindowsCallback callBackFn = new EnumWindowsCallback(ReportWindow);
 
-		// Have to declare a delegate so that a thunk is created, so that win32 may call us back.
-		EnumWindowsCallback callBackFn = new EnumWindowsCallback(ReportWindow);
+			EnumWindows(callBackFn, 0);
 
-		EnumWindows(callBackFn, 0);
-
-		return _procs;
+			return _procs;
+		}
 	}
 }

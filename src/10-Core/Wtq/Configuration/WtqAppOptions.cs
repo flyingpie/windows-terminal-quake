@@ -135,7 +135,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	}
 
 	[Display(GroupName = Gn.Process, Name = "Window class")]
-	//[ExampleValue("Mozilla Firefox - WhatsApp")]
+	[ExampleValue("ApplicationFrameWindow")]
 	[JsonPropertyOrder(2006)]
 	public string? WindowClass
 	{
@@ -145,7 +145,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 
 	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[ExampleValue("Mozilla Firefox - WhatsApp")]
-	[JsonPropertyOrder(2006)]
+	[JsonPropertyOrder(2007)]
 	public string? WindowTitle
 	{
 		get => _windowTitle;

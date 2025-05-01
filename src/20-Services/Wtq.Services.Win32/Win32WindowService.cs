@@ -70,15 +70,15 @@ public sealed class Win32WindowService :
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
-		new("Process Name", w => ((Win32WtqWindow)w).ProcessName),
-		new("Window Title", w => w.WindowTitle),
-		new("Window Class", w => ((Win32WtqWindow)w).WindowClass),
+		new("Process Name",			w => ((Win32WtqWindow)w).ProcessName),
+		new("Window Title",			w => w.WindowTitle),
+		new("Window Class",			w => ((Win32WtqWindow)w).WindowClass),
 
-		new("Window Rectangle", w => ((Win32WtqWindow)w).Rect),
+		new("Window Rectangle",		w => ((Win32WtqWindow)w).Rect),
 
-		new("Process Id", w => ((Win32WtqWindow)w).ProcessId),
-		new("Thread Id", w => ((Win32WtqWindow)w).ThreadId),
-		new("Window Handle", w => ((Win32WtqWindow)w).WindowHandle),
+		new("Process Id",			w => ((Win32WtqWindow)w).ProcessId),
+		new("Thread Id",			w => ((Win32WtqWindow)w).ThreadId),
+		new("Window Handle",		w => ((Win32WtqWindow)w).WindowHandle),
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
