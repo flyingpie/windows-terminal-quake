@@ -55,6 +55,8 @@ public sealed class Win32WtqWindow(
 			expectedProcName = System.IO.Path.GetFileNameWithoutExtension(opts.FileName);
 		}
 
+		// TODO: Add regex support to matching.
+
 		// Window class
 		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !opts.WindowClass.Equals(_window.WindowClass, StringComparison.OrdinalIgnoreCase))
 		{

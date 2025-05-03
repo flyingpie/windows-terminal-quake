@@ -134,6 +134,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 		set => _argumentList = value ?? [];
 	}
 
+	/// <summary>
+	/// (Windows only) Matches windows based on their Win32 Window Class.
+	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window class")]
 	[ExampleValue("ApplicationFrameWindow")]
 	[JsonPropertyOrder(2006)]
