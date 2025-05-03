@@ -6,7 +6,8 @@ public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddWin32WindowService(this IServiceCollection services)
 	{
-		return services
+		return Guard.Against.Null(services)
+			.AddSingleton<IWin32, Win32>()
 			.AddSingleton<IWtqWindowService, Win32WindowService>();
 	}
 }

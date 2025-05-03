@@ -19,7 +19,7 @@ public static class Program
 
 
 
-		User32.GetWin32Windows();
+		//User32.GetWin32Windows();
 		return;
 
 		//var p = Process.GetProcesses();

@@ -98,12 +98,12 @@ public class KWinWtqWindow(
 		return false;
 	}
 
-	public override async Task MoveToAsync(Point location)
+	public override async Task SetLocationAsync(Point location)
 	{
 		await _kwinClient.MoveWindowAsync(_window, location, CancellationToken.None).NoCtx();
 	}
 
-	public override async Task ResizeAsync(Size size)
+	public override async Task SetSizeAsync(Size size)
 	{
 		await _kwinClient.ResizeWindowAsync(_window, size, CancellationToken.None).NoCtx();
 	}

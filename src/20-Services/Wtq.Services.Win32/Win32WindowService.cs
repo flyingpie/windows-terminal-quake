@@ -1,16 +1,15 @@
-using Wtq.Services.Win32.Native;
-
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WindowService :
+public sealed class Win32WindowService(IWin32 win32) :
 	IDisposable,
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
-
 	private readonly InitLock _initLock = new();
+
+	private readonly IWin32 _win32 = Guard.Against.Null(win32);
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
@@ -40,9 +39,18 @@ public sealed class Win32WindowService :
 
 		await InitAsync().NoCtx();
 
-		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
+		var allWindows = await GetWindowsAsync(cancellationToken).NoCtx();
 
-		return processes.FirstOrDefault(p => p.Matches(opts));
+		// TODO: Logging
+
+		var matchingWindows = allWindows
+			.OfType<Win32WtqWindow>()
+			.Where(p => p.Matches(opts))
+			.ToList();
+
+		var chosenWindow = matchingWindows.OrderByDescending(w => w.IsMainWindow).FirstOrDefault();
+
+		return chosenWindow;
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(
@@ -52,12 +60,12 @@ public sealed class Win32WindowService :
 
 		try
 		{
-			var fg = GetForegroundProcessId();
-			if (fg > 0)
+			var fgPid = _win32.GetForegroundProcessId();
+			if (fgPid > 0)
 			{
 				return (await GetWindowsAsync(cancellationToken))
 					.Cast<Win32WtqWindow>()
-					.FirstOrDefault(w => w.ProcessId == fg);
+					.FirstOrDefault(w => w.ProcessId == fgPid);
 			}
 		}
 		catch (Exception ex)
@@ -74,6 +82,7 @@ public sealed class Win32WindowService :
 		new("Window Title",			w => w.WindowTitle),
 		new("Window Class",			w => ((Win32WtqWindow)w).WindowClass),
 
+		new("Is Main Window",		w => ((Win32WtqWindow)w).IsMainWindow),
 		new("Window Rectangle",		w => ((Win32WtqWindow)w).Rect),
 
 		new("Process Id",			w => ((Win32WtqWindow)w).ProcessId),
@@ -89,14 +98,6 @@ public sealed class Win32WindowService :
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
-	}
-
-	private static nint GetForegroundProcessId()
-	{
-		var hwnd = User32.GetForegroundWindow();
-		User32.GetWindowThreadProcessId(hwnd, out nint pid);
-
-		return pid;
 	}
 
 	private async Task CreateProcessAsync(WtqAppOptions opts)
@@ -156,10 +157,10 @@ public sealed class Win32WindowService :
 			_log.LogInformation("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 
-			_processes = User32
-				.GetWin32Windows()
-				.Where(w => !w.Size.IsEmpty)
-				.Select(w => (WtqWindow)new Win32WtqWindow(w))
+			_processes = _win32
+				.GetWindows()
+				.Where(w => !w.Rect.Size.IsEmpty)
+				.Select(w => (WtqWindow)new Win32WtqWindow(_win32, w))
 				.ToList();
 		}
 		finally
