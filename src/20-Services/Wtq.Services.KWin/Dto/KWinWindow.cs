@@ -2,6 +2,9 @@ namespace Wtq.Services.KWin.Dto;
 
 public class KWinWindow
 {
+	[JsonPropertyName("desktopFileName")]
+	public string? DesktopFileName { get; set; }
+
 	[JsonPropertyName("caption")]
 	public string? Caption { get; set; }
 

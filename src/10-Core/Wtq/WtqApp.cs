@@ -164,7 +164,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Window.MoveToAsync(location).NoCtx();
+		await Window.SetLocationAsync(location).NoCtx();
 
 		_lastLoc = location;
 	}
@@ -205,7 +205,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
-		await Window.ResizeAsync(size).NoCtx();
+		await Window.SetSizeAsync(size).NoCtx();
 	}
 
 	public override string ToString() => $"[App:{Options}] {Window?.ToString() ?? "<no process>"}";
