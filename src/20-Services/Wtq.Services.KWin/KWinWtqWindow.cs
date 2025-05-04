@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
@@ -13,6 +15,7 @@ public class KWinWtqWindow(
 
 	private bool _isValid = true;
 
+	[Display(Name = "Id", Description = "", Order = 1)]
 	public override string Id => _window.InternalId ?? "<unknown>";
 
 	#region Generic Stuff

@@ -26,7 +26,8 @@ public interface IWtqWindowService
 		CancellationToken cancellationToken);
 
 	/// <summary>
-	///
+	/// Returns a list of properties that are specific to the windows returned by this window service.
+	/// Used in the "Windows" page on the GUI.
 	/// </summary>
 	List<WtqWindowProperty> GetWindowProperties();
 
