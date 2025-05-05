@@ -48,12 +48,12 @@
 					</RadzenStack>
 				</Template>
 			</RadzenDataGridColumn>
-			<RadzenDataGridColumn Property="@nameof(WtqWindow.Title)" Title="@nameof(WtqWindow.Title)">
+			<RadzenDataGridColumn Property="@nameof(WtqWindow.WindowTitle)" Title="@nameof(WtqWindow.WindowTitle)">
 				<Template Context="item">
 					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-						@if (!string.IsNullOrWhiteSpace(item.Title))
+						@if (!string.IsNullOrWhiteSpace(item.WindowTitle))
 						{
-							@item.Title
+							@item.WindowTitle
 						}
 						else
 						{

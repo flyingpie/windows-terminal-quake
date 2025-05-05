@@ -16,7 +16,7 @@ public sealed class Win32WtqWindow(
 
 	public override string? Name => _process.ProcessName;
 
-	public override string? Title => _process.MainWindowTitle;
+	public override string? WindowTitle => _process.MainWindowTitle;
 
 	public override Task BringToForegroundAsync()
 	{

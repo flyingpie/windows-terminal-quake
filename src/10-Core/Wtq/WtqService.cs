@@ -5,6 +5,7 @@ namespace Wtq;
 /// <summary>
 /// Orchestrates toggling on- and off of apps, and sending focus to the right window.
 /// </summary>
+
 // TODO: Better name.
 public sealed class WtqService : WtqHostedService
 {
@@ -15,6 +16,8 @@ public sealed class WtqService : WtqHostedService
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
 	private WtqWindow? _lastNonWtqWindow;
+
+	private WtqAppToggledEvent? _lastEvent;
 
 	public WtqService(
 		ILogger<WtqService> log,
@@ -58,6 +61,20 @@ public sealed class WtqService : WtqHostedService
 			return;
 		}
 
+		if (_lastEvent != null)
+		{
+			var diff = ev.Timestamp - _lastEvent.Timestamp;
+
+			if (app.IsAttached && ev.AppName.Equals(_lastEvent.AppName, StringComparison.OrdinalIgnoreCase) && diff < TimeSpan.FromMilliseconds(300))
+			{
+				Console.WriteLine("OnAppToggledEventAsync");
+				await app.SuspendAsync().NoCtx();
+				return;
+			}
+		}
+
+		_lastEvent = ev;
+
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 
@@ -67,7 +84,19 @@ public sealed class WtqService : WtqHostedService
 		if (open != null && open != app)
 		{
 			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+
+			_bus.Publish(
+				new WtqAppToggledOffEvent()
+				{
+					AppName = open.Name, IsSwitching = true
+				});
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+
+			_bus.Publish(
+				new WtqAppToggledOnEvent()
+				{
+					AppName = app.Name, IsSwitching = true
+				});
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
@@ -76,6 +105,12 @@ public sealed class WtqService : WtqHostedService
 		if (app.IsOpen)
 		{
 			_log.LogInformation("Closing previously open app '{App}'", app);
+
+			_bus.Publish(
+				new WtqAppToggledOffEvent()
+				{
+					AppName = app.Name
+				});
 
 			// Close app.
 			await app.CloseAsync().NoCtx();
@@ -86,6 +121,12 @@ public sealed class WtqService : WtqHostedService
 		else
 		{
 			_log.LogInformation("Opening previously closed app '{App}'", app);
+
+			_bus.Publish(
+				new WtqAppToggledOnEvent()
+				{
+					AppName = app.Name
+				});
 
 			// Open app.
 			await app.OpenAsync().NoCtx();
