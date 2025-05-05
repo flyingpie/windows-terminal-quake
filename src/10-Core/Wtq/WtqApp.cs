@@ -41,6 +41,8 @@ public sealed class WtqApp : IAsyncDisposable
 		Name = Guard.Against.NullOrWhiteSpace(name);
 	}
 
+	public bool IsActive { get; set; } = true;
+
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
 	/// </summary>
@@ -74,6 +76,8 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		IsActive = true;
+
 		if (!IsOpen)
 		{
 			return;
@@ -97,21 +101,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async ValueTask DisposeAsync()
 	{
-		// TODO: Add ability to close attached processes when app closes.
-		if (!IsAttached)
-		{
-			_log.LogInformation("App is not attached, not doing anything for cleanup");
-			return;
-		}
-
-		// Stop update loop.
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
-
-		// Reset window location & size.
-		await ResetLocationAndSizeAsync().NoCtx();
-
-		// Reset app props.
-		await ResetPropsAsync().NoCtx();
+		await SuspendAsync().NoCtx();
 	}
 
 	/// <summary>
@@ -171,6 +161,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		IsActive = true;
+
 		if (IsOpen)
 		{
 			return false;
@@ -208,6 +200,27 @@ public sealed class WtqApp : IAsyncDisposable
 		await Window.ResizeAsync(size).NoCtx();
 	}
 
+	public async Task SuspendAsync()
+	{
+		IsActive = false;
+
+		// TODO: Add ability to close attached processes when app closes.
+		if (!IsAttached)
+		{
+			_log.LogInformation("App is not attached, not doing anything for cleanup");
+			return;
+		}
+
+		// Stop update loop.
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+
+		// Reset window location & size.
+		await ResetLocationAndSizeAsync().NoCtx();
+
+		// Reset app props.
+		await ResetPropsAsync().NoCtx();
+	}
+
 	public override string ToString() => $"[App:{Options}] {Window?.ToString() ?? "<no process>"}";
 
 	/// <summary>
@@ -215,6 +228,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
+		if (!IsActive)
+		{
+			return;
+		}
+
 		// Ask window to update its state first.
 		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
 
