@@ -23,19 +23,11 @@ public class SharpHookHotkeyService : WtqHostedService
 		IWtqBus bus)
 	{
 		_opts = Guard.Against.Null(opts);
-		//_dbus = Guard.Against.Null(dbus);
-		//_dbusObj = Guard.Against.Null(dbusObj as WtqDBusObject); // TODO: Make nicer.
 		_bus = Guard.Against.Null(bus);
 
-		// Update registrations every time the settings file is reloaded.
-		//opts.OnChange((opt, someString) => _ = Task.Run(async () => await RegisterAllAsync(CancellationToken.None)));
-
+		// TODO
 		//_bus.OnEvent<WtqSuspendHotkeysEvent>(async _ => await UnregisterAllAsync(CancellationToken.None));
 		//_bus.OnEvent<WtqResumeHotkeysEvent>(async _ => await RegisterAllAsync(CancellationToken.None));
-
-
-
-
 	}
 
 	private IEnumerable<HotkeyOptions> GetHotkeys()
@@ -52,8 +44,6 @@ public class SharpHookHotkeyService : WtqHostedService
 				yield return hk;
 			}
 		}
-
-
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -69,19 +59,11 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			mod |= m;
 
-			Console.WriteLine($"KEY_PRESSED:{e.Data.KeyCode}            [{mod}]{k}");
-
 			var hk = GetHotkeys().FirstOrDefault(h => h.Modifiers == mod && h.Key == k);
 			if (hk != null)
 			{
-				Console.WriteLine("Sup");
 				_bus.Publish(new WtqHotkeyPressedEvent(mod, k));
 			}
-
-			//if (k == Keys.D1)
-			//{
-			//	e.SuppressEvent = true;
-			//}
 		};
 
 		_hook.KeyReleased += (s, e) =>
@@ -90,14 +72,6 @@ public class SharpHookHotkeyService : WtqHostedService
 			var m = GetModifiers(e.Data.KeyCode);
 
 			mod ^= m;
-
-			//Console.WriteLine($"KEY_RELEASED:{e.Data.KeyCode}");
-
-			//if (k == Keys.D1)
-			//{
-			//	e.SuppressEvent = true;
-			//	Console.WriteLine("SUPPRESS");
-			//}
 		};
 
 		_ = _hook.RunAsync();

@@ -41,45 +41,45 @@ public static class BlazorExtensions
 	}
 
 	/// <summary>
-	/// https://www.toptal.com/developers/keycode/table
+	/// <a href="https://www.toptal.com/developers/keycode/table"/>.
 	/// </summary>
 	private static Keys ToKeys(string code)
 	{
 		switch (code.ToLowerInvariant())
 		{
-			case "pause":			return Keys.Pause;
-			case "backquote":		return Keys.Oemtilde;
-			case "backspace":		return Keys.Back;
-			case "tab":				return Keys.Tab;
-			case "numlock":			return Keys.NumLock;
-			case "enter":			return Keys.Enter;
-			case "capslock":		return Keys.CapsLock;
-			case "escape":			return Keys.Escape;
-			case "minus":			return Keys.OemMinus;
-			case "equal":			return Keys.Oemplus;
-			case "insert":			return Keys.Insert;
-			case "delete":			return Keys.Delete;
-			case "bracketleft":		return Keys.OemOpenBrackets;
-			case "bracketright":	return Keys.OemCloseBrackets;
-			case "semicolon":		return Keys.OemSemicolon;
-			case "quote":			return Keys.OemQuotes;
-			case "period":			return Keys.OemPeriod;
-			case "comma":			return Keys.Oemcomma;
-			case "slash":			return Keys.OemQuestion;
-			case "pageup":			return Keys.PageUp;
-			case "pagedown":		return Keys.PageDown;
-			case "arrowup":			return Keys.Up;
-			case "arrowdown":		return Keys.Down;
-			case "arrowleft":		return Keys.Left;
-			case "arrowright":		return Keys.Right;
-			case "numpaddivide":	return Keys.Divide;
-			case "numpadmultiply":	return Keys.Multiply;
-			case "numpadsubtract":	return Keys.Subtract;
-			case "numpadadd":		return Keys.Add;
-			case "numpaddecimal":	return Keys.Decimal;
-			case "numpadenter":		return Keys.Enter;
-			case "backslash":		return Keys.OemBackslash;
-			case "space":			return Keys.Space;
+			case "pause": return Keys.Pause;
+			case "backquote": return Keys.Oemtilde;
+			case "backspace": return Keys.Back;
+			case "tab": return Keys.Tab;
+			case "numlock": return Keys.NumLock;
+			case "enter": return Keys.Enter;
+			case "capslock": return Keys.CapsLock;
+			case "escape": return Keys.Escape;
+			case "minus": return Keys.OemMinus;
+			case "equal": return Keys.Oemplus;
+			case "insert": return Keys.Insert;
+			case "delete": return Keys.Delete;
+			case "bracketleft": return Keys.OemOpenBrackets;
+			case "bracketright": return Keys.OemCloseBrackets;
+			case "semicolon": return Keys.OemSemicolon;
+			case "quote": return Keys.OemQuotes;
+			case "period": return Keys.OemPeriod;
+			case "comma": return Keys.Oemcomma;
+			case "slash": return Keys.OemQuestion;
+			case "pageup": return Keys.PageUp;
+			case "pagedown": return Keys.PageDown;
+			case "arrowup": return Keys.Up;
+			case "arrowdown": return Keys.Down;
+			case "arrowleft": return Keys.Left;
+			case "arrowright": return Keys.Right;
+			case "numpaddivide": return Keys.Divide;
+			case "numpadmultiply": return Keys.Multiply;
+			case "numpadsubtract": return Keys.Subtract;
+			case "numpadadd": return Keys.Add;
+			case "numpaddecimal": return Keys.Decimal;
+			case "numpadenter": return Keys.Enter;
+			case "backslash": return Keys.OemBackslash;
+			case "space": return Keys.Space;
 
 			case "digit0": return Keys.D0;
 			case "digit1": return Keys.D1;
