@@ -11,6 +11,13 @@ public static class SystemExtensions
 		return JsonSerializer.Deserialize<TValue>(json)!;
 	}
 
+	/// <summary>
+	/// "" => null<br/>
+	/// " " => null<br/>
+	/// "\t" => null<br/>
+	/// "\n" => null<br/>
+	/// "not-null" => "not-null".<br/>
+	/// </summary>
 	public static string? EmptyOrWhiteSpaceToNull(this string? input) => string.IsNullOrWhiteSpace(input) ? null : input;
 
 	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
@@ -20,33 +27,38 @@ public static class SystemExtensions
 		return validatable.Validate(new ValidationContext(new object()));
 	}
 
-	public static string ExpandEnvVars(this string? src)
+	/// <summary>
+	/// Replace variables such as "%ENV_VAR%".<br/>
+	/// E.g. "User %USER% is logged in" => "User username1 is logged in".<br/>
+	/// Also replaces "~" with the path to the user's home directory.
+	/// </summary>
+	public static string ExpandEnvVars(this string source)
 	{
-		src ??= string.Empty;
+		Guard.Against.Null(source);
 
 		return Environment
-				.ExpandEnvironmentVariables(src)
+				.ExpandEnvironmentVariables(source)
 				?.Replace("~", WtqPaths.UserHome)
 			?? string.Empty;
 	}
 
-	public static string ToSnakeCase(this string text)
+	/// <summary>
+	/// "ToSnakeCase" => "to_snake_case".
+	/// </summary>
+	public static string ToSnakeCase(this string source)
 	{
-		if (text == null)
-		{
-			throw new ArgumentNullException(nameof(text));
-		}
+		Guard.Against.Null(source);
 
-		if (text.Length < 2)
+		if (source.Length <= 1)
 		{
-			return text.ToLowerInvariant();
+			return source.ToLowerInvariant();
 		}
 
 		var sb = new StringBuilder();
-		sb.Append(char.ToLowerInvariant(text[0]));
-		for (int i = 1; i < text.Length; ++i)
+		sb.Append(char.ToLowerInvariant(source[0]));
+		for (var i = 1; i < source.Length; ++i)
 		{
-			char c = text[i];
+			var c = source[i];
 			if (char.IsUpper(c))
 			{
 				sb.Append('_');

@@ -13,4 +13,28 @@ public class SystemExtensionsTest
 	{
 		Assert.AreEqual(expected, inp.EmptyOrWhiteSpaceToNull());
 	}
+
+	[TestMethod]
+	[DataRow("", "")]
+	[DataRow(" ", " ")]
+	[DataRow("a", "a")]
+	[DataRow("A", "a")]
+	[DataRow("aa", "aa")]
+	[DataRow("Aa", "aa")]
+	[DataRow("AA", "a_a")]
+	[DataRow("Snake", "snake")]
+	[DataRow("SNAKE", "s_n_a_k_e")]
+	[DataRow("ToSnakeCase", "to_snake_case")]
+	[DataRow("to_snake_case", "to_snake_case")]
+	[DataRow("To_Snake_Case", "to__snake__case")]
+	public void ToSnakeCase(string inp, string expected)
+	{
+		Assert.AreEqual(expected, inp.ToSnakeCase());
+	}
+
+	[TestMethod]
+	public void ToSnakeCaseNull()
+	{
+		Assert.ThrowsExactly<ArgumentNullException>(() => ((string)null)!.ToSnakeCase());
+	}
 }
