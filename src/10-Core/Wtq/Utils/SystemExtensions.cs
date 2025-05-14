@@ -11,6 +11,13 @@ public static class SystemExtensions
 		return JsonSerializer.Deserialize<TValue>(json)!;
 	}
 
+	/// <summary>
+	/// "" => null<br/>
+	/// " " => null<br/>
+	/// "\t" => null<br/>
+	/// "\n" => null<br/>
+	/// "not-null" => "not-null".<br/>
+	/// </summary>
 	public static string? EmptyOrWhiteSpaceToNull(this string? input) => string.IsNullOrWhiteSpace(input) ? null : input;
 
 	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)

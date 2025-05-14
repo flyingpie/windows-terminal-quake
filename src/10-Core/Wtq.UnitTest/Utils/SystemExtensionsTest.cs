@@ -35,6 +35,6 @@ public class SystemExtensionsTest
 	[TestMethod]
 	public void ToSnakeCaseNull()
 	{
-		Assert.ThrowsException<ArgumentNullException>(() => ((string)null).ToSnakeCase());
+		Assert.ThrowsExactly<ArgumentNullException>(() => ((string)null)!.ToSnakeCase());
 	}
 }
