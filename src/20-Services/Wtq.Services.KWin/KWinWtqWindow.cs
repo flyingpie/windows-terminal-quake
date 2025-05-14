@@ -25,7 +25,7 @@ public class KWinWtqWindow(
 
 	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
 
-	public override string? Title => _window?.Caption;
+	public override string? WindowTitle => _window?.Caption;
 
 	public override async Task BringToForegroundAsync()
 	{
