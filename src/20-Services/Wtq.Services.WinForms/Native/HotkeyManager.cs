@@ -79,6 +79,8 @@ internal static class HotkeyManager
 
 		protected override void WndProc(ref Message m)
 		{
+			Console.WriteLine($"WndProc({m.Msg})");
+
 			if (m.Msg == WMHotkey)
 			{
 				HotkeyEventArgs e = new(m.LParam);
