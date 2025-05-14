@@ -14,7 +14,7 @@ public class WtqWin32 : WtqHostBase
 
 		services
 			.AddWin32WindowService()
-			.AddWinFormsHotkeyService()
+			.AddSharpHookHotkeyService()
 			//.AddWinFormsHotkeyService()
 			.AddWinFormsScreenInfoProvider()
 
