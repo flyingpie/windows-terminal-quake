@@ -33,7 +33,8 @@
 
 	private bool IsSuper(KeyboardEventArgs e)
 	{
-		return (e.Key ?? string.Empty).Equals("super", StringComparison.OrdinalIgnoreCase);
+		return (e.Key ?? string.Empty).Equals("super", StringComparison.OrdinalIgnoreCase) ||
+			(e.Key ?? string.Empty).Equals("meta", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private void Clear()
