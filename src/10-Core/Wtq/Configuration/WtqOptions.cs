@@ -79,6 +79,9 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	[Range(5, 120)]
 	public int? AnimationTargetFps { get; set; }
 
+	[Display(GroupName = Gn.General, Name = "Feature flags")]
+	public FeatureFlags FeatureFlags { get; set; } = new();
+
 	/// <summary>
 	/// Called right after the options are loaded from file.
 	/// </summary>

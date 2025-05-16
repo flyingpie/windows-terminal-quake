@@ -19,4 +19,10 @@
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj" />
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

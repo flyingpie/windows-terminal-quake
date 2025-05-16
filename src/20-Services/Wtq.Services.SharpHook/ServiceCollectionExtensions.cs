@@ -5,9 +5,10 @@ namespace Wtq.Services.Win32;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddSharpHookHotkeyService(this IServiceCollection services)
-	{
-		return services
+	/// <summary>
+	/// Configures SharpHook for handling global hotkeys.
+	/// </summary>
+	public static IServiceCollection AddSharpHookHotkeyService(this IServiceCollection services) =>
+		Guard.Against.Null(services)
 			.AddHostedService<SharpHookHotkeyService>();
-	}
 }
