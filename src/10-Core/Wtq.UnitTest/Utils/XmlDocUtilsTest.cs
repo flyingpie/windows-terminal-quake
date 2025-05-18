@@ -9,7 +9,7 @@ public class XmlDocUtilsTest
 	public void GetExample()
 	{
 		// Act
-		var summary = TestClass.PropertyInfo.GetExample();
+		var summary = TestClass.PropertyInfo.GetExample().ReplaceLineEndings();
 
 		// Assert
 		Assert.AreEqual(
@@ -25,7 +25,7 @@ public class XmlDocUtilsTest
 	public void GetRemarks()
 	{
 		// Act
-		var summary = TestClass.PropertyInfo.GetRemarks();
+		var summary = TestClass.PropertyInfo.GetRemarks().ReplaceLineEndings();
 
 		// Assert
 		Assert.AreEqual(
@@ -42,7 +42,7 @@ public class XmlDocUtilsTest
 	public void GetSummary()
 	{
 		// Act
-		var summary = TestClass.PropertyInfo.GetSummary();
+		var summary = TestClass.PropertyInfo.GetSummary().ReplaceLineEndings();
 
 		// Assert
 		Assert.AreEqual(
