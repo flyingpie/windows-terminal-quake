@@ -34,7 +34,9 @@
 	private bool IsSuper(KeyboardEventArgs e)
 	{
 		return (e.Key ?? string.Empty).Equals("super", StringComparison.OrdinalIgnoreCase) ||
-			(e.Key ?? string.Empty).Equals("meta", StringComparison.OrdinalIgnoreCase);
+			(e.Key ?? string.Empty).Equals("meta", StringComparison.OrdinalIgnoreCase) ||
+			(e.Key ?? string.Empty).Equals("metaleft", StringComparison.OrdinalIgnoreCase) ||
+			(e.Key ?? string.Empty).Equals("metaright", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private void Clear()
@@ -49,6 +51,8 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
+		Console.WriteLine($"KEY:{e.Code}");
+
 		if (IsSuper(e))
 		{
 			_isSuper = true;

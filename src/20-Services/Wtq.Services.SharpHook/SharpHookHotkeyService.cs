@@ -5,6 +5,9 @@ using Wtq.Events;
 
 namespace Wtq.Services.SharpHook;
 
+/// <summary>
+/// Uses SharpHook (https://github.com/TolikPylypchuk/SharpHook) to register hotkeys.
+/// </summary>
 public class SharpHookHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<SharpHookHotkeyService>();
@@ -12,7 +15,7 @@ public class SharpHookHotkeyService : WtqHostedService
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqBus _bus;
 
-	private SimpleGlobalHook? _hook;
+	private readonly SimpleGlobalHook _hook;
 	private bool _isSuspended;
 
 	public SharpHookHotkeyService(
@@ -39,76 +42,69 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			return Task.CompletedTask;
 		});
+
+		// We need the blocking global hook to allow suppressions.
+		_hook = new SimpleGlobalHook(
+			globalHookType: GlobalHookType.Keyboard);
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		//_hook = new TaskPoolGlobalHook();
-		_hook = new SimpleGlobalHook(); // We need the blocking global hook to allow suppressions.
-
-		KeyModifiers mod = KeyModifiers.None;
-
-		bool x = false;
-
-		Keys suppress1 = Keys.None;
-		KeyModifiers suppress2 = KeyModifiers.None;
+		// Accumulate modifiers (when pressing multiple modifiers, they come in as a separate event each.
+		// I.e. pressing CTRL+ALT+1:
+		// - Event CTRL Pressed
+		// - Event ALT Pressed
+		// - Event 1 Pressed
+		// So we need to manually combine the modifiers.
+		// Maybe look into asking the OS for pressed modifiers directly, but this requires a separate mechanism, next to SharpHook.
+		KeyModifiers accMod = KeyModifiers.None;
 
 		_hook.KeyPressed += (s, e) =>
 		{
+			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
 			e.SuppressEvent = false;
 
+			// Translate SharpHook values to WTQ ones.
 			var k = (Keys)e.Data.KeyCode;
 			var m = GetModifiers(e.Data.KeyCode);
 
-			mod |= m;
+			// Add to accumulated modifiers.
+			accMod |= m;
 
-			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, k, mod);
+			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, k, accMod);
 
+			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
 			{
 				return;
 			}
 
-			var hk = GetHotkeys().FirstOrDefault(h => h.Modifiers == mod && h.Key == k);
+			// Look for a registered hotkey matching the one just pressed.
+			var hk = GetHotkeys().FirstOrDefault(h => h.Modifiers == accMod && h.Key == k);
 			if (hk == null)
 			{
-				_log.LogDebug("No hotkey mapping found for modifiers '{Modifiers}' and key '{Key}'", mod, k);
+				_log.LogDebug("No hotkey mapping found for modifiers '{Modifiers}' and key '{Key}'", accMod, k);
 				return;
 			}
 
 			e.SuppressEvent = true;
 
-			_bus.Publish(new WtqHotkeyPressedEvent(mod, k));
-
-			suppress1 = k;
-			suppress2 = mod;
+			_bus.Publish(new WtqHotkeyPressedEvent(accMod, k));
 		};
 
 		_hook.KeyReleased += (s, e) =>
 		{
+			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
 			e.SuppressEvent = false;
 
+			// Translate SharpHook values to WTQ ones.
 			var k = (Keys)e.Data.KeyCode;
 			var m = GetModifiers(e.Data.KeyCode);
 
-			mod ^= m;
+			// Remove from accumulated modifiers.
+			accMod ^= m;
 
-			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, k, mod);
-
-			if ((suppress1 & k) == k)
-			{
-				Console.WriteLine("SUPPRESS K");
-				suppress1 ^= k;
-				//e.SuppressEvent = true;
-			}
-
-			if ((suppress2 & m) == m)
-			{
-				Console.WriteLine("SUPPRESS M");
-				suppress2 ^= m;
-				//e.SuppressEvent = true;
-			}
-
+			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, k, accMod);
 		};
 
 		_ = _hook.RunAsync();
@@ -120,7 +116,8 @@ public class SharpHookHotkeyService : WtqHostedService
 	{
 		_log.LogDebug("Disposing SharpHook");
 
-		_hook?.Dispose();
+		// TODO: Seems that some thread still runs even after disposing.
+		_hook.Dispose();
 
 		return ValueTask.CompletedTask;
 	}
