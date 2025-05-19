@@ -233,9 +233,7 @@ Defaults to ```{{ Setting.DefaultValue }}```
 
 {% if Setting.HasExample %}
 
-```json
 {{ Setting.Example }}
-```
 
 {% elif Setting.IsGlobal and Setting.IsApp %}
 

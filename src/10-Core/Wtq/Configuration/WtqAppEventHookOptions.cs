@@ -1,3 +1,5 @@
+using Gn = Wtq.WtqConstants.Settings.GroupNames;
+
 namespace Wtq.Configuration;
 
 public class WtqAppEventHookOptions
@@ -5,6 +7,12 @@ public class WtqAppEventHookOptions
 	private readonly ILogger _log = Log.For<WtqAppEventHookOptions>();
 	private ICollection<string> _argumentList = [];
 
+	/// <summary>
+	/// Which monitor to preferably drop the app.
+	/// </summary>
+	// [DefaultValue(Wc.PreferMonitor.WithCursor)]
+	[Display(GroupName = Gn.Monitor, Name = "Filename")]
+	[JsonPropertyOrder(7001)]
 	[Required]
 	public string FileName { get; set; } = null!;
 
