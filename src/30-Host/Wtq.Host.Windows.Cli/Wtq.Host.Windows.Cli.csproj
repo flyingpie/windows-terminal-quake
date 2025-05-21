@@ -13,9 +13,16 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.SharpHook\Wtq.Services.SharpHook.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.TrayIcon\Wtq.Services.TrayIcon.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.Win32\Wtq.Services.Win32.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj" />
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="wtq.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>
