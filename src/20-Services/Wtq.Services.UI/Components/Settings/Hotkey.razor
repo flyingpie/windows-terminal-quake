@@ -31,11 +31,6 @@
 		}
 	}
 
-	private bool IsSuper(KeyboardEventArgs e)
-	{
-		return (e.Key ?? string.Empty).Equals("super", StringComparison.OrdinalIgnoreCase);
-	}
-
 	private void Clear()
 	{
 		Options.Modifiers = KeyModifiers.None;
@@ -48,7 +43,7 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
-		if (IsSuper(e))
+		if (e.IsSuperKey())
 		{
 			_isSuper = true;
 		}
@@ -66,7 +61,7 @@
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
-		if (IsSuper(e))
+		if (e.IsSuperKey())
 		{
 			_isSuper = false;
 		}

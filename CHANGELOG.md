@@ -12,6 +12,8 @@
 - Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
 - Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
+- Feature: New hotkey registration subsystem through the use of [SharpHook](https://github.com/TolikPylypchuk/SharpHook), which allows binding the "Windows" modifier on Windows.
+- Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
 
 ## [v2.0.15] / 2025-03-21
 - Bugfix: HideOnFocusLost broke

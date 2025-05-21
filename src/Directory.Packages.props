@@ -8,6 +8,7 @@
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.13.61"/>
 		<PackageVersion Include="Namotion.Reflection" Version="3.3.0"/>
 		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
+		<PackageVersion Include="SharpHook" Version="5.3.9"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
 		<PackageVersion Include="System.Resources.Extensions" Version="9.0.4"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
