@@ -51,6 +51,8 @@ public class WtqUIHost
 
 				Log.CloseAndFlush();
 
+				// TODO: Remove this.
+				// When using SharpHook, some threads seem to hang around when otherwise exiting the app.
 				_ = Task.Run(async () =>
 				{
 					await Task.Delay(TimeSpan.FromSeconds(2));

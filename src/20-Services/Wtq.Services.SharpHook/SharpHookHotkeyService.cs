@@ -43,7 +43,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			return Task.CompletedTask;
 		});
 
-		// We need the blocking global hook to allow suppressions.
+		// We need the blocking global hook to allow suppressions (i.e. preventing keys from doing other things after triggering WTQ events).
 		_hook = new SimpleGlobalHook(
 			globalHookType: GlobalHookType.Keyboard);
 	}
