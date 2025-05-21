@@ -1,5 +1,8 @@
 namespace Wtq.Events;
 
+/// <summary>
+/// An event that involves an app.
+/// </summary>
 public abstract class WtqAppEvent : WtqEvent
 {
 	/// <summary>
