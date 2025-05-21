@@ -8,21 +8,32 @@ public class WtqAppEventHookOptions
 	private ICollection<string> _argumentList = [];
 
 	/// <summary>
-	/// Which monitor to preferably drop the app.
+	/// A pattern that determines what event or events to hit.<br/>
+	/// Supports regular expressions.
 	/// </summary>
-	// [DefaultValue(Wc.PreferMonitor.WithCursor)]
-	[Display(GroupName = Gn.Monitor, Name = "Filename")]
+	[Display(GroupName = Gn.Events, Name = "Event pattern")]
 	[JsonPropertyOrder(7001)]
+	[Required]
+	public string EventPattern { get; set; } = null!;
+
+	/// <summary>
+	/// The filename used when starting a process, when the event occurs.
+	/// </summary>
+	[Display(GroupName = Gn.Events, Name = "Filename")]
+	[JsonPropertyOrder(7002)]
 	[Required]
 	public string FileName { get; set; } = null!;
 
+	/// <summary>
+	/// Command-line arguments that should be passed to the process when it's started.
+	/// </summary>
+	[Display(GroupName = Gn.Events, Name = "Argument list")]
+	[JsonPropertyOrder(7003)]
 	public ICollection<string> ArgumentList
 	{
 		get => _argumentList;
 		set => _argumentList = value ?? [];
 	}
-
-	public bool StopPropagation { get; set; }
 
 	public async Task ExecuteAsync(IDictionary<string, object?> parameters)
 	{
