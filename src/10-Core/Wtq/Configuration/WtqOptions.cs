@@ -61,13 +61,6 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
 		= [];
 
-	/// <summary>
-	/// Whether to show the GUI when WTQ is started.
-	/// </summary>
-	[DefaultValue(false)]
-	[Display(GroupName = Gn.General, Name = "Show UI on start")]
-	[JsonPropertyOrder(103)]
-	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
 	/// How many frames per second the animation should be.<br/>
@@ -76,11 +69,31 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[DefaultValue(40)]
 	[Display(GroupName = Gn.Animation, Name = "Animation target FPS")]
+	[JsonPropertyOrder(103)]
 	[Range(5, 120)]
 	public int? AnimationTargetFps { get; set; }
 
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
 	public FeatureFlags FeatureFlags { get; set; } = new();
+
+	/// <summary>
+	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
+	/// <br/>
+	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>
+	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
+	/// but still have a way back should things go awry.
+	/// </summary>
+	[Display(GroupName = Gn.General, Name = "Feature flags")]
+	[JsonPropertyOrder(104)]
+	public FeatureFlags FeatureFlags { get; set; } = new();
+
+	/// <summary>
+	/// Whether to show the GUI when WTQ is started.
+	/// </summary>
+	[DefaultValue(false)]
+	[Display(GroupName = Gn.General, Name = "Show UI on start")]
+	[JsonPropertyOrder(105)]
+	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
 	/// Called right after the options are loaded from file.
