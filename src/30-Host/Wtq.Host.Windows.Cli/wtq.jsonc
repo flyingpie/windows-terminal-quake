@@ -3,13 +3,20 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// Example with Windows Terminal
+		// Example with PowerShell
 		{
-			"Name": "Terminal",
+			"Name": "PowerShell",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "wt",
-			"ProcessName": "WindowsTerminal"
+			"FileName": "powershell"
 		}
+
+		// Example with Windows Terminal
+		//{
+		//	"Name": "Terminal",
+		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"FileName": "wt",
+		//	"ProcessName": "WindowsTerminal"
+		//}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
@@ -30,9 +37,5 @@
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95,
-
-	"FeatureFlags": {
-		"SharpHook": true
-	}
+	"VerticalScreenCoverage": 95
 }

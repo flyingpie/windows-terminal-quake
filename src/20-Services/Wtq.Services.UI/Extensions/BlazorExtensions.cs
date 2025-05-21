@@ -6,7 +6,20 @@ namespace Wtq.Services.UI.Extensions;
 
 public static class BlazorExtensions
 {
+	/// <summary>
+	/// Names of the "Super" key (also "Windows" and "Meta"), as they come through from a browser (which we use for hosting the GUI).
+	/// </summary>
+	private static readonly HashSet<string> SuperKeys = new(StringComparer.OrdinalIgnoreCase)
+	{
+		"super", "meta", "metaleft", "metaright",
+	};
+
 	private static readonly ILogger _log = Log.For(typeof(BlazorExtensions));
+
+	/// <summary>
+	/// Returns whether the specified <paramref name="ev"/> is tied to a "Super" key.
+	/// </summary>
+	public static bool IsSuperKey(this KeyboardEventArgs ev) => SuperKeys.Contains(ev.Key);
 
 	public static void ToModifiersAndKey(this KeyboardEventArgs ev, out KeyModifiers mod, out Keys key)
 	{

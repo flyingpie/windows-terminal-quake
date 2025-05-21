@@ -34,7 +34,6 @@ public class WtqWin32 : WtqHostBase
 
 		services
 			.AddWin32WindowService()
-
 			.AddWinFormsScreenInfoProvider()
 
 			// New cross-platform tray icon.
