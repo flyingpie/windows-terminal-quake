@@ -12,7 +12,6 @@ public static class XmlDocUtils
 	};
 
 	public static string? GetExample(this MemberInfo memberInfo) =>
-		// Guard.Against.Null(memberInfo).GetXmlDocsTag("example", _xmlDocsOptions);
 		Guard.Against.Null(memberInfo)
 			?.GetXmlDocsElement()
 			?.Element("example")
@@ -24,10 +23,6 @@ public static class XmlDocUtils
 			?.Replace("<code lang=\"json\">", "```json")
 			?.Replace("</code>", "```")
 			?? string.Empty;
-
-	public static XElement? GetExampleX(this MemberInfo memberInfo) =>
-		// Guard.Against.Null(memberInfo).GetXmlDocsTag("example", _xmlDocsOptions);
-		memberInfo.GetXmlDocsElement();
 
 	public static string? GetRemarks(this MemberInfo memberInfo) =>
 		Guard.Against.Null(memberInfo).GetXmlDocsTag("remarks", _xmlDocsOptions);

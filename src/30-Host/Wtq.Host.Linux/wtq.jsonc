@@ -5,28 +5,11 @@
 	"Apps": [
 		// Example with Dolphin
 		{
-			"Name": "konsole",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "konsole",
-			"HorizontalScreenCoverage": 80,
-			"AlwaysOnTop": true
-		},
-		{
 			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "dolphin",
 			"HorizontalScreenCoverage": 80,
 			"AlwaysOnTop": true
-			//"EventHooks": {
-			//	"AppToggledOn": {
-			//		"FileName": "ffplay",
-			//		"ArgumentList": [ "-nodisp", "-autoexit", "/home/marco/Downloads/dsdbload.wav" ]
-			//	},
-			//	"AppToggledOff": {
-			//		"FileName": "ffplay",
-			//		"ArgumentList": [ "-nodisp", "-autoexit", "/home/marco/Downloads/dsrlaunc.wav" ]
-			//	}
-			//}
 		}
 	],
 
@@ -37,14 +20,6 @@
 	// "WithCursor" (default), "Primary" or "AtIndex".
 	// Can be overridden per app.
 	"PreferMonitor": "WithCursor",
-
-	"EventHooks": {
-		".*":		{ "FileName": "wtq-sound", "ArgumentList": [] }
-
-//		"AppToggledOn":		{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/on.mp3" ] },
-//		"AppToggledOff":	{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/off.mp3" ] },
-//		"AppSwitchedOn":	{ "FileName": "ffplay", "ArgumentList": [ "-nodisp", "-autoexit", "~/Downloads/switch.mp3" ] }
-	},
 
 	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
 	// Zero based, eg. 0, 1, etc.

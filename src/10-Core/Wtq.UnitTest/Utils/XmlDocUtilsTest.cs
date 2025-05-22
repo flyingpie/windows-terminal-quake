@@ -14,31 +14,6 @@ public class XmlDocUtilsTest
 	{
 		// Act
 		var summary = TestClass.PropertyInfo.GetExample().ReplaceLineEndings();
-		// var x = TestClass.PropertyInfo.GetExampleX().Element("example");
-		// var yy = x.ToString();
-			//.Replace("<example>", "").Replace("</example>", "");
-
-
-		// var m = yy.Split("\n");
-		// var nn = m.Last();
-		// var s = nn.Count(l => l == ' ');
-
-		// var rea = new StringReader(yy);
-
-		// var y2 = yy.Replace("\n    ", "");
-
-		// var n = Regex.Match(yy, "(.*)</summary>");
-
-		// var sb = new StringBuilder();
-		// foreach (var y in x.Element("example").Elements())
-		// {
-		// 	sb.AppendLine(y.ToString());
-		//
-		// 	var xx = 2;
-		// }
-
-
-		var dbg = 2;
 
 		// Assert
 		Assert.AreEqual(

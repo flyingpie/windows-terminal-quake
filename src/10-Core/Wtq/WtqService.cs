@@ -71,7 +71,8 @@ public sealed class WtqService : WtqHostedService
 			_bus.Publish(
 				new WtqAppToggledOffEvent()
 				{
-					AppName = open.Name, IsSwitching = true
+					AppName = open.Name,
+					IsSwitching = true,
 				});
 
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
@@ -79,7 +80,8 @@ public sealed class WtqService : WtqHostedService
 			_bus.Publish(
 				new WtqAppToggledOnEvent()
 				{
-					AppName = app.Name, IsSwitching = true
+					AppName = app.Name,
+					IsSwitching = true,
 				});
 
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
@@ -94,7 +96,7 @@ public sealed class WtqService : WtqHostedService
 			_bus.Publish(
 				new WtqAppToggledOffEvent()
 				{
-					AppName = app.Name
+					AppName = app.Name,
 				});
 
 			// Close app.
@@ -110,7 +112,7 @@ public sealed class WtqService : WtqHostedService
 			_bus.Publish(
 				new WtqAppToggledOnEvent()
 				{
-					AppName = app.Name
+					AppName = app.Name,
 				});
 
 			// Open app.
