@@ -19,7 +19,7 @@ public class WtqWin32 : WtqHostBase
 
 		var c = services.BuildServiceProvider().GetRequiredService<IOptions<WtqOptions>>().Value;
 
-		if (c.FeatureFlags.SharpHook)
+		if (c.FeatureFlags?.SharpHook ?? false)
 		{
 			log.LogInformation("Using SharpHook hotkey service");
 
