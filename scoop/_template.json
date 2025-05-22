@@ -9,7 +9,6 @@
 			"WTQ - Windows Terminal Quake"
 		]
 	],
-	"persist": "wtq.jsonc",
 	"checkver": "github",
 	"architecture": {
 		"64bit": {
