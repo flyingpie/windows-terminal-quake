@@ -6,7 +6,7 @@ namespace Wtq.Services;
 /// <summary>
 /// 
 /// </summary>
-public class WtqUserEventHandler(
+public class WtqEventHookHandler(
 	IOptionsMonitor<WtqOptions> opts,
 	IWtqAppRepo appRepo,
 	IWtqBus bus)
