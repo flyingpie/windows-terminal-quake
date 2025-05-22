@@ -164,6 +164,28 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// <summary>
 	/// Execute a program when some event occurs.
 	/// </summary>
+	/// <example>
+	/// Globally:
+	/// <code>
+	/// {
+	/// 	"EventHooks": [
+	/// 		{ "EventPattern": "", "FileName": "App 1" },
+	/// 		{ "EventPattern": "", "FileName": "App 2" },
+	/// 		// ...
+	/// 	]
+	/// }
+	/// {
+	/// 	"Some example": ""
+	/// }
+	/// </code>
+	///
+	/// For one app only:
+	/// <code>
+	/// {
+	/// 	"Some example": ""
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Events, Name = "Event hooks")]
 	[JsonPropertyOrder(7001)]
 	public ICollection<WtqAppEventHookOptions> EventHooks { get; set; }
