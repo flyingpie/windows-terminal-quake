@@ -82,7 +82,7 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
 	[JsonPropertyOrder(104)]
-	public FeatureFlags FeatureFlags { get; set; } = new();
+	public FeatureFlags? FeatureFlags { get; set; }
 
 	/// <summary>
 	/// Whether to show the GUI when WTQ is started.
