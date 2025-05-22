@@ -61,8 +61,21 @@ public class WtqAppEventHookOptions
 			p.StartInfo.RedirectStandardError = true;
 			p.StartInfo.RedirectStandardOutput = true;
 
-			p.OutputDataReceived += (s, a) => _log.LogInformation(a.Data);
-			p.ErrorDataReceived += (s, a) => _log.LogWarning(a.Data);
+			p.OutputDataReceived += (_, a) =>
+			{
+				if (!string.IsNullOrWhiteSpace(a.Data))
+				{
+					_log.LogDebug(a.Data);
+				}
+			};
+
+			p.ErrorDataReceived += (_, a) =>
+			{
+				if (!string.IsNullOrWhiteSpace(a.Data))
+				{
+					_log.LogWarning(a.Data);
+				}
+			};
 
 			var result = p.Start();
 
@@ -79,5 +92,5 @@ public class WtqAppEventHookOptions
 		}
 	}
 
-	public override string ToString() => $"{FileName} {string.Join(" ", ArgumentList)}";
+	public override string ToString() => FileName;
 }
