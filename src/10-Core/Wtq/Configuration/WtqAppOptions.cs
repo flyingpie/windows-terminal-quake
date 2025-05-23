@@ -146,6 +146,9 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 		set => _windowClass = value?.EmptyOrWhiteSpaceToNull();
 	}
 
+	/// <summary>
+	/// Match windows based on their title (sometimes referred to as "caption").
+	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[ExampleValue("Mozilla Firefox - WhatsApp")]
 	[JsonPropertyOrder(2007)]

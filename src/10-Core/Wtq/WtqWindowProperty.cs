@@ -15,9 +15,9 @@ public class WtqWindowProperty
 
 	public string Name { get; set; }
 
-	public string? Description { get; set; } = "Does a thing";
+	public string? Description { get; set; }
 
-	public string? SettingsPropertyName { get; set; } = "ResourceClass";
+	public string? SettingsPropertyName { get; set; }
 
 	public int? ColumnWidth { get; set; }
 
