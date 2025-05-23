@@ -59,17 +59,8 @@ public class KWinWindowService(
 			: null;
 	}
 
-	public List<WtqWindowProperty> GetWindowProperties() =>
-	[
-		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
-		new("Resource Class",	w => ((KWinWtqWindow)w).ResourceClass),
-		new("Resource Name",	w => ((KWinWtqWindow)w).ResourceName),
-		new("Window Title",		w => w.WindowTitle),
-		new("Frame Geometry",	w => ((KWinWtqWindow)w).FrameGeometry),
-		new("Id",				w => w.Id),
-	];
-
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
+		CancellationToken cancellationToken)
 	{
 		return (await _kwinClient.GetWindowListAsync(cancellationToken).NoCtx())
 			.Select(WtqWindow (c) => new KWinWtqWindow(_kwinClient, c))
