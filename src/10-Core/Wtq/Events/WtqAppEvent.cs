@@ -6,7 +6,7 @@ namespace Wtq.Events;
 public abstract class WtqAppEvent(string appName) : WtqEvent
 {
 	/// <summary>
-	/// Name of the app to toggle.
+	/// Name of the app that relates to this event.
 	/// </summary>
 	public string AppName { get; } = Guard.Against.NullOrWhiteSpace(appName);
 }

@@ -78,6 +78,7 @@ public sealed class WtqService : WtqHostedService
 		// "Toggling app"
 		if (app.IsOpen)
 		{
+			// Toggle OFF
 			_log.LogInformation("Closing previously open app '{App}'", app);
 
 			_bus.Publish(new WtqAppToggledOffEvent(app.Name, false));
@@ -90,6 +91,7 @@ public sealed class WtqService : WtqHostedService
 		}
 		else
 		{
+			// Toggle ON
 			_log.LogInformation("Opening previously closed app '{App}'", app);
 
 			_bus.Publish(new WtqAppToggledOnEvent(app.Name, false));
