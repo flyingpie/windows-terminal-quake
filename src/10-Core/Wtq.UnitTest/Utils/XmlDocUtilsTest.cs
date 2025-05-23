@@ -1,11 +1,60 @@
-using Namotion.Reflection;
-using System.Linq;
+using System.Reflection;
 
 namespace Wtq.Core.UnitTest.Utils;
 
 [TestClass]
 public class XmlDocUtilsTest
 {
+	[TestMethod]
+	public void GetExample()
+	{
+		// Act
+		var summary = TestClass.PropertyInfo.GetExample().ReplaceLineEndings();
+
+		// Assert
+		Assert.AreEqual(
+			"""
+			{
+				"Name": "Value"
+			}
+			""",
+			summary);
+	}
+
+	[TestMethod]
+	public void GetRemarks()
+	{
+		// Act
+		var summary = TestClass.PropertyInfo.GetRemarks().ReplaceLineEndings();
+
+		// Assert
+		Assert.AreEqual(
+			"""
+			The Remarks.
+			Another line.
+			<p>With paragraph.</p>
+			With <strong>strong</strong> words.
+			""",
+			summary);
+	}
+
+	[TestMethod]
+	public void GetSummary()
+	{
+		// Act
+		var summary = TestClass.PropertyInfo.GetSummary().ReplaceLineEndings();
+
+		// Assert
+		Assert.AreEqual(
+			"""
+			The Summary.
+			Another line.
+			<p>With paragraph.</p>
+			With <strong>strong</strong> words.
+			""",
+			summary);
+	}
+
 	private class TestClass
 	{
 		/// <summary>
@@ -28,27 +77,7 @@ public class XmlDocUtilsTest
 		/// </code>
 		/// </example>
 		public string? Property { get; set; }
-	}
 
-	[TestMethod, Ignore]
-	public void METHOD()
-	{
-		var classType = typeof(TestClass);
-		var propType = classType.GetProperty(nameof(TestClass.Property));
-
-		var summary = propType.GetSummary();
-
-		Assert.AreEqual("""
-			The Summary.
-			Another line.
-			<p>With <strong>strong</strong></p> words.
-			""", summary);
-
-		// var doc = XmlDocUtils
-		// 	.GetMemberDocElement(propType)
-		// 	.Descendants("summary")
-		// 	.FirstOrDefault();
-
-		var dbg = 2;
+		public static PropertyInfo PropertyInfo => typeof(TestClass).GetProperty(nameof(Property))!;
 	}
 }

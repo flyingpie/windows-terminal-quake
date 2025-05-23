@@ -5,7 +5,7 @@ namespace Wtq.Utils;
 
 public static class XmlDocUtils
 {
-	private static XmlDocsOptions _xmlDocsOptions = new()
+	private static readonly XmlDocsOptions _xmlDocsOptions = new()
 	{
 		FormattingMode = XmlDocsFormattingMode.Html,
 	};
@@ -19,14 +19,11 @@ public static class XmlDocUtils
 	public static string? GetSummary(this MemberInfo memberInfo) =>
 		Guard.Against.Null(memberInfo).GetXmlDocsTag("summary", _xmlDocsOptions);
 
-	#region Enums
-
 	public static string? GetSummaryEnum(this object val, Type enumType)
 	{
-		var memb = enumType.GetMember(val.ToString()!).First();
+		var member = enumType.GetMember(val.ToString()!).FirstOrDefault()
+			?? throw new InvalidOperationException($"Could not get member info for enum type '{enumType.FullName}'.");
 
-		return GetSummary(memb);
+		return GetSummary(member);
 	}
-
-	#endregion
 }
