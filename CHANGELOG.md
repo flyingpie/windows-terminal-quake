@@ -14,6 +14,7 @@
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
 - Feature: New hotkey registration subsystem through the use of [SharpHook](https://github.com/TolikPylypchuk/SharpHook), which allows binding the "Windows" modifier on Windows.
 - Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
+- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method
 
 ## [v2.0.15] / 2025-03-21
 - Bugfix: HideOnFocusLost broke

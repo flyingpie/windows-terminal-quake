@@ -2,6 +2,9 @@ using Gn = Wtq.WtqConstants.Settings.GroupNames;
 
 namespace Wtq.Configuration;
 
+/// <summary>
+/// A single action to undertake when a specified event is fired.
+/// </summary>
 public class WtqAppEventHookOptions
 {
 	private readonly ILogger _log = Log.For<WtqAppEventHookOptions>();
@@ -41,23 +44,31 @@ public class WtqAppEventHookOptions
 
 		try
 		{
+			// Keep track of how long the action took, for troubleshooting purposes.
 			var sw = Stopwatch.StartNew();
 
+			// Create a process (doesn't actually start it yet).
 			var p = new Process();
+
+			// Add all parameters as environment variables, so they can be used in scripts and such.
 			foreach (var k in parameters)
 			{
+				// Prefix each environment variable to prevent overlap with existing ones.
 				p.StartInfo.Environment[$"WTQ_{k.Key.ToSnakeCase().ToUpperInvariant()}"] = k.Value?.ToString() ?? string.Empty;
 			}
 
-			p.StartInfo.FileName = FileName;
+			// Add filename and arguments, both support environment variables.
+			p.StartInfo.FileName = FileName.ExpandEnvVars();
 			foreach (var a in _argumentList.Where(a => !string.IsNullOrWhiteSpace(a)))
 			{
 				p.StartInfo.ArgumentList.Add(a.ExpandEnvVars());
 			}
 
+			// Execute the process in the background, prevents command prompts from popping up on Windows.
 			p.StartInfo.CreateNoWindow = true;
 			p.StartInfo.UseShellExecute = false;
 
+			// Pipe the output to our log.
 			p.StartInfo.RedirectStandardError = true;
 			p.StartInfo.RedirectStandardOutput = true;
 
@@ -77,11 +88,13 @@ public class WtqAppEventHookOptions
 				}
 			};
 
+			// Now to actually start the process.
 			var result = p.Start();
 
 			p.BeginErrorReadLine();
 			p.BeginOutputReadLine();
 
+			// Shouldn't run for too long.
 			await p.WaitForExitAsync();
 
 			_log.LogInformation("Finished event hook '{EventHook}', result: {Result}, took {Elapsed}", this, result, sw.Elapsed);

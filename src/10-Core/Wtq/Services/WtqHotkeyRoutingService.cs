@@ -4,7 +4,7 @@ namespace Wtq.Services;
 /// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
+public class WtqHotkeyRoutingService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WtqHotkeyRoutingService>();
 
@@ -25,30 +25,25 @@ public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 
 		_opts.OnChange(SendRegisterEvents);
 
-		_bus.OnEvent<WtqHotkeyPressedEvent>(
-			e =>
+		_bus.OnEvent<WtqHotkeyPressedEvent>(e =>
+		{
+			// Look for app that has the specified hotkey configured.
+			// Fall back to most recently toggled app.
+			// Fall back to first configured app after that.
+			var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
+
+			if (app == null)
 			{
-				// Look for app that has the specified hotkey configured.
-				// Fall back to most recently toggled app.
-				// Fall back to first configured app after that.
-				var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
-
-				if (app == null)
-				{
-					_log.LogWarning("No app found for hotkey '{Modifiers}+{Key}'", e.Modifiers, e.Key);
-					return Task.CompletedTask;
-				}
-
-				_bus.Publish(
-					new WtqAppToggledEvent()
-					{
-						AppName = app.Name,
-					});
-
-				_prevApp = app;
-
+				_log.LogWarning("No app found for hotkey '{Modifiers}+{Key}'", e.Modifiers, e.Key);
 				return Task.CompletedTask;
-			});
+			}
+
+			_bus.Publish(new WtqAppToggledEvent(app.Name));
+
+			_prevApp = app;
+
+			return Task.CompletedTask;
+		});
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -76,9 +71,7 @@ public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 				_bus.Publish(
 					new WtqHotkeyDefinedEvent()
 					{
-						AppOptions = app,
-						Key = hk.Key,
-						Modifiers = hk.Modifiers,
+						AppOptions = app, Key = hk.Key, Modifiers = hk.Modifiers,
 					});
 			}
 		}
@@ -88,8 +81,7 @@ public class WtqHotkeyRoutingService : WtqHostedService//, IWtqHotkeyService
 			_bus.Publish(
 				new WtqHotkeyDefinedEvent()
 				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
+					Key = hk.Key, Modifiers = hk.Modifiers,
 				});
 		}
 	}
