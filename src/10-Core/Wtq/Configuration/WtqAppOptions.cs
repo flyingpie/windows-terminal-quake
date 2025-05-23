@@ -12,6 +12,7 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	private ICollection<HotkeyOptions> _hotkeys = [];
 	private string? _fileName;
 	private string? _processName;
+	private string? _windowClass;
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
 
@@ -133,9 +134,24 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 		set => _argumentList = value ?? [];
 	}
 
+	/// <summary>
+	/// (Windows only) Matches windows based on their Win32 Window Class.
+	/// </summary>
+	[Display(GroupName = Gn.Process, Name = "Window class")]
+	[ExampleValue("ApplicationFrameWindow")]
+	[JsonPropertyOrder(2006)]
+	public string? WindowClass
+	{
+		get => _windowClass;
+		set => _windowClass = value?.EmptyOrWhiteSpaceToNull();
+	}
+
+	/// <summary>
+	/// Match windows based on their title (sometimes referred to as "caption").
+	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[ExampleValue("Mozilla Firefox - WhatsApp")]
-	[JsonPropertyOrder(2006)]
+	[JsonPropertyOrder(2007)]
 	public string? WindowTitle
 	{
 		get => _windowTitle;
