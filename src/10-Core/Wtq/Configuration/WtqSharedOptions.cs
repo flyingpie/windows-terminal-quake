@@ -159,6 +159,18 @@ public abstract class WtqSharedOptions : IValidatableObject
 
 	#endregion
 
+	#region 7000 - EventHooks
+
+	/// <summary>
+	/// Execute a program when some event occurs.
+	/// </summary>
+	[Display(GroupName = Gn.Events, Name = "Event hooks")]
+	[JsonPropertyOrder(7001)]
+	public ICollection<WtqAppEventHookOptions> EventHooks { get; set; }
+		= [];
+
+	#endregion
+
 	#region Validation
 
 	/// <summary>
