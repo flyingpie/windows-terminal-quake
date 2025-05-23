@@ -1,0 +1,17 @@
+CreateFile
+EnumWindows
+GetClassName
+GetForegroundWindow
+GetWindowLong
+GetWindowRect
+GetWindowText
+GetWindowThreadProcessId
+MoveWindow
+SendMessage
+SetForegroundWindow
+SetLayeredWindowAttributes
+SetWindowLong
+SetWindowPos
+SetWindowText
+WS_EX_LAYERED
+WM_PAINT
