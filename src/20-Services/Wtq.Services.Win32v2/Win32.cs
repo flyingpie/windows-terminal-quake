@@ -6,37 +6,18 @@ using PI = Windows.Win32.PInvoke;
 
 namespace Wtq.Services.Win32v2;
 
-public interface IWin32
-{
-	uint? GetForegroundProcessId();
-
-	Rectangle GetWindowRect(nint windowHandle);
-
-	string? GetWindowTitle(nint windowHandle);
-
-	void MoveWindow(nint windowHandle, Rectangle rectangle);
-
-	List<Win32Window> GetWindows();
-
-	void SetAlwaysOnTop(nint windowHandle, bool isAlwaysOnTop);
-
-	void SetForegroundWindow(nint windowHandle);
-
-	void SetWindowTitle(nint windowHandle, string title);
-
-	void SetWindowTransparency(nint windowHandle, int transparency);
-}
-
 public class Win32 : IWin32
 {
+#pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 	private const int HWND_NOTOPMOST = -2;
 	private const int HWND_TOPMOST = -1;
 
 	private const int WS_EX_LAYERED = 0x80000;
+#pragma warning restore SA1310
 
-	private ILogger _log = Log.For<Win32>();
+	private readonly ILogger _log = Log.For<Win32>();
 
-	private List<Win32Window> _procs = new();
+	private readonly List<Win32Window> _procs = new();
 
 	/// <summary>
 	/// Returns the id of the process that currently has focus.<br/>
@@ -83,7 +64,6 @@ public class Win32 : IWin32
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
 		var xx = new Span<char>(new char[256]);
-		//var ccx = PI.GetClassName(windowHandle, xx);
 		var ccx = PI.GetWindowText((HWND)windowHandle, xx);
 		var xxz = xx[..ccx].ToString();
 
@@ -130,6 +110,8 @@ public class Win32 : IWin32
 
 	public void SetForegroundWindow(nint windowHandle)
 	{
+		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
 		PI.SetForegroundWindow((HWND)windowHandle);
 		PI.SendMessage((HWND)windowHandle, PI.WM_PAINT, 0, 0);
 	}
@@ -143,11 +125,6 @@ public class Win32 : IWin32
 
 	public void SetWindowTransparency(nint windowHandle, int transparency)
 	{
-		//if (transparency >= 100)
-		//{
-		//	return;
-		//}
-
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
 		// Convert 0-100 alpha to 0-255.
@@ -171,7 +148,7 @@ public class Win32 : IWin32
 		var style = PI.GetWindowLong(windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
 		uint processId = 0;
-		uint threadId = PI.GetWindowThreadProcessId(windowHandle, &processId);
+		var threadId = PI.GetWindowThreadProcessId(windowHandle, &processId);
 
 		if (threadId == 0 || processId == 0)
 		{
@@ -185,10 +162,8 @@ public class Win32 : IWin32
 			return true;
 		}
 
-		var area = (rt.right - rt.left) * (rt.bottom - rt.top);
-
 		var ownerProcess = Process.GetProcessById((int)processId);
-		bool isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
+		var isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
 
 		var xx = new Span<char>(new char[256]);
 		var ccx = PI.GetClassName(windowHandle, xx);

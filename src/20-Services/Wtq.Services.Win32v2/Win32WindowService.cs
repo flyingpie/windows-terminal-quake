@@ -76,20 +76,6 @@ public sealed class Win32WindowService(IWin32 win32) :
 		return null;
 	}
 
-	public List<WtqWindowProperty> GetWindowProperties() =>
-	[
-		new("Process Name",			w => ((Win32WtqWindow)w).ProcessName),
-		new("Window Title",			w => w.WindowTitle),
-		new("Window Class",			w => ((Win32WtqWindow)w).WindowClass),
-
-		new("Is Main Window",		w => ((Win32WtqWindow)w).IsMainWindow),
-		new("Window Rectangle",		w => ((Win32WtqWindow)w).Rect),
-
-		new("Process Id",			w => ((Win32WtqWindow)w).ProcessId),
-		new("Thread Id",			w => ((Win32WtqWindow)w).ThreadId),
-		new("Window Handle",		w => ((Win32WtqWindow)w).WindowHandle),
-	];
-
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{

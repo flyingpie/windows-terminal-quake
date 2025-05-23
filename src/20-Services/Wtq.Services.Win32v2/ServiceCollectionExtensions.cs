@@ -4,7 +4,7 @@ namespace Wtq.Services.Win32v2;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddWin32WindowService(this IServiceCollection services)
+	public static IServiceCollection AddWin32V2WindowService(this IServiceCollection services)
 	{
 		return Guard.Against.Null(services)
 			.AddSingleton<IWin32, Win32>()
