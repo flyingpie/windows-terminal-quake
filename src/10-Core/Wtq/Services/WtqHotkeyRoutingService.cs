@@ -71,7 +71,9 @@ public class WtqHotkeyRoutingService : WtqHostedService
 				_bus.Publish(
 					new WtqHotkeyDefinedEvent()
 					{
-						AppOptions = app, Key = hk.Key, Modifiers = hk.Modifiers,
+						AppOptions = app,
+						Key = hk.Key,
+						Modifiers = hk.Modifiers,
 					});
 			}
 		}
@@ -81,7 +83,8 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			_bus.Publish(
 				new WtqHotkeyDefinedEvent()
 				{
-					Key = hk.Key, Modifiers = hk.Modifiers,
+					Key = hk.Key,
+					Modifiers = hk.Modifiers,
 				});
 		}
 	}
