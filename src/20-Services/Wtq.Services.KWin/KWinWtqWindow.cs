@@ -15,17 +15,39 @@ public class KWinWtqWindow(
 
 	public override string Id => _window.InternalId ?? "<unknown>";
 
+	#region Generic Stuff
+
+	public string? FileName =>
+		_window?.DesktopFileName;
+
+	#endregion
+
+	public string? DesktopFileName =>
+		_window?.DesktopFileName;
+
+	public Rectangle? FrameGeometry =>
+		_window?.FrameGeometry?.ToRect();
+
 	/// <summary>
 	/// TODO: Add proper window activity checking.
 	/// - Does the window still exist?
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid => _isValid;
+	public override bool IsValid =>
+		_isValid;
 
-	public override string? Name => $"{_window?.ResourceName} (resource class: {_window?.ResourceClass})";
+	public override string? Name =>
+		_window?.ResourceName;
 
-	public override string? WindowTitle => _window?.Caption;
+	public string? ResourceClass =>
+		_window?.ResourceClass;
+
+	public string? ResourceName =>
+		_window?.ResourceName;
+
+	public override string? WindowTitle =>
+		_window?.Caption;
 
 	public override async Task BringToForegroundAsync()
 	{
