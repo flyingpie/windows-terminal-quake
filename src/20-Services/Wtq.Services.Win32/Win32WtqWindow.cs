@@ -48,7 +48,7 @@ public sealed class Win32WtqWindow(
 		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
 	}
 
-	public override async Task MoveToAsync(Point location)
+	public override async Task SetLocationAsync(Point location)
 	{
 		var r = await GetWindowRectAsync().NoCtx();
 
@@ -61,7 +61,7 @@ public sealed class Win32WtqWindow(
 			bRepaint: true);
 	}
 
-	public override async Task ResizeAsync(Size size)
+	public override async Task SetSizeAsync(Size size)
 	{
 		var r = await GetWindowRectAsync().NoCtx();
 

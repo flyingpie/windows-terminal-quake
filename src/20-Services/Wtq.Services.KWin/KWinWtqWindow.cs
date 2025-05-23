@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
