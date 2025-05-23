@@ -1,6 +1,5 @@
 using Namotion.Reflection;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace Wtq.Utils;
 
@@ -12,17 +11,7 @@ public static class XmlDocUtils
 	};
 
 	public static string? GetExample(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo)
-			?.GetXmlDocsElement()
-			?.Element("example")
-			?.ToString()
-			?.Replace("             ", "")
-			?.Replace("<example>", "")
-			?.Replace("</example>", "")
-			?.Replace("<code>", "```")
-			?.Replace("<code lang=\"json\">", "```json")
-			?.Replace("</code>", "```")
-			?? string.Empty;
+		Guard.Against.Null(memberInfo).GetXmlDocsTag("example", _xmlDocsOptions);
 
 	public static string? GetRemarks(this MemberInfo memberInfo) =>
 		Guard.Against.Null(memberInfo).GetXmlDocsTag("remarks", _xmlDocsOptions);

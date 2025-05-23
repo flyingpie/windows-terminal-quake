@@ -16,8 +16,15 @@ WtqSettings:
         ExampleValue: 
         EnumValues: 
         HasExample: true
-        Example: "\n            ```\n            {\n            	\"Apps\": [\n            		{ \"Name\": \"App 1\" },\n            		{ \"Name\": \"App 2\" },\n            		// ...\n            	]\n            }\n            ```\n            "
-        Remarks: See the GUI and the <a href="#app-examples">docs</a> for some examples.
+        Example: >-
+          {
+          	"Apps": [
+          		{ "Name": "App 1" },
+          		{ "Name": "App 2" },
+          		// ...
+          	]
+          }
+        Remarks: See the GUI and the [docs](#app-examples) for some examples.
       - DisplayName: Hotkeys
         SettingName: Hotkeys
         Description: >-
@@ -32,7 +39,12 @@ WtqSettings:
         ExampleValue: 
         EnumValues: 
         HasExample: true
-        Example: "\n            ```\n            {\n            	\"Hotkeys\": [\n            		{ \"Modifiers\": \"Control\", \"Key\": \"Q\" }\n            	]\n            }\n            ```\n            "
+        Example: >-
+          {
+          	"Hotkeys": [
+          		{ "Modifiers": "Control", "Key": "Q" }
+          	]
+          }
         Remarks: ""
       - DisplayName: Show UI on start
         SettingName: ShowUiOnStart
@@ -86,7 +98,11 @@ WtqSettings:
         ExampleValue: 
         EnumValues: 
         HasExample: true
-        Example: "\n            ```\n            {\n            	\"Name\": \"Terminal\",\n            	// ...\n            }\n            ```\n            "
+        Example: >-
+          {
+          	"Name": "Terminal",
+          	// ...
+          }
         Remarks: ""
       - DisplayName: Hotkeys
         SettingName: Hotkeys
@@ -106,9 +122,9 @@ WtqSettings:
       - DisplayName: Filename
         SettingName: FileName
         Description: >-
-          The <strong>filename</strong> to use when starting a new process for the app.
+          The **filename** to use when starting a new process for the app.
 
-          E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
+          E.g. **notepad**, **dolphin**, etc.
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -122,11 +138,11 @@ WtqSettings:
       - DisplayName: Process name
         SettingName: ProcessName
         Description: >-
-          Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
+          Apps sometimes have **process names** different from their **filenames**.
 
           This field can be used to look for the process name in such cases. Windows Terminal is an
 
-          example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
+          example, with filename **wt**, and process name **WindowsTerminal**.
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -135,14 +151,21 @@ WtqSettings:
         ExampleValue: 
         EnumValues: 
         HasExample: true
-        Example: "\n            ```\n            {\n            	// Using with Windows Terminal requires both \"Filename\" and \"ProcessName\".\n            	\"Apps\": {\n            		\"Filename\": \"wt\",\n            		\"ProcessName\": \"WindowsTerminal\"\n            	}\n            }\n            ```\n            "
+        Example: >-
+          {
+          	// Using with Windows Terminal requires both "Filename" and "ProcessName".
+          	"Apps": {
+          		"Filename": "wt",
+          		"ProcessName": "WindowsTerminal"
+          	}
+          }
         Remarks: ""
       - DisplayName: Arguments
         SettingName: Arguments
         Description: >-
           Command-line arguments that should be passed to the app when it's started.
 
-          Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
+          Note that this only applies when using an **AttachMode** that starts the app.
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -158,7 +181,7 @@ WtqSettings:
         Description: >-
           Command-line arguments that should be passed to the app when it's started.
 
-          Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
+          Note that this only applies when using an **AttachMode** that starts the app.
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -167,7 +190,18 @@ WtqSettings:
         ExampleValue: 
         EnumValues: 
         HasExample: true
-        Example: "\n            ```\n            {\n            	\"Apps\": [\n            		{\n            			\"ArgumentList\": [\n            				\"--allow-screencapture\",\n            				\"--debug-info\",\n            			],\n            			// ...\n            		}\n            	]\n            }\n            ```\n            "
+        Example: >-
+          {
+          	"Apps": [
+          		{
+          			"ArgumentList": [
+          				"--allow-screencapture",
+          				"--debug-info",
+          			],
+          			// ...
+          		}
+          	]
+          }
         Remarks: ""
       - DisplayName: Window title
         SettingName: WindowTitle
@@ -187,13 +221,14 @@ WtqSettings:
       - DisplayName: Window title override
         SettingName: WindowTitleOverride
         Description: >-
-          <p>Attempt to set the window title to a specific value.</p>
+          Attempt to set the window title to a specific value.
 
-          <p>Useful for cases where multiple programs control window placement (such as when
+
+          Useful for cases where multiple programs control window placement (such as when
 
           using WTQ together with a window manager) and the window title can be used to
 
-          opt-out in the other program.</p>
+          opt-out in the other program.
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -224,13 +259,13 @@ WtqSettings:
         EnumValues:
         - Value: Find
           DisplayName: Find
-          Description: Only look for <strong>existing</strong> app instances (but don't create one).
+          Description: Only look for existing app instances (but don't create one).
         - Value: FindOrStart
           DisplayName: Find or start
-          Description: Look for an <strong>existing</strong> app instance, <strong>create one</strong> if one does not exist yet.
+          Description: Look for an existing app instance, create one if one does not exist yet.
         - Value: Manual
           DisplayName: Manual
-          Description: Attach to <strong>whatever app is in the foreground</strong> when pressing an assigned hotkey.
+          Description: Attach to whatever app is in the foreground when pressing an assigned hotkey.
         HasExample: false
         Example: ""
         Remarks: ""
@@ -280,13 +315,13 @@ WtqSettings:
         EnumValues:
         - Value: AlwaysHidden
           DisplayName: Always hidden
-          Description: <strong>Never</strong> show the taskbar icon.
+          Description: '**Never** show the taskbar icon.'
         - Value: AlwaysVisible
           DisplayName: Always visible
-          Description: <strong>Always</strong> show the taskbar icon (note that this can look a bit weird when the app is toggled off).
+          Description: '**Always** show the taskbar icon (note that this can look a bit weird when the app is toggled off).'
         - Value: WhenAppVisible
           DisplayName: When the app is visible
-          Description: Only show the taskbar icon when the app is toggled <strong>on</strong>.
+          Description: Only show the taskbar icon when the app is toggled **on**.
         HasExample: false
         Example: ""
         Remarks: ""
@@ -404,17 +439,17 @@ WtqSettings:
           Description: The monitor where the mouse cursor is currently at.
         - Value: AtIndex
           DisplayName: At index
-          Description: The monitor at the index as specified by <strong>MonitorIndex</strong> (0-based).
+          Description: The monitor at the index as specified by **MonitorIndex** (0-based).
         - Value: Primary
           DisplayName: Primary
-          Description: The monitor considered <strong>primary</strong> by the OS.
+          Description: The monitor considered **primary** by the OS.
         HasExample: false
         Example: ""
         Remarks: ""
       - DisplayName: Monitor index
         SettingName: MonitorIndex
         Description: >-
-          If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.
+          If **PreferMonitor** is set to **AtIndex**, this setting determines what monitor to choose.
 
           Zero based, e.g. 0, 1, etc.
         IsGlobal: true
@@ -515,19 +550,4 @@ WtqSettings:
           Description: ""
         HasExample: false
         Example: ""
-        Remarks: ""
-    - Name: Events
-      Settings:
-      - DisplayName: Event hooks
-        SettingName: EventHooks
-        Description: Execute a program when some event occurs.
-        IsGlobal: true
-        IsApp: true
-        IsEnum: false
-        IsRequired: true
-        DefaultValue: 
-        ExampleValue: 
-        EnumValues: 
-        HasExample: true
-        Example: "\nGlobally:\n```\n{\n	\"Some example\": \"\"\n}\n```\n            \nFor one app only:\n```\n{\n	\"Some example\": \"\"\n}\n```\n"
         Remarks: ""

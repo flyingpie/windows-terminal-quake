@@ -1,8 +1,4 @@
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Wtq.Core.UnitTest.Utils;
 
@@ -74,14 +70,6 @@ public class XmlDocUtilsTest
 		/// With <strong>strong</strong> words.
 		/// </remarks>
 		/// <example>
-		/// Globally:
-		/// <code lang="json">
-		/// {
-		/// 	"Name": "Value"
-		/// }
-		/// </code>
-		///
-		/// For one app only:
 		/// <code>
 		/// {
 		/// 	"Name": "Value"
