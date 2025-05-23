@@ -9,7 +9,6 @@ namespace Wtq;
 public sealed class WtqService : WtqHostedService
 {
 	private readonly ILogger<WtqService> _log;
-	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
@@ -18,12 +17,10 @@ public sealed class WtqService : WtqHostedService
 
 	public WtqService(
 		ILogger<WtqService> log,
-		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
 	{
 		_log = Guard.Against.Null(log);
-		_opts = Guard.Against.Null(opts);
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
 
@@ -67,7 +64,13 @@ public sealed class WtqService : WtqHostedService
 		if (open != null && open != app)
 		{
 			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+
+			_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
+
 			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+
+			_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
+
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
 			return;
 		}
@@ -75,7 +78,10 @@ public sealed class WtqService : WtqHostedService
 		// "Toggling app"
 		if (app.IsOpen)
 		{
+			// Toggle OFF
 			_log.LogInformation("Closing previously open app '{App}'", app);
+
+			_bus.Publish(new WtqAppToggledOffEvent(app.Name, false));
 
 			// Close app.
 			await app.CloseAsync().NoCtx();
@@ -85,7 +91,10 @@ public sealed class WtqService : WtqHostedService
 		}
 		else
 		{
+			// Toggle ON
 			_log.LogInformation("Opening previously closed app '{App}'", app);
+
+			_bus.Publish(new WtqAppToggledOnEvent(app.Name, false));
 
 			// Open app.
 			await app.OpenAsync().NoCtx();

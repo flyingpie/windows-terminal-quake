@@ -20,6 +20,7 @@ public static class WtqConstants
 			public const string Animation = nameof(Animation);
 			public const string App = nameof(App);
 			public const string Behavior = nameof(Behavior);
+			public const string Events = nameof(Events);
 			public const string General = nameof(General);
 			public const string Monitor = nameof(Monitor);
 			public const string Position = nameof(Position);
