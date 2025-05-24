@@ -77,6 +77,8 @@ public class Win32 : IWin32
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
+		_log.LogTrace("{MethodName}({WindowHandle}, {Rectangle})", nameof(MoveWindow), windowHandle, rectangle);
+
 		if (!PI.MoveWindow((HWND)windowHandle, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, true))
 		{
 			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.");

@@ -93,16 +93,30 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		return _apps.FirstOrDefault();
 	}
 
-	private WtqApp Create(WtqAppOptions app)
+	private WtqApp Create(WtqAppOptions opts)
 	{
-		Guard.Against.Null(app);
+		Guard.Against.Null(opts);
 
-		return new WtqApp(
-			_toggleService,
-			_screenInfoProvider,
-			_windowResolver,
-			() => _opts.CurrentValue.GetAppOptionsByNameRequired(app.Name),
-			app.Name);
+		lock (_apps)
+		{
+			var existingApp = GetByName(opts.Name);
+
+			if (existingApp != null)
+			{
+				throw new InvalidOperationException($"Attempted to create an app instance for app with name '{opts.Name}', which is already tracked.");
+			}
+
+			var app = new WtqApp(
+				_toggleService,
+				_screenInfoProvider,
+				_windowResolver,
+				() => _opts.CurrentValue.GetAppOptionsByNameRequired(opts.Name),
+				opts.Name);
+
+			_apps.Add(app);
+
+			return app;
+		}
 	}
 
 	private async Task UpdateAppsAsync(bool allowStartNew)
@@ -129,8 +143,6 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 				// Create & update app handle.
 				app = Create(opt);
-
-				_apps.Add(app);
 			}
 
 			// Update the app's local state, which may include starting a new process.

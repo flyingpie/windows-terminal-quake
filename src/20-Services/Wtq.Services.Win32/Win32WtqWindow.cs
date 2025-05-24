@@ -52,6 +52,8 @@ public sealed class Win32WtqWindow(
 	{
 		var r = await GetWindowRectAsync().NoCtx();
 
+		_log.LogTrace("{MethodName}({Location}) ({Rectangle})", nameof(SetLocationAsync), location, r);
+
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
 			x: location.X,
@@ -64,6 +66,8 @@ public sealed class Win32WtqWindow(
 	public override async Task SetSizeAsync(Size size)
 	{
 		var r = await GetWindowRectAsync().NoCtx();
+
+		_log.LogTrace("{MethodName}({Size}) ({Rectangle})", nameof(SetSizeAsync), size, r);
 
 		User32.MoveWindow(
 			hWnd: _process.MainWindowHandle,
