@@ -1,57 +1,64 @@
 {
-	// Docs: https://wtq.flyingpie.nl
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-
+		// WezTerm
 		{
-			"Name": "wt",
-			"ProcessName": "WindowsTerminal",
+			"Name": "WezTerm",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "wt"
+			"FileName": "wezterm-gui",
+			"HideOnFocusLost": "Never",
+			"Opacity": 99,
+			"OffScreenLocations": ["Above"]
 		},
 
+		// Q-Dir
 		{
-			"Name": "explorer",
+			"Name": "QDir",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName": "explorer",
-			"WindowClass": "CabinetWClass"
+			"FileName": "Q-Dir_x64",
+			//"HideOnFocusLost": "Never",
+			"OffScreenLocations": ["Left"]
 		},
 
+		// ProcessHacker
 		{
-			"Name": "WhatsApp",
+			"Name": "ProcessExplorer",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
-			"ProcessName": "ApplicationFrameHost",
-			"WindowClass": "ApplicationFrameWindow",
-			"WindowTitle": "WhatsApp"
-		}
+			"FileName": "procexp64.exe",
+			//"HideOnFocusLost": "Never",
+			"OffScreenLocations": ["Below"]
+		},
 
-		// Example with Windows Terminal
-		//{
-		//	"Name": "Terminal",
-		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-		//	"FileName": "wt",
-		//	"ProcessName": "WindowsTerminal"
-		//}
+		// KeePassXC
+		{
+			"Name": "KeePassXC",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D4" }],
+			"FileName": "KeePassXC",
+			//"HideOnFocusLost": "Never",
+			"OffScreenLocations": ["Right"]
+		},
 	],
 
-	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
+	"AnimationDurationMs": 150,
+	"AnimationTargetFps": 60,
+
+	// Hot keys that toggle the most recent app (or the first one if none has been active yet).
+//	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".
 	// Can be overridden per app.
 	"PreferMonitor": "WithCursor",
 
-	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
-	// Zero based, eg. 0, 1, etc.
-	// Defaults to "0".
-	// Can be overridden per app.
-	"MonitorIndex": 0,
-
 	// Horizontal screen coverage, as a percentage (defaults to 95).
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95
+	"VerticalScreenCoverage": 95,
+
+	"FeatureFlags": {
+		"SharpHook": true,
+		"NewWindowCapture": true
+	}
 }

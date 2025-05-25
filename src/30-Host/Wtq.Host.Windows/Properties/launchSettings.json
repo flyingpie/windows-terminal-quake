@@ -1,10 +1,1 @@
-{
-	"profiles": {
-		"Wtq.Host.Windows": {
-			"commandName": "Project",
-			"environmentVariables": {
-				"WTQ_LOG_LEVEL_": "VERBOSE"
-			}
-		}
-	}
-}
+../../Wtq.Host.Windows.Cli/Properties/launchSettings.json

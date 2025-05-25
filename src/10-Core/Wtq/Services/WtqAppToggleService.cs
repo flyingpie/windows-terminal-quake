@@ -12,7 +12,7 @@ public class WtqAppToggleService(
 	/// When moving app windows onto- and off the screen, we may not find a free space (i.e., the would-be locations are occupied by other screens).<br/>
 	/// In these cases, we fall back to a location off in the distance, and instantly move the app window there.
 	/// </summary>
-	private static readonly Point BehindScreenLocation = new(0, -100_000);
+	private static readonly Point BehindScreenLocation = new(0, -30_000); // Values under 32K can cause issues in Windows.
 
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);

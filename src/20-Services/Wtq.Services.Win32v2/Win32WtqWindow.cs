@@ -2,15 +2,20 @@ using Wtq.Services.Win32v2.Native;
 
 namespace Wtq.Services.Win32v2;
 
-public sealed class Win32WtqWindow(
-	IWin32 win32,
-	Win32Window window)
-	: WtqWindow
+public sealed class Win32WtqWindow : WtqWindow
 {
-	private static readonly ILogger _log = Log.For<Win32WtqWindow>();
+	private readonly ILogger _log;
 
-	private readonly IWin32 _win32 = Guard.Against.Null(win32);
-	private readonly Win32Window _window = Guard.Against.Null(window);
+	private readonly IWin32 _win32;
+	private readonly Win32Window _window;
+
+	public Win32WtqWindow(IWin32 win32, Win32Window window)
+	{
+		_win32 = Guard.Against.Null(win32);
+		_window = Guard.Against.Null(window);
+
+		_log = Log.For($"{nameof(Win32WtqWindow)}|{window}");
+	}
 
 	public override string Id =>
 		_window.WindowHandle.ToString(CultureInfo.InvariantCulture);
@@ -80,7 +85,7 @@ public sealed class Win32WtqWindow(
 
 	public override Task BringToForegroundAsync()
 	{
-		_log.LogInformation("BRING TO FOREGROUND");
+		_log.LogDebug("{MethodName}", nameof(BringToForegroundAsync));
 
 		_win32.SetForegroundWindow(_window.WindowHandle);
 
@@ -122,6 +127,11 @@ public sealed class Win32WtqWindow(
 
 	public override async Task SetSizeAsync(Size size)
 	{
+		if (size.Width < 200 || size.Height < 200)
+		{
+			throw new InvalidOperationException($"Attempted to set window size to something under 200x200, which can mess up windows.");
+		}
+
 		// Get current window rect.
 		var rect = await GetWindowRectAsync().NoCtx();
 
@@ -137,7 +147,7 @@ public sealed class Win32WtqWindow(
 		// Get handle to the main window
 		var handle = _window.WindowHandle;
 
-		_log.LogInformation("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
+		_log.LogDebug("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
 
 		Shell32.SetTaskbarIconVisible(handle, isVisible);
 

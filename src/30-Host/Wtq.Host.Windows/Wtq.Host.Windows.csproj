@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- wtq.jsonc -->
 		<Content Include="..\Wtq.Host.Windows.Cli\wtq.jsonc">
 			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
