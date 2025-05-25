@@ -80,7 +80,16 @@ public sealed class Win32WtqWindow(
 
 	public override Task BringToForegroundAsync()
 	{
+		_log.LogInformation("BRING TO FOREGROUND");
+
 		_win32.SetForegroundWindow(_window.WindowHandle);
+
+		var fgWndHnd = _win32.GetForegroundWindowHandle();
+
+		if (_window.WindowHandle != fgWndHnd)
+		{
+			_log.LogWarning("Attempted to set foreground window to '{Expected}', but was '{Actual}'", _window.WindowHandle.ToString("X"), fgWndHnd.Value.ToString("X"));
+		}
 
 		return Task.CompletedTask;
 	}

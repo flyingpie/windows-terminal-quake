@@ -4,6 +4,8 @@ public interface IWin32
 {
 	uint? GetForegroundProcessId();
 
+	nint? GetForegroundWindowHandle();
+
 	Rectangle GetWindowRect(nint windowHandle);
 
 	string? GetWindowTitle(nint windowHandle);
