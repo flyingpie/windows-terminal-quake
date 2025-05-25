@@ -19,4 +19,6 @@ public class Win32Window(Process process)
 	public string? WindowClass { get; set; }
 
 	public nint WindowHandle { get; set; }
+
+	public override string ToString() => $"ProcessId:{Process.Id} ProcessName:{Process.ProcessName} MainWindow:{Process.MainWindowHandle:X} WindowHandle:{WindowHandle:X}";
 }

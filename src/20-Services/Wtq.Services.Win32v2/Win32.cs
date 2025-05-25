@@ -114,6 +114,8 @@ public class Win32 : IWin32
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
+		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetForegroundWindow), windowHandle);
+
 		PI.SetForegroundWindow((HWND)windowHandle);
 		PI.SendMessage((HWND)windowHandle, PI.WM_PAINT, 0, 0);
 	}

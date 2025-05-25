@@ -140,7 +140,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 				return;
 			}
 
-			_log.LogInformation("Looking up list of processes");
+			_log.LogDebug("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 
 			_processes = _win32

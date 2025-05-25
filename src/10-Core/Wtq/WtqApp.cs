@@ -171,12 +171,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		_log.LogInformation("Opening app '{App}'", this);
+
 		if (IsOpen)
 		{
+			_log.LogWarning("App '{App}' is already open, skipping further actions", this);
 			return false;
 		}
-
-		_log.LogInformation("Opening app '{App}'", this);
 
 		IsOpen = true;
 
@@ -186,6 +187,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// If we are not attached to any window, stop the "Open" action, as we don't have anything to open.
 		if (!IsAttached)
 		{
+			_log.LogWarning("App '{App}' is not attached, skipping further action", this);
 			return false;
 		}
 
