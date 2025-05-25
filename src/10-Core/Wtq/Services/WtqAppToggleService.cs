@@ -10,9 +10,11 @@ public class WtqAppToggleService(
 {
 	/// <summary>
 	/// When moving app windows onto- and off the screen, we may not find a free space (i.e., the would-be locations are occupied by other screens).<br/>
-	/// In these cases, we fall back to a location off in the distance, and instantly move the app window there.
+	/// In these cases, we fall back to a location off in the distance, and instantly move the app window there.<br/>
+	/// <br/>
+	/// Values under 32K can cause issues in Windows, as they seem to be capped to -32k (causes location restore routine to start bouncing).
 	/// </summary>
-	private static readonly Point BehindScreenLocation = new(0, -30_000); // Values under 32K can cause issues in Windows.
+	private static readonly Point BehindScreenLocation = new(0, -30_000);
 
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
