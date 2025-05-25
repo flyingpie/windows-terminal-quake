@@ -9,7 +9,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
 
-	private readonly List<WtqApp> _apps = [];
+	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(StringComparer.OrdinalIgnoreCase);
 	private readonly Worker _loop;
 
 	public WtqAppRepo(
@@ -55,14 +55,14 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		foreach (var app in _apps)
 		{
-			await app.DisposeAsync().NoCtx();
+			await app.Value.DisposeAsync().NoCtx();
 		}
 	}
 
 	/// <inheritdoc/>
 	public IEnumerable<WtqApp> GetAll()
 	{
-		return _apps;
+		return _apps.Values;
 	}
 
 	/// <inheritdoc/>
@@ -70,7 +70,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	{
 		Guard.Against.NullOrWhiteSpace(name);
 
-		return _apps.Find(a => a.Name == name);
+		return _apps.Values.FirstOrDefault(a => a.Name == name);
 	}
 
 	/// <inheritdoc/>
@@ -78,72 +78,55 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	{
 		Guard.Against.Null(window);
 
-		return _apps.FirstOrDefault(a => a.Window == window);
+		return _apps.Values.FirstOrDefault(a => a.Window == window);
 	}
 
 	/// <inheritdoc/>
 	public WtqApp? GetOpen()
 	{
-		return _apps.FirstOrDefault(a => a.IsOpen);
+		return _apps.Values.FirstOrDefault(a => a.IsOpen);
 	}
 
 	/// <inheritdoc/>
 	public WtqApp? GetPrimary()
 	{
-		return _apps.FirstOrDefault();
+		return _apps.Values.FirstOrDefault();
 	}
 
-	private WtqApp Create(WtqAppOptions opts)
+	/// <summary>
+	/// Returns the <see cref="WtqApp"/> that is associated with the specified <paramref name="opts"/>, creating one if one doesn't exist yet.
+	/// </summary>
+	private WtqApp GetOrCreate(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
-		lock (_apps)
-		{
-			var existingApp = GetByName(opts.Name);
-
-			if (existingApp != null)
+		return _apps.GetOrAdd(
+			opts.Name,
+			appName =>
 			{
-				throw new InvalidOperationException($"Attempted to create an app instance for app with name '{opts.Name}', which is already tracked.");
-			}
+				_log.LogDebug("Creating app handle for '{AppName}'", appName);
 
-			var app = new WtqApp(
-				_toggleService,
-				_screenInfoProvider,
-				_windowResolver,
-				() => _opts.CurrentValue.GetAppOptionsByNameRequired(opts.Name),
-				opts.Name);
-
-			_apps.Add(app);
-
-			return app;
-		}
+				return new WtqApp(
+					_toggleService,
+					_screenInfoProvider,
+					_windowResolver,
+					() => _opts.CurrentValue.GetAppOptionsByNameRequired(appName),
+					appName);
+			});
 	}
 
+	/// <summary>
+	/// Updates the list of tracked apps (<see cref="WtqApp"/>), to match the list of available option objects (<see cref="WtqAppOptions"/>).
+	/// </summary>
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
-		_log.LogDebug("Updating apps");
+		_log.LogDebug("Updating apps (allow start new: {AllowStartNow})", allowStartNew);
 
 		// Add app handles for options that don't have one yet.
 		foreach (var opt in _opts.CurrentValue.Apps)
 		{
-			// Only update apps when their configuration is valid.
-			// Otherwise, we could be missing settings that are required later on.
-			if (!opt.IsValid)
-			{
-				_log.LogWarning("App '{App}' has validation errors, skipping during state updates", opt);
-				continue;
-			}
-
 			// Fetch WtqApp object by name as defined in settings.
-			var app = GetByName(opt.Name);
-			if (app == null)
-			{
-				// Create one now if we don't have one yet.
-				_log.LogInformation("Missing app handle for {Options}, creating one now", opt);
-
-				// Create & update app handle.
-				app = Create(opt);
-			}
+			var app = GetOrCreate(opt);
 
 			// Update the app's local state, which may include starting a new process.
 			await app.UpdateLocalAppStateAsync(allowStartNew).NoCtx();
@@ -152,7 +135,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		// Remove app handles for dropped options.
 		foreach (var app in _apps.ToList())
 		{
-			var opt = _opts.CurrentValue.GetAppOptionsByName(app.Name);
+			var opt = _opts.CurrentValue.GetAppOptionsByName(app.Value.Name);
 			if (opt != null)
 			{
 				continue;
@@ -160,9 +143,12 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 			_log.LogInformation("Dropped options {Options}, removing app handle {App}", opt, app);
 
-			await app.DisposeAsync().NoCtx();
+			await app.Value.DisposeAsync().NoCtx();
 
-			_apps.Remove(app);
+			if (!_apps.TryRemove(app.Key, out _))
+			{
+				_log.LogWarning("Could not remove app with name '{AppName}' from repo, maybe it was already removed and this is some race-condition sorta thing?", app.Key);
+			}
 		}
 	}
 }
