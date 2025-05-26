@@ -100,7 +100,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// TODO: Add ability to close attached processes when app closes.
 		if (!IsAttached)
 		{
-			_log.LogInformation("App is not attached, not doing anything for cleanup");
+			_log.LogDebug("App is not attached, not doing anything for cleanup");
 			return;
 		}
 
@@ -121,7 +121,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task<Rectangle> GetScreenRectAsync()
 	{
-		_log.LogTrace("Looking for current screen rect for app {App}", this);
+		_log.LogDebug("Looking for current screen rect for app {App}", this);
 
 		// Get all screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
@@ -135,11 +135,11 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			if (screenRect.Contains(windowRect.Location))
 			{
-				_log.LogTrace("Got screen {Screen}, for app {App}", screenRect, this);
+				_log.LogDebug("Got screen {Screen}, for app {App}", screenRect, this);
 				return screenRect;
 			}
 
-			_log.LogTrace("Screen {Screen} does NOT contain app {App}", screenRect, this);
+			_log.LogDebug("Screen {Screen} does NOT contain app {App}", screenRect, this);
 		}
 
 		_log.LogWarning("Could not find screen for app {App} ({Rectangle}), returning primary screen", this, windowRect);
@@ -171,12 +171,13 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		_log.LogInformation("Opening app '{App}'", this);
+
 		if (IsOpen)
 		{
+			_log.LogWarning("App '{App}' is already open, skipping further actions", this);
 			return false;
 		}
-
-		_log.LogInformation("Opening app '{App}'", this);
 
 		IsOpen = true;
 
@@ -186,6 +187,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// If we are not attached to any window, stop the "Open" action, as we don't have anything to open.
 		if (!IsAttached)
 		{
+			_log.LogWarning("App '{App}' is not attached, skipping further action", this);
 			return false;
 		}
 
@@ -226,12 +228,12 @@ public sealed class WtqApp : IAsyncDisposable
 				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
 			}
 
-			_log.LogTrace("Window handle '{Window}' for app '{App}' is still active, skipping update", Window, this);
+			_log.LogDebug("Window handle '{Window}' for app '{App}' is still active, skipping update", Window, this);
 			return;
 		}
 
 		// If we don't have a window handle, see if we can get one.
-		_log.LogInformation("No window attached to app {App}, asking window resolver for one now", this);
+		_log.LogDebug("No window attached to app {App}, asking window resolver for one now", this);
 
 		// Ask the window resolver for a new handle.
 		var window = await _windowResolver.GetWindowHandleAsync(Options, allowStartNew).NoCtx();
@@ -239,7 +241,7 @@ public sealed class WtqApp : IAsyncDisposable
 		// Log a warning if we don't have a window handle at this point.
 		if (window == null)
 		{
-			_log.LogWarning("No window found for app '{App}'", Options);
+			_log.LogDebug("No window found for app '{App}'", Options);
 			return;
 		}
 

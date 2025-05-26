@@ -8,7 +8,7 @@ namespace Wtq;
 // TODO: Better name.
 public sealed class WtqService : WtqHostedService
 {
-	private readonly ILogger<WtqService> _log;
+	private readonly ILogger _log;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);

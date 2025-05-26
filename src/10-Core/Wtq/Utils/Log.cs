@@ -21,7 +21,7 @@ public static class Log
 			.MinimumLevel.Is(logLevel)
 
 			// In-app.
-			.WriteTo.Sink(InAppLogSink.Instance, LogEventLevel.Debug)
+			.WriteTo.Sink(InAppLogSink.Instance)
 
 			// JSON.
 			.WriteTo.File(

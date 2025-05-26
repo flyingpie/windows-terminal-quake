@@ -6,7 +6,7 @@ public class WtqOptionsPath
 {
 	public static readonly WtqOptionsPath Instance = new();
 
-	private readonly ILogger _log = Log.For(typeof(WtqOptionsPath));
+	private readonly ILogger _log = Log.For<WtqOptionsPath>();
 
 	private WtqOptionsPath()
 	{
