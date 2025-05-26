@@ -4,9 +4,19 @@
 @inject WtqOptionsSaveService SaveService
 
 @page "/examples"
-@layout NarrowLayout
 
 @code {
+
+	private string[] _categories = [];
+
+	protected override void OnInitialized()
+	{
+		_categories = WtqAppExamples.AppExamples
+			.SelectMany(ex => ex.Categories)
+			.Distinct()
+			.OrderBy(c => c)
+			.ToArray();
+	}
 
 	private async Task AddApp(WtqAppExample example)
 	{
@@ -42,47 +52,57 @@
 	</span>
 </div>
 
-<RadzenRow>
+@foreach (var category in _categories)
+{
 
-	@foreach (var example in WtqAppExamples.AppExamples.Where(ex => _isLinux && ex.IsLinux || _isWindows && ex.IsWindows))
-	{
-		<RadzenColumn Size="6">
-			<RadzenCard>
+	<h2 class="rz-my-8 rz-color-base-600">@category</h2>
+	<RadzenRow>
 
-				<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
-					<h2 style="margin: 0;">@example.Title</h2>
+		@foreach (var example in WtqAppExamples
+			.AppExamples
+			.Where(ex => _isLinux && ex.IsLinux || _isWindows && ex.IsWindows)
+			.Where(ex => ex.Categories.Contains(category, StringComparer.OrdinalIgnoreCase))
+			.OrderBy(ex => ex.Title))
+		{
+			<RadzenColumn Size="6" SizeLG="4" SizeXL="3">
+				<RadzenCard>
 
-					<RadzenStack Orientation="Orientation.Horizontal">
-						@foreach (var os in example.Os)
+					<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
+						<h2 style="margin: 0;">@example.Title</h2>
+
+						<RadzenStack Orientation="Orientation.Horizontal">
+							@foreach (var os in example.Os)
+							{
+								<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
+							}
+						</RadzenStack>
+
+						<p class="rz-m-0" style="height: 3em;">@example.Description</p>
+
+						<RadzenImage
+							Path="@example.Image"
+							style="width: 100%; object-fit: cover; height: 160px;"
+						/>
+
+						<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+							<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" Disabled="@(example.Link == null)" />
+							<RadzenButton Variant="Variant.Filled" Text="Add" Click="() => AddApp(example)" />
+						</RadzenStack>
+
+						@if (Os.IsCallable(example.FileName))
 						{
-							<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
+							<p class="rz-color-success-light rz-mt-1">App '@example.FileName' seems to exist!</p>
+						}
+						else
+						{
+							<p class="rz-color-danger-light rz-mt-1">App '@example.FileName' does NOT seem to exist!</p>
 						}
 					</RadzenStack>
 
-					<p class="rz-m-0" style="height: 3em;">@example.Description</p>
+				</RadzenCard>
+			</RadzenColumn>
+		}
 
-					<RadzenImage
-						Path="@example.Image"
-						style="width: 100%; object-fit: cover; height: 160px;"
-					/>
+	</RadzenRow>
 
-					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-						<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" Disabled="@(example.Link == null)" />
-						<RadzenButton Variant="Variant.Filled" Text="Add" Click="() => AddApp(example)" />
-					</RadzenStack>
-
-					@if (Os.IsCallable(example.FileName))
-					{
-						<p class="rz-color-success-light rz-mt-1">App '@example.FileName' seems to exist!</p>
-					}
-					else
-					{
-						<p class="rz-color-danger-light rz-mt-1">App '@example.FileName' does NOT seem to exist!</p>
-					}
-				</RadzenStack>
-
-			</RadzenCard>
-		</RadzenColumn>
-	}
-
-</RadzenRow>
+}
