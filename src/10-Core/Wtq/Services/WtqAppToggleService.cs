@@ -38,7 +38,7 @@ public class WtqAppToggleService(
 		var windowRectSrc = GetOffScreenWindowRect(app, screenRect, screenRects);
 		var windowRectDst = GetOnScreenWindowRect(app, screenRect);
 
-		_log.LogTrace("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
 		// If no off-screen location could be found, just blink it into existence instantly.
 		if (windowRectSrc == null)
@@ -87,7 +87,7 @@ public class WtqAppToggleService(
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
 		var windowRectDst = GetOffScreenWindowRect(app, screenRect, screenRects);
 
-		_log.LogTrace("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
 		// If no off-screen location could be found, just blink it out of existence instantly.
 		if (windowRectDst == null)
