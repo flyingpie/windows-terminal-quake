@@ -40,7 +40,7 @@ public class WtqAppEventHookOptions
 
 	public async Task ExecuteAsync(IDictionary<string, object?> parameters)
 	{
-		_log.LogInformation("Running event hook '{EventHook}'", this);
+		_log.LogDebug("Running event hook '{EventHook}'", this);
 
 		try
 		{
@@ -97,7 +97,7 @@ public class WtqAppEventHookOptions
 			// Shouldn't run for too long.
 			await p.WaitForExitAsync();
 
-			_log.LogInformation("Finished event hook '{EventHook}', result: {Result}, took {Elapsed}", this, result, sw.Elapsed);
+			_log.LogDebug("Finished event hook '{EventHook}', result: {Result}, took {Elapsed}", this, result, sw.Elapsed);
 		}
 		catch (Exception ex)
 		{
