@@ -22,6 +22,11 @@ public class WtqAppExample
 	public required string Title { get; init; }
 
 	/// <summary>
+	/// Categories to bring some order to the "Examples" page.
+	/// </summary>
+	public required string[] Categories { get; init; }
+
+	/// <summary>
 	/// Short description of what the app does.
 	/// </summary>
 	public required string Description { get; init; }
