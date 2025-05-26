@@ -29,7 +29,7 @@ public sealed class WtqFocusTracker(
 				// Note that both the past- and the future window can be null.
 				if (_prev != curr)
 				{
-					_log.LogInformation("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
+					_log.LogDebug("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
 
 					_bus.Publish(new WtqWindowFocusChangedEvent()
 					{

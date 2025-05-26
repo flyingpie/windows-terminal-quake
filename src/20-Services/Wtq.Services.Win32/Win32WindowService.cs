@@ -139,7 +139,7 @@ public sealed class Win32WindowService :
 				return;
 			}
 
-			_log.LogInformation("Looking up list of processes");
+			_log.LogDebug("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 			var res = new List<WtqWindow>();
 			foreach (var proc in Process.GetProcesses())
