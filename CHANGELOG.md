@@ -6,12 +6,17 @@
 ## [vNext]
 
 ## [v2.0.16] / 2025-xx-xx
-- Refactor: Docs - Updated documentation page.
-- Feature: User events - Run command when an event is fired (such as when an app toggles on or off).
-- Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
-- Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
+- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method
+- Feature: Added 'WindowClass' as a property to match windows on (Windows only)
 - Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
+- Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
+- Feature: New hotkey registration subsystem through the use of [SharpHook](https://github.com/TolikPylypchuk/SharpHook), which allows binding the "Windows" modifier on Windows.
+- Feature: User events - Run command when an event is fired (such as when an app toggles on or off).
+- Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
+- Refactor: Docs - Updated documentation page.
+- Refactor: Tweaked log levels to be less verbose.
+- Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
 
 ## [v2.0.15] / 2025-03-21
 - Bugfix: HideOnFocusLost broke

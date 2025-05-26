@@ -5,4 +5,5 @@ namespace Wtq.Events;
 /// </summary>
 public abstract class WtqEvent
 {
+	public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
 }

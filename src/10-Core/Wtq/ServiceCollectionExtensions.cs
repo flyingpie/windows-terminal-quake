@@ -45,6 +45,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 			.AddSingleton<WtqOptionsSaveService>()
 
+			.AddHostedService<WtqEventHookHandler>()
 			.AddHostedService<WtqFocusTracker>()
 			.AddHostedService<WtqHotkeyRoutingService>()
 			.AddHostedService<WtqService>();

@@ -41,3 +41,13 @@ body, input {
 .md-nav__title {
 	display: none;
 }
+
+.md-nav__link--passed {
+	color: #899fc1 !important;
+}
+
+.md-nav__link--active {
+	border-right: 1px #428cff solid;
+	color: #428cff !important;
+	font-weight: bold;
+}

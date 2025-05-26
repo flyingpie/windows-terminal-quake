@@ -192,10 +192,7 @@ internal sealed class WtqDBusObject(
 
 	public Task ToggleAppAsync(string appName)
 	{
-		_bus.Publish(new WtqAppToggledEvent()
-		{
-			AppName = appName,
-		});
+		_bus.Publish(new WtqAppToggledEvent(appName));
 
 		return Task.CompletedTask;
 	}

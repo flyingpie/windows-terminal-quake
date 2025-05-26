@@ -32,10 +32,10 @@ public abstract class WtqWindow
 
 	public abstract bool Matches(WtqAppOptions opts);
 
-	public abstract Task MoveToAsync(Point location);
+	public abstract Task SetLocationAsync(Point location);
 
-	// TODO: Warn or disallow sizes below a certain threshold? Seems to happend occasionally.
-	public abstract Task ResizeAsync(Size size);
+	// TODO: Warn or disallow sizes below a certain threshold? Seems to happen occasionally.
+	public abstract Task SetSizeAsync(Size size);
 
 	public abstract Task SetAlwaysOnTopAsync(bool isAlwaysOnTop);
 

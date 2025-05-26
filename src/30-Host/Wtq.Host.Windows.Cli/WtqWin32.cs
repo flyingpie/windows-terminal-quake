@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Wtq.Configuration;
 using Wtq.Host.Base;
-using Wtq.Services.TrayIcon;
 using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 
@@ -12,9 +13,11 @@ public class WtqWin32 : WtqHostBase
 	{
 		Guard.Against.Null(services);
 
+		var c = services.BuildServiceProvider().GetRequiredService<IOptions<WtqOptions>>().Value;
+
 		services
+			.AddHotkeyService(c)
 			.AddWin32WindowService()
-			.AddWinFormsHotkeyService()
 			.AddWinFormsScreenInfoProvider()
 
 			// New cross-platform tray icon.
@@ -22,6 +25,6 @@ public class WtqWin32 : WtqHostBase
 
 			// WinForms (Windows-only) tray icon, kept around should the cross-platform one causes issues.
 			.AddWinFormsTrayIcon()
-		;
+			;
 	}
 }
