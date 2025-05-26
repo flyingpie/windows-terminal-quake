@@ -90,7 +90,7 @@ public sealed class WtqWindowResolver(
 
 		if (window != null)
 		{
-			_log.LogTrace("Got foreground window '{Window}' for manual attach", window);
+			_log.LogInformation("Got foreground window '{Window}' for manual attach", window);
 		}
 		else
 		{
