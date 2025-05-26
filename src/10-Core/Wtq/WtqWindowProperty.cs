@@ -1,7 +1,7 @@
 namespace Wtq;
 
 /// <summary>
-/// Describes a property of a <see cref="WtqWindow"/>, that can be used to match windows on, or just informationally in the GUI.<br/>
+/// Describes a property of a <see cref="WtqWindow"/>, that can be used to match windows on, or just informationally in the GUI.
 /// </summary>
 public class WtqWindowProperty
 {
