@@ -3,13 +3,20 @@
 @inject IWtqWindowService WindowService
 
 @code {
-	private List<WtqWindow> _windows = [];
-	private List<WtqWindowProperty> _props = null!;
+	private ICollection<WtqWindow> _windows = [];
+	private ICollection<WtqWindowProperty> _props = null!;
+	private string? _searchTerm;
+
+	public ICollection<WtqWindow> Windows =>
+		_windows
+			.OrderBy(w => w.Name)
+			.Where(w => string.IsNullOrWhiteSpace(_searchTerm) || (w.Name ?? string.Empty).Contains(_searchTerm, StringComparison.OrdinalIgnoreCase))
+			.ToList();
 
 	protected override async Task OnInitializedAsync()
 	{
 		_props = WindowService.GetWindowProperties();
-		_windows = (await WindowService.GetWindowsAsync(CancellationToken.None)).OrderBy(w => w.Name).ToList();
+		_windows = await WindowService.GetWindowsAsync(CancellationToken.None);
 	}
 
 }
@@ -17,13 +24,22 @@
 <PageHead Icon="select_window">Windows</PageHead>
 <p>List of windows that WTQ can see. Properties in this list can be used as criteria in the settings.</p>
 
+<RadzenStack Orientation="Orientation.Horizontal" class="rz-my-2">
+	<RadzenTextBox
+		Style="flex-grow: 1;"
+		@bind-Value="_searchTerm"
+		@oninput="@(i => _searchTerm = i.Value?.ToString())"
+		Placeholder="Filter"
+	/>
+</RadzenStack>
+
 <RadzenDataGrid
 	AllowColumnResize="true"
 	AllowFiltering="true"
 	AllowPaging="true"
 	AllowSorting="true"
-	Count="@_windows.Count"
-	Data="@_windows"
+	Count="@Windows.Count"
+	Data="@Windows"
 	GridLines="DataGridGridLines.Both"
 	PageSize="50"
 >

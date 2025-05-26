@@ -62,10 +62,10 @@ public class KWinWindowService(
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
 		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
-		new("Resource Class",	w => ((KWinWtqWindow)w).ResourceClass),
-		new("Resource Name",	w => ((KWinWtqWindow)w).ResourceName),
-		new("Window Title",		w => w.WindowTitle),
-		new("Frame Geometry",	w => ((KWinWtqWindow)w).FrameGeometry),
+		new("ResourceClass",	w => ((KWinWtqWindow)w).ResourceClass),
+		new("ResourceName",		w => ((KWinWtqWindow)w).ResourceName),
+		new("WindowTitle",		w => w.WindowTitle),
+		new("FrameGeometry",	w => ((KWinWtqWindow)w).FrameGeometry),
 		new("Id",				w => w.Id),
 	];
 
