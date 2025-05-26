@@ -41,6 +41,24 @@ public class Win32 : IWin32
 	}
 
 	/// <summary>
+	/// Returns the id of the window that currently has focus.<br/>
+	/// Returns null if no process was found.
+	/// </summary>
+	public unsafe nint? GetForegroundWindowHandle()
+	{
+		var windowHandle = PI.GetForegroundWindow();
+
+		if (windowHandle <= 0)
+		{
+			_log.LogWarning("{Method} Did not find a foreground window", nameof(GetForegroundWindowHandle));
+			return null;
+		}
+
+		_log.LogDebug("{Method} Got foreground window with handle '{Handle}'", nameof(GetForegroundWindowHandle), windowHandle);
+		return (nint)windowHandle;
+	}
+
+	/// <summary>
 	/// Returns the <see cref="Rectangle"/> describing the window with the specified <paramref name="windowHandle"/>.<br/>
 	/// Throws an exception if no rectangle could be obtained.
 	/// </summary>

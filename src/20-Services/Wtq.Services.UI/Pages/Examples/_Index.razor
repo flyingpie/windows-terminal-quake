@@ -4,7 +4,6 @@
 @inject WtqOptionsSaveService SaveService
 
 @page "/examples"
-@layout NarrowLayout
 
 @code {
 
@@ -46,7 +45,7 @@
 
 	@foreach (var example in WtqAppExamples.AppExamples.Where(ex => _isLinux && ex.IsLinux || _isWindows && ex.IsWindows))
 	{
-		<RadzenColumn Size="6">
+		<RadzenColumn Size="6" SizeMD="4" SizeLG="3">
 			<RadzenCard>
 
 				<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">

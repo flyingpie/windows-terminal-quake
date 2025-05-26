@@ -17,7 +17,7 @@ public class InAppLogSink : ILogEventSink
 	{
 		Events.Enqueue(logEvent);
 
-		while (Events.Count > 200)
+		while (Events.Count > 2_000)
 		{
 			Events.TryDequeue(out _);
 		}
