@@ -12,7 +12,6 @@
 		LogEventLevel.Error,
 		LogEventLevel.Warning,
 		LogEventLevel.Information,
-
 		// LogEventLevel.Debug,
 		// LogEventLevel.Verbose,
 	};
@@ -97,7 +96,6 @@
 <PageHead Icon="subject">Logs</PageHead>
 
 <RadzenStack Orientation="Orientation.Horizontal" class="rz-my-2">
-	@* <RadzenTextBox @bind-Value="Value" style="width: 100%;" @oninput="@(i => Value = i.Value?.ToString() ?? string.Empty)" /> *@
 	<RadzenTextBox Style="flex-grow: 1;" @bind-Value="_searchTerm" @oninput="@(i => _searchTerm = i.Value?.ToString())"></RadzenTextBox>
 	<RadzenStack Orientation="Orientation.Horizontal">
 		@foreach (var level in Enum.GetValues<LogEventLevel>())
@@ -158,30 +156,5 @@
 			</Template>
 		</RadzenDataGridColumn>
 
-		@* <RadzenDataGridColumn *@
-		@* 	Property="@nameof(LogEvent.Properties)" *@
-		@* 	Title="@nameof(LogEvent.Properties)" *@
-		@* > *@
-		@* 	<Template Context="item"> *@
-		@* 		@foreach (var p in item.Properties) *@
-		@* 		{ *@
-		@* 			<RadzenBadge Shade="Shade.Default" BadgeStyle="BadgeStyle.Primary" Text="@($"{p.Key}={p.Value}")"/> *@
-		@* 		} *@
-		@* 	</Template> *@
-		@* </RadzenDataGridColumn> *@
-
 	</Columns>
 </RadzenDataGrid>
-
-@* <table> *@
-@* 	<tbody> *@
-@* 		@foreach (var ev in Logs.Events.Reverse()) *@
-@* 		{ *@
-@* 			<tr> *@
-@* 				<td style="min-width: 150px;">@ev.Timestamp.ToString("s")</td> *@
-@* 				<td style="min-width: 100px;">@ev.Level</td> *@
-@* 				<td>@ev.RenderMessage(null)</td> *@
-@* 			</tr> *@
-@* 		} *@
-@* 	</tbody> *@
-@* </table> *@
