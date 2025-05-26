@@ -1,5 +1,8 @@
 namespace Wtq;
 
+/// <summary>
+/// Describes a property of a <see cref="WtqWindow"/>, that can be used to match windows on, or just informationally in the GUI.<br/>
+/// </summary>
 public class WtqWindowProperty
 {
 	public WtqWindowProperty(string name, Func<WtqWindow, object?> accessor)
@@ -8,18 +11,7 @@ public class WtqWindowProperty
 		Accessor = Guard.Against.Null(accessor);
 	}
 
-	public WtqWindowProperty()
-	{
-
-	}
-
 	public string Name { get; set; }
-
-	public string? Description { get; set; }
-
-	public string? SettingsPropertyName { get; set; }
-
-	public int? ColumnWidth { get; set; }
 
 	public Func<WtqWindow, object?> Accessor { get; set; }
 }
