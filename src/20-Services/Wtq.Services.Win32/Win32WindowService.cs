@@ -67,6 +67,13 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+	    // TODO: Add more.
+		new("WindowTitle",		w => w.WindowTitle),
+		new("Id",				w => w.Id),
+    ];
+
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{
