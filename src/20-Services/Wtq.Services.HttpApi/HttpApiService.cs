@@ -7,7 +7,6 @@ namespace Wtq.Services.HttpApi;
 
 public sealed class HttpApiService : WtqHostedService
 {
-	private readonly WtqService _wtq;
 	private readonly ILogger _log = Log.For<HttpApiService>();
 
 	private readonly IWtqAppRepo _appRepo;
@@ -18,10 +17,8 @@ public sealed class HttpApiService : WtqHostedService
 
 	public HttpApiService(
 		IWtqAppRepo appRepo,
-		IWtqBus bus,
-		WtqService wtq)
+		IWtqBus bus)
 	{
-		_wtq = wtq;
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
 	}
@@ -56,7 +53,6 @@ public sealed class HttpApiService : WtqHostedService
 
 		builder.Services.AddSingleton(_bus);
 		builder.Services.AddSingleton(_appRepo);
-		builder.Services.AddSingleton(_wtq);
 
 		_app = builder.Build();
 
