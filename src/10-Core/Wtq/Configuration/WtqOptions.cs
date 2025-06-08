@@ -74,6 +74,11 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
+	///
+	/// </summary>
+	public bool? EnableHttpApi { get; set; }
+
+	/// <summary>
 	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
 	/// <br/>
 	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>

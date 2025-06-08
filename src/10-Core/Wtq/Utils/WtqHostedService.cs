@@ -27,9 +27,17 @@ public abstract class WtqHostedService
 
 		var sw = Stopwatch.StartNew();
 
-		await OnStartAsync(cancellationToken).NoCtx();
+		try
+		{
+			await OnStartAsync(cancellationToken).NoCtx();
 
-		_log.LogDebug("Started service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+			_log.LogDebug("Started service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error starting hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			throw;
+		}
 	}
 
 	public async Task StopAsync(CancellationToken cancellationToken)

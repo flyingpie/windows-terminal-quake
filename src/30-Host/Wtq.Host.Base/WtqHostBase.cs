@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wtq.Services.HttpApi;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
@@ -46,6 +47,7 @@ public class WtqHostBase
 					.Bind(config);
 
 				s
+					.AddHttpApi()
 					.AddUI()
 					.AddWtqCore();
 
