@@ -2,63 +2,72 @@
 ### Enable Quake-style dropdown for (almost) any application.
 For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
+[Documentation](https://wtq.flyingpie.nl)
+
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
 ![Preview](./assets/logo-01.webp)
 
 # Showcase
 
-On **Windows 10**, with [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
+### Windows 10
+With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
 
-https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
+https://github.com/user-attachments/assets/57372a68-ab69-4cb1-b70d-acf440e5368c
 
-| On **CachyOS**, with [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/). | On **CachyOS**, combined with [Kando](https://github.com/kando-menu/kando). |
-| --- | --- |
-| <video src="https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf" /> | <video src="https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096" />  |
+### CachyOS - KDE Plasma 6
+With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/).
+
+https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 
 # Installation
 
-## Manual Download (Windows)
+*Also see the [documentation](https://wtq.flyingpie.nl)*
+
+### Manual Download (Windows)
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
-## Scoop (Windows)
+### Scoop (Windows)
 ```
 scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
 ```
-A shortcut is then available named 'WTQ - Windows Terminal Quake', or you can just run 'wtq' from a command line or Win+R.
+A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
 
-## WinGet (Windows)
+### WinGet (Windows)
 ```
 winget install windows-terminal-quake
 ```
-You can then call 'wtq' from the command line.
+You can then call ```wtq``` from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called 'WTQ - Main Window'.
+After having done that at least once, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
-## Flatpak (Linux)
+### Flatpak (Linux)
 ```
 TODO
 ```
 
-## Manual (Linux)
-See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ~/.local/share/wtq, and creates a wtq.desktop file.
+### Manual (Linux)
+See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
 ```shell
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
 ```
 
-And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
 ```shell
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
 ```
 
 > [!NOTE]
-> The WTQ configuration is not removed by this script. These are usually located at ~/.config/wtq.
+> The WTQ configuration is not removed by this script. These are usually located at ```~/.config/wtq```.
 
 # Configuration
+
+*Also see the [documentation](https://wtq.flyingpie.nl)*
+
 After starting WTQ, an icon will appear in the tray, which has some useful buttons in the context menu:
 ![wtq-context-menu](https://github.com/user-attachments/assets/d9045c85-b3a3-4c57-8d2f-53ab55fc4e38)
 
@@ -67,9 +76,8 @@ From there, the settings file can quickly be opened using "Open Settings File".
 A JSON schema file should be generated next to the settings file, enabling intellisense-like features in supporting editors:
 ![image](https://github.com/user-attachments/assets/c7ec61f2-4e98-41d5-8fc3-4a082a7d6a97)
 
-## Up Next
+There's also an GUI available to configure WTQ, through the same context menu - "Open Main Window".
 
-Available since version **2.0.12**, and currently in development, is a GUI to assist with configuring WTQ.
 ![image](https://github.com/user-attachments/assets/511f167e-a0b9-4882-bcb3-0d4a4fe0fb26)
 ![image](https://github.com/user-attachments/assets/9d172f29-53eb-47b6-9fc3-0f5b71d7cff9)
 
