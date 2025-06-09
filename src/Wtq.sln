@@ -54,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Host.Docs", "30-Host\Wt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.SharpHook", "20-Services\Wtq.Services.SharpHook\Wtq.Services.SharpHook.csproj", "{7B8C6131-3436-AADE-EDF8-B80983E09BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.HttpApi", "20-Services\Wtq.Services.HttpApi\Wtq.Services.HttpApi.csproj", "{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.API", "20-Services\Wtq.Services.API\Wtq.Services.API.csproj", "{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

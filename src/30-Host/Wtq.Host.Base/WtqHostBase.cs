@@ -47,7 +47,7 @@ public class WtqHostBase
 					.Bind(config);
 
 				s
-					.AddHttpApi()
+					.AddApi()
 					.AddUI()
 					.AddWtqCore();
 

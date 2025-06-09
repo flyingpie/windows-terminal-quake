@@ -74,9 +74,9 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
-	///
+	/// Options related to the HTTP API, that can be used to control WTQ programmatically.
 	/// </summary>
-	public bool? EnableHttpApi { get; set; }
+	public WtqApiOptions? Api { get; set; }
 
 	/// <summary>
 	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>

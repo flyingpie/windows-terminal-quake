@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.HttpApi\Wtq.Services.HttpApi.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.API\Wtq.Services.API.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj"/>
 	</ItemGroup>
 </Project>
