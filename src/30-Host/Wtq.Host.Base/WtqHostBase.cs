@@ -1,17 +1,36 @@
+using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Services.HttpApi;
+using Wtq.Services.API;
+using Wtq.Services.CLI;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	public void Run(string[] args)
+	public async Task RunAsync(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
 
+		if (args.Length == 0)
+		{
+			RunApp(args);
+		}
+		else
+		{
+			await RunCli(args).NoCtx();
+		}
+	}
+
+	protected virtual void ConfigureServices(IServiceCollection services)
+	{
+		// Implemented by OS-specific implementations.
+	}
+
+	private void RunApp(string[] args)
+	{
 		var log = Log.For<WtqHostBase>();
 
 		try
@@ -31,10 +50,7 @@ public class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x =>
-					{
-						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
-					};
+					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
 				})
 				.AddCommandLine(args)
 				.Build();
@@ -60,8 +76,10 @@ public class WtqHostBase
 		}
 	}
 
-	protected virtual void ConfigureServices(IServiceCollection services)
-	{
-		// Implemented by OS-specific implementations.
-	}
+	private async Task RunCli(string[] args) =>
+		await new ServiceCollection()
+			.AddCli()
+			.BuildServiceProvider()
+			.RunCliAsync(args)
+			.NoCtx();
 }

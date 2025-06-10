@@ -1,0 +1,16 @@
+global using Ardalis.GuardClauses;
+global using DeclarativeCommandLine;
+global using DeclarativeCommandLine.Attributes;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using System;
+global using System.Diagnostics;
+global using System.Diagnostics.CodeAnalysis;
+global using System.Drawing;
+global using System.IO;
+global using System.Linq;
+global using System.Net.Http;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using Wtq.Events;
+global using Wtq.Utils;

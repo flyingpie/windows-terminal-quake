@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.SharpHook", "2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.API", "20-Services\Wtq.Services.API\Wtq.Services.API.csproj", "{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.CLI", "20-Services\Wtq.Services.CLI\Wtq.Services.CLI.csproj", "{416E6CD2-3088-47AD-A654-1606DE0310CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +128,10 @@ Global
 		{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416E6CD2-3088-47AD-A654-1606DE0310CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416E6CD2-3088-47AD-A654-1606DE0310CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416E6CD2-3088-47AD-A654-1606DE0310CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416E6CD2-3088-47AD-A654-1606DE0310CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +153,7 @@ Global
 		{C3754BEB-3D0F-424C-93B3-37215BCF3575} = {F414F7B7-3276-46DE-B47E-9DA69D56736F}
 		{7B8C6131-3436-AADE-EDF8-B80983E09BF0} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{DD52C9C4-2B98-4E55-A1A2-C4C83FAB79B6} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
+		{416E6CD2-3088-47AD-A654-1606DE0310CE} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65349C7B-F6B3-49A8-9935-4ABF9B6D3D70}
