@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 using Wtq.Configuration;
 
-namespace Wtq.Services.HttpApi;
+namespace Wtq.Services.API;
 
 /// <summary>
 /// Hosts the HTTP API using Kestel.

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Wtq.Services.HttpApi;
+namespace Wtq.Services.API;
 
 public static class ServiceCollectionExtensions
 {

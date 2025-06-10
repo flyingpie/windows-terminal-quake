@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>Wtq.Services.HttpApi</RootNamespace>
+		<AssemblyName>Wtq.Services.API</AssemblyName>
+		<RootNamespace>Wtq.Services.API</RootNamespace>
 
 		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>

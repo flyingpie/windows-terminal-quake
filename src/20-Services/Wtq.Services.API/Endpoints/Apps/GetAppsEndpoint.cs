@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace Wtq.Services.HttpApi.Endpoints.Apps;
+namespace Wtq.Services.API.Endpoints.Apps;
 
 [ApiController]
 [Route("apps")]
