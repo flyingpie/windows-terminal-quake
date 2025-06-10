@@ -6,9 +6,11 @@ public static class Os
 {
 	private static readonly ILogger Log = Utils.Log.For(typeof(Os));
 
-	public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+	public static bool IsLinux =>
+		RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-	public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+	public static bool IsWindows =>
+		RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
 	public static bool IsCallable(string fileName)
 	{

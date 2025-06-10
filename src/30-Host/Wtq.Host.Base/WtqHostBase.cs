@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Services.HttpApi;
+using Wtq.Services.API;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
