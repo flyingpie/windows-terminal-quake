@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
 
 		<TargetFramework>net9.0-windows</TargetFramework>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<ApplicationIcon>../../../assets/icon-v2-256-padding.ico</ApplicationIcon>
 
