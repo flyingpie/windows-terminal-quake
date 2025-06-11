@@ -64,7 +64,7 @@ public sealed class ApiService : WtqHostedService
 
 		builder.WebHost.UseUrls([.. opt.Urls]);
 
-		builder.Services.AddControllers();
+		builder.Services.AddControllers().AddApplicationPart(typeof(ApiService).Assembly);
 		builder.Services.AddOpenApi();
 
 		builder.Services.AddSingleton(_bus);
