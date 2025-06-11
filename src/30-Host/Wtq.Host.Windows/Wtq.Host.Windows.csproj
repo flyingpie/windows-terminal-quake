@@ -4,7 +4,7 @@
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
 
 		<TargetFramework>net9.0-windows</TargetFramework>
-		<OutputType>WinExe</OutputType>
+		<OutputType>Exe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<ApplicationIcon>../../../assets/icon-v2-256-padding.ico</ApplicationIcon>
 
