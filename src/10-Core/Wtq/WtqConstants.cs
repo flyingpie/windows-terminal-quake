@@ -4,6 +4,9 @@ namespace Wtq;
 
 public static class WtqConstants
 {
+	public static nint MainWindowHandle;
+	public static WtqApp? Fg;
+
 	public static string AppVersion { get; }
 		= typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
 

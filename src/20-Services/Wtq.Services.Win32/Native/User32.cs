@@ -15,6 +15,8 @@ public static class User32
 	public const int WSEXAPPWINDOW = 0x00040000;
 	public const int WSEXLAYERED = 0x80000;
 	public const int WSEXTOOLWINDOW = 0x00000080;
+	public const byte VK_MENU = 0x12; // Alt key
+	public const uint KEYEVENTF_KEYUP = 0x0002;
 
 	public static void ForcePaint(IntPtr hWnd)
 	{
@@ -63,4 +65,21 @@ public static class User32
 
 	[DllImport("user32.dll", SetLastError = true)]
 	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
+
+	[DllImport("user32.dll", SetLastError = true)]
+	static extern void SwitchToThisWindow(IntPtr hWnd, bool turnOn);
+
+	[DllImport("user32.dll")]
+	static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+	public static void ForceForegroundWindow(IntPtr hWnd)
+	{
+		// Simulate Alt key press and release
+		keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
+		keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+
+		Thread.Sleep(50); // Give Windows a moment to register input
+
+		SetForegroundWindow(hWnd);
+	}
 }

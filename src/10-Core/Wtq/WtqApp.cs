@@ -200,6 +200,8 @@ public sealed class WtqApp : IAsyncDisposable
 		return true;
 	}
 
+	public Task FgAsync() => Window.BringToForegroundAsync();
+
 	public async Task ResizeWindowAsync(Size size)
 	{
 		if (!IsAttached)

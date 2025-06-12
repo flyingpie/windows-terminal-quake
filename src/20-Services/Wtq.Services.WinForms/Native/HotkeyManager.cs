@@ -69,6 +69,8 @@ internal static class HotkeyManager
 			_wnd = this;
 			_hwnd = Handle;
 			_windowReadyEvent.Set();
+
+			WtqConstants.MainWindowHandle = Handle;
 		}
 
 		protected override void SetVisibleCore(bool value)
@@ -79,6 +81,8 @@ internal static class HotkeyManager
 
 		protected override void WndProc(ref Message m)
 		{
+			Console.WriteLine($"WndProc({m.Msg}) (MyHandle:{Handle})");
+
 			if (m.Msg == WMHotkey)
 			{
 				HotkeyEventArgs e = new(m.LParam);
