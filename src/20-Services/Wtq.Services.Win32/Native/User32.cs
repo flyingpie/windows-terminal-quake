@@ -4,6 +4,8 @@ namespace Wtq.Services.Win32.Native;
 
 public static class User32
 {
+	private static readonly ILogger _log = Log.For(typeof(User32));
+
 	public const int GWLEXSTYLE = -20;
 	public const nint HWNDTOPMOST = -1;
 	public const nint HWNDNOTOPMOST = -2;
@@ -68,14 +70,40 @@ public static class User32
 
 	/// <summary>
 	/// Synthesizes a keystroke. The system can use such a synthesized keystroke to generate a WM_KEYUP or WM_KEYDOWN message. The keyboard driver's interrupt handler calls the keybd_event function.
-	/// 
-	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event
+	///
+	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event.
 	/// </summary>
 	[DllImport("user32.dll")]
 	public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
+	/// <summary>
+	/// Usually, we can just call <see cref="SetForegroundWindow"/>, and we're done.<br/>
+	/// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
+	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks.
+	///
+	/// Usually, of the second set of criteria (of which we need to hit 1), we'd hit this one:
+	/// - The calling process received the last input event.
+	///
+	/// That's because when a hotkey is pressed, WTQ receives an input event, and hence received "the last input event".
+	///
+	/// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
+	/// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
+	///
+	/// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would make our process the one with "the last input event".
+	/// </summary>
 	public static void ForceForegroundWindow(IntPtr hWnd)
 	{
+		// Attempt the regular method first, simpler and faster.
+		SetForegroundWindow(hWnd);
+
+		var fg = GetForegroundWindow();
+		if (fg == hWnd)
+		{
+			return;
+		}
+
+		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
+
 		// Simulate Alt key press and release
 		keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
 		keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
@@ -83,5 +111,15 @@ public static class User32
 		Thread.Sleep(50); // Give Windows a moment to register input
 
 		SetForegroundWindow(hWnd);
+
+		var fg2 = GetForegroundWindow();
+		if (fg2 == hWnd)
+		{
+			_log.LogDebug("Synthetic input event workaround successful");
+		}
+		else
+		{
+			_log.LogWarning("Synthetic input event workaround failed, window may not have focus");
+		}
 	}
 }
