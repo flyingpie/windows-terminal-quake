@@ -66,11 +66,13 @@ public static class User32
 	[DllImport("user32.dll", SetLastError = true)]
 	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
 
-	[DllImport("user32.dll", SetLastError = true)]
-	static extern void SwitchToThisWindow(IntPtr hWnd, bool turnOn);
-
+	/// <summary>
+	/// Synthesizes a keystroke. The system can use such a synthesized keystroke to generate a WM_KEYUP or WM_KEYDOWN message. The keyboard driver's interrupt handler calls the keybd_event function.
+	/// 
+	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event
+	/// </summary>
 	[DllImport("user32.dll")]
-	static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+	public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
 	public static void ForceForegroundWindow(IntPtr hWnd)
 	{
