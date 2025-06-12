@@ -96,8 +96,11 @@ public static class User32
 		// Attempt the regular method first, simpler and faster.
 		SetForegroundWindow(hWnd);
 
-		var fg = GetForegroundWindow();
-		if (fg == hWnd)
+		// Give the target window time to become foreground window.
+		Thread.Sleep(2);
+
+		// If the requested window has become the foreground window, we're done.
+		if (GetForegroundWindow() == hWnd)
 		{
 			return;
 		}
@@ -108,12 +111,12 @@ public static class User32
 		keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
 		keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
 
-		Thread.Sleep(50); // Give Windows a moment to register input
+		Thread.Sleep(20); // Give Windows a moment to process input events.
 
+		// We should now be the app with the most recent input event, so we should be allowed to set the foreground window.
 		SetForegroundWindow(hWnd);
 
-		var fg2 = GetForegroundWindow();
-		if (fg2 == hWnd)
+		if (GetForegroundWindow() == hWnd)
 		{
 			_log.LogDebug("Synthetic input event workaround successful");
 		}
