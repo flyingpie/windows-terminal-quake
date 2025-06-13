@@ -64,7 +64,15 @@ public sealed class ApiService : WtqHostedService
 
 		builder.WebHost.UseUrls([.. opt.Urls]);
 
-		builder.Services.AddControllers();
+		builder.Services
+
+			// Add MVC controllers.
+			.AddControllers()
+
+			// Explicitly add the current namespace, since it may not be picked up otherwise 
+			// (due to the controllers being outside the entry assembly).
+			.AddApplicationPart(typeof(ApiService).Assembly);
+
 		builder.Services.AddOpenApi();
 
 		builder.Services.AddSingleton(_bus);

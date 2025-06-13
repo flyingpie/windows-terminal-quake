@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace Wtq.Services.API.Endpoints.Apps;
 
@@ -10,21 +9,33 @@ public class PostCloseAppEndpoint : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> ExecuteAsync(
 		[FromServices] IWtqAppRepo appRepo,
-		[FromQuery, Required] string appName)
+		[FromQuery] string? appName)
 	{
-		var app = appRepo.GetByName(appName);
-
-		if (app == null)
+		if (!string.IsNullOrWhiteSpace(appName))
 		{
-			return BadRequest();
-		}
+			var app = appRepo.GetByName(appName);
 
-		if (!app.IsOpen)
+			if (app == null)
+			{
+				return BadRequest();
+			}
+
+			if (!app.IsOpen)
+			{
+				return BadRequest();
+			}
+
+			await app.CloseAsync().NoCtx();
+		}
+		else
 		{
-			return BadRequest();
-		}
+			var open = appRepo.GetOpen();
 
-		await app.CloseAsync().NoCtx();
+			if (open != null)
+			{
+				await open.CloseAsync().NoCtx();
+			}
+		}
 
 		return Ok();
 	}
