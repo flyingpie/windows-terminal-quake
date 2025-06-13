@@ -110,7 +110,9 @@ public static class User32
 	/// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
 	/// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
 	///
-	/// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would make our process the one with "the last input event".
+	/// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would
+	/// make our process the one with "the last input event".
+	/// https://stackoverflow.com/a/13881647.
 	/// </summary>
 	public static void ForceForegroundWindow(IntPtr hWnd)
 	{
