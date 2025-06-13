@@ -7,7 +7,9 @@
 		{
 			"Name": "PowerShell",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
+			"FileName": "powershell",
+			"HorizontalScreenCoverage": 50,
+			"VerticalScreenCoverage": 50
 		}
 
 		// Example with Windows Terminal
@@ -37,5 +39,9 @@
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95
+	"VerticalScreenCoverage": 95,
+
+	"Api": {
+		"Enable": true
+	}
 }
