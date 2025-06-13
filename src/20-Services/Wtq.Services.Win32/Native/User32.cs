@@ -19,6 +19,7 @@ public static class User32
 	public const int WSEXTOOLWINDOW = 0x00000080;
 	public const byte VK_MENU = 0x12; // Alt key
 	public const uint KEYEVENTF_KEYUP = 0x0002;
+	public const uint WM_NULL = 0x0000;
 
 	public static void ForcePaint(IntPtr hWnd)
 	{
@@ -76,6 +77,26 @@ public static class User32
 	[DllImport("user32.dll")]
 	public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
+	[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+	public static extern IntPtr SendMessageTimeout(
+		IntPtr hWnd,
+		uint Msg,
+		UIntPtr wParam,
+		IntPtr lParam,
+		SendMessageTimeoutFlags fuFlags,
+		uint uTimeout,
+		out UIntPtr lpdwResult);
+
+	[Flags]
+	public enum SendMessageTimeoutFlags : uint
+	{
+		SMTO_NORMAL = 0x0,
+		SMTO_BLOCK = 0x1,
+		SMTO_ABORTIFHUNG = 0x2,
+		SMTO_NOTIMEOUTIFNOTHUNG = 0x8,
+		SMTO_ERRORONEXIT = 0x20
+	}
+
 	/// <summary>
 	/// Usually, we can just call <see cref="SetForegroundWindow"/>, and we're done.<br/>
 	/// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
@@ -98,6 +119,9 @@ public static class User32
 
 		// Give the target window time to become foreground window.
 		Thread.Sleep(2);
+
+		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
+		// SendMessageTimeout(hWnd, WM_NULL, 0, 0, SendMessageTimeoutFlags.SMTO_NORMAL, 1_000, out _);
 
 		// If the requested window has become the foreground window, we're done.
 		if (GetForegroundWindow() == hWnd)
