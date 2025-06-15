@@ -21,6 +21,7 @@ public static class Kernel32
 
 	public static void RedirectConsoleStreams()
 	{
+		// StdOut & StdErr
 		var stdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		var safeStdOut = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdOut, false);
 		var stdoutWriter = new StreamWriter(new FileStream(safeStdOut, FileAccess.Write))
@@ -31,6 +32,7 @@ public static class Kernel32
 		Console.SetOut(stdoutWriter);
 		Console.SetError(stdoutWriter);
 
+		// StdIn
 		var stdIn = GetStdHandle(STD_INPUT_HANDLE);
 		var safeStdIn = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdIn, false);
 		var stdinReader = new StreamReader(new FileStream(safeStdIn, FileAccess.Read));
