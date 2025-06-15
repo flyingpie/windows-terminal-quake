@@ -133,7 +133,7 @@ public static class User32
 
 		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
 
-		// Simulate Alt key press and release
+		// Simulate Alt key press and release.
 		keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
 		keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
 
