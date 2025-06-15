@@ -14,6 +14,6 @@ public static class Program
 			Kernel32.RedirectConsoleStreams();
 		}
 
-		new WtqWin32().Run(args);
+		new WtqWin32().RunAsync(args).GetAwaiter().GetResult();
 	}
 }
