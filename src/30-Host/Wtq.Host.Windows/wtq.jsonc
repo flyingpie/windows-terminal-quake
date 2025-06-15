@@ -3,42 +3,20 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// WezTerm
+		// PowerShell
 		{
-			"Name": "WezTerm",
+			"Name": "PowerShell",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "wezterm-gui",
-			"HideOnFocusLost": "Never",
-			"Opacity": 99,
-			"OffScreenLocations": ["Above"]
-		},
-
-		// Q-Dir
-		{
-			"Name": "QDir",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName": "Q-Dir_x64",
-			//"HideOnFocusLost": "Never",
-			"OffScreenLocations": ["Left"]
-		},
-
-		// ProcessHacker
-		{
-			"Name": "ProcessExplorer",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
-			"FileName": "procexp64.exe",
-			//"HideOnFocusLost": "Never",
-			"OffScreenLocations": ["Below"]
-		},
-
-		// KeePassXC
-		{
-			"Name": "KeePassXC",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D4" }],
-			"FileName": "KeePassXC",
-			//"HideOnFocusLost": "Never",
-			"OffScreenLocations": ["Right"]
+			"FileName": "powershell"
 		}
+
+		// Windows Terminal
+		//{
+		//	"Name": "Terminal",
+		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"FileName": "wt",
+		//	"ProcessName": "WindowsTerminal"
+		//}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
@@ -62,8 +40,7 @@
 	"VerticalScreenCoverage": 95,
 
 	"FeatureFlags": {
-		"NewWindowCapture": true,
-		"SharpHook": true
+		"NewWindowCapture": true
 	},
 
 	"Api": {
