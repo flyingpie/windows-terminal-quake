@@ -56,7 +56,10 @@ public class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
+					f.OnLoadException = x =>
+					{
+						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
+					};
 				})
 				.AddCommandLine(args)
 				.Build();

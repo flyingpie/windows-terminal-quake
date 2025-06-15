@@ -20,7 +20,7 @@ public sealed class Win32WtqWindow(
 
 	public override Task BringToForegroundAsync()
 	{
-		User32.ForceForegroundWindow(_process.MainWindowHandle);
+		User32.SetForegroundWindow(_process.MainWindowHandle);
 		User32.ForcePaint(_process.MainWindowHandle);
 
 		return Task.CompletedTask;
