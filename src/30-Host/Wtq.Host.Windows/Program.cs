@@ -1,12 +1,11 @@
 using Wtq.Services.Win32.Native;
-using Wtq.Utils;
 
 namespace Wtq.Host.Windows;
 
 public static class Program
 {
 	[STAThread]
-	public static async Task Main(string[] args)
+	public static void Main(string[] args)
 	{
 		if (Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS))
 		{
@@ -15,6 +14,6 @@ public static class Program
 			Kernel32.RedirectConsoleStreams();
 		}
 
-		await new WtqWin32().RunAsync(args).NoCtx();
+		new WtqWin32().RunAsync(args).GetAwaiter().GetResult();
 	}
 }
