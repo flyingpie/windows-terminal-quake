@@ -1,0 +1,17 @@
+{
+	"profiles": {
+		"Config From CSProj": {
+			"commandName": "Project",
+			"environmentVariables": {
+				"__WTQ_LOG_LEVEL": "VERBOSE"
+			}
+		},
+		"Config From User Home": {
+			"commandName": "Project",
+			"environmentVariables": {
+				"WTQ_CONFIG_FILE": "~/.config/wtq/wtq.jsonc",
+				"__WTQ_LOG_LEVEL": "VERBOSE"
+			}
+		}
+	}
+}
