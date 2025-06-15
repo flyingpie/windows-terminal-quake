@@ -10,26 +10,19 @@ namespace Wtq.Services.API;
 /// <summary>
 /// Hosts the HTTP API using Kestel.
 /// </summary>
-public sealed class ApiService : WtqHostedService
+public sealed class ApiService(
+	IOptions<WtqOptions> opts,
+	IWtqAppRepo appRepo,
+	IWtqBus bus)
+	: WtqHostedService
 {
-	private readonly IOptions<WtqOptions> _opts;
+	private readonly IOptions<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly ILogger _log = Log.For<ApiService>();
 
-	private readonly IWtqAppRepo _appRepo;
-	private readonly IWtqBus _bus;
+	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly CancellationTokenSource _cts = new();
 
-	private WebApplication? _app;
-
-	public ApiService(
-		IOptions<WtqOptions> opts,
-		IWtqAppRepo appRepo,
-		IWtqBus bus)
-	{
-		_opts = Guard.Against.Null(opts);
-		_appRepo = Guard.Against.Null(appRepo);
-		_bus = Guard.Against.Null(bus);
-	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
@@ -69,7 +62,7 @@ public sealed class ApiService : WtqHostedService
 			// Add MVC controllers.
 			.AddControllers()
 
-			// Explicitly add the current namespace, since it may not be picked up otherwise 
+			// Explicitly add the current namespace, since it may not be picked up otherwise
 			// (due to the controllers being outside the entry assembly).
 			.AddApplicationPart(typeof(ApiService).Assembly);
 
@@ -78,13 +71,13 @@ public sealed class ApiService : WtqHostedService
 		builder.Services.AddSingleton(_bus);
 		builder.Services.AddSingleton(_appRepo);
 
-		_app = builder.Build();
+		var app = builder.Build();
 
-		_app.MapControllers();
-		_app.MapOpenApi();
-		_app.MapScalarApiReference("/");
+		app.MapControllers();
+		app.MapOpenApi();
+		app.MapScalarApiReference("/");
 
-		_ = _app.RunAsync(_cts.Token);
+		_ = app.RunAsync(_cts.Token);
 
 		return Task.CompletedTask;
 	}

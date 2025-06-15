@@ -70,7 +70,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	{
 		Guard.Against.NullOrWhiteSpace(name);
 
-		return _apps.Values.FirstOrDefault(a => a.Name == name);
+		return _apps.Values.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 	}
 
 	/// <inheritdoc/>
