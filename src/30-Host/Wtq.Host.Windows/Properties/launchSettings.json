@@ -3,7 +3,7 @@
 		"Wtq.Host.Windows": {
 			"commandName": "Project",
 			"environmentVariables": {
-				"WTQ_LOG_LEVEL_": "VERBOSE"
+				"WTQ_LOG_LEVEL": "VERBOSE"
 			}
 		}
 	}

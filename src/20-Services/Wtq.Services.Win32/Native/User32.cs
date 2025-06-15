@@ -120,10 +120,10 @@ public static class User32
 		SetForegroundWindow(hWnd);
 
 		// Give the target window time to become foreground window.
-		Thread.Sleep(2);
+		//Thread.Sleep(2);
 
 		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
-		// SendMessageTimeout(hWnd, WM_NULL, 0, 0, SendMessageTimeoutFlags.SMTO_NORMAL, 1_000, out _);
+		SendMessageTimeout(hWnd, WM_NULL, 0, 0, SendMessageTimeoutFlags.SMTO_NORMAL, uTimeout: 100, out _);
 
 		// If the requested window has become the foreground window, we're done.
 		if (GetForegroundWindow() == hWnd)
