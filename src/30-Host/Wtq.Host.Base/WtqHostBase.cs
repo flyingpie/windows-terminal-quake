@@ -14,6 +14,12 @@ public class WtqHostBase
 
 		var log = Log.For<WtqHostBase>();
 
+		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
+		{
+			log.LogInformation("Process exit");
+			Log.CloseAndFlush();
+		};
+
 		try
 		{
 			// Find path to settings files (wtq.jsonc or similar).

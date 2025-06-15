@@ -95,6 +95,7 @@ public static class Log
 
 	public static void CloseAndFlush()
 	{
+		Serilog.Log.Debug("Closing logger");
 		Serilog.Log.CloseAndFlush();
 	}
 }
