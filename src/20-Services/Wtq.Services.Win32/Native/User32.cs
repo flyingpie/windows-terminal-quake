@@ -119,9 +119,8 @@ public static class User32
 		// Attempt the regular method first, simpler and faster.
 		SetForegroundWindow(hWnd);
 
-		// Give the target window time to become foreground window.
-		//Thread.Sleep(2);
-
+		// Wait for the target window to process a null event, which means the previously sent "become foreground"-event has also been processed.
+		// Do this with a timeout, so we don't hang if the target window hangs.
 		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
 		SendMessageTimeout(hWnd, WM_NULL, 0, 0, SendMessageTimeoutFlags.SMTO_NORMAL, uTimeout: 100, out _);
 
