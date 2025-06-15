@@ -5,7 +5,7 @@ using Wtq.Services.Win32;
 using Wtq.Services.WinForms;
 using Wtq.Utils;
 
-namespace Wtq.Host.Windows.Cli;
+namespace Wtq.Host.Windows;
 
 public static class ServiceCollectionExtensions
 {
