@@ -49,8 +49,6 @@ public class WtqUIHost
 
 				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
 
-				Log.CloseAndFlush();
-
 				// TODO: Remove this.
 				// When using SharpHook, some threads seem to hang around when otherwise exiting the app.
 				_ = Task.Run(async () =>
