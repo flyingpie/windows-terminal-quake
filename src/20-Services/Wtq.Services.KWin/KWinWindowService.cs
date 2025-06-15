@@ -24,6 +24,17 @@ public class KWinWindowService(
 			Arguments = opts.Arguments,
 		};
 
+		foreach (var arg in opts.ArgumentList
+			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
+			.Select(a => a.Argument!))
+		{
+			var exp = arg.ExpandEnvVars();
+
+			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+
+			process.StartInfo.ArgumentList.Add(exp);
+		}
+
 		process.Start();
 
 		return Task.CompletedTask;

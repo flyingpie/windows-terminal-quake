@@ -27,9 +27,17 @@ public abstract class WtqHostedService
 
 		var sw = Stopwatch.StartNew();
 
-		await OnStartAsync(cancellationToken).NoCtx();
+		try
+		{
+			await OnStartAsync(cancellationToken).NoCtx();
 
-		_log.LogDebug("Started service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+			_log.LogDebug("Started service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error starting hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			throw;
+		}
 	}
 
 	public async Task StopAsync(CancellationToken cancellationToken)
@@ -38,9 +46,17 @@ public abstract class WtqHostedService
 
 		var sw = Stopwatch.StartNew();
 
-		await OnStopAsync(cancellationToken).NoCtx();
+		try
+		{
+			await OnStopAsync(cancellationToken).NoCtx();
 
-		_log.LogDebug("Stopped service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+			_log.LogDebug("Stopped service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error stopping hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			throw;
+		}
 	}
 
 	public async ValueTask DisposeAsync()
@@ -49,9 +65,17 @@ public abstract class WtqHostedService
 
 		var sw = Stopwatch.StartNew();
 
-		await OnDisposeAsync().NoCtx();
+		try
+		{
+			await OnDisposeAsync().NoCtx();
 
-		_log.LogDebug("Disposed service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+			_log.LogDebug("Disposed service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error disposing hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			throw;
+		}
 	}
 
 	protected virtual Task OnStartAsync(CancellationToken cancellationToken) => Task.CompletedTask;

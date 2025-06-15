@@ -1,17 +1,43 @@
+using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wtq.Services.API;
+using Wtq.Services.CLI;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
-	public void Run(string[] args)
+	public async Task RunAsync(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
 
+		if (args.Length == 0)
+		{
+			RunApp(args);
+		}
+		else
+		{
+			await RunCli(args).NoCtx();
+		}
+	}
+
+	protected virtual void ConfigureServices(IServiceCollection services)
+	{
+		// Implemented by OS-specific implementations.
+	}
+
+	private void RunApp(string[] args)
+	{
 		var log = Log.For<WtqHostBase>();
+
+		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
+		{
+			log.LogInformation("Process exit");
+			Log.CloseAndFlush();
+		};
 
 		try
 		{
@@ -46,6 +72,7 @@ public class WtqHostBase
 					.Bind(config);
 
 				s
+					.AddApi()
 					.AddUI()
 					.AddWtqCore();
 
@@ -58,8 +85,10 @@ public class WtqHostBase
 		}
 	}
 
-	protected virtual void ConfigureServices(IServiceCollection services)
-	{
-		// Implemented by OS-specific implementations.
-	}
+	private async Task RunCli(string[] args) =>
+		await new ServiceCollection()
+			.AddCli()
+			.BuildServiceProvider()
+			.RunCliAsync(args)
+			.NoCtx();
 }

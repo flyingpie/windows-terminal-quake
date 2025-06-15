@@ -60,5 +60,9 @@
 	"FeatureFlags": {
 		"SharpHook": true,
 		"NewWindowCapture": true
+	},
+
+	"Api": {
+		"Enable": true
 	}
 }
