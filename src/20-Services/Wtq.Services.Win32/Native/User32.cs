@@ -80,7 +80,8 @@ public static class User32
 	public static extern bool ShowWindow(nint hWnd, WindowShowStyle nCmdShow);
 
 	/// <summary>
-	/// Synthesizes a keystroke. The system can use such a synthesized keystroke to generate a WM_KEYUP or WM_KEYDOWN message. The keyboard driver's interrupt handler calls the keybd_event function.
+	/// Synthesizes a keystroke. The system can use such a synthesized keystroke to generate a WM_KEYUP or WM_KEYDOWN message.
+	/// The keyboard driver's interrupt handler calls the keybd_event function.
 	///
 	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event.
 	/// </summary>
@@ -102,7 +103,7 @@ public static class User32
 	/// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
 	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks.
 	///
-	/// Usually, of the second set of criteria (of which we need to hit 1), we'd hit this one:
+	/// Usually, of the second set of criteria (of which we need to hit at least 1), we'd hit this one:
 	/// - The calling process received the last input event.
 	///
 	/// That's because when a hotkey is pressed, WTQ receives an input event, and hence received "the last input event".
@@ -140,6 +141,9 @@ public static class User32
 
 		// We should now be the app with the most recent input event, so we should be allowed to set the foreground window.
 		SetForegroundWindow(hWnd);
+
+		// Wait for the above event to be processed again.
+		SendMessageTimeout(hWnd, WM_NULL, 0, 0, SendMessageTimeoutFlags.SMTO_NORMAL, uTimeout: 100, out _);
 
 		if (GetForegroundWindow() == hWnd)
 		{
