@@ -47,7 +47,7 @@ public sealed class Win32WtqWindow : WtqWindow
 	public Rectangle Rect =>
 		_window.Rect;
 
-	public string WindowClass =>
+	public string? WindowClass =>
 		_window.WindowClass;
 
 	public override bool Matches(WtqAppOptions opts)
@@ -88,13 +88,6 @@ public sealed class Win32WtqWindow : WtqWindow
 		_log.LogDebug("{MethodName}", nameof(BringToForegroundAsync));
 
 		_win32.SetForegroundWindow(_window.WindowHandle);
-
-		var fgWndHnd = _win32.GetForegroundWindowHandle();
-
-		if (_window.WindowHandle != fgWndHnd)
-		{
-			_log.LogWarning("Attempted to set foreground window to '{Expected}', but was '{Actual}'", _window.WindowHandle.ToString("X"), fgWndHnd.Value.ToString("X"));
-		}
 
 		return Task.CompletedTask;
 	}

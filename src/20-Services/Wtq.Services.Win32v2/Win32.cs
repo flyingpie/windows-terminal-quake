@@ -1,6 +1,7 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 
 using Windows.Win32.Foundation;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using PI = Windows.Win32.PInvoke;
 
@@ -12,6 +13,7 @@ public class Win32 : IWin32
 	private const int HWND_NOTOPMOST = -2;
 	private const int HWND_TOPMOST = -1;
 
+	public const uint WM_NULL = 0x0000;
 	private const int WS_EX_LAYERED = 0x80000;
 #pragma warning restore SA1310
 
@@ -128,14 +130,69 @@ public class Win32 : IWin32
 		}
 	}
 
-	public void SetForegroundWindow(nint windowHandle)
+	/// <summary>
+	/// Usually, we can just call <see cref="SetForegroundWindow"/>, and we're done.<br/>
+	/// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
+	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks.
+	///
+	/// Usually, of the second set of criteria (of which we need to hit at least 1), we'd hit this one:
+	/// - The calling process received the last input event.
+	///
+	/// That's because when a hotkey is pressed, WTQ receives an input event, and hence received "the last input event".
+	///
+	/// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
+	/// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
+	///
+	/// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would
+	/// make our process the one with "the last input event".
+	/// https://stackoverflow.com/a/13881647.
+	/// </summary>
+	public unsafe void SetForegroundWindow(nint windowHandle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
 		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetForegroundWindow), windowHandle);
 
-		PI.SetForegroundWindow((HWND)windowHandle);
-		PI.SendMessage((HWND)windowHandle, PI.WM_PAINT, 0, 0);
+		var hwnd = (HWND)windowHandle;
+
+		// Attempt the regular method first, simpler and faster.
+		PI.SetForegroundWindow(hwnd);
+		PI.SendMessage(hwnd, PI.WM_PAINT, 0, 0);
+
+		// Wait for the target window to process a null event, which means the previously sent "become foreground"-event has also been processed.
+		// Do this with a timeout, so we don't hang if the target window hangs.
+		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
+		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
+
+		// If the requested window has become the foreground window, we're done.
+		if (PI.GetForegroundWindow() == hwnd)
+		{
+			return;
+		}
+
+		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
+
+		// Simulate Alt key press and release.
+		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, 0, UIntPtr.Zero);
+		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP, UIntPtr.Zero);
+
+		Thread.Sleep(20); // Give Windows a moment to process input events.
+
+		// We should now be the app with the most recent input event, so we should be allowed to set the foreground window.
+		PI.SetForegroundWindow(hwnd);
+		PI.SendMessage(hwnd, PI.WM_PAINT, 0, 0);
+
+		// Wait for the above event to be processed again.
+		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
+
+		if (PI.GetForegroundWindow() == hwnd)
+		{
+			_log.LogDebug("Synthetic input event workaround successful");
+		}
+		else
+		{
+			_log.LogWarning("Synthetic input event workaround failed, window may not have focus");
+		}
 	}
 
 	public void SetWindowTitle(nint windowHandle, string title)
