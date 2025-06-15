@@ -69,10 +69,10 @@ public sealed class Win32WindowService :
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
-	    // TODO: Add more.
+		// TODO: Add more.
 		new("WindowTitle",		w => w.WindowTitle),
 		new("Id",				w => w.Id),
-    ];
+	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
@@ -104,7 +104,12 @@ public sealed class Win32WindowService :
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
-			UseShellExecute = false,
+
+			// If this is set to "false", some apps like PowerShell are spawned within the command prompt,
+			// if WTQ runs from the command line.
+			//
+			// However, it used to be "false" (the default) for a long time, so we may find issues with this change.
+			UseShellExecute = true,
 		};
 
 		foreach (var arg in opts.ArgumentList
