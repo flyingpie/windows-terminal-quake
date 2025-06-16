@@ -12,8 +12,7 @@ public class Win32 : IWin32
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 	private const int HWND_NOTOPMOST = -2;
 	private const int HWND_TOPMOST = -1;
-
-	public const uint WM_NULL = 0x0000;
+	private const uint WM_NULL = 0x0000;
 	private const int WS_EX_LAYERED = 0x80000;
 #pragma warning restore SA1310
 
