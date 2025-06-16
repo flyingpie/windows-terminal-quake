@@ -1,5 +1,6 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 
+using System.Runtime.InteropServices;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -7,23 +8,22 @@ using PI = Windows.Win32.PInvoke;
 
 namespace Wtq.Services.Win32v2;
 
+/// <inheritdoc cref="IWin32"/>
 public class Win32 : IWin32
 {
+
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
+
 	private const int HWND_NOTOPMOST = -2;
 	private const int HWND_TOPMOST = -1;
 	private const uint WM_NULL = 0x0000;
 	private const int WS_EX_LAYERED = 0x80000;
+
 #pragma warning restore SA1310
 
 	private readonly ILogger _log = Log.For<Win32>();
 
-	private readonly List<Win32Window> _procs = new();
-
-	/// <summary>
-	/// Returns the id of the process that currently has focus.<br/>
-	/// Returns null if no process was found.
-	/// </summary>
+	/// <inheritdoc/>
 	public unsafe uint? GetForegroundProcessId()
 	{
 		var windowHandle = PI.GetForegroundWindow();
@@ -41,10 +41,7 @@ public class Win32 : IWin32
 		return processId;
 	}
 
-	/// <summary>
-	/// Returns the id of the window that currently has focus.<br/>
-	/// Returns null if no process was found.
-	/// </summary>
+	/// <inheritdoc/>
 	public unsafe nint? GetForegroundWindowHandle()
 	{
 		var windowHandle = PI.GetForegroundWindow();
@@ -59,10 +56,40 @@ public class Win32 : IWin32
 		return (nint)windowHandle;
 	}
 
-	/// <summary>
-	/// Returns the <see cref="Rectangle"/> describing the window with the specified <paramref name="windowHandle"/>.<br/>
-	/// Throws an exception if no rectangle could be obtained.
-	/// </summary>
+	/// <inheritdoc/>
+	public string? GetWindowClass(nint windowHandle)
+	{
+		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
+		var buffer = new Span<char>(new char[256]);
+		var length = PI.GetClassName((HWND)windowHandle, buffer);
+		return buffer[..length].ToString();
+	}
+
+	/// <inheritdoc/>
+	public ICollection<Win32Window> GetWindowList()
+	{
+		_log.LogTrace("{MethodName}", nameof(GetWindowList));
+
+		// Create an empty list of window handles we'll pass to ReportWindow, for it to add the window that was found.
+		var windowHandles = new List<HWND>();
+
+		// Pin the list so it doesn't get moved by GC.
+		var listHandle = GCHandle.Alloc(windowHandles);
+		var listHandlePtr = GCHandle.ToIntPtr(listHandle);
+
+		// Now ask EnumWindows to fill up the list.
+		PI.EnumWindows(ReportWindow, listHandlePtr);
+
+		// Turn the list of handles into a list of objects that contain info about the windows.
+		return windowHandles
+			.Select(w => GetWin32Window(w))
+			.Where(w => w != null)
+			.Select(w => w!)
+			.ToList();
+	}
+
+	/// <inheritdoc/>
 	public Rectangle GetWindowRect(nint windowHandle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -78,20 +105,29 @@ public class Win32 : IWin32
 		return res;
 	}
 
+	/// <inheritdoc/>
 	public string? GetWindowTitle(nint windowHandle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
-		var xx = new Span<char>(new char[256]);
-		var ccx = PI.GetWindowText((HWND)windowHandle, xx);
-		var xxz = xx[..ccx].ToString();
-
-		return xxz;
+		var buffer = new Span<char>(new char[256]);
+		var length = PI.GetWindowText((HWND)windowHandle, buffer);
+		return buffer[..length].ToString();
 	}
 
-	/// <summary>
-	/// Sets the position and size of the window with the specified <paramref name="windowHandle"/>.
-	/// </summary>
+	/// <inheritdoc/>
+	public bool IsValidWindow(nint windowHandle)
+	{
+		// When the window handle is zero, we don't need to ask the OS, as that is invalid by default.
+		if (windowHandle == 0)
+		{
+			return false;
+		}
+
+		return PI.IsWindow((HWND)windowHandle);
+	}
+
+	/// <inheritdoc/>
 	public void MoveWindow(nint windowHandle, Rectangle rectangle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -104,15 +140,7 @@ public class Win32 : IWin32
 		}
 	}
 
-	public List<Win32Window> GetWindows()
-	{
-		_procs.Clear();
-
-		PI.EnumWindows(ReportWindow, 0); // TODO: Pass result collection as lparam
-
-		return _procs;
-	}
-
+	/// <inheritdoc/>
 	public void SetAlwaysOnTop(nint windowHandle, bool isAlwaysOnTop)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -129,25 +157,24 @@ public class Win32 : IWin32
 		}
 	}
 
-	/// <summary>
-	/// Usually, we can just call <see cref="SetForegroundWindow"/>, and we're done.<br/>
-	/// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
-	/// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks.
-	///
-	/// Usually, of the second set of criteria (of which we need to hit at least 1), we'd hit this one:
-	/// - The calling process received the last input event.
-	///
-	/// That's because when a hotkey is pressed, WTQ receives an input event, and hence received "the last input event".
-	///
-	/// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
-	/// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
-	///
-	/// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would
-	/// make our process the one with "the last input event".
-	/// https://stackoverflow.com/a/13881647.
-	/// </summary>
+	/// <inheritdoc/>
 	public unsafe void SetForegroundWindow(nint windowHandle)
 	{
+		// Usually, we can just call <see cref="SetForegroundWindow"/>, and we're done.<br/>
+		// However, to prevent abuse of this feature, Microsoft implemented a couple rules around setting foreground windows:
+		// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks.
+		//
+		// Usually, of the second set of criteria (of which we need to hit at least 1), we'd hit this one:
+		// - The calling process received the last input event.
+		//
+		// That's because when a hotkey is pressed, WTQ receives an input event, and hence received "the last input event".
+		//
+		// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
+		// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
+		//
+		// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would
+		// make our process the one with "the last input event".
+		// https://stackoverflow.com/a/13881647.
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
 		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetForegroundWindow), windowHandle);
@@ -194,6 +221,7 @@ public class Win32 : IWin32
 		}
 	}
 
+	/// <inheritdoc/>
 	public void SetWindowTitle(nint windowHandle, string title)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -201,6 +229,7 @@ public class Win32 : IWin32
 		PI.SetWindowText((HWND)windowHandle, title);
 	}
 
+	/// <inheritdoc/>
 	public void SetWindowTransparency(nint windowHandle, int transparency)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -221,35 +250,60 @@ public class Win32 : IWin32
 		}
 	}
 
-	private unsafe BOOL ReportWindow(HWND windowHandle, LPARAM lParam)
+	/// <summary>
+	/// This method is called for each window that is encountered when calling <see cref="PI.EnumWindows(WNDENUMPROC, LPARAM)"/>.
+	/// </summary>
+	private static unsafe BOOL ReportWindow(HWND windowHandle, LPARAM lParam)
+	{
+		// Fetch the list of handles that was passed in when calling EnumWindows.
+		var listHandle = GCHandle.FromIntPtr(lParam);
+
+		if (listHandle.Target is not List<HWND> windowHandles)
+		{
+			throw new InvalidOperationException($"Expected list handle to be of type '{typeof(List<HWND>).FullName}', but was '{listHandle.Target?.GetType()?.FullName}'.");
+		}
+
+		windowHandles.Add(windowHandle);
+
+		return true; // Returning "true" means that we'll continue onto the next window. Which we want, cause we want to see all windows.
+	}
+
+	/// <summary>
+	/// Takes a window handle, and returns a decorated <see cref="Win32Window"/>.
+	/// </summary>
+	private unsafe Win32Window? GetWin32Window(HWND windowHandle)
 	{
 		var style = PI.GetWindowLong(windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
 		uint processId = 0;
 		var threadId = PI.GetWindowThreadProcessId(windowHandle, &processId);
 
+		// If no thread- or process id could be obtained, skip the window. This may be due to the process having exited in the meantime?
 		if (threadId == 0 || processId == 0)
 		{
-			// TODO: Log
-			return true;
+			return null;
 		}
 
+		// If we can't get the window's dimensions, skip the window. Perhaps also due to the window just having closed, or it being some hidden thing or whatever.
 		if (!PI.GetWindowRect(windowHandle, out var rt))
 		{
-			// TODO: Log
-			return true;
+			return null;
 		}
 
+		// Get information about the owning process.
 		var ownerProcess = Process.GetProcessById((int)processId);
+
+		// Figure out whether this is the process's main window.
 		var isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
 
-		var xx = new Span<char>(new char[256]);
-		var ccx = PI.GetClassName(windowHandle, xx);
-		var xxz = xx[..ccx].ToString();
+		// Fetch the window class.
+		var windowClass = GetWindowClass(windowHandle);
 
+		// Fetch the window class.
 		var windowTitle = GetWindowTitle(windowHandle);
 
-		var p = new Win32Window(ownerProcess)
+		// Construct return object.
+		var window = new Win32Window(ownerProcess)
 		{
 			IsMainWindow = isMainWindow,
 			ProcessId = processId,
@@ -257,12 +311,10 @@ public class Win32 : IWin32
 			Style = style,
 			ThreadId = threadId,
 			WindowCaption = windowTitle,
-			WindowClass = xxz,
+			WindowClass = windowClass,
 			WindowHandle = windowHandle,
 		};
 
-		_procs.Add(p);
-
-		return true;
+		return window;
 	}
 }

@@ -7,8 +7,8 @@
 		{
 			"Name": "PowerShell",
 			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "powershell"
-		}
+			"FileName": "pwsh"
+		},
 
 		// Windows Terminal
 		//{
@@ -17,6 +17,21 @@
 		//	"FileName": "wt",
 		//	"ProcessName": "WindowsTerminal"
 		//}
+
+		// Explorer
+		{
+			"Name": "Explorer",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "explorer",
+			"WindowClass": "CabinetWClass"
+		},
+	
+		// Task Manager
+		{
+			"Name": "Task Manager",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"FileName": "taskmgr"
+		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
@@ -40,7 +55,8 @@
 	"VerticalScreenCoverage": 95,
 
 	"FeatureFlags": {
-		"NewWindowCapture": true
+		"NewWindowCapture": true,
+		"SharpHook": true
 	},
 
 	"Api": {

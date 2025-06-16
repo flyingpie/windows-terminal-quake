@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Wtq;
 
 /// <summary>
@@ -6,9 +8,21 @@ namespace Wtq;
 public abstract class WtqWindow
 	: IEquatable<WtqWindow>, IEqualityComparer<WtqWindow>
 {
+	private readonly List<PropertyInfo> _canBeMatchedOnProps;
+
+	protected WtqWindow()
+	{
+		// Built a list of properties that can be matched on, so we don't have to do this when actually matching.
+		_canBeMatchedOnProps = GetType()
+			.GetProperties()
+			.Where(p => p.GetCustomAttribute<CanBeMatchedOnAttribute>() != null)
+			.ToList();
+	}
+
 	/// <summary>
 	/// A string that uniquely identifies this window across the system.
 	/// </summary>
+	[CanBeMatchedOn]
 	public abstract string Id { get; }
 
 	/// <summary>
@@ -19,8 +33,10 @@ public abstract class WtqWindow
 	/// <summary>
 	/// A descriptive name of the window, often (close to) the process name.
 	/// </summary>
+	[CanBeMatchedOn]
 	public abstract string? Name { get; }
 
+	[CanBeMatchedOn]
 	public abstract string? WindowTitle { get; }
 
 	public abstract Task BringToForegroundAsync();
@@ -31,6 +47,38 @@ public abstract class WtqWindow
 	public abstract Task<Rectangle> GetWindowRectAsync();
 
 	public abstract bool Matches(WtqAppOptions opts);
+
+	/// <summary>
+	/// Used for filtering windows for troubleshooting purposes, such as through the "Windows" page in the GUI.
+	/// </summary>
+	public virtual bool MatchesString(string searchTerm)
+	{
+		// If no search term was specified, match anything.
+		if (string.IsNullOrWhiteSpace(searchTerm))
+		{
+			return true;
+		}
+
+		foreach (var prop in _canBeMatchedOnProps)
+		{
+			// Fetch the property value from the current window.
+			var val = prop.GetValue(this)?.ToString();
+
+			// We only attempt to match if the propery has a value.
+			if (string.IsNullOrWhiteSpace(val))
+			{
+				continue;
+			}
+
+			// If the value of this property matches the search term, we match and don't need to look further.
+			if (val.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public abstract Task SetLocationAsync(Point location);
 

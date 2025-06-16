@@ -78,9 +78,17 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
-		// TODO: Add more.
 		new("WindowTitle",		w => w.WindowTitle),
-		new("Id",				w => w.Id),
+		new("ProcessName",		w => ((Win32WtqWindow)w).ProcessName),
+		new("WindowClass",		w => ((Win32WtqWindow)w).WindowClass),
+
+		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow),
+
+		new("WindowRect",		w => ((Win32WtqWindow)w).Rect),
+
+		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId),
+		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId),
+		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle),
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
@@ -151,7 +159,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
 
 			_processes = _win32
-				.GetWindows()
+				.GetWindowList()
 				.Where(w => !w.Rect.Size.IsEmpty)
 				.Select(w => (WtqWindow)new Win32WtqWindow(_win32, w))
 				.ToList();

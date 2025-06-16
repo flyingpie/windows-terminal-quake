@@ -17,6 +17,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		_log = Log.For($"{nameof(Win32WtqWindow)}|{window}");
 	}
 
+	[CanBeMatchedOn]
 	public override string Id =>
 		_window.WindowHandle.ToString(CultureInfo.InvariantCulture);
 
@@ -24,31 +25,39 @@ public sealed class Win32WtqWindow : WtqWindow
 		_window.IsMainWindow;
 
 	public override bool IsValid =>
-		!_window.Process.HasExited;
+		!_window.Process.HasExited && // Check whether the process that owns the window is still running.
+		_win32.IsValidWindow(_window.WindowHandle); // Check whether the window itself is still valid (could be closed while the owning process is still running).
 
+	[CanBeMatchedOn]
 	public override string? Name =>
 		_window.Process.ProcessName;
 
-	public override string? WindowTitle =>
-		_window.WindowCaption;
-
-	public string? ProcessName =>
-		_window.Process.ProcessName;
-
+	[CanBeMatchedOn]
 	public uint ProcessId =>
 		_window.ProcessId;
 
-	public uint ThreadId =>
-		_window.ThreadId;
-
-	public nint WindowHandle =>
-		_window.WindowHandle;
+	[CanBeMatchedOn]
+	public string? ProcessName =>
+		_window.Process.ProcessName;
 
 	public Rectangle Rect =>
 		_window.Rect;
 
+	[CanBeMatchedOn]
+	public uint ThreadId =>
+		_window.ThreadId;
+
+	[CanBeMatchedOn]
 	public string? WindowClass =>
 		_window.WindowClass;
+
+	[CanBeMatchedOn]
+	public nint WindowHandle =>
+		_window.WindowHandle;
+
+	[CanBeMatchedOn]
+	public override string? WindowTitle =>
+		_window.WindowCaption;
 
 	public override bool Matches(WtqAppOptions opts)
 	{

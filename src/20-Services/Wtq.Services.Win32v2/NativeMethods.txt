@@ -6,6 +6,7 @@ GetWindowLong
 GetWindowRect
 GetWindowText
 GetWindowThreadProcessId
+IsWindow
 keybd_event
 KEYEVENTF_KEYUP
 MoveWindow
