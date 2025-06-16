@@ -17,11 +17,13 @@ public class KWinWtqWindow(
 
 	#region Generic Stuff
 
+	[CanBeMatchedOn]
 	public string? FileName =>
 		_window?.DesktopFileName;
 
 	#endregion
 
+	[CanBeMatchedOn]
 	public string? DesktopFileName =>
 		_window?.DesktopFileName;
 
@@ -37,15 +39,19 @@ public class KWinWtqWindow(
 	public override bool IsValid =>
 		_isValid;
 
+	[CanBeMatchedOn]
 	public override string? Name =>
 		_window?.ResourceName;
 
+	[CanBeMatchedOn]
 	public string? ResourceClass =>
 		_window?.ResourceClass;
 
+	[CanBeMatchedOn]
 	public string? ResourceName =>
 		_window?.ResourceName;
 
+	[CanBeMatchedOn]
 	public override string? WindowTitle =>
 		_window?.Caption;
 

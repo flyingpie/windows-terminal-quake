@@ -14,8 +14,10 @@ public sealed class Win32WtqWindow(
 
 	public override bool IsValid => !_process.HasExited;
 
+	[CanBeMatchedOn]
 	public override string? Name => _process.ProcessName;
 
+	[CanBeMatchedOn]
 	public override string? WindowTitle => _process.MainWindowTitle;
 
 	public override Task BringToForegroundAsync()
