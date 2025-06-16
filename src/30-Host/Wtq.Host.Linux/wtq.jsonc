@@ -3,13 +3,23 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// Example with Dolphin
+
+		{
+			"Name": "Konsole",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"FileName": "konsole"
+		},
+
 		{
 			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
-			"FileName": "dolphin",
-			"HorizontalScreenCoverage": 80,
-			"AlwaysOnTop": true
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"FileName": "plasma-systemmonitor"
+		},
+
+		{
+			"Name": "SystemMonitor",
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"FileName": "dolphin"
 		}
 	],
 
