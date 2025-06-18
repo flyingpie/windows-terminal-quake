@@ -89,7 +89,14 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			e.SuppressEvent = true;
 
-			_bus.Publish(new WtqHotkeyPressedEvent(accMod, k));
+			var keySeq = new KeySequence()
+			{
+				Modifiers = accMod,
+				KeyChar = e.Data.KeyChar.ToString(), // TODO: Test
+				KeyCode = k,
+			};
+
+			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
 		};
 
 		_hook.KeyReleased += (s, e) =>

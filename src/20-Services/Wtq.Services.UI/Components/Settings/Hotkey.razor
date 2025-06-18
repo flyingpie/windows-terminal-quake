@@ -4,8 +4,6 @@
 
 @code {
 
-	private RadzenTextBox _textBox = null!;
-
 	private bool _isSuper;
 
 	[EditorRequired]
@@ -15,8 +13,6 @@
 	[EditorRequired]
 	[Parameter]
 	public Action OnRemove { get; set; }
-
-	public ValueTask FocusAsync() => _textBox.FocusAsync();
 
 	private string Description
 	{
@@ -43,6 +39,8 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
+		Console.WriteLine($"CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} KB CODE:{e.Code} KEY:{e.Key} TYPE:{e.Type} LOCATION:{e.Location} IsComposing:{e.IsComposing}");
+
 		if (e.IsSuperKey())
 		{
 			_isSuper = true;
@@ -56,7 +54,17 @@
 		}
 
 		Options.Modifiers = mod;
-		Options.Key = key;
+
+		if (UseKeyCodes.Contains(key))
+		{
+			Options.Key = key;
+			Options.KeyChar = null;
+		}
+		else
+		{
+			Options.Key = null;
+			Options.KeyChar = e.Key;
+		}
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)
@@ -67,13 +75,17 @@
 		}
 	}
 
+	public static HashSet<Keys> UseKeyCodes { get; } = new()
+	{
+		Keys.Add, Keys.Divide, Keys.Multiply, Keys.D2,
+	};
+
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
 	<!-- Shortcut capturing textbox -->
 	<RadzenTextBox
-		@ref="_textBox"
 		Style="width: 100%;"
 		@onkeydown="HandleKeyDown"
 		@onkeyup="HandleKeyUp"

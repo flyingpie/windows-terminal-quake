@@ -2,10 +2,11 @@ namespace Wtq.Configuration;
 
 public static class HotkeyOptionsExtensions
 {
-	public static bool HasHotkey(this ICollection<HotkeyOptions> hotkeys, Keys key, KeyModifiers modifiers)
+	public static bool HasHotkey(this ICollection<HotkeyOptions> hotkeys, KeySequence sequence)
 	{
 		Guard.Against.Null(hotkeys);
 
-		return hotkeys.Any(hk => hk.Key == key && hk.Modifiers == modifiers);
+		// TODO: hk == sequence (requires overloading equals operator).
+		return hotkeys.Any(hk => hk.Sequence.Equals2(sequence));
 	}
 }

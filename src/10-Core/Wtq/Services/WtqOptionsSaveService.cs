@@ -18,6 +18,7 @@ public class WtqOptionsSaveService
 				new JsonStringEnumConverter(),
 			},
 
+			Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Causes UTF8 characters to be serialized as-is, instead of (less readable) escape codes.
 			WriteIndented = true,
 			IndentCharacter = '\t',
 			IndentSize = 1,

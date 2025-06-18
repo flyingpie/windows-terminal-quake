@@ -6,7 +6,7 @@
 
 		{
 			"Name": "Konsole",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+//			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "§" }],
 			"FileName": "konsole"
 		},
 

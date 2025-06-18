@@ -6,6 +6,39 @@ namespace Wtq.Services.KWin;
 
 public static class Mapping
 {
+	public static string Sequence(KeySequence sequence)
+	{
+		var sb = new StringBuilder();
+
+		// Modifier
+		if (sequence.Modifiers != KeyModifiers.None)
+		{
+			sb.Append(ModifierToKWinString(sequence.Modifiers));
+		}
+
+		// Key char
+		if (!string.IsNullOrWhiteSpace(sequence.KeyChar))
+		{
+			if (sb.Length > 0)
+			{
+				sb.Append('+');
+			}
+
+			sb.Append(sequence.KeyChar);
+		}
+		else if (sequence.KeyCode.HasValue && sequence.KeyCode != None)
+		{
+			if (sb.Length > 0)
+			{
+				sb.Append('+');
+			}
+
+			sb.Append(KeyToKWinString(sequence.KeyCode.Value));
+		}
+
+		return sb.ToString();
+	}
+
 	public static string Sequence(KeyModifiers modifiers, Keys key)
 	{
 		var sb = new StringBuilder();
@@ -17,9 +50,9 @@ public static class Mapping
 
 		if (key != None)
 		{
-			if(sb.Length > 0)
+			if (sb.Length > 0)
 			{
-				sb.Append("+");
+				sb.Append('+');
 			}
 
 			sb.Append(KeyToKWinString(key));
@@ -50,7 +83,7 @@ public static class Mapping
 			Right => "Right",
 			Down => "Down",
 
-			Add => "+",
+			Add => "Num++",
 			Back => "Backspace",
 			Delete => "Del",
 			Divide => "/",
@@ -74,7 +107,9 @@ public static class Mapping
 			OemMinus => "-",
 			OemOpenBrackets => "[",
 			OemPeriod => ".",
-			OemPipe => "|",
+
+			// OemPipe => "|",
+			OemPipe => "§",
 			OemQuestion => "?",
 			OemQuotes => "\"",
 			OemSemicolon => ";",
@@ -88,8 +123,32 @@ public static class Mapping
 			_ => string.Empty,
 		};
 
-	private static string ModifierToKWinString(KeyModifiers modifiers) =>
-		modifiers switch
+	private static string ModifierToKWinString(KeyModifiers modifiers)
+	{
+		var sb = new StringBuilder();
+
+		foreach (var m in new[]
+		{
+			KeyModifiers.Control, KeyModifiers.Alt, KeyModifiers.Shift, KeyModifiers.Super
+		})
+		{
+			if (modifiers.HasFlag(m))
+			{
+				if (sb.Length > 0)
+				{
+					sb.Append('+');
+				}
+
+				sb.Append(ModifierToKWinString2(m));
+			}
+		}
+
+		return sb.ToString();
+	}
+
+	private static string ModifierToKWinString2(KeyModifiers modifiers)
+	{
+		return modifiers switch
 		{
 			KeyModifiers.Control
 				=> "Ctrl",
@@ -106,4 +165,5 @@ public static class Mapping
 			_
 				=> string.Empty,
 		};
+	}
 }

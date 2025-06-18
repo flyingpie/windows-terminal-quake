@@ -5,9 +5,23 @@ namespace Wtq.Configuration;
 /// </summary>
 public sealed class HotkeyOptions
 {
-	public Keys Key { get; set; }
+	private Keys? _keyCode;
+
+	public Keys? Key {get;set;}
+	// {
+	// 	get => HasKeyChar ? null : _keyCode; // Only serialize this property if no "KeyChar" is present.
+	// 	set => _keyCode = value;
+	// }
+
+	public string? KeyChar { get; set; }
 
 	public KeyModifiers Modifiers { get; set; }
+
+	[JsonIgnore]
+	public bool HasKeyChar => !string.IsNullOrWhiteSpace(KeyChar);
+
+	[JsonIgnore]
+	public bool HasKeyCode => Key != Keys.None;
 
 	[JsonIgnore]
 	public bool IsAlt
@@ -83,6 +97,14 @@ public sealed class HotkeyOptions
 	[JsonIgnore]
 	public bool IsEmpty => Modifiers == KeyModifiers.None && Key == Keys.None;
 
+	[JsonIgnore]
+	public KeySequence Sequence => new()
+	{
+		KeyChar = KeyChar,
+		KeyCode = Key,
+		Modifiers = Modifiers,
+	};
+
 	public override string ToString()
 	{
 		var s = new StringBuilder();
@@ -127,7 +149,15 @@ public sealed class HotkeyOptions
 			s.Append(" + ");
 		}
 
-		s.Append(Key.GetAttribute<Keys, DisplayAttribute>()?.Description ?? Key.ToString());
+		if (HasKeyChar)
+		{
+			s.Append(KeyChar);
+		}
+
+		if (Key.HasValue && Key != Keys.None)
+		{
+			s.Append(Key.Value.GetAttribute<Keys, DisplayAttribute>()?.Description ?? Key.ToString());
+		}
 
 		return s.ToString();
 	}

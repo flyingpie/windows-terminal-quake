@@ -147,11 +147,12 @@ internal sealed class KWinClientV2(
 	public async Task RegisterHotkeyAsync(
 		string name,
 		string description,
-		KeyModifiers modifiers,
-		Keys key,
+		KeySequence sequence,
 		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
+
+		Console.WriteLine($"MAPPING:{Mapping.Sequence(sequence)}");
 
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -161,9 +162,10 @@ internal sealed class KWinClientV2(
 					{
 						name = name,
 						title = description,
-						sequence = Mapping.Sequence(modifiers, key),
-						mod = modifiers.ToString(),
-						key = key.ToString(),
+						sequence = Mapping.Sequence(sequence),
+						mod = sequence.Modifiers.ToString(),
+						keyChar = sequence.KeyChar ?? string.Empty,
+						keyCode = sequence.KeyCode?.ToString() ?? string.Empty,
 					},
 				},
 				cancellationToken)

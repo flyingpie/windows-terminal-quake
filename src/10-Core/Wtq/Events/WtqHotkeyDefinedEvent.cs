@@ -10,13 +10,15 @@ public sealed class WtqHotkeyDefinedEvent : WtqEvent
 	/// </summary>
 	public WtqAppOptions? AppOptions { get; init; }
 
-	/// <summary>
-	/// The pressed key (Q, 1, F1, etc.).
-	/// </summary>
-	public required Keys Key { get; init; }
+	public KeySequence Sequence { get; init; }
 
-	/// <summary>
-	/// The optional modifiers (ctrl, shift, etc.).
-	/// </summary>
-	public required KeyModifiers Modifiers { get; init; }
+	// /// <summary>
+	// /// The pressed key (Q, 1, F1, etc.).
+	// /// </summary>
+	// public required Keys? Key { get; init; }
+	//
+	// /// <summary>
+	// /// The optional modifiers (ctrl, shift, etc.).
+	// /// </summary>
+	// public required KeyModifiers Modifiers { get; init; }
 }

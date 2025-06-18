@@ -30,11 +30,11 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			// Look for app that has the specified hotkey configured.
 			// Fall back to most recently toggled app.
 			// Fall back to first configured app after that.
-			var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
+			var app = GetAppForHotkey(e.Sequence) ?? _prevApp ?? _appRepo.GetPrimary();
 
 			if (app == null)
 			{
-				_log.LogWarning("No app found for hotkey '{Modifiers}+{Key}'", e.Modifiers, e.Key);
+				_log.LogWarning("No app found for hotkey '{Sequence}'", e.Sequence);
 				return Task.CompletedTask;
 			}
 
@@ -53,9 +53,9 @@ public class WtqHotkeyRoutingService : WtqHostedService
 		return Task.CompletedTask;
 	}
 
-	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
+	private WtqApp? GetAppForHotkey(KeySequence sequence)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(key, keyMods));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(sequence));
 
 		return opt == null
 			? null
@@ -72,8 +72,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 					new WtqHotkeyDefinedEvent()
 					{
 						AppOptions = app,
-						Key = hk.Key,
-						Modifiers = hk.Modifiers,
+						Sequence = hk.Sequence,
 					});
 			}
 		}
@@ -83,8 +82,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			_bus.Publish(
 				new WtqHotkeyDefinedEvent()
 				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
+					Sequence = hk.Sequence,
 				});
 		}
 	}
