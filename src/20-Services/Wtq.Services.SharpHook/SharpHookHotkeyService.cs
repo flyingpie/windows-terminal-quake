@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
-using SharpHook.Native;
+using SharpHook.Data;
 using Wtq.Events;
 
 namespace Wtq.Services.SharpHook;
