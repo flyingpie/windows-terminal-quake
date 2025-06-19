@@ -16,6 +16,8 @@ public struct KeySequence
 
 	public bool Equals2(KeySequence sequence) // TODO: Proper overloading
 	{
-		return Modifiers == sequence.Modifiers && (KeyCode == sequence.KeyCode || KeyChar == sequence.KeyChar);
+		return Modifiers == sequence.Modifiers && (KeyCode == sequence.KeyCode || (KeyChar?.Equals(sequence.KeyChar, StringComparison.OrdinalIgnoreCase) ?? false));
 	}
+
+	public override string ToString() => $"Modifiers:{Modifiers} KeyCode:{KeyCode} KeyChar:{KeyChar}";
 }
