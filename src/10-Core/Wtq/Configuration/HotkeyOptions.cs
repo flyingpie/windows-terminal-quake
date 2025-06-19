@@ -3,15 +3,9 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines a combination of a <see cref="Keys"/> value, with optional <see cref="KeyModifiers"/>, used for mapping a shortcut to an action.
 /// </summary>
-public sealed class HotkeyOptions
+public sealed class HotkeyOptions : IValidatableObject
 {
-	private Keys? _keyCode;
-
-	public Keys? Key {get;set;}
-	// {
-	// 	get => HasKeyChar ? null : _keyCode; // Only serialize this property if no "KeyChar" is present.
-	// 	set => _keyCode = value;
-	// }
+	public Keys? Key { get; set; }
 
 	public string? KeyChar { get; set; }
 
@@ -98,12 +92,7 @@ public sealed class HotkeyOptions
 	public bool IsEmpty => Modifiers == KeyModifiers.None && Key == Keys.None;
 
 	[JsonIgnore]
-	public KeySequence Sequence => new()
-	{
-		KeyChar = KeyChar,
-		KeyCode = Key,
-		Modifiers = Modifiers,
-	};
+	public KeySequence Sequence => new(Modifiers, Key, KeyChar);
 
 	public override string ToString()
 	{
@@ -160,5 +149,13 @@ public sealed class HotkeyOptions
 		}
 
 		return s.ToString();
+	}
+
+	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+	{
+		if (Key == null && KeyChar == null)
+		{
+			yield return new($"Either a '{nameof(Key)}' or '{nameof(KeyChar)}' is required.");
+		}
 	}
 }

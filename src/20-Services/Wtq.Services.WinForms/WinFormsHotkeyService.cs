@@ -39,10 +39,10 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 		{
 			var keySeq = new KeySequence()
 			{
-				Modifiers = a.Modifiers.ToWtqKeyModifiers(),
+				// Modifiers = a.Modifiers.ToWtqKeyModifiers(),
 
 				// KeyChar = "", // TODO: Not supported yet.
-				KeyCode = a.Key.ToWtqKeys(),
+				// KeyCode = a.Key.ToWtqKeys(),
 			};
 
 			bus.Publish(new WtqHotkeyPressedEvent(keySeq));

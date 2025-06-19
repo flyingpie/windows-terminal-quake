@@ -188,12 +188,7 @@ internal sealed class WtqDBusObject(
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
 		Enum.TryParse<Keys>(keyCodeStr, ignoreCase: true, out var key);
 
-		var keySeq = new KeySequence()
-		{
-			Modifiers = mod,
-			KeyChar = keyCharStr,
-			KeyCode = key,
-		};
+		var keySeq = new KeySequence(mod, key, keyCharStr);
 
 		await Task.WhenAll(_onPressShortcutHandlers.Select(h => h(keySeq)));
 	}
