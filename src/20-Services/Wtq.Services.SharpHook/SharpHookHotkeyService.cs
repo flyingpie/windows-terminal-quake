@@ -91,9 +91,9 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			var keySeq = new KeySequence()
 			{
-				Modifiers = accMod,
-				KeyChar = e.Data.KeyChar.ToString(), // TODO: Test
-				KeyCode = k,
+				// Modifiers = accMod,
+				// KeyChar = e.Data.KeyChar.ToString(), // TODO: Test
+				// KeyCode = k,
 			};
 
 			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
