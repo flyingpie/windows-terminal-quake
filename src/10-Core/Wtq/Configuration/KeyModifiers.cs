@@ -32,6 +32,12 @@ public enum KeyModifiers
 	Super = 8,
 
 	/// <summary>
+	/// Key came from the numpad/keypad. Only used in combination with key characters, to differentiate keys
+	/// that can come from either the numpad or somewhere else (like "1").
+	/// </summary>
+	Numpad = 16,
+
+	/// <summary>
 	/// Prevents holding down the key-combo from firing multiple events.
 	/// TODO: Maybe move this out of the generic lib and into the Win32 or WinForms one.
 	/// </summary>
