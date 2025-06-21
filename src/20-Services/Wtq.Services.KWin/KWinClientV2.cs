@@ -152,8 +152,6 @@ internal sealed class KWinClientV2(
 	{
 		await InitAsync().NoCtx();
 
-		Console.WriteLine($"MAPPING:{Mapping.Sequence(sequence)}");
-
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				new("REGISTER_HOT_KEY")

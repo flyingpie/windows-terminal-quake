@@ -12,10 +12,12 @@ public sealed class HotkeyOptions : IValidatableObject
 	public KeyModifiers Modifiers { get; set; }
 
 	[JsonIgnore]
+	[MemberNotNullWhen(true, nameof(KeyChar))]
 	public bool HasKeyChar => !string.IsNullOrWhiteSpace(KeyChar);
 
 	[JsonIgnore]
-	public bool HasKeyCode => Key != Keys.None;
+	[MemberNotNullWhen(true, nameof(Key))]
+	public bool HasKeyCode => Key != null && Key != Keys.None;
 
 	[JsonIgnore]
 	public bool IsAlt
@@ -143,7 +145,7 @@ public sealed class HotkeyOptions : IValidatableObject
 			s.Append(KeyChar);
 		}
 
-		if (Key.HasValue && Key != Keys.None)
+		if (HasKeyCode)
 		{
 			s.Append(Key.Value.GetAttribute<Keys, DisplayAttribute>()?.Description ?? Key.ToString());
 		}
@@ -153,7 +155,7 @@ public sealed class HotkeyOptions : IValidatableObject
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 	{
-		if (Key == null && KeyChar == null)
+		if (HasKeyChar == HasKeyCode)
 		{
 			yield return new($"Either a '{nameof(Key)}' or '{nameof(KeyChar)}' is required.");
 		}

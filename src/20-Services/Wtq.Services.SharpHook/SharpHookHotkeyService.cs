@@ -1,10 +1,7 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
-using System.Runtime.InteropServices;
-using System.Text;
 using Wtq.Events;
-using System.Windows.Forms;
 
 namespace Wtq.Services.SharpHook;
 
@@ -47,8 +44,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		});
 
 		// We need the blocking global hook to allow suppressions (i.e. preventing keys from doing other things after triggering WTQ events).
-		_hook = new SimpleGlobalHook(
-			globalHookType: GlobalHookType.Keyboard);
+		_hook = new SimpleGlobalHook(GlobalHookType.Keyboard);
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -64,25 +60,18 @@ public class SharpHookHotkeyService : WtqHostedService
 
 		_hook.KeyPressed += (s, e) =>
 		{
-
-
 			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
 			e.SuppressEvent = false;
 
 			// Translate SharpHook values to WTQ ones.
 			var m = GetModifiers(e.Data.KeyCode);
-			var keyCode = (Configuration.Keys)e.Data.KeyCode;
-			var keyChar = User32X.KeyCodeToUnicode((uint)e.Data.RawCode);
+			var keyCode = (Keys)e.Data.KeyCode;
+			var keyChar = User32.KeyCodeToUnicode(e.Data.RawCode);
 
 			// Add to accumulated modifiers.
 			accMod |= m;
 
-			var keySeq = new KeySequence()
-			{
-				Modifiers = accMod,
-				KeyChar = keyChar,
-				KeyCode = keyCode,
-			};
+			var keySeq = new KeySequence(accMod, keyCode, keyChar);
 
 			Console.WriteLine($"VK:{e.Data.KeyCode} SEQ:{keySeq}");
 
@@ -95,7 +84,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			}
 
 			// Look for a registered hotkey matching the one just pressed.
-			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence.Equals2(keySeq));
+			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);
 			if (hk == null)
 			{
 				_log.LogDebug("No hotkey mapping found for modifiers '{Modifiers}' and key '{Key}'", accMod, keyCode);
@@ -113,7 +102,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			e.SuppressEvent = false;
 
 			// Translate SharpHook values to WTQ ones.
-			var k = (Configuration.Keys)e.Data.KeyCode;
+			var k = (Keys)e.Data.KeyCode;
 			var m = GetModifiers(e.Data.KeyCode);
 
 			// Remove from accumulated modifiers.
@@ -177,57 +166,4 @@ public class SharpHookHotkeyService : WtqHostedService
 			}
 		}
 	}
-}
-
-public static class User32X
-{
-	public static byte VK_LSHIFT =  	0xA0;
-	public static byte VK_RSHIFT = 0xA1;
-	public static byte VK_LCONTROL = 0xA2;
-	public static byte VK_RCONTROL =  	0xA3;
-	public static byte VK_LMENU =  	0xA4;
-	public static byte VK_RMENU =  	0xA5;
-
-	public static string KeyCodeToUnicode(uint key)
-	{
-		// TODO: Keyboard layout changes require WTQ restart atm.
-		KeysConverter converter = new KeysConverter();
-		var res = converter.ConvertToString((System.Windows.Forms.Keys)key);
-		Console.WriteLine($"RES:{res}");
-
-		// TODO: When "Control" is pressed, we're not getting back key characters. Kind of understandable, but messes up the registration.
-		// Remove "Control" from the keyboard state?
-		byte[] keyboardState = new byte[256];
-		bool keyboardStateStatus = GetKeyboardState(keyboardState);
-
-		Console.WriteLine($"STATE:{Convert.ToHexString(keyboardState)}");
-
-		if (!keyboardStateStatus)
-		{
-			return "wups";
-		}
-
-		uint virtualKeyCode = (uint)key;
-		uint scanCode = MapVirtualKey(virtualKeyCode, 0);
-		IntPtr inputLocaleIdentifier = GetKeyboardLayout(0);
-
-		Console.WriteLine($"LAYOUT:{inputLocaleIdentifier}");
-
-		StringBuilder result = new StringBuilder();
-		ToUnicodeEx(virtualKeyCode, scanCode, keyboardState, result, (int)5, (uint)0, inputLocaleIdentifier);
-
-		return result.ToString();
-	}
-
-	[DllImport("user32.dll")]
-	static extern bool GetKeyboardState(byte[] lpKeyState);
-
-	[DllImport("user32.dll")]
-	static extern uint MapVirtualKey(uint uCode, uint uMapType);
-
-	[DllImport("user32.dll")]
-	static extern IntPtr GetKeyboardLayout(uint idThread);
-
-	[DllImport("user32.dll")]
-	static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
 }

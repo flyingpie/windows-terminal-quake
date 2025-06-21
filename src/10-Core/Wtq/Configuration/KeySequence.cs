@@ -3,7 +3,7 @@ namespace Wtq.Configuration;
 /// <summary>
 /// A combination of a <see cref="KeyModifiers"/>, a <see cref="Keys"/> and a key as a character.
 /// </summary>
-public readonly struct KeySequence(KeyModifiers modifiers, Keys? keyCode, string? keyChar)
+public readonly struct KeySequence(KeyModifiers modifiers, string? keyChar, Keys? keyCode)
 	: IEquatable<KeySequence>
 {
 	/// <summary>

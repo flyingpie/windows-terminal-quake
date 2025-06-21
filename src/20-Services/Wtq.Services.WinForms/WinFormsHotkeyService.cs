@@ -22,6 +22,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 			if (e.Sequence.KeyCode == null)
 			{
 				// TODO: Convert code <-> char
+				_log.LogWarning("Key chars are not supported in the WinForms hotkey registration, please switch to the SharpHook one.");
 				return Task.CompletedTask;
 			}
 
@@ -37,13 +38,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 
 		HotkeyManager.HotkeyPressed += (s, a) =>
 		{
-			var keySeq = new KeySequence()
-			{
-				// Modifiers = a.Modifiers.ToWtqKeyModifiers(),
-
-				// KeyChar = "", // TODO: Not supported yet.
-				// KeyCode = a.Key.ToWtqKeys(),
-			};
+			var keySeq = new KeySequence(a.Modifiers.ToWtqKeyModifiers(), null, a.Key.ToWtqKeys());
 
 			bus.Publish(new WtqHotkeyPressedEvent(keySeq));
 		};
