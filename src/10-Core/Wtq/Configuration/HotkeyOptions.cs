@@ -94,7 +94,7 @@ public sealed class HotkeyOptions : IValidatableObject
 	public bool IsEmpty => Modifiers == KeyModifiers.None && Key == Keys.None;
 
 	[JsonIgnore]
-	public KeySequence Sequence => new(Modifiers, Key, KeyChar);
+	public KeySequence Sequence => new(Modifiers, KeyChar, Key);
 
 	public override string ToString()
 	{
@@ -135,6 +135,16 @@ public sealed class HotkeyOptions : IValidatableObject
 			s.Append("Super");
 		}
 
+		if (Modifiers.HasFlag(KeyModifiers.Numpad))
+		{
+			if (s.Length > 0)
+			{
+				s.Append(" + ");
+			}
+
+			s.Append("Num");
+		}
+
 		if (s.Length > 0)
 		{
 			s.Append(" + ");
@@ -155,7 +165,7 @@ public sealed class HotkeyOptions : IValidatableObject
 
 	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 	{
-		if (HasKeyChar == HasKeyCode)
+		if (!HasKeyChar && !HasKeyCode)
 		{
 			yield return new($"Either a '{nameof(Key)}' or '{nameof(KeyChar)}' is required.");
 		}

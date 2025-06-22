@@ -1,3 +1,5 @@
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @using Wtq.Services.UI.Extensions
 
 @inject IWtqBus Bus
@@ -18,19 +20,29 @@
 	{
 		get
 		{
-			if (Options.Key != Keys.None || Options.Modifiers != KeyModifiers.None)
-			{
-				return Options.ToString();
-			}
+			var s = Options.Sequence;
+			return s.IsEmpty
+				? "(press a shortcut here)"
+				: s.ToString();
 
-			return "(press a shortcut here)";
+			// if (Options.Key != Keys.None || Options.Modifiers != KeyModifiers.None)
+			// {
+			// 	return Options.ToString();
+			// }
+			//
+			// return "(press a shortcut here)";
 		}
 	}
+
+	public string? RawEvent { get; set; }
+
+	public string? RawSequence { get; set; }
 
 	private void Clear()
 	{
 		Options.Modifiers = KeyModifiers.None;
 		Options.Key = Keys.None;
+		Options.KeyChar = null;
 	}
 
 	private void HandleFocusGained(FocusEventArgs e) => Bus.Publish<WtqSuspendHotkeysEvent>();
@@ -39,74 +51,131 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
-		Console.WriteLine($"CTRL:{e.CtrlKey} ALT:{e.AltKey} SHIFT:{e.ShiftKey} KB CODE:{e.Code} KEY:{e.Key} TYPE:{e.Type} LOCATION:{e.Location} IsComposing:{e.IsComposing}");
+		RawEvent = Json.Serialize(e);
 
-		if (e.IsSuperKey())
+		// if (e.IsSuperKey())
+		// {
+		// 	_isSuper = true;
+		// }
+
+		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
+
+		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
+		// So we're keeping track of that ourselves.
+
+		// if (_isSuper)
+		// {
+		// 	mod |= KeyModifiers.Super;
+		// }
+
+		if (keyCode.IsSuper())
 		{
+			Console.WriteLine("IS SUPER!!");
 			_isSuper = true;
-		}
 
-		e.ToModifiersAndKey(out var mod, out var key);
+			// return;
+		}
 
 		if (_isSuper)
 		{
 			mod |= KeyModifiers.Super;
 		}
 
-		Options.Modifiers = mod;
+		if (keyCode.IsModifier())
+		{
+			keyChar = null;
+			keyCode = Keys.None;
+		}
 
-		if (UseKeyCodes.Contains(key))
+		if (!string.IsNullOrWhiteSpace(keyChar))
 		{
-			Options.Key = key;
-			Options.KeyChar = null;
+			keyCode = Keys.None;
 		}
-		else
+
+		Console.WriteLine($"MOD:{mod} HAS_FLAG:{mod.HasFlag(KeyModifiers.Shift)}");
+
+		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
+		// TODO: Explain why
+		// TODO: Move to KWin-specific part.
+		if (mod.HasFlag(KeyModifiers.Shift) && keyChar != null && keyChar.All(c => !char.IsUpper(c) && !char.IsLower(c)))
 		{
-			Options.Key = null;
-			Options.KeyChar = e.Key;
+			mod ^= KeyModifiers.Shift;
 		}
+
+		Options.Modifiers = mod;
+		Options.Key = keyCode;
+		Options.KeyChar = keyChar;
+
+		Console.WriteLine(
+			$"IS_SUPER:{_isSuper} " +
+			$"ALT:{e.AltKey} " +
+			$"CTRL:{e.CtrlKey} " +
+			$"META:{e.MetaKey} " +
+			$"SHIFT:{e.ShiftKey} " +
+			$"KEY_CODE:{e.Code} " +
+			$"KEY_CHAR:{e.Key} " +
+			$"EV_TYPE:{e.Type} " +
+			$"LOCATION:{e.Location} " +
+			$"IsComposing:{e.IsComposing}");
+
+		Console.WriteLine($"SEQ_SHORT:{Options.Sequence}");
+		Console.WriteLine($"SEQ_LONG_:{Options.Sequence.ToLongString()}");
+
+		RawSequence = Json.Serialize(Options.Sequence);
+
+		// _isSuper = false;
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
-		if (e.IsSuperKey())
+		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
+
+		if (keyCode.IsSuper())
 		{
 			_isSuper = false;
 		}
 	}
 
-	public static HashSet<Keys> UseKeyCodes { get; } = new()
-	{
-		Keys.Add, Keys.Divide, Keys.Multiply, Keys.D2,
-	};
+	public char KeyChar => (Options?.KeyChar ?? " ")[0];
 
 }
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+<RadzenStack Orientation="Orientation.Vertical">
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-	<!-- Shortcut capturing textbox -->
-	<RadzenTextBox
-		Style="width: 100%;"
-		@onkeydown="HandleKeyDown"
-		@onkeyup="HandleKeyUp"
-		@onfocus="HandleFocusGained"
-		@onblur="HandleFocusLost"
-		Placeholder="Type here to set hotkey."
-		Value="@Description"
-	/>
+		<!-- Shortcut capturing textbox -->
+		<RadzenTextBox
+			Style="width: 100%;"
+			@onkeydown="HandleKeyDown"
+			@onkeyup="HandleKeyUp"
+			@onfocus="HandleFocusGained"
+			@onblur="HandleFocusLost"
+			Placeholder="Type here to set hotkey."
+			Value="@Description"
+		/>
 
-	<!-- Clear button -->
-	<RadzenButton
-		Icon="backspace"
-		Size="ButtonSize.Medium"
-		Click="@(() => Clear())"
-	/>
+		<!-- Clear button -->
+		<RadzenButton
+			Icon="backspace"
+			Size="ButtonSize.Medium"
+			Click="@(() => Clear())"
+		/>
 
-	<!-- Remove button -->
-	<RadzenButton
-		Icon="delete"
-		Size="ButtonSize.Medium"
-		Click="@(() => OnRemove())"
-	/>
+		<!-- Remove button -->
+		<RadzenButton
+			Icon="delete"
+			Size="ButtonSize.Medium"
+			Click="@(() => OnRemove())"
+		/>
 
+	</RadzenStack>
+
+	<h4>EVENT</h4>
+	<pre>@RawEvent</pre>
+
+	<h4>SEQUENCE</h4>
+	<pre>@RawSequence</pre>
+
+	<pre>IS_UPPER:@(char.IsUpper((Options?.KeyChar ?? " ")[0]))</pre>
+	<pre>IS_LOWER:@(char.IsLower((Options?.KeyChar ?? " ")[0]))</pre>
 </RadzenStack>

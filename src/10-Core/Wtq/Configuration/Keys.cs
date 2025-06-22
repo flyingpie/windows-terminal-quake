@@ -510,10 +510,22 @@ public enum Keys
 	LWin = 0x5B,
 
 	/// <summary>
+	/// The left Windows logo key (also called "super" or "meta").
+	/// </summary>
+	[Display(Name = "Left super")]
+	LSuperKey = 0x5B,
+
+	/// <summary>
 	/// The right Windows logo key (Microsoft Natural Keyboard).
 	/// </summary>
 	[Display(Name = "Right super")]
 	RWin = 0x5C,
+
+	/// <summary>
+	/// The right Windows logo key (also called "super" or "meta").
+	/// </summary>
+	[Display(Name = "Right super")]
+	RSuperKey = 0x5C,
 
 	/// <summary>
 	/// The application key (Microsoft Natural Keyboard).
@@ -791,9 +803,19 @@ public enum Keys
 	LMenu = 0xA4,
 
 	/// <summary>
+	/// The left ALT key.
+	/// </summary>
+	LAltKey = 0xA4,
+
+	/// <summary>
 	/// The right ALT key.
 	/// </summary>
 	RMenu = 0xA5,
+
+	/// <summary>
+	/// The right ALT key.
+	/// </summary>
+	RAltKey = 0xA5,
 
 	/// <summary>
 	/// The browser back key.
@@ -1071,4 +1093,6 @@ public enum Keys
 	/// The ALT modifier key.
 	/// </summary>
 	Alt = 0x00040000,
+
+	Super,
 }

@@ -10,17 +10,17 @@
 			"FileName": "konsole"
 		},
 
-		{
-			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
-			"FileName": "plasma-systemmonitor"
-		},
-
-		{
-			"Name": "SystemMonitor",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
-			"FileName": "dolphin"
-		}
+//		{
+//			"Name": "Dolphin",
+//			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+//			"FileName": "plasma-systemmonitor"
+//		},
+//
+//		{
+//			"Name": "SystemMonitor",
+//			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+//			"FileName": "dolphin"
+//		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
@@ -42,6 +42,8 @@
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
 	"VerticalScreenCoverage": 95,
+
+	"ShowUiOnStart": true,
 
 	"Api": {
 		"Enable": true

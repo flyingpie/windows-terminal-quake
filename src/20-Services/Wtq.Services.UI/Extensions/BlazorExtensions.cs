@@ -9,24 +9,34 @@ public static class BlazorExtensions
 	/// <summary>
 	/// Names of the "Super" key (also "Windows" and "Meta"), as they come through from a browser (which we use for hosting the GUI).
 	/// </summary>
-	private static readonly HashSet<string> SuperKeys = new(StringComparer.OrdinalIgnoreCase)
-	{
-		"super", "meta", "metaleft", "metaright",
-	};
 
+	// private static readonly HashSet<string> SuperKeys = new(StringComparer.OrdinalIgnoreCase)
+	// {
+	// 	"super", "meta", "metaleft", "metaright",
+	// };
 	private static readonly ILogger _log = Log.For(typeof(BlazorExtensions));
 
 	/// <summary>
 	/// Returns whether the specified <paramref name="ev"/> is tied to a "Super" key.
 	/// </summary>
-	public static bool IsSuperKey(this KeyboardEventArgs ev) => SuperKeys.Contains(ev.Key);
 
-	public static void ToModifiersAndKey(this KeyboardEventArgs ev, out KeyModifiers mod, out Keys key)
+	// public static bool IsSuperKey(this KeyboardEventArgs ev) => SuperKeys.Contains(ev.Key);
+	public static void ToModifiersAndKey(
+		this KeyboardEventArgs ev,
+		out KeyModifiers mod,
+		out string? keyChar,
+		out Keys keyCode)
 	{
 		Guard.Against.Null(ev);
 
 		mod = ToKeyModifiers(ev);
-		key = ToKeys(ev.Code);
+		keyChar = ev.Key;
+		keyCode = ToKeys(ev.Code);
+
+		if (keyCode.IsNumpad())
+		{
+			mod |= KeyModifiers.Numpad;
+		}
 	}
 
 	private static KeyModifiers ToKeyModifiers(KeyboardEventArgs ev)
@@ -85,12 +95,6 @@ public static class BlazorExtensions
 			case "arrowdown": return Keys.Down;
 			case "arrowleft": return Keys.Left;
 			case "arrowright": return Keys.Right;
-			case "numpaddivide": return Keys.Divide;
-			case "numpadmultiply": return Keys.Multiply;
-			case "numpadsubtract": return Keys.Subtract;
-			case "numpadadd": return Keys.Add;
-			case "numpaddecimal": return Keys.Decimal;
-			case "numpadenter": return Keys.Enter;
 			case "backslash": return Keys.OemBackslash;
 			case "space": return Keys.Space;
 
@@ -167,6 +171,31 @@ public static class BlazorExtensions
 			case "numpad7": return Keys.NumPad7;
 			case "numpad8": return Keys.NumPad8;
 			case "numpad9": return Keys.NumPad9;
+			case "numpaddivide": return Keys.Divide;
+			case "numpadmultiply": return Keys.Multiply;
+			case "numpadsubtract": return Keys.Subtract;
+			case "numpadadd": return Keys.Add;
+			case "numpaddecimal": return Keys.Decimal;
+			case "numpadenter": return Keys.Enter;
+
+			// Modifiers
+			// case "alt": return Keys.Alt;
+			case "altleft": return Keys.LAltKey;
+			case "altright": return Keys.RAltKey;
+
+			// case "control": return Keys.Control;
+			case "controlleft": return Keys.LControlKey;
+			case "controlright": return Keys.RControlKey;
+
+			// case "shift": return Keys.Shift;
+			case "shiftleft": return Keys.LShiftKey;
+			case "shiftright": return Keys.RShiftKey;
+
+			// case "super": return Keys.Super;
+			case "superleft": return Keys.LSuperKey;
+			case "superright": return Keys.RSuperKey;
+			case "osleft": return Keys.LSuperKey;
+			case "osright": return Keys.RSuperKey;
 		}
 
 		_log.LogWarning("Unknown key code '{Code}'", code);

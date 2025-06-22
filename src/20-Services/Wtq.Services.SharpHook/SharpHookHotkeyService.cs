@@ -71,7 +71,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			// Add to accumulated modifiers.
 			accMod |= m;
 
-			var keySeq = new KeySequence(accMod, keyCode, keyChar);
+			var keySeq = new KeySequence(accMod, keyChar, keyCode);
 
 			Console.WriteLine($"VK:{e.Data.KeyCode} SEQ:{keySeq}");
 

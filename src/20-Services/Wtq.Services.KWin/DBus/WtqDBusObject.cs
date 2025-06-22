@@ -185,19 +185,10 @@ internal sealed class WtqDBusObject(
 			keyCharStr,
 			keyCodeStr);
 
-		if (!Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod))
-		{
-			_log.LogWarning("Could not parse string '{KeyModifierString}' as a key modifier", modStr);
-			return;
-		}
+		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
+		Enum.TryParse<Keys>(keyCodeStr, ignoreCase: true, out var key);
 
-		if (!Enum.TryParse<Keys>(keyCodeStr, ignoreCase: true, out var key))
-		{
-			_log.LogWarning("Could not parse string '{KeyCodeString}' as a key code", keyCodeStr);
-			return;
-		}
-
-		var keySeq = new KeySequence(mod, key, keyCharStr);
+		var keySeq = new KeySequence(mod, keyCharStr, key);
 
 		await Task.WhenAll(_onPressShortcutHandlers.Select(h => h(keySeq)));
 	}

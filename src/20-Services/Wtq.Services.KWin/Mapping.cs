@@ -6,9 +6,18 @@ namespace Wtq.Services.KWin;
 
 public static class Mapping
 {
+	public static string ToKWin(this KeySequence sequence)
+	{
+		return Sequence(sequence);
+	}
+
 	public static string Sequence(KeySequence sequence)
 	{
 		var sb = new StringBuilder();
+
+		// TODO: Determine whether the "Shift" key is required.
+		// I.e., with sequence "Shift+F1", it _is_ required, as the actual key isn't affected by the shift.
+		// But with "Ctrl+Shift+1", it _is not_ required, as it will be bound as "Ctrl+@" (on US keyboards).
 
 		// Modifier
 		if (sequence.Modifiers != KeyModifiers.None)
@@ -17,7 +26,8 @@ public static class Mapping
 		}
 
 		// Key char
-		if (!string.IsNullOrWhiteSpace(sequence.KeyChar))
+		// KWin uses key characters, so prefer that one if we have it right in the settings.
+		if (sequence.HasKeyChar)
 		{
 			if (sb.Length > 0)
 			{
@@ -26,15 +36,20 @@ public static class Mapping
 
 			sb.Append(sequence.KeyChar);
 		}
-		else if (sequence.KeyCode.HasValue && sequence.KeyCode != None)
+
+		// Alternatively, if no key character is present, map the key code.
+		// This is not a perfect method, as the character depends on the keyboard layout, which I haven't found a way to access yet.
+		else if (sequence.HasKeyCode)
 		{
 			if (sb.Length > 0)
 			{
 				sb.Append('+');
 			}
 
-			sb.Append(KeyToKWinString(sequence.KeyCode.Value));
+			sb.Append(KeyToKWinString(sequence.KeyCode));
 		}
+
+		Console.WriteLine($"SEQ:{sequence} => KWIN:{sb}");
 
 		return sb.ToString();
 	}
@@ -127,10 +142,10 @@ public static class Mapping
 	{
 		var sb = new StringBuilder();
 
-		foreach (var m in new[]
-		{
-			KeyModifiers.Control, KeyModifiers.Alt, KeyModifiers.Shift, KeyModifiers.Super
-		})
+		foreach (var m in (KeyModifiers[])
+		[
+			KeyModifiers.Control, KeyModifiers.Alt, KeyModifiers.Shift, KeyModifiers.Super, KeyModifiers.Numpad // Order is important. I think.
+		])
 		{
 			if (modifiers.HasFlag(m))
 			{
@@ -158,6 +173,8 @@ public static class Mapping
 				=> "Shift",
 			KeyModifiers.Super
 				=> "Meta",
+			KeyModifiers.Numpad
+				=> "Num",
 			KeyModifiers.None
 				=> string.Empty,
 			KeyModifiers.NoRepeat
