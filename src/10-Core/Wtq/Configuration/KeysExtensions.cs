@@ -2,25 +2,37 @@ namespace Wtq.Configuration;
 
 public static class KeysExtensions
 {
-	public static bool IsNumpad(this Keys key)
-	{
-		switch (key)
-		{
-			case Keys.NumPad0:
-			case Keys.NumPad1:
-			case Keys.NumPad2:
-			case Keys.NumPad3:
-			case Keys.NumPad4:
-			case Keys.NumPad5:
-			case Keys.NumPad6:
-			case Keys.NumPad7:
-			case Keys.NumPad8:
-			case Keys.NumPad9:
-				return true;
-			default:
-				return false;
-		}
-	}
+	// public static bool IsNumpad(this Keys key)
+	// {
+	// 	switch (key)
+	// 	{
+	// 		case Keys.NumPad0:
+	// 		case Keys.NumPad1:
+	// 		case Keys.NumPad2:
+	// 		case Keys.NumPad3:
+	// 		case Keys.NumPad4:
+	// 		case Keys.NumPad5:
+	// 		case Keys.NumPad6:
+	// 		case Keys.NumPad7:
+	// 		case Keys.NumPad8:
+	// 		case Keys.NumPad9:
+	// 		case Keys.Divide;
+	// 		case Keys.Multiply:
+	// 		case Keys.Subtract:
+	// 		case Keys.Add:
+	//
+	// 		case "numpaddivide": return Keys.Divide;
+	// 		case "numpadmultiply": return Keys.Multiply;
+	// 		case "numpadsubtract": return Keys.Subtract;
+	// 		case "numpadadd": return Keys.Add;
+	// 		case "numpaddecimal": return Keys.Decimal;
+	// 		case "numpadenter": return Keys.Enter;
+	//
+	// 			return true;
+	// 		default:
+	// 			return false;
+	// 	}
+	// }
 
 	public static bool IsAlt(this Keys key)
 	{

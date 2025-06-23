@@ -3,21 +3,13 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Defines a combination of a <see cref="Keys"/> value, with optional <see cref="KeyModifiers"/>, used for mapping a shortcut to an action.
 /// </summary>
-public sealed class HotkeyOptions : IValidatableObject
+public sealed class HotkeyOptions
 {
 	public Keys? Key { get; set; }
 
 	public string? KeyChar { get; set; }
 
 	public KeyModifiers Modifiers { get; set; }
-
-	[JsonIgnore]
-	[MemberNotNullWhen(true, nameof(KeyChar))]
-	public bool HasKeyChar => !string.IsNullOrWhiteSpace(KeyChar);
-
-	[JsonIgnore]
-	[MemberNotNullWhen(true, nameof(Key))]
-	public bool HasKeyCode => Key != null && Key != Keys.None;
 
 	[JsonIgnore]
 	public bool IsAlt
@@ -96,78 +88,5 @@ public sealed class HotkeyOptions : IValidatableObject
 	[JsonIgnore]
 	public KeySequence Sequence => new(Modifiers, KeyChar, Key);
 
-	public override string ToString()
-	{
-		var s = new StringBuilder();
-
-		if (IsCtrl)
-		{
-			s.Append("Ctrl");
-		}
-
-		if (IsShift)
-		{
-			if (s.Length > 0)
-			{
-				s.Append(" + ");
-			}
-
-			s.Append("Shift");
-		}
-
-		if (IsAlt)
-		{
-			if (s.Length > 0)
-			{
-				s.Append(" + ");
-			}
-
-			s.Append("Alt");
-		}
-
-		if (IsSuper)
-		{
-			if (s.Length > 0)
-			{
-				s.Append(" + ");
-			}
-
-			s.Append("Super");
-		}
-
-		if (Modifiers.HasFlag(KeyModifiers.Numpad))
-		{
-			if (s.Length > 0)
-			{
-				s.Append(" + ");
-			}
-
-			s.Append("Num");
-		}
-
-		if (s.Length > 0)
-		{
-			s.Append(" + ");
-		}
-
-		if (HasKeyChar)
-		{
-			s.Append(KeyChar);
-		}
-
-		if (HasKeyCode)
-		{
-			s.Append(Key.Value.GetAttribute<Keys, DisplayAttribute>()?.Description ?? Key.ToString());
-		}
-
-		return s.ToString();
-	}
-
-	public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-	{
-		if (!HasKeyChar && !HasKeyCode)
-		{
-			yield return new($"Either a '{nameof(Key)}' or '{nameof(KeyChar)}' is required.");
-		}
-	}
+	public override string ToString() => Sequence.ToString();
 }

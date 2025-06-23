@@ -13,7 +13,7 @@ public static class User32
 	public static byte VK_LMENU = 0xA4;
 	public static byte VK_RMENU = 0xA5;
 
-	public static string KeyCodeToUnicode(uint key)
+	public static string? KeyCodeToUnicode(uint key)
 	{
 		// TODO: Keyboard layout changes require WTQ restart atm.
 		KeysConverter converter = new KeysConverter();
@@ -29,7 +29,7 @@ public static class User32
 
 		if (!keyboardStateStatus)
 		{
-			return "wups";
+			return null;
 		}
 
 		uint virtualKeyCode = (uint)key;

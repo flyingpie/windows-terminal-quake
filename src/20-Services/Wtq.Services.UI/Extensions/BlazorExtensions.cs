@@ -6,21 +6,25 @@ namespace Wtq.Services.UI.Extensions;
 
 public static class BlazorExtensions
 {
-	/// <summary>
-	/// Names of the "Super" key (also "Windows" and "Meta"), as they come through from a browser (which we use for hosting the GUI).
-	/// </summary>
-
-	// private static readonly HashSet<string> SuperKeys = new(StringComparer.OrdinalIgnoreCase)
-	// {
-	// 	"super", "meta", "metaleft", "metaright",
-	// };
 	private static readonly ILogger _log = Log.For(typeof(BlazorExtensions));
 
 	/// <summary>
-	/// Returns whether the specified <paramref name="ev"/> is tied to a "Super" key.
+	/// Converts the numeric value of the "location" property to an <see cref="DomKeyLocation"/>.
 	/// </summary>
+	/// <remarks>https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#keyboard_locations.</remarks>
+	public static DomKeyLocation GetKeyLocation(this KeyboardEventArgs e)
+	{
+		switch ((int)e.Location)
+		{
+			case 0: return DomKeyLocation.Standard;
+			case 1: return DomKeyLocation.Left;
+			case 2: return DomKeyLocation.Right;
+			case 3: return DomKeyLocation.Numpad;
 
-	// public static bool IsSuperKey(this KeyboardEventArgs ev) => SuperKeys.Contains(ev.Key);
+			default: return DomKeyLocation.Unknown;
+		}
+	}
+
 	public static void ToModifiersAndKey(
 		this KeyboardEventArgs ev,
 		out KeyModifiers mod,
@@ -33,7 +37,10 @@ public static class BlazorExtensions
 		keyChar = ev.Key;
 		keyCode = ToKeys(ev.Code);
 
-		if (keyCode.IsNumpad())
+		var loc = ev.GetKeyLocation();
+
+		// If this key comes from the numpad, add the "Numpad" modifier.
+		if (loc == DomKeyLocation.Numpad)
 		{
 			mod |= KeyModifiers.Numpad;
 		}
@@ -58,7 +65,11 @@ public static class BlazorExtensions
 			mod |= KeyModifiers.Shift;
 		}
 
-		// TODO: Super?
+		// Note that the "MetaKey" property doesn't seem to work on Photino+Linux.
+		if (ev.MetaKey)
+		{
+			mod |= KeyModifiers.Super;
+		}
 
 		return mod;
 	}
