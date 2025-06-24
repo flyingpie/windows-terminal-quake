@@ -60,20 +60,16 @@
 
 		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
 
-		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
-		// So we're keeping track of that ourselves.
-
 		// if (_isSuper)
 		// {
 		// 	mod |= KeyModifiers.Super;
 		// }
 
+		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
+		// So we're keeping track of that ourselves.
 		if (keyCode.IsSuper())
 		{
-			Console.WriteLine("IS SUPER!!");
 			_isSuper = true;
-
-			// return;
 		}
 
 		if (_isSuper)
@@ -81,18 +77,18 @@
 			mod |= KeyModifiers.Super;
 		}
 
+		// If the pressed key is a modifier, omit it from the key code and key char.
 		if (keyCode.IsModifier())
 		{
 			keyChar = null;
 			keyCode = Keys.None;
 		}
 
+		// If a proper key char is available, omit the key code.
 		if (!string.IsNullOrWhiteSpace(keyChar))
 		{
 			keyCode = Keys.None;
 		}
-
-		Console.WriteLine($"MOD:{mod} HAS_FLAG:{mod.HasFlag(KeyModifiers.Shift)}");
 
 		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
 		// TODO: Explain why
@@ -119,7 +115,6 @@
 			$"IsComposing:{e.IsComposing}");
 
 		Console.WriteLine($"SEQ_SHORT:{Options.Sequence}");
-		Console.WriteLine($"SEQ_LONG_:{Options.Sequence.ToLongString()}");
 
 		RawSequence = Json.Serialize(Options.Sequence);
 
@@ -144,12 +139,18 @@
 	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
 		<!-- Shortcut capturing textbox -->
-		<RadzenTextBox
+		<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
+		<input
+			class="rz-textbox"
 			Style="width: 100%;"
 			@onkeydown="HandleKeyDown"
+			@onkeydown:preventDefault="true"
+
 			@onkeyup="HandleKeyUp"
+
 			@onfocus="HandleFocusGained"
 			@onblur="HandleFocusLost"
+
 			Placeholder="Type here to set hotkey."
 			Value="@Description"
 		/>

@@ -1,5 +1,6 @@
 namespace Wtq.Configuration;
 
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Keeps the file next to the KeyModifiers one.")]
 public static class KeysExtensions
 {
 	// public static bool IsNumpad(this Keys key)

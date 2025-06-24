@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using Wtq.Configuration;
+using Wtq.Services.UI.Input;
 
 namespace Wtq.Services.UI.Extensions;
 
@@ -9,20 +10,55 @@ public static class BlazorExtensions
 	private static readonly ILogger _log = Log.For(typeof(BlazorExtensions));
 
 	/// <summary>
-	/// Converts the numeric value of the "location" property to an <see cref="DomKeyLocation"/>.
+	/// Converts the numeric value of the "location" property to an <see cref="Html5DomKeyLocation"/>.
 	/// </summary>
 	/// <remarks>https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#keyboard_locations.</remarks>
-	public static DomKeyLocation GetKeyLocation(this KeyboardEventArgs e)
+	public static Html5DomKeyLocation GetKeyLocation(this KeyboardEventArgs e)
 	{
 		switch ((int)e.Location)
 		{
-			case 0: return DomKeyLocation.Standard;
-			case 1: return DomKeyLocation.Left;
-			case 2: return DomKeyLocation.Right;
-			case 3: return DomKeyLocation.Numpad;
+			case 0: return Html5DomKeyLocation.Standard;
+			case 1: return Html5DomKeyLocation.Left;
+			case 2: return Html5DomKeyLocation.Right;
+			case 3: return Html5DomKeyLocation.Numpad;
 
-			default: return DomKeyLocation.Unknown;
+			default: return Html5DomKeyLocation.Unknown;
 		}
+	}
+
+	/// <summary>
+	/// Returns whether the "shift"-modifier has caused the pressed key to emit a symbol, unrelated to the one that
+	/// would have been emitted, had shift not been pressed.<br/>
+	/// <br/>
+	/// For example: when pressing the "A" key without shift returns "a", with shift "A". These are different, but related.<br/>
+	/// Pressing the "1" key on the main row of a US ANSI keyboard without shift returns "1", with shift "!". These are different, and not related.<br/>
+	/// <br/>
+	/// This is not a perfect method, but we need it for sending hotkey registrations to KWin, as there "shift" is not considered
+	/// when the character already implies one.<br/>
+	/// <br/>
+	/// Nicer methods would probably require more access to the active keyboard layout and character mapping, which we don't have.
+	/// </summary>
+	public static bool HasShiftKeyAffectedCharacter(KeyModifiers modifiers, Keys? keyCode, string? keyChar)
+	{
+		// The "shift" key must be part of the active modifiers.
+		if (!modifiers.HasShift())
+		{
+			return false;
+		}
+
+		// We can skip non-character keys.
+		if (keyChar == null)
+		{
+			return false;
+		}
+
+		// Don't consider key chars that are referring to a non-character key, like "Tab", or "F1".
+		if (keyChar.Length > 1)
+		{
+			return false;
+		}
+
+		return keyChar.All(c => !char.IsUpper(c) && !char.IsLower(c));
 	}
 
 	public static void ToModifiersAndKey(
@@ -33,14 +69,19 @@ public static class BlazorExtensions
 	{
 		Guard.Against.Null(ev);
 
+		// Modifier
 		mod = ToKeyModifiers(ev);
+
+		// Key char
 		keyChar = ev.Key;
+
+		// Key code
 		keyCode = ToKeys(ev.Code);
 
 		var loc = ev.GetKeyLocation();
 
 		// If this key comes from the numpad, add the "Numpad" modifier.
-		if (loc == DomKeyLocation.Numpad)
+		if (loc == Html5DomKeyLocation.Numpad)
 		{
 			mod |= KeyModifiers.Numpad;
 		}

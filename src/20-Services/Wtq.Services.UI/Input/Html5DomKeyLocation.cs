@@ -1,11 +1,11 @@
-namespace Wtq.Services.UI.Extensions;
+namespace Wtq.Services.UI.Input;
 
 /// <summary>
 /// The following constants identify which part of the keyboard the key event originates from.
 /// They are accessed as KeyboardEvent.DOM_KEY_LOCATION_STANDARD and so forth.
 /// </summary>
 /// <remarks>https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#keyboard_locations.</remarks>
-public enum DomKeyLocation
+public enum Html5DomKeyLocation
 {
 	/// <summary>
 	/// DOM_KEY_LOCATION_STANDARD
