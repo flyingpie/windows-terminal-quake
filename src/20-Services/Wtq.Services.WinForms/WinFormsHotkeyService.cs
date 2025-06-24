@@ -1,4 +1,4 @@
-using Wtq.Configuration;
+using Wtq.Input;
 using Wtq.Services.WinForms.Native;
 using KeyModifiers = Wtq.Services.WinForms.Native.KeyModifiers;
 using Keys = System.Windows.Forms.Keys;
@@ -9,9 +9,6 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WinFormsHotkeyService>();
 
-	// TODO: Implement.
-	private bool _isSuspended;
-
 	public WinFormsHotkeyService(IWtqBus bus)
 	{
 		Guard.Against.Null(bus);
@@ -19,7 +16,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 		// TODO: Handle suspend/resume
 		bus.OnEvent<WtqHotkeyDefinedEvent>(e =>
 		{
-			if (e.Sequence.KeyCode == null)
+			if (!e.Sequence.HasKeyCode)
 			{
 				// TODO: Convert code <-> char
 				_log.LogWarning("Key chars are not supported in the WinForms hotkey registration, please switch to the SharpHook one.");
@@ -29,7 +26,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 			var mods = (KeyModifiers)e.Sequence.Modifiers;
 			var key = (Keys)e.Sequence.KeyCode;
 
-			_log.LogInformation("Registering Hotkey [{Modifiers}] '{Key}'", e.Sequence);
+			_log.LogInformation("Registering Hotkey '{Sequence}'", e.Sequence);
 
 			HotkeyManager.RegisterHotkey(key, mods);
 

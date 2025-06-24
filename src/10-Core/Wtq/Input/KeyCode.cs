@@ -1,8 +1,10 @@
-namespace Wtq.Configuration;
+namespace Wtq.Input;
 
+/// <summary>
+/// Represents a virtual key code, i.e. a key that points to a physical button on a keyboard, without necessarily taking into account keyboard language/layout.
+/// </summary>
 [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
-[Flags]
-public enum Keys
+public enum KeyCode
 {
 	/// <summary>
 	/// The bitmask to extract a key code from a key value.
@@ -775,7 +777,7 @@ public enum Keys
 	/// The SCROLL LOCK key.
 	/// </summary>
 	[Display(Name = "Scroll lock")]
-	Scroll = 0x91,
+	ScrollLock = 0x91,
 
 	/// <summary>
 	/// The left SHIFT key.

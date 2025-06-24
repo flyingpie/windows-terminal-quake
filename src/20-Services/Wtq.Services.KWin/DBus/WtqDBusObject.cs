@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
 using Tmds.DBus;
-using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
 using Wtq.Services.KWin.Exceptions;
@@ -186,7 +185,7 @@ internal sealed class WtqDBusObject(
 			keyCodeStr);
 
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-		Enum.TryParse<Keys>(keyCodeStr, ignoreCase: true, out var key);
+		Enum.TryParse<KeyCode>(keyCodeStr, ignoreCase: true, out var key);
 
 		var keySeq = new KeySequence(mod, keyCharStr, key);
 

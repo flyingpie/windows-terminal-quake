@@ -1,7 +1,8 @@
-namespace Wtq.Configuration;
+namespace Wtq.Input;
 
 /// <summary>
-/// Alt, control, etc..
+/// Alt, control, etc.<br/>
+/// Named plurally, as it can contain multiple values.
 /// </summary>
 [Flags]
 public enum KeyModifiers
@@ -17,7 +18,7 @@ public enum KeyModifiers
 	Alt = 1,
 
 	/// <summary>
-	/// Control (either left or right).
+	/// Control.
 	/// </summary>
 	Control = 2,
 
@@ -27,13 +28,14 @@ public enum KeyModifiers
 	Shift = 4,
 
 	/// <summary>
-	/// The "Windows" key on many keyboards.
+	/// The "Windows" key on many keyboards. Otherwise known as "Meta".
 	/// </summary>
 	Super = 8,
 
 	/// <summary>
-	/// Key came from the numpad/keypad. Only used in combination with key characters, to differentiate keys
-	/// that can come from either the numpad or somewhere else (like "1").
+	/// Key came from the numpad/keypad. Only used in combination with key characters (KeyChars as opposed to KeyCodes), to differentiate keys
+	/// that can come from either the numpad or somewhere else (like "1").<br/>
+	/// Borrowed from Qt.
 	/// </summary>
 	Numpad = 16,
 

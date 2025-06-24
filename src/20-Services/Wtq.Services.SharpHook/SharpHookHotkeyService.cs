@@ -2,6 +2,8 @@ using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
 using Wtq.Events;
+using SKC = SharpHook.Data.KeyCode;
+using WKC = Wtq.Input.KeyCode;
 
 namespace Wtq.Services.SharpHook;
 
@@ -56,7 +58,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		// - Event 1 Pressed
 		// So we need to manually combine the modifiers.
 		// Maybe look into asking the OS for pressed modifiers directly, but this requires a separate mechanism, next to SharpHook.
-		KeyModifiers accMod = KeyModifiers.None;
+		var accMod = KeyModifiers.None;
 
 		_hook.KeyPressed += (s, e) =>
 		{
@@ -65,7 +67,7 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			// Translate SharpHook values to WTQ ones.
 			var m = GetModifiers(e.Data.KeyCode);
-			var keyCode = (Keys)e.Data.KeyCode;
+			var keyCode = (WKC)e.Data.KeyCode;
 			var keyChar = User32.KeyCodeToUnicode(e.Data.RawCode);
 
 			// Add to accumulated modifiers.
@@ -102,7 +104,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			e.SuppressEvent = false;
 
 			// Translate SharpHook values to WTQ ones.
-			var k = (Keys)e.Data.KeyCode;
+			var k = (WKC)e.Data.KeyCode;
 			var m = GetModifiers(e.Data.KeyCode);
 
 			// Remove from accumulated modifiers.
@@ -126,24 +128,24 @@ public class SharpHookHotkeyService : WtqHostedService
 		return ValueTask.CompletedTask;
 	}
 
-	private static KeyModifiers GetModifiers(KeyCode keyCode)
+	private static KeyModifiers GetModifiers(SKC keyCode)
 	{
 		switch (keyCode)
 		{
-			case KeyCode.VcLeftAlt:
-			case KeyCode.VcRightAlt:
+			case SKC.VcLeftAlt:
+			case SKC.VcRightAlt:
 				return KeyModifiers.Alt;
 
-			case KeyCode.VcLeftControl:
-			case KeyCode.VcRightControl:
+			case SKC.VcLeftControl:
+			case SKC.VcRightControl:
 				return KeyModifiers.Control;
 
-			case KeyCode.VcLeftMeta:
-			case KeyCode.VcRightMeta:
+			case SKC.VcLeftMeta:
+			case SKC.VcRightMeta:
 				return KeyModifiers.Super;
 
-			case KeyCode.VcLeftShift:
-			case KeyCode.VcRightShift:
+			case SKC.VcLeftShift:
+			case SKC.VcRightShift:
 				return KeyModifiers.Shift;
 
 			default:

@@ -160,7 +160,7 @@ internal sealed class KWinClientV2(
 					{
 						name = name,
 						title = description,
-						sequence = Mapping.Sequence(sequence),
+						sequence = sequence.ToKWinSequenceString(),
 						mod = sequence.Modifiers.ToString(),
 						keyChar = sequence.KeyChar ?? string.Empty,
 						keyCode = sequence.KeyCode.ToString(),
