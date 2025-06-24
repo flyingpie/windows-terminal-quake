@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
 using Tmds.DBus;
-using Wtq.Configuration;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
 using Wtq.Services.KWin.Exceptions;
@@ -27,7 +26,7 @@ internal sealed class WtqDBusObject(
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 
 	private readonly InitLock _lock = new();
-	private readonly List<Func<(KeyModifiers, Keys), Task>> _onPressShortcutHandlers = [];
+	private readonly List<Func<KeySequence, Task>> _onPressShortcutHandlers = [];
 
 	private Worker? _loop;
 
@@ -168,7 +167,7 @@ internal sealed class WtqDBusObject(
 		return Task.CompletedTask;
 	}
 
-	public void OnPressShortcut(Func<(KeyModifiers Mod, Keys Key), Task> handler)
+	public void OnPressShortcut(Func<KeySequence, Task> handler)
 	{
 		Guard.Against.Null(handler);
 
@@ -176,18 +175,21 @@ internal sealed class WtqDBusObject(
 	}
 
 	/// <inheritdoc/>
-	public async Task OnPressShortcutAsync(string modStr, string keyStr)
+	public async Task OnPressShortcutAsync(string modStr, string keyCharStr, string keyCodeStr)
 	{
 		_log.LogInformation(
-			"{MethodName}({Modifier}, {Key})",
+			"{MethodName}({Modifier}, {KeyChar}, {KeyCode})",
 			nameof(OnPressShortcutAsync),
 			modStr,
-			keyStr);
+			keyCharStr,
+			keyCodeStr);
 
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-		Enum.TryParse<Keys>(keyStr, ignoreCase: true, out var key);
+		Enum.TryParse<KeyCode>(keyCodeStr, ignoreCase: true, out var key);
 
-		await Task.WhenAll(_onPressShortcutHandlers.Select(h => h((mod, key))));
+		var keySeq = new KeySequence(mod, keyCharStr, key);
+
+		await Task.WhenAll(_onPressShortcutHandlers.Select(h => h(keySeq)));
 	}
 
 	public Task ToggleAppAsync(string appName)

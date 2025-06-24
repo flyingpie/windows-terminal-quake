@@ -36,8 +36,7 @@ public interface IKWinClient
 	Task RegisterHotkeyAsync(
 		string name,
 		string description,
-		KeyModifiers modifiers,
-		Keys key,
+		KeySequence sequence,
 		CancellationToken cancellationToken);
 
 	Task ResizeWindowAsync(
