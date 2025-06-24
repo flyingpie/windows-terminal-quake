@@ -40,7 +40,7 @@ public static class KeySequenceExtensions
 				sb.Append('+');
 			}
 
-			sb.Append(sequence.KeyCode.ToKWinString());
+			sb.Append(sequence.KeyCode.Value.ToKWinString());
 		}
 
 		return sb.ToString();
@@ -65,7 +65,6 @@ public static class KeySequenceExtensions
 				return "Num";
 
 			case KeyModifiers.None:
-			case KeyModifiers.NoRepeat:
 			default:
 				return string.Empty;
 		}

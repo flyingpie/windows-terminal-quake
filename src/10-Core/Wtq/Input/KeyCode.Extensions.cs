@@ -11,6 +11,9 @@ public static class KeyCodeExtensions
 		return key.IsAlt() || key.IsControl() || key.IsShift() || key.IsSuper();
 	}
 
+	/// <summary>
+	/// Whether this is the ALT key (either left or right).
+	/// </summary>
 	public static bool IsAlt(this KeyCode key)
 	{
 		switch (key)
@@ -24,6 +27,9 @@ public static class KeyCodeExtensions
 		}
 	}
 
+	/// <summary>
+	/// Whether this is the CONTROL key (either left or right).
+	/// </summary>
 	public static bool IsControl(this KeyCode key)
 	{
 		switch (key)
@@ -37,6 +43,9 @@ public static class KeyCodeExtensions
 		}
 	}
 
+	/// <summary>
+	/// Whether this key is part of the numpad/keypad.
+	/// </summary>
 	public static bool IsNumpad(this KeyCode key)
 	{
 		switch (key)
@@ -63,6 +72,9 @@ public static class KeyCodeExtensions
 		}
 	}
 
+	/// <summary>
+	/// Whether this is the SHIFT key (either left or right).
+	/// </summary>
 	public static bool IsShift(this KeyCode key)
 	{
 		switch (key)
@@ -76,6 +88,9 @@ public static class KeyCodeExtensions
 		}
 	}
 
+	/// <summary>
+	/// Whether this is the SUPER (or META or WINDOWS) key (either left or right).
+	/// </summary>
 	public static bool IsSuper(this KeyCode key)
 	{
 		switch (key)
