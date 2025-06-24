@@ -6,7 +6,7 @@
 		// PowerShell
 		{
 			"Name": "PowerShell",
-			"Hotkeys": [{ "Modifiers": "Alt", "KeyChar": "U" }],
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
 			"FileName": "pwsh"
 		},
 
@@ -21,7 +21,7 @@
 		// Explorer
 		{
 			"Name": "Explorer",
-			"Hotkeys": [{ "Modifiers": "Alt", "KeyChar": "§" }],
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
 			"FileName": "explorer",
 			"WindowClass": "CabinetWClass"
 		},
