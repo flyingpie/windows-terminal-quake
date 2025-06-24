@@ -33,7 +33,7 @@ public enum KeyModifiers
 	Super = 8,
 
 	/// <summary>
-	/// Key came from the numpad/keypad. Only used in combination with key characters (KeyChars as opposed to KeyCodes), to differentiate keys
+	/// Key cames from the numpad/keypad. Only used in combination with key characters (KeyChars as opposed to KeyCodes), to differentiate keys
 	/// that can come from either the numpad or somewhere else (like "1").<br/>
 	/// Borrowed from Qt.
 	/// </summary>

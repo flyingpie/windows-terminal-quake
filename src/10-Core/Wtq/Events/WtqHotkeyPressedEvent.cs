@@ -9,5 +9,8 @@ namespace Wtq.Events;
 /// </summary>
 public sealed class WtqHotkeyPressedEvent(KeySequence sequence) : WtqEvent
 {
+	/// <summary>
+	/// The key sequence that was pressed.
+	/// </summary>
 	public KeySequence Sequence { get; } = sequence;
 }

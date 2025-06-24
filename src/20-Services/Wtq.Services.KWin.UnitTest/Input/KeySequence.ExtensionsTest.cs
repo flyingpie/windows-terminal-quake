@@ -23,6 +23,7 @@ public class KeySequenceExtensionsTest
 			(new(KM.Control | KM.Numpad,				"1",	null),					"Ctrl+Num+1"),
 
 			(new(KM.Control,							"§",	null),					"Ctrl+§"),
+			(new(KM.Control,							"§",	null),					"Ctrl+§"),
 
 			// @formatter:on
 #pragma warning restore SA1027

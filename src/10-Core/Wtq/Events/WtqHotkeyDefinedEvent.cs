@@ -10,5 +10,8 @@ public sealed class WtqHotkeyDefinedEvent : WtqEvent
 	/// </summary>
 	public WtqAppOptions? AppOptions { get; init; }
 
+	/// <summary>
+	/// The key sequence that was specified.
+	/// </summary>
 	public KeySequence Sequence { get; init; }
 }
