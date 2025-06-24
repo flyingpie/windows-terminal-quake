@@ -490,20 +490,20 @@ partial class ColorPicker : KWinObject
 	private const string __Interface = "org.kde.kwin.ColorPicker";
 	public ColorPicker(KWinService service, ObjectPath path) : base(service, path)
 	{ }
-	// public Task<(uint)> PickAsync()
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_ruz(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             member: "pick");
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	 public Task<uint> PickAsync()
+	 {
+		 return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_ruz(m, (KWinObject)s!), this);
+		 MessageBuffer CreateMessage()
+		 {
+			 var writer = this.Connection.GetMessageWriter();
+			 writer.WriteMethodCallHeader(
+				 destination: Service.Destination,
+				 path: Path,
+				 @interface: __Interface,
+				 member: "pick");
+			 return writer.CreateMessage();
+		 }
+	 }
 }
 record CompositingProperties
 {
@@ -929,23 +929,23 @@ partial class Effects : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<string> DebugAsync(string name, string name)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_s(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "ss",
-	//             member: "debug");
-	//         writer.WriteString(name);
-	//         writer.WriteString(name);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	 public Task<string> DebugAsync(string name, string name2)
+	 {
+		 return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_s(m, (KWinObject)s!), this);
+		 MessageBuffer CreateMessage()
+		 {
+			 var writer = this.Connection.GetMessageWriter();
+			 writer.WriteMethodCallHeader(
+				 destination: Service.Destination,
+				 path: Path,
+				 @interface: __Interface,
+				 signature: "ss",
+				 member: "debug");
+			 writer.WriteString(name);
+			 writer.WriteString(name2);
+			 return writer.CreateMessage();
+		 }
+	 }
 	public Task SetActiveEffectsAsync(string[] value)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage());
@@ -3311,22 +3311,22 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<string[]> ActionListAsync((int[]) key)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_as(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "(ai)",
-	//             member: "actionList");
-	//         WriteType_raiz(ref writer, key);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<string[]> ActionListAsync(int[] key)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_as(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "(ai)",
+				member: "actionList");
+			WriteType_raiz(ref writer, key);
+			return writer.CreateMessage();
+		}
+	}
 	public Task<int[]> ShortcutAsync(string[] actionId)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_ai(m, (KWinObject)s!), this);
@@ -3343,22 +3343,22 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<(int[])[]> ShortcutKeysAsync(string[] actionId)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "as",
-	//             member: "shortcutKeys");
-	//         writer.WriteArray(actionId);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<int[][]> ShortcutKeysAsync(string[] actionId)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "as",
+				member: "shortcutKeys");
+			writer.WriteArray(actionId);
+			return writer.CreateMessage();
+		}
+	}
 	public Task<int[]> DefaultShortcutAsync(string[] actionId)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_ai(m, (KWinObject)s!), this);
@@ -3375,22 +3375,22 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<(int[])[]> DefaultShortcutKeysAsync(string[] actionId)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "as",
-	//             member: "defaultShortcutKeys");
-	//         writer.WriteArray(actionId);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<int[][]> DefaultShortcutKeysAsync(string[] actionId)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "as",
+				member: "defaultShortcutKeys");
+			writer.WriteArray(actionId);
+			return writer.CreateMessage();
+		}
+	}
 	public Task<ObjectPath> GetComponentAsync(string componentUnique)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_o(m, (KWinObject)s!), this);
@@ -3425,24 +3425,24 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<(int[])[]> SetShortcutKeysAsync(string[] actionId, (int[])[] keys, uint flags)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "asa(ai)u",
-	//             member: "setShortcutKeys");
-	//         writer.WriteArray(actionId);
-	//         WriteType_araiz(ref writer, keys);
-	//         writer.WriteUInt32(flags);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<int[][]> SetShortcutKeysAsync(string[] actionId, int[][] keys, uint flags)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_araiz(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "asa(ai)u",
+				member: "setShortcutKeys");
+			writer.WriteArray(actionId);
+			WriteType_araiz(ref writer, keys);
+			writer.WriteUInt32(flags);
+			return writer.CreateMessage();
+		}
+	}
 	public Task SetForeignShortcutAsync(string[] actionId, int[] keys)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage());
@@ -3460,23 +3460,23 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task SetForeignShortcutKeysAsync(string[] actionId, (int[])[] keys)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage());
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "asa(ai)",
-	//             member: "setForeignShortcutKeys");
-	//         writer.WriteArray(actionId);
-	//         WriteType_araiz(ref writer, keys);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task SetForeignShortcutKeysAsync(string[] actionId, int[][] keys)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage());
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "asa(ai)",
+				member: "setForeignShortcutKeys");
+			writer.WriteArray(actionId);
+			WriteType_araiz(ref writer, keys);
+			return writer.CreateMessage();
+		}
+	}
 	public Task SetInactiveAsync(string[] actionId)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage());
@@ -3558,23 +3558,23 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<(string, string, string, string, string, string, int[], int[])[]> GlobalShortcutsByKeyAsync((int[]) key, (int) @type)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_arssssssaiaiz(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "(ai)(i)",
-	//             member: "globalShortcutsByKey");
-	//         WriteType_raiz(ref writer, key);
-	//         WriteType_riz(ref writer, @type);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<(string, string, string, string, string, string, int[], int[])[]> GlobalShortcutsByKeyAsync(int[] key, int @type)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_arssssssaiaiz(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "(ai)(i)",
+				member: "globalShortcutsByKey");
+			WriteType_raiz(ref writer, key);
+			WriteType_riz(ref writer, @type);
+			return writer.CreateMessage();
+		}
+	}
 	public Task<bool> IsGlobalShortcutAvailableAsync(int key, string component)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_b(m, (KWinObject)s!), this);
@@ -3592,23 +3592,23 @@ partial class KGlobalAccel : KWinObject
 			return writer.CreateMessage();
 		}
 	}
-	// public Task<bool> GlobalShortcutAvailableAsync((int[]) key, string component)
-	// {
-	//     return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_b(m, (KWinObject)s!), this);
-	//     MessageBuffer CreateMessage()
-	//     {
-	//         var writer = this.Connection.GetMessageWriter();
-	//         writer.WriteMethodCallHeader(
-	//             destination: Service.Destination,
-	//             path: Path,
-	//             @interface: __Interface,
-	//             signature: "(ai)s",
-	//             member: "globalShortcutAvailable");
-	//         WriteType_raiz(ref writer, key);
-	//         writer.WriteString(component);
-	//         return writer.CreateMessage();
-	//     }
-	// }
+	public Task<bool> GlobalShortcutAvailableAsync(int[] key, string component)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_b(m, (KWinObject)s!), this);
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "(ai)s",
+				member: "globalShortcutAvailable");
+			WriteType_raiz(ref writer, key);
+			writer.WriteString(component);
+			return writer.CreateMessage();
+		}
+	}
 	public Task<bool> UnregisterAsync(string componentUnique, string shortcutUnique)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_b(m, (KWinObject)s!), this);
@@ -3645,7 +3645,7 @@ partial class KGlobalAccel : KWinObject
 	public ValueTask<IDisposable> WatchYourShortcutGotChangedAsync(Action<Exception?, (string[] ActionId, int[] NewKeys)> handler, bool emitOnCapturedContext = true, ObserverFlags flags = ObserverFlags.None)
 		=> base.WatchSignalAsync(Service.Destination, __Interface, Path, "yourShortcutGotChanged", (Message m, object? s) => ReadMessage_asai(m, (KWinObject)s!), handler, emitOnCapturedContext, flags);
 	// public ValueTask<IDisposable> WatchYourShortcutsChangedAsync(Action<Exception?, (string[] ActionId, (int[])[] NewKeys)> handler, bool emitOnCapturedContext = true, ObserverFlags flags = ObserverFlags.None)
-	//     => base.WatchSignalAsync(Service.Destination, __Interface, Path, "yourShortcutsChanged", (Message m, object? s) => ReadMessage_asaraiz(m, (KWinObject)s!), handler, emitOnCapturedContext, flags);
+	//	 => base.WatchSignalAsync(Service.Destination, __Interface, Path, "yourShortcutsChanged", (Message m, object? s) => ReadMessage_asaraiz(m, (KWinObject)s!), handler, emitOnCapturedContext, flags);
 }
 record TabletModeManagerProperties
 {
@@ -6585,11 +6585,11 @@ class KWinObject
 		reader.ReadSignature("t");
 		return reader.ReadUInt64();
 	}
-	// protected static (uint) ReadMessage_ruz(Message message, KWinObject _)
-	// {
-	//     var reader = message.GetBodyReader();
-	//     return ReadType_ruz(ref reader);
-	// }
+	protected static uint ReadMessage_ruz(Message message, KWinObject _)
+	{
+		var reader = message.GetBodyReader();
+		return ReadType_ruz(ref reader);
+	}
 	protected static bool ReadMessage_b(Message message, KWinObject _)
 	{
 		var reader = message.GetBodyReader();
@@ -6688,11 +6688,11 @@ class KWinObject
 		var reader = message.GetBodyReader();
 		return reader.ReadArrayOfInt32();
 	}
-	// protected static (int[])[] ReadMessage_araiz(Message message, KWinObject _)
-	// {
-	//     var reader = message.GetBodyReader();
-	//     return ReadType_araiz(ref reader);
-	// }
+	protected static int[][] ReadMessage_araiz(Message message, KWinObject _)
+	{
+		var reader = message.GetBodyReader();
+		return ReadType_araiz(ref reader);
+	}
 	protected static ObjectPath ReadMessage_o(Message message, KWinObject _)
 	{
 		var reader = message.GetBodyReader();
@@ -6705,13 +6705,13 @@ class KWinObject
 		var arg1 = reader.ReadArrayOfInt32();
 		return (arg0, arg1);
 	}
-	// protected static (string[], (int[])[]) ReadMessage_asaraiz(Message message, KWinObject _)
-	// {
-	//     var reader = message.GetBodyReader();
-	//     var arg0 = reader.ReadArrayOfString();
-	//     var arg1 = ReadType_araiz(ref reader);
-	//     return (arg0, arg1);
-	// }
+	protected static (string[], int[][]) ReadMessage_asaraiz(Message message, KWinObject _)
+	{
+		var reader = message.GetBodyReader();
+		var arg0 = reader.ReadArrayOfString();
+		var arg1 = ReadType_araiz(ref reader);
+		return (arg0, arg1);
+	}
 	protected static (double, double) ReadMessage_v_rddz(Message message, KWinObject _)
 	{
 		var reader = message.GetBodyReader();
@@ -6764,10 +6764,10 @@ class KWinObject
 	{
 		return (reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble());
 	}
-	// protected static (uint) ReadType_ruz(ref Reader reader)
-	// {
-	//     return (reader.ReadUInt32());
-	// }
+	protected static uint ReadType_ruz(ref Reader reader)
+	{
+		return reader.ReadUInt32();
+	}
 	protected static (string, string, string)[] ReadType_arsssz(ref Reader reader)
 	{
 		List<(string, string, string)> list = new();
@@ -6820,20 +6820,20 @@ class KWinObject
 		}
 		return list.ToArray();
 	}
-	// protected static (int[])[] ReadType_araiz(ref Reader reader)
-	// {
-	//     List<(int[])> list = new();
-	//     ArrayEnd arrayEnd = reader.ReadArrayStart(DBusType.Struct);
-	//     while (reader.HasNext(arrayEnd))
-	//     {
-	//         list.Add(ReadType_raiz(ref reader));
-	//     }
-	//     return list.ToArray();
-	// }
-	// protected static (int[]) ReadType_raiz(ref Reader reader)
-	// {
-	//     return (reader.ReadArrayOfInt32());
-	// }
+	protected static int[][] ReadType_araiz(ref Reader reader)
+	{
+		List<int[]> list = new();
+		ArrayEnd arrayEnd = reader.ReadArrayStart(DBusType.Struct);
+		while (reader.HasNext(arrayEnd))
+		{
+			list.Add(ReadType_raiz(ref reader));
+		}
+		return list.ToArray();
+	}
+	protected static int[] ReadType_raiz(ref Reader reader)
+	{
+		return reader.ReadArrayOfInt32();
+	}
 	protected static void WriteType_arissz(ref MessageWriter writer, (int, string, string)[] value)
 	{
 		ArrayStart arrayStart = writer.WriteArrayStart(DBusType.Struct);
@@ -6850,25 +6850,25 @@ class KWinObject
 		writer.WriteString(value.Item2);
 		writer.WriteString(value.Item3);
 	}
-	// protected static void WriteType_raiz(ref MessageWriter writer, (int[]) value)
-	// {
-	//     writer.WriteStructureStart();
-	//     writer.WriteArray(value.Item1);
-	// }
-	// protected static void WriteType_araiz(ref MessageWriter writer, (int[])[] value)
-	// {
-	//     ArrayStart arrayStart = writer.WriteArrayStart(DBusType.Struct);
-	//     foreach (var item in value)
-	//     {
-	//         WriteType_raiz(ref writer, item);
-	//     }
-	//     writer.WriteArrayEnd(arrayStart);
-	// }
-	// protected static void WriteType_riz(ref MessageWriter writer, (int) value)
-	// {
-	//     writer.WriteStructureStart();
-	//     writer.WriteInt32(value.Item1);
-	// }
+	protected static void WriteType_raiz(ref MessageWriter writer, int[] value)
+	{
+		writer.WriteStructureStart();
+		writer.WriteArray(value);
+	}
+	protected static void WriteType_araiz(ref MessageWriter writer, int[][] value)
+	{
+		ArrayStart arrayStart = writer.WriteArrayStart(DBusType.Struct);
+		foreach (var item in value)
+		{
+			WriteType_raiz(ref writer, item);
+		}
+		writer.WriteArrayEnd(arrayStart);
+	}
+	protected static void WriteType_riz(ref MessageWriter writer, int value)
+	{
+		writer.WriteStructureStart();
+		writer.WriteInt32(value);
+	}
 	protected static void WriteType_rddz(ref MessageWriter writer, (double, double) value)
 	{
 		writer.WriteStructureStart();
