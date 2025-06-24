@@ -1095,6 +1095,4 @@ public enum KeyCode
 	/// The ALT modifier key.
 	/// </summary>
 	Alt = 0x00040000,
-
-	Super,
 }
