@@ -32,7 +32,7 @@ public static class KeyCodeExtensions
 			case SKC.VcFunction: return WKC.None; // TODO: Unmapped
 
 			// Misc
-			case SKC.VcBackQuote:
+			case SKC.VcBackQuote:		return WKC.back
 			case SKC.VcEscape:
 			case SKC.VcOpenBracket:
 			case SKC.VcCloseBracket:

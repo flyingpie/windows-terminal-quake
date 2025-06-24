@@ -37,6 +37,32 @@ public static class KeyCodeExtensions
 		}
 	}
 
+	public static bool IsNumpad(this KeyCode key)
+	{
+		switch (key)
+		{
+			case KeyCode.NumPad0:
+			case KeyCode.NumPad1:
+			case KeyCode.NumPad2:
+			case KeyCode.NumPad3:
+			case KeyCode.NumPad4:
+			case KeyCode.NumPad5:
+			case KeyCode.NumPad6:
+			case KeyCode.NumPad7:
+			case KeyCode.NumPad8:
+			case KeyCode.NumPad9:
+			case KeyCode.Multiply:
+			case KeyCode.Subtract:
+			case KeyCode.Divide:
+			case KeyCode.Add:
+			case KeyCode.Decimal:
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
 	public static bool IsShift(this KeyCode key)
 	{
 		switch (key)

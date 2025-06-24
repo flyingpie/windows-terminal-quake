@@ -68,14 +68,42 @@ public class SharpHookHotkeyService : WtqHostedService
 			// Translate SharpHook values to WTQ ones.
 			var m = GetModifiers(e.Data.KeyCode);
 			var keyCode = (WKC)e.Data.KeyCode;
-			var keyChar = User32.KeyCodeToUnicode(e.Data.RawCode);
+//			var keyChar = User32.KeyCodeToUnicode(e.Data.RawCode);
+			var keyChar = User32.KeyCodeToKeyChar(e.Data.RawCode);
 
 			// Add to accumulated modifiers.
 			accMod |= m;
 
-			var keySeq = new KeySequence(accMod, keyChar, keyCode);
+			var mod2 = KeyModifiers.None;
+			if (User32.IsAltPressed())
+			{
+				mod2 |= KeyModifiers.Alt;
+			}
 
-			Console.WriteLine($"VK:{e.Data.KeyCode} SEQ:{keySeq}");
+			if (User32.IsControlPressed())
+			{
+				mod2 |= KeyModifiers.Control;
+			}
+
+			if (User32.IsShiftPressed())
+			{
+				mod2 |= KeyModifiers.Shift;
+			}
+
+			if (User32.IsSuperPressed())
+			{
+				mod2 |= KeyModifiers.Super;
+			}
+
+			if (keyCode.IsNumpad())
+			{
+				mod2 |= KeyModifiers.Numpad;
+			}
+
+			//var keySeq = new KeySequence(accMod, keyChar, keyCode);
+			var keySeq = new KeySequence(mod2, keyChar, keyCode);
+
+			Console.WriteLine($"SEQ:{keySeq}");
 
 			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, keyCode, accMod);
 
