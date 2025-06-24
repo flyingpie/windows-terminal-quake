@@ -18,7 +18,6 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 		{
 			if (!e.Sequence.HasKeyCode)
 			{
-				// TODO: Convert code <-> char
 				_log.LogWarning("Key chars are not supported in the WinForms hotkey registration, please switch to the SharpHook one.");
 				return Task.CompletedTask;
 			}
