@@ -55,7 +55,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 
 	private WtqApp? GetAppForHotkey(KeySequence sequence)
 	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(sequence));
+		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.Any(hk => hk.Sequence == sequence));
 
 		return opt == null
 			? null
