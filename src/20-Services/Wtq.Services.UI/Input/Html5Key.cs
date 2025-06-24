@@ -1,4 +1,5 @@
 using Wtq.Configuration;
+using Wtq.Input;
 
 namespace Wtq.Services.UI.Input;
 
@@ -9,7 +10,7 @@ public class Html5Key
 
 	}
 
-	public Keys? WtqKeyCode { get; set; }
+	public KeyCode? WtqKeyCode { get; set; }
 
 	public string? JsKey { get; set; }
 

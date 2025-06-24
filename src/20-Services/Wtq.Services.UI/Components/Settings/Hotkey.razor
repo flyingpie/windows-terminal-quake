@@ -1,5 +1,3 @@
-@using System.Text.Json
-@using System.Text.Json.Serialization
 @using Wtq.Services.UI.Extensions
 
 @inject IWtqBus Bus
@@ -41,7 +39,7 @@
 	private void Clear()
 	{
 		Options.Modifiers = KeyModifiers.None;
-		Options.Key = Keys.None;
+		Options.Key = KeyCode.None;
 		Options.KeyChar = null;
 	}
 
@@ -81,13 +79,13 @@
 		if (keyCode.IsModifier())
 		{
 			keyChar = null;
-			keyCode = Keys.None;
+			keyCode = KeyCode.None;
 		}
 
 		// If a proper key char is available, omit the key code.
 		if (!string.IsNullOrWhiteSpace(keyChar))
 		{
-			keyCode = Keys.None;
+			keyCode = KeyCode.None;
 		}
 
 		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
