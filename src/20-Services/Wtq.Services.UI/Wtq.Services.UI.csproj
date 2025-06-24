@@ -7,9 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BlazorMonaco" />
-		<PackageReference Include="Photino.Blazor" />
-		<PackageReference Include="Radzen.Blazor" />
+		<PackageReference Include="BlazorMonaco"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting"/>
+		<PackageReference Include="Photino.Blazor"/>
+		<PackageReference Include="Radzen.Blazor"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -19,6 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
 </Project>
