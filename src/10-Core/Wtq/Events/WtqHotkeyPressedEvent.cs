@@ -7,15 +7,10 @@ namespace Wtq.Events;
 /// Note that this event is used for OS-specific hotkey-handling.<br/>
 /// The non-platform-specific <see cref="WtqHotkeyRoutingService"/> catches these, and fires new events that include the relevant app.
 /// </summary>
-public sealed class WtqHotkeyPressedEvent(KeyModifiers mod, Keys key) : WtqEvent
+public sealed class WtqHotkeyPressedEvent(KeySequence sequence) : WtqEvent
 {
 	/// <summary>
-	/// The pressed key (Q, 1, F1, etc.).
+	/// The key sequence that was pressed.
 	/// </summary>
-	public Keys Key { get; } = key;
-
-	/// <summary>
-	/// The optional modifiers (ctrl, shift, etc.).
-	/// </summary>
-	public KeyModifiers Modifiers { get; } = mod;
+	public KeySequence Sequence { get; } = sequence;
 }
