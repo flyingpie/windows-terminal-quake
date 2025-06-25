@@ -232,22 +232,22 @@ public static class BlazorExtensions
 
 			// Modifiers
 			// case "alt": return KeyCode.Alt;
-			case "altleft": return KeyCode.LAltKey;
-			case "altright": return KeyCode.RAltKey;
+			case "altleft": return KeyCode.LAlt;
+			case "altright": return KeyCode.RAlt;
 
 			// case "control": return KeyCode.Control;
-			case "controlleft": return KeyCode.LControlKey;
-			case "controlright": return KeyCode.RControlKey;
+			case "controlleft": return KeyCode.LControl;
+			case "controlright": return KeyCode.RControl;
 
 			// case "shift": return KeyCode.Shift;
-			case "shiftleft": return KeyCode.LShiftKey;
-			case "shiftright": return KeyCode.RShiftKey;
+			case "shiftleft": return KeyCode.LShift;
+			case "shiftright": return KeyCode.RShift;
 
 			// case "super": return KeyCode.Super;
-			case "superleft": return KeyCode.LSuperKey;
-			case "superright": return KeyCode.RSuperKey;
-			case "osleft": return KeyCode.LSuperKey;
-			case "osright": return KeyCode.RSuperKey;
+			case "superleft": return KeyCode.LSuper;
+			case "superright": return KeyCode.RSuper;
+			case "osleft": return KeyCode.LSuper;
+			case "osright": return KeyCode.RSuper;
 		}
 
 		_log.LogWarning("Unknown key code '{Code}'", code);

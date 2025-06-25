@@ -66,8 +66,30 @@ public readonly struct KeySequence(
 		return false;
 	}
 
-	public bool Equals(KeySequence other) =>
-		Modifiers == other.Modifiers && KeyCode == other.KeyCode && KeyChar == other.KeyChar;
+	public bool Equals(KeySequence other)
+	{
+		// Modifiers have to be the same.
+		if (Modifiers != other.Modifiers)
+		{
+			return false;
+		}
+
+		// If a key character was present on both sides, and it matches, the key sequence can be considered the same.
+		if (HasKeyChar && other.HasKeyChar && KeyChar == other.KeyChar)
+		{
+			return true;
+		}
+
+		// Alternatively, if a virtual key code was present on both sides, and it matches, also good.
+		if (HasKeyCode && other.HasKeyCode && KeyCode == other.KeyCode)
+		{
+			return true;
+		}
+
+		// If we get here, neither the key char nor the key code matched.
+		// Note that a key is required, we can't have a key sequence with only a modifier.
+		return false;
+	}
 
 	public override int GetHashCode() =>
 		HashCode.Combine((int)Modifiers, KeyCode, KeyChar);

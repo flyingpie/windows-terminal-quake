@@ -3,16 +3,10 @@ using WKC = Wtq.Input.KeyCode;
 
 namespace Wtq.Services.SharpHook.Input;
 
-public class ShWtqMapping
-{
-	public SKC SharpHookKeyCode { get; set; }
-
-	public WKC WtqKeyCode { get; set; }
-}
-
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Naming convention.")]
 public static class KeyCodeExtensions
 {
-	public static WKC ToWtqKeyCode(SKC shKeyCode)
+	public static WKC ToWtqKeyCode(this SKC shKeyCode)
 	{
 		// @formatter:off
 #pragma warning disable SA1025
@@ -20,79 +14,89 @@ public static class KeyCodeExtensions
 		switch (shKeyCode)
 		{
 			// Modifiers
-			case SKC.VcLeftShift: return WKC.LShiftKey;
-			case SKC.VcRightShift: return WKC.RShiftKey;
-			case SKC.VcLeftControl: return WKC.LControlKey;
-			case SKC.VcRightControl: return WKC.RControlKey;
-			case SKC.VcLeftAlt: return WKC.LAltKey;
-			case SKC.VcRightAlt: return WKC.RAltKey;
-			case SKC.VcLeftMeta: return WKC.LSuperKey;
-			case SKC.VcRightMeta: return WKC.RSuperKey;
-			case SKC.VcContextMenu: return WKC.None; // TODO: Unmapped
-			case SKC.VcFunction: return WKC.None; // TODO: Unmapped
+			case SKC.VcLeftShift:			return WKC.LShift;
+			case SKC.VcRightShift:			return WKC.RShift;
+			case SKC.VcLeftControl:			return WKC.LControl;
+			case SKC.VcRightControl:		return WKC.RControl;
+			case SKC.VcLeftAlt:				return WKC.LAlt;
+			case SKC.VcRightAlt:			return WKC.RAlt;
+			case SKC.VcLeftMeta:			return WKC.LSuper;
+			case SKC.VcRightMeta:			return WKC.RSuper;
+			case SKC.VcContextMenu:			return WKC.None; // TODO: Unmapped
+			case SKC.VcFunction:			return WKC.None; // TODO: Unmapped
 
 			// Misc
-			// case SKC.VcBackQuote:		return WKC.back
-			case SKC.VcEscape:
-			case SKC.VcOpenBracket:
-			case SKC.VcCloseBracket:
-			case SKC.VcBackslash:
-			case SKC.VcSemicolon:
-			case SKC.VcQuote:
-			case SKC.VcEnter:
-			case SKC.VcComma:
-			case SKC.VcPeriod:
-			case SKC.VcSlash:
-			case SKC.VcSpace:
-			case SKC.Vc102:
-			case SKC.VcMisc:
-			case SKC.VcPrintScreen:
-			case SKC.VcPause:
-			case SKC.VcCancel:
-			case SKC.VcHelp:
-			case SKC.VcInsert:
-			case SKC.VcDelete:
-			case SKC.VcHome:
-			case SKC.VcEnd:
-			case SKC.VcPageUp:
-			case SKC.VcPageDown:
-			case SKC.VcUp:
-			case SKC.VcLeft:
-			case SKC.VcRight:
-			case SKC.VcDown:
-			case SKC.VcMinus:
-			case SKC.VcEquals:
-			case SKC.VcBackspace:
-			case SKC.VcTab:
-			case SKC.VcChangeInputSource:
-			case SKC.VcPower:
-			case SKC.VcSleep:
-			case SKC.VcMediaPlay:
-			case SKC.VcMediaStop:
-			case SKC.VcMediaPrevious:
-			case SKC.VcMediaNext:
-			case SKC.VcMediaSelect:
-			case SKC.VcMediaEject:
-			case SKC.VcVolumeMute:
-			case SKC.VcVolumeDown:
-			case SKC.VcVolumeUp:
-			case SKC.VcApp1:
-			case SKC.VcApp2:
-			case SKC.VcApp3:
-			case SKC.VcApp4:
-			case SKC.VcAppBrowser:
-			case SKC.VcAppCalculator:
-			case SKC.VcAppMail:
-			case SKC.VcBrowserSearch:
-			case SKC.VcBrowserHome:
-			case SKC.VcBrowserBack:
-			case SKC.VcBrowserForward:
-			case SKC.VcBrowserStop:
-			case SKC.VcBrowserRefresh:
-			case SKC.VcBrowserFavorites:
-			case SKC.VcUnderscore:
-			case SKC.VcYen:
-			case SKC.VcJpComma:
+			case SKC.VcBackQuote:			return WKC.Oemtilde;
+			case SKC.VcEscape:				return WKC.Escape;
+			case SKC.VcEnter:				return WKC.Enter;
+			case SKC.VcSpace:				return WKC.Space;
+			case SKC.VcTab:					return WKC.Tab;
+			case SKC.VcPrintScreen:			return WKC.PrintScreen;
+			case SKC.VcPause:				return WKC.Pause;
+			case SKC.VcBackspace:			return WKC.Backspace;
+			case SKC.VcCancel:				return WKC.Cancel;
+			case SKC.VcHelp:				return WKC.Help;
+			case SKC.VcSleep:				return WKC.Sleep;
+			case SKC.Vc102:					return WKC.Oem102;
+			case SKC.VcPower:				return WKC.None; // TODO: Unmapped
+			case SKC.VcUnderscore:			return WKC.None; // TODO: Unmapped
+			case SKC.VcYen:					return WKC.None; // TODO: Unmapped
+			case SKC.VcJpComma:				return WKC.None; // TODO: Unmapped
+			case SKC.VcSlash:				return WKC.None; // TODO: Unmapped
+			case SKC.VcMisc:				return WKC.None; // TODO: Unmapped
+			case SKC.VcEquals:				return WKC.None; // TODO: Unmapped
+			case SKC.VcChangeInputSource:	return WKC.None; // TODO: Unmapped
+
+			// Right of main row
+			case SKC.VcOpenBracket:			return WKC.OemOpenBrackets;
+			case SKC.VcCloseBracket:		return WKC.OemCloseBrackets;
+			case SKC.VcBackslash:			return WKC.OemBackslash;
+			case SKC.VcSemicolon:			return WKC.OemSemicolon;
+			case SKC.VcQuote:				return WKC.OemQuotes;
+			case SKC.VcComma:				return WKC.Oemcomma;
+			case SKC.VcPeriod:				return WKC.OemPeriod;
+
+			// Above arrow keys
+			case SKC.VcInsert:				return WKC.Insert;
+			case SKC.VcDelete:				return WKC.Delete;
+			case SKC.VcHome:				return WKC.Home;
+			case SKC.VcEnd:					return WKC.End;
+			case SKC.VcPageUp:				return WKC.PageUp;
+			case SKC.VcPageDown:			return WKC.PageDown;
+
+			// Arrow keys
+			case SKC.VcUp:					return WKC.ArrowUp;
+			case SKC.VcLeft:				return WKC.ArrowLeft;
+			case SKC.VcRight:				return WKC.ArrowRight;
+			case SKC.VcDown:				return WKC.ArrowDown;
+			case SKC.VcMinus:				return WKC.OemMinus;
+
+			// Media keys
+			case SKC.VcMediaPlay:			return WKC.MediaPlayPause;
+			case SKC.VcMediaStop:			return WKC.MediaStop;
+			case SKC.VcMediaPrevious:		return WKC.MediaPreviousTrack;
+			case SKC.VcMediaNext:			return WKC.MediaNextTrack;
+			case SKC.VcMediaSelect:			return WKC.SelectMedia;
+			case SKC.VcVolumeMute:			return WKC.VolumeMute;
+			case SKC.VcVolumeDown:			return WKC.VolumeDown;
+			case SKC.VcVolumeUp:			return WKC.VolumeUp;
+			case SKC.VcMediaEject:			return WKC.None; // TODO: Unmapped
+
+			case SKC.VcApp1:				return WKC.LaunchApplication1;
+			case SKC.VcApp2:				return WKC.LaunchApplication2;
+			case SKC.VcAppMail:				return WKC.LaunchMail;
+			case SKC.VcApp3:				return WKC.None; // TODO: Unmapped
+			case SKC.VcApp4:				return WKC.None; // TODO: Unmapped
+			case SKC.VcAppBrowser:			return WKC.None; // TODO: Unmapped
+			case SKC.VcAppCalculator:		return WKC.None; // TODO: Unmapped
+
+			case SKC.VcBrowserSearch:		return WKC.BrowserSearch;
+			case SKC.VcBrowserHome:			return WKC.BrowserHome;
+			case SKC.VcBrowserBack:			return WKC.BrowserBack;
+			case SKC.VcBrowserForward:		return WKC.BrowserForward;
+			case SKC.VcBrowserStop:			return WKC.BrowserStop;
+			case SKC.VcBrowserRefresh:		return WKC.BrowserRefresh;
+			case SKC.VcBrowserFavorites:	return WKC.BrowserFavorites;
 
 			// IME
 			case SKC.VcAccept:				return WKC.IMEAccept;

@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Forms;
 using Wtq.Events;
-using SKC = SharpHook.Data.KeyCode;
+using Wtq.Services.SharpHook.Input;
 using WKC = Wtq.Input.KeyCode;
 
 namespace Wtq.Services.SharpHook;
@@ -14,11 +16,13 @@ public class SharpHookHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<SharpHookHotkeyService>();
 
+	private KeysConverter _converter = new();
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqBus _bus;
 
 	private readonly SimpleGlobalHook _hook;
 	private bool _isSuspended;
+
 
 	public SharpHookHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
@@ -49,63 +53,55 @@ public class SharpHookHotkeyService : WtqHostedService
 		_hook = new SimpleGlobalHook(GlobalHookType.Keyboard);
 	}
 
+	protected override ValueTask OnDisposeAsync()
+	{
+		_log.LogDebug("Disposing SharpHook");
+
+		// TODO: Seems that some thread still runs even after disposing.
+		_hook.Dispose();
+
+		return ValueTask.CompletedTask;
+	}
+
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		// Accumulate modifiers (when pressing multiple modifiers, they come in as a separate event each.
-		// I.e. pressing CTRL+ALT+1:
-		// - Event CTRL Pressed
-		// - Event ALT Pressed
-		// - Event 1 Pressed
-		// So we need to manually combine the modifiers.
-		// Maybe look into asking the OS for pressed modifiers directly, but this requires a separate mechanism, next to SharpHook.
-		var accMod = KeyModifiers.None;
-
 		_hook.KeyPressed += (s, e) =>
 		{
 			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
 			e.SuppressEvent = false;
 
-			// Translate SharpHook values to WTQ ones.
-			var m = GetModifiers(e.Data.KeyCode);
-			var keyCode = (WKC)e.Data.KeyCode;
-//			var keyChar = User32.KeyCodeToUnicode(e.Data.RawCode);
-			var keyChar = User32.KeyCodeToKeyChar(e.Data.RawCode);
+			// Convert SharpHook key code to WTQ one.
+			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
-			// Add to accumulated modifiers.
-			accMod |= m;
+			// Attempt to translate the virtual key code to a key character (may return null).
+			var keyChar = Win32.KeyCodeToKeyChar(e.Data.RawCode);
 
-			var mod2 = KeyModifiers.None;
-			if (User32.IsAltPressed())
+			if (keyChar == null)
 			{
-				mod2 |= KeyModifiers.Alt;
+				var attr = keyCode.GetAttribute<DisplayAttribute>();
+
+//				keyChar = EnumUtils
+//					.GetValues<WKC>()
+//					.FirstOrDefault(k => k.Value == keyCode)
+//					?.Value.ToString()
+////					?? keyCode.ToString();
+;
+				//keyChar = _converter.ConvertToString((Keys)keyCode);
+				//keyChar = keyCode.ToString();
+
+				keyChar = attr?.Name ?? keyCode.ToString();
+
+				Console.WriteLine($"NO KEY CHAR, FALLBACK:{keyChar}");
+			}
+			else
+			{
+				Console.WriteLine($"GOT KEY CHAR:{keyChar}");
 			}
 
-			if (User32.IsControlPressed())
-			{
-				mod2 |= KeyModifiers.Control;
-			}
-
-			if (User32.IsShiftPressed())
-			{
-				mod2 |= KeyModifiers.Shift;
-			}
-
-			if (User32.IsSuperPressed())
-			{
-				mod2 |= KeyModifiers.Super;
-			}
-
-			if (keyCode.IsNumpad())
-			{
-				mod2 |= KeyModifiers.Numpad;
-			}
-
-			//var keySeq = new KeySequence(accMod, keyChar, keyCode);
-			var keySeq = new KeySequence(mod2, keyChar, keyCode);
+			var mod = GetModifiers(keyCode);
+			var keySeq = new KeySequence(mod, keyChar, keyCode);
 
 			Console.WriteLine($"SEQ:{keySeq}");
-
-			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, keyCode, accMod);
 
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
@@ -117,28 +113,17 @@ public class SharpHookHotkeyService : WtqHostedService
 			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);
 			if (hk == null)
 			{
-				_log.LogDebug("No hotkey mapping found for modifiers '{Modifiers}' and key '{Key}'", accMod, keyCode);
+				_log.LogDebug("No hotkey mapping found for key sequence '{Sequence}'", keySeq);
 				return;
 			}
 
+			// Prevent the key from activating other possible actions. Especially useful when the SUPER ("Windows") key was involved.
 			e.SuppressEvent = true;
+			Console.WriteLine($"APP:{hk}");
+			_log.LogDebug("Got hotkey mapping for key sequence '{Sequence}' (mapping: {Mapping})", keySeq, hk);
 
+			// Send hotkey pressed event for routing.
 			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
-		};
-
-		_hook.KeyReleased += (s, e) =>
-		{
-			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
-			e.SuppressEvent = false;
-
-			// Translate SharpHook values to WTQ ones.
-			var k = (WKC)e.Data.KeyCode;
-			var m = GetModifiers(e.Data.KeyCode);
-
-			// Remove from accumulated modifiers.
-			accMod ^= m;
-
-			_log.LogDebug("KeyPressed(modifiers:{Modifiers} ({CumModifiers}), key:{Key})", m, k, accMod);
 		};
 
 		_ = _hook.RunAsync();
@@ -146,41 +131,45 @@ public class SharpHookHotkeyService : WtqHostedService
 		return Task.CompletedTask;
 	}
 
-	protected override ValueTask OnDisposeAsync()
+	/// <summary>
+	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
+	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
+	/// </summary>
+	private static KeyModifiers GetModifiers(WKC keyCode)
 	{
-		_log.LogDebug("Disposing SharpHook");
-
-		// TODO: Seems that some thread still runs even after disposing.
-		_hook.Dispose();
-
-		return ValueTask.CompletedTask;
-	}
-
-	private static KeyModifiers GetModifiers(SKC keyCode)
-	{
-		switch (keyCode)
+		var mod2 = KeyModifiers.None;
+		if (Win32.IsAltPressed())
 		{
-			case SKC.VcLeftAlt:
-			case SKC.VcRightAlt:
-				return KeyModifiers.Alt;
-
-			case SKC.VcLeftControl:
-			case SKC.VcRightControl:
-				return KeyModifiers.Control;
-
-			case SKC.VcLeftMeta:
-			case SKC.VcRightMeta:
-				return KeyModifiers.Super;
-
-			case SKC.VcLeftShift:
-			case SKC.VcRightShift:
-				return KeyModifiers.Shift;
-
-			default:
-				return KeyModifiers.None;
+			mod2 |= KeyModifiers.Alt;
 		}
+
+		if (Win32.IsControlPressed())
+		{
+			mod2 |= KeyModifiers.Control;
+		}
+
+		if (Win32.IsShiftPressed())
+		{
+			mod2 |= KeyModifiers.Shift;
+		}
+
+		if (Win32.IsSuperPressed())
+		{
+			mod2 |= KeyModifiers.Super;
+		}
+
+		if (keyCode.IsNumpad())
+		{
+			mod2 |= KeyModifiers.Numpad;
+		}
+
+		return mod2;
 	}
 
+	/// <summary>
+	/// Returns the full list of <see cref="HotkeyOptions"/>, both globally and per app.<br/>
+	/// Used to determine whether we should send an event, as we're seeing _all_ key presses.
+	/// </summary>
 	private IEnumerable<HotkeyOptions> GetHotkeys()
 	{
 		foreach (var hk in _opts.CurrentValue.Hotkeys)

@@ -58,6 +58,11 @@ public enum KeyCode
 	Back = 0x08,
 
 	/// <summary>
+	/// The BACKSPACE key.
+	/// </summary>
+	Backspace = Back,
+
+	/// <summary>
 	/// The TAB key.
 	/// </summary>
 	[Display(Name = "Tab")]
@@ -88,12 +93,12 @@ public enum KeyCode
 	/// <summary>
 	/// The SHIFT key.
 	/// </summary>
-	ShiftKey = 0x10,
+	Shift = 0x10,
 
 	/// <summary>
 	/// The CTRL key.
 	/// </summary>
-	ControlKey = 0x11,
+	Control = 0x11,
 
 	/// <summary>
 	/// The ALT key.
@@ -108,12 +113,13 @@ public enum KeyCode
 	/// <summary>
 	/// The CAPS LOCK key.
 	/// </summary>
-	Capital = 0x14,
+	[Display(Name = nameof(CapsLock))]
+	Capital = CapsLock,
 
 	/// <summary>
 	/// The CAPS LOCK key.
 	/// </summary>
-	[Display(Name = "Caps lock")]
+	//[Display(Name = "Caps lock")]
 	CapsLock = 0x14,
 
 	/// <summary>
@@ -154,7 +160,6 @@ public enum KeyCode
 	/// <summary>
 	/// The ESC key.
 	/// </summary>
-	[Display(Name = "Escape")]
 	Escape = 0x1B,
 
 	/// <summary>
@@ -185,65 +190,88 @@ public enum KeyCode
 	/// <summary>
 	/// The SPACEBAR key.
 	/// </summary>
-	[Display(Name = "Space bar")]
 	Space = 0x20,
 
 	/// <summary>
 	/// The PAGE UP key.
 	/// </summary>
-	Prior = 0x21,
+	PageUp = 0x21,
 
 	/// <summary>
 	/// The PAGE UP key.
 	/// </summary>
-	[Display(Name = "Page up")]
-	PageUp = Prior,
+	[Display(Name = nameof(PageUp))]
+	[Obsolete("Non-canonical")]
+	Prior = PageUp,
 
 	/// <summary>
 	/// The PAGE DOWN key.
 	/// </summary>
-	Next = 0x22,
+	PageDown = 0x22,
 
 	/// <summary>
 	/// The PAGE DOWN key.
 	/// </summary>
-	[Display(Name = "Page down")]
-	PageDown = Next,
+	[Display(Name = nameof(PageDown))]
+	[Obsolete("Non-canonical")]
+	Next = PageDown,
 
 	/// <summary>
 	/// The END key.
 	/// </summary>
-	[Display(Name = "End")]
 	End = 0x23,
 
 	/// <summary>
 	/// The HOME key.
 	/// </summary>
-	[Display(Name = "Home")]
 	Home = 0x24,
 
 	/// <summary>
 	/// The LEFT ARROW key.
 	/// </summary>
-	[Display(Name = "Left arrow")]
+	ArrowLeft = 0x25,
+
+	/// <summary>
+	/// The LEFT ARROW key.
+	/// </summary>
+	[Display(Name = nameof(ArrowLeft))]
+	[Obsolete("Non-canonical")]
 	Left = 0x25,
 
 	/// <summary>
 	/// The UP ARROW key.
 	/// </summary>
-	[Display(Name = "Up arrow")]
+	ArrowUp = 0x26,
+
+	/// <summary>
+	/// The UP ARROW key.
+	/// </summary>
+	[Display(Name = nameof(ArrowUp))]
+	[Obsolete("Non-canonical")]
 	Up = 0x26,
 
 	/// <summary>
 	/// The RIGHT ARROW key.
 	/// </summary>
-	[Display(Name = "Right arrow")]
+	ArrowRight = 0x27,
+
+	/// <summary>
+	/// The RIGHT ARROW key.
+	/// </summary>
+	[Display(Name = nameof(ArrowRight))]
+	[Obsolete("Non-canonical")]
 	Right = 0x27,
 
 	/// <summary>
 	/// The DOWN ARROW key.
 	/// </summary>
-	[Display(Name = "Down arrow")]
+	ArrowDown = 0x28,
+
+	/// <summary>
+	/// The DOWN ARROW key.
+	/// </summary>
+	[Display(Name = "ArrowDown")]
+	[Obsolete("Non-canonical")]
 	Down = 0x28,
 
 	/// <summary>
@@ -508,26 +536,26 @@ public enum KeyCode
 	/// <summary>
 	/// The left Windows logo key (Microsoft Natural Keyboard).
 	/// </summary>
-	[Display(Name = "Left super")]
+	[Display(Name = "SuperLeft")]
 	LWin = 0x5B,
 
 	/// <summary>
 	/// The left Windows logo key (also called "super" or "meta").
 	/// </summary>
-	[Display(Name = "Left super")]
-	LSuperKey = 0x5B,
+	[Display(Name = "SuperLeft")]
+	LSuper = 0x5B,
 
 	/// <summary>
 	/// The right Windows logo key (Microsoft Natural Keyboard).
 	/// </summary>
-	[Display(Name = "Right super")]
+	[Display(Name = "SuperRight")]
 	RWin = 0x5C,
 
 	/// <summary>
 	/// The right Windows logo key (also called "super" or "meta").
 	/// </summary>
-	[Display(Name = "Right super")]
-	RSuperKey = 0x5C,
+	[Display(Name = "SuperRight")]
+	RSuper = 0x5C,
 
 	/// <summary>
 	/// The application key (Microsoft Natural Keyboard).
@@ -782,22 +810,22 @@ public enum KeyCode
 	/// <summary>
 	/// The left SHIFT key.
 	/// </summary>
-	LShiftKey = 0xA0,
+	LShift = 0xA0,
 
 	/// <summary>
 	/// The right SHIFT key.
 	/// </summary>
-	RShiftKey = 0xA1,
+	RShift = 0xA1,
 
 	/// <summary>
 	/// The left CTRL key.
 	/// </summary>
-	LControlKey = 0xA2,
+	LControl = 0xA2,
 
 	/// <summary>
 	/// The right CTRL key.
 	/// </summary>
-	RControlKey = 0xA3,
+	RControl = 0xA3,
 
 	/// <summary>
 	/// The left ALT key.
@@ -807,7 +835,7 @@ public enum KeyCode
 	/// <summary>
 	/// The left ALT key.
 	/// </summary>
-	LAltKey = 0xA4,
+	LAlt = 0xA4,
 
 	/// <summary>
 	/// The right ALT key.
@@ -817,7 +845,7 @@ public enum KeyCode
 	/// <summary>
 	/// The right ALT key.
 	/// </summary>
-	RAltKey = 0xA5,
+	RAlt = 0xA5,
 
 	/// <summary>
 	/// The browser back key.
@@ -1029,7 +1057,7 @@ public enum KeyCode
 	/// <summary>
 	/// The PROCESS KEY key.
 	/// </summary>
-	ProcessKey = 0xE5,
+	Process = 0xE5,
 
 	/// <summary>
 	/// The Packet KEY key.
@@ -1084,12 +1112,12 @@ public enum KeyCode
 	/// <summary>
 	/// The SHIFT modifier key.
 	/// </summary>
-	Shift = 0x00010000,
+	//Shift = 0x00010000,
 
 	/// <summary>
 	/// The CTRL modifier key.
 	/// </summary>
-	Control = 0x00020000,
+	//Control = 0x00020000,
 
 	/// <summary>
 	/// The ALT modifier key.

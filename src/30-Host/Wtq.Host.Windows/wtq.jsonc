@@ -21,7 +21,7 @@
 		// Explorer
 		{
 			"Name": "Explorer",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "explorer",
 			"WindowClass": "CabinetWClass"
 		},
@@ -29,13 +29,13 @@
 		// Task Manager
 		{
 			"Name": "Task Manager",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowDown" }],
 			"FileName": "taskmgr"
 		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
+	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" }, { "Key": "RSuper" } ],
 
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".

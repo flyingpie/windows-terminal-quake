@@ -18,8 +18,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LAltKey:
-			case KeyCode.RAltKey:
+			case KeyCode.LAlt:
+			case KeyCode.RAlt:
 				return true;
 
 			default:
@@ -34,8 +34,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LControlKey:
-			case KeyCode.RControlKey:
+			case KeyCode.LControl:
+			case KeyCode.RControl:
 				return true;
 
 			default:
@@ -79,8 +79,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LShiftKey:
-			case KeyCode.RShiftKey:
+			case KeyCode.LShift:
+			case KeyCode.RShift:
 				return true;
 
 			default:
@@ -95,8 +95,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LSuperKey:
-			case KeyCode.RSuperKey:
+			case KeyCode.LSuper:
+			case KeyCode.RSuper:
 				return true;
 
 			default:
