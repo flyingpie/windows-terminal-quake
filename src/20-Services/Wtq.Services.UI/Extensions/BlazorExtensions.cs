@@ -123,7 +123,7 @@ public static class BlazorExtensions
 		switch (code.ToLowerInvariant())
 		{
 			case "pause": return KeyCode.Pause;
-			case "backquote": return KeyCode.Oemtilde;
+			case "backquote": return KeyCode.OemTilde;
 			case "backspace": return KeyCode.Back;
 			case "tab": return KeyCode.Tab;
 			case "numlock": return KeyCode.NumLock;
@@ -131,7 +131,7 @@ public static class BlazorExtensions
 			case "capslock": return KeyCode.CapsLock;
 			case "escape": return KeyCode.Escape;
 			case "minus": return KeyCode.OemMinus;
-			case "equal": return KeyCode.Oemplus;
+			case "equal": return KeyCode.OemPlus;
 			case "insert": return KeyCode.Insert;
 			case "delete": return KeyCode.Delete;
 			case "bracketleft": return KeyCode.OemOpenBrackets;
@@ -139,7 +139,7 @@ public static class BlazorExtensions
 			case "semicolon": return KeyCode.OemSemicolon;
 			case "quote": return KeyCode.OemQuotes;
 			case "period": return KeyCode.OemPeriod;
-			case "comma": return KeyCode.Oemcomma;
+			case "comma": return KeyCode.OemComma;
 			case "slash": return KeyCode.OemQuestion;
 			case "pageup": return KeyCode.PageUp;
 			case "pagedown": return KeyCode.PageDown;

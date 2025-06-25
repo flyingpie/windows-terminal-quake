@@ -1,6 +1,6 @@
-using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
+using Wtq.Services.KWin.Input;
 using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin;
@@ -160,7 +160,7 @@ internal sealed class KWinClientV2(
 					{
 						name = name,
 						title = description,
-						sequence = sequence.ToKWinSequenceString(),
+						sequence = sequence.ToKWinString(),
 						mod = sequence.Modifiers.ToString(),
 						keyChar = sequence.KeyChar ?? string.Empty,
 						keyCode = sequence.KeyCode?.ToString() ?? string.Empty,

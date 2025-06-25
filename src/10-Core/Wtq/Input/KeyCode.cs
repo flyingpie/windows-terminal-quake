@@ -924,13 +924,13 @@ public enum KeyCode
 	/// <summary>
 	/// The OEM plus key.
 	/// </summary>
-	Oemplus = 0xBB,
+	OemPlus = 0xBB,
 
 	/// <summary>
 	/// The OEM comma key.
 	/// </summary>
 	[Display(Name = ", (comma)")]
-	Oemcomma = 0xBC,
+	OemComma = 0xBC,
 
 	/// <summary>
 	/// The OEM Minus key.
@@ -964,7 +964,7 @@ public enum KeyCode
 	/// The OEM tilde key.
 	/// </summary>
 	[Display(Name = "~ (tilde)")]
-	Oemtilde = Oem3,
+	OemTilde = Oem3,
 
 	/// <summary>
 	/// The OEM open brackets key.
