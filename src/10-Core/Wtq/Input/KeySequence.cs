@@ -95,4 +95,41 @@ public readonly struct KeySequence(
 
 	public override string ToString() =>
 		$"Modifiers:'{Modifiers}' KeyChar:{(HasKeyChar ? $"'{KeyChar}'" : "<none>")} KeyCode:{(HasKeyCode ? $"'{KeyCode}'" : "<none>")}";
+
+	public string ToShortString()
+	{
+		var sb = new StringBuilder();
+
+		// Modifier
+		if (Modifiers != KeyModifiers.None)
+		{
+			sb.Append(Modifiers);
+		}
+
+		// Key char
+		// KWin uses key characters, so prefer that one if we have it right in the settings.
+		if (HasKeyChar)
+		{
+			if (sb.Length > 0)
+			{
+				sb.Append('+');
+			}
+
+			sb.Append(KeyChar);
+		}
+
+		// Alternatively, if no key character is present, map the key code.
+		// This is not a perfect method, as the character depends on the keyboard layout, which I haven't found a way to access yet.
+		else if (HasKeyCode)
+		{
+			if (sb.Length > 0)
+			{
+				sb.Append('+');
+			}
+
+			sb.Append(KeyCode);
+		}
+
+		return sb.ToString();
+	}
 }

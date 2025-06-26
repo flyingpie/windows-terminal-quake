@@ -23,7 +23,6 @@ public class SharpHookHotkeyService : WtqHostedService
 	private readonly SimpleGlobalHook _hook;
 	private bool _isSuspended;
 
-
 	public SharpHookHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqBus bus)
@@ -74,34 +73,11 @@ public class SharpHookHotkeyService : WtqHostedService
 			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
 			// Attempt to translate the virtual key code to a key character (may return null).
-			var keyChar = Win32.KeyCodeToKeyChar(e.Data.RawCode);
-
-			if (keyChar == null)
-			{
-				var attr = keyCode.GetAttribute<DisplayAttribute>();
-
-//				keyChar = EnumUtils
-//					.GetValues<WKC>()
-//					.FirstOrDefault(k => k.Value == keyCode)
-//					?.Value.ToString()
-////					?? keyCode.ToString();
-;
-				//keyChar = _converter.ConvertToString((Keys)keyCode);
-				//keyChar = keyCode.ToString();
-
-				keyChar = attr?.Name ?? keyCode.ToString();
-
-				Console.WriteLine($"NO KEY CHAR, FALLBACK:{keyChar}");
-			}
-			else
-			{
-				Console.WriteLine($"GOT KEY CHAR:{keyChar}");
-			}
+			var keyChar = Win32.KeyCodeToKeyChar(e.Data.RawCode)
+				?? keyCode.GetAttribute<DisplayAttribute>()?.Name ?? keyCode.ToString();
 
 			var mod = GetModifiers(keyCode);
 			var keySeq = new KeySequence(mod, keyChar, keyCode);
-
-			Console.WriteLine($"SEQ:{keySeq}");
 
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
@@ -138,6 +114,7 @@ public class SharpHookHotkeyService : WtqHostedService
 	private static KeyModifiers GetModifiers(WKC keyCode)
 	{
 		var mod2 = KeyModifiers.None;
+
 		if (Win32.IsAltPressed())
 		{
 			mod2 |= KeyModifiers.Alt;

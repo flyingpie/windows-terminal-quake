@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using Wtq.Input;
+using Wtq.Services.KWin.Input;
 using KC = Wtq.Input.KeyCode;
 using KM = Wtq.Input.KeyModifiers;
 
@@ -10,30 +10,27 @@ namespace Wtq.Services.KWin.UnitTest.Input;
 public class KeySequenceExtensionsTest
 {
 	[TestMethod]
-	public void METHOD()
-	{
-		var l = new List<(KeySequence Sequence, string KWin)>()
-		{
-		// @formatter:off
+
+	// @formatter:off
 #pragma warning disable SA1027
 
-			// Single keys
-			(new(KM.None,								null,	KC.A),					"A"),
+	// Single keys
+	[DataRow(KM.None,								null,	KC.A,					"A")]
 
-			(new(KM.None,								"A",	KC.None),				"A"),
-			(new(KM.Control,							"1",	KC.None),				"Ctrl+1"),
-			(new(KM.Control | KM.Numpad,				"1",	KC.None),				"Ctrl+Num+1"),
+	[DataRow(KM.None,								"A",	KC.None,				"A")]
+	[DataRow(KM.Control,							"1",	KC.None,				"Ctrl+1")]
+	[DataRow(KM.Control | KM.Numpad,				"1",	KC.None,				"Ctrl+Num+1")]
 
-			(new(KM.Control,							"§",	KC.None),				"Ctrl+§"),
-			(new(KM.Control,							"§",	KC.None),				"Ctrl+§"),
+	// Implied "SHIFT"
+	[DataRow(KM.Control | KM.Shift,					"§",	KC.None,				"Ctrl+§")]
 
-			// @formatter:on
+	[DataRow(KM.Control | KM.Shift,					"a",	KC.None,				"Ctrl+Shift+A")]
+	[DataRow(KM.Control | KM.Shift,					"A",	KC.None,				"Ctrl+Shift+A")]
+
+	// @formatter:on
 #pragma warning restore SA1027
-		};
-
-		foreach (var x in l)
-		{
-			// Assert.AreEqual(x.Sequence.ToKWin(), x.KWin);
-		}
+	public void ToKWinStringTest(KM mod, string keyChar, KC keyCode, string expectedKWinString)
+	{
+		Assert.AreEqual(expectedKWinString, new KeySequence(mod, keyChar, keyCode).ToKWinString());
 	}
 }

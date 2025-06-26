@@ -21,13 +21,9 @@
 			var s = Options.Sequence;
 			return s.IsEmpty
 				? "(press a shortcut here)"
-				: s.ToString();
+				: s.ToShortString();
 		}
 	}
-
-	public string? RawEvent { get; set; }
-
-	public string? RawSequence { get; set; }
 
 	private void Clear()
 	{
@@ -42,8 +38,6 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
-		RawEvent = Json.Serialize(e);
-
 		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
 
 		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
@@ -58,21 +52,14 @@
 			mod |= KeyModifiers.Super;
 		}
 
-		// If the pressed key is a modifier, omit it from the key code and key char.
-		// if (keyCode.IsModifier())
-		// {
-		// 	keyChar = null;
-		// 	keyCode = KeyCode.None;
-		// }
-
 		// If the pressed key is a modifier, omit it from the "Modifiers" set.
 		mod ^= keyCode.AsModifier();
 
 		// If a proper key char is available, omit the key code.
-		if (!string.IsNullOrWhiteSpace(keyChar))
-		{
-			keyCode = KeyCode.None;
-		}
+		// if (!string.IsNullOrWhiteSpace(keyChar))
+		// {
+		// 	keyCode = KeyCode.None;
+		// }
 
 		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
 		// TODO: Explain why
@@ -83,84 +70,52 @@
 		}
 
 		Options.Modifiers = mod;
-		Options.Key = keyCode;
+		// Options.Key = keyCode;
 		Options.KeyChar = keyChar;
-
-		Console.WriteLine(
-			$"IS_SUPER:{_isSuper} " +
-			$"ALT:{e.AltKey} " +
-			$"CTRL:{e.CtrlKey} " +
-			$"META:{e.MetaKey} " +
-			$"SHIFT:{e.ShiftKey} " +
-			$"KEY_CODE:{e.Code} " +
-			$"KEY_CHAR:{e.Key} " +
-			$"EV_TYPE:{e.Type} " +
-			$"LOCATION:{e.Location} " +
-			$"IsComposing:{e.IsComposing}");
-
-		Console.WriteLine($"SEQ_SHORT:{Options.Sequence}");
-
-		RawSequence = Json.Serialize(Options.Sequence);
-
-		// _isSuper = false;
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
 		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
 
+		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
+		// So we're keeping track of that ourselves.
 		if (keyCode.IsSuper())
 		{
 			_isSuper = false;
 		}
 	}
 
-	public char KeyChar => (Options?.KeyChar ?? " ")[0];
-
 }
 
-<RadzenStack Orientation="Orientation.Vertical">
-	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-		<!-- Shortcut capturing textbox -->
-		<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
-		<input
-			class="rz-textbox"
-			Style="width: 100%;"
-			@onkeydown="HandleKeyDown"
-			@onkeydown:preventDefault="true"
+	<!-- Shortcut capturing textbox -->
+	<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
+	<input
+		class="rz-textbox"
+		Style="width: 100%;"
+		@onkeydown="HandleKeyDown"
+		@onkeydown:preventDefault="true"
+		@onkeyup="HandleKeyUp"
+		@onfocus="HandleFocusGained"
+		@onblur="HandleFocusLost"
+		Placeholder="Type here to set hotkey."
+		Value="@Description"
+	/>
 
-			@onkeyup="HandleKeyUp"
+	<!-- Clear button -->
+	<RadzenButton
+		Icon="backspace"
+		Size="ButtonSize.Medium"
+		Click="@(() => Clear())"
+	/>
 
-			@onfocus="HandleFocusGained"
-			@onblur="HandleFocusLost"
+	<!-- Remove button -->
+	<RadzenButton
+		Icon="delete"
+		Size="ButtonSize.Medium"
+		Click="@(() => OnRemove())"
+	/>
 
-			Placeholder="Type here to set hotkey."
-			Value="@Description"
-		/>
-
-		<!-- Clear button -->
-		<RadzenButton
-			Icon="backspace"
-			Size="ButtonSize.Medium"
-			Click="@(() => Clear())"
-		/>
-
-		<!-- Remove button -->
-		<RadzenButton
-			Icon="delete"
-			Size="ButtonSize.Medium"
-			Click="@(() => OnRemove())"
-		/>
-
-	</RadzenStack>
-
-	<h4>EVENT</h4>
-	<pre>@RawEvent</pre>
-
-	<h4>SEQUENCE</h4>
-	<pre>@RawSequence</pre>
-
-	<pre>IS_UPPER:@(char.IsUpper((Options?.KeyChar ?? " ")[0]))</pre>
-	<pre>IS_LOWER:@(char.IsLower((Options?.KeyChar ?? " ")[0]))</pre>
 </RadzenStack>

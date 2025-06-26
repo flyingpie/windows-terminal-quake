@@ -84,6 +84,7 @@ public class KWinWtqWindow(
 		}
 
 		// Match by file name.
+		// TODO: This doesn't work yet, maybe due to the above "GetFileNameWithoutExtension"?
 		if (searchTerm != null && searchTerm.Equals(_window.DesktopFileName, StringComparison.OrdinalIgnoreCase))
 		{
 			return true;
