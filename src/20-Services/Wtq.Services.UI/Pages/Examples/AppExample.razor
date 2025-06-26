@@ -1,0 +1,41 @@
+@code {
+
+	[Parameter]
+	public WtqAppExample? App { get; set; }
+
+	[Parameter]
+	public Func<WtqAppExample, Task> OnSelectApp { get; set; }
+
+}
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
+	<h2 style="margin: 0;">@App.Title</h2>
+
+	<RadzenStack Orientation="Orientation.Horizontal">
+		@foreach (var os in App.Os)
+		{
+			<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
+		}
+	</RadzenStack>
+
+	<p class="rz-m-0" style="height: 3em;">@App.Description</p>
+
+	<RadzenImage
+		Path="@App.Image"
+		style="width: 100%; object-fit: cover; height: 160px;"
+	/>
+
+	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
+		<RadzenButton Variant="Variant.Filled" Text="Add" Click="() => OnSelectApp(App)" />
+	</RadzenStack>
+
+	@if (Os.IsCallable(example.FileName))
+	{
+		<p class="rz-color-success-light rz-mt-1">App '@example.FileName' seems to exist!</p>
+	}
+	else
+	{
+		<p class="rz-color-danger-light rz-mt-1">App '@example.FileName' does NOT seem to exist!</p>
+	}
+</RadzenStack>
