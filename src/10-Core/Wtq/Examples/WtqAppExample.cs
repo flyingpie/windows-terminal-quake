@@ -1,21 +1,12 @@
 using System.Runtime.InteropServices;
 
-namespace Wtq;
+namespace Wtq.Examples;
 
 /// <summary>
 /// Example configuration for use in the UI, to quickly get started.
 /// </summary>
 public class WtqAppExample
 {
-	public WtqAppExample()
-	{
-		Factory = () => new WtqAppOptions()
-		{
-			Name = Title,
-			FileName = FileName,
-		};
-	}
-
 	/// <summary>
 	/// Name of the app the example is for.
 	/// </summary>
@@ -41,19 +32,19 @@ public class WtqAppExample
 	/// </summary>
 	public string? Image { get; set; }
 
-	public string? FileName { get; set; }
+	/// <summary>
+	/// An app can run in different ways, e.g. Windows/Linux, Native/Flatpak, etc.<br/>
+	/// Flavors allow expressing each of these, so we can combine multiple methods in a single example, and the user
+	/// can pick the one that they prefer/is available on their system.
+	/// </summary>
+	public required ICollection<WtqAppExampleFlavor> Flavors { get; init; }
 
 	/// <summary>
 	/// What operating systems the app runs on. Used for indication and filtering in the UI.
 	/// </summary>
-	public required ICollection<OSPlatform> Os { get; init; }
+	public ICollection<OSPlatform> Os => Flavors.SelectMany(f => f.Os).ToList();
 
 	public bool IsLinux => Os.Contains(OSPlatform.Linux);
 
 	public bool IsWindows => Os.Contains(OSPlatform.Windows);
-
-	/// <summary>
-	/// Function that creates an instance of <see cref="WtqAppOptions" />, for use in the settings file.
-	/// </summary>
-	public Func<WtqAppOptions> Factory { get; init; }
 }

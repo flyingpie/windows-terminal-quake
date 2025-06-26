@@ -1,0 +1,51 @@
+@using Wtq.Examples
+
+@code {
+
+	[Parameter]
+	public WtqAppExample? App { get; set; }
+
+	[Parameter]
+	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; }
+
+}
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
+	<h2 style="margin: 0;">@App.Title</h2>
+
+	<RadzenStack Orientation="Orientation.Horizontal">
+		@foreach (var os in App.Os)
+		{
+			<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
+		}
+	</RadzenStack>
+
+	<p class="rz-m-0" style="height: 3em;">@App.Description</p>
+
+	<RadzenImage
+		Path="@App.Image"
+		style="width: 100%; height: 160px; object-fit: contain;"
+	/>
+
+	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
+
+		<RadzenStack Orientation="Orientation.Vertical">
+			@foreach (var flavor in App.Flavors)
+			{
+				<RadzenButton Variant="Variant.Filled" Icon="add" Text="@flavor.Name" Click="() => OnSelectApp(App, flavor)" />
+
+				@if (Os.IsCallable(flavor.FileName))
+				{
+					<p class="rz-color-success-light rz-mt-1">App '@flavor.FileName' seems to exist!</p>
+				}
+				else
+				{
+					<p class="rz-color-danger-light rz-mt-1">App '@flavor.FileName' does NOT seem to exist!</p>
+				}
+			}
+		</RadzenStack>
+	</RadzenStack>
+
+
+</RadzenStack>
