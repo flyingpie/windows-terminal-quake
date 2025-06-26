@@ -54,11 +54,9 @@ public class WtqHostBase
 				.AddEnvironmentVariables()
 				.AddJsonFile(f =>
 				{
-					f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
-					{
-						UseActivePolling = true,
-						UsePollingFileWatcher = true,
-					};
+					f.ReloadOnChange = true;
+					f.Optional = false;
+					f.Path = Path.GetFileName(pathToWtqConf);
 					f.OnLoadException = x =>
 					{
 						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
