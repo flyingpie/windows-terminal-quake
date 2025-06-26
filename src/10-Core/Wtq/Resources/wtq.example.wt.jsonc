@@ -7,12 +7,12 @@
 		{
 			// Found Windows Terminal to be installed, using that.
 			"Name": "Terminal",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "wt",
 			"ProcessName": "WindowsTerminal"
 		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ]
+	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" } ]
 }

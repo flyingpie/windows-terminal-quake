@@ -6,14 +6,14 @@
 		// PowerShell
 		{
 			"Name": "PowerShell",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "pwsh"
 		},
 
 		// Windows Terminal
 		//{
 		//	"Name": "Terminal",
-		//	"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+		//	"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 		//	"FileName": "wt",
 		//	"ProcessName": "WindowsTerminal"
 		//}
@@ -21,7 +21,7 @@
 		// Explorer
 		{
 			"Name": "Explorer",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "explorer",
 			"WindowClass": "CabinetWClass"
 		},
@@ -29,13 +29,13 @@
 		// Task Manager
 		{
 			"Name": "Task Manager",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowDown" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowDown" }],
 			"FileName": "taskmgr"
 		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" }, { "Key": "RSuper" } ],
+	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" }, { "Key": "SuperRight" } ],
 
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".
