@@ -16,14 +16,16 @@ public class KeySequenceExtensionsTest
 		{
 		// @formatter:off
 #pragma warning disable SA1027
+
+			// Single keys
 			(new(KM.None,								null,	KC.A),					"A"),
 
-			(new(KM.None,								"A",	null),					"A"),
-			(new(KM.Control,							"1",	null),					"Ctrl+1"),
-			(new(KM.Control | KM.Numpad,				"1",	null),					"Ctrl+Num+1"),
+			(new(KM.None,								"A",	KC.None),				"A"),
+			(new(KM.Control,							"1",	KC.None),				"Ctrl+1"),
+			(new(KM.Control | KM.Numpad,				"1",	KC.None),				"Ctrl+Num+1"),
 
-			(new(KM.Control,							"§",	null),					"Ctrl+§"),
-			(new(KM.Control,							"§",	null),					"Ctrl+§"),
+			(new(KM.Control,							"§",	KC.None),				"Ctrl+§"),
+			(new(KM.Control,							"§",	KC.None),				"Ctrl+§"),
 
 			// @formatter:on
 #pragma warning restore SA1027

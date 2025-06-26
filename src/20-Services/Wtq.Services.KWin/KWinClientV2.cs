@@ -163,7 +163,7 @@ internal sealed class KWinClientV2(
 						sequence = sequence.ToKWinString(),
 						mod = sequence.Modifiers.ToString(),
 						keyChar = sequence.KeyChar ?? string.Empty,
-						keyCode = sequence.KeyCode?.ToString() ?? string.Empty,
+						keyCode = sequence.KeyCode.ToString(),
 					},
 				},
 				cancellationToken)

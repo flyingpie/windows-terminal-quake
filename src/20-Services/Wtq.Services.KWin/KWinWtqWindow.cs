@@ -83,6 +83,12 @@ public class KWinWtqWindow(
 			searchTerm = null;
 		}
 
+		// Match by file name.
+		if (searchTerm != null && searchTerm.Equals(_window.DesktopFileName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
 		// Match by resource class (often reverse DNS notation).
 		if (searchTerm != null && searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
 		{

@@ -1,6 +1,7 @@
 using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
 using Wtq.Services.UI;
@@ -53,13 +54,18 @@ public class WtqHostBase
 				.AddEnvironmentVariables()
 				.AddJsonFile(f =>
 				{
-					f.ReloadOnChange = true;
-					f.Optional = false;
-					f.Path = Path.GetFileName(pathToWtqConf);
+					f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
+					{
+						UseActivePolling = true,
+						UsePollingFileWatcher = true,
+					};
 					f.OnLoadException = x =>
 					{
 						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
 					};
+					f.Optional = false;
+					f.Path = Path.GetFileName(pathToWtqConf);
+					f.ReloadOnChange = true;
 				})
 				.AddCommandLine(args)
 				.Build();

@@ -1,10 +1,12 @@
+@using Wtq.Examples
+
 @code {
 
 	[Parameter]
 	public WtqAppExample? App { get; set; }
 
 	[Parameter]
-	public Func<WtqAppExample, Task> OnSelectApp { get; set; }
+	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; }
 
 }
 
@@ -22,20 +24,28 @@
 
 	<RadzenImage
 		Path="@App.Image"
-		style="width: 100%; object-fit: cover; height: 160px;"
+		style="width: 100%; height: 160px; object-fit: contain;"
 	/>
 
 	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
 		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
-		<RadzenButton Variant="Variant.Filled" Text="Add" Click="() => OnSelectApp(App)" />
+
+		<RadzenStack Orientation="Orientation.Vertical">
+			@foreach (var flavor in App.Flavors)
+			{
+				<RadzenButton Variant="Variant.Filled" Icon="add" Text="@flavor.Name" Click="() => OnSelectApp(App, flavor)" />
+
+				@if (Os.IsCallable(flavor.FileName))
+				{
+					<p class="rz-color-success-light rz-mt-1">App '@flavor.FileName' seems to exist!</p>
+				}
+				else
+				{
+					<p class="rz-color-danger-light rz-mt-1">App '@flavor.FileName' does NOT seem to exist!</p>
+				}
+			}
+		</RadzenStack>
 	</RadzenStack>
 
-	@if (Os.IsCallable(example.FileName))
-	{
-		<p class="rz-color-success-light rz-mt-1">App '@example.FileName' seems to exist!</p>
-	}
-	else
-	{
-		<p class="rz-color-danger-light rz-mt-1">App '@example.FileName' does NOT seem to exist!</p>
-	}
+
 </RadzenStack>

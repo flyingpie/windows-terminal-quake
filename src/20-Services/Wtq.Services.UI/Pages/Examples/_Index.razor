@@ -1,3 +1,5 @@
+@using Wtq.Examples
+
 @inject IOptionsMonitor<WtqOptions> WtqOptions
 @inject DialogService Dialog
 @inject NavigationManager NavMan
@@ -18,11 +20,11 @@
 			.ToArray();
 	}
 
-	private async Task AddApp(WtqAppExample example)
+	private async Task AddApp(WtqAppExample example, WtqAppExampleFlavor flavor)
 	{
 		var opt = WtqOptions.CurrentValue;
 
-		var app = example.Factory();
+		var app = flavor.Factory(example);
 		opt.Apps.Add(app);
 
 		await SaveService.SaveAsync(opt).NoCtx();
@@ -67,7 +69,7 @@
 			<RadzenColumn Size="6" SizeLG="4" SizeXL="3">
 				<RadzenCard>
 
-					<AppExample App="example" />
+					<AppExample App="example" OnSelectApp="AddApp" />
 
 				</RadzenCard>
 			</RadzenColumn>

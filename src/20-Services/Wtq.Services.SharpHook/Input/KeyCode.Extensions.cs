@@ -14,21 +14,21 @@ public static class KeyCodeExtensions
 		switch (shKeyCode)
 		{
 			// Modifiers
-			case SKC.VcLeftShift:			return WKC.LShift;
-			case SKC.VcRightShift:			return WKC.RShift;
-			case SKC.VcLeftControl:			return WKC.LControl;
-			case SKC.VcRightControl:		return WKC.RControl;
-			case SKC.VcLeftAlt:				return WKC.LAlt;
-			case SKC.VcRightAlt:			return WKC.RAlt;
-			case SKC.VcLeftMeta:			return WKC.LSuper;
-			case SKC.VcRightMeta:			return WKC.RSuper;
+			case SKC.VcLeftShift:			return WKC.ShiftLeft;
+			case SKC.VcRightShift:			return WKC.ShiftRight;
+			case SKC.VcLeftControl:			return WKC.ControlLeft;
+			case SKC.VcRightControl:		return WKC.ControlRight;
+			case SKC.VcLeftAlt:				return WKC.AltLeft;
+			case SKC.VcRightAlt:			return WKC.AltRight;
+			case SKC.VcLeftMeta:			return WKC.SuperLeft;
+			case SKC.VcRightMeta:			return WKC.SuperRight;
 			case SKC.VcContextMenu:			return WKC.None; // TODO: Unmapped
 			case SKC.VcFunction:			return WKC.None; // TODO: Unmapped
 
 			// Misc
-			case SKC.VcBackQuote:			return WKC.Oemtilde;
-			case SKC.VcEscape:				return WKC.Escape;
-			case SKC.VcEnter:				return WKC.Enter;
+			case SKC.VcBackQuote:			return WKC.OemTilde;
+			case SKC.VcEscape:				return WKC.Return;
+			case SKC.VcEnter:				return WKC.Return;
 			case SKC.VcSpace:				return WKC.Space;
 			case SKC.VcTab:					return WKC.Tab;
 			case SKC.VcPrintScreen:			return WKC.PrintScreen;
@@ -53,7 +53,7 @@ public static class KeyCodeExtensions
 			case SKC.VcBackslash:			return WKC.OemBackslash;
 			case SKC.VcSemicolon:			return WKC.OemSemicolon;
 			case SKC.VcQuote:				return WKC.OemQuotes;
-			case SKC.VcComma:				return WKC.Oemcomma;
+			case SKC.VcComma:				return WKC.OemComma;
 			case SKC.VcPeriod:				return WKC.OemPeriod;
 
 			// Above arrow keys
@@ -76,7 +76,7 @@ public static class KeyCodeExtensions
 			case SKC.VcMediaStop:			return WKC.MediaStop;
 			case SKC.VcMediaPrevious:		return WKC.MediaPreviousTrack;
 			case SKC.VcMediaNext:			return WKC.MediaNextTrack;
-			case SKC.VcMediaSelect:			return WKC.SelectMedia;
+			case SKC.VcMediaSelect:			return WKC.LaunchSelectMedia;
 			case SKC.VcVolumeMute:			return WKC.VolumeMute;
 			case SKC.VcVolumeDown:			return WKC.VolumeDown;
 			case SKC.VcVolumeUp:			return WKC.VolumeUp;
@@ -109,7 +109,7 @@ public static class KeyCodeExtensions
 			case SKC.VcKanji:				return WKC.KanjiMode;
 			case SKC.VcKatakanaHiragana:	return WKC.FinalMode;
 			case SKC.VcModeChange:			return WKC.IMEModeChange;
-			case SKC.VcNonConvert:			return WKC.IMENonconvert;
+			case SKC.VcNonConvert:			return WKC.IMENonConvert;
 			case SKC.VcAlphanumeric:		return WKC.None; // TODO: Unmapped
 			case SKC.VcHiragana:			return WKC.None; // TODO: Unmapped
 			case SKC.VcImeOff:				return WKC.None; // TODO: Unmapped
@@ -190,22 +190,22 @@ public static class KeyCodeExtensions
 
 			// Numpad
 			case SKC.VcNumPadClear:			return WKC.Clear;
-			case SKC.VcNumPadDivide:		return WKC.Divide;
-			case SKC.VcNumPadMultiply:		return WKC.Multiply;
-			case SKC.VcNumPadSubtract:		return WKC.Subtract;
-			case SKC.VcNumPadAdd:			return WKC.Add;
-			case SKC.VcNumPadDecimal:		return WKC.Decimal;
-			case SKC.VcNumPadSeparator:		return WKC.Separator;
-			case SKC.VcNumPad0:				return WKC.NumPad0;
-			case SKC.VcNumPad1:				return WKC.NumPad1;
-			case SKC.VcNumPad2:				return WKC.NumPad2;
-			case SKC.VcNumPad3:				return WKC.NumPad3;
-			case SKC.VcNumPad4:				return WKC.NumPad4;
-			case SKC.VcNumPad5:				return WKC.NumPad5;
-			case SKC.VcNumPad6:				return WKC.NumPad6;
-			case SKC.VcNumPad7:				return WKC.NumPad7;
-			case SKC.VcNumPad8:				return WKC.NumPad8;
-			case SKC.VcNumPad9:				return WKC.NumPad9;
+			case SKC.VcNumPadDivide:		return WKC.NumpadDivide;
+			case SKC.VcNumPadMultiply:		return WKC.NumpadMultiply;
+			case SKC.VcNumPadSubtract:		return WKC.NumpadSubtract;
+			case SKC.VcNumPadAdd:			return WKC.NumpadAdd;
+			case SKC.VcNumPadDecimal:		return WKC.NumpadDecimal;
+			case SKC.VcNumPadSeparator:		return WKC.NumpadSeparator;
+			case SKC.VcNumPad0:				return WKC.Numpad0;
+			case SKC.VcNumPad1:				return WKC.Numpad1;
+			case SKC.VcNumPad2:				return WKC.Numpad2;
+			case SKC.VcNumPad3:				return WKC.Numpad3;
+			case SKC.VcNumPad4:				return WKC.Numpad4;
+			case SKC.VcNumPad5:				return WKC.Numpad5;
+			case SKC.VcNumPad6:				return WKC.Numpad6;
+			case SKC.VcNumPad7:				return WKC.Numpad7;
+			case SKC.VcNumPad8:				return WKC.Numpad8;
+			case SKC.VcNumPad9:				return WKC.Numpad9;
 			case SKC.VcNumPadEnter:			return WKC.None; // TODO: Unmapped
 			case SKC.VcNumPadEquals:		return WKC.None; // TODO: Unmapped
 

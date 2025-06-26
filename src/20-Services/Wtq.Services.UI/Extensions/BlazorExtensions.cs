@@ -124,12 +124,12 @@ public static class BlazorExtensions
 		{
 			case "pause": return KeyCode.Pause;
 			case "backquote": return KeyCode.OemTilde;
-			case "backspace": return KeyCode.Back;
+			case "backspace": return KeyCode.Backspace;
 			case "tab": return KeyCode.Tab;
 			case "numlock": return KeyCode.NumLock;
-			case "enter": return KeyCode.Enter;
+			case "enter": return KeyCode.Return;
 			case "capslock": return KeyCode.CapsLock;
-			case "escape": return KeyCode.Escape;
+			case "escape": return KeyCode.Return;
 			case "minus": return KeyCode.OemMinus;
 			case "equal": return KeyCode.OemPlus;
 			case "insert": return KeyCode.Insert;
@@ -143,10 +143,10 @@ public static class BlazorExtensions
 			case "slash": return KeyCode.OemQuestion;
 			case "pageup": return KeyCode.PageUp;
 			case "pagedown": return KeyCode.PageDown;
-			case "arrowup": return KeyCode.Up;
-			case "arrowdown": return KeyCode.Down;
-			case "arrowleft": return KeyCode.Left;
-			case "arrowright": return KeyCode.Right;
+			case "arrowup": return KeyCode.ArrowUp;
+			case "arrowdown": return KeyCode.ArrowDown;
+			case "arrowleft": return KeyCode.ArrowLeft;
+			case "arrowright": return KeyCode.ArrowRight;
 			case "backslash": return KeyCode.OemBackslash;
 			case "space": return KeyCode.Space;
 
@@ -213,41 +213,41 @@ public static class BlazorExtensions
 			case "keyy": return KeyCode.Y;
 			case "keyz": return KeyCode.Z;
 
-			case "numpad0": return KeyCode.NumPad0;
-			case "numpad1": return KeyCode.NumPad1;
-			case "numpad2": return KeyCode.NumPad2;
-			case "numpad3": return KeyCode.NumPad3;
-			case "numpad4": return KeyCode.NumPad4;
-			case "numpad5": return KeyCode.NumPad5;
-			case "numpad6": return KeyCode.NumPad6;
-			case "numpad7": return KeyCode.NumPad7;
-			case "numpad8": return KeyCode.NumPad8;
-			case "numpad9": return KeyCode.NumPad9;
-			case "numpaddivide": return KeyCode.Divide;
-			case "numpadmultiply": return KeyCode.Multiply;
-			case "numpadsubtract": return KeyCode.Subtract;
-			case "numpadadd": return KeyCode.Add;
-			case "numpaddecimal": return KeyCode.Decimal;
-			case "numpadenter": return KeyCode.Enter;
+			case "numpad0": return KeyCode.Numpad0;
+			case "numpad1": return KeyCode.Numpad1;
+			case "numpad2": return KeyCode.Numpad2;
+			case "numpad3": return KeyCode.Numpad3;
+			case "numpad4": return KeyCode.Numpad4;
+			case "numpad5": return KeyCode.Numpad5;
+			case "numpad6": return KeyCode.Numpad6;
+			case "numpad7": return KeyCode.Numpad7;
+			case "numpad8": return KeyCode.Numpad8;
+			case "numpad9": return KeyCode.Numpad9;
+			case "numpaddivide": return KeyCode.NumpadDivide;
+			case "numpadmultiply": return KeyCode.NumpadMultiply;
+			case "numpadsubtract": return KeyCode.NumpadSubtract;
+			case "numpadadd": return KeyCode.NumpadAdd;
+			case "numpaddecimal": return KeyCode.NumpadDecimal;
+			case "numpadenter": return KeyCode.Return;
 
 			// Modifiers
 			// case "alt": return KeyCode.Alt;
-			case "altleft": return KeyCode.LAlt;
-			case "altright": return KeyCode.RAlt;
+			case "altleft": return KeyCode.AltLeft;
+			case "altright": return KeyCode.AltRight;
 
 			// case "control": return KeyCode.Control;
-			case "controlleft": return KeyCode.LControl;
-			case "controlright": return KeyCode.RControl;
+			case "controlleft": return KeyCode.ControlLeft;
+			case "controlright": return KeyCode.ControlRight;
 
 			// case "shift": return KeyCode.Shift;
-			case "shiftleft": return KeyCode.LShift;
-			case "shiftright": return KeyCode.RShift;
+			case "shiftleft": return KeyCode.ShiftLeft;
+			case "shiftright": return KeyCode.ShiftRight;
 
 			// case "super": return KeyCode.Super;
-			case "superleft": return KeyCode.LSuper;
-			case "superright": return KeyCode.RSuper;
-			case "osleft": return KeyCode.LSuper;
-			case "osright": return KeyCode.RSuper;
+			case "superleft": return KeyCode.SuperLeft;
+			case "superright": return KeyCode.SuperRight;
+			case "osleft": return KeyCode.SuperLeft;
+			case "osright": return KeyCode.SuperRight;
 		}
 
 		_log.LogWarning("Unknown key code '{Code}'", code);

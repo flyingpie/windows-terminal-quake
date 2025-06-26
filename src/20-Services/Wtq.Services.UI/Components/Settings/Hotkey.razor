@@ -22,13 +22,6 @@
 			return s.IsEmpty
 				? "(press a shortcut here)"
 				: s.ToString();
-
-			// if (Options.Key != Keys.None || Options.Modifiers != KeyModifiers.None)
-			// {
-			// 	return Options.ToString();
-			// }
-			//
-			// return "(press a shortcut here)";
 		}
 	}
 
@@ -51,17 +44,7 @@
 	{
 		RawEvent = Json.Serialize(e);
 
-		// if (e.IsSuperKey())
-		// {
-		// 	_isSuper = true;
-		// }
-
 		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
-
-		// if (_isSuper)
-		// {
-		// 	mod |= KeyModifiers.Super;
-		// }
 
 		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
 		// So we're keeping track of that ourselves.
@@ -76,11 +59,14 @@
 		}
 
 		// If the pressed key is a modifier, omit it from the key code and key char.
-		if (keyCode.IsModifier())
-		{
-			keyChar = null;
-			keyCode = KeyCode.None;
-		}
+		// if (keyCode.IsModifier())
+		// {
+		// 	keyChar = null;
+		// 	keyCode = KeyCode.None;
+		// }
+
+		// If the pressed key is a modifier, omit it from the "Modifiers" set.
+		mod ^= keyCode.AsModifier();
 
 		// If a proper key char is available, omit the key code.
 		if (!string.IsNullOrWhiteSpace(keyChar))

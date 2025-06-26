@@ -3,6 +3,31 @@ namespace Wtq.Input;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Keeps the file next to the KeyModifiers one.")]
 public static class KeyCodeExtensions
 {
+	public static KeyModifiers AsModifier(this KeyCode key)
+	{
+		switch (key)
+		{
+			case KeyCode.AltLeft:
+			case KeyCode.AltRight:
+				return KeyModifiers.Alt;
+
+			case KeyCode.ControlLeft:
+			case KeyCode.ControlRight:
+				return KeyModifiers.Control;
+
+			case KeyCode.ShiftLeft:
+			case KeyCode.ShiftRight:
+				return KeyModifiers.Shift;
+
+			case KeyCode.SuperLeft:
+			case KeyCode.SuperRight:
+				return KeyModifiers.Super;
+
+			default:
+				return KeyModifiers.None;
+		}
+	}
+
 	/// <summary>
 	/// Returns whether the specified <paramref name="key"/> is a modifier (Alt, Control, Shift or Super).
 	/// </summary>
@@ -18,8 +43,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LAlt:
-			case KeyCode.RAlt:
+			case KeyCode.AltLeft:
+			case KeyCode.AltRight:
 				return true;
 
 			default:
@@ -34,8 +59,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LControl:
-			case KeyCode.RControl:
+			case KeyCode.ControlLeft:
+			case KeyCode.ControlRight:
 				return true;
 
 			default:
@@ -50,21 +75,21 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.NumPad0:
-			case KeyCode.NumPad1:
-			case KeyCode.NumPad2:
-			case KeyCode.NumPad3:
-			case KeyCode.NumPad4:
-			case KeyCode.NumPad5:
-			case KeyCode.NumPad6:
-			case KeyCode.NumPad7:
-			case KeyCode.NumPad8:
-			case KeyCode.NumPad9:
-			case KeyCode.Multiply:
-			case KeyCode.Subtract:
-			case KeyCode.Divide:
-			case KeyCode.Add:
-			case KeyCode.Decimal:
+			case KeyCode.Numpad0:
+			case KeyCode.Numpad1:
+			case KeyCode.Numpad2:
+			case KeyCode.Numpad3:
+			case KeyCode.Numpad4:
+			case KeyCode.Numpad5:
+			case KeyCode.Numpad6:
+			case KeyCode.Numpad7:
+			case KeyCode.Numpad8:
+			case KeyCode.Numpad9:
+			case KeyCode.NumpadMultiply:
+			case KeyCode.NumpadSubtract:
+			case KeyCode.NumpadDivide:
+			case KeyCode.NumpadAdd:
+			case KeyCode.NumpadDecimal:
 				return true;
 
 			default:
@@ -79,8 +104,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LShift:
-			case KeyCode.RShift:
+			case KeyCode.ShiftLeft:
+			case KeyCode.ShiftRight:
 				return true;
 
 			default:
@@ -95,8 +120,8 @@ public static class KeyCodeExtensions
 	{
 		switch (key)
 		{
-			case KeyCode.LSuper:
-			case KeyCode.RSuper:
+			case KeyCode.SuperLeft:
+			case KeyCode.SuperRight:
 				return true;
 
 			default:

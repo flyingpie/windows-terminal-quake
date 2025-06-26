@@ -6,7 +6,7 @@ namespace Wtq.Input;
 public readonly struct KeySequence(
 	KeyModifiers modifiers,
 	string? keyChar,
-	KeyCode? keyCode)
+	KeyCode keyCode)
 	: IEquatable<KeySequence>
 {
 	/// <summary>
@@ -23,14 +23,13 @@ public readonly struct KeySequence(
 	/// <summary>
 	/// The pressed key (Q, 1, F1, etc.), as a virtual key code.
 	/// </summary>
-	public KeyCode? KeyCode { get; } = keyCode;
+	public KeyCode KeyCode { get; } = keyCode;
 
 	/// <summary>
 	/// Returns whether <see cref="KeyCode"/> is not empty.
 	/// </summary>
-	[MemberNotNullWhen(true, nameof(KeyCode))]
 	[JsonIgnore]
-	public bool HasKeyCode => KeyCode.HasValue && KeyCode != Wtq.Input.KeyCode.None;
+	public bool HasKeyCode => KeyCode != KeyCode.None;
 
 	/// <summary>
 	/// The pressed key, as a string, as translated by the keyboard layout.

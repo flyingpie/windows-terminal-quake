@@ -40,7 +40,7 @@ public static class KeySequenceExtensions
 				sb.Append('+');
 			}
 
-			var keyCodeStr = sequence.KeyCode.Value.ToKWinString();
+			var keyCodeStr = sequence.KeyCode.ToKWinString();
 			if (!string.IsNullOrWhiteSpace(keyCodeStr))
 			{
 				sb.Append(keyCodeStr);
@@ -75,7 +75,7 @@ public static class KeySequenceExtensions
 	}
 
 	/// <summary>
-	/// Converts 0 or 1 key into a string that can be used for registration in KWin.
+	/// Converts no- or 1 key into a string that can be used for registration in KWin.
 	/// </summary>
 	private static string? ToKWinString(this KeyCode keyCode)
 	{
@@ -85,14 +85,15 @@ public static class KeySequenceExtensions
 
 		switch (keyCode)
 		{
-			// Top row (mostly)
-			case KeyCode.Back:						return "Backspace";
+			// The Most Popular Keys
+			case KeyCode.Backspace:					return "Backspace";
 			case KeyCode.Escape:					return "Esc";
 			case KeyCode.Pause:						return "Pause";
 			case KeyCode.PrintScreen:				return "Print";
-			case KeyCode.Return:					return "Return"; // TODO: Middle enter, doesn't work for numpad enter.
+			case KeyCode.Return:					return "Esc";
 			case KeyCode.Space:						return "Space";
 			case KeyCode.Tab:						return "Tab";
+			case KeyCode.ContextMenu:				return null; // TODO: Unmapped
 
 			// IME
 			case KeyCode.FinalMode:					return null; // TODO: Unmapped
@@ -100,15 +101,15 @@ public static class KeySequenceExtensions
 			case KeyCode.IMEAccept:					return null; // TODO: Unmapped
 			case KeyCode.IMEConvert:				return null; // TODO: Unmapped
 			case KeyCode.IMEModeChange:				return null; // TODO: Unmapped
-			case KeyCode.IMENonconvert:				return null; // TODO: Unmapped
+			case KeyCode.IMENonConvert:				return null; // TODO: Unmapped
 			case KeyCode.JunjaMode:					return null; // TODO: Unmapped
 			case KeyCode.KanaMode:					return null; // TODO: Unmapped
 
 			// Arrow keys
-			case KeyCode.Down:						return "Down";
-			case KeyCode.Left:						return "Left";
-			case KeyCode.Right:						return "Right";
-			case KeyCode.Up:						return "Up";
+			case KeyCode.ArrowDown:					return "Down";
+			case KeyCode.ArrowLeft:					return "Left";
+			case KeyCode.ArrowRight:				return "Right";
+			case KeyCode.ArrowUp:					return "Up";
 
 			// Above arrow keys
 			case KeyCode.Delete:					return "Delete";
@@ -119,14 +120,14 @@ public static class KeySequenceExtensions
 			case KeyCode.PageUp:					return "PgUp";
 
 			// Modifiers
-			case KeyCode.LAltKey:					return "Alt";
-			case KeyCode.RAltKey:					return "Alt";
-			case KeyCode.LControlKey:				return "Control";
-			case KeyCode.RControlKey:				return "Control";
-			case KeyCode.LShiftKey:					return "Shift";
-			case KeyCode.RShiftKey:					return "Shift";
-			case KeyCode.LWin:						return "Meta";
-			case KeyCode.RWin:						return "Meta";
+			case KeyCode.AltLeft:					return "Alt";
+			case KeyCode.AltRight:					return "Alt";
+			case KeyCode.ControlLeft:				return "Control";
+			case KeyCode.ControlRight:				return "Control";
+			case KeyCode.ShiftLeft:					return "Shift";
+			case KeyCode.ShiftRight:				return "Shift";
+			case KeyCode.SuperLeft:					return "Meta";
+			case KeyCode.SuperRight:				return "Meta";
 
 			// Main row numbers
 			case KeyCode.D0:						return "0";
@@ -168,7 +169,7 @@ public static class KeySequenceExtensions
 			case KeyCode.Y:							return "Y";
 			case KeyCode.Z:							return "Z";
 
-			// Right of main row
+			// OEM Keys
 			case KeyCode.OemSemicolon:				return ";";
 			case KeyCode.OemPlus:					return "=";
 			case KeyCode.OemComma:					return ",";
@@ -180,24 +181,27 @@ public static class KeySequenceExtensions
 			case KeyCode.OemQuotes:					return "'";
 			case KeyCode.OemOpenBrackets:			return "[";
 			case KeyCode.OemCloseBrackets:			return "]";
+			case KeyCode.Oem8:						return null; // TODO: Unmapped
+			case KeyCode.Oem102:					return null; // TODO: Unmapped
+			case KeyCode.OemClear:					return null; // TODO: Unmapped
 
 			// Numpad
-			case KeyCode.NumPad0:					return "Num+0";
-			case KeyCode.NumPad1:					return "Num+1";
-			case KeyCode.NumPad2:					return "Num+2";
-			case KeyCode.NumPad3:					return "Num+3";
-			case KeyCode.NumPad4:					return "Num+4";
-			case KeyCode.NumPad5:					return "Num+5";
-			case KeyCode.NumPad6:					return "Num+6";
-			case KeyCode.NumPad7:					return "Num+7";
-			case KeyCode.NumPad8:					return "Num+8";
-			case KeyCode.NumPad9:					return "Num+9";
-			case KeyCode.Add:						return "Num++";
-			case KeyCode.Decimal:					return "Num+.";
-			case KeyCode.Divide:					return "Num+/";
-			case KeyCode.Multiply:					return "Num+*";
-			case KeyCode.Separator:					return null; // TODO: Unmapped
-			case KeyCode.Subtract:					return "Num+-";
+			case KeyCode.Numpad0:					return "Num+0";
+			case KeyCode.Numpad1:					return "Num+1";
+			case KeyCode.Numpad2:					return "Num+2";
+			case KeyCode.Numpad3:					return "Num+3";
+			case KeyCode.Numpad4:					return "Num+4";
+			case KeyCode.Numpad5:					return "Num+5";
+			case KeyCode.Numpad6:					return "Num+6";
+			case KeyCode.Numpad7:					return "Num+7";
+			case KeyCode.Numpad8:					return "Num+8";
+			case KeyCode.Numpad9:					return "Num+9";
+			case KeyCode.NumpadAdd:					return "Num++";
+			case KeyCode.NumpadDecimal:				return "Num+.";
+			case KeyCode.NumpadDivide:				return "Num+/";
+			case KeyCode.NumpadMultiply:			return "Num+*";
+			case KeyCode.NumpadSubtract:			return "Num+-";
+			case KeyCode.NumpadSeparator:			return null; // TODO: Unmapped
 
 			case KeyCode.F1:						return "F1";
 			case KeyCode.F2:						return "F2";
@@ -248,7 +252,6 @@ public static class KeySequenceExtensions
 			case KeyCode.MediaPreviousTrack:		return null; // TODO: Unmapped
 			case KeyCode.MediaStop:					return null; // TODO: Unmapped
 			case KeyCode.MediaPlayPause:			return null; // TODO: Unmapped
-			case KeyCode.SelectMedia:				return null; // TODO: Unmapped
 
 			// Misc
 			case KeyCode.LineFeed:					return null; // TODO: Unmapped
@@ -258,14 +261,12 @@ public static class KeySequenceExtensions
 			case KeyCode.Select:					return null; // TODO: Unmapped
 			case KeyCode.Execute:					return null; // TODO: Unmapped
 			case KeyCode.Help:						return null; // TODO: Unmapped
-			case KeyCode.Apps:						return null; // TODO: Unmapped
 			case KeyCode.Sleep:						return null; // TODO: Unmapped
 			case KeyCode.LaunchMail:				return null; // TODO: Unmapped
+			case KeyCode.LaunchSelectMedia:			return null; // TODO: Unmapped
 			case KeyCode.LaunchApplication1:		return null; // TODO: Unmapped
 			case KeyCode.LaunchApplication2:		return null; // TODO: Unmapped
-			case KeyCode.Oem8:						return null; // TODO: Unmapped
-			case KeyCode.Oem102:					return null; // TODO: Unmapped
-			case KeyCode.ProcessKey:				return null; // TODO: Unmapped
+			case KeyCode.Process:					return null; // TODO: Unmapped
 			case KeyCode.Packet:					return null; // TODO: Unmapped
 			case KeyCode.Attn:						return null; // TODO: Unmapped
 			case KeyCode.Crsel:						return null; // TODO: Unmapped
@@ -275,7 +276,6 @@ public static class KeySequenceExtensions
 			case KeyCode.Zoom:						return null; // TODO: Unmapped
 			case KeyCode.NoName:					return null; // TODO: Unmapped
 			case KeyCode.Pa1:						return null; // TODO: Unmapped
-			case KeyCode.OemClear:					return null; // TODO: Unmapped
 
 			case KeyCode.None:
 			default:
