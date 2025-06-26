@@ -71,6 +71,20 @@ public static class Os
 		return null;
 	}
 
+	public static bool IsSymlink(string path)
+	{
+		Guard.Against.NullOrWhiteSpace(path);
+
+		if (!File.Exists(path))
+		{
+			throw new InvalidOperationException($"No such file at path '{path}'.");
+		}
+
+		var pathInfo = new FileInfo(path);
+
+		return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
+	}
+
 	public static void OpenFileOrDirectory(string path)
 	{
 		Guard.Against.NullOrWhiteSpace(path);
