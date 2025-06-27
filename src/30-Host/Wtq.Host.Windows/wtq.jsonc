@@ -31,7 +31,25 @@
 			"Name": "Task Manager",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowDown" }],
 			"FileName": "taskmgr"
-		}
+		},
+	
+		// Brave - Google Calendar
+		{
+			"Name": "Google Calendar",
+			"Hotkeys": [{ "Modifiers": "Control,Shift", "KeyChar": "!" }],
+			"FileName": "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
+			"ArgumentList": [ { "Argument": "--app=https://calendar.google.com" } ],
+			"WindowTitle": ".*Google Calendar.*"
+		},
+	
+		// Brave - GMail
+		{
+			"Name": "GMail",
+			"Hotkeys": [{ "Modifiers": "Control,Shift", "KeyChar": "@" }],
+			"FileName": "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
+			"ArgumentList": [ { "Argument": "--app=https://mail.google.com" } ],
+			"WindowTitle": ".*GMail.*"
+		},
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).

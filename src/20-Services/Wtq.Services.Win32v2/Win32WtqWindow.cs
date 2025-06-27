@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Wtq.Services.Win32v2.Native;
 
 namespace Wtq.Services.Win32v2;
@@ -78,9 +79,16 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 
 		// Window title
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !opts.WindowTitle.Equals(_window.WindowCaption, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle))
 		{
-			return false;
+			var r = new Regex(opts.WindowTitle, RegexOptions.IgnoreCase);
+			if (!r.IsMatch(_window.WindowCaption ?? string.Empty))
+			{
+				return false;
+			}
+//			!opts.WindowTitle.Equals(_window.WindowCaption, StringComparison.OrdinalIgnoreCase)
+
+//			return false;
 		}
 
 		// Process name
