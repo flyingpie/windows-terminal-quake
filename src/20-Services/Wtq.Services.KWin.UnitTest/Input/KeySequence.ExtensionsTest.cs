@@ -1,4 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Wtq.Input;
 using Wtq.Services.KWin.Input;
 using KC = Wtq.Input.KeyCode;
