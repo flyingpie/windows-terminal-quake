@@ -5,41 +5,6 @@ namespace Wtq.Services.KWin.Input;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Naming convention.")]
 public static class KeySequenceExtensions
 {
-	/// <summary>
-	/// Returns whether the "shift"-modifier has caused the pressed key to emit a symbol, unrelated to the one that
-	/// would have been emitted, had shift not been pressed.<br/>
-	/// <br/>
-	/// For example: when pressing the "A" key without shift returns "a", with shift "A". These are different, but related.<br/>
-	/// Pressing the "1" key on the main row of a US ANSI keyboard without shift returns "1", with shift "!". These are different, and not related.<br/>
-	/// <br/>
-	/// This is not a perfect method, but we need it for sending hotkey registrations to KWin, as there "shift" is not considered
-	/// when the character already implies one.<br/>
-	/// <br/>
-	/// Nicer methods would probably require more access to the active keyboard layout and character mapping, which we don't have.
-	/// </summary>
-	public static bool IsShiftImplied(this KeySequence sequence)
-	{
-		// The "shift" key must be part of the active modifiers.
-		if (!sequence.Modifiers.HasShift())
-		{
-			return false;
-		}
-
-		// We can skip non-character keys.
-		if (sequence.KeyChar == null)
-		{
-			return false;
-		}
-
-		// Don't consider key chars that are referring to a non-character key, like "Tab", or "F1".
-		if (sequence.KeyChar.Length > 1)
-		{
-			return false;
-		}
-
-		return sequence.KeyChar.All(c => !char.IsUpper(c) && !char.IsLower(c));
-	}
-
 	public static string ToKWinString(this KeySequence sequence)
 	{
 		var sb = new StringBuilder();

@@ -64,10 +64,10 @@
 		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
 		// TODO: Explain why
 		// TODO: Move to KWin-specific part.
-		if (mod.HasFlag(KeyModifiers.Shift) && keyChar != null && keyChar.All(c => !char.IsUpper(c) && !char.IsLower(c)))
-		{
-			mod ^= KeyModifiers.Shift;
-		}
+		// if (mod.HasFlag(KeyModifiers.Shift) && keyChar != null && keyChar.All(c => !char.IsUpper(c) && !char.IsLower(c)))
+		// {
+		// 	mod ^= KeyModifiers.Shift;
+		// }
 
 		Options.Modifiers = mod;
 		// Options.Key = keyCode;
@@ -76,7 +76,7 @@
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
-		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
+		e.ToModifiersAndKey(out var mod, out _, out var keyCode);
 
 		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
 		// So we're keeping track of that ourselves.

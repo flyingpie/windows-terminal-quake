@@ -96,14 +96,59 @@ public readonly struct KeySequence(
 	public override string ToString() =>
 		$"Modifiers:'{Modifiers}' KeyChar:{(HasKeyChar ? $"'{KeyChar}'" : "<none>")} KeyCode:{(HasKeyCode ? $"'{KeyCode}'" : "<none>")}";
 
+	/// <summary>
+	/// Returns whether the "shift"-modifier has caused the pressed key to emit a symbol, unrelated to the one that
+	/// would have been emitted, had shift not been pressed.<br/>
+	/// <br/>
+	/// For example: when pressing the "A" key without shift returns "a", with shift "A". These are different, but related.<br/>
+	/// Pressing the "1" key on the main row of a US ANSI keyboard without shift returns "1", with shift "!". These are different, and not related.<br/>
+	/// <br/>
+	/// This is not a perfect method, but we need it for sending hotkey registrations to KWin, as there "shift" is not considered
+	/// when the character already implies one.<br/>
+	/// <br/>
+	/// Nicer methods would probably require more access to the active keyboard layout and character mapping, which we don't have.
+	/// </summary>
+	public bool IsShiftImplied()
+	{
+		// The "shift" key must be part of the active modifiers.
+		if (!Modifiers.HasShift())
+		{
+			return false;
+		}
+
+		// We can skip non-character keys.
+		if (KeyChar == null)
+		{
+			return false;
+		}
+
+		// Don't consider key chars that are referring to a non-character key, like "Tab", or "F1".
+		if (KeyChar.Length > 1)
+		{
+			return false;
+		}
+
+		return KeyChar.All(c => !char.IsUpper(c) && !char.IsLower(c));
+	}
+
 	public string ToShortString()
 	{
 		var sb = new StringBuilder();
 
 		// Modifier
-		if (Modifiers != KeyModifiers.None)
+		foreach (var m in new[] { KeyModifiers.Control, KeyModifiers.Alt, KeyModifiers.Shift, KeyModifiers.Super, KeyModifiers.Numpad, })
 		{
-			sb.Append(Modifiers);
+			if (!Modifiers.HasFlag(m))
+			{
+				continue;
+			}
+
+			if (sb.Length > 0)
+			{
+				sb.Append('+');
+			}
+
+			sb.Append(m);
 		}
 
 		// Key char
