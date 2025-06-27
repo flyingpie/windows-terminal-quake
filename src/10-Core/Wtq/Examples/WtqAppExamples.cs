@@ -298,7 +298,7 @@ public static class WtqAppExamples
 					{
 						Name = x.Title,
 						FileName = "explorer",
-						WindowClass = "",
+						WindowClass = "CabinetWClass",
 					},
 				},
 			],
