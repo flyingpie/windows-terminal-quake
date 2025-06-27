@@ -11,5 +11,5 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using Wtq.Configuration;
-global using Wtq.Exceptions;
+global using Wtq.Input;
 global using Wtq.Utils;
