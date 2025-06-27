@@ -6,19 +6,19 @@
 
 		{
 			"Name": "Konsole",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "konsole"
 		},
 
 		{
 			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D2" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
 			"FileName": "plasma-systemmonitor"
 		},
 
 		{
 			"Name": "SystemMonitor",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D3" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
 			"FileName": "dolphin"
 		}
 	],
