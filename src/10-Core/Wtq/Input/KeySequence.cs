@@ -74,7 +74,7 @@ public readonly struct KeySequence(
 		}
 
 		// If a key character was present on both sides, and it matches, the key sequence can be considered the same.
-		if (HasKeyChar && other.HasKeyChar && KeyChar == other.KeyChar)
+		if (HasKeyChar && other.HasKeyChar && KeyChar.Equals(other.KeyChar, StringComparison.OrdinalIgnoreCase))
 		{
 			return true;
 		}
