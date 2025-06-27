@@ -55,22 +55,8 @@
 		// If the pressed key is a modifier, omit it from the "Modifiers" set.
 		mod ^= keyCode.AsModifier();
 
-		// If a proper key char is available, omit the key code.
-		// if (!string.IsNullOrWhiteSpace(keyChar))
-		// {
-		// 	keyCode = KeyCode.None;
-		// }
-
-		// If shift is pressed, and the character is "shifted", remove shift from the modifier set.
-		// TODO: Explain why
-		// TODO: Move to KWin-specific part.
-		// if (mod.HasFlag(KeyModifiers.Shift) && keyChar != null && keyChar.All(c => !char.IsUpper(c) && !char.IsLower(c)))
-		// {
-		// 	mod ^= KeyModifiers.Shift;
-		// }
-
 		Options.Modifiers = mod;
-		// Options.Key = keyCode;
+		Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
 		Options.KeyChar = keyChar;
 	}
 
