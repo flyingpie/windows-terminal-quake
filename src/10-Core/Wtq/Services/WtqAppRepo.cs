@@ -4,6 +4,8 @@ namespace Wtq.Services;
 public sealed class WtqAppRepo : IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
+	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
+
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppToggleService _toggleService;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
@@ -120,6 +122,9 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	/// </summary>
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
+		// Make sure this method always non-concurrently.
+		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
+
 		_log.LogDebug("Updating apps (allow start new: {AllowStartNow})", allowStartNew);
 
 		// Add app handles for options that don't have one yet.

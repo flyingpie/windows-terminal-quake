@@ -133,6 +133,9 @@ public sealed class Win32WtqWindow : WtqWindow
 
 		// Update window rect.
 		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
 	}
 
 	public override async Task SetSizeAsync(Size size)
@@ -150,6 +153,9 @@ public sealed class Win32WtqWindow : WtqWindow
 
 		// Update window rect.
 		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
 	}
 
 	public override Task SetTaskbarIconVisibleAsync(bool isVisible)
