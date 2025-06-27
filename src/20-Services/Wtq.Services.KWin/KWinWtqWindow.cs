@@ -83,6 +83,13 @@ public class KWinWtqWindow(
 			searchTerm = null;
 		}
 
+		// Match by file name.
+		// TODO: This doesn't work yet, maybe due to the above "GetFileNameWithoutExtension"?
+		if (searchTerm != null && searchTerm.Equals(_window.DesktopFileName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
 		// Match by resource class (often reverse DNS notation).
 		if (searchTerm != null && searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
 		{
