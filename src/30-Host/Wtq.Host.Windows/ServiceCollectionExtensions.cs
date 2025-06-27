@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Wtq.Configuration;
+using Wtq.Services.SharpHook;
 using Wtq.Services.Win32;
 using Wtq.Services.Win32v2;
 using Wtq.Services.WinForms;
