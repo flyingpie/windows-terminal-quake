@@ -1,4 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using Wtq.Services.KWin.Dto;
 
