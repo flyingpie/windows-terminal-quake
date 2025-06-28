@@ -86,9 +86,6 @@ public sealed class Win32WtqWindow : WtqWindow
 			{
 				return false;
 			}
-//			!opts.WindowTitle.Equals(_window.WindowCaption, StringComparison.OrdinalIgnoreCase)
-
-//			return false;
 		}
 
 		// Process name

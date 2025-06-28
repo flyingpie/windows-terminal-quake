@@ -220,7 +220,7 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
-		// Make sure this method always non-concurrently.
+		// Make sure this method always runs non-concurrently.
 		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
 
 		// Ask window to update its state first.

@@ -122,7 +122,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	/// </summary>
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
-		// Make sure this method always non-concurrently.
+		// Make sure this method always runs non-concurrently.
 		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
 
 		_log.LogDebug("Updating apps (allow start new: {AllowStartNow})", allowStartNew);
