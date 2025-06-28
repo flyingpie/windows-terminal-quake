@@ -97,14 +97,15 @@ public readonly struct KeySequence(
 		$"Modifiers:'{Modifiers}' KeyChar:{(HasKeyChar ? $"'{KeyChar}'" : "<none>")} KeyCode:{(HasKeyCode ? $"'{KeyCode}'" : "<none>")}";
 
 	/// <summary>
-	/// Returns whether the "shift"-modifier has caused the pressed key to emit a symbol, unrelated to the one that
+	/// Returns whether the "SHIFT"-modifier has caused the pressed key to emit a symbol, unrelated to the one that
 	/// would have been emitted, had shift not been pressed.<br/>
 	/// <br/>
 	/// For example: when pressing the "A" key without shift returns "a", with shift "A". These are different, but related.<br/>
 	/// Pressing the "1" key on the main row of a US ANSI keyboard without shift returns "1", with shift "!". These are different, and not related.<br/>
 	/// <br/>
-	/// This is not a perfect method, but we need it for sending hotkey registrations to KWin, as there "shift" is not considered
+	/// This is not a perfect method, but we need it for sending hotkey registrations to KWin, as there, "SHIFT" is not considered
 	/// when the character already implies one.<br/>
+	/// In other words, sending "CTRL+SHIFT+!" to KWin, does not work, it has to be sent as "CTRL+!".<br/>
 	/// <br/>
 	/// Nicer methods would probably require more access to the active keyboard layout and character mapping, which we don't have.
 	/// </summary>
