@@ -14,6 +14,9 @@ namespace Wtq;
 /// </summary>
 public sealed class WtqApp : IAsyncDisposable
 {
+	private readonly Guid _id = Guid.NewGuid();
+	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
+
 	private readonly ILogger _log;
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
@@ -31,7 +34,7 @@ public sealed class WtqApp : IAsyncDisposable
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
-		_log = Log.For($"{GetType()}|{name}");
+		_log = Log.For($"{GetType()}|{_id}|{name}");
 
 		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);
@@ -217,6 +220,9 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
+		// Make sure this method always runs non-concurrently.
+		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
+
 		// Ask window to update its state first.
 		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
 
