@@ -2,7 +2,8 @@ namespace Wtq.Input;
 
 /// <summary>
 /// Alt, control, etc.<br/>
-/// Named plurally, as it can contain multiple values.
+/// Named plurally, as it can contain multiple values.<br/>
+/// Separate multiple values with commas, e.g. "Control, Alt".
 /// </summary>
 [Flags]
 public enum KeyModifiers
