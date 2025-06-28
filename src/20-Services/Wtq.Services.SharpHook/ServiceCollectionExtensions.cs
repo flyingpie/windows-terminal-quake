@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Services.SharpHook;
 
-namespace Wtq.Services.Win32;
+namespace Wtq.Services.SharpHook;
 
 public static class ServiceCollectionExtensions
 {
