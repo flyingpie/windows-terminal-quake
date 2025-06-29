@@ -4,8 +4,6 @@
 
 @code {
 
-	private RadzenTextBox _textBox = null!;
-
 	private bool _isSuper;
 
 	[EditorRequired]
@@ -16,25 +14,22 @@
 	[Parameter]
 	public Action OnRemove { get; set; }
 
-	public ValueTask FocusAsync() => _textBox.FocusAsync();
-
 	private string Description
 	{
 		get
 		{
-			if (Options.Key != Keys.None || Options.Modifiers != KeyModifiers.None)
-			{
-				return Options.ToString();
-			}
-
-			return "(press a shortcut here)";
+			var s = Options.Sequence;
+			return s.IsEmpty
+				? "(press a shortcut here)"
+				: s.ToShortString();
 		}
 	}
 
 	private void Clear()
 	{
 		Options.Modifiers = KeyModifiers.None;
-		Options.Key = Keys.None;
+		Options.Key = KeyCode.None;
+		Options.KeyChar = null;
 	}
 
 	private void HandleFocusGained(FocusEventArgs e) => Bus.Publish<WtqSuspendHotkeysEvent>();
@@ -43,25 +38,35 @@
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{
-		if (e.IsSuperKey())
+		e.ToModifiersAndKey(out var mod, out var keyChar, out var keyCode);
+
+		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
+		// So we're keeping track of that ourselves.
+		if (keyCode.IsSuper())
 		{
 			_isSuper = true;
 		}
-
-		e.ToModifiersAndKey(out var mod, out var key);
 
 		if (_isSuper)
 		{
 			mod |= KeyModifiers.Super;
 		}
 
+		// If the pressed key is a modifier, omit it from the "Modifiers" set.
+		mod ^= keyCode.AsModifier();
+
 		Options.Modifiers = mod;
-		Options.Key = key;
+		Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
+		Options.KeyChar = keyChar;
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
-		if (e.IsSuperKey())
+		e.ToModifiersAndKey(out var mod, out _, out var keyCode);
+
+		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
+		// So we're keeping track of that ourselves.
+		if (keyCode.IsSuper())
 		{
 			_isSuper = false;
 		}
@@ -72,10 +77,12 @@
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
 	<!-- Shortcut capturing textbox -->
-	<RadzenTextBox
-		@ref="_textBox"
+	<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
+	<input
+		class="rz-textbox"
 		Style="width: 100%;"
 		@onkeydown="HandleKeyDown"
+		@onkeydown:preventDefault="true"
 		@onkeyup="HandleKeyUp"
 		@onfocus="HandleFocusGained"
 		@onblur="HandleFocusLost"
