@@ -1,0 +1,6 @@
+GetKeyState
+GetKeyboardState
+GetKeyboardLayout
+ToUnicodeEx
+MapVirtualKey
+VIRTUAL_KEY

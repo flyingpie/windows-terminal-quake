@@ -30,7 +30,6 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	private readonly IWtqBus _bus;
 
 	// Set on service init.
-	private KWinService _kwinService = null!;
 	private KGlobalAccel _kGlobalAccel = null!;
 	private Component _kwinComponent = null!;
 
@@ -56,13 +55,13 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		_kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
-		_kGlobalAccel = _kwinService.CreateKGlobalAccel("/kglobalaccel");
-		_kwinComponent = _kwinService.CreateComponent("/component/kwin");
+		var kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
+		_kGlobalAccel = kwinService.CreateKGlobalAccel("/kglobalaccel");
+		_kwinComponent = kwinService.CreateComponent("/component/kwin");
 
 		_dbusObj.OnPressShortcut((arg) =>
 		{
-			_bus.Publish(new WtqHotkeyPressedEvent(arg.Mod, arg.Key));
+			_bus.Publish(new WtqHotkeyPressedEvent(arg));
 
 			return Task.CompletedTask;
 		});
@@ -141,7 +140,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 			_log.LogInformation("Registering global hotkey '{Key}' with id '{Id}'", hk, id);
 
-			await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+			await _kwinClient.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken).NoCtx();
 		}
 	}
 
@@ -162,7 +161,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 				_log.LogInformation("Registering app hotkey '{Key}' with id '{Id}', for app '{App}'", hk, id, app);
 
-				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken).NoCtx();
 			}
 		}
 	}

@@ -113,8 +113,25 @@ public sealed class Win32WindowService(IWin32 win32) :
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
-			UseShellExecute = false,
+
+			// If this is set to "false", some apps like PowerShell are spawned within the command prompt,
+			// if WTQ runs from the command line.
+			//
+			// However, it used to be "false" (the default) for a long time, so we may find issues with this change.
+			UseShellExecute = true,
 		};
+
+		// Arguments
+		foreach (var arg in opts.ArgumentList
+			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
+			.Select(a => a.Argument!))
+		{
+			var exp = arg.ExpandEnvVars();
+
+			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+
+			process.StartInfo.ArgumentList.Add(exp);
+		}
 
 		// Start
 		try

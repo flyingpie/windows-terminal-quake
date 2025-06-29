@@ -1,6 +1,7 @@
 using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
 using Wtq.Services.UI;
@@ -60,6 +61,17 @@ public class WtqHostBase
 					{
 						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
 					};
+
+					if (Os.IsSymlink(pathToWtqConf))
+					{
+						log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
+
+						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
+						{
+							UseActivePolling = true,
+							UsePollingFileWatcher = true,
+						};
+					}
 				})
 				.AddCommandLine(args)
 				.Build();

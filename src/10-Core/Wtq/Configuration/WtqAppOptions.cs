@@ -6,7 +6,7 @@ namespace Wtq.Configuration;
 /// Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 /// </summary>
 [Display(Name = ":material-application-outline: App options")]
-public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
+public sealed class WtqAppOptions : WtqSharedOptions
 {
 	private ICollection<ProcessArgument> _argumentList = [];
 	private ICollection<HotkeyOptions> _hotkeys = [];
@@ -198,7 +198,8 @@ public sealed class WtqAppOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	public void PrepareForSave()
 	{
-		foreach (var hk in Hotkeys.Where(hk => hk.IsEmpty).ToList()) // Explicit ToList() since we're modifying it from within the loop.
+		// Explicit ToList() since we're modifying it from within the loop.
+		foreach (var hk in Hotkeys.Where(hk => hk.Sequence.IsEmpty).ToList())
 		{
 			Hotkeys.Remove(hk);
 		}

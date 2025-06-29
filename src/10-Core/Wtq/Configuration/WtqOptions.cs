@@ -6,7 +6,7 @@ namespace Wtq.Configuration;
 /// Defines WTQ-wide options, including the list of configured apps.
 /// </summary>
 [Display(Name = ":material-earth: Global options")]
-public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
+public sealed class WtqOptions : WtqSharedOptions
 {
 	/// <summary>
 	/// Path to wtq.schema.json.<br/>
@@ -118,7 +118,8 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 			app.PrepareForSave();
 		}
 
-		foreach (var hk in Hotkeys.Where(hk => hk.IsEmpty).ToList()) // Explicit ToList() since we're modifying it from within the loop.
+		// Explicit ToList() since we're modifying it from within the loop.
+		foreach (var hk in Hotkeys.Where(hk => hk.Sequence.IsEmpty).ToList())
 		{
 			Hotkeys.Remove(hk);
 		}

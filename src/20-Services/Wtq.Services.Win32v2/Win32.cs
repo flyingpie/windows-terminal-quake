@@ -303,10 +303,12 @@ public class Win32 : IWin32
 		var windowTitle = GetWindowTitle(windowHandle);
 
 		// Construct return object.
-		var window = new Win32Window(ownerProcess)
+		var window = new Win32Window(() => ownerProcess.HasExited)
 		{
 			IsMainWindow = isMainWindow,
+			MainWindowHandle = ownerProcess.MainWindowHandle,
 			ProcessId = processId,
+			ProcessName = ownerProcess.ProcessName,
 			Rect = new(rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top),
 			Style = style,
 			ThreadId = threadId,

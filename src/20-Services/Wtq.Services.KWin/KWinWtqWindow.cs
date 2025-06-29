@@ -72,36 +72,33 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
-		var searchTerm = opts.ProcessName;
-		if (string.IsNullOrWhiteSpace(searchTerm) && !string.IsNullOrWhiteSpace(opts.FileName))
+		// Match by file name.
+		if (!MatchesFileName(opts))
 		{
-			searchTerm = Path.GetFileNameWithoutExtension(opts.FileName);
+			return false;
 		}
 
-		if (string.IsNullOrWhiteSpace(searchTerm))
-		{
-			searchTerm = null;
-		}
-
+		// TODO
 		// Match by resource class (often reverse DNS notation).
-		if (searchTerm != null && searchTerm.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
-		{
-			return true;
-		}
+		// if (!string.IsNullOrWhiteSpace(opts.ResourceClass) && opts.ResourceClass.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
+		// {
+		// 	return true;
+		// }
 
+		// TODO
 		// Match by resource name (close to process name).
-		if (searchTerm != null && searchTerm.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
-		{
-			return true;
-		}
+		// if (!string.IsNullOrWhiteSpace(opts.ResourceName) && opts.ResourceName.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		// {
+		// 	return true;
+		// }
 
 		// Match by window title.
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && opts.WindowTitle.Equals(_window.Caption, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.Caption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
 		{
-			return true;
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public override async Task SetLocationAsync(Point location)
@@ -140,5 +137,34 @@ public class KWinWtqWindow(
 		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
 
 		_isValid = !string.IsNullOrWhiteSpace(w?.InternalId);
+	}
+
+	private bool MatchesFileName(WtqAppOptions opts)
+	{
+		// If we don't have a filename in the options, consider that "matches anything".
+		if (string.IsNullOrWhiteSpace(opts.FileName))
+		{
+			return true;
+		}
+
+		// Check the actual filename first.
+		if (opts.FileName.Equals(_window.DesktopFileName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by resource class (often reverse DNS notation).
+		if (opts.FileName.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by resource name (close to process name).
+		if (opts.FileName.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

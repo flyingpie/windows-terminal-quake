@@ -7,11 +7,11 @@
 		{
 			// Didn't find Windows Terminal to be installed, so generated fallback to plain PowerShell prompt.
 			"Name": "PowerShell",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "powershell"
 		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ]
+	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" } ]
 }

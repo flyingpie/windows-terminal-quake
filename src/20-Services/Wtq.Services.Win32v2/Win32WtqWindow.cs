@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Wtq.Services.Win32v2.Native;
 
 namespace Wtq.Services.Win32v2;
@@ -25,12 +26,12 @@ public sealed class Win32WtqWindow : WtqWindow
 		_window.IsMainWindow;
 
 	public override bool IsValid =>
-		!_window.Process.HasExited && // Check whether the process that owns the window is still running.
+		!_window.HasExited && // Check whether the process that owns the window is still running.
 		_win32.IsValidWindow(_window.WindowHandle); // Check whether the window itself is still valid (could be closed while the owning process is still running).
 
 	[CanBeMatchedOn]
 	public override string? Name =>
-		_window.Process.ProcessName;
+		_window.ProcessName;
 
 	[CanBeMatchedOn]
 	public uint ProcessId =>
@@ -38,7 +39,7 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	[CanBeMatchedOn]
 	public string? ProcessName =>
-		_window.Process.ProcessName;
+		_window.ProcessName;
 
 	public Rectangle Rect =>
 		_window.Rect;
@@ -63,28 +64,33 @@ public sealed class Win32WtqWindow : WtqWindow
 	{
 		Guard.Against.Null(opts);
 
-		var expectedProcName = opts.ProcessName;
-		if (string.IsNullOrWhiteSpace(expectedProcName))
+		// Process name
+		if (!string.IsNullOrWhiteSpace(opts.ProcessName))
 		{
-			expectedProcName = System.IO.Path.GetFileNameWithoutExtension(opts.FileName);
+			if (!Regex.IsMatch(_window.ProcessName ?? string.Empty, opts.ProcessName, RegexOptions.IgnoreCase))
+			{
+				return false;
+			}
 		}
 
-		// TODO: Add regex support to matching.
+		// If no process name was specified, use the filename instead (but without .exe or such).
+		else if (!string.IsNullOrWhiteSpace(opts.FileName))
+		{
+			var fileName = opts.FileName.GetFileNameWithoutExtension();
+			if (!fileName.Equals(_window.ProcessName, StringComparison.OrdinalIgnoreCase))
+			{
+				return false;
+			}
+		}
 
 		// Window class
-		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !opts.WindowClass.Equals(_window.WindowClass, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !Regex.IsMatch(_window.WindowClass ?? string.Empty, opts.WindowClass, RegexOptions.IgnoreCase))
 		{
 			return false;
 		}
 
 		// Window title
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !opts.WindowTitle.Equals(_window.WindowCaption, StringComparison.OrdinalIgnoreCase))
-		{
-			return false;
-		}
-
-		// Process name
-		if (!expectedProcName.Equals(_window.Process.ProcessName, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.WindowCaption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
 		{
 			return false;
 		}
@@ -125,6 +131,9 @@ public sealed class Win32WtqWindow : WtqWindow
 
 		// Update window rect.
 		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
 	}
 
 	public override async Task SetSizeAsync(Size size)
@@ -142,6 +151,9 @@ public sealed class Win32WtqWindow : WtqWindow
 
 		// Update window rect.
 		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
 	}
 
 	public override Task SetTaskbarIconVisibleAsync(bool isVisible)

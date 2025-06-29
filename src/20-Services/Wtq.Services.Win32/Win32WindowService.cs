@@ -112,6 +112,7 @@ public sealed class Win32WindowService :
 			UseShellExecute = true,
 		};
 
+		// Arguments
 		foreach (var arg in opts.ArgumentList
 			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
 			.Select(a => a.Argument!))

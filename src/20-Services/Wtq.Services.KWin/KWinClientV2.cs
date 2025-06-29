@@ -1,6 +1,6 @@
-using Wtq.Configuration;
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
+using Wtq.Services.KWin.Input;
 using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin;
@@ -147,8 +147,7 @@ internal sealed class KWinClientV2(
 	public async Task RegisterHotkeyAsync(
 		string name,
 		string description,
-		KeyModifiers modifiers,
-		Keys key,
+		KeySequence sequence,
 		CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
@@ -161,9 +160,10 @@ internal sealed class KWinClientV2(
 					{
 						name = name,
 						title = description,
-						sequence = Mapping.Sequence(modifiers, key),
-						mod = modifiers.ToString(),
-						key = key.ToString(),
+						sequence = sequence.ToKWinString(),
+						mod = sequence.Modifiers.ToString(),
+						keyChar = sequence.KeyChar ?? string.Empty,
+						keyCode = sequence.KeyCode.ToString(),
 					},
 				},
 				cancellationToken)

@@ -2,13 +2,13 @@ namespace Wtq.Services.WinForms;
 
 internal static class Mapping
 {
-	internal static Configuration.Keys ToWtqKeys(this System.Windows.Forms.Keys key)
+	internal static Input.KeyCode ToWtqKeys(this System.Windows.Forms.Keys key)
 	{
-		return (Configuration.Keys)key;
+		return (Input.KeyCode)key;
 	}
 
-	internal static Configuration.KeyModifiers ToWtqKeyModifiers(this Native.KeyModifiers mask)
+	internal static Input.KeyModifiers ToWtqKeyModifiers(this Native.KeyModifiers mask)
 	{
-		return (Configuration.KeyModifiers)mask;
+		return (Input.KeyModifiers)mask;
 	}
 }

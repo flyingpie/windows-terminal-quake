@@ -7,11 +7,11 @@
 		{
 			// We're defaulting to Konsole, as this is usually present on KDE Plasma (WTQ only supports KDE Plasma 5 & 6 currently).
 			"Name": "Konsole",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "konsole"
 		}
 	],
 
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ]
+	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" } ]
 }

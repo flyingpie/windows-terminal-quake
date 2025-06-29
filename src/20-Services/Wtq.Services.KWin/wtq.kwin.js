@@ -281,14 +281,16 @@ cmds["RESIZE_WINDOW"] = (cmdInfo) => {
 cmds["NOOP"] = (cmdInfo) => { };
 
 cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
-	log.info(`Registering hotkey with name:'${p.name}', sequence:'${p.sequence}', key:'${p.key}' and mod:'${p.mod}'`);
+	const descr = `sequence:'${p.sequence}', key char:'${p.keyChar}', key code:'${p.keyCode}', modifier:'${p.mod}'`;
+
+	log.info(`Registering hotkey with name:'${p.name}', ${descr}`);
 
 	registerShortcut(
 		p.name,
 		p.title,
 		p.sequence,
 		() => {
-			log.info(`Firing hotkey with name:'${p.name}', sequence:'${p.sequence}', key:'${p.key}' and mod:'${p.mod}'`);
+			log.info(`Firing hotkey with name:'${p.name}', ${descr}`);
 
 			callDBus(
 				"wtq.svc",
@@ -296,7 +298,8 @@ cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 				"wtq.kwin",
 				"OnPressShortcut",
 				p.mod,
-				p.key);
+				p.keyChar,
+				p.keyCode);
 		});
 }
 
