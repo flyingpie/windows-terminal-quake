@@ -93,7 +93,7 @@ public class KWinWtqWindow(
 		// }
 
 		// Match by window title.
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !opts.WindowTitle.Equals(_window.Caption, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.Caption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
 		{
 			return false;
 		}

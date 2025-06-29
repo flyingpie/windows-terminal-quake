@@ -20,14 +20,16 @@ public class Win32WtqWindowTest
 		_window = new Win32WtqWindow(_win32.Object, _wnd);
 	}
 
-	/// <summary>
-	/// Match by process name, using the <see cref="WtqAppOptions.FileName"/> property.
-	/// </summary>
 	[TestMethod]
+
+	// Exact
 	[DataRow("ProcessExplorer", "ProcessExplorer", true)]
 	[DataRow("ProcessExplorer", "processexplorer", true)]
 	[DataRow("processexplorer", "ProcessExplorer", true)]
-	public void ByProcessName_FromFileName_True(string opt, string wnd, bool isMatch)
+
+	// No match
+	[DataRow("procexp", "ProcessExplorer", false)]
+	public void ByFileName_ProcessName(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.FileName = opt;
@@ -37,29 +39,94 @@ public class Win32WtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
-	/// <summary>
-	/// Match by process name, using the <see cref="WtqAppOptions.ProcessName"/> property.
-	/// </summary>
 	[TestMethod]
 
-	//
+	// Exact
 	[DataRow("ProcessExplorer", "ProcessExplorer", true)]
 	[DataRow("ProcessExplorer", "processexplorer", true)]
 	[DataRow("processexplorer", "ProcessExplorer", true)]
 
-	//
+	// No match
 	[DataRow("procexp", "ProcessExplorer", false)]
 
-	//
+	// Regex - Match
 	[DataRow("ProcessExp", "ProcessExplorer", true)] // Without explicit regex symbols, acts as "contains".
 	[DataRow("ProcessExp.*", "ProcessExplorer", true)]
 	[DataRow(".*cessExp.*", "ProcessExplorer", true)]
 	[DataRow(".rocessExplorer", "ProcessExplorer", true)]
-	public void ByProcessName_FromProcessName_True(string opt, string wnd, bool isMatch)
+
+	// Regex - No match
+	[DataRow("TheProcessName", null, false)]
+	[DataRow("TheProcessName", "", false)]
+	[DataRow("TheProcessName", " ", false)]
+	[DataRow(".*ExpProc.*", "ProcessExplorer", false)] // No match
+	public void ByProcessName(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.ProcessName = opt;
 		_wnd.ProcessName = wnd;
+
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
+	}
+
+	[TestMethod]
+
+	// Exact
+	[DataRow("TheWindowClass", "TheWindowClass", true)]
+	[DataRow("TheWindowClass", "thewindowclass", true)]
+	[DataRow("thewindowclass", "TheWindowClass", true)]
+
+	// No match
+	[DataRow("thewndclass", "TheWindowClass", false)]
+
+	// Regex - Match
+	[DataRow("TheWindowC", "TheWindowClass", true)] // Without explicit regex symbols, acts as "contains".
+	[DataRow("TheWindowC.*", "TheWindowClass", true)]
+	[DataRow(".*WindowCl.*", "TheWindowClass", true)]
+	[DataRow(".WindowClass", "TheWindowClass", true)]
+
+	// Regex - No match
+	[DataRow("TheWindowClass", null, false)]
+	[DataRow("TheWindowClass", "", false)]
+	[DataRow("TheWindowClass", " ", false)]
+	[DataRow(".*ClassWindow.*", "TheWindowClass", false)]
+	public void ByWindowClass(string opt, string wnd, bool isMatch)
+	{
+		// Arrange
+		_opts.WindowClass = opt;
+		_wnd.WindowClass = wnd;
+
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
+	}
+
+	[TestMethod]
+
+	// Exact
+	[DataRow("TheWindowTitle", "TheWindowTitle", true)]
+	[DataRow("TheWindowTitle", "thewindowtitle", true)]
+	[DataRow("thewindowtitle", "TheWindowTitle", true)]
+
+	// No match
+	[DataRow("thewndtitle", "TheWindowTitle", false)]
+
+	// Regex - Match
+	[DataRow("TheWindowT", "TheWindowTitle", true)] // Without explicit regex symbols, acts as "contains".
+	[DataRow("TheWindowT.*", "TheWindowTitle", true)]
+	[DataRow(".*WindowT.*", "TheWindowTitle", true)]
+	[DataRow(".WindowTitle", "TheWindowTitle", true)]
+
+	// Regex - No match
+	[DataRow("TheWindowTitle", null, false)]
+	[DataRow("TheWindowTitle", "", false)]
+	[DataRow("TheWindowTitle", " ", false)]
+	[DataRow(".*TitleWindow.*", "TheWindowTitle", false)]
+	public void ByWindowTitle(string opt, string wnd, bool isMatch)
+	{
+		// Arrange
+		_opts.WindowTitle = opt;
+		_wnd.WindowCaption = wnd;
 
 		// Act + Assert
 		Assert.AreEqual(isMatch, _window.Matches(_opts));

@@ -18,116 +18,100 @@ public class KWinWtqWindowTest
 		_window = new KWinWtqWindow(_kwin.Object, _wnd);
 	}
 
-	/// <summary>
-	/// Matches option <see cref="WtqAppOptions.FileName"/> to window's <see cref="KWinWtqWindow.DesktopFileName"/> property.
-	/// </summary>
 	[TestMethod]
-	[DataRow("dev.vencord.Vesktop", "dev.vencord.Vesktop")]
-	[DataRow("dev.vencord.Vesktop", "DEV.VENCORD.VESKTOP")]
-	[DataRow("DEV.VENCORD.VESKTOP", "dev.vencord.Vesktop")]
-	public void ByFileName_DesktopFileName_True(string opt, string wnd)
+
+	// Exact
+	[DataRow("FileName", "FileName", true)]
+	[DataRow("FileName", "FILENAME", true)]
+	[DataRow("FileName", "filename", true)]
+
+	// No match
+	[DataRow("FileName", null, false)]
+	[DataRow("FileName", "", false)]
+	[DataRow("FileName", " ", false)]
+	[DataRow("FileName", "OtherName", false)]
+	public void ByFileName_DesktopFileName(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.FileName = opt;
 		_wnd.DesktopFileName = wnd;
 
-		// Act
-		var res = _window.Matches(_opts);
-
-		// Assert
-		Assert.IsTrue(res);
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
-	/// <summary>
-	/// Matches option <see cref="WtqAppOptions.FileName"/> to window's <see cref="KWinWtqWindow.ResourceClass"/> property.
-	/// </summary>
 	[TestMethod]
-	[DataRow("dev.vencord.Vesktop", "dev.vencord.Vesktop")]
-	[DataRow("dev.vencord.Vesktop", "DEV.VENCORD.VESKTOP")]
-	[DataRow("DEV.VENCORD.VESKTOP", "dev.vencord.Vesktop")]
-	public void ByFileName_ResourceClass_True(string opt, string wnd)
+
+	// Exact
+	[DataRow("ResourceClass", "ResourceClass", true)]
+	[DataRow("resourceclass", "RESOURCECLASS", true)]
+	[DataRow("RESOURCECLASS", "resourceclass", true)]
+
+	// No match
+	[DataRow("ResourceClass", null, false)]
+	[DataRow("ResourceClass", "", false)]
+	[DataRow("ResourceClass", " ", false)]
+	[DataRow("ResourceClass", "OtherName", false)]
+	public void ByFileName_ResourceClass(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.FileName = opt;
 		_wnd.ResourceClass = wnd;
 
-		// Act
-		var res = _window.Matches(_opts);
-
-		// Assert
-		Assert.IsTrue(res);
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
-	/// <summary>
-	/// Matches option <see cref="WtqAppOptions.FileName"/> to window's <see cref="KWinWtqWindow.ResourceName"/> property.
-	/// </summary>
 	[TestMethod]
-	[DataRow("dev.vencord.Vesktop", "dev.vencord.Vesktop")]
-	[DataRow("dev.vencord.Vesktop", "DEV.VENCORD.VESKTOP")]
-	[DataRow("DEV.VENCORD.VESKTOP", "dev.vencord.Vesktop")]
-	public void ByFileName_ResourceName_True(string opt, string wnd)
+
+	// Exact
+	[DataRow("ResourceName", "ResourceName", true)]
+	[DataRow("resourcename", "RESOURCENAME", true)]
+	[DataRow("RESOURCENAME", "resourcename", true)]
+
+	// No match
+	[DataRow("ResourceName", null, false)]
+	[DataRow("ResourceName", "", false)]
+	[DataRow("ResourceName", " ", false)]
+	[DataRow("ResourceName", "OtherName", false)]
+	public void ByFileName_ResourceName(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.FileName = opt;
 		_wnd.ResourceName = wnd;
 
-		// Act
-		var res = _window.Matches(_opts);
-
-		// Assert
-		Assert.IsTrue(res);
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
-	/// <summary>
-	/// Option <see cref="WtqAppOptions.FileName"/> doesn't match anything.
-	/// </summary>
 	[TestMethod]
-	public void ByFileName_False()
-	{
-		// Arrange
-		_opts.FileName = "dev.vencord.Vesktop";
 
-		// Act
-		var res = _window.Matches(_opts);
+	// Exact
+	[DataRow("TheWindowTitle", "TheWindowTitle", true)]
+	[DataRow("TheWindowTitle", "thewindowtitle", true)]
+	[DataRow("thewindowtitle", "TheWindowTitle", true)]
 
-		// Assert
-		Assert.IsFalse(res);
-	}
+	// No match
+	[DataRow("thewndtitle", "TheWindowTitle", false)]
 
-	/// <summary>
-	/// Matches by option <see cref="WtqAppOptions.WindowTitle"/>.
-	/// </summary>
-	[TestMethod]
-	[DataRow("dev.vencord.Vesktop", "dev.vencord.Vesktop")]
-	[DataRow("dev.vencord.Vesktop", "DEV.VENCORD.VESKTOP")]
-	[DataRow("DEV.VENCORD.VESKTOP", "dev.vencord.Vesktop")]
-	public void ByWindowTitle_True(string opt, string wnd)
+	// Regex - Match
+	[DataRow("TheWindowT", "TheWindowTitle", true)] // Without explicit regex symbols, acts as "contains".
+	[DataRow("TheWindowT.*", "TheWindowTitle", true)]
+	[DataRow(".*WindowT.*", "TheWindowTitle", true)]
+	[DataRow(".WindowTitle", "TheWindowTitle", true)]
+
+	// Regex - No match
+	[DataRow("TheWindowTitle", null, false)]
+	[DataRow("TheWindowTitle", "", false)]
+	[DataRow("TheWindowTitle", " ", false)]
+	[DataRow(".*TitleWindow.*", "TheWindowTitle", false)]
+	public void ByWindowTitle(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
 		_opts.WindowTitle = opt;
 		_wnd.Caption = wnd;
 
-		// Act
-		var res = _window.Matches(_opts);
-
-		// Assert
-		Assert.IsTrue(res);
-	}
-
-	/// <summary>
-	/// Matches by option <see cref="WtqAppOptions.WindowTitle"/>, but doesn't hit.
-	/// </summary>
-	[TestMethod]
-	public void ByWindowTitle_False()
-	{
-		// Arrange
-		_opts.WindowTitle = "the-window-title";
-		_wnd.Caption = "another-window-title";
-
-		// Act
-		var res = _window.Matches(_opts);
-
-		// Assert
-		Assert.IsFalse(res);
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 }

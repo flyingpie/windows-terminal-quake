@@ -65,20 +65,32 @@ public sealed class Win32WtqWindow : WtqWindow
 		Guard.Against.Null(opts);
 
 		// Process name
-		var expectedProcName = opts.ProcessName?.EmptyOrWhiteSpaceToNull() ?? System.IO.Path.GetFileNameWithoutExtension(opts.FileName)!; // If no process name was specified, use the filename instead (but without .exe or such).
-		if (!expectedProcName.Equals(_window.ProcessName, StringComparison.OrdinalIgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.ProcessName))
 		{
-			return false;
+			if (!Regex.IsMatch(_window.ProcessName ?? string.Empty, opts.ProcessName, RegexOptions.IgnoreCase))
+			{
+				return false;
+			}
+		}
+
+		// If no process name was specified, use the filename instead (but without .exe or such).
+		else if (!string.IsNullOrWhiteSpace(opts.FileName))
+		{
+			var fileName = opts.FileName.GetFileNameWithoutExtension();
+			if (!fileName.Equals(_window.ProcessName, StringComparison.OrdinalIgnoreCase))
+			{
+				return false;
+			}
 		}
 
 		// Window class
-		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !string.IsNullOrWhiteSpace(_window.WindowClass) && !Regex.IsMatch(opts.WindowClass, _window.WindowClass, RegexOptions.IgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !Regex.IsMatch(_window.WindowClass ?? string.Empty, opts.WindowClass, RegexOptions.IgnoreCase))
 		{
 			return false;
 		}
 
 		// Window title
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !string.IsNullOrWhiteSpace(_window.WindowCaption) && !Regex.IsMatch(opts.WindowTitle, _window.WindowCaption, RegexOptions.IgnoreCase))
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.WindowCaption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
 		{
 			return false;
 		}

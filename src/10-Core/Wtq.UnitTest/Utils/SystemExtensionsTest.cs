@@ -15,6 +15,30 @@ public class SystemExtensionsTest
 	}
 
 	[TestMethod]
+	[DataRow("the-filename", "the-filename")]
+	[DataRow("the-filename.exe", "the-filename")]
+	public void GetFileNameWithoutExtension(string fileName, string expected)
+	{
+		Assert.AreEqual(expected, fileName.GetFileNameWithoutExtension());
+	}
+
+	[TestMethod]
+	[DataRow("")]
+	[DataRow(" ")]
+	[DataRow("\t")]
+	public void GetFileNameWithoutExtensionEmpty(string fileName)
+	{
+		Assert.ThrowsExactly<ArgumentException>(fileName.GetFileNameWithoutExtension);
+	}
+
+	[TestMethod]
+	[DataRow(null)]
+	public void GetFileNameWithoutExtensionNull(string fileName)
+	{
+		Assert.ThrowsExactly<ArgumentNullException>(fileName.GetFileNameWithoutExtension);
+	}
+
+	[TestMethod]
 	[DataRow("", "")]
 	[DataRow(" ", " ")]
 	[DataRow("a", "a")]
