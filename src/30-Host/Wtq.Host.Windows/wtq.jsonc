@@ -54,11 +54,6 @@
 	// Vertical screen coverage, as a percentage (defaults to 95).
 	"VerticalScreenCoverage": 95,
 
-	"FeatureFlags": {
-		"NewWindowCapture": true,
-		"SharpHook": true
-	},
-
 	"Api": {
 		"Enable": true
 	}
