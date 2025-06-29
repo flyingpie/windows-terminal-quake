@@ -20,6 +20,9 @@ public class Win32WtqWindowTest
 		_window = new Win32WtqWindow(_win32.Object, _wnd);
 	}
 
+	/// <summary>
+	/// Only a file name is specified, which is then used to match on process name.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -39,6 +42,9 @@ public class Win32WtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// An explicit process name is specified, so we can use that to match.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -63,6 +69,7 @@ public class Win32WtqWindowTest
 	public void ByProcessName(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
+		_opts.FileName = "the-file-name"; // Should not be used in matching.
 		_opts.ProcessName = opt;
 		_wnd.ProcessName = wnd;
 
