@@ -3,25 +3,25 @@ using PI = Windows.Win32.PInvoke;
 
 namespace Wtq.Services.SharpHook;
 
-public static class Win32
+public class Win32 : IWin32
 {
-	public static bool IsAltPressed() =>
+	public bool IsAltPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
-	public static bool IsControlPressed() =>
+	public bool IsControlPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
 
-	public static bool IsShiftPressed() =>
+	public bool IsShiftPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
 
-	public static bool IsSuperPressed() =>
+	public bool IsSuperPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_LWIN) || IsKeyPressed(VIRTUAL_KEY.VK_RWIN);
 
 	/// <summary>
 	/// Attempts to convert the specified virtual <paramref name="keyCode"/> to a UTF8 character representation,
 	/// taking the current keyboard layout into account.
 	/// </summary>
-	public static string? KeyCodeToKeyChar(uint keyCode)
+	public string? KeyCodeToKeyChar(uint keyCode)
 	{
 		// Build a key state.
 		// The key state represents the state of each virtual key.

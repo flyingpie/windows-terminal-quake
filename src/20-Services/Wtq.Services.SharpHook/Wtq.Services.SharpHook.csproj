@@ -3,18 +3,15 @@
 		<AssemblyName>Wtq.Services.SharpHook</AssemblyName>
 		<RootNamespace>Wtq.Services.SharpHook</RootNamespace>
 
-		<TargetFramework>net9.0-windows</TargetFramework>
-		<EnableWindowsTargeting>true</EnableWindowsTargeting>
-
-		<UseWindowsForms>true</UseWindowsForms>
+		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SharpHook" />
+		<PackageReference Include="SharpHook"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
 
 	<ItemGroup>

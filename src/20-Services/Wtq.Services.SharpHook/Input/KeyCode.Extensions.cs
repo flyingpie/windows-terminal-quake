@@ -6,6 +6,9 @@ namespace Wtq.Services.SharpHook.Input;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Naming convention.")]
 public static class KeyCodeExtensions
 {
+	/// <summary>
+	/// Converts a SharpHook key code to a WTQ one.
+	/// </summary>
 	public static WKC ToWtqKeyCode(this SKC shKeyCode)
 	{
 		// @formatter:off
@@ -22,7 +25,7 @@ public static class KeyCodeExtensions
 			case SKC.VcRightAlt:			return WKC.AltRight;
 			case SKC.VcLeftMeta:			return WKC.SuperLeft;
 			case SKC.VcRightMeta:			return WKC.SuperRight;
-			case SKC.VcContextMenu:			return WKC.None; // TODO: Unmapped
+			case SKC.VcContextMenu:			return WKC.ContextMenu;
 			case SKC.VcFunction:			return WKC.None; // TODO: Unmapped
 
 			// Misc

@@ -1,11 +1,8 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
-using System.ComponentModel.DataAnnotations;
-using System.Windows.Forms;
 using Wtq.Events;
 using Wtq.Services.SharpHook.Input;
-using WKC = Wtq.Input.KeyCode;
 
 namespace Wtq.Services.SharpHook;
 
@@ -16,19 +13,21 @@ public class SharpHookHotkeyService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<SharpHookHotkeyService>();
 
-	private KeysConverter _converter = new();
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqBus _bus;
+	private readonly IWin32KeyService _keyService;
 
 	private readonly SimpleGlobalHook _hook;
 	private bool _isSuspended;
 
 	public SharpHookHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
-		IWtqBus bus)
+		IWtqBus bus,
+		IWin32KeyService keyService)
 	{
 		_opts = Guard.Against.Null(opts);
 		_bus = Guard.Against.Null(bus);
+		_keyService = Guard.Against.Null(keyService);
 
 		_bus.OnEvent<WtqSuspendHotkeysEvent>(_ =>
 		{
@@ -69,21 +68,17 @@ public class SharpHookHotkeyService : WtqHostedService
 			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
 			e.SuppressEvent = false;
 
-			// Convert SharpHook key code to WTQ one.
-			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
-
-			// Attempt to translate the virtual key code to a key character (may return null).
-			var keyChar = Win32.KeyCodeToKeyChar(e.Data.RawCode)
-				?? keyCode.GetAttribute<DisplayAttribute>()?.Name ?? keyCode.ToString();
-
-			var mod = GetModifiers(keyCode);
-			var keySeq = new KeySequence(mod, keyChar, keyCode);
-
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
 			{
 				return;
 			}
+
+			// Convert SharpHook key code to WTQ one.
+			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
+
+			// Turn key code into sequence.
+			var keySeq = _keyService.GetKeySequence(keyCode, e.Data.RawCode);
 
 			// Look for a registered hotkey matching the one just pressed.
 			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);
@@ -105,42 +100,6 @@ public class SharpHookHotkeyService : WtqHostedService
 		_ = _hook.RunAsync();
 
 		return Task.CompletedTask;
-	}
-
-	/// <summary>
-	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
-	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
-	/// </summary>
-	private static KeyModifiers GetModifiers(WKC keyCode)
-	{
-		var mod2 = KeyModifiers.None;
-
-		if (Win32.IsAltPressed())
-		{
-			mod2 |= KeyModifiers.Alt;
-		}
-
-		if (Win32.IsControlPressed())
-		{
-			mod2 |= KeyModifiers.Control;
-		}
-
-		if (Win32.IsShiftPressed())
-		{
-			mod2 |= KeyModifiers.Shift;
-		}
-
-		if (Win32.IsSuperPressed())
-		{
-			mod2 |= KeyModifiers.Super;
-		}
-
-		if (keyCode.IsNumpad())
-		{
-			mod2 |= KeyModifiers.Numpad;
-		}
-
-		return mod2;
 	}
 
 	/// <summary>
