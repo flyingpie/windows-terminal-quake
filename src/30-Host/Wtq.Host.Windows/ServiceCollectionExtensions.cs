@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 		Guard.Against.Null(opts);
 
-		if (opts.FeatureFlags?.SharpHook ?? false)
+		if (opts.FeatureFlags?.SharpHook ?? true)
 		{
 			_log.LogInformation("Using SharpHook hotkey service (new behavior, please report any issues and consider disabling this if you run into any)");
 
@@ -42,7 +42,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 		Guard.Against.Null(opts);
 
-		if (opts.FeatureFlags?.NewWindowCapture ?? false)
+		if (opts.FeatureFlags?.NewWindowCapture ?? true)
 		{
 			_log.LogInformation("Using Win32 v2 window service (new behavior, please report any issues and consider disabling this if you run into any)");
 
