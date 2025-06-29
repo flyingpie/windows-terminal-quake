@@ -95,7 +95,7 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			// Prevent the key from activating other possible actions. Especially useful when the SUPER ("Windows") key was involved.
 			e.SuppressEvent = true;
-			Console.WriteLine($"APP:{hk}");
+
 			_log.LogDebug("Got hotkey mapping for key sequence '{Sequence}' (mapping: {Mapping})", keySeq, hk);
 
 			// Send hotkey pressed event for routing.
