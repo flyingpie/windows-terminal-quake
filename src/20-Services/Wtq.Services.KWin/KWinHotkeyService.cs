@@ -33,6 +33,16 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	private KGlobalAccel _kGlobalAccel = null!;
 	private Component _kwinComponent = null!;
 
+	/// <summary>
+	/// When registering a shortcut with the same id multiple times (in the KWin script),
+	/// it seems we're getting key sequence data from the first version.<br/>
+	/// <br/>
+	/// To work around this, we unregister everything, but use a shortcut id that's
+	/// unique across the lifetime of the WTQ process. That solves the problem, basically
+	/// by treating shortcut registrations as immutable.
+	/// </summary>
+	private int _shortcutId;
+
 	public KWinHotkeyService(
 		IDBusConnection dbus,
 		IWtqDBusObject dbusObj,
@@ -129,11 +139,10 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	private async Task RegisterGlobalHotkeysAsync(CancellationToken cancellationToken)
 	{
-		var globalHkIndex = 0;
 		foreach (var hk in _opts.CurrentValue.Hotkeys)
 		{
 			// Unique identifier.
-			var id = $"{WtqShortcutPrefix}_global_{globalHkIndex++}";
+			var id = $"{WtqShortcutPrefix}_global_{_shortcutId++}";
 
 			// Descriptive name that shows up in the "Shortcuts" window.
 			var name = "WTQ hotkey - Global";
@@ -150,11 +159,10 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		{
 			var appName = app.Name.ToLowerInvariant();
 
-			var appHkIndex = 0;
 			foreach (var hk in app.Hotkeys)
 			{
 				// Unique identifier.
-				var id = $"{WtqShortcutPrefix}_app_{appName}_{appHkIndex++}";
+				var id = $"{WtqShortcutPrefix}_app_{appName}_{_shortcutId++}";
 
 				// Descriptive name that shows up in the "Shortcuts" window.
 				var name = $"WTQ hotkey - App - {app.Name}";
