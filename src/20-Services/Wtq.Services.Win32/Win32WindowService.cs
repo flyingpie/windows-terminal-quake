@@ -69,9 +69,15 @@ public sealed class Win32WindowService :
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
+
+#pragma warning disable SA1027 // Use tabs correctly
+
 		// TODO: Add more.
 		new("WindowTitle",		w => w.WindowTitle),
 		new("Id",				w => w.Id),
+
+#pragma warning restore SA1027 // Use tabs correctly
+
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(

@@ -4,7 +4,8 @@ namespace Wtq.Services.Win32.Native;
 
 public static class User32
 {
-	private static readonly ILogger _log = Log.For(typeof(User32));
+#pragma warning disable CA1707 // Identifiers should not contain underscores // MvdO: In line with MSDN.
+#pragma warning disable SA1310 // Field names should not contain underscore
 
 	public const int GWLEXSTYLE = -20;
 	public const nint HWNDTOPMOST = -1;
@@ -21,15 +22,10 @@ public static class User32
 	public const uint KEYEVENTF_KEYUP = 0x0002;
 	public const uint WM_NULL = 0x0000;
 
-	[Flags]
-	public enum SendMessageTimeoutFlags : uint
-	{
-		SMTO_NORMAL = 0x0,
-		SMTO_BLOCK = 0x1,
-		SMTO_ABORTIFHUNG = 0x2,
-		SMTO_NOTIMEOUTIFNOTHUNG = 0x8,
-		SMTO_ERRORONEXIT = 0x20
-	}
+#pragma warning restore SA1310 // Field names should not contain underscore
+#pragma warning restore CA1707 // Identifiers should not contain underscores
+
+	private static readonly ILogger _log = Log.For(typeof(User32));
 
 	public static void ForcePaint(IntPtr hWnd)
 	{

@@ -7,7 +7,7 @@ public class WtqUIInvoker : IDisposable, IWtqUIService
 	private readonly ILogger _log = Log.For<WtqUIInvoker>();
 	private bool _isClosing;
 
-	public Action<Action> Action { get; set; }
+	public Action<Action>? Action { get; set; }
 
 	public void Dispose()
 	{

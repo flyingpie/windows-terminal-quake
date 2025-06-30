@@ -82,14 +82,14 @@ public class KWinWtqWindow(
 		// Match by resource class (often reverse DNS notation).
 		// if (!string.IsNullOrWhiteSpace(opts.ResourceClass) && opts.ResourceClass.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
 		// {
-		// 	return true;
+		//   return true;
 		// }
 
 		// TODO
 		// Match by resource name (close to process name).
 		// if (!string.IsNullOrWhiteSpace(opts.ResourceName) && opts.ResourceName.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
 		// {
-		// 	return true;
+		//   return true;
 		// }
 
 		// Match by window title.

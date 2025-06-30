@@ -1,3 +1,5 @@
+#pragma warning disable SA1027 // Use tabs correctly // MvdO: Disable when all examples are in place.
+
 using System.Runtime.InteropServices;
 
 namespace Wtq.Examples;

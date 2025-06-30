@@ -1,7 +1,7 @@
 namespace Wtq.Input;
 
 /// <summary>
-/// A combination of a <see cref="KeyModifiers"/>, a <see cref="Keys"/> (KeyCode) and a key character (KeyChar).
+/// A combination of a <see cref="KeyModifiers"/>, a <see cref="KeyCode"/> (KeyCode) and a key character (KeyChar).
 /// </summary>
 public readonly struct KeySequence(
 	KeyModifiers modifiers,

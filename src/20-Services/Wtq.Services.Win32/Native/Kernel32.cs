@@ -5,10 +5,16 @@ namespace Wtq.Services.Win32.Native;
 
 public static class Kernel32
 {
+#pragma warning disable CA1707 // Identifiers should not contain underscores // MvdO: In line with MSDN.
+#pragma warning disable SA1310 // Field names should not contain underscore
+
 	public const int ATTACH_PARENT_PROCESS = -1;
 	public const int STD_OUTPUT_HANDLE = -11;
 	public const int STD_ERROR_HANDLE = -12;
 	public const int STD_INPUT_HANDLE = -10;
+
+#pragma warning restore SA1310 // Field names should not contain underscore
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 
 	[DllImport("kernel32.dll", SetLastError = true)]
 	public static extern bool AttachConsole(int dwProcessId);

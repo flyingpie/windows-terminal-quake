@@ -15,7 +15,7 @@ public class XmlDocUtilsTest
 		Assert.AreEqual(
 			"""
 			{
-				"Name": "Value"
+			  "Name": "Value"
 			}
 			""",
 			summary);
@@ -72,7 +72,7 @@ public class XmlDocUtilsTest
 		/// <example>
 		/// <code>
 		/// {
-		/// 	"Name": "Value"
+		///   "Name": "Value"
 		/// }
 		/// </code>
 		/// </example>

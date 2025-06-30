@@ -12,7 +12,7 @@ public class Win32Window(Func<bool> hasExited)
 
 	public uint ProcessId { get; set; }
 
-	public string ProcessName { get; set; }
+	public string? ProcessName { get; set; }
 
 	public Rectangle Rect { get; set; }
 
