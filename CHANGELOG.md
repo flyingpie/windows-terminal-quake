@@ -6,20 +6,20 @@
 
 ## [v2.0.16] / 2025-xx-xx
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
-- Bugfix: Properly close & dispose logger when the application fully exists.
-- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method.
+- Bugfix: Properly close & dispose logger when the application fully exits.
+- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method (thanks to [Chuckie Chen](https://github.com/ChuckieChen945), #187).
 - Bugfix: Windows - In some cases a window couldn't be brought to the foreground, due to Windows preventing abuse of said function.
-- Feature: API & CLI to control WTQ programmatically.
+- Feature: API & CLI to control WTQ programmatically (thanks to [Tim Gilevich](https://github.com/dwarfovich) #194).
 - Feature: Added 'WindowClass' as a property to match windows on (Windows only).
 - Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
 - Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
-- Feature: GUI - Suspend key presses when the hotkey field has focus (for Windows, only works with the SharpHook hotkey registration for now).
+- Feature: GUI - Suspend key presses when the hotkey field has focus (for Windows, only works with the SharpHook hotkey registration for now) #66.
 - Feature: New hotkey registration subsystem through the use of [SharpHook](https://github.com/TolikPylypchuk/SharpHook), which allows binding the "Windows" modifier on Windows.
-- Feature: User events - Run command when an event is fired (such as when an app toggles on or off).
-- Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
-- Refactor: Docs - Updated documentation page.
-- Refactor: Tweaked log levels to be less verbose.
+- Feature: User events - Run command when an event is fired (such as when an app toggles on or off) (thanks to [Sergio Compean](https://github.com/surgiie), #181).
+- Refactor: [Docs](https://wtq.flyingpie.nl) - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
+- Refactor: [Docs](https://wtq.flyingpie.nl) - Updated documentation page.
+- Refactor: Tweaked log levels to be less verbose (thanks to [Maarten](https://github.com/survivorbat)).
 - Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
 
 ## [v2.0.15] / 2025-03-21
