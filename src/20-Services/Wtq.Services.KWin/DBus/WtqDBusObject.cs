@@ -175,11 +175,16 @@ internal sealed class WtqDBusObject(
 	}
 
 	/// <inheritdoc/>
-	public async Task OnPressShortcutAsync(string modStr, string keyCharStr, string keyCodeStr)
+	public async Task OnPressShortcutAsync(
+		string name,
+		string modStr,
+		string keyCharStr,
+		string keyCodeStr)
 	{
 		_log.LogInformation(
-			"{MethodName}({Modifier}, {KeyChar}, {KeyCode})",
+			"{MethodName}({Name}, {Modifier}, {KeyChar}, {KeyCode})",
 			nameof(OnPressShortcutAsync),
+			name,
 			modStr,
 			keyCharStr,
 			keyCodeStr);

@@ -297,6 +297,7 @@ cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 				"/wtq/kwin",
 				"wtq.kwin",
 				"OnPressShortcut",
+				p.name,
 				p.mod,
 				p.keyChar,
 				p.keyCode);
