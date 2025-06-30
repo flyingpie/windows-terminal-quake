@@ -13,13 +13,13 @@
 		{
 			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
-			"FileName": "plasma-systemmonitor"
+			"FileName": "dolphin"
 		},
 
 		{
 			"Name": "SystemMonitor",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
-			"FileName": "dolphin"
+			"FileName": "plasma-systemmonitor"
 		}
 	],
 
