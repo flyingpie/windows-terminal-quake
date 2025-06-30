@@ -21,6 +21,14 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[JsonPropertyOrder(2005)]
 	public AttachMode? AttachMode { get; set; }
 
+	/// <summary>
+	/// Automatically start app on WTQ start.
+	/// </summary>
+	[DefaultValue(Wc.AutoStartMode.OnWtqStart)]
+	[Display(GroupName = Gn.Process, Name = "Auto start mode")]
+	[JsonPropertyOrder(2006)]
+	public AutoStartMode? AutoStartMode { get; set; }
+
 	#endregion
 
 	#region 3000 - Behavior
