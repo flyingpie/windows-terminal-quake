@@ -101,7 +101,7 @@ internal sealed class WtqDBusObject(
 		{
 			return await waiter.Task
 				.WithCancellation(cancellationToken)
-				.WithTimeout(TimeSpan.FromSeconds(1))
+				.WithTimeout(Debugger.IsAttached ? TimeSpan.FromMinutes(60) : TimeSpan.FromSeconds(1))
 				.NoCtx();
 		}
 		catch (TaskCanceledException)
