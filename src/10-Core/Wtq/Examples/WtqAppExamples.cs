@@ -523,6 +523,16 @@ public static class WtqAppExamples
 
 		// /File Sharing
 
+		// TODO: Chrome/Chromium/etc. --app (Google Calendar)
+		// "FileName": "org.chromium.Chromium",
+		// "ArgumentList": [ { "Argument": "--app=https://calendar.google.com" } ],
+		// "WindowTitle": ".*Google Calendar.*"
+
+		// TODO: Chrome/Chromium/etc. --app (GMail)
+		// "FileName": "org.chromium.Chromium",
+		// "ArgumentList": [ { "Argument": "--app=https://mail.google.com" } ],
+		// "WindowTitle": ".*GMail.*"
+
 		#endregion
 
 		#region Monitoring
@@ -1004,7 +1014,7 @@ public static class WtqAppExamples
 				{
 					Name = Flavors.Native,
 					Os = [OSPlatform.Linux, OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
-					FileName = "wezterm",
+					FileName = "wezterm-gui",
 				},
 			],
 		},
