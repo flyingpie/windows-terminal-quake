@@ -25,6 +25,7 @@ public class KeySequenceExtensionsTest
 
 	[DataRow(KM.None,								"A",	KC.None,				"A")]
 	[DataRow(KM.Control,							"1",	KC.None,				"Ctrl+1")]
+	[DataRow(KM.Control,							"9",	KC.None,				"Ctrl+9")]
 	[DataRow(KM.Control | KM.Numpad,				"1",	KC.None,				"Ctrl+Num+1")]
 
 	// Implied "SHIFT"

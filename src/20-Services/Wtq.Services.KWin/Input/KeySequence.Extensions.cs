@@ -181,6 +181,15 @@ public static class KeySequenceExtensions
 
 	private static string ToKWinString(this string keyChar)
 	{
-		return Enum.TryParse<KeyCode>(keyChar, ignoreCase: true, out var code) ? code.ToKWinString() ?? keyChar.ToUpperInvariant() : keyChar.ToUpperInvariant();
+		return
+
+			EnumUtils.TryParse<KeyCode>(keyChar, ignoreCase: true, out var code)
+
+			// If we can parse it, return the KWin (Qt) name of the key code.
+			? code.ToKWinString()
+
+			// If we can't parse it, return the upper-cased version of the key character (cause letters appear as uppercase in shortcuts it seems).
+			?? keyChar.ToUpperInvariant()
+			: keyChar.ToUpperInvariant();
 	}
 }
