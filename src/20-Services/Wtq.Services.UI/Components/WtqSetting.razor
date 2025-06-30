@@ -13,17 +13,20 @@
 
 	public string? Subtitle => AttrUtils.GetPrompt(Get);
 
+	[EditorRequired]
 	[Parameter]
-	public RenderFragment Content { get; set; }
+	public RenderFragment Content { get; set; } = null!;
 
 	[CascadingParameter]
-	public IEnumerable<ValidationResult> ValidationResults { get; set; }
+	public IEnumerable<ValidationResult> ValidationResults { get; set; } = null!;
 
+	[EditorRequired]
 	[Parameter]
-	public Expression<Func<object?>> Get { get; set; }
+	public Expression<Func<object?>> Get { get; set; } = null!;
 
+	[EditorRequired]
 	[Parameter]
-	public Action<TProperty?> Set { get; set; }
+	public Action<TProperty?> Set { get; set; } = null!;
 
 	[Parameter]
 	public Expression<Func<object?>>? Default { get; set; }
@@ -35,8 +38,8 @@
 			? "rz-color-danger-light"
 			: "";
 
-	private string PropertyName
-		=> _propertyName ??= AttrUtils.GetMemberInfo(Get).Name;
+	private string? PropertyName
+		=> _propertyName ??= AttrUtils.GetMemberInfo(Get)?.Name;
 
 	private IEnumerable<ValidationResult> ValidationResultsForProperty
 		=> ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));

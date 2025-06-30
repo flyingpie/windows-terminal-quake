@@ -29,11 +29,11 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Apps": [
-	/// 		{ "Name": "App 1" },
-	/// 		{ "Name": "App 2" },
-	/// 		// ...
-	/// 	]
+	///   "Apps": [
+	///     { "Name": "App 1" },
+	///     { "Name": "App 2" },
+	///     // ...
+	///   ]
 	/// }
 	/// </code>
 	/// </example>
@@ -50,9 +50,9 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Hotkeys": [
-	/// 		{ "Modifiers": "Control", "Key": "Q" }
-	/// 	]
+	///   "Hotkeys": [
+	///     { "Modifiers": "Control", "Key": "Q" }
+	///   ]
 	/// }
 	/// </code>
 	/// </example>

@@ -72,12 +72,18 @@ public class KWinWindowService(
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
+
+#pragma warning disable SA1027 // Use tabs correctly
+
 		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
 		new("ResourceClass",	w => ((KWinWtqWindow)w).ResourceClass),
 		new("ResourceName",		w => ((KWinWtqWindow)w).ResourceName),
 		new("WindowTitle",		w => w.WindowTitle),
 		new("FrameGeometry",	w => ((KWinWtqWindow)w).FrameGeometry),
 		new("Id",				w => w.Id),
+
+#pragma warning restore SA1027 // Use tabs correctly
+
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)

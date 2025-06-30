@@ -32,8 +32,8 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Name": "Terminal",
-	/// 	// ...
+	///   "Name": "Terminal",
+	///   // ...
 	/// }
 	/// </code>
 	/// </example>
@@ -83,11 +83,11 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// <example>
 	/// <code>
 	/// {
-	/// 	// Using with Windows Terminal requires both "Filename" and "ProcessName".
-	/// 	"Apps": {
-	/// 		"Filename": "wt",
-	/// 		"ProcessName": "WindowsTerminal"
-	/// 	}
+	///   // Using with Windows Terminal requires both "Filename" and "ProcessName".
+	///   "Apps": {
+	///     "Filename": "wt",
+	///     "ProcessName": "WindowsTerminal"
+	///   }
 	/// }
 	/// </code>
 	/// </example>
@@ -114,15 +114,15 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Apps": [
-	/// 		{
-	/// 			"ArgumentList": [
-	/// 				"--allow-screencapture",
-	/// 				"--debug-info",
-	/// 			],
-	/// 			// ...
-	/// 		}
-	/// 	]
+	///   "Apps": [
+	///     {
+	///       "ArgumentList": [
+	///         "--allow-screencapture",
+	///         "--debug-info",
+	///       ],
+	///       // ...
+	///     }
+	///   ]
 	/// }
 	/// </code>
 	/// </example>

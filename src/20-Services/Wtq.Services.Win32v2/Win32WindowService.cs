@@ -78,6 +78,9 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
+
+#pragma warning disable SA1027 // Use tabs correctly
+
 		new("WindowTitle",		w => w.WindowTitle),
 		new("ProcessName",		w => ((Win32WtqWindow)w).ProcessName),
 		new("WindowClass",		w => ((Win32WtqWindow)w).WindowClass),
@@ -89,6 +92,9 @@ public sealed class Win32WindowService(IWin32 win32) :
 		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId),
 		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId),
 		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle),
+
+#pragma warning restore SA1027 // Use tabs correctly
+
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(

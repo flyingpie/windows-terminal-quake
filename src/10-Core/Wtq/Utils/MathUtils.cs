@@ -8,8 +8,8 @@ public static class MathUtils
 	public static int CeilI(this float f) => (int)Math.Ceiling(f);
 
 	/// <summary>
-	/// Returns a <see cref="Point"/> that represents <paramref name="src"/>, centered within <paramref name="dst"/>.<br/>
-	/// https://stackoverflow.com/a/59347321
+	/// Returns a <see cref="Point"/> that represents <paramref name="inner"/>, centered within <paramref name="outer"/>.<br/>
+	/// https://stackoverflow.com/a/59347321.
 	/// </summary>
 	public static Point CenterInRectangle(this Size inner, Rectangle outer) =>
 		new()

@@ -251,6 +251,7 @@ dotnet_diagnostic.S4200.severity = none # S4200: Native methods should be wrappe
 dotnet_diagnostic.S6602.severity = none # S6602: "Find" method should be used instead of the "FirstOrDefault" extension
 dotnet_diagnostic.S6605.severity = none # S6605: Collection-specific "Exists" method should be used instead of the "Any" extension
 dotnet_diagnostic.SA1101.severity = none # SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1124.severity = none # SA1124: Do not use regions
 dotnet_diagnostic.SA1309.severity = none # SA1309: Field names should not begin with underscore
 dotnet_diagnostic.SA1600.severity = none # SA1600: Elements should be documented
 dotnet_diagnostic.SA1611.severity = none # SA1611: Element parameters should be documented

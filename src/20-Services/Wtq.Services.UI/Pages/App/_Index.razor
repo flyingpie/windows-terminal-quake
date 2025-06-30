@@ -18,9 +18,9 @@
 	[Parameter]
 	public string? AppId { get; set; }
 
-	public WtqAppOptions AppOpts { get; set; }
+	public WtqAppOptions AppOpts { get; set; } = null!;
 
-	public WtqOptions GlobalOpts { get; set; }
+	public WtqOptions GlobalOpts { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{

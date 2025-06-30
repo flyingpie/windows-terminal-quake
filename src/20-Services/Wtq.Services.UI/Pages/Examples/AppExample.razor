@@ -2,11 +2,13 @@
 
 @code {
 
+	[EditorRequired]
 	[Parameter]
-	public WtqAppExample? App { get; set; }
+	public WtqAppExample App { get; set; } = null!;
 
+	[EditorRequired]
 	[Parameter]
-	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; }
+	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; } = null!;
 
 }
 
