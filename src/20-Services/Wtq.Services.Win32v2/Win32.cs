@@ -33,7 +33,7 @@ public class Win32 : IWin32
 
 		if (threadId <= 0)
 		{
-			_log.LogWarning("{Method} Did not find a foreground process", nameof(GetForegroundProcessId));
+			_log.LogDebug("{Method} Did not find a foreground process", nameof(GetForegroundProcessId));
 			return null;
 		}
 
@@ -96,7 +96,7 @@ public class Win32 : IWin32
 
 		if (!PI.GetWindowRect((HWND)windowHandle, out var rect))
 		{
-			throw new InvalidOperationException($"Could not get window rect for window with handle '{windowHandle}'.");
+			throw new InvalidOperationException($"Could not get window rect for window with handle '{windowHandle}'.", new Win32Exception());
 		}
 
 		var res = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
@@ -136,7 +136,7 @@ public class Win32 : IWin32
 
 		if (!PI.MoveWindow((HWND)windowHandle, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, true))
 		{
-			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.");
+			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.", new Win32Exception());
 		}
 	}
 
@@ -153,7 +153,7 @@ public class Win32 : IWin32
 
 		if (!PI.SetWindowPos(hWnd: (HWND)windowHandle, hWndInsertAfter: (HWND)insertBefore, X: 0, Y: 0, cx: 0, cy: 0, uFlags: flags))
 		{
-			throw new InvalidOperationException($"Could not set 'Always On Top' to '{isAlwaysOnTop}' of window with handle '{windowHandle}'.");
+			throw new InvalidOperationException($"Could not set 'Always On Top' to '{isAlwaysOnTop}' of window with handle '{windowHandle}'.", new Win32Exception());
 		}
 	}
 
@@ -246,7 +246,7 @@ public class Win32 : IWin32
 		// Set transparency
 		if (!PI.SetLayeredWindowAttributes((HWND)windowHandle, crKey: (COLORREF)0, bAlpha: alpha, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA))
 		{
-			throw new InvalidOperationException($"Could not set transparency to '{transparency}' of window with handle '{windowHandle}'.");
+			throw new InvalidOperationException($"Could not set transparency to '{transparency}' of window with handle '{windowHandle}'.", new Win32Exception());
 		}
 	}
 

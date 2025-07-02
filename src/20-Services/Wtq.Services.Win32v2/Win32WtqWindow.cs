@@ -102,7 +102,14 @@ public sealed class Win32WtqWindow : WtqWindow
 	{
 		_log.LogDebug("{MethodName}", nameof(BringToForegroundAsync));
 
-		_win32.SetForegroundWindow(_window.WindowHandle);
+		try
+		{
+			_win32.SetForegroundWindow(_window.WindowHandle);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could set foreground window '{Window}': {Message}", this, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
@@ -116,7 +123,14 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
-		_win32.SetAlwaysOnTop(_window.WindowHandle, isAlwaysOnTop);
+		try
+		{
+			_win32.SetAlwaysOnTop(_window.WindowHandle, isAlwaysOnTop);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could set 'always on top' window '{Window}' to '{IsAlwaysOnTop}': {Message}", this, isAlwaysOnTop, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
@@ -158,26 +172,42 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	public override Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
-		// Get handle to the main window
-		var handle = _window.WindowHandle;
-
-		_log.LogDebug("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
-
-		Shell32.SetTaskbarIconVisible(handle, isVisible);
+		try
+		{
+			Shell32.SetTaskbarIconVisible(_window.WindowHandle, isVisible);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not set visibility for window '{Window}' to '{IsVisible}': {Message}", this, isVisible, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
 
 	public override Task SetTransparencyAsync(int transparency)
 	{
-		_win32.SetWindowTransparency(_window.WindowHandle, transparency);
+		try
+		{
+			_win32.SetWindowTransparency(_window.WindowHandle, transparency);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not set transparency for window '{Window}' to '{Transparency}': {Message}", this, transparency, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
 
 	public override Task SetWindowTitleAsync(string title)
 	{
-		_win32.SetWindowTitle(_window.WindowHandle, title);
+		try
+		{
+			_win32.SetWindowTitle(_window.WindowHandle, title);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not set title for window '{Window}' to '{Title}': {Message}", this, title, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
