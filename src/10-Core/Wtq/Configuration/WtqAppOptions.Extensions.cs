@@ -52,6 +52,14 @@ public static class WtqAppOptionsExtensions
 		return OptionUtils.Cascade<AttachMode>(o => o.AttachMode, app, app.Global);
 	}
 
+	/// <inheritdoc cref="WtqSharedOptions.AutoStartMode"/>
+	public static AutoStartMode GetAutoStartMode(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<AutoStartMode>(o => o.AutoStartMode, app, app.Global);
+	}
+
 	/// <inheritdoc cref="WtqSharedOptions.HideOnFocusLost"/>
 	public static HideOnFocusLost GetHideOnFocusLost(this WtqAppOptions app)
 	{

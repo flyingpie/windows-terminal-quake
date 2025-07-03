@@ -32,9 +32,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 
 		_ = Task.Run(async () =>
 		{
-			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-			// "StartApps": "OnWtqStart | OnHotkeyPress"
-			await UpdateAppsAsync(allowStartNew: true).NoCtx();
+			await UpdateAppsAsync(allowStartNew: null).NoCtx();
 		});
 
 		// When WTQ stops, reset all tracked apps.
@@ -120,7 +118,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	/// <summary>
 	/// Updates the list of tracked apps (<see cref="WtqApp"/>), to match the list of available option objects (<see cref="WtqAppOptions"/>).
 	/// </summary>
-	private async Task UpdateAppsAsync(bool allowStartNew)
+	private async Task UpdateAppsAsync(bool? allowStartNew)
 	{
 		// Make sure this method always runs non-concurrently.
 		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
@@ -134,7 +132,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 			var app = GetOrCreate(opt);
 
 			// Update the app's local state, which may include starting a new process.
-			await app.UpdateLocalAppStateAsync(allowStartNew).NoCtx();
+			await app.UpdateLocalAppStateAsync(allowStartNew ?? opt.GetAutoStartMode() == AutoStartMode.OnWtqStart).NoCtx();
 		}
 
 		// Remove app handles for dropped options.
