@@ -9,7 +9,7 @@
 			"Name": "Terminal",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "wt",
-			"ProcessName": "WindowsTerminal"
+			"ProcessName": "^WindowsTerminal$"
 		}
 	],
 

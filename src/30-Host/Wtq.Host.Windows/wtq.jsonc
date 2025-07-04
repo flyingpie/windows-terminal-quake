@@ -15,7 +15,7 @@
 		//	"Name": "Terminal",
 		//	"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 		//	"FileName": "wt",
-		//	"ProcessName": "WindowsTerminal"
+		//	"ProcessName": "^WindowsTerminal$"
 		//}
 
 		// Explorer
@@ -23,7 +23,7 @@
 			"Name": "Explorer",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "explorer",
-			"WindowClass": "CabinetWClass"
+			"WindowClass": "^CabinetWClass$"
 		},
 	
 		// Task Manager
