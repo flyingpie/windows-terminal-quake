@@ -74,6 +74,7 @@ After starting WTQ, an icon will appear in the tray, which has some useful butto
 From there, the settings file can quickly be opened using "Open Settings File".
 
 A JSON schema file should be generated next to the settings file, enabling intellisense-like features in supporting editors:
+
 ![image](https://github.com/user-attachments/assets/c7ec61f2-4e98-41d5-8fc3-4a082a7d6a97)
 
 There's also an GUI available to configure WTQ, through the same context menu - "Open Main Window".
