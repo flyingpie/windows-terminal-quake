@@ -60,7 +60,8 @@ public sealed class WtqAppOptions : WtqSharedOptions
 
 	/// <summary>
 	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
-	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
+	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.<br/>
+	/// Note that you can also put absolute paths in here.
 	/// </summary>
 	/// <remarks>
 	/// See the "Examples" page in the GUI for, well, examples.
