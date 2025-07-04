@@ -15,6 +15,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	private string? _windowClass;
 	private string? _windowTitle;
 	private string? _windowTitleOverride;
+	private string? _workingDirectory;
 
 	/// <summary>
 	/// Used to refer from the app options object back to the global one, for cascading.
@@ -26,8 +27,12 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	#region 1000 - App
 
 	/// <summary>
-	/// A logical name for the app, used to identify it across config reloads.<br/>
+	/// <para>
+	/// A logical name for the app, used to identify it across config reloads.
+	/// </para>
+	/// <para>
 	/// Appears in logs.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -59,9 +64,15 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	#region 2000 - Process
 
 	/// <summary>
-	/// The <strong>filename</strong> to use when starting a new process for the app.<br/>
-	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.<br/>
+	/// <para>
+	/// The <strong>filename</strong> to use when starting a new process for the app.
+	/// </para>
+	/// <para>
+	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
+	/// </para>
+	/// <para>
 	/// Note that you can also put absolute paths in here.
+	/// </para>
 	/// </summary>
 	/// <remarks>
 	/// See the "Examples" page in the GUI for, well, examples.
@@ -77,40 +88,24 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
-	/// This field can be used to look for the process name in such cases. Windows Terminal is an
-	/// example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
-	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   // Using with Windows Terminal requires both "Filename" and "ProcessName".
-	///   "Apps": {
-	///     "Filename": "wt",
-	///     "ProcessName": "WindowsTerminal"
-	///   }
-	/// }
-	/// </code>
-	/// </example>
-	[Display(GroupName = Gn.Process, Name = "Process name")]
-	[JsonPropertyOrder(2003)]
-	public string? ProcessName
-	{
-		get => _processName;
-		set => _processName = value?.EmptyOrWhiteSpaceToNull();
-	}
-
-	/// <summary>
-	/// Command-line arguments that should be passed to the app when it's started.<br/>
+	/// <para>
+	/// Command-line arguments that should be passed to the app when it's started.
+	/// </para>
+	/// <para>
 	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
+	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.Process)]
-	[JsonPropertyOrder(2004)]
+	[JsonPropertyOrder(2002)]
 	public string? Arguments { get; set; }
 
 	/// <summary>
-	/// Command-line arguments that should be passed to the app when it's started.<br/>
+	/// <para>
+	/// Command-line arguments that should be passed to the app when it's started.
+	/// </para>
+	/// <para>
 	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -128,7 +123,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// </code>
 	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Argument list")]
-	[JsonPropertyOrder(2004)]
+	[JsonPropertyOrder(2003)]
 	public ICollection<ProcessArgument> ArgumentList
 	{
 		get => _argumentList;
@@ -136,10 +131,61 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
+	/// <para>
+	/// Working directory when starting a new process.
+	/// </para>
+	/// <para>
+	/// Useful if the <strong>filename</strong> isn't available through PATH.
+	/// </para>
+	/// </summary>
+	[Display(GroupName = Gn.Process, Name = "Working directory")]
+	[JsonPropertyOrder(2004)]
+	[Required]
+	public string? WorkingDirectory
+	{
+		get => _workingDirectory;
+		set => _workingDirectory = value?.EmptyOrWhiteSpaceToNull();
+	}
+
+	/// <summary>
+	/// <para>
+	/// Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
+	/// This field can be used to look for the process name in such cases. Windows Terminal is an
+	/// example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
+	/// </para>
+	/// <para>
+	/// Supports regular expressions.
+	/// </para>
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   // Using with Windows Terminal requires both "Filename" and "ProcessName".
+	///   "Apps": {
+	///     "Filename": "wt",
+	///     "ProcessName": "^WindowsTerminal$"
+	///   }
+	/// }
+	/// </code>
+	/// </example>
+	[Display(GroupName = Gn.Process, Name = "Process name")]
+	[JsonPropertyOrder(2005)]
+	public string? ProcessName
+	{
+		get => _processName;
+		set => _processName = value?.EmptyOrWhiteSpaceToNull();
+	}
+
+	/// <summary>
+	/// <para>
 	/// (Windows only) Matches windows based on their Win32 Window Class.
+	/// </para>
+	/// <para>
+	/// Supports regular expressions.
+	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window class")]
-	[ExampleValue("ApplicationFrameWindow")]
+	[ExampleValue("^ApplicationFrameWindow$")]
 	[JsonPropertyOrder(2006)]
 	public string? WindowClass
 	{
@@ -148,10 +194,15 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
+	/// <para>
 	/// Match windows based on their title (sometimes referred to as "caption").
+	/// </para>
+	/// <para>
+	/// Supports regular expressions.
+	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window title")]
-	[ExampleValue("Mozilla Firefox - WhatsApp")]
+	[ExampleValue("^Mozilla Firefox - WhatsApp$")]
 	[JsonPropertyOrder(2007)]
 	public string? WindowTitle
 	{

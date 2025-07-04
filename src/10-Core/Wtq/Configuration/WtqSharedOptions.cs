@@ -13,8 +13,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 2000 - Process
 
 	/// <summary>
-	/// How WTQ should get to an instance of a running app.<br/>
+	/// <para>
+	/// How WTQ should get to an instance of a running app.
+	/// </para>
+	/// <para>
 	/// I.e. whether to start an app instance if one cannot be found.
+	/// </para>
 	/// </summary>
 	[DefaultValue(Wc.AttachMode.FindOrStart)]
 	[Display(GroupName = Gn.Process, Name = "Attach mode")]
@@ -50,8 +54,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <summary>
-	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
+	/// <para>
+	/// Make the window see-through (applies to the entire window, including the title bar).
+	/// </para>
+	/// <para>
 	/// 0 (invisible) - 100 (opaque).
+	/// </para>
 	/// </summary>
 	[DefaultValue(100)]
 	[Display(GroupName = Gn.Behavior)]
@@ -97,9 +105,15 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>
-	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
-	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
+	/// <para>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.
+	/// </para>
+	/// <para>
+	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.
+	/// </para>
+	/// <para>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+	/// </para>
 	/// </summary>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
@@ -119,8 +133,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
-	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.<br/>
+	/// <para>
+	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.
+	/// </para>
+	/// <para>
 	/// Zero based, e.g. 0, 1, etc.
+	/// </para>
 	/// </summary>
 	[DefaultValue(0)]
 	[Display(GroupName = Gn.Monitor, Name = "Monitor index")]

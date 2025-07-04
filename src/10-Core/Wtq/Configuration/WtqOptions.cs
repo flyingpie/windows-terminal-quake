@@ -9,8 +9,12 @@ namespace Wtq.Configuration;
 public sealed class WtqOptions : WtqSharedOptions
 {
 	/// <summary>
-	/// Path to wtq.schema.json.<br/>
+	/// <para>
+	/// Path to wtq.schema.json.
+	/// </para>
+	/// <para>
 	/// Used for adding intellisense-like features to editors that support JSON schema (such as VSCode).
+	/// </para>
 	/// </summary>
 	/// <remarks>
 	/// Fixed value, changes to this property in the wtq.jsonc will be ignored/overwritten.
@@ -44,8 +48,7 @@ public sealed class WtqOptions : WtqSharedOptions
 		= [];
 
 	/// <summary>
-	/// Global hotkeys, that toggle either the first, or the most recently toggled app.<br/>
-	/// Optional.
+	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -63,9 +66,15 @@ public sealed class WtqOptions : WtqSharedOptions
 
 
 	/// <summary>
-	/// How many frames per second the animation should be.<br/>
-	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
+	/// <para>
+	/// How many frames per second the animation should be.
+	/// </para>
+	/// <para>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.
+	/// </para>
+	/// <para>
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
+	/// </para>
 	/// </summary>
 	[DefaultValue(40)]
 	[Display(GroupName = Gn.Animation, Name = "Animation target FPS")]
@@ -79,11 +88,16 @@ public sealed class WtqOptions : WtqSharedOptions
 	public WtqApiOptions? Api { get; set; }
 
 	/// <summary>
-	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
-	/// <br/>
-	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>
+	/// <para>
+	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.
+	/// </para>
+	/// <para>
+	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.
+	/// </para>
+	/// <para>
 	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
 	/// but still have a way back should things go awry.
+	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
 	[JsonPropertyOrder(104)]
