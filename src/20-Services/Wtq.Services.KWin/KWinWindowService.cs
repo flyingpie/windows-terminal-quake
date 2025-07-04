@@ -22,8 +22,10 @@ public class KWinWindowService(
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
+			WorkingDirectory = opts.WorkingDirectory,
 		};
 
+		// Arguments
 		foreach (var arg in opts.ArgumentList
 			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
 			.Select(a => a.Argument!))

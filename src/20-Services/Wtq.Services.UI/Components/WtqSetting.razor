@@ -71,7 +71,7 @@
 		@Content
 
 		<!-- Description -->
-		<p class="rz-color-base-500 rz-m-0 rz-mt-1">@((MarkupString)Get.GetMemberInfo()!.GetSummary()!)</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1 description">@((MarkupString)Get.GetMemberInfo()!.GetSummary()!)</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)
@@ -98,3 +98,9 @@
 
 	</RadzenColumn>
 </RadzenRow>
+
+<style>
+	.description p {
+		margin: 0 0 .5em 0;
+	}
+</style>

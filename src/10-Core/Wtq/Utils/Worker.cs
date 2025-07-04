@@ -30,7 +30,7 @@ public sealed class Worker : IAsyncDisposable
 		_ = Task.Run(
 			async () =>
 			{
-				while (!_cts.Token.IsCancellationRequested)
+				while (!_cts.Token.IsCancellationRequested) // TODO: Token is disposed on app stop, which can throw an exception here.
 				{
 					try
 					{

@@ -9,8 +9,8 @@
 
 	public ICollection<WtqWindow> Windows =>
 		_windows
-			.OrderBy(w => w.Name)
 			.Where(w => string.IsNullOrWhiteSpace(_searchTerm) || w.MatchesString(_searchTerm))
+			.OrderBy(w => w.Name)
 			.ToList();
 
 	protected override async Task OnInitializedAsync()

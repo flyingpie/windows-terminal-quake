@@ -74,7 +74,7 @@
 						<h2 class="rz-m-0 rz-mx-4">@app.Name</h2>
 						@foreach (var hk in @app.Hotkeys)
 						{
-							<RadzenBadge BadgeStyle="BadgeStyle.Primary">@hk</RadzenBadge>
+							<RadzenBadge BadgeStyle="BadgeStyle.Primary" class="rz-mr-1">@hk.Sequence.ToShortString()</RadzenBadge>
 						}
 					</RadzenStack>
 				</RadzenColumn>

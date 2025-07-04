@@ -4,6 +4,11 @@ namespace Wtq.Utils;
 
 public static class Os
 {
+	/// <summary>
+	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
+	/// </summary>
+	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
+
 	private static readonly ILogger Log = Utils.Log.For(typeof(Os));
 
 	public static bool IsLinux =>
@@ -12,8 +17,14 @@ public static class Os
 	public static bool IsWindows =>
 		RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-	public static bool IsCallable(string fileName)
+	public static bool IsCallable(string? workingDirectory, string fileName)
 	{
+		// Check whether the file exists in the working directory first.
+		if (!string.IsNullOrWhiteSpace(workingDirectory) && IsExecutablePresent(workingDirectory, fileName))
+		{
+			return true;
+		}
+
 		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
 			? IsCallableLnx(fileName)
 			: IsCallableWin(fileName);
@@ -26,9 +37,7 @@ public static class Os
 
 	public static bool IsCallableWin(string fileName)
 	{
-		string[] exeExts = [string.Empty, ".exe", ".bat", ".cmd"];
-
-		foreach (var ext in exeExts)
+		foreach (var ext in ExeExts)
 		{
 			var path = fileName + ext;
 
@@ -133,5 +142,18 @@ public static class Os
 				throw;
 			}
 		}
+	}
+
+	private static bool IsExecutablePresent(string workingDirectory, string fileName)
+	{
+		foreach (var ext in ExeExts)
+		{
+			if (File.Exists(Path.Combine(workingDirectory, fileName + ext)))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

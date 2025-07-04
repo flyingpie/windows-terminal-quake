@@ -119,6 +119,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
+			WorkingDirectory = opts.WorkingDirectory,
 
 			// If this is set to "false", some apps like PowerShell are spawned within the command prompt,
 			// if WTQ runs from the command line.

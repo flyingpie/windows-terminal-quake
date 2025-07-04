@@ -99,14 +99,17 @@
 				<!-- Refer to examples page. -->
 				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
 					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
-					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
+					what values to use for <strong>filename</strong>, <strong>process name</strong> and others.
 				</RadzenAlert>
 
 				<!-- Filename -->
-				<FilenameSetting														Get="() => AppOpts.FileName"					Set="v => AppOpts.FileName = v" />
+				<FilenameSetting														Get="() => AppOpts.FileName"					Set="v => AppOpts.FileName = v"																			WorkingDirectory="@AppOpts.WorkingDirectory" />
 
 				<!-- Alerts about known apps, and any specific configuration they require. -->
 				<KnownAppAlerts AppOpts="AppOpts" />
+
+				<!-- Working dir -->
+				<WtqSettingTextBox														Get="() => AppOpts.WorkingDirectory"			Set="v => AppOpts.WorkingDirectory = v" />
 
 				<!-- Process name -->
 				<WtqSettingTextBox														Get="() => AppOpts.ProcessName"					Set="v => AppOpts.ProcessName = v" />

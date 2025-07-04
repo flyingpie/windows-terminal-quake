@@ -37,13 +37,13 @@
 			{
 				<RadzenButton Variant="Variant.Filled" Icon="add" Text="@flavor.Name" Click="() => OnSelectApp(App, flavor)" />
 
-				@if (Os.IsCallable(flavor.FileName))
+				@if (Os.IsCallable(null, flavor.FileName))
 				{
-					<p class="rz-color-success-light rz-mt-1">App '@flavor.FileName' seems to exist!</p>
+					<p class="rz-color-success-light rz-mt-0">App '@flavor.FileName' seems to exist!</p>
 				}
 				else
 				{
-					<p class="rz-color-danger-light rz-mt-1">App '@flavor.FileName' does NOT seem to exist!</p>
+					<p class="rz-color-danger-light rz-mt-0">App '@flavor.FileName' does NOT seem to exist!</p>
 				}
 			}
 		</RadzenStack>
