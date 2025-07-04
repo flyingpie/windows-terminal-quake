@@ -113,32 +113,46 @@ public static class WtqAppExamples
 
 		#endregion
 
+		#region Browser Apps
+
+		// TODO: Chrome/Chromium/etc. --app (Google Calendar)
+		// "FileName": "org.chromium.Chromium",
+		// "ArgumentList": [ { "Argument": "--app=https://calendar.google.com" } ],
+		// "WindowTitle": ".*Google Calendar.*"
+
+		// TODO: Chrome/Chromium/etc. --app (GMail)
+		// "FileName": "org.chromium.Chromium",
+		// "ArgumentList": [ { "Argument": "--app=https://mail.google.com" } ],
+		// "WindowTitle": ".*GMail.*
+
+		#endregion
+
 		#region Dev Tools
 
 		// Dev Toolbox
-		new()
-		{
-			Categories = [Categories.DevTools],
-			Title = "Dev Toolbox",
-			Description = "TODO",
-			Image = "/example-apps/dev-toolbox.webp",
-			Link = new("https://github.com/aleiepure/devtoolbox"),
-			Flavors =
-			[
-				new()
-				{
-					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
-					FileName = "devtoolbox",
-				},
-				new()
-				{
-					Name = Flavors.Flatpak,
-					Os = [OSPlatform.Linux,],
-					FileName = "me.iepure.devtoolbox",
-				}
-			],
-		},
+		// new()
+		// {
+		// 	Categories = [Categories.DevTools],
+		// 	Title = "Dev Toolbox",
+		// 	Description = "TODO",
+		// 	Image = "/example-apps/dev-toolbox.webp",
+		// 	Link = new("https://github.com/aleiepure/devtoolbox"),
+		// 	Flavors =
+		// 	[
+		// 		new()
+		// 		{
+		// 			Name = Flavors.Native,
+		// 			Os = [OSPlatform.Linux,],
+		// 			FileName = "devtoolbox",
+		// 		},
+		// 		new()
+		// 		{
+		// 			Name = Flavors.Flatpak,
+		// 			Os = [OSPlatform.Linux,],
+		// 			FileName = "me.iepure.devtoolbox",
+		// 		}
+		// 	],
+		// },
 
 		// DevToys
 		// TODO
@@ -244,12 +258,11 @@ public static class WtqAppExamples
 		},
 
 		// Double Commander
-		// TODO
 		new()
 		{
 			Categories = [Categories.FileManagers],
-			Title = "Double Commander (TODO)",
-			Description = "Midnight Commander-inspired file manager.",
+			Title = "Double Commander",
+			Description = "Midnight Commander-inspired 2-pane file manager.",
 			Image = "/example-apps/double-commander.webp",
 			Link = new("https://doublecommander.com"),
 			Flavors =
@@ -258,17 +271,16 @@ public static class WtqAppExamples
 				{
 					Name = Flavors.Native,
 					Os = [OSPlatform.Windows,],
-					FileName = "TODO",
+					FileName = "doublecmd",
 				},
 			],
 		},
 
 		// Q-Dir
-		// TODO
 		new()
 		{
 			Categories = [Categories.FileManagers],
-			Title = "Q-Dir (TODO)",
+			Title = "Q-Dir",
 			Description = "File manager with support for multiple panes, featuring lots of customization.",
 			Image = "/example-apps/q-dir.webp",
 			Link = new("http://q-dir.com/"),
@@ -278,7 +290,30 @@ public static class WtqAppExamples
 				{
 					Name = Flavors.Native,
 					Os = [OSPlatform.Windows,],
-					FileName = "TODO",
+					FileName = "q-dir",
+					Factory = x => new()
+					{
+						FileName = "q-dir",
+						ProcessName = "Q-Dir_x64",
+					},
+				},
+			],
+		},
+
+		// Total Commander
+		new()
+		{
+			Categories = [Categories.FileManagers],
+			Title = "Total Commander",
+			Description = "Midnight Commander-inspired 2-pane file manager.",
+			Image = "/example-apps/total-commander.webp",
+			Flavors =
+			[
+				new()
+				{
+					Name = Flavors.Native,
+					Os = [OSPlatform.Windows,],
+					FileName = "totalcmd64",
 				},
 			],
 		},
@@ -296,6 +331,7 @@ public static class WtqAppExamples
 				{
 					Name = Flavors.Native,
 					Os = [OSPlatform.Windows,],
+					FileName = "explorer",
 					Factory = x => new()
 					{
 						Name = x.Title,
@@ -525,16 +561,6 @@ public static class WtqAppExamples
 
 		// /File Sharing
 
-		// TODO: Chrome/Chromium/etc. --app (Google Calendar)
-		// "FileName": "org.chromium.Chromium",
-		// "ArgumentList": [ { "Argument": "--app=https://calendar.google.com" } ],
-		// "WindowTitle": ".*Google Calendar.*"
-
-		// TODO: Chrome/Chromium/etc. --app (GMail)
-		// "FileName": "org.chromium.Chromium",
-		// "ArgumentList": [ { "Argument": "--app=https://mail.google.com" } ],
-		// "WindowTitle": ".*GMail.*"
-
 		#endregion
 
 		#region Monitoring
@@ -604,7 +630,7 @@ public static class WtqAppExamples
 			Categories = [Categories.Monitoring],
 			Title = "System Informer",
 			Description = "Task manager on even more steroids.",
-			Image = "/example-apps/placeholder.webp",
+			Image = "/example-apps/system-informer.webp",
 			Link = new("https://github.com/winsiderss/systeminformer"),
 			Flavors =
 			[
@@ -845,23 +871,24 @@ public static class WtqAppExamples
 		// },
 
 		// WhatsApp
-		new()
-		{
-			Categories = [Categories.Social],
-			Title = "WhatsApp",
-			Description = "Chat service.",
-			Image = "/example-apps/placeholder.webp",
-			Link = new("https://whatsapp.com/"),
-			Flavors =
-			[
-				new()
-				{
-					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
-					FileName = "whatsapp",
-				},
-			],
-		},
+		// TODO
+		//new()
+		//{
+		//	Categories = [Categories.Social],
+		//	Title = "WhatsApp",
+		//	Description = "Chat service.",
+		//	Image = "/example-apps/placeholder.webp",
+		//	Link = new("https://whatsapp.com/"),
+		//	Flavors =
+		//	[
+		//		new()
+		//		{
+		//			Name = Flavors.Native,
+		//			Os = [OSPlatform.Windows,],
+		//			FileName = "whatsapp",
+		//		},
+		//	],
+		//},
 
 		#endregion
 
@@ -1015,7 +1042,7 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux, OSPlatform.Windows,], // On Linux, terminal emulator and shell are more separate than on Windows.
+					Os = [OSPlatform.Linux, OSPlatform.Windows,],
 					FileName = "wezterm-gui",
 				},
 			],
@@ -1040,7 +1067,7 @@ public static class WtqAppExamples
 					{
 						Name = e.Title,
 						FileName = "wt",
-						ProcessName = "WindowsTerminal",
+						ProcessName = "^WindowsTerminal$",
 					},
 				},
 			],
