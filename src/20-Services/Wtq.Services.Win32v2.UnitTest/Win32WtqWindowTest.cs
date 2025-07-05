@@ -42,6 +42,29 @@ public class Win32WtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	[TestMethod]
+
+	// Either
+	[DataRow(MainWindowState.Either, true, true)]
+	[DataRow(MainWindowState.Either, false, true)]
+
+	// Main window only
+	[DataRow(MainWindowState.MainWindowOnly, true, true)]
+	[DataRow(MainWindowState.MainWindowOnly, false, false)]
+
+	// Non-main window only
+	[DataRow(MainWindowState.NonMainWindowOnly, true, false)]
+	[DataRow(MainWindowState.NonMainWindowOnly, false, true)]
+	public void ByMainWindow(MainWindowState opt, bool isMainWindow, bool isMatch)
+	{
+		// Arrange
+		_opts.MainWindow = opt;
+		_wnd.IsMainWindow = isMainWindow;
+
+		// Act + Assert
+		Assert.AreEqual(isMatch, _window.Matches(_opts));
+	}
+
 	/// <summary>
 	/// An explicit process name is specified, so we can use that to match.
 	/// </summary>

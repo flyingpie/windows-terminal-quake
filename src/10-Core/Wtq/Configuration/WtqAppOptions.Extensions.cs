@@ -86,6 +86,10 @@ public static class WtqAppOptionsExtensions
 		return app.GetHorizontalScreenCoverage() / 100f;
 	}
 
+	/// <inheritdoc cref="WtqAppOptions.MainWindow"/>
+	public static MainWindowState GetMainWindow(this WtqAppOptions app) =>
+		Guard.Against.Null(app).MainWindow ?? AttrUtils.GetDefaultValueFor<MainWindowState>(() => app.MainWindow);
+
 	/// <inheritdoc cref="WtqSharedOptions.MonitorIndex"/>
 	public static int GetMonitorIndex(this WtqAppOptions app)
 	{

@@ -177,6 +177,25 @@ public sealed class WtqAppOptions : WtqSharedOptions
 
 	/// <summary>
 	/// <para>
+	/// (Windows only) Matches only "main" windows; the initial window a process spawns.
+	/// </para>
+	/// <para>
+	/// When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
+	/// that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+	/// When the other (non-main) windows cannot be easily differentiated from the main window (for example through
+	/// the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.
+	/// </para>
+	/// <para>
+	/// A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.
+	/// </para>
+	/// </summary>
+	[Display(GroupName = Gn.Process, Name = "Main window")]
+	[DefaultValue(MainWindowState.Either)]
+	[JsonPropertyOrder(2006)]
+	public MainWindowState? MainWindow { get; set; }
+
+	/// <summary>
+	/// <para>
 	/// (Windows only) Matches windows based on their Win32 Window Class.
 	/// </para>
 	/// <para>
@@ -185,7 +204,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window class")]
 	[ExampleValue("^ApplicationFrameWindow$")]
-	[JsonPropertyOrder(2006)]
+	[JsonPropertyOrder(2007)]
 	public string? WindowClass
 	{
 		get => _windowClass;
@@ -202,7 +221,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[ExampleValue("^Mozilla Firefox - WhatsApp$")]
-	[JsonPropertyOrder(2007)]
+	[JsonPropertyOrder(2008)]
 	public string? WindowTitle
 	{
 		get => _windowTitle;

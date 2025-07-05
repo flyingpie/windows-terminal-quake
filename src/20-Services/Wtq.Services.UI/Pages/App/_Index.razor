@@ -120,6 +120,9 @@
 				<!-- Attach mode -->
 				<WtqSettingRadio					TProperty="AttachMode"				Get="() => AppOpts.AttachMode"					Set="v => AppOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />
 
+				<!-- Main window -->
+				<WtqSettingRadio					TProperty="MainWindowState"			Get="() => AppOpts.MainWindow"					Set="v => AppOpts.MainWindow = v"					Default="() => AppOpts.MainWindow" />
+
 				<!-- Window class -->
 				<WtqSettingTextBox														Get="() => AppOpts.WindowClass"					Set="v => AppOpts.WindowClass = v" />
 
