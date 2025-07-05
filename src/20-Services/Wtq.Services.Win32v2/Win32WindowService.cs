@@ -81,17 +81,17 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 #pragma warning disable SA1027 // Use tabs correctly
 
-		new("WindowTitle",		w => w.WindowTitle),
 		new("ProcessName",		w => ((Win32WtqWindow)w).ProcessName),
+		new("WindowTitle",		w => w.WindowTitle),
 		new("WindowClass",		w => ((Win32WtqWindow)w).WindowClass),
 
-		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow),
+		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow,												width: 120),
+		new("Location",			w => ((Win32WtqWindow)w).Rect.Location.ToShortString(),								width: 120),
+		new("Size",				w => ((Win32WtqWindow)w).Rect.Size.ToShortString(),									width: 120),
 
-		new("WindowRect",		w => ((Win32WtqWindow)w).Rect),
-
-		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId),
-		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId),
-		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle),
+		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId,													width: 120),
+		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId,							isVisible: false,		width: 120),
+		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle,						isVisible: false,		width: 120),
 
 #pragma warning restore SA1027 // Use tabs correctly
 

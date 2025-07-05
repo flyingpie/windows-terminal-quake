@@ -39,4 +39,8 @@ public static class MathUtils
 	/// Multiply <paramref name="sz"/> by a float, truncating back to an integer <see cref="Size"/>.
 	/// </summary>
 	public static Size MultiplyF(this Size sz, float factor) => ((SizeF)sz * factor).ToSize();
+
+	public static string ToShortString(this Point point) => $"({point.X}, {point.Y})";
+
+	public static string ToShortString(this Size size) => $"{size.Width}x{size.Height}";
 }

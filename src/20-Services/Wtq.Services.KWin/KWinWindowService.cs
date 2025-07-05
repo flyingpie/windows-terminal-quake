@@ -78,11 +78,15 @@ public class KWinWindowService(
 #pragma warning disable SA1027 // Use tabs correctly
 
 		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
+		new("WindowTitle",		w => w.WindowTitle),
+
 		new("ResourceClass",	w => ((KWinWtqWindow)w).ResourceClass),
 		new("ResourceName",		w => ((KWinWtqWindow)w).ResourceName),
-		new("WindowTitle",		w => w.WindowTitle),
-		new("FrameGeometry",	w => ((KWinWtqWindow)w).FrameGeometry),
-		new("Id",				w => w.Id),
+
+		new("Location",			w => ((KWinWtqWindow)w).FrameGeometry?.Location.ToShortString(),		width: 50),
+		new("Size",				w => ((KWinWtqWindow)w).FrameGeometry?.Size.ToShortString(),			width: 50),
+
+		new("Id",				w => w.Id,																isVisible: false),
 
 #pragma warning restore SA1027 // Use tabs correctly
 

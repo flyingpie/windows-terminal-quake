@@ -73,8 +73,11 @@ public class WtqUIHost
 
 				return !_isClosing;
 			})
+
 			.Center()
+
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
 			.SetSize(1280, 800)
 			.SetTitle(MainWindowTitle);

@@ -72,7 +72,6 @@ public sealed class Win32WindowService :
 
 #pragma warning disable SA1027 // Use tabs correctly
 
-		// TODO: Add more.
 		new("WindowTitle",		w => w.WindowTitle),
 		new("Id",				w => w.Id),
 

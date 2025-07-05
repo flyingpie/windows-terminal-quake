@@ -34,24 +34,33 @@
 </RadzenStack>
 
 <RadzenDataGrid
-	AllowColumnResize="true"
-	AllowFiltering="true"
-	AllowPaging="true"
-	AllowSorting="true"
-	Count="@Windows.Count"
 	Data="@Windows"
-	GridLines="DataGridGridLines.Both"
 	PageSize="50"
+
+	AllowAlternatingRows="true"
+	AllowColumnPicking="true"
+	AllowColumnResize="true"
+	AllowPaging="true"
 >
 	<Columns>
 
 		@foreach (var prop in _props)
 		{
-			<RadzenDataGridColumn Property="@prop.Name" Title="@prop.Name">
+			<RadzenDataGridColumn
+				Property="@prop.Name"
+				SortProperty="@prop.Name"
+				Title="@prop.Name"
+				Visible="@prop.Visible"
+				Width="@(prop.Width != null ? $"{prop.Width.ToString()}px" : "")"
+			>
 				<Template Context="item">
-					<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+					<RadzenStack
+						Orientation="Orientation.Horizontal"
+						JustifyContent="JustifyContent.SpaceBetween"
+					>
 						<span>@prop.Accessor(item)</span>
-						<RadzenLink Icon="content_copy"/>
+						@* TODO: Add clipboard support *@
+						@* <RadzenButton Icon="content_copy" Size="ButtonSize.ExtraSmall" ButtonStyle="ButtonStyle.Dark" IconColor="@Colors.Base500" title="@($"Copy '{@prop.Accessor(item)}'")" Click="_ => ClipboardService.CopyToClipboardAsync(prop.Accessor(item)?.ToString() ?? string.Empty)"/> *@
 					</RadzenStack>
 				</Template>
 			</RadzenDataGridColumn>
