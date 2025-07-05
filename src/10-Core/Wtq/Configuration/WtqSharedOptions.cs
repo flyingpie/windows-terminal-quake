@@ -131,7 +131,6 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </code>
 	/// </example>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
-	[DefaultValue("""["Above", "Below", "Left", "Right"]""")]
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
 	[JsonPropertyOrder(4005)]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
