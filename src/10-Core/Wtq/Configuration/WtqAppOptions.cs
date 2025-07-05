@@ -140,7 +140,6 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Working directory")]
 	[JsonPropertyOrder(2004)]
-	[Required]
 	public string? WorkingDirectory
 	{
 		get => _workingDirectory;
