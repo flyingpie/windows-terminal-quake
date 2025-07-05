@@ -212,7 +212,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.CompletedTask;
 	}
 
-	public override string ToString() => $"WindowHandle:{Id} ProcessId:{ProcessId} ProcessName:{ProcessName} Title:{WindowTitle} WindowClass:{WindowClass} Rect:{Rect} IsMainWindow:{IsMainWindow}";
+	public override string ToString() => $"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
 
 	public override Task UpdateAsync() => Task.CompletedTask;
 }
