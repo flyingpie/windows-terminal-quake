@@ -34,7 +34,7 @@ public sealed class WtqApp : IAsyncDisposable
 		Func<WtqAppOptions> optionsAccessor,
 		string name)
 	{
-		_log = Log.For($"{GetType()}|{_id}|{name}");
+		_log = Log.For($"{GetType()}|{name}");
 
 		_windowResolver = Guard.Against.Null(windowResolver);
 		_toggler = Guard.Against.Null(toggler);

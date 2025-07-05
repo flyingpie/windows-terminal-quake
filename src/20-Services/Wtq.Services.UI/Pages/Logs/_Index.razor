@@ -1,6 +1,6 @@
-@page "/logs"
-@using Microsoft.Extensions.Logging
 @using Serilog.Events
+
+@page "/logs"
 
 @inject InAppLogSink Logs
 
@@ -12,18 +12,18 @@
 		LogEventLevel.Error,
 		LogEventLevel.Warning,
 		LogEventLevel.Information,
+
+		// Disabling these levels for now, as they slow down the UI too much.
 		// LogEventLevel.Debug,
 		// LogEventLevel.Verbose,
 	};
 
 	private string? _searchTerm;
 
-	private static readonly HashSet<string> IgnoredProperties = new(StringComparer.OrdinalIgnoreCase)
-	{
-		"sourcecontext",
-	};
-
-	private RadzenDataGrid<LogEvent>? _grid;
+	public ICollection<LogEvent> DataFiltered => Logs.Events
+		.Where(e => _levels.Contains(e.Level))
+		.Where(e => e.MessageTemplate?.Text?.Contains(_searchTerm ?? string.Empty, StringComparison.OrdinalIgnoreCase) ?? false)
+		.ToList();
 
 	public BadgeStyle LogLevelToBadgeStyle(LogEventLevel level)
 	{
@@ -65,31 +65,18 @@
 
 	protected override void OnInitialized()
 	{
-		Log.For("TestLog").LogCritical("Critical");
-		Log.For("TestLog").LogDebug("Debug");
-		Log.For("TestLog").LogError("Error");
-		Log.For("TestLog").LogInformation("Information");
-		Log.For("TestLog").LogTrace("Trace");
-		Log.For("TestLog").LogWarning("Warning");
-
-		Logs.OnEvent = () => InvokeAsync(async () => { await (_grid?.RefreshDataAsync() ?? Task.CompletedTask).NoCtx(); });
+		Logs.OnEvent = () => InvokeAsync(StateHasChanged);
 	}
 
 	private void ToggleLevel(LogEventLevel level)
 	{
-		if (_levels.Contains(level))
+		if (!_levels.Add(level))
 		{
 			_levels.Remove(level);
-		}
-		else
-		{
-			_levels.Add(level);
 		}
 
 		StateHasChanged();
 	}
-
-	private bool IsLevelOn(LogEventLevel level) => _levels.Contains(level);
 
 }
 
@@ -110,13 +97,13 @@
 </RadzenStack>
 
 <RadzenDataGrid
-	@ref="_grid"
-	Data="Logs.Events.Where(e => _levels.Contains(e.Level)).Where(e => e.MessageTemplate?.Text?.Contains(_searchTerm ?? string.Empty, StringComparison.OrdinalIgnoreCase) ?? false)"
-	Density="Density.Compact"
-	AllowFiltering="true"
-	AllowPaging="true"
-	AllowSorting="true"
+	Data="DataFiltered"
 	PageSize="50"
+
+	AllowAlternatingRows="true"
+	AllowColumnPicking="true"
+	AllowColumnResize="true"
+	AllowPaging="true"
 >
 	<Columns>
 		<RadzenDataGridColumn
@@ -152,9 +139,16 @@
 			Title="Message"
 		>
 			<Template Context="item">
-				@item.RenderMessage()
+				<div style="white-space: pre-wrap !important;">@item.RenderMessage()</div>
+				<div style="white-space: pre-wrap !important;">@item.Exception?.ToString()</div>
 			</Template>
 		</RadzenDataGridColumn>
 
 	</Columns>
 </RadzenDataGrid>
+
+<style>
+	td {
+		vertical-align: top; /* Relevant for multi-line logs */
+	}
+</style>
