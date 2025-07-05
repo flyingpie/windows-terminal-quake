@@ -12,6 +12,13 @@ public interface IWin32
 	nint? GetForegroundWindowHandle();
 
 	/// <summary>
+	/// Returns a <see cref="Win32Window"/> corresponding to the specified window handle.<br/>
+	/// Returns null if no window could be found.
+	/// </summary>
+	Win32Window? GetWindow(
+		nint windowHandle);
+
+	/// <summary>
 	/// Returns the class of a window (if any), used to filter windows on.
 	/// </summary>
 	string? GetWindowClass(
