@@ -239,21 +239,15 @@ Defaults to ```{{ Setting.DefaultValue }}```
 
 {% elif Setting.IsGlobal and Setting.IsApp %}
 
-Globally:
 ```json
 {
+	// Globally:
 	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-	// ...
-}
-```
 
-For one app only:
-```json
-{
+	// For one app only:
 	"Apps": [
 		{
 			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
-			// ...
 		}
 	]
 }

@@ -115,7 +115,23 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///     // Globally:
+	///     "OffScreenLocations": ["Above", "Below", "Left", "Right"],
+	///
+	///     // For one app only:
+	///     "Apps": [
+	///         {
+	///             "OffScreenLocations": ["Above", "Below", "Left", "Right"],
+	///         }
+	///     ]
+	/// }
+	/// </code>
+	/// </example>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
+	[DefaultValue("""["Above", "Below", "Left", "Right"]""")]
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
 	[JsonPropertyOrder(4005)]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
