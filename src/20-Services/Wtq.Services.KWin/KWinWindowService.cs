@@ -42,7 +42,7 @@ public class KWinWindowService(
 		return Task.CompletedTask;
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(
+	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken)
 	{
@@ -52,7 +52,9 @@ public class KWinWindowService(
 		{
 			var clients = await GetWindowsAsync(cancellationToken).NoCtx();
 
-			return clients.FirstOrDefault(c => c.Matches(opts));
+			return clients
+				.Where(c => c.Matches(opts))
+				.ToList();
 		}
 		catch (Exception ex)
 		{

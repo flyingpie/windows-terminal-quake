@@ -33,7 +33,7 @@ public sealed class Win32WindowService :
 		_initLock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(
+	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken)
 	{
@@ -43,7 +43,9 @@ public sealed class Win32WindowService :
 
 		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
 
-		return processes.FirstOrDefault(p => p.Matches(opts));
+		return processes
+			.Where(p => p.Matches(opts))
+			.ToList();
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(

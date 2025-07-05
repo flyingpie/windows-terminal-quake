@@ -13,9 +13,9 @@ public interface IWtqWindowService
 		CancellationToken cancellationToken);
 
 	/// <summary>
-	/// Looks for a window that matches the specified <paramref name="opts"/>.
+	/// Looks for windows that match the specified <paramref name="opts"/>.
 	/// </summary>
-	Task<WtqWindow?> FindWindowAsync(
+	Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken);
 

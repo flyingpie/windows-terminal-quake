@@ -31,7 +31,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 		_initLock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(
+	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken)
 	{
@@ -43,14 +43,12 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 		// TODO: Logging
 
-		var matchingWindows = allWindows
+		return allWindows
 			.OfType<Win32WtqWindow>()
 			.Where(p => p.Matches(opts))
+			.OrderByDescending(w => w.IsMainWindow)
+			.Cast<WtqWindow>()
 			.ToList();
-
-		var chosenWindow = matchingWindows.OrderByDescending(w => w.IsMainWindow).FirstOrDefault();
-
-		return chosenWindow;
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(

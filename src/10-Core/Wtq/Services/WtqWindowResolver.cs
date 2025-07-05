@@ -36,7 +36,7 @@ public sealed class WtqWindowResolver(
 		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})", opts, allowStartNew);
 
 		// Look for an existing window first.
-		var window1 = await _windowService.FindWindowAsync(opts, CancellationToken.None).NoCtx();
+		var window1 = await FindWindowAsync(opts, CancellationToken.None).NoCtx();
 		if (window1 != null)
 		{
 			// If we got one, great, return it.
@@ -67,7 +67,7 @@ public sealed class WtqWindowResolver(
 		for (var attempt = 0; attempt < 5; attempt++)
 		{
 			// Look for our newly created window.
-			var window2 = await _windowService.FindWindowAsync(opts, CancellationToken.None).NoCtx();
+			var window2 = await FindWindowAsync(opts, CancellationToken.None).NoCtx();
 			if (window2 == null)
 			{
 				await Task.Delay(TimeSpan.FromMilliseconds(250)).NoCtx();
@@ -98,5 +98,21 @@ public sealed class WtqWindowResolver(
 		}
 
 		return window;
+	}
+
+	private async Task<WtqWindow?> FindWindowAsync(WtqAppOptions opts, CancellationToken ct)
+	{
+		// Find windows that match the criteria as specified by the app options.
+		var matchingWindows = await _windowService.FindWindowsAsync(opts, ct).NoCtx();
+
+		// Warn if we found more than 1.
+		if (matchingWindows.Count > 1)
+		{
+			_log.LogWarning("Multiple windows found for app options {AppOptions}, you may want to specify more matching criteria.\nThese windows were found (of which the first is chosen):{Windows}", opts, string.Join(", ", matchingWindows.Select(w => $"\n- {w}")));
+		}
+
+		// Return the first one.
+		// Note that - if multiple windows are found - the window service should prioritize by whatever metric makes sense for them.
+		return matchingWindows.FirstOrDefault();
 	}
 }
