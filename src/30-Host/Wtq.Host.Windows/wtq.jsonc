@@ -1,22 +1,15 @@
 {
-	// Docs: https://wtq.flyingpie.nl
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// PowerShell
-		{
-			"Name": "PowerShell",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-			"FileName": "pwsh"
-		},
 
 		// Windows Terminal
-		//{
-		//	"Name": "Terminal",
-		//	"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-		//	"FileName": "wt",
-		//	"ProcessName": "^WindowsTerminal$"
-		//}
+		{
+			"Name": "Windows Terminal",
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
+			"FileName": "wt",
+			"ProcessName": "^WindowsTerminal$"
+		},
 
 		// Explorer
 		{
@@ -24,13 +17,6 @@
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "explorer",
 			"WindowClass": "^CabinetWClass$"
-		},
-	
-		// Task Manager
-		{
-			"Name": "Task Manager",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowDown" }],
-			"FileName": "taskmgr"
 		}
 	],
 
