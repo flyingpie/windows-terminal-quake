@@ -5,7 +5,7 @@
 ## Create Release
 
 ```ps1
-./src/build.ps1 --target PublishRelease --github-token <GH_TOKEN>
+./src/build.ps1 --target PublishRelease --github-token <GH_TOKEN> --github-release v2.0.8 --sem-ver-version 2.0.8
 ```
 
 ## Prepare Manifest PR

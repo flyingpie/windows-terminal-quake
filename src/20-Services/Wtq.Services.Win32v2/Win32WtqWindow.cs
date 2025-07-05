@@ -20,7 +20,12 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	[CanBeMatchedOn]
 	public override string Id =>
-		_window.WindowHandle.ToString(CultureInfo.InvariantCulture);
+
+		// TODO: We want to use a more unique id, but "window handle" can vary across Win32 calls
+		// (i.e. multiple calls return different window handles, even when it's the same window).
+		// So until we can fix that, we're using the process id, as we did in the v1 version of Win32WtqWindow.
+		_window.ProcessId.ToString(CultureInfo.InvariantCulture);
+		// _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
 
 	public bool IsMainWindow =>
 		_window.IsMainWindow;

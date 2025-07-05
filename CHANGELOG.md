@@ -4,13 +4,14 @@
 
 ## [vNext]
 
-## [v2.0.16] / 2025-xx-xx
+## [v2.0.16] / 2025-07-05
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
 - Bugfix: Properly close & dispose logger when the application fully exits.
 - Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method (thanks to [Chuckie Chen](https://github.com/ChuckieChen945), #187).
 - Bugfix: Windows - In some cases a window couldn't be brought to the foreground, due to Windows preventing abuse of said function.
 - Feature: API & CLI to control WTQ programmatically (thanks to [Tim Gilevich](https://github.com/dwarfovich) #194).
 - Feature: Added 'WindowClass' as a property to match windows on (Windows only).
+- Feature: Added 'WorkingDirectory' setting, for use when starting a new process.
 - Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
 - Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
