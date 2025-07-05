@@ -4,6 +4,9 @@
 
 ## [vNext]
 
+## [v2.0.17] / 2025-07-xx
+- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
+
 ## [v2.0.16] / 2025-07-05
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
 - Bugfix: Properly close & dispose logger when the application fully exits.

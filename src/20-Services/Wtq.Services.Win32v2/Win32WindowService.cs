@@ -60,12 +60,12 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 		try
 		{
-			var fgPid = _win32.GetForegroundProcessId();
-			if (fgPid > 0)
+			var foregroundWindowHandle = _win32.GetForegroundWindowHandle();
+			if (foregroundWindowHandle > 0)
 			{
 				return (await GetWindowsAsync(cancellationToken))
 					.Cast<Win32WtqWindow>()
-					.FirstOrDefault(w => w.ProcessId == fgPid);
+					.FirstOrDefault(w => w.WindowHandle == foregroundWindowHandle);
 			}
 		}
 		catch (Exception ex)

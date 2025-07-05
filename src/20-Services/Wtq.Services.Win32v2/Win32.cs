@@ -24,24 +24,6 @@ public class Win32 : IWin32
 	private readonly ILogger _log = Log.For<Win32>();
 
 	/// <inheritdoc/>
-	public unsafe uint? GetForegroundProcessId()
-	{
-		var windowHandle = PI.GetForegroundWindow();
-
-		uint processId;
-		var threadId = PI.GetWindowThreadProcessId(windowHandle, &processId);
-
-		if (threadId <= 0)
-		{
-			_log.LogDebug("{Method} Did not find a foreground process", nameof(GetForegroundProcessId));
-			return null;
-		}
-
-		_log.LogDebug("{Method} Got foreground process with id '{ProcessId}' (and thread id '{ThreadId}')", nameof(GetForegroundProcessId), processId, threadId);
-		return processId;
-	}
-
-	/// <inheritdoc/>
 	public unsafe nint? GetForegroundWindowHandle()
 	{
 		var windowHandle = PI.GetForegroundWindow();

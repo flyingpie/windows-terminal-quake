@@ -6,14 +6,8 @@ namespace Wtq.Services.Win32v2;
 public interface IWin32
 {
 	/// <summary>
-	/// Returns the id of the process that currently has focus.<br/>
-	/// Returns null if no process was found.
-	/// </summary>
-	uint? GetForegroundProcessId();
-
-	/// <summary>
 	/// Returns the id of the window that currently has focus.<br/>
-	/// Returns null if no process was found.
+	/// Returns null if no window was found.
 	/// </summary>
 	nint? GetForegroundWindowHandle();
 
