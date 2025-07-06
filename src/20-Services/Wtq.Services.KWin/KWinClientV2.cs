@@ -33,7 +33,11 @@ internal sealed class KWinClientV2(
 				await _wtqBusObj.InitAsync().NoCtx();
 
 				// Load KWin script.
-				_script = await scriptService.LoadScriptAsync(PathToWtqKwinJs).NoCtx();
+				// XDG_CACHE_HOME=/home/marco/.var/app/nl.flyingpie.wtq/cache
+				var p = "/home/marco/.var/app/nl.flyingpie.wtq/cache/wtq.kwin.js";
+				File.Copy(PathToWtqKwinJs, p, overwrite: true);
+
+				_script = await scriptService.LoadScriptAsync(p).NoCtx();
 			})
 			.NoCtx();
 	}

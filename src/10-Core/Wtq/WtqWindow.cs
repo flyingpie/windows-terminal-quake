@@ -12,7 +12,7 @@ public abstract class WtqWindow
 
 	protected WtqWindow()
 	{
-		// Built a list of properties that can be matched on, so we don't have to do this when actually matching.
+		// Build a list of properties that can be matched on, so we don't have to do this when actually matching.
 		_canBeMatchedOnProps = GetType()
 			.GetProperties()
 			.Where(p => p.GetCustomAttribute<CanBeMatchedOnAttribute>() != null)

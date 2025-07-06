@@ -50,8 +50,15 @@ public sealed class WtqTrayIconService : WtqHostedService
 			? WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico")
 			: WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png");
 
+		// XDG_CACHE_HOME=/home/marco/.var/app/nl.flyingpie.wtq/cache
+		var p = "/home/marco/.var/app/nl.flyingpie.wtq/cache/icon.png";
+
+//		File.Copy(iconPath, p, overwrite: true);
+		var p = "nl.flyingpie.wtq";
+		//var p = "/app/share/icons/hicolor/256x256/apps/nl.flyingpie.wtq.png";
+
 		_icon = NotifyIcon.Create(
-			iconPath,
+			p,
 			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion}",
