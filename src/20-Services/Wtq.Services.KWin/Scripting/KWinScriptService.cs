@@ -24,7 +24,7 @@ internal sealed class KWinScriptService(
 			await scr.UnloadScriptAsync(id).NoCtx();
 		}
 
-		_log.LogInformation("Loading KWin script from path '{Path}'", path);
+		_log.LogDebug("Loading KWin script from path '{Path}'", path);
 
 		if (!File.Exists(path))
 		{

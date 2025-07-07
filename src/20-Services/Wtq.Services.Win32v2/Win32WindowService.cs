@@ -58,13 +58,22 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 		try
 		{
+			// Find the handle of the foreground window.
 			var foregroundWindowHandle = _win32.GetForegroundWindowHandle();
-			if (foregroundWindowHandle > 0)
+			if (foregroundWindowHandle == null || foregroundWindowHandle <= 0)
 			{
-				return (await GetWindowsAsync(cancellationToken))
-					.Cast<Win32WtqWindow>()
-					.FirstOrDefault(w => w.WindowHandle == foregroundWindowHandle);
+				return null;
 			}
+
+			// Turn the handle into a Win32Window.
+			var win32Window = _win32.GetWindow(foregroundWindowHandle.Value);
+			if (win32Window == null)
+			{
+				return null;
+			}
+
+			// Wrap the result in a Win32WtqWindow.
+			return new Win32WtqWindow(_win32, win32Window);
 		}
 		catch (Exception ex)
 		{

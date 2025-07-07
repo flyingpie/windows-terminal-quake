@@ -39,6 +39,10 @@ public class Win32 : IWin32
 	}
 
 	/// <inheritdoc/>
+	public Win32Window? GetWindow(nint windowHandle) =>
+		GetWin32Window((HWND)windowHandle);
+
+	/// <inheritdoc/>
 	public string? GetWindowClass(nint windowHandle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -65,7 +69,7 @@ public class Win32 : IWin32
 
 		// Turn the list of handles into a list of objects that contain info about the windows.
 		return windowHandles
-			.Select(w => GetWin32Window(w))
+			.Select(GetWin32Window)
 			.Where(w => w != null)
 			.Select(w => w!)
 			.ToList();
@@ -272,17 +276,34 @@ public class Win32 : IWin32
 			return null;
 		}
 
-		// Get information about the owning process.
-		var ownerProcess = Process.GetProcessById((int)processId);
-
-		// Figure out whether this is the process's main window.
-		var isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
-
 		// Fetch the window class.
 		var windowClass = GetWindowClass(windowHandle);
 
 		// Fetch the window class.
 		var windowTitle = GetWindowTitle(windowHandle);
+
+		// Get information about the owning process.
+		Process? ownerProcess = null;
+		try
+		{
+			ownerProcess = Process.GetProcessById((int)processId);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(
+				ex,
+				"Could not get process info for window handle {WindowHandle}, process with id {ProcessId}, window class {WindowClass} and window title {WindowTitle}: {Message}",
+				windowHandle,
+				processId,
+				windowClass,
+				windowTitle,
+				ex.Message);
+
+			return null;
+		}
+
+		// Figure out whether this is the process's main window.
+		var isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
 
 		// Construct return object.
 		var window = new Win32Window(() => ownerProcess.HasExited)

@@ -95,6 +95,17 @@ public sealed class Win32WtqWindow : WtqWindow
 			return false;
 		}
 
+		// Main window
+		if (opts.GetMainWindow() == MainWindowState.MainWindowOnly && !_window.IsMainWindow)
+		{
+			return false;
+		}
+
+		if (opts.GetMainWindow() == MainWindowState.NonMainWindowOnly && _window.IsMainWindow)
+		{
+			return false;
+		}
+
 		return true;
 	}
 
