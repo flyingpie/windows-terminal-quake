@@ -34,7 +34,8 @@ internal sealed class KWinClientV2(
 
 				// Load KWin script.
 				// XDG_CACHE_HOME=/home/marco/.var/app/nl.flyingpie.wtq/cache
-				var p = "/home/marco/.var/app/nl.flyingpie.wtq/cache/wtq.kwin.js";
+				// var p = "/home/marco/.var/app/nl.flyingpie.wtq/cache/wtq.kwin.js";
+				var p = Path.Combine(WtqPaths.Cache, "wtq.kwin.js");
 				File.Copy(PathToWtqKwinJs, p, overwrite: true);
 
 				_script = await scriptService.LoadScriptAsync(p).NoCtx();
