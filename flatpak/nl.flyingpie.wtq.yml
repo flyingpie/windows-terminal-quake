@@ -6,9 +6,6 @@ sdk: org.gnome.Sdk
 command: wtq
 
 finish-args:
-# - --filesystem=host
-# - --filesystem=home
-# - --socket=session-bus
   - --device=dri # GPU acceleration of the GUI
   - --own-name=nl.flyingpie.wtq.svc
   - --socket=wayland
@@ -28,7 +25,7 @@ modules:
     build-commands:
       - cp -R . /app/bin/
       - install -D nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
-      - install -D ./nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
+      - install -D nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
 
     sources:
       # App
