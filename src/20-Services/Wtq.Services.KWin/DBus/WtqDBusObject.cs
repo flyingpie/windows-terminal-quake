@@ -12,7 +12,7 @@ internal sealed class WtqDBusObject(
 	IWtqBus bus)
 	: System.IAsyncDisposable, IWtqDBusObject
 {
-	private const string ServiceName = "wtq.svc";
+	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
