@@ -15,3 +15,9 @@ https://github.com/tryphotino/photino.Samples/tree/master/Photino.PublishPhotino
 
 XDG Flatpak Conventions
 https://docs.flatpak.org/en/latest/conventions.html#xdg-base-directories
+
+```shell
+flatpak install org.gnome.Sdk/x86_64/48
+flatpak install org.gnome.Platform/x86_64/48
+
+```

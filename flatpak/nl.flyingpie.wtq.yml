@@ -1,0 +1,39 @@
+id: nl.flyingpie.wtq
+runtime: org.gnome.Platform
+runtime-version: "48"
+sdk: org.gnome.Sdk
+
+command: wtq
+
+finish-args:
+# - --filesystem=host
+# - --filesystem=home
+# - --socket=session-bus
+  - --device=dri # GPU acceleration of the GUI
+  - --own-name=nl.flyingpie.wtq.svc
+  - --socket=wayland
+  - --talk-name=org.freedesktop.Flatpak # So we can start processes ("flatpak-spawn --host dolphin")
+  - --talk-name=org.kde.KWin # So we can talk to KWin for querying windows
+  - --talk-name=org.kde.StatusNotifierWatcher # So we can create a tray icon
+
+modules:
+
+  # libappindicator
+  - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
+
+  # WTQ
+  - name: wtq
+
+    buildsystem: simple
+    build-commands:
+      - cp -R . /app/bin/
+      - install -D nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
+
+    sources:
+      # App
+      - type: dir
+        path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+
+      # Icon
+      - type: file
+        path: ../assets/nl.flyingpie.wtq-white.svg

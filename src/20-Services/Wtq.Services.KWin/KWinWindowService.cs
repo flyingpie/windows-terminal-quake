@@ -20,15 +20,16 @@ public class KWinWindowService(
 
 		process.StartInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
+			FileName = "flatpak-spawn",
+//			FileName = opts.FileName,
+//			Arguments = opts.Arguments,
 			WorkingDirectory = opts.WorkingDirectory,
 		};
 
+		var args = new string[] { "flatpak-spawn", "--host", opts.FileName, };
+
 		// Arguments
-		foreach (var arg in opts.ArgumentList
-			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
-			.Select(a => a.Argument!))
+		foreach (var arg in args)
 		{
 			var exp = arg.ExpandEnvVars();
 

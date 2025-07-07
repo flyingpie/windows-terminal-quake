@@ -1,12 +1,12 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NotificationIcon.NET;
-using System.Runtime.InteropServices;
 
 namespace Wtq.Services.TrayIcon;
 
 public sealed class WtqTrayIconService : WtqHostedService
 {
-	private readonly bool _isWin = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+	private readonly ILogger _log = Log.For<WtqTrayIconService>();
 
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
@@ -44,21 +44,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 	private void ShowStatusIcon()
 	{
-		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
-		// Also, on Linux the icon requires some padding.
-		var iconPath = _isWin
-			? WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico")
-			: WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png");
-
-		// XDG_CACHE_HOME=/home/marco/.var/app/nl.flyingpie.wtq/cache
-		var p = "/home/marco/.var/app/nl.flyingpie.wtq/cache/icon.png";
-
-//		File.Copy(iconPath, p, overwrite: true);
-		var p = "nl.flyingpie.wtq";
-		//var p = "/app/share/icons/hicolor/256x256/apps/nl.flyingpie.wtq.png";
-
 		_icon = NotifyIcon.Create(
-			p,
+			GetPathToIcon(),
 			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion}",
@@ -98,7 +85,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 					() => _lifetime.StopApplication()),
 			]);
 
-		if (_isWin)
+		if (Os.IsWindows)
 		{
 			// On Windows, we can just block the thread on the tray icon UI.
 			_icon.Show();
@@ -119,7 +106,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 				},
 				TimeSpan.FromMilliseconds(200));
 		}
-
 	}
 
 	private static MenuItem CreateItem(
@@ -132,5 +118,26 @@ public sealed class WtqTrayIconService : WtqHostedService
 			Click = (s, e) => action(),
 			IsDisabled = !enabled,
 		};
+	}
+
+	private string GetPathToIcon()
+	{
+		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
+		if (Os.IsWindows)
+		{
+			_log.LogDebug("Running on Windows, using ICO version of tray icon");
+			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
+		}
+
+		// Linux (Flatpak).
+		if (Os.IsFlatpak)
+		{
+			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
+			return "nl.flyingpie.wtq-white";
+		}
+
+		// Linux (non-Flatpak).
+		_log.LogDebug("Running bare Linux, using icon path of tray icon");
+		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
 	}
 }

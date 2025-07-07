@@ -132,7 +132,7 @@ kwin.setActiveWindow = (window) => {
 ////////////////////////////////////////////////////////////
 
 // WTQ /////////////////////////////////////////////////////
-wtq.DBUS_SERVICE	= "wtq.svc";
+wtq.DBUS_SERVICE	= "nl.flyingpie.wtq.svc";
 wtq.DBUS_PATH		= "/wtq/kwin";
 wtq.DBUS_INTERFACE	= "wtq.kwin";
 
@@ -293,9 +293,9 @@ cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 			log.info(`Firing hotkey with name:'${p.name}', ${descr}`);
 
 			callDBus(
-				"wtq.svc",
-				"/wtq/kwin",
-				"wtq.kwin",
+				wtq.DBUS_SERVICE,		// Service
+				wtq.DBUS_PATH,			// Path
+				wtq.DBUS_INTERFACE,		// Interface
 				"OnPressShortcut",
 				p.name,
 				p.mod,
