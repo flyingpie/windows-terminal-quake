@@ -1,7 +1,7 @@
 #!/bin/bash
 
-flatpak uninstall -y nl.flyingpie.wtq
+./fp-build.sh
 
-flatpak-builder --force-clean --install --user build-dir nl.flyingpie.wtq.yml
-
-flatpak run --command=sh nl.flyingpie.wtq
+flatpak run \
+	--command=sh \
+	nl.flyingpie.wtq
