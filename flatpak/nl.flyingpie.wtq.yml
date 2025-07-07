@@ -28,11 +28,16 @@ modules:
     build-commands:
       - cp -R . /app/bin/
       - install -D nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
+      - install -D ./nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
 
     sources:
       # App
       - type: dir
         path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+
+      # Desktop file
+      - type: file
+        path: ./nl.flyingpie.wtq.desktop
 
       # Icon
       - type: file

@@ -1,10 +1,10 @@
 [Desktop Entry]
 Name=WTQ
-Exec=env WEBKIT_DISABLE_DMABUF_RENDERER=1 /home/marco/.local/share/wtq/wtq
+Exec=wtq
 Version=1.0
 Type=Application
 Categories=
 Terminal=false
-Icon=/home/marco/.local/share/wtq/assets/icon-v2-64.png
+Icon=nl.flyingpie.wtq-white
 Comment=Enable Quake-mode for (almost) any app
 StartupNotify=true
