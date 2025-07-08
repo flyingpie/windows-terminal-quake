@@ -18,7 +18,9 @@ public class KWinWindowService(IKWinClient kwinClient)
 
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+			WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments
@@ -51,19 +53,13 @@ public class KWinWindowService(IKWinClient kwinClient)
 			FileName = "flatpak-spawn",
 		};
 
-		var args = new List<string>()
-		{
-			"--host",
-		};
+		startInfo.ArgumentList.Add("--host");
 
 		// Working directory
 		if (!string.IsNullOrWhiteSpace(opts.WorkingDirectory))
 		{
-			args.AddRange(
-			[
-				"--directory",
-				opts.WorkingDirectory,
-			]);
+			startInfo.ArgumentList.Add("--directory");
+			startInfo.ArgumentList.Add(opts.WorkingDirectory);
 		}
 
 		// Filename
@@ -72,7 +68,7 @@ public class KWinWindowService(IKWinClient kwinClient)
 			throw new InvalidOperationException($"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'");
 		}
 
-		args.Add(opts.FileName);
+		startInfo.ArgumentList.Add(opts.FileName);
 
 		// Arguments
 		foreach (var arg in opts.ArgumentList ?? [])
@@ -86,7 +82,7 @@ public class KWinWindowService(IKWinClient kwinClient)
 
 			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg.Argument, exp);
 
-			args.Add(exp);
+			startInfo.ArgumentList.Add(exp);
 		}
 
 		return startInfo;

@@ -6,12 +6,12 @@ sdk: org.gnome.Sdk
 command: wtq
 
 finish-args:
-  - --device=dri # GPU acceleration of the GUI
-  - --own-name=nl.flyingpie.wtq.svc
-  - --socket=wayland
-  - --talk-name=org.freedesktop.Flatpak # So we can start processes ("flatpak-spawn --host dolphin")
-  - --talk-name=org.kde.KWin # So we can talk to KWin for querying windows
-  - --talk-name=org.kde.StatusNotifierWatcher # So we can create a tray icon
+  - --device=dri                                # GPU acceleration of the GUI
+  - --own-name=nl.flyingpie.wtq.svc             # Exposes DBus service for the KWin script to talk to
+  - --socket=wayland                            # So we can run the GUI
+  - --talk-name=org.freedesktop.Flatpak         # So we can start processes ("flatpak-spawn --host dolphin")
+  - --talk-name=org.kde.KWin                    # So we can talk to KWin for querying windows
+  - --talk-name=org.kde.StatusNotifierWatcher   # So we can create a tray icon
 
 modules:
 
@@ -30,7 +30,8 @@ modules:
     sources:
       # App
       - type: dir
-        path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+        #path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+        path: ../_output/staging/linux-x64_self-contained/
 
       # Desktop file
       - type: file
