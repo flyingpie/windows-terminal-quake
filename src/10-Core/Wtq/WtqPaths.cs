@@ -2,7 +2,6 @@ namespace Wtq;
 
 public static class WtqPaths
 {
-	// XDG_CACHE_HOME=/home/marco/.var/app/nl.flyingpie.wtq/cache
 	private static string? _cacheDir;
 	private static string? _pathToAppDir;
 
@@ -21,7 +20,7 @@ public static class WtqPaths
 	public static string AppDataWtq => Path.Combine(AppData, "wtq");
 
 	/// <summary>
-	/// Path to cache dir, where we can write temporary stuff. Currently used GUI state and KWin script.
+	/// Path to cache dir, where we can write temporary stuff. Currently used for GUI state and KWin script.
 	/// Windows:   TODO
 	/// Linux:     /home/username/.cache/wtq.
 	/// </summary>
@@ -31,7 +30,7 @@ public static class WtqPaths
 		{
 			if (Os.IsWindows)
 			{
-				throw new NotImplementedException("No cache dir supported on Windows.");
+				throw new NotImplementedException("TODO"); // TODO
 			}
 
 			_cacheDir ??= Os.GetEnvVar("XDG_CACHE_HOME") ?? Path.Combine(UserHome, ".cache", "wtq");

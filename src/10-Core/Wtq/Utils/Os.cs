@@ -121,7 +121,8 @@ public static class Os
 			Process.Start(
 				new ProcessStartInfo()
 				{
-					FileName = path, UseShellExecute = true,
+					FileName = path,
+					UseShellExecute = true,
 				});
 		}
 		catch (Exception ex)
