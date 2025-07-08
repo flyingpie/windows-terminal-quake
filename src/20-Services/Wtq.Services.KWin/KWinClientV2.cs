@@ -35,7 +35,7 @@ internal sealed class KWinClientV2(
 				// Load KWin script.
 				// Note that we're copying the KWin script to the cache dir, as that will be available to both the host and the sandbox, in the case we're running as a Flatpak.
 				// For non-Flatpak, we could use the path to the KWin script directly, but that cannot be seen by KWin since KWin can't see in our sandbox.
-				var pathToKwinJs = Path.Combine(WtqPaths.Cache, "wtq.kwin.js");
+				var pathToKwinJs = Path.Combine(WtqPaths.GetWtqCacheDir(), "wtq.kwin.js");
 				File.Copy(PathToWtqKwinJs, pathToKwinJs, overwrite: true);
 
 				_script = await scriptService.LoadScriptAsync(pathToKwinJs).NoCtx();
