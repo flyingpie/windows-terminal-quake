@@ -2,7 +2,6 @@ namespace Wtq;
 
 public static class WtqPaths
 {
-	private static string? _cacheDir;
 	private static string? _pathToAppDir;
 
 	/// <summary>
@@ -47,9 +46,9 @@ public static class WtqPaths
 		WtqConfigFromEnvVar ?? string.Empty,
 
 		// Next to wtq executable.
-		Path.Combine(GetWtqAppDir(), "wtq.json"),
-		Path.Combine(GetWtqAppDir(), "wtq.jsonc"),
-		Path.Combine(GetWtqAppDir(), "wtq.json5"),
+		Path.Combine(WtqAppDir, "wtq.json"),
+		Path.Combine(WtqAppDir, "wtq.jsonc"),
+		Path.Combine(WtqAppDir, "wtq.json5"),
 
 		// In XDG config dir.
 		Path.Combine(UserHome, ".config", "wtq.json"),
@@ -72,85 +71,51 @@ public static class WtqPaths
 		Path.Combine(AppDataWtq, "wtq.json5"),
 	];
 
-	public static string GetPathRelativeToWtqAppDir(params string[] path) => Path.Combine(GetWtqAppDir(), Path.Combine(path));
-
 	/// <summary>
 	/// Path to directory that contains the WTQ executable.
 	/// </summary>
-	public static string GetWtqAppDir()
+	public static string WtqAppDir
 	{
-		if (_pathToAppDir == null)
+		get
 		{
-			_pathToAppDir = Path.GetDirectoryName(typeof(WtqPaths).Assembly.Location);
-
-			Console.WriteLine($"GetWtqAppDir() => {_pathToAppDir}");
-
-			if (string.IsNullOrWhiteSpace(_pathToAppDir))
+			if (_pathToAppDir == null)
 			{
-				throw new WtqException("Could not get path to app directory.");
+				_pathToAppDir = Path.GetDirectoryName(typeof(WtqPaths).Assembly.Location);
+
+				if (string.IsNullOrWhiteSpace(_pathToAppDir))
+				{
+					throw new WtqException("Could not get path to app directory.");
+				}
 			}
+
+			return _pathToAppDir;
 		}
-
-		return _pathToAppDir;
-	}
-
-	/// <summary>
-	/// Path to cache dir, where we can write temporary stuff. Currently used for GUI state and KWin script.
-	/// Windows:   TODO
-	/// Linux:     /home/username/.cache/wtq.
-	/// </summary>
-	public static string GetWtqCacheDir()
-	{
-		if (Os.IsWindows)
-		{
-			throw new NotImplementedException("TODO"); // TODO
-		}
-
-		_cacheDir ??=
-			Os.GetEnvVar("XDG_CACHE_HOME") // Use the path as defined by the XDG spec (if there is one).
-			?? Path.Combine(UserHome, ".cache", "wtq"); // Fall back to the well-known path
-
-		if (!Directory.Exists(_cacheDir))
-		{
-			Directory.CreateDirectory(_cacheDir);
-		}
-
-		return _cacheDir;
 	}
 
 	/// <summary>
 	/// Path to where log files are stored.
-	/// Windows:    C:/users/username/appdata/local/temp/wtq/logs<br/>
-	/// Linux:      /tmp/wtq/logs.
-	/// </summary>
-	public static string GetWtqLogDir() => GetOrCreateDirectory(Path.Combine(GetWtqTempDir(), "logs"));
-
-	/// <summary>
-	/// Path to temporary directory.<br/>
 	/// Windows:    C:/users/username/appdata/local/temp/wtq<br/>
-	/// Linux:      /tmp/wtq.
+	/// Linux:      /home/username/.local/state.
 	/// </summary>
-	public static string GetWtqTempDir() => GetOrCreateDirectory(Path.Combine(Path.GetTempPath(), "wtq"));
+	public static string WtqLogDir => WtqTempDir;
 
 	/// <summary>
-	/// Make sure the specified <param name="path"/> exists.
+	/// Path to cache dir, where we can write temporary stuff. Currently used for GUI state and KWin script.
+	/// Windows:    C:/users/username/appdata/local/temp/wtq<br/>
+	/// Linux:      /home/username/.local/state.
 	/// </summary>
-	private static string GetOrCreateDirectory(string path)
+	public static string WtqTempDir
 	{
-		if (Directory.Exists(path))
+		get
 		{
-			return path;
-		}
+			if (Os.IsWindows)
+			{
+				return Path.Combine(Path.GetTempPath(), "wtq").GetOrCreateDirectory();
+			}
 
-		try
-		{
-			Directory.CreateDirectory(path);
+			return Path.Combine(Xdg.XDG_STATE_HOME.GetOrCreateDirectory(), "wtq").GetOrCreateDirectory();
 		}
-		catch (Exception ex)
-		{
-			throw new WtqException($"Could not create app data directory '{path}': {ex.Message}", ex);
-		}
-
-		return path;
 	}
+
+	public static string GetPathRelativeToWtqAppDir(params string[] path) => Path.Combine(WtqAppDir, Path.Combine(path));
 }

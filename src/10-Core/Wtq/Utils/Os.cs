@@ -14,26 +14,13 @@ public static class Os
 	private static bool? _isFlatpak;
 
 	public static bool IsFlatpak =>
-		_isFlatpak ??= GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) ?? false;
+		_isFlatpak ??= EnvUtils.GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) ?? false;
 
 	public static bool IsLinux =>
 		RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
 	public static bool IsWindows =>
 		RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
-	public static string? GetEnvVar(string name)
-	{
-		Guard.Against.NullOrWhiteSpace(name);
-
-		return Environment
-			.GetEnvironmentVariables()
-			.Cast<DictionaryEntry>()
-			.FirstOrDefault(d => d.Key?.ToString()?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false)
-			.Value
-			?.ToString()
-			?.EmptyOrWhiteSpaceToNull();
-	}
 
 	public static bool IsCallable(string? workingDirectory, string fileName)
 	{

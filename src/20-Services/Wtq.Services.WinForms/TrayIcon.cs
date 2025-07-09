@@ -51,7 +51,7 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Logs Directory",
-					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+					() => Os.OpenFileOrDirectory(WtqPaths.WtqLogDir)),
 
 				new ToolStripSeparator(),
 

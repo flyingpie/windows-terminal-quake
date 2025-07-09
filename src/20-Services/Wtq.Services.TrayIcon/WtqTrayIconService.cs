@@ -76,7 +76,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					"Open Logs",
-					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+					() => Os.OpenFileOrDirectory(WtqPaths.WtqLogDir)),
 
 				new SeparatorItem(),
 

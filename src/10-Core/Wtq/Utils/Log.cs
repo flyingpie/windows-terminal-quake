@@ -14,7 +14,7 @@ public static class Log
 
 	public static void Configure()
 	{
-		var path = WtqPaths.GetWtqLogDir();
+		var path = WtqPaths.WtqLogDir;
 		var logLevel = WtqEnv.LogLevel;
 
 		var logBuilder = new LoggerConfiguration()
@@ -26,7 +26,7 @@ public static class Log
 			// JSON.
 			.WriteTo.File(
 				formatter: new RenderedCompactJsonFormatter(),
-				path: Path.Combine(path, "logs-.json"),
+				path: Path.Combine(path, "logs.json"),
 				fileSizeLimitBytes: 50_000_000,
 				rollingInterval: RollingInterval.Infinite,
 				retainedFileCountLimit: 1)

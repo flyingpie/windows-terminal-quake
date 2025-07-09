@@ -125,7 +125,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		{
 			if (await _kGlobalAccel.UnregisterAsync("kwin", kwinShortcutName).NoCtx())
 			{
-				_log.LogInformation("Unregistered {Name}", kwinShortcutName);
+				_log.LogDebug("Unregistered {Name}", kwinShortcutName);
 			}
 			else
 			{

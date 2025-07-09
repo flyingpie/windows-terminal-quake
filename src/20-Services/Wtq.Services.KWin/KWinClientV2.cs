@@ -23,7 +23,7 @@ internal sealed class KWinClientV2(
 	/// Path to KWin script in the XDG cache folder, that is reachable by both sandboxed WTQ, and KWin.<br/>
 	/// This is necessary when running WTQ as a Flatpak, where KWin can't see the files, since they're sandboxed.
 	/// </summary>
-	private static readonly string _pathToWtqKwinJsCache = Path.Combine(WtqPaths.GetWtqCacheDir(), "wtq.kwin.js");
+	private static readonly string _pathToWtqKwinJsCache = Path.Combine(WtqPaths.WtqTempDir, "wtq.kwin.js");
 
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 

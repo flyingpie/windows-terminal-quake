@@ -30,8 +30,8 @@ modules:
     sources:
       # App
       - type: dir
-        #path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
-        path: ../_output/staging/linux-x64_self-contained/
+        path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+        #path: ../_output/staging/linux-x64_self-contained/
 
       # Desktop file
       - type: file
