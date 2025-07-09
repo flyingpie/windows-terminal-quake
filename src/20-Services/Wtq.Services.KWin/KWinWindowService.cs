@@ -1,14 +1,17 @@
 using Wtq.Configuration;
+using Wtq.Services.KWin.ProcessFactory;
 
 namespace Wtq.Services.KWin;
 
 public class KWinWindowService(
-	IKWinClient kwinClient)
+	IKWinClient kwinClient,
+	IProcessFactory procFactory)
 	: IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<KWinWindowService>();
 
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
+	private readonly IProcessFactory _procFactory = Guard.Against.Null(procFactory);
 
 	public Task CreateAsync(
 		WtqAppOptions opts,
@@ -16,26 +19,7 @@ public class KWinWindowService(
 	{
 		Guard.Against.Null(opts);
 
-		using var process = new Process();
-
-		process.StartInfo = new ProcessStartInfo()
-		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
-			WorkingDirectory = opts.WorkingDirectory,
-		};
-
-		// Arguments
-		foreach (var arg in opts.ArgumentList
-			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
-			.Select(a => a.Argument!))
-		{
-			var exp = arg.ExpandEnvVars();
-
-			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
-
-			process.StartInfo.ArgumentList.Add(exp);
-		}
+		using var process = _procFactory.Create(opts);
 
 		process.Start();
 
@@ -61,7 +45,7 @@ public class KWinWindowService(
 			_log.LogError(ex, "Failed to look up list of windows: {Message}", ex.Message);
 		}
 
-		return null;
+		return [];
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(

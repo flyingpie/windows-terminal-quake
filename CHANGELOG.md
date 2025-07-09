@@ -9,6 +9,7 @@
 - Refactor: Windows - Make foreground window tracking a bunch more efficient.
 - Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
 - Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
+- Feature: Flatpak release
 
 ## [v2.0.16] / 2025-07-05
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
