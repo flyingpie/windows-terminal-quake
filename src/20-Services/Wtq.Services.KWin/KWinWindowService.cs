@@ -48,7 +48,8 @@ public class KWinWindowService(
 		return [];
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
+	public async Task<WtqWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		var w = await _kwinClient.GetForegroundWindowAsync(cancellationToken).NoCtx();
 
@@ -59,20 +60,22 @@ public class KWinWindowService(
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
+
 #pragma warning disable SA1027 // Use tabs correctly
 
-		new("Filename", w => ((KWinWtqWindow)w).DesktopFileName),
-		new("WindowTitle", w => w.WindowTitle),
+		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
+		new("WindowTitle",		w => w.WindowTitle),
 
-		new("ResourceClass", w => ((KWinWtqWindow)w).ResourceClass),
-		new("ResourceName", w => ((KWinWtqWindow)w).ResourceName),
+		new("ResourceClass",	w => ((KWinWtqWindow)w).ResourceClass),
+		new("ResourceName",		w => ((KWinWtqWindow)w).ResourceName),
 
-		new("Location", w => ((KWinWtqWindow)w).FrameGeometry?.Location.ToShortString(), width: 50),
-		new("Size", w => ((KWinWtqWindow)w).FrameGeometry?.Size.ToShortString(), width: 50),
+		new("Location",			w => ((KWinWtqWindow)w).FrameGeometry?.Location.ToShortString(),		width: 50),
+		new("Size",				w => ((KWinWtqWindow)w).FrameGeometry?.Size.ToShortString(),			width: 50),
 
-		new("Id", w => w.Id, isVisible: false),
+		new("Id",				w => w.Id,																isVisible: false),
 
 #pragma warning restore SA1027 // Use tabs correctly
+
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)
