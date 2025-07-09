@@ -48,7 +48,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 			GetPathToIcon(),
 			[
 				CreateItem(
-					$"Version {WtqConstants.AppVersion}",
+					$"Version {WtqConstants.AppVersion}{(Os.IsFlatpak ? " (Flatpak)" : string.Empty)}",
 					() => { },
 					enabled: false),
 

@@ -1,5 +1,9 @@
 @inherits LayoutComponentBase
 
+@code {
+	private string AppSuffix => Os.IsFlatpak ? "(Flatpak)" : string.Empty;
+}
+
 <div style="position: fixed; top: 0; right: 20px; left: 250px; padding: 0; z-index: 999; background-color: orange; color: black; font-weight: bold; text-align: center;">
 	The GUI is a work-in-progress, mind the gaps! And feel free to send feedback on the project page :)
 </div>
@@ -15,7 +19,7 @@
 				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs <RadzenIcon Icon="open_in_new" /></RadzenButton>
 				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub <RadzenIcon Icon="open_in_new" /></RadzenButton>
 
-				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion</div>
+				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion @AppSuffix</div>
 			</RadzenStack>
 		</RadzenStack>
 	</RadzenSidebar>
