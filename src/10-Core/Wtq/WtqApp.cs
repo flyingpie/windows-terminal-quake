@@ -229,6 +229,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// Check that if we have a process handle, the process is still active.
 		if (IsAttached)
 		{
+			await UpdateWindowPropsAsync().NoCtx();
+
 			if (_lastLoc != null)
 			{
 				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
