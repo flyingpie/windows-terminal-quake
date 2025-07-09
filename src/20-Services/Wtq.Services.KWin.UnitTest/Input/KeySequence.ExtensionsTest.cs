@@ -1,6 +1,5 @@
 using Wtq.Input;
 using Wtq.Services.KWin.Input;
-using Wtq.Utils;
 using KC = Wtq.Input.KeyCode;
 using KM = Wtq.Input.KeyModifiers;
 
@@ -9,12 +8,6 @@ namespace Wtq.Services.KWin.UnitTest.Input;
 [TestClass]
 public class KeySequenceExtensionsTest
 {
-	[TestInitialize]
-	public void Setup()
-	{
-		Log.Configure();
-	}
-
 	[TestMethod]
 
 	// @formatter:off

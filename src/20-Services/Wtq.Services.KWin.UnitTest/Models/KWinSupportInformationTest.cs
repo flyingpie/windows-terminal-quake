@@ -1,4 +1,3 @@
-using System.Linq;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin.UnitTest.Models;
@@ -12,12 +11,12 @@ public class KWinSupportInformationTest
 		// Arrange
 		var supportInfoStr = """
 			actionLeft: 0
-			
+
 			Screens
 			=======
 			Active screen follows mouse:  yes
 			Number of Screens: 1
-			
+
 			Screen 0:
 			---------
 			Name: eDP-1
@@ -26,12 +25,12 @@ public class KWinSupportInformationTest
 			Scale: 1
 			Refresh Rate: 60049
 			Adaptive Sync: incapable
-			
+
 			Compositing
 			===========
 			Compositing is active
 			""";
-		
+
 		// Act
 		var res = KWinSupportInformation.Parse(supportInfoStr);
 
@@ -83,7 +82,7 @@ public class KWinSupportInformationTest
 			===========
 			Compositing is active
 			""";
-		
+
 		// Act
 		var res = KWinSupportInformation.Parse(supportInfoStr);
 
