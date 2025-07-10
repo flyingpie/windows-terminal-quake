@@ -29,9 +29,15 @@ modules:
 
     sources:
       # App
-      - type: dir
-        path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
-        #path: ../_output/staging/linux-x64_self-contained/
+      # - type: dir
+      #   path: ../_output/build/bin/Wtq.Host.Linux/net9.0/linux-x64/publish/
+      #   #path: ../_output/staging/linux-x64_self-contained/assets/
+
+      - type: archive
+        url: https://github.com/flyingpie/windows-terminal-quake/releases/download/vNextFlatpak/linux-x64_self-contained.tar.gz
+        sha256: cd41f5b46fa26480e64c383e4677ff346031cd256e73ff17f95c4cff6ff35ba6
+        dest-filename: linux-x64_self-contained.tar.gz
+        strip-components: 0
 
       # Desktop file
       - type: file
@@ -40,3 +46,12 @@ modules:
       # Icon
       - type: file
         path: ../assets/nl.flyingpie.wtq-white.svg
+
+  # - name: wtq-2
+  #
+  #   buildsystem: simple
+  #
+  #   sources:
+  #     # Icon
+  #     - type: file
+  #       path: ../assets/nl.flyingpie.wtq-white.svg

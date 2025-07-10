@@ -1,5 +1,6 @@
 # Flatpak
 
+## TODO
 - wtq.kwin.js
 Working, by putting the script in the XDG cache on runtime.
 
@@ -11,7 +12,10 @@ Ability to expose unix pipe/tcp socket
 
 - Events
 
-Photino guide
+## Docs
+- Permission '--filesystem=home' is not required, but useful if the settings file exists there (either directly, or as a symlink)
+
+## Photino guide
 https://github.com/tryphotino/photino.Samples/tree/master/Photino.PublishPhotino/PublishPhotino
 
 XDG Flatpak Conventions
