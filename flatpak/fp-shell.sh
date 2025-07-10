@@ -2,4 +2,4 @@
 
 ./fp-build.sh
 
-flatpak run --command=sh nl.flyingpie.wtq
+flatpak run --command=sh $FLATPAK_APP

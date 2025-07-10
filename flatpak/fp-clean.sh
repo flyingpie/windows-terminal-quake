@@ -1,7 +1,5 @@
 #!/bin/bash
 
-flatpak uninstall -y nl.flyingpie.wtq
+flatpak uninstall -y $FLATPAK_APP
 
-rm -rf ./.flatpak-build-dir
-rm -rf ./.flatpak-repo
-rm -rf ./.flatpak-state-dir
+rm -rf $FLATPAK_BUILD_ROOT

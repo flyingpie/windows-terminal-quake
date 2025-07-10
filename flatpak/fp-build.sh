@@ -1,12 +1,14 @@
 #!/bin/bash
 
-flatpak uninstall -y nl.flyingpie.wtq
+source ./vars.sh
+
+flatpak uninstall -y $FLATPAK_APP
 
 flatpak-builder \
 	--force-clean \
 	--install \
-	--repo=.flatpak-repo \
-	--state-dir=.flatpak-state-dir \
+	--repo=$FLATPAK_REPO \
+	--state-dir=$FLATPAK_STATE_DIR \
 	--user \
-	.flatpak-build-dir \
-	nl.flyingpie.wtq.yml
+	$FLATPAK_BUILD_DIR \
+	$FLATPAK_APP_YML
