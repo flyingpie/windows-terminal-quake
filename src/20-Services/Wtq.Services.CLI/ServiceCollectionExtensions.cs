@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
 			{
 				var handler = new SocketsHttpHandler()
 				{
-					ConnectCallback = Os.IsWindows ? WindowsNamedPipe() : UnixSocket(),
+					// ConnectCallback = Os.IsWindows ? WindowsNamedPipe() : UnixSocket(),
 				};
 
 				return new HttpClient(handler)

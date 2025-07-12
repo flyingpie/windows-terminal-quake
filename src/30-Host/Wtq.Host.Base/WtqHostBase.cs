@@ -9,18 +9,18 @@ using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
-public class WtqHostBase
+public abstract class WtqHostBase
 {
-	private readonly IPlatformService _platform = null!;
-
 	public async Task RunAsync(string[] args)
 	{
+		var platform = CreatePlatformService();
+
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
-		Log.Configure(_platform.PathToLogs);
+		Log.Configure(platform.PathToLogs);
 
 		if (args.Length == 0)
 		{
-			RunApp(args);
+			RunApp(platform, args);
 		}
 		else
 		{
@@ -28,12 +28,14 @@ public class WtqHostBase
 		}
 	}
 
+	protected abstract IPlatformService CreatePlatformService();
+
 	protected virtual void ConfigureServices(IServiceCollection services)
 	{
 		// Implemented by OS-specific implementations.
 	}
 
-	private void RunApp(string[] args)
+	private void RunApp(IPlatformService platform, string[] args)
 	{
 		var log = Log.For<WtqHostBase>();
 
@@ -47,7 +49,7 @@ public class WtqHostBase
 		{
 			// Find path to settings files (wtq.jsonc or similar).
 			// var pathToWtqConf = WtqOptionsPath.Instance.Path;
-			var pathToWtqConf = _platform.PathToWtqConf;
+			var pathToWtqConf = platform.PathToWtqConf;
 
 			// Write wtq.schema.json.
 			WtqSchema.WriteFor(pathToWtqConf);
@@ -63,14 +65,13 @@ public class WtqHostBase
 					f.Path = Path.GetFileName(pathToWtqConf);
 					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
 
-					if (_platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
+					if (platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
 					{
 						log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
 
 						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
 						{
-							UseActivePolling = true,
-							UsePollingFileWatcher = true,
+							UseActivePolling = true, UsePollingFileWatcher = true,
 						};
 					}
 				})
@@ -85,6 +86,7 @@ public class WtqHostBase
 					.Bind(config);
 
 				s
+					.AddSingleton(platform)
 					.AddApi()
 					.AddUI()
 					.AddWtqCore();

@@ -9,14 +9,39 @@ public interface IPlatformService
 	string PlatformName { get; }
 
 	/// <summary>
+	/// Path to the directory that contains the WTQ app itself.
+	/// </summary>
+	string PathToAppDir { get; }
+
+	/// <summary>
 	/// Where the log files are stored.
 	/// </summary>
 	string PathToLogs { get; }
 
 	/// <summary>
+	/// Path to the icon that's used by the GUI (including in the taskbar, but not the tray icon).
+	/// </summary>
+	string PathToAppIcon { get; }
+
+	/// <summary>
+	/// Path to the icon that's used for the tray icon.
+	/// </summary>
+	string PathToTrayIcon { get; }
+
+	/// <summary>
+	/// Path to the user's home directory. Used to resolve settings.
+	/// </summary>
+	string PathToUserHome { get; }
+
+	/// <summary>
 	/// Path to the active (usually only) settings file.
 	/// </summary>
-	string PathToWtqConf { get; set; }
+	string PathToWtqConf { get; }
+
+	/// <summary>
+	/// Path to the active (usually only) settings file.
+	/// </summary>
+	string PathToWtqConfDir { get; }
 
 	/// <summary>
 	/// Ordered list of paths where the settings file could be.
@@ -28,6 +53,8 @@ public interface IPlatformService
 	/// Note that this is not necessarily the first path in <see cref="PathsToWtqConfs"/>, hence why it's a separate property.
 	/// </summary>
 	string PreferredPathWtqConfig { get; }
+
+	Process CreateProcess(WtqAppOptions opts);
 
 	/// <summary>
 	/// Returns whether a <paramref name="fileName"/> can be called, optionally using the specified <paramref name="workingDirectory"/>.<br/>

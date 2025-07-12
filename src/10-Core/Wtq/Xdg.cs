@@ -13,6 +13,6 @@ public static class Xdg
 	/// - actions history (logs, history, recently used files, …)
 	/// - current state of the application that can be reused on a restart (view, layout, open files, undo history, …).
 	/// </summary>
-	// public static string XDG_STATE_HOME =>
-	// 	EnvUtils.GetEnvVarOrDefault("XDG_STATE_HOME", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local/state"));
+	public static string XDG_STATE_HOME =>
+		EnvUtils.GetEnvVarOrDefault("XDG_STATE_HOME", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local/state"));
 }

@@ -1,0 +1,152 @@
+#!/bin/bash
+
+set -e # Quit on error.
+
+declare -A COMMANDS # We use this to build a list of available commands with descriptions.
+
+export FLATPAK_BUILD_ROOT="${FLATPAK_BUILD_ROOT:-/tmp/wtq-flatpak}"
+export FLATPAK_BUILD_DIR="${FLATPAK_BUILD_ROOT}/build-dir"
+export FLATPAK_REPO="${FLATPAK_BUILD_ROOT}/repo"
+export FLATPAK_STATE_DIR="${FLATPAK_BUILD_ROOT}/state-dir"
+
+export FLATPAK_APP=nl.flyingpie.wtq
+export FLATPAK_APP_YML="$FLATPAK_APP.yml"
+
+# -----------------------
+# Commands
+# -----------------------
+
+# VARS ###################################################
+vars() {
+	echo "FLATPAK_BUILD_ROOT:..$FLATPAK_BUILD_ROOT"
+	echo "FLATPAK_BUILD_DIR:...$FLATPAK_BUILD_DIR"
+	echo "FLATPAK_REPO:........$FLATPAK_REPO"
+	echo "FLATPAK_STATE_DIR:...$FLATPAK_STATE_DIR"
+	echo "FLATPAK_APP:.........$FLATPAK_APP"
+	echo "FLATPAK_APP_YML:.....$FLATPAK_APP_YML"
+}
+COMMANDS[vars]="Prints relevant environment variables."
+
+# PREP ###################################################
+prep-env() {
+	echo "Preparing environment..."
+
+	flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+	flatpak install --user -y flathub org.flatpak.Builder
+	flatpak install --user -y flathub org.gnome.Platform//48
+	flatpak install --user -y flathub org.gnome.Sdk//48
+}
+COMMANDS["prep-env"]="Sets up the local environment for building Flatpaks."
+
+# CLEAN ##################################################
+clean() {
+	echo "Removing everything WTQ Flatpak-related..."
+
+	flatpak uninstall -y $FLATPAK_APP | true
+
+	rm -rf $FLATPAK_BUILD_ROOT
+}
+COMMANDS["clean"]="Removes everything WTQ Flatpak-related."
+
+# BUILDER-SHELL ##########################################
+builder-shell() {
+	echo "Starting shell in builder..."
+
+	flatpak-builder \
+		--run \
+		$FLATPAK_BUILD_DIR \
+		$FLATPAK_APP_YML \
+		sh
+}
+COMMANDS["builder-shell"]="Start a shell in the Flatpak builder."
+
+# BUILD ##################################################
+build() {
+	echo "Building..."
+
+	flatpak uninstall -y $FLATPAK_APP | true
+
+	flatpak-builder \
+		--force-clean \
+		--install \
+		--repo=$FLATPAK_REPO \
+		--state-dir=$FLATPAK_STATE_DIR \
+		--user \
+		$FLATPAK_BUILD_DIR \
+		$FLATPAK_APP_YML
+}
+COMMANDS["build"]="Build Flatpak image."
+
+# BUILD-AND-RUN ##########################################
+build-and-run() {
+	echo "Building and running..."
+
+	build
+
+	flatpak run $FLATPAK_APP
+}
+COMMANDS["build-and-run"]="Build Flatpak image and start it."
+
+# BUILD-AND-SHELL ########################################
+build-and-shell() {
+	echo "Building and opening shell..."
+
+	build
+
+	flatpak run --command=sh $FLATPAK_APP
+}
+COMMANDS["build-and-shell"]="Build Flatpak image and start a shell in it."
+
+# LINT ###################################################
+lint() {
+	echo "Running linter..."
+
+	flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream $FLATPAK_APP.metainfo.xml
+}
+COMMANDS["lint"]="Run Flatpak linter."
+
+# BUNDLE #################################################
+bundle() {
+	echo "Creating Flatpak bundle..."
+
+	flatpak build-bundle \
+		$FLATPAK_REPO \
+		"$FLATPAK_APP.flatpak" \
+		$FLATPAK_APP
+}
+COMMANDS["bundle"]="Create Flatpak bundle."
+
+# -----------------------
+# Show Help
+# -----------------------
+
+show_help() {
+	echo "Usage: $0 <command>"
+	echo ""
+	echo "Available commands:"
+	for CMD in "${!COMMANDS[@]}"; do
+		printf "  %-20s %s\n" "$CMD" "${COMMANDS[$CMD]}"
+	done
+}
+
+# -----------------------
+# Command Dispatch
+# -----------------------
+
+if [ $# -eq 0 ]; then
+	show_help
+	exit 0
+fi
+
+COMMAND="$1"
+shift
+
+if declare -F "$COMMAND" >/dev/null; then
+	"$COMMAND" "$@"
+else
+	echo "Unknown command: $COMMAND"
+	echo ""
+	show_help
+	exit 1
+fi

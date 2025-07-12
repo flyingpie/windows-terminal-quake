@@ -5,47 +5,41 @@
 	<name>WTQ</name>
 	<summary>Enable Quake-style dropdown for (almost) any application</summary>
 	<content_rating type="oars-1.1" />
+	
+	<metadata_license>MIT</metadata_license>
+	<project_license>MIT</project_license>
+
+	<launchable type="desktop-id">nl.flyingpie.wtq.desktop</launchable>
 
 	<categories>
-		<category>Development</category>
-		<category>Productivity</category>
+		<category>Utility</category>
 	</categories>
 
 	<keywords>
-		<keyword>linux</keyword>
+		<keyword>dropdown</keyword>
 		<keyword>flatpak</keyword>
+		<keyword>linux</keyword>
+		<keyword>quake</keyword>
+		<keyword>terminal</keyword>
+		<keyword>toggle</keyword>
 	</keywords>
 
 	<url type="bugtracker">https://github.com/flyingpie/windows-terminal-quake/issues</url>
 	<url type="homepage">https://wtq.flyingpie.nl</url>
 	<url type="vcs-browser">https://github.com/flyingpie/windows-terminal-quake</url>
 	
-	<metadata_license>MIT</metadata_license>
-	<project_license>MIT</project_license>
-	
 	<developer id="nl.flyingpie">
 		<name>Marco van den Oever</name>
 	</developer>
 
 	<description>
-		<p>
-			WTQ runs in the background, and enables sliding applications on-and off the screen, Quake style.
-		</p>
+		<p>WTQ runs in the background, and enables sliding applications on-and off the screen, Quake style.</p>
 	</description>
-	
-	<launchable type="desktop-id">nl.flyingpie.wtq.desktop</launchable>
 
-	<releases>
-		<release version="2.0.17" date="2025-07-20">
-			<description>
-				- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
-				- Refactor: Windows - Make foreground window tracking a bunch more efficient.
-				- Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
-				- Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
-				- Feature: Flatpak release
-			</description>
-		</release>
-	</releases>
+	<branding>
+		<color type="primary" scheme_preference="light">#e0ecfb</color>
+		<color type="primary" scheme_preference="dark">#144d92</color>
+	</branding>
 
 	<screenshots>
 		<screenshot type="default">
@@ -69,4 +63,20 @@
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 	</screenshots>
+
+	<releases>
+		<release version="2.0.17" date="2025-07-20">
+			<description>
+				<p>Changelog</p>
+				<ul>
+					<li>Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.</li>
+					<li>Refactor: Windows - Make foreground window tracking a bunch more efficient.</li>
+					<li>Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.</li>
+					<li>Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.</li>
+					<li>Feature: Flatpak release</li>
+				</ul>
+			</description>
+			<url>https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.17</url>
+		</release>
+	</releases>
 </component>

@@ -8,6 +8,6 @@ public static class AssemblyInit
 	[AssemblyInitialize]
 	public static void Setup(TestContext ctx)
 	{
-		Log.Configure();
+		// Log.Configure();
 	}
 }

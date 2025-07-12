@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
 	{
 		Guard.Against.Null(services);
 
-		if (Os.IsFlatpak)
+		if (/*Os.IsFlatpak*/true)
 		{
 			_log.LogDebug("Using Flatpak process factory");
 			services.AddSingleton<IProcessFactory, FlatpakProcessFactory>();

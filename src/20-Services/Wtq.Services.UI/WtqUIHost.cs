@@ -76,7 +76,9 @@ public class WtqUIHost
 
 			.Center()
 
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			// .SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			// .SetIconFile("nl.flyingpie.wtq")
+			.SetIconFile("/home/marco/workspace/flyingpie/wtq/wtq_1/assets/nl.flyingpie.wtq-white.svg")
 			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
 			.SetSize(1280, 800)
