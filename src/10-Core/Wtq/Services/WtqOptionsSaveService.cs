@@ -4,7 +4,7 @@ public class WtqOptionsSaveService
 {
 	public async Task SaveAsync(WtqOptions options)
 	{
-		// await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, Write(options)).NoCtx();
+		await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, Write(options)).NoCtx();
 	}
 
 	public string Write(WtqOptions options)

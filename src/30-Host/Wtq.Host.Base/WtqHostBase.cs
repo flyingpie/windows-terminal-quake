@@ -2,25 +2,22 @@ using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Wtq.Services;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
-public abstract class WtqHostBase
+public class WtqHostBase
 {
 	public async Task RunAsync(string[] args)
 	{
-		var platform = CreatePlatformService();
-
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
-		Log.Configure(platform.PathToLogs);
+		Log.Configure();
 
 		if (args.Length == 0)
 		{
-			RunApp(platform, args);
+			RunApp(args);
 		}
 		else
 		{
@@ -28,14 +25,12 @@ public abstract class WtqHostBase
 		}
 	}
 
-	protected abstract IPlatformService CreatePlatformService();
-
 	protected virtual void ConfigureServices(IServiceCollection services)
 	{
 		// Implemented by OS-specific implementations.
 	}
 
-	private void RunApp(IPlatformService platform, string[] args)
+	private void RunApp(string[] args)
 	{
 		var log = Log.For<WtqHostBase>();
 
@@ -48,8 +43,7 @@ public abstract class WtqHostBase
 		try
 		{
 			// Find path to settings files (wtq.jsonc or similar).
-			// var pathToWtqConf = WtqOptionsPath.Instance.Path;
-			var pathToWtqConf = platform.PathToWtqConf;
+			var pathToWtqConf = WtqOptionsPath.Instance.Path;
 
 			// Write wtq.schema.json.
 			WtqSchema.WriteFor(pathToWtqConf);
@@ -63,15 +57,19 @@ public abstract class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
+					f.OnLoadException = x =>
+					{
+						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
+					};
 
-					if (platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
+					if (Os.IsSymlink(pathToWtqConf))
 					{
 						log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
 
 						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
 						{
-							UseActivePolling = true, UsePollingFileWatcher = true,
+							UseActivePolling = true,
+							UsePollingFileWatcher = true,
 						};
 					}
 				})
@@ -86,7 +84,6 @@ public abstract class WtqHostBase
 					.Bind(config);
 
 				s
-					.AddSingleton(platform)
 					.AddApi()
 					.AddUI()
 					.AddWtqCore();

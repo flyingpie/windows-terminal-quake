@@ -20,9 +20,8 @@ public class WtqApiOptions
 	public ICollection<string> Urls { get; set; }
 		=
 		[
-			"http://unix:/tmp/wtq.sock"
-			// Os.IsLinux
-			// 	? "http://unix:/tmp/wtq.sock" // On Linux, default to a Unix socket.
-			// 	: "http://pipe:/wtq" // On Windows, default to a named pipe.
+			Os.IsLinux
+				? "http://unix:/tmp/wtq.sock" // On Linux, default to a Unix socket.
+				: "http://pipe:/wtq" // On Windows, default to a named pipe.
 		];
 }

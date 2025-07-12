@@ -10,13 +10,10 @@ namespace Wtq.Services.KWin;
 /// </summary>
 internal sealed class KWinClientV2(
 	IDBusConnection dbus,
-	IPlatformService platform,
 	IKWinScriptService scriptService,
 	IWtqDBusObject wtqBusObj)
 	: IAsyncDisposable, IKWinClient
 {
-	private readonly IPlatformService _platform = Guard.Against.Null(platform);
-
 	/// <summary>
 	/// Packaged KWin script, that's inside the WTQ binaries folder.
 	/// </summary>

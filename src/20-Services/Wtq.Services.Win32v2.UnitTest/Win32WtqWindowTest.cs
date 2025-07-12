@@ -15,7 +15,7 @@ public class Win32WtqWindowTest
 	[TestInitialize]
 	public void Setup()
 	{
-		// Log.Configure();
+		Log.Configure();
 
 		_window = new Win32WtqWindow(_win32.Object, _wnd);
 	}

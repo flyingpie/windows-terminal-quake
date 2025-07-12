@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Serilog.Formatting.Compact;
 
 namespace Wtq.Utils;
 
@@ -10,21 +10,12 @@ public static class Log
 {
 	private const string LogTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
 
-	public const string LogLevelEnvVar = "WTQ_LOG_LEVEL";
-
 	private static ILoggerFactory _factory;
 
-	/// <summary>
-	/// Returns the requested log level, as specified by an environment variable.
-	/// </summary>
-	public static LogEventLevel LogLevel
-		=> Enum.TryParse<LogEventLevel>(Environment.GetEnvironmentVariable(LogLevelEnvVar), ignoreCase: true, out var res)
-			? res
-			: LogEventLevel.Information;
-
-	public static void Configure(string pathToLogsDir)
+	public static void Configure()
 	{
-		var logLevel = LogLevel;
+		var path = WtqPaths.GetWtqLogDir();
+		var logLevel = WtqEnv.LogLevel;
 
 		var logBuilder = new LoggerConfiguration()
 			.MinimumLevel.Is(logLevel)
@@ -32,18 +23,18 @@ public static class Log
 			// In-app.
 			.WriteTo.Sink(InAppLogSink.Instance)
 
-			// // JSON.
-			// .WriteTo.File(
-			// 	formatter: new RenderedCompactJsonFormatter(),
-			// 	path: Path.Combine(path, "logs.json"),
-			// 	fileSizeLimitBytes: 50_000_000,
-			// 	rollingInterval: RollingInterval.Infinite,
-			// 	retainedFileCountLimit: 1)
+			// JSON.
+			.WriteTo.File(
+				formatter: new RenderedCompactJsonFormatter(),
+				path: Path.Combine(path, "logs-.json"),
+				fileSizeLimitBytes: 50_000_000,
+				rollingInterval: RollingInterval.Infinite,
+				retainedFileCountLimit: 1)
 
 			// Plain text.
 			.WriteTo.File(
 				outputTemplate: LogTemplate,
-				path: Path.Combine(pathToLogsDir, "logs-.txt"),
+				path: Path.Combine(path, "logs-.txt"),
 				fileSizeLimitBytes: 10_000_000,
 				rollingInterval: RollingInterval.Day,
 				retainedFileCountLimit: 5);
@@ -51,13 +42,13 @@ public static class Log
 		// Log to console.
 		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
 
-		// if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
-		// {
-		// 	Console.WriteLine(
-		// 		"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
-		//
-		// 	console.MinimumLevel.Warning();
-		// }
+		if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
+		{
+			Console.WriteLine(
+				"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
+
+			console.MinimumLevel.Warning();
+		}
 
 		Serilog.Log.Logger = logBuilder.CreateLogger();
 		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
@@ -65,10 +56,10 @@ public static class Log
 		_factory.AddProvider(provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
-		Serilog.Log.Information("Logging to file at '{Path}'", pathToLogsDir);
+		Serilog.Log.Information("Logging to file at '{Path}'", path);
 	}
 
-	public static ILogger For<T>()
+	public static Microsoft.Extensions.Logging.ILogger For<T>()
 	{
 		if (_factory == null)
 		{
@@ -78,7 +69,7 @@ public static class Log
 		return _factory.CreateLogger<T>();
 	}
 
-	public static ILogger For(Type type)
+	public static Microsoft.Extensions.Logging.ILogger For(Type type)
 	{
 		Guard.Against.Null(type);
 
@@ -90,7 +81,7 @@ public static class Log
 		return _factory.CreateLogger(type);
 	}
 
-	public static ILogger For(string category)
+	public static Microsoft.Extensions.Logging.ILogger For(string category)
 	{
 		Guard.Against.NullOrWhiteSpace(category);
 

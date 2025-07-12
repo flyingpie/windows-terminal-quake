@@ -9,7 +9,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 	private readonly ILogger _log = Log.For<WtqTrayIconService>();
 
 	private readonly IHostApplicationLifetime _lifetime;
-	private readonly IPlatformService _platform;
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
 
@@ -18,13 +17,11 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
-		IPlatformService platform,
 		IWtqBus bus,
 		IWtqUIService ui)
 	{
 		_lifetime = lifetime;
 		_bus = Guard.Against.Null(bus);
-		_platform = Guard.Against.Null(platform);
 		_ui = Guard.Against.Null(ui);
 
 		new Thread(ShowStatusIcon).Start();
@@ -48,14 +45,10 @@ public sealed class WtqTrayIconService : WtqHostedService
 	private void ShowStatusIcon()
 	{
 		_icon = NotifyIcon.Create(
-			_platform.PathToTrayIcon,
+			GetPathToIcon(),
 			[
-				#pragma warning disable SA1025
-				#pragma warning disable SA1027
-
-				// @formatter:off
 				CreateItem(
-					$"Version {WtqConstants.AppVersion} ({_platform.PlatformName})",
+					$"Version {WtqConstants.AppVersion}{(Os.IsFlatpak ? " (Flatpak)" : string.Empty)}",
 					() => { },
 					enabled: false),
 
@@ -63,7 +56,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					$"Open Project Website (GitHub)",
-					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
+					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new SeparatorItem(),
 
@@ -75,28 +68,24 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					"Open Settings File",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
+					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
 
 				CreateItem(
 					"Open Settings Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
+					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
 
 				CreateItem(
 					"Open Logs",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogs)),
+					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
 
 				new SeparatorItem(),
 
 				CreateItem(
 					"Quit",
 					() => _lifetime.StopApplication()),
-
-				// @formatter:on
-				#pragma warning restore SA1025
-				#pragma warning restore SA1027
 			]);
 
-		if (/*Os.IsWindows*/false) // TODO
+		if (Os.IsWindows)
 		{
 			// On Windows, we can just block the thread on the tray icon UI.
 			_icon.Show();
@@ -126,28 +115,29 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		return new MenuItem(text)
 		{
-			Click = (_, _) => action(), IsDisabled = !enabled,
+			Click = (_, _) => action(),
+			IsDisabled = !enabled,
 		};
 	}
 
-	// private string GetPathToIcon()
-	// {
-	// 	// It seems Windows wants its icons as ICO files, while Linux supports PNG.
-	// 	if (Os.IsWindows)
-	// 	{
-	// 		_log.LogDebug("Running on Windows, using ICO version of tray icon");
-	// 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.ico");
-	// 	}
-	//
-	// 	// Linux (Flatpak).
-	// 	if (Os.IsFlatpak)
-	// 	{
-	// 		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
-	// 		return "nl.flyingpie.wtq-white";
-	// 	}
-	//
-	// 	// Linux (non-Flatpak).
-	// 	_log.LogDebug("Running bare Linux, using icon path of tray icon");
-	// 	return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
-	// }
+	private string GetPathToIcon()
+	{
+		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
+		if (Os.IsWindows)
+		{
+			_log.LogDebug("Running on Windows, using ICO version of tray icon");
+			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.ico");
+		}
+	
+		// Linux (Flatpak).
+		if (Os.IsFlatpak)
+		{
+			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
+			return "nl.flyingpie.wtq-white";
+		}
+	
+		// Linux (non-Flatpak).
+		_log.LogDebug("Running bare Linux, using icon path of tray icon");
+		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
+	}
 }

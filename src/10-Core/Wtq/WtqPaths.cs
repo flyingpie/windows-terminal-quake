@@ -108,10 +108,10 @@ public static class WtqPaths
 	{
 		get
 		{
-			// if (Os.IsWindows)
-			// {
-			// 	return Path.Combine(Path.GetTempPath(), "wtq").GetOrCreateDirectory();
-			// }
+			if (Os.IsWindows)
+			{
+				return Path.Combine(Path.GetTempPath(), "wtq").GetOrCreateDirectory();
+			}
 
 			return Path.Combine(Xdg.XDG_STATE_HOME.GetOrCreateDirectory(), "wtq").GetOrCreateDirectory();
 		}
