@@ -9,12 +9,13 @@ public static class Os
 	/// </summary>
 	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
 
-	private static readonly ILogger Log = Utils.Log.For(typeof(Os));
-
 	private static bool? _isFlatpak;
 
 	public static bool IsFlatpak =>
-		_isFlatpak ??= EnvUtils.GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) ?? false;
+		_isFlatpak ??=
+			EnvUtils.GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) // Set by Flatpak.
+			?? EnvUtils.GetEnvVar("WTQ_PLATFORM_OVERRIDE")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) // For testing purposes.
+			?? false;
 
 	public static bool IsLinux =>
 		RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -103,6 +104,8 @@ public static class Os
 	{
 		Guard.Against.NullOrWhiteSpace(path);
 
+		var log = Utils.Log.For(nameof(OpenFileOrDirectory));
+
 		try
 		{
 			Process.Start(
@@ -114,7 +117,7 @@ public static class Os
 		}
 		catch (Exception ex)
 		{
-			Log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
+			log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
 		}
 	}
 
