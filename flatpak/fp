@@ -10,7 +10,7 @@ export FLATPAK_REPO="${FLATPAK_BUILD_ROOT}/repo"
 export FLATPAK_STATE_DIR="${FLATPAK_BUILD_ROOT}/state-dir"
 
 export FLATPAK_APP=nl.flyingpie.wtq
-export FLATPAK_APP_YML="$FLATPAK_APP.yml"
+export FLATPAK_APP_YML="$FLATPAK_APP.debug.yml"
 
 # -----------------------
 # Commands
