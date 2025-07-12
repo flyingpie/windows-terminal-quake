@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Wtq.Host.Linux;
 
 public static class Program
