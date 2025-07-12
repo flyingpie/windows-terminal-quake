@@ -115,7 +115,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		return new MenuItem(text)
 		{
-			Click = (s, e) => action(),
+			Click = (_, _) => action(),
 			IsDisabled = !enabled,
 		};
 	}
@@ -128,14 +128,14 @@ public sealed class WtqTrayIconService : WtqHostedService
 			_log.LogDebug("Running on Windows, using ICO version of tray icon");
 			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
 		}
-
+	
 		// Linux (Flatpak).
 		if (Os.IsFlatpak)
 		{
 			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
 			return "nl.flyingpie.wtq-white";
 		}
-
+	
 		// Linux (non-Flatpak).
 		_log.LogDebug("Running bare Linux, using icon path of tray icon");
 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");

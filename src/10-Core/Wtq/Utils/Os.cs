@@ -9,8 +9,6 @@ public static class Os
 	/// </summary>
 	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
 
-	private static readonly ILogger Log = Utils.Log.For(typeof(Os));
-
 	private static bool? _isFlatpak;
 
 	public static bool IsFlatpak =>
@@ -103,6 +101,8 @@ public static class Os
 	{
 		Guard.Against.NullOrWhiteSpace(path);
 
+		var log = Utils.Log.For(nameof(OpenFileOrDirectory));
+
 		try
 		{
 			Process.Start(
@@ -114,7 +114,7 @@ public static class Os
 		}
 		catch (Exception ex)
 		{
-			Log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
+			log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
 		}
 	}
 

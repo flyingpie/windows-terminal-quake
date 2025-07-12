@@ -105,7 +105,15 @@ public static class WtqPaths
 	/// Windows:    C:/users/username/appdata/local/temp/wtq<br/>
 	/// Linux:      /tmp/wtq.
 	/// </summary>
-	public static string GetWtqTempDir() => GetOrCreateDirectory(Path.Combine(Path.GetTempPath(), "wtq"));
+	public static string GetWtqTempDir()
+	{
+		if (Os.IsFlatpak)
+		{
+			return Xdg.XDG_STATE_HOME.GetOrCreateDirectory();
+		}
+
+		return GetOrCreateDirectory(Path.Combine(Path.GetTempPath(), "wtq"));
+	}
 
 	/// <summary>
 	/// Make sure the specified <param name="path"/> exists.
