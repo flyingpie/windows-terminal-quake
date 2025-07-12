@@ -26,7 +26,7 @@ modules:
       - install -D nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
       - install -D nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq.svg
       - install -D nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
-      - install -D nl.flyingpie.wtq.metainfo.xml /usr/share/metainfo/nl.flyingpie.wtq.metainfo.xml
+      - install -D nl.flyingpie.wtq.metainfo.xml /app/share/metainfo/nl.flyingpie.wtq.metainfo.xml
 
     sources:
       # App

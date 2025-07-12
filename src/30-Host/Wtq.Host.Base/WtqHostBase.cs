@@ -2,6 +2,7 @@ using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Wtq.Services;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
 using Wtq.Services.UI;
@@ -10,10 +11,12 @@ namespace Wtq.Host.Base;
 
 public class WtqHostBase
 {
+	private readonly IPlatformService _platform = null!;
+
 	public async Task RunAsync(string[] args)
 	{
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
-		Log.Configure();
+		Log.Configure(_platform.PathToLogs);
 
 		if (args.Length == 0)
 		{
@@ -43,7 +46,8 @@ public class WtqHostBase
 		try
 		{
 			// Find path to settings files (wtq.jsonc or similar).
-			var pathToWtqConf = WtqOptionsPath.Instance.Path;
+			// var pathToWtqConf = WtqOptionsPath.Instance.Path;
+			var pathToWtqConf = _platform.PathToWtqConf;
 
 			// Write wtq.schema.json.
 			WtqSchema.WriteFor(pathToWtqConf);
@@ -57,12 +61,9 @@ public class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x =>
-					{
-						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
-					};
+					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
 
-					if (Os.IsSymlink(pathToWtqConf))
+					if (_platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
 					{
 						log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
 

@@ -13,6 +13,10 @@
 	<metadata_license>MIT</metadata_license>
 	<project_license>MIT</project_license>
 
+	<categories>
+		<category>TODO</category>
+	</categories>
+
 	<developer id="nl.flyingpie">
 		<name>Marco van den Oever</name>
 	</developer>

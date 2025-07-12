@@ -2,6 +2,8 @@ namespace Wtq.Utils;
 
 public static class EnvUtils
 {
+	private static string UserHome => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
 	/// <summary>
 	/// Replace variables such as "%ENV_VAR%".<br/>
 	/// E.g. "User %USER% is logged in" => "User username1 is logged in".<br/>
@@ -13,7 +15,7 @@ public static class EnvUtils
 
 		return Environment
 				.ExpandEnvironmentVariables(source)
-				?.Replace("~", WtqPaths.UserHome)
+				?.Replace("~", UserHome)
 			?? string.Empty;
 	}
 
