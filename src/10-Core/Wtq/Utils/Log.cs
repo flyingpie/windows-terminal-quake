@@ -42,7 +42,7 @@ public static class Log
 		// Log to console.
 		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
 
-		if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
+		if (Os.IsLinux && !WtqEnv.HasTermEnvVar)
 		{
 			Console.WriteLine(
 				"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");

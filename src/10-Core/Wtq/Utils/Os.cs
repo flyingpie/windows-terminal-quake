@@ -11,12 +11,9 @@ public static class Os
 	/// </summary>
 	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
 
-	private static bool? _isFlatpak;
-
 	public static bool IsFlatpak =>
-		_isFlatpak ??=
-			EnvUtils.HasEnvVarWithValue("container", "flatpak") // Set by Flatpak.
-			|| EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "flatpak"); // For testing purposes.
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "flatpak") // For testing purposes.
+		|| EnvUtils.HasEnvVarWithValue("container", "flatpak"); // Set by Flatpak.
 
 	public static bool IsLinux =>
 		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "linux") // For testing purposes.
