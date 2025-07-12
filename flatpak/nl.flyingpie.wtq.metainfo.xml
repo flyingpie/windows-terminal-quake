@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>nl.flyingpie.wtq</id>
+
+	<name>WTQ</name>
+	<summary>Enable Quake-style dropdown for (almost) any application</summary>
+	<content_rating type="oars-1.1" />
+
+	<url type="bugtracker">https://github.com/flyingpie/windows-terminal-quake/issues</url>
+	<url type="homepage">https://wtq.flyingpie.nl</url>
+	<url type="vcs-browser">https://github.com/flyingpie/windows-terminal-quake</url>
+	
+	<metadata_license>MIT</metadata_license>
+	<project_license>MIT</project_license>
+
+	<developer id="nl.flyingpie">
+		<name>Marco van den Oever</name>
+	</developer>
+
+	<description>
+		<p>
+			WTQ runs in the background, and enables sliding applications on-and off the screen, Quake style.
+		</p>
+	</description>
+	
+	<launchable type="desktop-id">nl.flyingpie.wtq.desktop</launchable>
+
+	<releases>
+		<release version="2.0.17" date="2025-07-20">
+			<description>
+				- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
+				- Refactor: Windows - Make foreground window tracking a bunch more efficient.
+				- Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
+				- Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
+				- Feature: Flatpak release
+			</description>
+		</release>
+	</releases>
+
+	<screenshots>
+		<screenshot type="default">
+			<image>../assets/screenshots/welcome-1.png</image>
+			<caption>Welcome page.</caption>
+		</screenshot>
+		<screenshot>
+			<image>../assets/screenshots/examples-1.png</image>
+			<caption>Some examples of applications that can be used with WTQ.</caption>
+		</screenshot>
+		<screenshot>
+			<image>../assets/screenshots/app-settings-1.png</image>
+			<caption>Some of the settings that can be applied to a toggled app.</caption>
+		</screenshot>
+		<screenshot>
+			<image>../assets/screenshots/app-settings-2.png</image>
+			<caption>Some of the settings that can be applied to a toggled app.</caption>
+		</screenshot>
+		<screenshot>
+			<image>../assets/screenshots/app-settings-3.png</image>
+			<caption>Some of the settings that can be applied to a toggled app.</caption>
+		</screenshot>
+	</screenshots>
+</component>

@@ -5,28 +5,28 @@
 	<ItemGroup>
 		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0"/>
 		<PackageVersion Include="DeclarativeCommandLine" Version="1.0.0"/>
-		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.6"/>
+		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.7"/>
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.183"/>
 		<PackageVersion Include="Namotion.Reflection" Version="3.4.2"/>
 		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
-		<PackageVersion Include="SharpHook" Version="6.1.1"/>
+		<PackageVersion Include="SharpHook" Version="6.1.2"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
-		<PackageVersion Include="System.Resources.Extensions" Version="9.0.6"/>
+		<PackageVersion Include="System.Resources.Extensions" Version="9.0.7"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
 		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.12.0.118525"/>
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.13.0.120203"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- GUI -->
 		<PackageVersion Include="BlazorMonaco" Version="3.3.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="7.1.1"/>
+		<PackageVersion Include="Radzen.Blazor" Version="7.1.5"/>
 		<!-- HTTP API -->
-		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6"/>
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.4.19"/>
+		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.6.0"/>
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.3.0"/>
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0"/>

@@ -30,11 +30,8 @@ modules:
 
     sources:
       # App
-      - type: archive
-        url: https://github.com/flyingpie/windows-terminal-quake/releases/download/vNextFlatpak/linux-x64_self-contained.tar.gz
-        sha256: cd41f5b46fa26480e64c383e4677ff346031cd256e73ff17f95c4cff6ff35ba6
-        dest-filename: linux-x64_self-contained.tar.gz
-        strip-components: 0
+      - type: dir
+        path: ../_output/staging/linux-x64_self-contained/
 
       # Desktop file
       - type: file
