@@ -10,7 +10,13 @@ export FLATPAK_REPO="${FLATPAK_BUILD_ROOT}/repo"
 export FLATPAK_STATE_DIR="${FLATPAK_BUILD_ROOT}/state-dir"
 
 export FLATPAK_APP=nl.flyingpie.wtq
-export FLATPAK_APP_YML="$FLATPAK_APP.debug.yml"
+
+DEBUG_FILE=.debug
+if [ -f "$DEBUG_FILE" ]; then
+	export FLATPAK_APP_YML=$FLATPAK_APP.debug.yml
+else
+	export FLATPAK_APP_YML=$FLATPAK_APP.yml
+fi
 
 # -----------------------
 # Commands
@@ -26,6 +32,18 @@ vars() {
 	echo "FLATPAK_APP_YML:.....$FLATPAK_APP_YML"
 }
 COMMANDS[vars]="Prints relevant environment variables."
+
+# SET-DEBUG ##############################################
+set-debug() {
+	touch .debug
+}
+COMMANDS["set-debug"]="Switches to using the .debug version of the manifest, using local build artifacts."
+
+# UNSET-DEBUG ############################################
+unset-debug() {
+	rm .debug
+}
+COMMANDS["unset-debug"]="Reverts set-debug, switching back to the regular yml."
 
 # PREP ###################################################
 prep-env() {
