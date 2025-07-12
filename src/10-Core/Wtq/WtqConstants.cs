@@ -66,7 +66,8 @@ public static class WtqConstants
 		.GetValues<AnimationType>()
 		.Select(k => new
 		{
-			Description = k.GetAttribute<AnimationType, DisplayAttribute>(), Key = k,
+			Description = k.GetAttribute<AnimationType, DisplayAttribute>(),
+			Key = k,
 		})
 		.Where(k => k.Description != null)
 		.Select(k => k.Key)
