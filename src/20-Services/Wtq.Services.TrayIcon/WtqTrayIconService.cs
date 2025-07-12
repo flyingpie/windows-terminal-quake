@@ -126,7 +126,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 		if (Os.IsWindows)
 		{
 			_log.LogDebug("Running on Windows, using ICO version of tray icon");
-			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.ico");
+			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
 		}
 	
 		// Linux (Flatpak).
