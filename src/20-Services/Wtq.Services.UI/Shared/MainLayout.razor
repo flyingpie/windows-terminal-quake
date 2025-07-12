@@ -12,10 +12,12 @@
 			<LeftNav/>
 
 			<RadzenStack AlignItems="AlignItems.Center" class="rz-mb-4" Gap="8">
-				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs <RadzenIcon Icon="open_in_new" /></RadzenButton>
-				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub <RadzenIcon Icon="open_in_new" /></RadzenButton>
+				<RadzenStack Orientation="Orientation.Horizontal">
+					<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs <RadzenIcon Icon="open_in_new" /></RadzenButton>
+					<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub <RadzenIcon Icon="open_in_new" /></RadzenButton>
+				</RadzenStack>
 
-				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion @AppSuffix</div>
+				<div class="rz-color-base-500 rz-mt-2">@WtqConstants.AppVersion @AppSuffix</div>
 			</RadzenStack>
 		</RadzenStack>
 	</RadzenSidebar>
