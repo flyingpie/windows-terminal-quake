@@ -82,8 +82,6 @@ public static class WtqPaths
 		{
 			_pathToAppDir = Path.GetDirectoryName(typeof(WtqPaths).Assembly.Location);
 
-			Console.WriteLine($"GetWtqAppDir() => {_pathToAppDir}");
-
 			if (string.IsNullOrWhiteSpace(_pathToAppDir))
 			{
 				throw new WtqException("Could not get path to app directory.");
@@ -107,11 +105,22 @@ public static class WtqPaths
 	/// </summary>
 	public static string GetWtqTempDir()
 	{
+		// Flatpak, use XDG_STATE_HOME without an app-specific subdir (since the entire directory is already app-specific).
+		// For example: "/home/user/.var/app/nl.flyingpie.wtq/.local/state".
 		if (Os.IsFlatpak)
 		{
 			return Xdg.XDG_STATE_HOME.GetOrCreateDirectory();
 		}
 
+		// Native Linux, use XDG_STATE_HOME with an app-specific subdir.
+		// For example: "/home/user/.local/state/wtq".
+		if (Os.IsLinux)
+		{
+			return Path.Combine(Xdg.XDG_STATE_HOME, "wtq").GetOrCreateDirectory();
+		}
+
+		// Windows, use the standard temp dir with an app-specific subdir.
+		// For example: "C:/Users/marco/AppData/Local/Temp/wtq".
 		return GetOrCreateDirectory(Path.Combine(Path.GetTempPath(), "wtq"));
 	}
 

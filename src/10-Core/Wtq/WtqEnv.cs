@@ -17,12 +17,6 @@ public static class WtqEnv
 	public static string? ConfigFile
 		=> Environment.GetEnvironmentVariable(Names.Config)?.ExpandEnvVars()?.EmptyOrWhiteSpaceToNull();
 
-	public static bool IsLinux
-		=> RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-
-	public static bool IsWindows
-		=> RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
 	public static bool HasTermEnvVar
 		=> !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
 
@@ -31,6 +25,6 @@ public static class WtqEnv
 	/// </summary>
 	public static LogEventLevel LogLevel
 		=> Enum.TryParse<LogEventLevel>(Environment.GetEnvironmentVariable(Names.LogLevel), ignoreCase: true, out var res)
-		? res
-		: LogEventLevel.Information;
+			? res
+			: LogEventLevel.Information;
 }

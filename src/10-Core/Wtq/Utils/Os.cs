@@ -4,21 +4,24 @@ namespace Wtq.Utils;
 
 public static class Os
 {
+	private const string WtqPlatformOverride = "WTQ_PLATFORM_OVERRIDE";
+
 	/// <summary>
 	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
 	/// </summary>
 	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
 
-	private static bool? _isFlatpak;
-
 	public static bool IsFlatpak =>
-		_isFlatpak ??= EnvUtils.GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) ?? false;
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "flatpak") // For testing purposes.
+		|| EnvUtils.HasEnvVarWithValue("container", "flatpak"); // Set by Flatpak.
 
 	public static bool IsLinux =>
-		RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "linux") // For testing purposes.
+		|| RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
 	public static bool IsWindows =>
-		RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "windows") // For testing purposes.
+		|| RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
 	public static bool IsCallable(string? workingDirectory, string fileName)
 	{
@@ -108,8 +111,7 @@ public static class Os
 			Process.Start(
 				new ProcessStartInfo()
 				{
-					FileName = path,
-					UseShellExecute = true,
+					FileName = path, UseShellExecute = true,
 				});
 		}
 		catch (Exception ex)
