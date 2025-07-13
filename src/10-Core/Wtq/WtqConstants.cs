@@ -6,8 +6,28 @@ namespace Wtq;
 
 public static class WtqConstants
 {
-	public static string AppVersion { get; }
-		= typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+	public static string AppVersion =>
+		typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+
+	public static string AppFileVersion =>
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).FileVersion ?? "<unknown>";
+
+	public static string AppInformationalVersion =>
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).ProductVersion ?? "<unknown>";
+
+	public static DateTimeOffset BuildConfiguration
+	{
+		get
+		{
+			var v = Assembly.GetExecutingAssembly()
+				.GetCustomAttributes<AssemblyMetadataAttribute>()
+				.FirstOrDefault(attr => attr.Key == "BuildConfiguration")?.Value;
+
+			return DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var p)
+				? p
+				: DateTimeOffset.MinValue;
+		}
+	}
 
 	public static DateTimeOffset BuildDate
 	{
