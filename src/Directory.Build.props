@@ -17,7 +17,7 @@
 	</PropertyGroup>
 
 	<!-- Non-test projects -->
-	<PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('Test'))">
+	<PropertyGroup Condition=" !$(MSBuildProjectName.EndsWith('Test')) ">
 		<Nullable>enable</Nullable>
 
 		<!-- Code analysis -->
@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<!-- Test projects -->
-	<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Test'))">
+	<PropertyGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
 		<Nullable>annotations</Nullable>
 
 		<!-- Code analysis -->
@@ -55,4 +55,37 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<!-- Adds metadata to the assembly. -->
+	<Target Name="AddGitMetadaAssemblyAttributes" BeforeTargets="GetAssemblyAttributes">
+
+		<!-- Git branch -->
+		<Exec
+			Command="git rev-parse --abbrev-ref HEAD"
+			Condition=" '$(GitBranch)' == '' "
+			ConsoleToMsBuild="true"
+			IgnoreExitCode="true"
+			StandardOutputImportance="low"
+		>
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitBranch"/>
+		</Exec>
+
+		<!-- Git commit -->
+		<Exec
+			Command="git rev-parse --short=8  HEAD"
+			Condition=" '$(GitCommit)' == '' "
+			ConsoleToMsBuild="true"
+			IgnoreExitCode="true"
+			StandardOutputImportance="low"
+		>
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommit"/>
+		</Exec>
+
+		<ItemGroup>
+			<AssemblyMetadata Include="BuildTimestamp" Value="$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssK))"/>
+			<AssemblyMetadata Condition=" $(GitCommit) != '' " Include="GitCommit" Value="$(GitCommit)"/>
+			<AssemblyMetadata Condition=" $(GitBranch) != '' " Include="GitBranch" Value="$(GitBranch)"/>
+		</ItemGroup>
+	</Target>
+
 </Project>

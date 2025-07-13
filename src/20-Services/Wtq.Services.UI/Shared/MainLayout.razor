@@ -4,10 +4,6 @@
 	private string AppSuffix => Os.IsFlatpak ? "(Flatpak)" : string.Empty;
 }
 
-<div style="position: fixed; top: 0; right: 20px; left: 250px; padding: 0; z-index: 999; background-color: orange; color: black; font-weight: bold; text-align: center;">
-	The GUI is a work-in-progress, mind the gaps! And feel free to send feedback on the project page :)
-</div>
-
 <RadzenComponents/>
 
 <RadzenLayout>
@@ -16,10 +12,12 @@
 			<LeftNav/>
 
 			<RadzenStack AlignItems="AlignItems.Center" class="rz-mb-4" Gap="8">
-				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs <RadzenIcon Icon="open_in_new" /></RadzenButton>
-				<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub <RadzenIcon Icon="open_in_new" /></RadzenButton>
+				<RadzenStack Orientation="Orientation.Horizontal">
+					<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.DocumentationUrl))">Docs <RadzenIcon Icon="open_in_new" /></RadzenButton>
+					<RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Click="@(() => Os.OpenUrl(WtqConstants.GitHubUrl))">GitHub <RadzenIcon Icon="open_in_new" /></RadzenButton>
+				</RadzenStack>
 
-				<div class="rz-color-base-500 rz-mt-2">WTQ @WtqConstants.AppVersion @AppSuffix</div>
+				<div class="rz-color-base-500 rz-mt-2">@WtqConstants.AppVersion @AppSuffix</div>
 			</RadzenStack>
 		</RadzenStack>
 	</RadzenSidebar>
