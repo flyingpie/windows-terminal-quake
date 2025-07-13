@@ -12,14 +12,16 @@ public static class Os
 	private static readonly string[] ExeExts = [string.Empty, ".exe", ".bat", ".cmd"];
 
 	public static bool IsFlatpak =>
-		_isFlatpak ??= EnvUtils.GetEnvVar("container")?.Equals("flatpak", StringComparison.OrdinalIgnoreCase) ?? false;
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "flatpak") // For testing purposes.
+		|| EnvUtils.HasEnvVarWithValue("container", "flatpak"); // Set by Flatpak.
 
 	public static bool IsLinux =>
 		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "linux") // For testing purposes.
 		|| RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
 	public static bool IsWindows =>
-		RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+		EnvUtils.HasEnvVarWithValue(WtqPlatformOverride, "windows") // For testing purposes.
+		|| RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
 	public static bool IsCallable(string? workingDirectory, string fileName)
 	{
