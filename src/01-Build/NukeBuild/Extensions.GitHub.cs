@@ -6,7 +6,7 @@ using Serilog;
 using System.IO;
 using System.Threading.Tasks;
 
-public static class ExtensionsGitHub
+public static partial class Extensions
 {
 	private static readonly string ApplicationOctetStream = "application/octet-stream";
 

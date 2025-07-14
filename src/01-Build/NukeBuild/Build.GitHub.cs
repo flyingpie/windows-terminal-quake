@@ -30,7 +30,7 @@ public sealed partial class Build
 			var ghRelease = await GitHubTasks.GitHubClient.GetOrCreateGitHubReleaseAsync(owner, name, GitHubRelease);
 
 			// Update release notes.
-			var latestChangeLog = await NukeExtensions.GetChangeLogEntryAsync(ChangeLogFile, GitHubRelease);
+			var latestChangeLog = await ChangeLog.GetEntryAsync(ChangeLogFile, GitHubRelease);
 
 			await GitHubTasks
 				.GitHubClient
@@ -55,8 +55,15 @@ public sealed partial class Build
 
 			// Upload new assets.
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64FrameworkDependentZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64FrameworkDependentZipSha256);
+
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64SelfContainedZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToLinux64SelfContainedZipSha256);
+
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64FrameworkDependentZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64FrameworkDependentZipSha256);
+
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZipSha256);
 		});
 }

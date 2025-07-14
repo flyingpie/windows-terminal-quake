@@ -49,11 +49,19 @@ public sealed partial class Build : NukeBuild
 
 	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz";
 
+	private AbsolutePath PathToLinux64FrameworkDependentZipSha256 => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz.sha256";
+
 	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.tar.gz";
+
+	private AbsolutePath PathToLinux64SelfContainedZipSha256 => ArtifactsDirectory / "linux-x64_self-contained.tar.gz.sha256";
 
 	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / "win-x64_framework-dependent.zip";
 
+	private AbsolutePath PathToWin64FrameworkDependentZipSha256 => ArtifactsDirectory / "win-x64_framework-dependent.zip.sha256";
+
 	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / "win-x64_self-contained.zip";
+
+	private AbsolutePath PathToWin64SelfContainedZipSha256 => ArtifactsDirectory / "win-x64_self-contained.zip.sha256";
 
 	private GitHubActions GitHubActions => GitHubActions.Instance;
 

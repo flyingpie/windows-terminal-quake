@@ -37,9 +37,9 @@ public sealed partial class Build
 				.SetProject(Solution._0_Host.Wtq_Host_Linux)
 				.SetOutput(st));
 
-			st.TarGZipTo(
-				PathToLinux64FrameworkDependentZip,
-				fileMode: FileMode.CreateNew);
+			st.TarGZipTo(PathToLinux64FrameworkDependentZip, fileMode: FileMode.CreateNew);
+
+			PathToLinux64FrameworkDependentZipSha256.WriteAllText(PathToLinux64FrameworkDependentZip.GetFileHashSha256());
 		});
 
 	/// <summary>
@@ -60,9 +60,9 @@ public sealed partial class Build
 				.SetRuntime("linux-x64")
 				.SetSelfContained(true));
 
-			st.TarGZipTo(
-				PathToLinux64SelfContainedZip,
-				fileMode: FileMode.CreateNew);
+			st.TarGZipTo(PathToLinux64SelfContainedZip, fileMode: FileMode.CreateNew);
+
+			PathToLinux64SelfContainedZipSha256.WriteAllText(PathToLinux64SelfContainedZip.GetFileHashSha256());
 		});
 
 	/// <summary>
@@ -83,10 +83,9 @@ public sealed partial class Build
 				.SetOutput(st)
 				.SetSelfContained(false));
 
-			st.ZipTo(
-				PathToWin64FrameworkDependentZip,
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: FileMode.CreateNew);
+			st.ZipTo(PathToWin64FrameworkDependentZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
+
+			PathToWin64FrameworkDependentZipSha256.WriteAllText(PathToWin64FrameworkDependentZip.GetFileHashSha256());
 		});
 
 	/// <summary>
@@ -108,9 +107,8 @@ public sealed partial class Build
 				.SetRuntime("win-x64")
 				.SetSelfContained(true));
 
-			st.ZipTo(
-				PathToWin64SelfContainedZip,
-				compressionLevel: CompressionLevel.SmallestSize,
-				fileMode: FileMode.CreateNew);
+			st.ZipTo(PathToWin64SelfContainedZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
+
+			PathToWin64SelfContainedZipSha256.WriteAllText(PathToWin64SelfContainedZip.GetFileHashSha256());
 		});
 }
