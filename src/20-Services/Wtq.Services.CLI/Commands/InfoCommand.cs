@@ -7,6 +7,10 @@ public class InfoCommand : ICommand
 	{
 		Console.WriteLine($"-- App ----------------------------------------------------------");
 		Console.WriteLine($"Platform:......................................{PlatformName}");
+		Console.WriteLine($"App version:...................................{WtqConstants.AppVersion}");
+		Console.WriteLine($"File version:..................................{WtqConstants.AppFileVersion}");
+		Console.WriteLine($"Informational version:.........................{WtqConstants.AppInformationalVersion}");
+		Console.WriteLine($"Build configuration:...........................{WtqConstants.BuildConfiguration}");
 		Console.WriteLine($"Build date:....................................{WtqConstants.BuildDate.ToString("s")}");
 		Console.WriteLine($"Git branch:....................................{WtqConstants.GitBranch}");
 		Console.WriteLine($"Git commit:....................................{WtqConstants.GitCommit}");

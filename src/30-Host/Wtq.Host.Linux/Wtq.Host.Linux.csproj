@@ -17,6 +17,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="..\..\20-Services\Wtq.Services.UI\wwwroot\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>wwwroot\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<None Update="wtq.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

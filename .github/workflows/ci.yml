@@ -27,9 +27,9 @@ on:
         required: false
 
 jobs:
-  windows-latest:
-    name: windows-latest
-    runs-on: windows-latest
+  ubuntu-22_04:
+    name: ubuntu-22_04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,8 +41,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: PublishRelease'
-        run: ./src/build.cmd PublishRelease
+      - name: 'Run: Publish'
+        run: ./src/build.cmd Publish
         env:
           name: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
