@@ -28,6 +28,7 @@ public sealed partial class Build
 		.DependsOn(Clean)
 		.DependsOn(RunTests)
 		.Produces(PathToLinux64FrameworkDependentZip)
+		.Produces(PathToLinux64FrameworkDependentZipSha256)
 		.Executes(() =>
 		{
 			var st = StagingDirectory / "linux-x64_framework-dependent";
@@ -49,6 +50,7 @@ public sealed partial class Build
 		.DependsOn(Clean)
 		.DependsOn(RunTests)
 		.Produces(PathToLinux64SelfContainedZip)
+		.Produces(PathToLinux64SelfContainedZipSha256)
 		.Executes(() =>
 		{
 			var st = StagingDirectory / "linux-x64_self-contained";
@@ -72,6 +74,7 @@ public sealed partial class Build
 		.DependsOn(Clean)
 		.DependsOn(RunTests)
 		.Produces(PathToWin64FrameworkDependentZip)
+		.Produces(PathToWin64FrameworkDependentZipSha256)
 		.Executes(() =>
 		{
 			var st = StagingDirectory / "win-x64_framework-dependent";
@@ -95,6 +98,7 @@ public sealed partial class Build
 		.DependsOn(Clean)
 		.DependsOn(RunTests)
 		.Produces(PathToWin64SelfContainedZip)
+		.Produces(PathToWin64SelfContainedZipSha256)
 		.Executes(() =>
 		{
 			var st = StagingDirectory / "win-x64_self-contained";
