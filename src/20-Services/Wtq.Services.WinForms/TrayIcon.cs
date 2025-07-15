@@ -41,17 +41,17 @@ public sealed class TrayIcon : IDisposable
 
 				new ToolStripSeparator(),
 
-				CreateItem(
-					"Open Settings File",
-					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
+				// CreateItem(
+				// 	"Open Settings File",
+				// 	() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
 
-				CreateItem(
-					"Open Settings Directory",
-					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+				// CreateItem(
+				// 	"Open Settings Directory",
+				// 	() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
 
 				CreateItem(
 					"Open Logs Directory",
-					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+					() => Os.OpenFileOrDirectory(WtqPaths.WtqLogDir)),
 
 				new ToolStripSeparator(),
 
