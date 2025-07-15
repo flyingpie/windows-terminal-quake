@@ -27,9 +27,9 @@ on:
         required: false
 
 jobs:
-  ubuntu-24_04:
-    name: ubuntu-24_04
-    runs-on: ubuntu-24.04
+  ubuntu-22_04:
+    name: ubuntu-22_04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
