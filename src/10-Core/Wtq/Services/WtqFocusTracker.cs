@@ -49,11 +49,6 @@ public sealed class WtqFocusTracker(
 
 	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
-		if (_loop == null)
-		{
-			return;
-		}
-
 		await _loop.DisposeAsync().NoCtx();
 	}
 }

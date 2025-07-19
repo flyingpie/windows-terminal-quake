@@ -30,19 +30,6 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
 
-		_ = Task.Run(async () =>
-		{
-			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-			// "StartApps": "OnWtqStart | OnHotkeyPress"
-			await UpdateAppsAsync(allowStartNew: true).NoCtx();
-		});
-
-		// When WTQ stops, reset all tracked apps.
-		lifetime.ApplicationStopping.Register(() =>
-		{
-			_ = Task.Run(DisposeAsync);
-		});
-
 		// Start loop that updates app state periodically.
 		_loop = new(
 			$"{nameof(WtqAppRepo)}.UpdateAppStates",
@@ -50,10 +37,18 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 			_ => UpdateAppsAsync(allowStartNew: false));
 	}
 
+	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+		// "StartApps": "OnWtqStart | OnHotkeyPress"
+		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+	}
+
 	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
 		await _loop.DisposeAsync().NoCtx();
 
+		// When WTQ stops, reset all tracked apps.
 		foreach (var app in _apps)
 		{
 			await app.Value.DisposeAsync().NoCtx();
