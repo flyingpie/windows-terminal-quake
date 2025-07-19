@@ -13,25 +13,25 @@ public class WtqUIHost
 	private readonly ILogger _log = Log.For<WtqUIHost>();
 	private readonly PhotinoBlazorApp _app;
 
-	// private readonly IWtqWindowService _windowService;
+	private readonly IWtqWindowService _windowService;
 	private bool _isClosing;
 
 	public WtqUIHost(
 		IOptions<WtqOptions> opts,
 		IEnumerable<IHostedService> hostedServices,
 		IHostApplicationLifetime appLifetime,
-		// IWtqBus bus,
-		// IWtqWindowService windowService,
+		IWtqBus bus,
+		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
-		// _windowService = Guard.Against.Null(windowService);
+		_windowService = Guard.Against.Null(windowService);
 
 		_app = Guard.Against.Null(app);
 		_ = Guard.Against.Null(appLifetime);
-		// _ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(hostedServices);
 
-		// bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
 
 		_ = appLifetime.ApplicationStarted.Register(() =>
 		{
@@ -55,7 +55,6 @@ public class WtqUIHost
 				{
 					await Task.Delay(TimeSpan.FromSeconds(2));
 
-					Console.WriteLine("EXITTTT");
 					Environment.Exit(0);
 				});
 			});
@@ -116,19 +115,19 @@ public class WtqUIHost
 
 	private async Task<WtqWindow?> FindWtqMainWindowAsync()
 	{
-		// for (var i = 0; i < 10; i++)
-		// {
-		// 	var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
-		//
-		// 	var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
-		//
-		// 	if (mainWindow != null)
-		// 	{
-		// 		return mainWindow;
-		// 	}
-		//
-		// 	await Task.Delay(TimeSpan.FromMilliseconds(200)).NoCtx();
-		// }
+		for (var i = 0; i < 10; i++)
+		{
+			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
+		
+			var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
+		
+			if (mainWindow != null)
+			{
+				return mainWindow;
+			}
+		
+			await Task.Delay(TimeSpan.FromMilliseconds(200)).NoCtx();
+		}
 
 		return null;
 	}
