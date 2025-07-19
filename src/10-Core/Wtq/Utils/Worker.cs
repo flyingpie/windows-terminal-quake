@@ -11,10 +11,13 @@ public sealed class Worker : IAsyncDisposable
 	private readonly TaskCompletionSource _tcs = new();
 
 	private readonly string _name;
+	private readonly TimeSpan _interval;
 
 	public Worker(string name, TimeSpan interval, Func<CancellationToken, Task> action)
 	{
 		_name = Guard.Against.NullOrWhiteSpace(name);
+		_interval = Guard.Against.OutOfRange(interval, nameof(interval), TimeSpan.FromMilliseconds(200), TimeSpan.FromMinutes(1));
+
 		Guard.Against.Null(action);
 
 		_ = Task.Run(async () =>
@@ -40,6 +43,8 @@ public sealed class Worker : IAsyncDisposable
 			}
 		});
 	}
+
+	public bool IsRunning => !_cts.IsCancellationRequested;
 
 	public async ValueTask DisposeAsync()
 	{

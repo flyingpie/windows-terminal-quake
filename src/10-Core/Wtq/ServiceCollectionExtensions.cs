@@ -39,16 +39,15 @@ public static class ServiceCollectionExtensions
 			.AddSingleton(_ => InAppLogSink.Instance)
 
 			// Core App Logic
-			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<WorkerFactory>()
 			.AddSingleton<WtqOptionsSaveService>()
 
 			.AddHostedService<WtqEventHookHandler>()
 			.AddHostedService<WtqFocusTracker>()
 			.AddHostedService<WtqHotkeyRoutingService>()
-			.AddHostedService<WtqService>();
+			.AddHostedService<WtqService>()
+			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
 	}
 }

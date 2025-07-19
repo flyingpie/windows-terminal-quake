@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using System.Diagnostics;
 using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
@@ -11,9 +13,14 @@ public class WtqUIHost
 	private const string MainWindowTitle = "WTQ - Main Window";
 
 	private readonly ILogger _log = Log.For<WtqUIHost>();
+
+	private readonly IOptions<WtqOptions> _opts;
+	private readonly IEnumerable<IHostedService> _hostedServices;
+	private readonly IHostApplicationLifetime _appLifetime;
+	private readonly IWtqBus _bus;
+	private readonly IWtqWindowService _windowService;
 	private readonly PhotinoBlazorApp _app;
 
-	private readonly IWtqWindowService _windowService;
 	private bool _isClosing;
 
 	public WtqUIHost(
@@ -24,54 +31,96 @@ public class WtqUIHost
 		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
-		_windowService = Guard.Against.Null(windowService);
-
 		_app = Guard.Against.Null(app);
-		_ = Guard.Against.Null(appLifetime);
-		_ = Guard.Against.Null(bus);
-		_ = Guard.Against.Null(hostedServices);
+		_appLifetime = Guard.Against.Null(appLifetime);
+		_bus = bus = Guard.Against.Null(bus);
+		_hostedServices = Guard.Against.Null(hostedServices);
+		_windowService = Guard.Against.Null(windowService);
+		_opts = Guard.Against.Null(opts);
 
-		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+		bus.OnEvent<WtqUIRequestedEvent>(_ => OpenMainWindowAsync());
 
-		_ = appLifetime.ApplicationStarted.Register(() =>
+		SetupAppLifetime();
+		SetupMainWindow();
+	}
+
+	private void SetupAppLifetime()
+	{
+		// Starting
+		_ = _appLifetime.ApplicationStarted.Register(() =>
 		{
-			Task.WaitAll(hostedServices.Select(srv => srv.StartAsync(CancellationToken.None)));
+			_log.LogDebug("Stopping hosted services");
+
+			var sw = Stopwatch.StartNew();
+
+			Task.WaitAll(
+				_hostedServices.Select(async srv =>
+				{
+					_log.LogDebug("Starting service '{Service}'", srv);
+					await srv.StartAsync(CancellationToken.None);
+					_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+				}));
 		});
 
-		_ = appLifetime.ApplicationStopping.Register(
-			() =>
-			{
-				Task.WaitAll(hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
+		// Stopping
+		_ = _appLifetime.ApplicationStopping.Register(() =>
+		{
+			Task.WaitAll(_hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
 
-				_isClosing = true;
+			// // TODO: Remove this.
+			// // When using SharpHook, some threads seem to hang around when otherwise exiting the app.
+			// _ = Task.Run(async () =>
+			// {
+			// 	Console.WriteLine("EXIT");
+			// 	await Task.Delay(TimeSpan.FromSeconds(2));
+			//
+			// 	Environment.Exit(0);
+			// });
 
-				app.MainWindow.Close();
+			((ApplicationLifetime)_appLifetime).NotifyStopped(); // "Stopped"
+		});
 
-				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
+		// Stopped
+		_ = _appLifetime.ApplicationStopped.Register(() =>
+		{
+			Console.WriteLine("Waiting for hosted services to stop");
+			Task.WaitAll(_hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
+			Console.WriteLine("/Waiting for hosted services to stop");
 
-				// TODO: Remove this.
-				// When using SharpHook, some threads seem to hang around when otherwise exiting the app.
-				_ = Task.Run(async () =>
-				{
-					await Task.Delay(TimeSpan.FromSeconds(2));
+			// Close UI (like, for real, as opposed to just hiding it).
+			_isClosing = true;
+			_app.MainWindow.Close();
+		});
+	}
 
-					Environment.Exit(0);
-				});
-			});
-
-		_ = app.MainWindow
+	private void SetupMainWindow()
+	{
+		_ = _app.MainWindow
 			.RegisterWindowCreatedHandler((s, a) =>
 			{
-				if (!opts.Value.GetShowUiOnStart())
+				Console.WriteLine("RegisterWindowCreatedHandler");
+
+				if (!_opts.Value.GetShowUiOnStart())
 				{
 					_ = Task.Run(CloseMainWindowAsync);
 				}
 			})
 			.RegisterWindowClosingHandler((s, a) =>
 			{
+				Console.WriteLine("RegisterWindowClosingHandler");
+
+				if (_isClosing)
+				{
+					Console.WriteLine("REALLY Closing");
+
+					//					Thread.Sleep(5_000);
+					return false;
+				}
+
+				Console.WriteLine("Not really Closing");
 				_ = Task.Run(CloseMainWindowAsync);
 
-				return !_isClosing;
+				return true;
 			})
 
 			.Center()

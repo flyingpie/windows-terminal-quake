@@ -23,7 +23,6 @@ public sealed class ApiService(
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly CancellationTokenSource _cts = new();
 
-
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
 		// Check whether we need to enable the API.
@@ -58,6 +57,9 @@ public sealed class ApiService(
 		builder.WebHost.UseUrls([.. opt.Urls]);
 
 		builder.Services
+			.AddLogging(c => c
+				.ClearProviders()
+				.AddProvider(Log.Provider))
 
 			// Add MVC controllers.
 			.AddControllers()

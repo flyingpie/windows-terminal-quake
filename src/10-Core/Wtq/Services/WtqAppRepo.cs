@@ -1,7 +1,7 @@
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppRepo"/>.
-public sealed class WtqAppRepo : IWtqAppRepo
+public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
@@ -19,11 +19,9 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
-		IWtqWindowResolver procResolver,
-		WorkerFactory workerFactory)
+		IWtqWindowResolver procResolver)
 	{
 		_ = Guard.Against.Null(lifetime);
-		_ = Guard.Against.Null(workerFactory);
 		_opts = Guard.Against.Null(opts);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_toggleService = Guard.Against.Null(toggleService);
@@ -46,13 +44,13 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		});
 
 		// Start loop that updates app state periodically.
-		_loop = workerFactory.Create(
+		_loop = new(
 			$"{nameof(WtqAppRepo)}.UpdateAppStates",
 			TimeSpan.FromSeconds(1),
 			_ => UpdateAppsAsync(allowStartNew: false));
 	}
 
-	public async ValueTask DisposeAsync()
+	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
 		await _loop.DisposeAsync().NoCtx();
 

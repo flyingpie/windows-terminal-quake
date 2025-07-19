@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using NotificationIcon.NET;
 
@@ -11,7 +12,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
-	private readonly WorkerFactory _workerFactory;
 
 	private NotifyIcon? _icon;
 	private Worker? _loop;
@@ -19,11 +19,9 @@ public sealed class WtqTrayIconService : WtqHostedService
 	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus,
-		IWtqUIService ui,
-		WorkerFactory workerFactory)
+		IWtqUIService ui)
 	{
 		_lifetime = lifetime;
-		_workerFactory = Guard.Against.Null(workerFactory);
 		_bus = Guard.Against.Null(bus);
 		_ui = Guard.Against.Null(ui);
 
@@ -40,7 +38,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 		if (_loop != null)
 		{
-			await _loop.DisposeAsync().NoCtx();
+			// Don't wait for the loop to fully dispose, as it can take a while due to the thread waiting on a GUI loop iteration.
+			_ = _loop.DisposeAsync();
 			_loop = null;
 		}
 	}
@@ -99,12 +98,15 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// That means the threads can step on each other's state, crashing the UI stack.
 			//
 			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
-			_loop = _workerFactory.Create(
+			_loop = new(
 				nameof(WtqTrayIconService),
 				TimeSpan.FromMilliseconds(200),
 				ct =>
 				{
-					Console.WriteLine($"TRAY ICON LOOP {DateTimeOffset.UtcNow}");
+					if (!_loop!.IsRunning)
+					{
+						return Task.CompletedTask;
+					}
 
 					_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
 

@@ -9,9 +9,8 @@ namespace Wtq.Services.KWin.DBus;
 
 internal sealed class WtqDBusObject(
 	IDBusConnection dbus,
-	IWtqBus bus,
-	WorkerFactory workerFactory)
-	: System.IAsyncDisposable, IWtqDBusObject
+	IWtqBus bus)
+	: WtqHostedService, IWtqDBusObject
 {
 	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
@@ -25,7 +24,6 @@ internal sealed class WtqDBusObject(
 
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
-	private readonly WorkerFactory _workerFactory = Guard.Against.Null(workerFactory);
 
 	private readonly InitLock _lock = new();
 	private readonly List<Func<KeySequence, Task>> _onPressShortcutHandlers = [];
@@ -50,18 +48,15 @@ internal sealed class WtqDBusObject(
 			.NoCtx();
 	}
 
-	public async ValueTask DisposeAsync()
+	protected override async ValueTask OnDisposeAsync()
 	{
-		_cts.Dispose();
+		await _cts.CancelAsync();
 		_lock.Dispose();
-
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
 	}
 
 	public Task LogAsync(string level, string msg)
 	{
-		// TODO
-		_log.LogDebug("{Level} {Message}", level, msg);
+		_log.LogTrace("[wtq.kwin.js] {Level} {Message}", level, msg);
 
 		return Task.CompletedTask;
 	}
@@ -83,7 +78,7 @@ internal sealed class WtqDBusObject(
 	{
 		await InitAsync().NoCtx();
 
-		_log.LogDebug("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
+		_log.LogTrace("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
 		// Add response waiter.
 		var id = cmdInfo.ResponderId;
@@ -212,7 +207,7 @@ internal sealed class WtqDBusObject(
 	/// </summary>
 	private void StartNoOpLoop()
 	{
-		_loop = _workerFactory.Create(
+		_loop = new(
 			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
 			TimeSpan.FromSeconds(10),
 			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx());

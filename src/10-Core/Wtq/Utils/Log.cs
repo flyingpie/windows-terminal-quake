@@ -10,7 +10,9 @@ public static class Log
 {
 	private const string LogTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
 
-	private static ILoggerFactory _factory;
+	public static ILoggerFactory Factory { get; private set; }
+
+	public static ILoggerProvider Provider { get; private set; }
 
 	public static void Configure()
 	{
@@ -44,16 +46,15 @@ public static class Log
 
 		if (Os.IsLinux && !WtqEnv.HasTermEnvVar)
 		{
-			Console.WriteLine(
-				"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
+			Console.WriteLine("Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
 
 			console.MinimumLevel.Warning();
 		}
 
 		Serilog.Log.Logger = logBuilder.CreateLogger();
-		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
-		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
-		_factory.AddProvider(provider);
+		Provider = new SerilogLoggerProvider(Serilog.Log.Logger);
+		Factory = new SerilogLoggerFactory(Serilog.Log.Logger);
+		Factory.AddProvider(Provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
 		Serilog.Log.Information("Logging to file at '{Path}'", path);
@@ -61,36 +62,36 @@ public static class Log
 
 	public static Microsoft.Extensions.Logging.ILogger For<T>()
 	{
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for type '{typeof(T).Name}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger<T>();
+		return Factory.CreateLogger<T>();
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For(Type type)
 	{
 		Guard.Against.Null(type);
 
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for type '{type.Name}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger(type);
+		return Factory.CreateLogger(type);
 	}
 
 	public static Microsoft.Extensions.Logging.ILogger For(string category)
 	{
 		Guard.Against.NullOrWhiteSpace(category);
 
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for category '{category}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger(category);
+		return Factory.CreateLogger(category);
 	}
 
 	public static void CloseAndFlush()

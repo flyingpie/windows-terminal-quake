@@ -6,22 +6,20 @@ namespace Wtq.Services;
 /// </summary>
 public sealed class WtqFocusTracker(
 	IWtqBus bus,
-	IWtqWindowService windowService,
-	WorkerFactory workerFactory)
+	IWtqWindowService windowService)
 	: WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
 
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(windowService);
-	private readonly WorkerFactory _workerFactory = Guard.Against.Null(workerFactory);
 
 	private Worker? _loop;
 	private WtqWindow? _prev;
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		_loop = _workerFactory.Create(
+		_loop = new(
 			nameof(WtqFocusTracker),
 			TimeSpan.FromMilliseconds(333),
 			async _ =>
@@ -49,12 +47,13 @@ public sealed class WtqFocusTracker(
 		return Task.CompletedTask;
 	}
 
-	protected override async ValueTask OnDisposeAsync()
+	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
-		if (_loop != null)
+		if (_loop == null)
 		{
-			await _loop.DisposeAsync().NoCtx();
-			_loop = null;
+			return;
 		}
+
+		await _loop.DisposeAsync().NoCtx();
 	}
 }

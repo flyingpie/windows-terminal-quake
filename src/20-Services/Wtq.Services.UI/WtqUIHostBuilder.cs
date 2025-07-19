@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using System.Runtime.InteropServices;
 using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
@@ -27,17 +28,28 @@ public static class WtqUIHostBuilder
 
 		var app = appBuilder.Build();
 
+		var lifetime = (ApplicationLifetime)app.Services.GetRequiredService<IHostApplicationLifetime>();
+
+		PosixSignalRegistration.Create(
+			PosixSignal.SIGINT,
+			ctx =>
+			{
+				ctx.Cancel = true;
+
+				lifetime.StopApplication(); // "Stopping"
+			});
+
 		invoker.Action = a => app?.MainWindow?.Invoke(a);
 
 		new WtqUIHost(
 			app.Services.GetRequiredService<IOptions<WtqOptions>>(),
 			app.Services.GetRequiredService<IEnumerable<IHostedService>>(),
-			app.Services.GetRequiredService<IHostApplicationLifetime>(),
+			lifetime,
 			app.Services.GetRequiredService<IWtqBus>(),
 			app.Services.GetRequiredService<IWtqWindowService>(),
 			app);
 
-		((ApplicationLifetime)app.Services.GetRequiredService<IHostApplicationLifetime>()).NotifyStarted();
+		lifetime.NotifyStarted();
 
 		app.Run();
 	}
