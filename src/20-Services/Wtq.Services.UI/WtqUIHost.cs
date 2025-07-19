@@ -118,14 +118,14 @@ public class WtqUIHost
 		for (var i = 0; i < 10; i++)
 		{
 			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
-		
+
 			var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
-		
+
 			if (mainWindow != null)
 			{
 				return mainWindow;
 			}
-		
+
 			await Task.Delay(TimeSpan.FromMilliseconds(200)).NoCtx();
 		}
 

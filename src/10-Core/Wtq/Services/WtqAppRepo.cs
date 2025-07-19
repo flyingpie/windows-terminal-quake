@@ -23,11 +23,11 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		WorkerFactory workerFactory)
 	{
 		_ = Guard.Against.Null(lifetime);
-		_opts = Guard.Against.Null(opts);
-		_toggleService = Guard.Against.Null(toggleService);
-		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
-		_windowResolver = Guard.Against.Null(procResolver);
 		_ = Guard.Against.Null(workerFactory);
+		_opts = Guard.Against.Null(opts);
+		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+		_toggleService = Guard.Against.Null(toggleService);
+		_windowResolver = Guard.Against.Null(procResolver);
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
@@ -40,10 +40,16 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		});
 
 		// When WTQ stops, reset all tracked apps.
-		lifetime.ApplicationStopping.Register(() => { _ = Task.Run(DisposeAsync); });
+		lifetime.ApplicationStopping.Register(() =>
+		{
+			_ = Task.Run(DisposeAsync);
+		});
 
 		// Start loop that updates app state periodically.
-		_loop = workerFactory.Create($"{nameof(WtqAppRepo)}.UpdateAppStates", TimeSpan.FromSeconds(1), _ => UpdateAppsAsync(allowStartNew: false));
+		_loop = workerFactory.Create(
+			$"{nameof(WtqAppRepo)}.UpdateAppStates",
+			TimeSpan.FromSeconds(1),
+			_ => UpdateAppsAsync(allowStartNew: false));
 	}
 
 	public async ValueTask DisposeAsync()

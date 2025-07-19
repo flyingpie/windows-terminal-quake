@@ -120,7 +120,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		return new MenuItem(text)
 		{
-			Click = (_, _) => action(), IsDisabled = !enabled,
+			Click = (_, _) => action(),
+			IsDisabled = !enabled,
 		};
 	}
 

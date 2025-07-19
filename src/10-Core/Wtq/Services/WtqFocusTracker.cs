@@ -11,6 +11,7 @@ public sealed class WtqFocusTracker(
 	: WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
+
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(windowService);
 	private readonly WorkerFactory _workerFactory = Guard.Against.Null(workerFactory);
