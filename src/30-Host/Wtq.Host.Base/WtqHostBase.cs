@@ -14,16 +14,6 @@ public class WtqHostBase
 {
 	public async Task RunAsync(string[] args)
 	{
-//		// Called on SIGINT
-//		Console.CancelKeyPress += (s, a) =>
-//		{
-//			Console.WriteLine("__CANCEL PRESS");
-//			a.Cancel = true;
-//
-//			Thread.Sleep(2000);
-//			Console.WriteLine("/__CANCEL PRESS");
-//		};
-
 		// Called on SIGTERM
 		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
 		{
@@ -48,18 +38,6 @@ public class WtqHostBase
 				ctx.Cancel = true;
 				Console.WriteLine("__SIGTERM");
 			});
-
-		// void Sig(PosixSignalContext c)
-		// {
-		// 	Console.WriteLine($"#############################");
-		// 	Console.WriteLine($"SIGNAL: {c.Signal}");
-		// 	Console.WriteLine($"#############################");
-		// }
-		//
-		// foreach (var e in Enum.GetValues<PosixSignal>())
-		// {
-		// 	PosixSignalRegistration.Create(e, Sig);
-		// }
 
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
