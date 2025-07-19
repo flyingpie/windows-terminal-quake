@@ -5,52 +5,52 @@ namespace Wtq.Utils;
 /// </summary>
 public sealed class Worker : IAsyncDisposable
 {
-	public static readonly TimeSpan DefaultInterval = TimeSpan.FromMilliseconds(250);
-
 	private readonly ILogger _log = Log.For<Worker>();
 
 	private readonly CancellationTokenSource _cts = new();
-	private readonly TimeSpan _interval;
+	private readonly TaskCompletionSource _tcs = new();
 
-	public Worker(
-		string name,
-		Func<CancellationToken, Task> action)
-		: this(name, action, DefaultInterval)
+	private readonly string _name;
+
+	public Worker(string name, TimeSpan interval, Func<CancellationToken, Task> action)
 	{
-	}
+		_name = Guard.Against.NullOrWhiteSpace(name);
+		Guard.Against.Null(action);
 
-	public Worker(
-		string name,
-		Func<CancellationToken, Task>
-		action,
-		TimeSpan interval)
-	{
-		_interval = interval;
-
-		_ = Task.Run(
-			async () =>
+		_ = Task.Run(async () =>
+		{
+			while (true)
 			{
-				while (!_cts.Token.IsCancellationRequested) // TODO: Token is disposed on app stop, which can throw an exception here.
+				try
 				{
-					try
-					{
-						await action(_cts.Token).NoCtx();
-					}
-					catch (Exception ex)
-					{
-						_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
-					}
-
-					await Task.Delay(_interval).NoCtx();
+					await action(_cts.Token).NoCtx();
 				}
-			});
+				catch (Exception ex)
+				{
+					_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
+				}
+
+				if (_cts.IsCancellationRequested)
+				{
+					_tcs.SetResult();
+					break;
+				}
+
+				await Task.Delay(interval).NoCtx();
+			}
+		});
 	}
 
-	public ValueTask DisposeAsync()
+	public async ValueTask DisposeAsync()
 	{
-		// TODO: Wait for loop iteration to end.
+		_log.LogInformation("Stopping worker '{Worker}'", _name);
+
+		await _cts.CancelAsync().NoCtx();
+
+		await _tcs.Task.NoCtx();
+
 		_cts.Dispose();
 
-		return ValueTask.CompletedTask;
+		_log.LogInformation("Stopped worker '{Worker}'", _name);
 	}
 }

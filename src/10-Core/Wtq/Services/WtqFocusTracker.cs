@@ -6,20 +6,23 @@ namespace Wtq.Services;
 /// </summary>
 public sealed class WtqFocusTracker(
 	IWtqBus bus,
-	IWtqWindowService windowService)
+	IWtqWindowService windowService,
+	WorkerFactory workerFactory)
 	: WtqHostedService
 {
-	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
+	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(windowService);
+	private readonly WorkerFactory _workerFactory = Guard.Against.Null(workerFactory);
 
 	private Worker? _loop;
 	private WtqWindow? _prev;
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		_loop = new(
+		_loop = _workerFactory.Create(
 			nameof(WtqFocusTracker),
+			TimeSpan.FromMilliseconds(333),
 			async _ =>
 			{
 				// Get current foreground window (could be null).

@@ -19,13 +19,15 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
-		IWtqWindowResolver procResolver)
+		IWtqWindowResolver procResolver,
+		WorkerFactory workerFactory)
 	{
 		_ = Guard.Against.Null(lifetime);
 		_opts = Guard.Against.Null(opts);
 		_toggleService = Guard.Against.Null(toggleService);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 		_windowResolver = Guard.Against.Null(procResolver);
+		_ = Guard.Against.Null(workerFactory);
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
@@ -38,17 +40,10 @@ public sealed class WtqAppRepo : IWtqAppRepo
 		});
 
 		// When WTQ stops, reset all tracked apps.
-		lifetime.ApplicationStopping.Register(() =>
-		{
-			// TODO: Find a nicer way to handle this.
-			DisposeAsync().GetAwaiter().GetResult();
-		});
+		lifetime.ApplicationStopping.Register(() => { _ = Task.Run(DisposeAsync); });
 
 		// Start loop that updates app state periodically.
-		_loop = new(
-			$"{nameof(WtqAppRepo)}.UpdateAppStates",
-			_ => UpdateAppsAsync(allowStartNew: false),
-			TimeSpan.FromSeconds(1));
+		_loop = workerFactory.Create($"{nameof(WtqAppRepo)}.UpdateAppStates", TimeSpan.FromSeconds(1), _ => UpdateAppsAsync(allowStartNew: false));
 	}
 
 	public async ValueTask DisposeAsync()

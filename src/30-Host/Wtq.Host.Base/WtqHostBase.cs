@@ -2,6 +2,8 @@ using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
 using Wtq.Services.UI;
@@ -12,6 +14,53 @@ public class WtqHostBase
 {
 	public async Task RunAsync(string[] args)
 	{
+//		// Called on SIGINT
+//		Console.CancelKeyPress += (s, a) =>
+//		{
+//			Console.WriteLine("__CANCEL PRESS");
+//			a.Cancel = true;
+//
+//			Thread.Sleep(2000);
+//			Console.WriteLine("/__CANCEL PRESS");
+//		};
+
+		// Called on SIGTERM
+		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
+		{
+			Console.WriteLine("__PROCESS EXIT");
+
+			Thread.Sleep(2000);
+			Console.WriteLine("/__PROCESS EXIT");
+		};
+
+		PosixSignalRegistration.Create(
+			PosixSignal.SIGINT,
+			ctx =>
+			{
+				ctx.Cancel = true;
+				Console.WriteLine("__SIGINT");
+			});
+
+		PosixSignalRegistration.Create(
+			PosixSignal.SIGTERM,
+			ctx =>
+			{
+				ctx.Cancel = true;
+				Console.WriteLine("__SIGTERM");
+			});
+
+		// void Sig(PosixSignalContext c)
+		// {
+		// 	Console.WriteLine($"#############################");
+		// 	Console.WriteLine($"SIGNAL: {c.Signal}");
+		// 	Console.WriteLine($"#############################");
+		// }
+		//
+		// foreach (var e in Enum.GetValues<PosixSignal>())
+		// {
+		// 	PosixSignalRegistration.Create(e, Sig);
+		// }
+
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure();
 
@@ -57,10 +106,7 @@ public class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x =>
-					{
-						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
-					};
+					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
 
 					if (Os.IsSymlink(pathToWtqConf))
 					{
@@ -68,8 +114,7 @@ public class WtqHostBase
 
 						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
 						{
-							UseActivePolling = true,
-							UsePollingFileWatcher = true,
+							UseActivePolling = true, UsePollingFileWatcher = true,
 						};
 					}
 				})
@@ -84,11 +129,14 @@ public class WtqHostBase
 					.Bind(config);
 
 				s
-					.AddApi()
-					.AddUI()
-					.AddWtqCore();
 
-				ConfigureServices(s);
+					// .AddApi()
+					.AddUI()
+
+					// .AddWtqCore()
+					;
+
+				// ConfigureServices(s);
 			});
 		}
 		catch (Exception ex)

@@ -3,23 +3,10 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-
 		{
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "konsole"
-		},
-
-		{
-			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
-			"FileName": "dolphin"
-		},
-
-		{
-			"Name": "SystemMonitor",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
-			"FileName": "plasma-systemmonitor"
 		}
 	],
 
@@ -44,6 +31,6 @@
 	"VerticalScreenCoverage": 95,
 
 	"Api": {
-		"Enable": true
+//		"Enable": true
 	}
 }

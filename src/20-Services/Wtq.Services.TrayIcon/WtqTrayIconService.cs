@@ -11,6 +11,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 	private readonly IHostApplicationLifetime _lifetime;
 	private readonly IWtqBus _bus;
 	private readonly IWtqUIService _ui;
+	private readonly WorkerFactory _workerFactory;
 
 	private NotifyIcon? _icon;
 	private Worker? _loop;
@@ -18,9 +19,11 @@ public sealed class WtqTrayIconService : WtqHostedService
 	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus,
-		IWtqUIService ui)
+		IWtqUIService ui,
+		WorkerFactory workerFactory)
 	{
 		_lifetime = lifetime;
+		_workerFactory = Guard.Against.Null(workerFactory);
 		_bus = Guard.Against.Null(bus);
 		_ui = Guard.Against.Null(ui);
 
@@ -96,15 +99,17 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// That means the threads can step on each other's state, crashing the UI stack.
 			//
 			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
-			_loop = new(
+			_loop = _workerFactory.Create(
 				nameof(WtqTrayIconService),
+				TimeSpan.FromMilliseconds(200),
 				ct =>
 				{
+					Console.WriteLine($"TRAY ICON LOOP {DateTimeOffset.UtcNow}");
+
 					_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
 
 					return Task.CompletedTask;
-				},
-				TimeSpan.FromMilliseconds(200));
+				});
 		}
 	}
 
@@ -115,8 +120,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		return new MenuItem(text)
 		{
-			Click = (_, _) => action(),
-			IsDisabled = !enabled,
+			Click = (_, _) => action(), IsDisabled = !enabled,
 		};
 	}
 
@@ -128,14 +132,14 @@ public sealed class WtqTrayIconService : WtqHostedService
 			_log.LogDebug("Running on Windows, using ICO version of tray icon");
 			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
 		}
-	
+
 		// Linux (Flatpak).
 		if (Os.IsFlatpak)
 		{
 			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
 			return "nl.flyingpie.wtq-white";
 		}
-	
+
 		// Linux (non-Flatpak).
 		_log.LogDebug("Running bare Linux, using icon path of tray icon");
 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");

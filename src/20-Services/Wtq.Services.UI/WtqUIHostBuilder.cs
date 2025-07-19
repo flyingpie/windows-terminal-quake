@@ -33,12 +33,17 @@ public static class WtqUIHostBuilder
 			app.Services.GetRequiredService<IOptions<WtqOptions>>(),
 			app.Services.GetRequiredService<IEnumerable<IHostedService>>(),
 			app.Services.GetRequiredService<IHostApplicationLifetime>(),
-			app.Services.GetRequiredService<IWtqBus>(),
-			app.Services.GetRequiredService<IWtqWindowService>(),
+
+			// app.Services.GetRequiredService<IWtqBus>(),
+			// app.Services.GetRequiredService<IWtqWindowService>(),
 			app);
 
 		((ApplicationLifetime)app.Services.GetRequiredService<IHostApplicationLifetime>()).NotifyStarted();
 
 		app.Run();
+
+		Console.WriteLine("POST app.Run()");
+
+		var dbg = 2;
 	}
 }
