@@ -33,7 +33,8 @@ internal sealed class KWinClientV2(
 			.NoCtx();
 	}
 
-	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
+	public async Task<Point> GetCursorPosAsync(
+		CancellationToken cancellationToken)
 	{
 		return (await _wtqBusObj
 				.SendCommandAsync("GET_CURSOR_POS", null, cancellationToken)
@@ -42,7 +43,8 @@ internal sealed class KWinClientV2(
 			.ToPoint();
 	}
 
-	public async Task<KWinWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
+	public async Task<KWinWindow?> GetForegroundWindowAsync(
+		CancellationToken cancellationToken)
 	{
 		return (await _wtqBusObj
 				.SendCommandAsync("GET_FOREGROUND_WINDOW", null, cancellationToken)
@@ -50,7 +52,8 @@ internal sealed class KWinClientV2(
 			.GetParamsAs<KWinWindow>();
 	}
 
-	public async Task<KWinSupportInformation> GetSupportInformationAsync(CancellationToken cancellationToken)
+	public async Task<KWinSupportInformation> GetSupportInformationAsync(
+		CancellationToken cancellationToken)
 	{
 		var kwin = await _dbus.GetKWinAsync().NoCtx();
 
@@ -76,7 +79,8 @@ internal sealed class KWinClientV2(
 		return resp.GetParamsAs<KWinWindow>();
 	}
 
-	public async Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken)
+	public async Task<ICollection<KWinWindow>> GetWindowListAsync(
+		CancellationToken cancellationToken)
 	{
 		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST", null, cancellationToken).NoCtx();
 
@@ -95,7 +99,9 @@ internal sealed class KWinClientV2(
 				"MOVE_WINDOW",
 				new
 				{
-					internalId = window.InternalId, x = location.X, y = location.Y,
+					internalId = window.InternalId,
+					x = location.X,
+					y = location.Y,
 				},
 				cancellationToken)
 			.NoCtx();
@@ -135,7 +141,9 @@ internal sealed class KWinClientV2(
 				"RESIZE_WINDOW",
 				new
 				{
-					internalId = window.InternalId, width = size.Width, height = size.Height,
+					internalId = window.InternalId,
+					width = size.Width,
+					height = size.Height,
 				},
 				cancellationToken)
 			.NoCtx();
@@ -151,7 +159,8 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
 				new
 				{
-					internalId = window.InternalId, isVisible = JsUtils.ToJsBoolean(isVisible),
+					internalId = window.InternalId,
+					isVisible = JsUtils.ToJsBoolean(isVisible),
 				},
 				cancellationToken)
 			.NoCtx();
@@ -167,7 +176,8 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_ALWAYS_ON_TOP",
 				new
 				{
-					internalId = window.InternalId, isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
+					internalId = window.InternalId,
+					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
 				},
 				cancellationToken)
 			.NoCtx();
@@ -183,7 +193,8 @@ internal sealed class KWinClientV2(
 				"SET_WINDOW_OPACITY",
 				new
 				{
-					internalId = window.InternalId, opacity = opacity,
+					internalId = window.InternalId,
+					opacity = opacity,
 				},
 				cancellationToken)
 			.NoCtx();

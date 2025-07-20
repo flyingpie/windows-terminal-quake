@@ -20,14 +20,14 @@
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.WinForms\Wtq.Services.WinForms.csproj"/>
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
 	</ItemGroup>
-<!--
+
 	<ItemGroup>
 		<Content Include="..\..\20-Services\Wtq.Services.UI\wwwroot\**\*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>wwwroot\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Content>
 	</ItemGroup>
--->
+
 	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<None Update="wtq.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
