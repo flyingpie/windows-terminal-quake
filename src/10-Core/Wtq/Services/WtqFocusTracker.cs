@@ -28,11 +28,6 @@ public sealed class WtqFocusTracker : WtqHostedService
 			TimeSpan.FromMilliseconds(333),
 			async ct =>
 			{
-				if (ct.IsCancellationRequested)
-				{
-					return;
-				}
-
 				// Get current foreground window (could be null).
 				var curr = await windowService.GetForegroundWindowAsync(ct).NoCtx();
 

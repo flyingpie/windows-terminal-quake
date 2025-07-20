@@ -37,6 +37,12 @@ public sealed class RecurringTask(
 		{
 			while (true)
 			{
+				if (_cts.IsCancellationRequested)
+				{
+					_tcs.SetResult();
+					break;
+				}
+
 				try
 				{
 					await action(_cts.Token).NoCtx();
@@ -46,13 +52,7 @@ public sealed class RecurringTask(
 					_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
 				}
 
-				if (_cts.IsCancellationRequested)
-				{
-					_tcs.SetResult();
-					break;
-				}
-
-				await Task.Delay(interval).NoCtx();
+				await Task.Delay(interval, _cts.Token).NoCtx();
 			}
 		});
 	}
