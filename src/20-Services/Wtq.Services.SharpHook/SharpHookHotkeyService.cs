@@ -51,14 +51,15 @@ public class SharpHookHotkeyService : WtqHostedService
 		_hook = new SimpleGlobalHook(GlobalHookType.Keyboard);
 	}
 
-	protected override ValueTask OnDisposeAsync()
+	protected override async ValueTask OnDisposeAsync()
 	{
 		_log.LogDebug("Disposing SharpHook");
 
 		// TODO: Seems that some thread still runs even after disposing.
+		_hook.Stop();
 		_hook.Dispose();
 
-		return ValueTask.CompletedTask;
+		await _hookTask.NoCtx();
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -97,11 +98,11 @@ public class SharpHookHotkeyService : WtqHostedService
 			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
 		};
 
-		_ = _hook.RunAsync();
+		_hookTask = _hook.RunAsync();
 
 		return Task.CompletedTask;
 	}
-
+	private Task? _hookTask;
 	/// <summary>
 	/// Returns the full list of <see cref="HotkeyOptions"/>, both globally and per app.<br/>
 	/// Used to determine whether we should send an event, as we're seeing _all_ key presses.

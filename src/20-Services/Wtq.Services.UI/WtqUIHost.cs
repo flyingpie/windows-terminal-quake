@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
 using System.Diagnostics;
+using System.Threading;
 using Wtq.Configuration;
+using Wtq.Utils;
 
 namespace Wtq.Services.UI;
 
@@ -46,51 +48,95 @@ public class WtqUIHost
 
 	private void SetupAppLifetime()
 	{
+		var timeout = TimeSpan.FromSeconds(3);
+
 		// Starting
 		_ = _appLifetime.ApplicationStarted.Register(() =>
 		{
-			_log.LogDebug("Stopping hosted services");
-
-			var sw = Stopwatch.StartNew();
-
-			Task.WaitAll(
-				_hostedServices.Select(async srv =>
-				{
-					_log.LogDebug("Starting service '{Service}'", srv);
-					await srv.StartAsync(CancellationToken.None);
-					_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw.Elapsed);
-				}));
+			Services_StartAsync().GetAwaiter().GetResult();
 		});
 
 		// Stopping
 		_ = _appLifetime.ApplicationStopping.Register(() =>
 		{
-			Task.WaitAll(_hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
-
-			// // TODO: Remove this.
-			// // When using SharpHook, some threads seem to hang around when otherwise exiting the app.
-			// _ = Task.Run(async () =>
-			// {
-			// 	Console.WriteLine("EXIT");
-			// 	await Task.Delay(TimeSpan.FromSeconds(2));
-			//
-			// 	Environment.Exit(0);
-			// });
+			Services_StopAsync().GetAwaiter().GetResult();
 
 			((ApplicationLifetime)_appLifetime).NotifyStopped(); // "Stopped"
 		});
 
-		// Stopped
+		// Stopped (dispose)
 		_ = _appLifetime.ApplicationStopped.Register(() =>
 		{
-			Console.WriteLine("Waiting for hosted services to stop");
-			Task.WaitAll(_hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
-			Console.WriteLine("/Waiting for hosted services to stop");
+			Services_DisposeAsync().GetAwaiter().GetResult();
 
 			// Close UI (like, for real, as opposed to just hiding it).
 			_isClosing = true;
 			_app.MainWindow.Close();
 		});
+	}
+
+	private async Task Services_StartAsync()
+	{
+		var timeout = TimeSpan.FromSeconds(3);
+
+		foreach (var srv in _hostedServices)
+		{
+			try
+			{
+				_log.LogDebug("Starting service '{Service}'", srv);
+				var sw = Stopwatch.StartNew();
+				await srv.StartAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
+				_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+			}
+			catch (Exception ex)
+			{
+				_log.LogCritical(ex, "Starting service '{Service}' failed", srv);
+				Environment.Exit(-1);
+				throw;
+			}
+		}
+	}
+
+	private async Task Services_StopAsync()
+	{
+		var timeout = TimeSpan.FromSeconds(3);
+
+		foreach (var srv in _hostedServices)
+		{
+			try
+			{
+				_log.LogDebug("Stopping service '{Service}'", srv);
+				var sw = Stopwatch.StartNew();
+				await srv.StopAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
+				_log.LogDebug("Stopped service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+			}
+			catch (Exception ex)
+			{
+				_log.LogWarning(ex, "Stopping service '{Service}' failed", srv);
+				throw;
+			}
+		}
+	}
+
+	private async Task Services_DisposeAsync()
+	{
+		var timeout = TimeSpan.FromSeconds(3);
+
+		foreach (var srv in _hostedServices.OfType<IAsyncDisposable>())
+		{
+			try
+			{
+				_log.LogDebug("Disposing service '{Service}'", srv);
+				var sw = Stopwatch.StartNew();
+				await srv.DisposeAsync().TimeoutAfterAsync(timeout);
+				_log.LogDebug("Disposed service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+			}
+			catch (Exception ex)
+			{
+				_log.LogWarning(ex, "Disposing service '{Service}' failed", srv);
+				throw;
+			}
+		}
 	}
 
 	private void SetupMainWindow()
@@ -112,8 +158,6 @@ public class WtqUIHost
 				if (_isClosing)
 				{
 					Console.WriteLine("REALLY Closing");
-
-					//					Thread.Sleep(5_000);
 					return false;
 				}
 

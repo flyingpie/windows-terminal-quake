@@ -22,8 +22,13 @@ public sealed class WtqFocusTracker(
 		_loop = new(
 			nameof(WtqFocusTracker),
 			TimeSpan.FromMilliseconds(333),
-			async _ =>
+			async ct =>
 			{
+				if (ct.IsCancellationRequested)
+				{
+					return;
+				}
+
 				// Get current foreground window (could be null).
 				var curr = await _windowService.GetForegroundWindowAsync(cancellationToken).NoCtx();
 

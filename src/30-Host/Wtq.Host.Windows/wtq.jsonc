@@ -41,6 +41,6 @@
 	"VerticalScreenCoverage": 95,
 
 	"Api": {
-		"Enable": true
+		//"Enable": true
 	}
 }
