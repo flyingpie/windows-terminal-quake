@@ -8,42 +8,18 @@ public sealed class WtqTrayIconService : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WtqTrayIconService>();
 
-	private readonly IHostApplicationLifetime _lifetime;
-	private readonly IWtqBus _bus;
-	private readonly IWtqUIService _ui;
-
-	private NotifyIcon? _icon;
-	private Worker? _loop;
+	private readonly NotifyIcon _icon;
+	private readonly RecurringTask _loop;
 
 	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus,
 		IWtqUIService ui)
 	{
-		_lifetime = lifetime;
-		_bus = Guard.Against.Null(bus);
-		_ui = Guard.Against.Null(ui);
+		_ = Guard.Against.Null(lifetime);
+		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(ui);
 
-		new Thread(ShowStatusIcon).Start();
-	}
-
-	protected override async ValueTask OnDisposeAsync()
-	{
-		if (_icon != null)
-		{
-			_icon.Dispose();
-			_icon = null;
-		}
-
-		if (_loop != null)
-		{
-			await _loop.DisposeAsync().NoCtx();
-			_loop = null;
-		}
-	}
-
-	private void ShowStatusIcon()
-	{
 		_icon = NotifyIcon.Create(
 			GetPathToIcon(),
 			[
@@ -55,14 +31,14 @@ public sealed class WtqTrayIconService : WtqHostedService
 				new SeparatorItem(),
 
 				CreateItem(
-					$"Open Project Website (GitHub)",
+					"Open Project Website (GitHub)",
 					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new SeparatorItem(),
 
 				CreateItem(
 					"Open Main Window",
-					() => _bus.Publish(new WtqUIRequestedEvent())),
+					() => bus.Publish(new WtqUIRequestedEvent())),
 
 				new SeparatorItem(),
 
@@ -82,9 +58,39 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					"Quit",
-					() => _lifetime.StopApplication()),
+					lifetime.StopApplication),
 			]);
 
+		_loop = new(
+			nameof(WtqTrayIconService),
+			TimeSpan.FromMilliseconds(200), // The action is blocking, so this value doesn't actually matter much.
+			ct =>
+			{
+				ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
+
+				return Task.CompletedTask;
+			});
+	}
+
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		new Thread(ShowStatusIcon).Start();
+
+		return Task.CompletedTask;
+	}
+
+	protected override ValueTask OnDisposeAsync()
+	{
+		_icon.Dispose();
+
+		// Don't wait for the loop to fully dispose, as it can take a while due to the thread waiting on a GUI loop iteration.
+		_ = _loop.DisposeAsync();
+
+		return ValueTask.CompletedTask;
+	}
+
+	private void ShowStatusIcon()
+	{
 		if (Os.IsWindows)
 		{
 			// On Windows, we can just block the thread on the tray icon UI.
@@ -96,29 +102,19 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// That means the threads can step on each other's state, crashing the UI stack.
 			//
 			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
-			_loop = new(
-				nameof(WtqTrayIconService),
-				ct =>
-				{
-					_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
-
-					return Task.CompletedTask;
-				},
-				TimeSpan.FromMilliseconds(200));
+			_loop.Start();
 		}
 	}
 
 	private static MenuItem CreateItem(
 		string text,
 		Action action,
-		bool enabled = true)
-	{
-		return new MenuItem(text)
+		bool enabled = true) =>
+		new(text)
 		{
 			Click = (_, _) => action(),
 			IsDisabled = !enabled,
 		};
-	}
 
 	private string GetPathToIcon()
 	{
@@ -128,14 +124,14 @@ public sealed class WtqTrayIconService : WtqHostedService
 			_log.LogDebug("Running on Windows, using ICO version of tray icon");
 			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
 		}
-	
+
 		// Linux (Flatpak).
 		if (Os.IsFlatpak)
 		{
 			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
 			return "nl.flyingpie.wtq-white";
 		}
-	
+
 		// Linux (non-Flatpak).
 		_log.LogDebug("Running bare Linux, using icon path of tray icon");
 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");

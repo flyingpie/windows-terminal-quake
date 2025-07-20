@@ -72,7 +72,10 @@ public sealed class TrayIcon : IDisposable
 			waiter.SetResult(true);
 
 			Application.Run();
-		});
+		})
+		{
+			Name = nameof(WinFormsTrayIconService),
+		};
 
 		notifyThread.Start();
 
@@ -83,6 +86,8 @@ public sealed class TrayIcon : IDisposable
 	{
 		_notificationIcon?.Dispose();
 		_notificationIcon = null;
+
+		Application.Exit();
 	}
 
 	private static Icon CreateIcon()

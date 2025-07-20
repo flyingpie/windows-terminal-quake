@@ -6,16 +6,16 @@
 
 @code {
 
+	private readonly Debouncer _debouncer = new();
+
 	private HashSet<LogEventLevel> _levels = new()
 	{
 		LogEventLevel.Fatal,
 		LogEventLevel.Error,
 		LogEventLevel.Warning,
 		LogEventLevel.Information,
-
-		// Disabling these levels for now, as they slow down the UI too much.
-		// LogEventLevel.Debug,
-		// LogEventLevel.Verbose,
+		LogEventLevel.Debug,
+		LogEventLevel.Verbose,
 	};
 
 	private string? _searchTerm;
@@ -65,7 +65,7 @@
 
 	protected override void OnInitialized()
 	{
-		Logs.OnEvent = () => InvokeAsync(StateHasChanged);
+		Logs.OnEvent = () => _debouncer.Debounce(() => InvokeAsync(StateHasChanged));
 	}
 
 	private void ToggleLevel(LogEventLevel level)

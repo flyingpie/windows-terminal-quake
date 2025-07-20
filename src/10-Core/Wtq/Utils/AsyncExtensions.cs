@@ -29,6 +29,24 @@ public static class AsyncExtensions
 		return task.ConfigureAwait(false);
 	}
 
+	public static async Task TimeoutAfterAsync(this Task task, TimeSpan timeout)
+	{
+		_ = Guard.Against.Null(task);
+
+		using var timeoutCancellationTokenSource = new CancellationTokenSource();
+
+		var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token)).NoCtx();
+
+		if (completedTask != task)
+		{
+			throw new TimeoutException("The operation has timed out.");
+		}
+
+		await timeoutCancellationTokenSource.CancelAsync().NoCtx();
+
+		await task.NoCtx(); // Very important in order to propagate exceptions.
+	}
+
 	public static async Task<TResult> TimeoutAfterAsync<TResult>(this Task<TResult> task, TimeSpan timeout)
 	{
 		_ = Guard.Against.Null(task);
@@ -45,5 +63,10 @@ public static class AsyncExtensions
 		await timeoutCancellationTokenSource.CancelAsync().NoCtx();
 
 		return await task.NoCtx(); // Very important in order to propagate exceptions.
+	}
+
+	public static async ValueTask TimeoutAfterAsync(this ValueTask task, TimeSpan timeout)
+	{
+		await task.AsTask().TimeoutAfterAsync(timeout);
 	}
 }
