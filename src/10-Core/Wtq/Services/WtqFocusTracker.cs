@@ -4,21 +4,25 @@ namespace Wtq.Services;
 /// Runs in the background, keeping track of what window has focus.<br/>
 /// Fires <see cref="WtqWindowFocusChangedEvent"/> events when focus changes from window to the next.
 /// </summary>
-public sealed class WtqFocusTracker(
-	IWtqBus bus,
-	IWtqWindowService windowService)
-	: WtqHostedService
+public sealed class WtqFocusTracker : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<WtqFocusTracker>();
 
-	private readonly IWtqBus _bus = Guard.Against.Null(bus);
-	private readonly IWtqWindowService _windowService = Guard.Against.Null(windowService);
+	private readonly RecurringTask _loop;
 
-	private Worker? _loop;
 	private WtqWindow? _prev;
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	/// <summary>
+	/// Runs in the background, keeping track of what window has focus.<br/>
+	/// Fires <see cref="WtqWindowFocusChangedEvent"/> events when focus changes from window to the next.
+	/// </summary>
+	public WtqFocusTracker(
+		IWtqBus bus,
+		IWtqWindowService windowService)
 	{
+		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(windowService);
+
 		_loop = new(
 			nameof(WtqFocusTracker),
 			TimeSpan.FromMilliseconds(333),
@@ -30,7 +34,7 @@ public sealed class WtqFocusTracker(
 				}
 
 				// Get current foreground window (could be null).
-				var curr = await _windowService.GetForegroundWindowAsync(ct).NoCtx();
+				var curr = await windowService.GetForegroundWindowAsync(ct).NoCtx();
 
 				// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
 				// Note that both the past- and the future window can be null.
@@ -38,16 +42,22 @@ public sealed class WtqFocusTracker(
 				{
 					_log.LogDebug("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
 
-					_bus.Publish(
+					bus.Publish(
 						new WtqWindowFocusChangedEvent()
 						{
-							GotFocusWindow = curr, LostFocusWindow = _prev,
+							GotFocusWindow = curr,
+							LostFocusWindow = _prev,
 						});
 				}
 
 				// Store for next cycle.
 				_prev = curr;
 			});
+	}
+
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		_loop.Start();
 
 		return Task.CompletedTask;
 	}

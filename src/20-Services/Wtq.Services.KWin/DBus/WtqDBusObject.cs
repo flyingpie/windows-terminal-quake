@@ -7,10 +7,7 @@ using Wtq.Services.KWin.Exceptions;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject(
-	IDBusConnection dbus,
-	IWtqBus bus)
-	: WtqHostedService, IWtqDBusObject
+internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 {
 	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
@@ -22,18 +19,32 @@ internal sealed class WtqDBusObject(
 	private readonly ConcurrentDictionary<Guid, KWinResponseWaiter> _waiters = new();
 	private readonly ILogger _log = Log.For<WtqDBusObject>();
 
-	private readonly IWtqBus _bus = Guard.Against.Null(bus);
-	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
+	private readonly IWtqBus _bus;
+	private readonly IDBusConnection _dbus;
 
 	private readonly InitLock _lock = new();
 	private readonly List<Func<KeySequence, Task>> _onPressShortcutHandlers = [];
 
-	private Worker? _loop;
+	private readonly RecurringTask _noopLoop;
+
+	public WtqDBusObject(
+		IDBusConnection dbus,
+		IWtqBus bus)
+	{
+		_bus = Guard.Against.Null(bus);
+		_dbus = Guard.Against.Null(dbus);
+
+		// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+		// and the connection is dropped.
+		_noopLoop = new(
+			$"{nameof(WtqDBusObject)}.NoOpLoop",
+			TimeSpan.FromSeconds(10), // Timeout is after a minute or so.
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx());
+	}
 
 	public ObjectPath ObjectPath => _path;
 
-	public async Task InitAsync()
-	{
+	public async Task InitAsync() =>
 		await _lock
 			.InitAsync(async () =>
 			{
@@ -41,11 +52,15 @@ internal sealed class WtqDBusObject(
 
 				// Register this object as a DBus service.
 				await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
-
-				// Start NOOP loop.
-				StartNoOpLoop();
 			})
 			.NoCtx();
+
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		// Start NOOP loop.
+		_noopLoop.Start();
+
+		return Task.CompletedTask;
 	}
 
 	protected override async ValueTask OnDisposeAsync()
@@ -199,17 +214,5 @@ internal sealed class WtqDBusObject(
 		_bus.Publish(new WtqAppToggledEvent(appName));
 
 		return Task.CompletedTask;
-	}
-
-	/// <summary>
-	/// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-	/// and the connection is dropped.
-	/// </summary>
-	private void StartNoOpLoop()
-	{
-		_loop = new(
-			$"{nameof(WtqDBusObject)}.{nameof(StartNoOpLoop)}",
-			TimeSpan.FromSeconds(10),
-			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx());
 	}
 }

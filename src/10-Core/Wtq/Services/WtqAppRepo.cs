@@ -12,7 +12,7 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	private readonly IWtqWindowResolver _windowResolver;
 
 	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(StringComparer.OrdinalIgnoreCase);
-	private readonly Worker _loop;
+	private readonly RecurringTask _loop;
 
 	public WtqAppRepo(
 		IHostApplicationLifetime lifetime,
@@ -42,6 +42,8 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
 		// "StartApps": "OnWtqStart | OnHotkeyPress"
 		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+
+		_loop.Start();
 	}
 
 	protected override async Task OnStopAsync(CancellationToken cancellationToken)

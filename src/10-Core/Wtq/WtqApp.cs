@@ -23,7 +23,7 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqAppToggleService _toggler;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
-	private readonly Worker _loop;
+	private readonly RecurringTask _loop;
 
 	private Point? _lastLoc;
 
@@ -108,7 +108,7 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Stop update loop.
-		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+		await _loop.DisposeAsync().NoCtx();
 
 		// Reset window location & size.
 		await ResetLocationAndSizeAsync().NoCtx();
