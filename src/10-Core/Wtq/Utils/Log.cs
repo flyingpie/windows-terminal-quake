@@ -34,14 +34,6 @@ public static class Log
 			// In-app.
 			.WriteTo.Sink(InAppLogSink.Instance)
 
-			// // JSON.
-			// .WriteTo.File(
-			// 	formatter: new RenderedCompactJsonFormatter(),
-			// 	path: Path.Combine(path, "logs.json"),
-			// 	fileSizeLimitBytes: 50_000_000,
-			// 	rollingInterval: RollingInterval.Infinite,
-			// 	retainedFileCountLimit: 1)
-
 			// Plain text.
 			.WriteTo.File(
 				outputTemplate: LogTemplate,
@@ -52,14 +44,6 @@ public static class Log
 
 		// Log to console.
 		var console = logBuilder.WriteTo.Console(outputTemplate: LogTemplate);
-
-		// if (WtqEnv.IsLinux && !WtqEnv.HasTermEnvVar)
-		// {
-		// 	Console.WriteLine(
-		// 		"Running on Linux, and no 'TERM' environment variable found. Suggests we're called indirectly, i.e. non-interactively. Changing log level for console logger to 'warning', prevent journal spam.");
-		//
-		// 	console.MinimumLevel.Warning();
-		// }
 
 		Serilog.Log.Logger = logBuilder.CreateLogger();
 		Provider = new SerilogLoggerProvider(Serilog.Log.Logger);

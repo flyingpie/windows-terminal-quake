@@ -24,10 +24,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 		_icon = NotifyIcon.Create(
 			_platform.PathToTrayIcon,
 			[
-				#pragma warning disable SA1025
-				#pragma warning disable SA1027
-
-				// @formatter:off
 				CreateItem(
 					$"Version {WtqConstants.AppVersion} ({_platform.PlatformName})",
 					() => { },
@@ -117,7 +113,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 		bool enabled = true) =>
 		new(text)
 		{
-			Click = (_, _) => action(), IsDisabled = !enabled,
+			Click = (_, _) => action(),
+			IsDisabled = !enabled,
 		};
 
 	private string GetPathToIcon()

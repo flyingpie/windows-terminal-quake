@@ -48,7 +48,6 @@ public abstract class WtqHostBase
 		try
 		{
 			// Find path to settings files (wtq.jsonc or similar).
-			// var pathToWtqConf = WtqOptionsPath.Instance.Path;
 			var pathToWtqConf = platform.PathToWtqConf;
 
 			// Write wtq.schema.json.
@@ -63,7 +62,10 @@ public abstract class WtqHostBase
 					f.ReloadOnChange = true;
 					f.Optional = false;
 					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x => { log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message); };
+					f.OnLoadException = x =>
+					{
+						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
+					};
 
 					if (platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
 					{
@@ -71,7 +73,8 @@ public abstract class WtqHostBase
 
 						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
 						{
-							UseActivePolling = true, UsePollingFileWatcher = true,
+							UseActivePolling = true,
+							UsePollingFileWatcher = true,
 						};
 					}
 				})

@@ -10,24 +10,9 @@ namespace Wtq.Services.KWin;
 /// </summary>
 internal sealed class KWinClientV2(
 	IDBusConnection dbus,
-	IPlatformService platform,
-	IKWinScriptService scriptService,
 	IWtqDBusObject wtqBusObj)
 	: IKWinClient
 {
-	private readonly IPlatformService _platform = Guard.Against.Null(platform);
-
-	/// <summary>
-	/// Packaged KWin script, that's inside the WTQ binaries folder.
-	/// </summary>
-	private static readonly string _pathToWtqKwinJsSrc = WtqPaths.GetPathRelativeToWtqAppDir("wtq.kwin.js");
-
-	/// <summary>
-	/// Path to KWin script in the XDG cache folder, that is reachable by both sandboxed WTQ, and KWin.<br/>
-	/// This is necessary when running WTQ as a Flatpak, where KWin can't see the files, since they're sandboxed.
-	/// </summary>
-	private static readonly string _pathToWtqKwinJsCache = Path.Combine(WtqPaths.WtqTempDir, "wtq.kwin.js");
-
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
