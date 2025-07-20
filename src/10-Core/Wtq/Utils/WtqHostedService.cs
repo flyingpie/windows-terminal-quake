@@ -21,6 +21,25 @@ public abstract class WtqHostedService
 		_name = GetType().FullName!;
 	}
 
+	public async Task InitAsync(CancellationToken cancellationToken)
+	{
+		_log.LogDebug("Initializing service '{Name}'", _name);
+
+		var sw = Stopwatch.StartNew();
+
+		try
+		{
+			await OnInitAsync(cancellationToken).NoCtx();
+
+			_log.LogDebug("Initialized service '{Name}' (took {Elapsed})", _name, sw.Elapsed);
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Error initializing hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			throw;
+		}
+	}
+
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		_log.LogDebug("Starting service '{Name}'", _name);
@@ -77,6 +96,8 @@ public abstract class WtqHostedService
 			throw;
 		}
 	}
+
+	protected virtual Task OnInitAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
 	protected virtual Task OnStartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 

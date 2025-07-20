@@ -76,8 +76,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		new Thread(ShowStatusIcon).Start();
 
-		_loop.Start();
-
 		return Task.CompletedTask;
 	}
 
@@ -98,12 +96,14 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// On Windows, we can just block the thread on the tray icon UI.
 			_icon.Show();
 		}
-
-		// But on Linux, the main UI uses webkitgtk, which is also used by NotificationIcon.NET.
-		// That means the threads can step on each other's state, crashing the UI stack.
-		//
-		// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
-		_loop.Start();
+		else
+		{
+			// But on Linux, the main UI uses webkitgtk, which is also used by NotificationIcon.NET.
+			// That means the threads can step on each other's state, crashing the UI stack.
+			//
+			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
+			_loop.Start();
+		}
 	}
 
 	private static MenuItem CreateItem(
