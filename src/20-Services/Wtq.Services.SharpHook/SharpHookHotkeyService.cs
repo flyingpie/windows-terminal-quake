@@ -18,6 +18,8 @@ public class SharpHookHotkeyService : WtqHostedService
 	private readonly IWin32KeyService _keyService;
 
 	private readonly SimpleGlobalHook _hook;
+
+	private Task? _hookTask;
 	private bool _isSuspended;
 
 	public SharpHookHotkeyService(
@@ -102,7 +104,7 @@ public class SharpHookHotkeyService : WtqHostedService
 
 		return Task.CompletedTask;
 	}
-	private Task? _hookTask;
+
 	/// <summary>
 	/// Returns the full list of <see cref="HotkeyOptions"/>, both globally and per app.<br/>
 	/// Used to determine whether we should send an event, as we're seeing _all_ key presses.
