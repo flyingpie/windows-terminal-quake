@@ -3,7 +3,7 @@
 		"Config From CSProj": {
 			"commandName": "Project",
 			"environmentVariables": {
-				"__WTQ_LOG_LEVEL": "VERBOSE"
+				"WTQ_LOG_LEVEL": "VERBOSE"
 			}
 		},
 		"Config From User Home": {
