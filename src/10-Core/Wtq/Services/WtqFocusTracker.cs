@@ -30,7 +30,7 @@ public sealed class WtqFocusTracker(
 				}
 
 				// Get current foreground window (could be null).
-				var curr = await _windowService.GetForegroundWindowAsync(cancellationToken).NoCtx();
+				var curr = await _windowService.GetForegroundWindowAsync(ct).NoCtx();
 
 				// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
 				// Note that both the past- and the future window can be null.
@@ -38,11 +38,11 @@ public sealed class WtqFocusTracker(
 				{
 					_log.LogDebug("Focus went from window '{LostFocus}' to window {GotFocus})", _prev, curr);
 
-					_bus.Publish(new WtqWindowFocusChangedEvent()
-					{
-						GotFocusWindow = curr,
-						LostFocusWindow = _prev,
-					});
+					_bus.Publish(
+						new WtqWindowFocusChangedEvent()
+						{
+							GotFocusWindow = curr, LostFocusWindow = _prev,
+						});
 				}
 
 				// Store for next cycle.

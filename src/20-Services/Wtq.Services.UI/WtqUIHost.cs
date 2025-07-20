@@ -2,11 +2,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.Threading;
 using Photino.Blazor;
 using System.Diagnostics;
-using System.Threading;
 using Wtq.Configuration;
-using Wtq.Utils;
+using IAsyncDisposable = System.IAsyncDisposable;
 
 namespace Wtq.Services.UI;
 
@@ -15,6 +15,7 @@ public class WtqUIHost
 	private const string MainWindowTitle = "WTQ - Main Window";
 
 	private readonly ILogger _log = Log.For<WtqUIHost>();
+	private readonly JoinableTaskFactory _taskFactory = new(JoinableTaskContext.CreateNoOpContext());
 
 	private readonly IOptions<WtqOptions> _opts;
 	private readonly IEnumerable<IHostedService> _hostedServices;
@@ -48,18 +49,19 @@ public class WtqUIHost
 
 	private void SetupAppLifetime()
 	{
-		var timeout = TimeSpan.FromSeconds(3);
-
 		// Starting
 		_ = _appLifetime.ApplicationStarted.Register(() =>
 		{
-			Services_StartAsync().GetAwaiter().GetResult();
+			//
+
+			_taskFactory.Run(Services_StartAsync);
 		});
 
 		// Stopping
 		_ = _appLifetime.ApplicationStopping.Register(() =>
 		{
-			Services_StopAsync().GetAwaiter().GetResult();
+			//
+			_taskFactory.Run(Services_StopAsync);
 
 			((ApplicationLifetime)_appLifetime).NotifyStopped(); // "Stopped"
 		});
@@ -67,7 +69,7 @@ public class WtqUIHost
 		// Stopped (dispose)
 		_ = _appLifetime.ApplicationStopped.Register(() =>
 		{
-			Services_DisposeAsync().GetAwaiter().GetResult();
+			_taskFactory.Run(Services_DisposeAsync);
 
 			// Close UI (like, for real, as opposed to just hiding it).
 			_isClosing = true;
@@ -78,15 +80,18 @@ public class WtqUIHost
 	private async Task Services_StartAsync()
 	{
 		var timeout = TimeSpan.FromSeconds(3);
+		var sw1 = Stopwatch.StartNew();
+
+		_log.LogDebug("Starting services");
 
 		foreach (var srv in _hostedServices)
 		{
 			try
 			{
 				_log.LogDebug("Starting service '{Service}'", srv);
-				var sw = Stopwatch.StartNew();
+				var sw2 = Stopwatch.StartNew();
 				await srv.StartAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
-				_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+				_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
 			{
@@ -95,48 +100,60 @@ public class WtqUIHost
 				throw;
 			}
 		}
+
+		_log.LogDebug("Started services, took {Elapsed}", sw1.Elapsed);
 	}
 
 	private async Task Services_StopAsync()
 	{
+		var sw1 = Stopwatch.StartNew();
 		var timeout = TimeSpan.FromSeconds(3);
+
+		_log.LogDebug("Stopping services");
 
 		foreach (var srv in _hostedServices)
 		{
 			try
 			{
 				_log.LogDebug("Stopping service '{Service}'", srv);
-				var sw = Stopwatch.StartNew();
+				var sw2 = Stopwatch.StartNew();
 				await srv.StopAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
-				_log.LogDebug("Stopped service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+				_log.LogDebug("Stopped service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
 			{
 				_log.LogWarning(ex, "Stopping service '{Service}' failed", srv);
-				throw;
+				Environment.Exit(-1);
 			}
 		}
+
+		_log.LogDebug("Stopped services, took {Elapsed}", sw1.Elapsed);
 	}
 
 	private async Task Services_DisposeAsync()
 	{
+		var sw1 = Stopwatch.StartNew();
 		var timeout = TimeSpan.FromSeconds(3);
+
+		_log.LogDebug("Disposing services");
 
 		foreach (var srv in _hostedServices.OfType<IAsyncDisposable>())
 		{
 			try
 			{
 				_log.LogDebug("Disposing service '{Service}'", srv);
-				var sw = Stopwatch.StartNew();
+				var sw2 = Stopwatch.StartNew();
 				await srv.DisposeAsync().TimeoutAfterAsync(timeout);
-				_log.LogDebug("Disposed service '{Service}', took {Elapsed}", srv, sw.Elapsed);
+				_log.LogDebug("Disposed service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
 			{
 				_log.LogWarning(ex, "Disposing service '{Service}' failed", srv);
-				throw;
+				Environment.Exit(-1);
 			}
 		}
+
+		_log.LogDebug("Disposed services, took {Elapsed}", sw1.Elapsed);
 	}
 
 	private void SetupMainWindow()
@@ -166,9 +183,7 @@ public class WtqUIHost
 
 				return true;
 			})
-
 			.Center()
-
 			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
 			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
