@@ -12,7 +12,9 @@ public static class Log
 
 	public const string LogLevelEnvVar = "WTQ_LOG_LEVEL";
 
-	private static ILoggerFactory _factory;
+	public static ILoggerFactory Factory { get; private set; }
+
+	public static ILoggerProvider Provider { get; private set; }
 
 	/// <summary>
 	/// Returns the requested log level, as specified by an environment variable.
@@ -60,9 +62,9 @@ public static class Log
 		// }
 
 		Serilog.Log.Logger = logBuilder.CreateLogger();
-		var provider = new SerilogLoggerProvider(Serilog.Log.Logger);
-		_factory = new SerilogLoggerFactory(Serilog.Log.Logger);
-		_factory.AddProvider(provider);
+		Provider = new SerilogLoggerProvider(Serilog.Log.Logger);
+		Factory = new SerilogLoggerFactory(Serilog.Log.Logger);
+		Factory.AddProvider(Provider);
 
 		Serilog.Log.Information("Set log level to '{Level}'", logLevel);
 		Serilog.Log.Information("Logging to file at '{Path}'", pathToLogsDir);
@@ -70,36 +72,36 @@ public static class Log
 
 	public static ILogger For<T>()
 	{
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for type '{typeof(T).Name}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger<T>();
+		return Factory.CreateLogger<T>();
 	}
 
 	public static ILogger For(Type type)
 	{
 		Guard.Against.Null(type);
 
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for type '{type.Name}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger(type);
+		return Factory.CreateLogger(type);
 	}
 
 	public static ILogger For(string category)
 	{
 		Guard.Against.NullOrWhiteSpace(category);
 
-		if (_factory == null)
+		if (Factory == null)
 		{
 			throw new InvalidOperationException($"Attempting to create logger for category '{category}', before initializing logging.");
 		}
 
-		return _factory.CreateLogger(category);
+		return Factory.CreateLogger(category);
 	}
 
 	public static void CloseAndFlush()
