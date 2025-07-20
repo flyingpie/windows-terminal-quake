@@ -31,7 +31,8 @@ public static class WtqUIHostBuilder
 		var lifetime = (ApplicationLifetime)app.Services.GetRequiredService<IHostApplicationLifetime>();
 
 		// Note that this handler needs to be called pretty early, otherwise other handles may be run first, like the AspNetCore one (if the API is enabled).
-		PosixSignalRegistration.Create(
+		// Note that we shouldn't ignore the return value, as it can get optimized out in "Release" mode, causing the entire handler to not work (as it gets finalized immediately).
+		using var reg = PosixSignalRegistration.Create(
 			PosixSignal.SIGINT,
 			ctx =>
 			{
