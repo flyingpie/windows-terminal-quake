@@ -50,17 +50,11 @@ public class WtqUIHost
 	private void SetupAppLifetime()
 	{
 		// Starting
-		_ = _appLifetime.ApplicationStarted.Register(() =>
-		{
-			//
-
-			_taskFactory.Run(Services_StartAsync);
-		});
+		_ = _appLifetime.ApplicationStarted.Register(() => _taskFactory.Run(Services_StartAsync));
 
 		// Stopping
 		_ = _appLifetime.ApplicationStopping.Register(() =>
 		{
-			//
 			_taskFactory.Run(Services_StopAsync);
 
 			((ApplicationLifetime)_appLifetime).NotifyStopped(); // "Stopped"

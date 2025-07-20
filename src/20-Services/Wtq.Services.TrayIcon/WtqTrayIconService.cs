@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using NotificationIcon.NET;
 
@@ -28,7 +27,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 		new Thread(ShowStatusIcon).Start();
 	}
 
-	protected override async ValueTask OnDisposeAsync()
+	protected override ValueTask OnDisposeAsync()
 	{
 		if (_icon != null)
 		{
@@ -41,6 +40,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// Don't wait for the loop to fully dispose, as it can take a while due to the thread waiting on a GUI loop iteration.
 			_ = _loop.DisposeAsync();
 		}
+
+		return ValueTask.CompletedTask;
 	}
 
 	private void ShowStatusIcon()
@@ -121,7 +122,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 	{
 		return new MenuItem(text)
 		{
-			Click = (_, _) => action(), IsDisabled = !enabled,
+			Click = (_, _) => action(),
+			IsDisabled = !enabled,
 		};
 	}
 
