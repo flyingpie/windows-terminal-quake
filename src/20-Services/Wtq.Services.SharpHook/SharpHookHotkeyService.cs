@@ -82,7 +82,7 @@ public class SharpHookHotkeyService : WtqHostedService
 
 			// Turn key code into sequence.
 			var keySeq = _keyService.GetKeySequence(keyCode, e.Data.RawCode);
-
+			_log.LogInformation("KEY SEQ:{Seq}", keySeq);
 			// Look for a registered hotkey matching the one just pressed.
 			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);
 			if (hk == null)
