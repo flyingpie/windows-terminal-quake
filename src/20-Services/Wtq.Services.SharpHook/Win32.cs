@@ -5,6 +5,8 @@ namespace Wtq.Services.SharpHook;
 
 public class Win32 : IWin32
 {
+	private readonly ILogger _log = Log.For<Win32>();
+
 	public bool IsAltPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
@@ -55,14 +57,7 @@ public class Win32 : IWin32
 			wFlags: 0,
 			dwhkl: layout);
 
-		// The result of ToUnicodeEx should be greater than 0 if it succeeded.
-		if (length <= 0)
-		{
-			return null;
-		}
-
-		// Pull the relevant part out of the buffer (as specified by the returned "length").
-		var result = buffer[..length].ToString();
+		var result = buffer.ToString().Trim('\0').Trim();
 
 		// The result could still be empty, e.g. for the "Tab" character, which returns \t.
 		if (string.IsNullOrWhiteSpace(result))
@@ -71,6 +66,7 @@ public class Win32 : IWin32
 		}
 
 		// Now we can return the actual UTF8 representation.
+		_log.LogInformation("Got character '{Char}'", result);
 		return result;
 	}
 

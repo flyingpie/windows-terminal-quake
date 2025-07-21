@@ -1,6 +1,9 @@
+GetForegroundWindow
 GetKeyState
 GetKeyboardState
 GetKeyboardLayout
-ToUnicodeEx
+GetKeyboardLayoutNameW
+GetWindowThreadProcessId
 MapVirtualKey
+ToUnicodeEx
 VIRTUAL_KEY
