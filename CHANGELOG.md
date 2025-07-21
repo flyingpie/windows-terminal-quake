@@ -6,10 +6,11 @@
 
 ## [v2.0.17] / 2025-07-xx
 - Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
+- Refactor: Startup/shutdown - More straigh-forward now, and fixed a bunch of cases where part of the process stayed alive when stopping.
 - Refactor: Windows - Make foreground window tracking a bunch more efficient.
-- Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
-- Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
 - Feature: Flatpak release
+- Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
+- Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
 
 ## [v2.0.16] / 2025-07-05
 - Bugfix: Implemented missing parts for "ArgumentList" to work.

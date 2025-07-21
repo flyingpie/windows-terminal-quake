@@ -18,6 +18,8 @@ public class SharpHookHotkeyService : WtqHostedService
 	private readonly IWin32KeyService _keyService;
 
 	private readonly SimpleGlobalHook _hook;
+
+	private Task? _hookTask;
 	private bool _isSuspended;
 
 	public SharpHookHotkeyService(
@@ -51,14 +53,15 @@ public class SharpHookHotkeyService : WtqHostedService
 		_hook = new SimpleGlobalHook(GlobalHookType.Keyboard);
 	}
 
-	protected override ValueTask OnDisposeAsync()
+	protected override async ValueTask OnDisposeAsync()
 	{
 		_log.LogDebug("Disposing SharpHook");
 
 		// TODO: Seems that some thread still runs even after disposing.
+		_hook.Stop();
 		_hook.Dispose();
 
-		return ValueTask.CompletedTask;
+		await _hookTask.NoCtx();
 	}
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -97,7 +100,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
 		};
 
-		_ = _hook.RunAsync();
+		_hookTask = _hook.RunAsync();
 
 		return Task.CompletedTask;
 	}
