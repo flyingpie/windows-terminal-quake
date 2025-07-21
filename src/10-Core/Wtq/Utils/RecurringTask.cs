@@ -35,24 +35,30 @@ public sealed class RecurringTask(
 
 		_ = Task.Run(async () =>
 		{
-			while (true)
+			try
 			{
-				if (_cts.IsCancellationRequested)
+				while (true)
 				{
-					_tcs.SetResult();
-					break;
-				}
+					if (_cts.IsCancellationRequested)
+					{
+						break;
+					}
 
-				try
-				{
-					await action(_cts.Token).NoCtx();
-				}
-				catch (Exception ex)
-				{
-					_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
-				}
+					try
+					{
+						await action(_cts.Token).NoCtx();
+					}
+					catch (Exception ex)
+					{
+						_log.LogWarning(ex, "Error running loop iteration: {Message}", ex.Message);
+					}
 
-				await Task.Delay(interval, _cts.Token).NoCtx();
+					await Task.Delay(interval, _cts.Token).NoCtx();
+				}
+			}
+			finally
+			{
+				_tcs.SetResult();
 			}
 		});
 	}
@@ -66,8 +72,6 @@ public sealed class RecurringTask(
 		await _cts.CancelAsync().NoCtx();
 
 		await _tcs.Task.NoCtx();
-
-		_cts.Dispose();
 
 		_log.LogInformation("Stopped worker '{Worker}'", Name);
 	}
