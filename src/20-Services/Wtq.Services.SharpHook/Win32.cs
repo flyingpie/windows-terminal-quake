@@ -43,7 +43,6 @@ public class Win32 : IWin32
 
 		// Get the currently active keyboard layout.
 		// TODO: Keyboard layout changes require WTQ restart it seems.
-		//var threadId = GetThreadId();
 		var layout = PI.GetKeyboardLayout_SafeHandle(0);
 
 		// Build a buffer for the resulting UTF8 string.
@@ -58,9 +57,6 @@ public class Win32 : IWin32
 			wFlags: 0,
 			dwhkl: layout);
 
-		//_log.LogInformation("LAYOUT:{Layout} BUFFER:{Buffer} ({Length})", layout.DangerousGetHandle(), buffer[..5].ToString(), length);
-
-		// Pull the relevant part out of the buffer (as specified by the returned "length").
 		var result = buffer.ToString().Trim('\0').Trim();
 
 		// The result could still be empty, e.g. for the "Tab" character, which returns \t.
@@ -73,24 +69,6 @@ public class Win32 : IWin32
 		_log.LogInformation("Got character '{Char}'", result);
 		return result;
 	}
-
-	//private unsafe uint GetThreadId()
-	//{
-	//	var fg = PI.GetForegroundWindow();
-	//	if (fg == 0)
-	//	{
-	//		_log.LogWarning("Foreground window NULL"); // TODO: Fallback to current thread?
-	//		return 0;
-	//	}
-
-	//	var threadId = PI.GetWindowThreadProcessId(fg, null);
-	//	if (threadId == 0)
-	//	{
-	//		_log.LogWarning("FG thread NULL");
-	//	}
-
-	//	return threadId;
-	//}
 
 	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
 		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
