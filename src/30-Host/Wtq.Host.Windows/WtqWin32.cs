@@ -9,10 +9,8 @@ namespace Wtq.Host.Windows;
 
 public class WtqWin32 : WtqHostBase
 {
-	protected override IPlatformService CreatePlatformService()
-	{
-		throw new NotImplementedException();
-	}
+	protected override IPlatformService CreatePlatformService() =>
+		new WindowsPlatformService();
 
 	protected override void ConfigureServices(IServiceCollection services)
 	{

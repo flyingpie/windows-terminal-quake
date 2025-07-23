@@ -20,6 +20,18 @@ public static class SystemExtensions
 		return Path.GetFileNameWithoutExtension(fileName)?.EmptyOrWhiteSpaceToNull() ?? fileName;
 	}
 
+	public static string AssertFileExists(this string path)
+	{
+		Guard.Against.NullOrWhiteSpace(path);
+
+		if (!File.Exists(path))
+		{
+			throw new WtqException($"File at path '{path}' does not exist.");
+		}
+
+		return path;
+	}
+
 	/// <summary>
 	/// Make sure the specified <param name="path"/> exists.
 	/// </summary>

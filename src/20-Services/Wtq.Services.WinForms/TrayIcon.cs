@@ -1,18 +1,20 @@
-using Wtq.Configuration;
-
 namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
+	private readonly IPlatformService _platform;
+
 	private NotifyIcon? _notificationIcon;
 
 	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
 	public TrayIcon(
 		IHostApplicationLifetime lifetime,
+		IPlatformService platform,
 		IWtqBus bus)
 	{
-		_ = Guard.Against.Null(lifetime);
 		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(lifetime);
+		_platform = Guard.Against.Null(platform);
 
 		var waiter = new TaskCompletionSource<bool>();
 
@@ -31,7 +33,7 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
+					() => platform.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new ToolStripSeparator(),
 
@@ -43,15 +45,15 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Settings File",
-					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
+					() => platform.OpenFileOrDirectory(platform.PathToWtqConf)),
 
 				CreateItem(
 					"Open Settings Directory",
-					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+					() => platform.OpenFileOrDirectory(platform.PathToWtqConfDir)),
 
 				CreateItem(
 					"Open Logs Directory",
-					() => Os.OpenFileOrDirectory(WtqPaths.WtqLogDir)),
+					() => platform.OpenFileOrDirectory(platform.PathToLogsDir)),
 
 				new ToolStripSeparator(),
 
@@ -90,9 +92,9 @@ public sealed class TrayIcon : IDisposable
 		Application.Exit();
 	}
 
-	private static Icon CreateIcon()
+	private Icon CreateIcon()
 	{
-		var path = WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
+		var path = Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-nopadding.ico");
 		using var str = File.OpenRead(path);
 
 		return new Icon(str);

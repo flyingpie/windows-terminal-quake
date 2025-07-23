@@ -1,5 +1,4 @@
 using Wtq.Configuration;
-using Wtq.Utils;
 
 namespace Wtq.Services.Win32v2.UnitTest;
 
@@ -15,8 +14,6 @@ public class Win32WtqWindowTest
 	[TestInitialize]
 	public void Setup()
 	{
-		Log.Configure();
-
 		_window = new Win32WtqWindow(_win32.Object, _wnd);
 	}
 

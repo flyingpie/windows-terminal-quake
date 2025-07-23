@@ -41,8 +41,8 @@ public static class ServiceCollectionExtensions
 			// Core App Logic
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
+			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<WtqOptionsSaveService>()
 
 			.AddHostedService<WtqEventHookHandler>()
 			.AddHostedService<WtqFocusTracker>()

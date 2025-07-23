@@ -6,6 +6,7 @@ namespace Wtq.Services.TrayIcon;
 
 public sealed class WtqTrayIconService : WtqHostedService
 {
+	private readonly IPlatformService _platform;
 	private readonly ILogger _log = Log.For<WtqTrayIconService>();
 
 	private readonly NotifyIcon _icon;
@@ -17,9 +18,10 @@ public sealed class WtqTrayIconService : WtqHostedService
 		IWtqBus bus,
 		IWtqUIService ui)
 	{
-		_ = Guard.Against.Null(lifetime);
 		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(lifetime);
 		_ = Guard.Against.Null(ui);
+		_platform = Guard.Against.Null(platform);
 
 		_icon = NotifyIcon.Create(
 			_platform.PathToTrayIcon,
@@ -33,7 +35,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new SeparatorItem(),
 
@@ -53,7 +55,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 
 				CreateItem(
 					"Open Logs",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogs)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
 
 				new SeparatorItem(),
 
@@ -117,24 +119,24 @@ public sealed class WtqTrayIconService : WtqHostedService
 			IsDisabled = !enabled,
 		};
 
-	private string GetPathToIcon()
-	{
-		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
-		if (Os.IsWindows)
-		{
-			_log.LogDebug("Running on Windows, using ICO version of tray icon");
-			return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
-		}
-
-		// Linux (Flatpak).
-		if (Os.IsFlatpak)
-		{
-			_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
-			return "nl.flyingpie.wtq-white";
-		}
-
-		// Linux (non-Flatpak).
-		_log.LogDebug("Running bare Linux, using icon path of tray icon");
-		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
-	}
+	// private string GetPathToIcon()
+	// {
+	// 	// It seems Windows wants its icons as ICO files, while Linux supports PNG.
+	// 	if (Os.IsWindows)
+	// 	{
+	// 		_log.LogDebug("Running on Windows, using ICO version of tray icon");
+	// 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
+	// 	}
+	//
+	// 	// Linux (Flatpak).
+	// 	if (Os.IsFlatpak)
+	// 	{
+	// 		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
+	// 		return "nl.flyingpie.wtq-white";
+	// 	}
+	//
+	// 	// Linux (non-Flatpak).
+	// 	_log.LogDebug("Running bare Linux, using icon path of tray icon");
+	// 	return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
+	// }
 }

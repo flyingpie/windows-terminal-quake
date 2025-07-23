@@ -15,15 +15,15 @@ public class InfoCommand : ICommand
 		Console.WriteLine($"Git branch:....................................{WtqConstants.GitBranch}");
 		Console.WriteLine($"Git commit:....................................{WtqConstants.GitCommit}");
 		Console.WriteLine($"-- Paths --------------------------------------------------------");
-		Console.WriteLine($"{nameof(WtqPaths.AppData)}:....................{WtqPaths.AppData}");
-		Console.WriteLine($"{nameof(WtqPaths.AppDataWtq)}:.................{WtqPaths.AppDataWtq}");
-		Console.WriteLine($"{nameof(WtqPaths.PreferredWtqConfigPath)}:.....{WtqPaths.PreferredWtqConfigPath}");
-		Console.WriteLine($"{nameof(WtqPaths.UserHome)}:...................{WtqPaths.UserHome}");
-		Console.WriteLine($"{nameof(WtqPaths.GetWtqAppDir)}:...............{WtqPaths.GetWtqAppDir()}");
-		Console.WriteLine($"{nameof(WtqPaths.WtqConfigFromEnvVar)}:........{WtqPaths.WtqConfigFromEnvVar}");
-		Console.WriteLine($"{nameof(WtqPaths.WtqConfigPaths)}:.............{string.Join("\n  -", WtqPaths.WtqConfigPaths)}");
-		Console.WriteLine($"{nameof(WtqPaths.GetWtqLogDir)}:...............{WtqPaths.GetWtqLogDir()}");
-		Console.WriteLine($"{nameof(WtqPaths.GetWtqTempDir)}:..............{WtqPaths.GetWtqTempDir()}");
+		// Console.WriteLine($"{nameof(WtqPaths.AppData)}:....................{WtqPaths.AppData}");
+		// Console.WriteLine($"{nameof(WtqPaths.AppDataWtq)}:.................{WtqPaths.AppDataWtq}");
+		// Console.WriteLine($"{nameof(WtqPaths.PreferredWtqConfigPath)}:.....{WtqPaths.PreferredWtqConfigPath}");
+		// Console.WriteLine($"{nameof(WtqPaths.UserHome)}:...................{WtqPaths.UserHome}");
+		// Console.WriteLine($"{nameof(WtqPaths.GetWtqAppDir)}:...............{WtqPaths.GetWtqAppDir()}");
+		// Console.WriteLine($"{nameof(WtqPaths.WtqConfigFromEnvVar)}:........{WtqPaths.WtqConfigFromEnvVar}");
+		// Console.WriteLine($"{nameof(WtqPaths.WtqConfigPaths)}:.............{string.Join("\n  -", WtqPaths.WtqConfigPaths)}");
+		// Console.WriteLine($"{nameof(WtqPaths.GetWtqLogDir)}:...............{WtqPaths.GetWtqLogDir()}");
+		// Console.WriteLine($"{nameof(WtqPaths.GetWtqTempDir)}:..............{WtqPaths.GetWtqTempDir()}");
 		Console.WriteLine($"-----------------------------------------------------------------");
 	}
 
@@ -31,10 +31,10 @@ public class InfoCommand : ICommand
 	{
 		get
 		{
-			if (Os.IsFlatpak)
-			{
-				return "Flatpak";
-			}
+			// if (Os.IsFlatpak)
+			// {
+			// 	return "Flatpak";
+			// }
 
 			if (Os.IsLinux)
 			{

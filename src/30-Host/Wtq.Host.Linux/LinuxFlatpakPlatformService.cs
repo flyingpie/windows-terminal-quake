@@ -1,54 +1,44 @@
 using System.Diagnostics;
-using System.IO;
 using Wtq.Configuration;
-using Wtq.Exceptions;
-using Wtq.Services;
 using Wtq.Utils;
 
 namespace Wtq.Host.Linux;
 
-public class LinuxFlatpakPlatformService : IPlatformService
+public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 {
 	/// <inheritdoc/>
-	public string PlatformName => "Flatpak";
+	public override string PlatformName => "Flatpak";
 
 	/// <inheritdoc/>
-	public string PathToAppDir =>
-		Path.GetDirectoryName(typeof(WtqPaths).Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
-		throw new WtqException("Could not get path to app directory.");
+	public override string PathToAppIcon { get; }
+
+	/// <summary>
+	/// Flatpak, use XDG_STATE_HOME without an app-specific subdir (since the entire directory is already app-specific).
+	/// For example: "/home/user/.var/app/nl.flyingpie.wtq/.local/state".
+	/// </summary>
+	public override string PathToTempDir =>
+		XDG.XDG_STATE_HOME.GetOrCreateDirectory();
 
 	/// <inheritdoc/>
-	public string PathToLogs => WtqPaths.WtqLogDir;
+	///		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
+	public override string PathToTrayIcon =>
+		"nl.flyingpie.wtq-white";
+
+	// TODO: I'm expecting preper implementation of XDG spec to make this unnecessary.
+	// /// <inheritdoc/>
+	// public override ICollection<string> PathsToWtqConfs =>
+	// [
+	// 	// In XDG config dir.
+	// 	// TODO
+	// 	Path.Combine(PathToUserHome, ".config", "wtq.json"),
+	// 	Path.Combine(PathToUserHome, ".config", "wtq.jsonc"),
+	// 	Path.Combine(PathToUserHome, ".config", "wtq.json5"),
+	//
+	// 	..base.PathsToWtqConfs
+	// ];
 
 	/// <inheritdoc/>
-	public string PathToAppIcon { get; }
-
-	/// <inheritdoc/>
-	public string PathToTrayIcon => "nl.flyingpie.wtq-white";
-
-	/// <inheritdoc/>
-	public string PathToUserHome => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-	/// <inheritdoc/>
-	public string PathToWtqConf => WtqPaths.PreferredWtqConfigPath;
-
-	/// <inheritdoc/>
-	public string PathToWtqConfDir => Path.GetDirectoryName(PathToWtqConf) ?? throw new WtqException($"Could not determine directory of path '{PathToWtqConf}'.");
-
-	/// <inheritdoc/>
-	public ICollection<string> PathsToWtqConfs =>
-	[
-		// In XDG config dir.
-		Path.Combine(PathToUserHome, ".config", "wtq.json"),
-		Path.Combine(PathToUserHome, ".config", "wtq.jsonc"),
-		Path.Combine(PathToUserHome, ".config", "wtq.json5"),
-	];
-
-	/// <inheritdoc/>
-	public string PreferredPathWtqConfig => throw new NotImplementedException();
-
-	/// <inheritdoc/>
-	public Process CreateProcess(WtqAppOptions opts)
+	public override Process CreateProcess(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
 
@@ -96,25 +86,19 @@ public class LinuxFlatpakPlatformService : IPlatformService
 	}
 
 	/// <inheritdoc/>
-	public bool IsCallable(string? workingDirectory, string fileName)
+	public override bool IsCallable(string? workingDirectory, string fileName)
 	{
 		return false; // TODO
 	}
 
 	/// <inheritdoc/>
-	public bool ShouldUsePollingFileWatcherForPath(string path)
-	{
-		return false; // TODO
-	}
-
-	/// <inheritdoc/>
-	public void OpenFileOrDirectory(string path)
+	public override void OpenFileOrDirectory(string path)
 	{
 		// TODO
 	}
 
 	/// <inheritdoc/>
-	public void OpenUrl(Uri url)
+	public override void OpenUrl(Uri url)
 	{
 		// TODO
 	}

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
@@ -12,9 +13,9 @@ public static class Log
 
 	public const string LogLevelEnvVar = "WTQ_LOG_LEVEL";
 
-	public static ILoggerFactory Factory { get; private set; }
+	public static ILoggerFactory Factory { get; private set; } = NullLoggerFactory.Instance;
 
-	public static ILoggerProvider Provider { get; private set; }
+	public static ILoggerProvider Provider { get; private set; } = NullLoggerProvider.Instance;
 
 	/// <summary>
 	/// Returns the requested log level, as specified by an environment variable.

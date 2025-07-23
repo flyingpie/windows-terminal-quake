@@ -45,6 +45,7 @@ public static class WtqUIHostBuilder
 
 		var ui = new WtqUIHost(
 			app.Services.GetRequiredService<IOptions<WtqOptions>>(),
+			app.Services.GetRequiredService<IPlatformService>(),
 			app.Services.GetRequiredService<IWtqBus>(),
 			app.Services.GetRequiredService<IWtqWindowService>(),
 			app);

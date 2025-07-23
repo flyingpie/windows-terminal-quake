@@ -13,16 +13,16 @@ public static class ServiceCollectionExtensions
 	{
 		Guard.Against.Null(services);
 
-		if (Os.IsFlatpak)
-		{
-			_log.LogDebug("Using Flatpak process factory");
-			services.AddSingleton<IProcessFactory, FlatpakProcessFactory>();
-		}
-		else
-		{
-			_log.LogDebug("Using native process factory");
-			services.AddSingleton<IProcessFactory, NativeProcessFactory>();
-		}
+		// if (Os.IsFlatpak)
+		// {
+		// 	_log.LogDebug("Using Flatpak process factory");
+		// 	services.AddSingleton<IProcessFactory, FlatpakProcessFactory>();
+		// }
+		// else
+		// {
+		// 	_log.LogDebug("Using native process factory");
+		// 	services.AddSingleton<IProcessFactory, NativeProcessFactory>();
+		// }
 
 		return services
 

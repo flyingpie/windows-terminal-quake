@@ -1,1 +1,3 @@
-<p>Settings backed by file at path <RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Class="rz-p-1" Click="@(() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path))">@WtqOptionsPath.Instance.Path <RadzenIcon Icon="open_in_new" /></RadzenButton>.</p>
+@inject IPlatformService Platform
+
+<p>Settings backed by file at path <RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Class="rz-p-1" Click="@(() => Platform.OpenFileOrDirectory(Platform.PathToWtqConf))">@Platform.PathToWtqConf <RadzenIcon Icon="open_in_new" /></RadzenButton>.</p>
