@@ -4,18 +4,26 @@ public abstract class PlatformServiceBase : IPlatformService
 {
 	private readonly ILogger _log;
 
-	protected PlatformServiceBase()
+	protected PlatformServiceBase(
+		string? pathToAppDir = null,
+		string? pathToUserHomeDir = null)
 	{
 		_log = Log.For(GetType());
+
+		PathToAppDir = pathToAppDir ?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
+			throw new WtqException("Could not get path to app directory.");
+
+		PathToUserHomeDir = pathToUserHomeDir ??
+			Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	}
 
 	public abstract string PlatformName { get; }
 
+	public abstract ICollection<string> DefaultApiUrls { get; }
+
 	public abstract string[] ExecutableExtensions { get; }
 
-	public virtual string PathToAppDir =>
-		Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
-		throw new WtqException("Could not get path to app directory.");
+	public virtual string PathToAppDir { get; }
 
 	public virtual string PathToAssetsDir =>
 		Path.Combine(PathToAppDir, "assets");
@@ -28,8 +36,7 @@ public abstract class PlatformServiceBase : IPlatformService
 
 	public abstract string PathToTrayIcon { get; }
 
-	public virtual string PathToUserHome =>
-		Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+	public virtual string PathToUserHomeDir { get; }
 
 	public virtual string PathToWtqConf { get; }
 

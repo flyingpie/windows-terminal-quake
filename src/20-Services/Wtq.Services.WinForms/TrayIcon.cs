@@ -26,7 +26,7 @@ public sealed class TrayIcon : IDisposable
 			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion}",
-					() => {},
+					() => { },
 					enabled: false),
 
 				new ToolStripSeparator(),
@@ -65,10 +65,7 @@ public sealed class TrayIcon : IDisposable
 			// Tray Icon
 			_notificationIcon = new NotifyIcon()
 			{
-				Icon = CreateIcon(),
-				ContextMenuStrip = contextMenu,
-				Text = "WTQ",
-				Visible = true,
+				Icon = CreateIcon(), ContextMenuStrip = contextMenu, Text = "WTQ", Visible = true,
 			};
 
 			waiter.SetResult(true);
@@ -94,8 +91,7 @@ public sealed class TrayIcon : IDisposable
 
 	private Icon CreateIcon()
 	{
-		var path = Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-nopadding.ico");
-		using var str = File.OpenRead(path);
+		using var str = File.OpenRead(_platform.PathToTrayIcon);
 
 		return new Icon(str);
 	}

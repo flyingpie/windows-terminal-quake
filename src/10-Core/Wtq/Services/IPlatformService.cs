@@ -9,9 +9,19 @@ public interface IPlatformService
 	string PlatformName { get; }
 
 	/// <summary>
+	/// When no addresses are specified to run the API on, these used.
+	/// </summary>
+	ICollection<string> DefaultApiUrls { get; }
+
+	/// <summary>
 	/// Path to the directory that contains the WTQ app itself.
 	/// </summary>
 	string PathToAppDir { get; }
+
+	/// <summary>
+	/// Path to the icon that's used by the GUI (including in the taskbar, but not the tray icon).
+	/// </summary>
+	string PathToAppIcon { get; }
 
 	string PathToAssetsDir { get; }
 
@@ -19,11 +29,6 @@ public interface IPlatformService
 	/// Where the log files are stored.
 	/// </summary>
 	string PathToLogsDir { get; }
-
-	/// <summary>
-	/// Path to the icon that's used by the GUI (including in the taskbar, but not the tray icon).
-	/// </summary>
-	string PathToAppIcon { get; }
 
 	/// <summary>
 	///
@@ -38,7 +43,7 @@ public interface IPlatformService
 	/// <summary>
 	/// Path to the user's home directory. Used to resolve settings.
 	/// </summary>
-	string PathToUserHome { get; }
+	string PathToUserHomeDir { get; }
 
 	/// <summary>
 	/// Path to the active (usually only) settings file.
@@ -46,7 +51,7 @@ public interface IPlatformService
 	string PathToWtqConf { get; }
 
 	/// <summary>
-	/// Path to the active (usually only) settings file.
+	/// Path to the active (usually only) settings file's directory.
 	/// </summary>
 	string PathToWtqConfDir { get; }
 
@@ -63,10 +68,6 @@ public interface IPlatformService
 
 	Process CreateProcess(WtqAppOptions opts);
 
-	// bool ExistsOnPath(string path);
-
-	string? ResolvePath(string fileName);
-
 	/// <summary>
 	/// Returns whether a <paramref name="fileName"/> can be called, optionally using the specified <paramref name="workingDirectory"/>.<br/>
 	/// Used to tell the user whether a file name looks correct, in GUI (for examples and apps).
@@ -82,6 +83,8 @@ public interface IPlatformService
 	/// Opens the specified <paramref name="url"/> using the default application (usually a web browser).
 	/// </summary>
 	void OpenUrl(Uri url);
+
+	string? ResolvePath(string fileName);
 
 	/// <summary>
 	/// Returns whether - when watching for changes for the specified <paramref name="path"/> - a polling file watcher should be used.

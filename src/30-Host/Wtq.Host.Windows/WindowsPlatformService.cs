@@ -12,6 +12,12 @@ public class WindowsPlatformService : PlatformServiceBase
 	/// </summary>
 	public override string[] ExecutableExtensions => [string.Empty, ".exe", ".bat", ".cmd"];
 
+	/// <summary>
+	/// On Windows, default to a named pipe.
+	/// </summary>
+	public override ICollection<string> DefaultApiUrls =>
+		["http://pipe:/wtq"];
+
 	public override string PlatformName { get; }
 
 	public override string PathToAppDir { get; }

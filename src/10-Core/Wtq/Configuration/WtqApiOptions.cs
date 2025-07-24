@@ -17,12 +17,5 @@ public class WtqApiOptions
 	/// <br/>
 	/// A regular socket can also be used, e.g. "http://127.0.0.1:8998".
 	/// </summary>
-	public ICollection<string> Urls { get; set; }
-		=
-		[
-			"http://unix:/tmp/wtq.sock"
-			// Os.IsLinux
-			// 	? "http://unix:/tmp/wtq.sock" // On Linux, default to a Unix socket.
-			// 	: "http://pipe:/wtq" // On Windows, default to a named pipe.
-		];
+	public ICollection<string>? Urls { get; set; }
 }

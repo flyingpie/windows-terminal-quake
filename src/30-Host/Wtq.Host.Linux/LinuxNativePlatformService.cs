@@ -8,7 +8,22 @@ public class LinuxNativePlatformService : PlatformServiceBase
 {
 	public const string Config = "WTQ_CONFIG_FILE";
 
+	public LinuxNativePlatformService(
+		string? pathToAppDir = null,
+		string? pathToUserHomeDir = null)
+		: base(
+			pathToAppDir: pathToAppDir,
+			pathToUserHomeDir: pathToUserHomeDir)
+	{
+	}
+
 	public override string PlatformName { get; } = "Linux Native";
+
+	/// <summary>
+	/// On Linux, default to a Unix socket.
+	/// </summary>
+	public override ICollection<string> DefaultApiUrls =>
+		["http://unix:/tmp/wtq.sock"];
 
 	/// <summary>
 	/// When looking for the existence of a file and whether it's executable, we consider these extensions.

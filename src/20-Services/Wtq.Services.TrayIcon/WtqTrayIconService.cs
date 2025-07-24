@@ -118,25 +118,4 @@ public sealed class WtqTrayIconService : WtqHostedService
 			Click = (_, _) => action(),
 			IsDisabled = !enabled,
 		};
-
-	// private string GetPathToIcon()
-	// {
-	// 	// It seems Windows wants its icons as ICO files, while Linux supports PNG.
-	// 	if (Os.IsWindows)
-	// 	{
-	// 		_log.LogDebug("Running on Windows, using ICO version of tray icon");
-	// 		return WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
-	// 	}
-	//
-	// 	// Linux (Flatpak).
-	// 	if (Os.IsFlatpak)
-	// 	{
-	// 		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
-	// 		return "nl.flyingpie.wtq-white";
-	// 	}
-	//
-	// 	// Linux (non-Flatpak).
-	// 	_log.LogDebug("Running bare Linux, using icon path of tray icon");
-	// 	return WtqPaths.GetPathRelativeToWtqAppDir("assets", "nl.flyingpie.wtq-white.svg");
-	// }
 }
