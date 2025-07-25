@@ -21,6 +21,9 @@
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<InformationalVersion>$(Version)</InformationalVersion>
+
+		<!-- We don't need compression on a local app -->
+		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<!-- Non-test projects -->

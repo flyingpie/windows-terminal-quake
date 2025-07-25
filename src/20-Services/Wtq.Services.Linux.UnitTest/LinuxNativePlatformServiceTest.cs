@@ -1,7 +1,6 @@
-namespace Wtq.Host.Linux.UnitTest;
+namespace Wtq.Services.Linux.UnitTest;
 
 [TestClass]
-[Ignore]
 public class LinuxNativePlatformServiceTest
 {
 	private readonly WtqAppOptions _opts = new();

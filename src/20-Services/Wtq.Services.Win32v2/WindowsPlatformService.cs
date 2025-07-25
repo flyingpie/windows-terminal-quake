@@ -1,12 +1,18 @@
-using System.Collections.Generic;
 using System.IO;
-using Wtq.Services;
-using Wtq.Utils;
 
-namespace Wtq.Host.Windows;
+namespace Wtq.Services.Win32v2;
 
 public class WindowsPlatformService : PlatformServiceBase
 {
+	public WindowsPlatformService(
+		string? pathToAppDir = null,
+		string? pathToUserHomeDir = null)
+		: base(
+			pathToAppDir: pathToAppDir,
+			pathToUserHomeDir: pathToUserHomeDir)
+	{
+	}
+
 	/// <summary>
 	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
 	/// </summary>

@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using Wtq.Configuration;
-using Wtq.Utils;
 
-namespace Wtq.Host.Linux;
+namespace Wtq.Services.Linux;
 
 public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 {

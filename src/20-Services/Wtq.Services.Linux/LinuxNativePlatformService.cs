@@ -1,8 +1,4 @@
-using System.IO;
-using Wtq.Services;
-using Wtq.Utils;
-
-namespace Wtq.Host.Linux;
+namespace Wtq.Services.Linux;
 
 public class LinuxNativePlatformService : PlatformServiceBase
 {
@@ -30,9 +26,9 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// </summary>
 	public override string[] ExecutableExtensions => [string.Empty];
 
-	public override string PathToLogsDir { get; }
-
 	public override string PathToAppIcon { get; }
+
+	public override string PathToLogsDir { get; }
 
 	/// <summary>
 	/// Native Linux, use XDG_STATE_HOME with an app-specific subdir.

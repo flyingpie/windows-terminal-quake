@@ -25,12 +25,12 @@ public abstract class PlatformServiceBase : IPlatformService
 
 	public virtual string PathToAppDir { get; }
 
+	public abstract string PathToAppIcon { get; }
+
 	public virtual string PathToAssetsDir =>
 		Path.Combine(PathToAppDir, "assets");
 
 	public abstract string PathToLogsDir { get; }
-
-	public abstract string PathToAppIcon { get; }
 
 	public abstract string PathToTempDir { get; }
 
@@ -82,11 +82,6 @@ public abstract class PlatformServiceBase : IPlatformService
 			StartInfo = startInfo,
 		};
 	}
-
-	// public bool ExistsOnPath(string fileName)
-	// {
-	// 	return GetFullPath(fileName) != null;
-	// }
 
 	public string? ResolvePath(string fileName)
 	{

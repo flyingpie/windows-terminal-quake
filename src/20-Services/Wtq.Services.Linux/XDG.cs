@@ -1,7 +1,4 @@
-using System.IO;
-using Wtq.Utils;
-
-namespace Wtq.Host.Linux;
+namespace Wtq.Services.Linux;
 
 public static class XDG
 {

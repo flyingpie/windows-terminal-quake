@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Wtq.Configuration;
 using Wtq.Host.Base;
 using Wtq.Services;
+using Wtq.Services.Win32v2;
 using Wtq.Services.WinForms;
 
 namespace Wtq.Host.Windows;

@@ -1,14 +1,17 @@
-namespace Wtq.Host.Linux.UnitTest;
+using System;
+using System.Linq;
+using Wtq.Configuration;
+
+namespace Wtq.Services.Win32v2.UnitTest;
 
 [TestClass]
-[Ignore]
-public class LinuxNativePlatformServiceTest
+public class WindowsPlatformServiceTest
 {
 	private readonly WtqAppOptions _opts = new();
 
-	private readonly LinuxNativePlatformService _p = new(
-		pathToAppDir: "/path/to/app",
-		pathToUserHomeDir: "/home/username");
+	private readonly WindowsPlatformService _p = new(
+		pathToAppDir: "C:/path/to/app",
+		pathToUserHomeDir: "C:/users/username");
 
 	[TestMethod]
 	public void PlatformName()

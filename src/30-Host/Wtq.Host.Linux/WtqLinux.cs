@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Wtq.Host.Base;
 using Wtq.Services;
-using Wtq.Services.KWin;
+using Wtq.Services.Linux;
 using Wtq.Services.TrayIcon;
 using Wtq.Utils;
 
@@ -22,8 +22,8 @@ public class WtqLinux : WtqHostBase
 	{
 		Guard.Against.Null(services);
 
-		services
-			.AddTrayIcon()
-			.AddKWin();
+		Services.KWin.ServiceCollectionExtensions.AddKWin(
+			services
+				.AddTrayIcon());
 	}
 }
