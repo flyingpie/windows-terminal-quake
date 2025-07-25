@@ -4,7 +4,7 @@ namespace Wtq.Services.Linux;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection AddKWin(this IServiceCollection services)
+	public static IServiceCollection AddLinux(this IServiceCollection services)
 	{
 		Guard.Against.Null(services);
 

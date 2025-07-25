@@ -14,11 +14,7 @@
 		<PackageReference Include="Photino.Blazor"/>
 		<PackageReference Include="Radzen.Blazor"/>
 	</ItemGroup>
-	<!--
-	<ItemGroup>
-		<Content Update="wwwroot\**" CopyToOutputDirectory="PreserveNewest"/>
-	</ItemGroup>
--->
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
