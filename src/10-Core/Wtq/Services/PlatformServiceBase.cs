@@ -1,5 +1,8 @@
 namespace Wtq.Services;
 
+/// <summary>
+/// Implements a bunch of stuff of <see cref="IPlatformService"/>, that's shared across multiple platforms.
+/// </summary>
 public abstract class PlatformServiceBase : IPlatformService
 {
 	private readonly ILogger _log;
@@ -17,37 +20,66 @@ public abstract class PlatformServiceBase : IPlatformService
 			Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	}
 
+	/// <inheritdoc/>
 	public abstract string PlatformName { get; }
 
+	/// <inheritdoc/>
 	public abstract ICollection<string> DefaultApiUrls { get; }
 
+	/// <summary>
+	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
+	/// </summary>
 	public abstract string[] ExecutableExtensions { get; }
 
+	/// <inheritdoc/>
 	public virtual string PathToAppDir { get; }
 
-	public abstract string PathToAppIcon { get; }
+	// /// <inheritdoc/>
+	// public abstract string PathToAppIcon { get; }
 
+	/// <inheritdoc/>
 	public virtual string PathToAssetsDir =>
 		Path.Combine(PathToAppDir, "assets");
 
+	/// <inheritdoc/>
 	public abstract string PathToLogsDir { get; }
 
+	/// <inheritdoc/>
 	public abstract string PathToTempDir { get; }
 
+	/// <inheritdoc/>
 	public abstract string PathToTrayIcon { get; }
 
+	/// <inheritdoc/>
 	public virtual string PathToUserHomeDir { get; }
 
+	/// <inheritdoc/>
 	public virtual string PathToWtqConf { get; }
 
 	/// <inheritdoc/>
 	public virtual string PathToWtqConfDir =>
 		Path.GetDirectoryName(PathToWtqConf) ?? throw new WtqException($"Could not determine directory of path '{PathToWtqConf}'.");
 
+	/// <inheritdoc/>
 	public abstract ICollection<string> PathsToWtqConfs { get; }
 
+	/// <inheritdoc/>
 	public abstract string PreferredPathWtqConfig { get; }
 
+	public virtual ICollection<string> WtqConfNames =>
+	[
+		"wtq",
+		".wtq",
+	];
+
+	public virtual ICollection<string> WtqConfExtensions =>
+	[
+		"json",
+		"jsonc",
+		"json5",
+	];
+
+	/// <inheritdoc/>
 	public virtual Process CreateProcess(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
@@ -59,7 +91,9 @@ public abstract class PlatformServiceBase : IPlatformService
 
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+			WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments
@@ -83,6 +117,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		};
 	}
 
+	/// <inheritdoc/>
 	public string? ResolvePath(string fileName)
 	{
 		if (File.Exists(fileName))
@@ -103,6 +138,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		return null;
 	}
 
+	/// <inheritdoc/>
 	public virtual bool IsCallable(string? workingDirectory, string fileName)
 	{
 		foreach (var ext in ExecutableExtensions)
@@ -123,6 +159,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		return false;
 	}
 
+	/// <inheritdoc/>
 	public virtual bool ShouldUsePollingFileWatcherForPath(string path)
 	{
 		Guard.Against.NullOrWhiteSpace(path);
@@ -137,6 +174,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
 	}
 
+	/// <inheritdoc/>
 	public virtual void OpenFileOrDirectory(string path)
 	{
 		Guard.Against.NullOrWhiteSpace(path);
@@ -155,6 +193,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		}
 	}
 
+	/// <inheritdoc/>
 	public virtual void OpenUrl(Uri url)
 	{
 		Guard.Against.Null(url);

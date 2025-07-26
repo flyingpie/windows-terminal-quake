@@ -1,9 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
 namespace Wtq.Services.Linux;
 
 public class LinuxNativePlatformService : PlatformServiceBase
 {
-	public const string Config = "WTQ_CONFIG_FILE";
-
 	public LinuxNativePlatformService(
 		string? pathToAppDir = null,
 		string? pathToUserHomeDir = null)
@@ -13,7 +14,8 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	{
 	}
 
-	public override string PlatformName { get; } = "Linux Native";
+	/// <inheritdoc/>
+	public override string PlatformName => "Linux";
 
 	/// <summary>
 	/// On Linux, default to a Unix socket.
@@ -22,31 +24,87 @@ public class LinuxNativePlatformService : PlatformServiceBase
 		["http://unix:/tmp/wtq.sock"];
 
 	/// <summary>
-	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
+	/// On Linux, executable files generally don't have extensions.<br/>
+	/// Some exceptions exist, like ".sh", but these require the extension to be part of the filename when executing.
 	/// </summary>
-	public override string[] ExecutableExtensions => [string.Empty];
+	public override string[] ExecutableExtensions =>
+		[string.Empty];
 
-	public override string PathToAppIcon { get; }
-
-	public override string PathToLogsDir { get; }
+	public override string PathToLogsDir =>
+		Path.Combine(PathToTempDir);
 
 	/// <summary>
-	/// Native Linux, use XDG_STATE_HOME with an app-specific subdir.
+	/// Native Linux, use XDG_STATE_HOME with an app-specific subdirectory.
 	/// For example: "/home/user/.local/state/wtq".
 	/// </summary>
 	public override string PathToTempDir =>
-		Path.Combine(XDG.XDG_STATE_HOME, "wtq").GetOrCreateDirectory();
+		Path.Combine(XDG_STATE_HOME, "wtq");
 
 	/// <summary>
-	///
-	// _log.LogDebug("Running bare Linux, using icon path of tray icon");
+	/// On native Linux, use a physical path to the tray icon, as an SVG.
 	/// </summary>
 	public override string PathToTrayIcon =>
 		Path.Combine(PathToAppDir, "assets", "nl.flyingpie.wtq-white.svg").AssertFileExists();
 
-	public override string PathToWtqConf { get; }
+	public override string PathToWtqConf
+		=> PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists) ?? PreferredPathWtqConfig;
 
-	public override ICollection<string> PathsToWtqConfs { get; }
+	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
+	public override ICollection<string> PathsToWtqConfs
+	{
+		get
+		{
+			var res = new List<string?>();
 
-	public override string PreferredPathWtqConfig { get; }
+			// Environment variable
+			res.Add(WtqEnv.WtqConfigFile);
+
+			foreach (var path in new[]
+			{
+				// Next to the app executable
+				PathToAppDir,
+
+				// XDG home, defaults to user home
+				XDG_CONFIG_HOME,
+
+				// Explicitly user home
+				PathToUserHomeDir,
+			})
+			{
+				foreach (var name in WtqConfNames)
+				{
+					foreach (var ext in WtqConfExtensions)
+					{
+						res.Add(Path.Combine(path, $"{name}.{ext}"));
+					}
+				}
+			}
+
+			return res
+				.Where(e => !string.IsNullOrWhiteSpace(e))
+				.Select(e => e!)
+				.Distinct()
+				.ToList();
+		}
+	}
+
+	public override string PreferredPathWtqConfig =>
+		EnvUtils.GetEnvVarOrDefault(WtqEnv.Names.Config, Path.Combine(XDG_CONFIG_HOME, "wtq.jsonc"));
+
+	protected string XDG_CONFIG_HOME =>
+		EnvUtils.GetEnvVarOrDefault("XDG_CONFIG_HOME", Path.Combine(PathToUserHomeDir, ".config"));
+
+	/// <summary>
+	/// $XDG_STATE_HOME defines the base directory relative to which user-specific state files should be stored.
+	/// If $XDG_STATE_HOME is either not set or empty, a default equal to $HOME/.local/state should be used.
+	///
+	/// The $XDG_STATE_HOME contains state data that should persist between (application) restarts, but that is
+	/// not important or portable enough to the user that it should be stored in $XDG_DATA_HOME.
+	///
+	/// It may contain:
+	/// - actions history (logs, history, recently used files, …)
+	/// - current state of the application that can be reused on a restart (view, layout, open files, undo history, …).
+	/// </summary>
+	protected string XDG_STATE_HOME =>
+		EnvUtils.GetEnvVarOrDefault("XDG_STATE_HOME", Path.Combine(PathToUserHomeDir, ".local", "state"));
 }

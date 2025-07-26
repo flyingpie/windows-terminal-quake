@@ -13,8 +13,8 @@ public static class WtqEnv
 	/// <summary>
 	/// Returns path to the WTQ config file, as specified by an environment variable.
 	/// </summary>
-	public static string? ConfigFile
-		=> Environment.GetEnvironmentVariable(Names.Config)?.ExpandEnvVars()?.EmptyOrWhiteSpaceToNull();
+	public static string? WtqConfigFile
+		=> EnvUtils.GetEnvVar(Names.Config);
 
 	public static bool HasTermEnvVar
 		=> !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));

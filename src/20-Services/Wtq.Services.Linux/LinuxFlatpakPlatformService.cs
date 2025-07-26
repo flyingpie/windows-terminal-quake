@@ -7,15 +7,15 @@ public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 	/// <inheritdoc/>
 	public override string PlatformName => "Flatpak";
 
-	/// <inheritdoc/>
-	public override string PathToAppIcon { get; }
+	// /// <inheritdoc/>
+	// public override string PathToAppIcon { get; }
 
 	/// <summary>
 	/// Flatpak, use XDG_STATE_HOME without an app-specific subdir (since the entire directory is already app-specific).
 	/// For example: "/home/user/.var/app/nl.flyingpie.wtq/.local/state".
 	/// </summary>
 	public override string PathToTempDir =>
-		XDG.XDG_STATE_HOME.GetOrCreateDirectory();
+		XDG_STATE_HOME;
 
 	/// <inheritdoc/>
 	///		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");

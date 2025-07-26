@@ -32,11 +32,11 @@ public class WindowsPlatformServiceTest
 		Assert.AreEqual("/path/to/app", _p.PathToAppDir);
 	}
 
-	[TestMethod]
-	public void PathToAppIcon()
-	{
-		Assert.AreEqual("/TODO", _p.PathToAppIcon);
-	}
+	// [TestMethod]
+	// public void PathToAppIcon()
+	// {
+	// 	Assert.AreEqual("/TODO", _p.PathToAppIcon);
+	// }
 
 	[TestMethod]
 	public void PathToAssetsDir()
