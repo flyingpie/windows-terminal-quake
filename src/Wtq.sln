@@ -60,6 +60,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.Win32v2", "20-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.Win32v2.UnitTest", "20-Services\Wtq.Services.Win32v2.UnitTest\Wtq.Services.Win32v2.UnitTest.csproj", "{CDABAE08-04EA-45F9-9C91-2833F479C170}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.Linux", "20-Services\Wtq.Services.Linux\Wtq.Services.Linux.csproj", "{22A291CE-0BF5-436A-BA58-89DDC12D0EFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wtq.Services.Linux.UnitTest", "20-Services\Wtq.Services.Linux.UnitTest\Wtq.Services.Linux.UnitTest.csproj", "{88C5EC8A-2E94-4799-866F-836AAABCC055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +142,14 @@ Global
 		{CDABAE08-04EA-45F9-9C91-2833F479C170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDABAE08-04EA-45F9-9C91-2833F479C170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDABAE08-04EA-45F9-9C91-2833F479C170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22A291CE-0BF5-436A-BA58-89DDC12D0EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22A291CE-0BF5-436A-BA58-89DDC12D0EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22A291CE-0BF5-436A-BA58-89DDC12D0EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22A291CE-0BF5-436A-BA58-89DDC12D0EFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C5EC8A-2E94-4799-866F-836AAABCC055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C5EC8A-2E94-4799-866F-836AAABCC055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C5EC8A-2E94-4799-866F-836AAABCC055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C5EC8A-2E94-4799-866F-836AAABCC055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +173,8 @@ Global
 		{416E6CD2-3088-47AD-A654-1606DE0310CE} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{13E26E18-E6B6-483E-B451-1147636901DA} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 		{CDABAE08-04EA-45F9-9C91-2833F479C170} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
+		{22A291CE-0BF5-436A-BA58-89DDC12D0EFE} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
+		{88C5EC8A-2E94-4799-866F-836AAABCC055} = {0818E9B2-260C-40E6-8FE1-96EC3A42B98D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65349C7B-F6B3-49A8-9935-4ABF9B6D3D70}

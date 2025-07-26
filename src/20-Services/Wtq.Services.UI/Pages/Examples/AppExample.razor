@@ -1,5 +1,7 @@
 @using Wtq.Examples
 
+@inject IPlatformService Platform
+
 @code {
 
 	[EditorRequired]
@@ -30,14 +32,14 @@
 	/>
 
 	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
+		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Platform.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
 
 		<RadzenStack Orientation="Orientation.Vertical">
 			@foreach (var flavor in App.Flavors)
 			{
 				<RadzenButton Variant="Variant.Filled" Icon="add" Text="@flavor.Name" Click="() => OnSelectApp(App, flavor)" />
 
-				@if (Os.IsCallable(null, flavor.FileName))
+				@if (Platform.IsCallable(null, flavor.FileName))
 				{
 					<p class="rz-color-success-light rz-mt-0">App '@flavor.FileName' seems to exist!</p>
 				}

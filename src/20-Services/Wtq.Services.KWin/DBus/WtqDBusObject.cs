@@ -8,9 +8,9 @@ using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
+internal sealed class WtqDBusObject
+	: WtqHostedService, IWtqDBusObject
 {
-	private readonly IKWinScriptService _scriptService;
 	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
 	private static readonly ObjectPath _path = new("/wtq/kwin");
@@ -18,13 +18,13 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 	/// <summary>
 	/// Packaged KWin script, that's inside the WTQ binaries folder.
 	/// </summary>
-	private static readonly string _pathToWtqKwinJsSrc = WtqPaths.GetPathRelativeToWtqAppDir("wtq.kwin.js");
+	private readonly string _pathToWtqKwinJsSrc;
 
 	/// <summary>
 	/// Path to KWin script in the XDG cache folder, that is reachable by both sandboxed WTQ, and KWin.<br/>
 	/// This is necessary when running WTQ as a Flatpak, where KWin can't see the files, since they're sandboxed.
 	/// </summary>
-	private static readonly string _pathToWtqKwinJsCache = Path.Combine(WtqPaths.GetWtqTempDir(), "wtq.kwin.js");
+	private readonly string _pathToWtqKwinJsCache;
 
 	private readonly CancellationTokenSource _cts = new();
 	private readonly AsyncAutoResetEvent _res = new(false);
@@ -34,6 +34,8 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 
 	private readonly IWtqBus _bus;
 	private readonly IDBusConnection _dbus;
+	private readonly IKWinScriptService _scriptService;
+	private readonly IPlatformService _platformService;
 
 	private readonly List<Func<KeySequence, Task>> _onPressShortcutHandlers = [];
 
@@ -44,11 +46,16 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 	public WtqDBusObject(
 		IDBusConnection dbus,
 		IKWinScriptService scriptService,
+		IPlatformService platformService,
 		IWtqBus bus)
 	{
 		_bus = Guard.Against.Null(bus);
 		_dbus = Guard.Against.Null(dbus);
+		_platformService = Guard.Against.Null(platformService);
 		_scriptService = Guard.Against.Null(scriptService);
+
+		_pathToWtqKwinJsSrc = Path.Combine(_platformService.PathToAppDir, "wtq.kwin.js");
+		_pathToWtqKwinJsCache = Path.Combine(_platformService.PathToTempDir, "wtq.kwin.js");
 
 		// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
 		// and the connection is dropped.
