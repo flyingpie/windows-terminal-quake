@@ -1,8 +1,11 @@
+using Wtq.Utils;
+
 namespace Wtq.Services.Linux.UnitTest;
 
 [TestClass]
 public class LinuxNativePlatformServiceTest
 {
+	private readonly Mock<IFs> _fs = new(MockBehavior.Strict);
 	private readonly WtqAppOptions _opts = new();
 
 	private readonly LinuxNativePlatformService _p = new(
@@ -15,19 +18,33 @@ public class LinuxNativePlatformServiceTest
 		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
 		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "");
 		Environment.SetEnvironmentVariable("XDG_STATE_HOME", "");
+		Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "");
+
+		Fs.Inst = _fs.Object;
+
+		_fs.Reset();
 	}
 
 	[TestMethod]
 	public void PlatformName()
 	{
-		Assert.AreEqual("Linux Native", _p.PlatformName);
+		Assert.AreEqual("Linux", _p.PlatformName);
 	}
 
 	[TestMethod]
-	public void DefaultApiUrls()
+	public void DefaultApiUrls_XdgRuntimeNotSet()
 	{
 		Assert.AreEqual(1, _p.DefaultApiUrls.Count);
-		Assert.AreEqual("http://unix:/tmp/wtq.sock", _p.DefaultApiUrls.First());
+		Assert.AreEqual("http://unix:/home/username/.local/state/wtq/wtq.sock", _p.DefaultApiUrls.First());
+	}
+
+	[TestMethod]
+	public void DefaultApiUrls_XdgRuntimeSet()
+	{
+		Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "/path/to/runtime/dir");
+
+		Assert.AreEqual(1, _p.DefaultApiUrls.Count);
+		Assert.AreEqual("http://unix:/path/to/runtime/dir/wtq/wtq.sock", _p.DefaultApiUrls.First());
 	}
 
 	[TestMethod]
@@ -71,9 +88,19 @@ public class LinuxNativePlatformServiceTest
 	}
 
 	[TestMethod]
-	public void PathToTrayIcon()
+	public void PathToTrayIconDark()
 	{
-		Assert.AreEqual("/path/to/app/assets/nl.flyingpie.wtq-white.svg", _p.PathToTrayIcon);
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+		Assert.AreEqual("/path/to/app/assets/nl.flyingpie.wtq-black.svg", _p.PathToTrayIconDark);
+	}
+
+	[TestMethod]
+	public void PathToTrayIconLight()
+	{
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+		Assert.AreEqual("/path/to/app/assets/nl.flyingpie.wtq-white.svg", _p.PathToTrayIconLight);
 	}
 
 	[TestMethod]
@@ -83,33 +110,61 @@ public class LinuxNativePlatformServiceTest
 	}
 
 	[TestMethod]
-	public void PathToWtqConf()
+	[DataRow("/path/to/app/wtq.json")]
+	[DataRow("/home/username/wtq.json")]
+	public void PathToWtqConf(string path)
 	{
-		Assert.AreEqual("/TODO", _p.PathToWtqConf);
+		_fs.Reset();
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.FileExists(It.Is<string>(p => p == path))).Returns(true);
+
+		Assert.AreEqual(path, _p.PathToWtqConf);
 	}
 
 	[TestMethod]
-	public void PathToWtqConfDir()
+	public void PathToWtqConf_Preferred()
 	{
-		Assert.AreEqual("/TODO", _p.PathToWtqConfDir);
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+
+		Assert.AreEqual("/home/username/.config/wtq.jsonc", _p.PathToWtqConf);
+	}
+
+	[TestMethod]
+	[DataRow("/path/to/app/wtq.json", "/path/to/app")]
+	[DataRow("/home/username/wtq.json", "/home/username")]
+	public void PathToWtqConfDir(string path, string dir)
+	{
+		_fs.Reset();
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.FileExists(It.Is<string>(p => p == path))).Returns(true);
+
+		Assert.AreEqual(dir, _p.PathToWtqConfDir);
+	}
+
+	[TestMethod]
+	public void PathToWtqConfDir_Preferred()
+	{
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+
+		Assert.AreEqual("/home/username/.config", _p.PathToWtqConfDir);
 	}
 
 	[TestMethod]
 	public void PathsToWtqConfs_WtqConfigFileEnvSet()
 	{
 		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "/env/path/to/wtq.jsonc");
-		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "");
 
 		var paths = _p.PathsToWtqConfs.ToList();
 
 		Assert.AreEqual(19, paths.Count);
 		Assert.AreEqual("/env/path/to/wtq.jsonc", paths[0]);
+
+		// Other stuff is tested in the other tests.
 	}
 
 	[TestMethod]
 	public void PathsToWtqConfs_XdgSet()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
 		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "/path/to/xdg/config/home");
 
 		var paths = _p.PathsToWtqConfs.ToList();
@@ -117,28 +172,28 @@ public class LinuxNativePlatformServiceTest
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json", //
-			"/path/to/app/wtq.jsonc", //
-			"/path/to/app/wtq.json5", //
-			"/path/to/app/.wtq.json", //
-			"/path/to/app/.wtq.jsonc", //
-			"/path/to/app/.wtq.json5", //
+			"/path/to/app/wtq.json",
+			"/path/to/app/wtq.jsonc",
+			"/path/to/app/wtq.json5",
+			"/path/to/app/.wtq.json",
+			"/path/to/app/.wtq.jsonc",
+			"/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/path/to/xdg/config/home/wtq.json", //
-			"/path/to/xdg/config/home/wtq.jsonc", //
-			"/path/to/xdg/config/home/wtq.json5", //
-			"/path/to/xdg/config/home/.wtq.json", //
-			"/path/to/xdg/config/home/.wtq.jsonc", //
-			"/path/to/xdg/config/home/.wtq.json5", //
+			"/path/to/xdg/config/home/wtq.json",
+			"/path/to/xdg/config/home/wtq.jsonc",
+			"/path/to/xdg/config/home/wtq.json5",
+			"/path/to/xdg/config/home/.wtq.json",
+			"/path/to/xdg/config/home/.wtq.jsonc",
+			"/path/to/xdg/config/home/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json", //
-			"/home/username/wtq.jsonc", //
-			"/home/username/wtq.json5", //
-			"/home/username/.wtq.json", //
-			"/home/username/.wtq.jsonc", //
-			"/home/username/.wtq.json5", //
+			"/home/username/wtq.json",
+			"/home/username/wtq.jsonc",
+			"/home/username/wtq.json5",
+			"/home/username/.wtq.json",
+			"/home/username/.wtq.jsonc",
+			"/home/username/.wtq.json5",
 		};
 
 		Assert.AreEqual(expected.Length, paths.Count);
@@ -152,36 +207,33 @@ public class LinuxNativePlatformServiceTest
 	[TestMethod]
 	public void PathsToWtqConfs_XdgNotSet()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
-		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "");
-
 		var paths = _p.PathsToWtqConfs.ToList();
 
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json", //
-			"/path/to/app/wtq.jsonc", //
-			"/path/to/app/wtq.json5", //
-			"/path/to/app/.wtq.json", //
-			"/path/to/app/.wtq.jsonc", //
-			"/path/to/app/.wtq.json5", //
+			"/path/to/app/wtq.json",
+			"/path/to/app/wtq.jsonc",
+			"/path/to/app/wtq.json5",
+			"/path/to/app/.wtq.json",
+			"/path/to/app/.wtq.jsonc",
+			"/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/home/username/.config/wtq.json", //
-			"/home/username/.config/wtq.jsonc", //
-			"/home/username/.config/wtq.json5", //
-			"/home/username/.config/.wtq.json", //
-			"/home/username/.config/.wtq.jsonc", //
-			"/home/username/.config/.wtq.json5", //
+			"/home/username/.config/wtq.json",
+			"/home/username/.config/wtq.jsonc",
+			"/home/username/.config/wtq.json5",
+			"/home/username/.config/.wtq.json",
+			"/home/username/.config/.wtq.jsonc",
+			"/home/username/.config/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json", //
-			"/home/username/wtq.jsonc", //
-			"/home/username/wtq.json5", //
-			"/home/username/.wtq.json", //
-			"/home/username/.wtq.jsonc", //
-			"/home/username/.wtq.json5", //
+			"/home/username/wtq.json",
+			"/home/username/wtq.jsonc",
+			"/home/username/wtq.json5",
+			"/home/username/.wtq.json",
+			"/home/username/.wtq.jsonc",
+			"/home/username/.wtq.json5",
 		};
 
 		Assert.AreEqual(expected.Length, paths.Count);

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Wtq.Configuration;
 
 namespace Wtq.Services.Linux;
 
@@ -21,7 +22,7 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// On Linux, default to a Unix socket.
 	/// </summary>
 	public override ICollection<string> DefaultApiUrls =>
-		["http://unix:/tmp/wtq.sock"];
+		[$"http://unix:{XDG_RUNTIME_DIR}/wtq/wtq.sock"];
 
 	/// <summary>
 	/// On Linux, executable files generally don't have extensions.<br/>
@@ -29,6 +30,11 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// </summary>
 	public override string[] ExecutableExtensions =>
 		[string.Empty];
+
+	/// <summary>
+	/// Not supported yet on Linux, always returning <see cref="OsColorMode.Unknown"/>.
+	/// </summary>
+	public override OsColorMode OsColorMode => OsColorMode.Unknown;
 
 	public override string PathToLogsDir =>
 		Path.Combine(PathToTempDir);
@@ -43,7 +49,13 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// <summary>
 	/// On native Linux, use a physical path to the tray icon, as an SVG.
 	/// </summary>
-	public override string PathToTrayIcon =>
+	public override string PathToTrayIconDark =>
+		Path.Combine(PathToAppDir, "assets", "nl.flyingpie.wtq-black.svg").AssertFileExists();
+
+	/// <summary>
+	/// On native Linux, use a physical path to the tray icon, as an SVG.
+	/// </summary>
+	public override string PathToTrayIconLight =>
 		Path.Combine(PathToAppDir, "assets", "nl.flyingpie.wtq-white.svg").AssertFileExists();
 
 	public override string PathToWtqConf
@@ -93,6 +105,9 @@ public class LinuxNativePlatformService : PlatformServiceBase
 
 	protected string XDG_CONFIG_HOME =>
 		EnvUtils.GetEnvVarOrDefault("XDG_CONFIG_HOME", Path.Combine(PathToUserHomeDir, ".config"));
+
+	protected string XDG_RUNTIME_DIR =>
+		EnvUtils.GetEnvVarOrDefault("XDG_RUNTIME_DIR", XDG_STATE_HOME);
 
 	/// <summary>
 	/// $XDG_STATE_HOME defines the base directory relative to which user-specific state files should be stored.

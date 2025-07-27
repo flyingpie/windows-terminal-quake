@@ -26,6 +26,9 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public abstract ICollection<string> DefaultApiUrls { get; }
 
+	/// <inheritdoc/>
+	public abstract OsColorMode OsColorMode { get; }
+
 	/// <summary>
 	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
 	/// </summary>
@@ -48,7 +51,10 @@ public abstract class PlatformServiceBase : IPlatformService
 	public abstract string PathToTempDir { get; }
 
 	/// <inheritdoc/>
-	public abstract string PathToTrayIcon { get; }
+	public abstract string PathToTrayIconDark { get; }
+
+	/// <inheritdoc/>
+	public abstract string PathToTrayIconLight { get; }
 
 	/// <inheritdoc/>
 	public virtual string PathToUserHomeDir { get; }
@@ -91,9 +97,7 @@ public abstract class PlatformServiceBase : IPlatformService
 
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
-			WorkingDirectory = opts.WorkingDirectory,
+			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments

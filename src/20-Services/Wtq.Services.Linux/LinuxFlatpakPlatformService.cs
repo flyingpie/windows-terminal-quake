@@ -17,9 +17,16 @@ public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 	public override string PathToTempDir =>
 		XDG_STATE_HOME;
 
-	/// <inheritdoc/>
-	///		_log.LogDebug("Running in Flatpak, using icon name of tray icon (i.e., not the full path)");
-	public override string PathToTrayIcon =>
+	/// <summary>
+	/// Running in Flatpak, using icon name of tray icon (i.e., not the full path) - Dark.
+	/// </summary>
+	public override string PathToTrayIconDark =>
+		"nl.flyingpie.wtq-black";
+
+	/// <summary>
+	/// Running in Flatpak, using icon name of tray icon (i.e., not the full path) - Light.
+	/// </summary>
+	public override string PathToTrayIconLight =>
 		"nl.flyingpie.wtq-white";
 
 	// TODO: I'm expecting preper implementation of XDG spec to make this unnecessary.

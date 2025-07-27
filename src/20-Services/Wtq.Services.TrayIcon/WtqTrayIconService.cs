@@ -6,8 +6,10 @@ namespace Wtq.Services.TrayIcon;
 
 public sealed class WtqTrayIconService : WtqHostedService
 {
-	private readonly IPlatformService _platform;
 	private readonly ILogger _log = Log.For<WtqTrayIconService>();
+
+	private readonly IPlatformService _platform;
+	private readonly TrayIconUtil _trayIconUtil;
 
 	private readonly NotifyIcon _icon;
 	private readonly RecurringTask _loop;
@@ -16,15 +18,17 @@ public sealed class WtqTrayIconService : WtqHostedService
 		IHostApplicationLifetime lifetime,
 		IPlatformService platform,
 		IWtqBus bus,
-		IWtqUIService ui)
+		IWtqUIService ui,
+		TrayIconUtil trayIconUtil)
 	{
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(lifetime);
 		_ = Guard.Against.Null(ui);
 		_platform = Guard.Against.Null(platform);
+		_trayIconUtil = trayIconUtil;
 
 		_icon = NotifyIcon.Create(
-			_platform.PathToTrayIcon,
+			_trayIconUtil.TrayIconPath,
 			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion} ({_platform.PlatformName})",
@@ -115,7 +119,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 		bool enabled = true) =>
 		new(text)
 		{
-			Click = (_, _) => action(),
-			IsDisabled = !enabled,
+			Click = (_, _) => action(), IsDisabled = !enabled,
 		};
 }

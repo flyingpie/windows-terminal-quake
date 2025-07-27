@@ -3,18 +3,21 @@ namespace Wtq.Services.WinForms;
 public sealed class TrayIcon : IDisposable
 {
 	private readonly IPlatformService _platform;
+	private readonly TrayIconUtil _trayIconUtil;
 
 	private NotifyIcon? _notificationIcon;
 
 	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
 	public TrayIcon(
 		IHostApplicationLifetime lifetime,
+		IWtqBus bus,
 		IPlatformService platform,
-		IWtqBus bus)
+		TrayIconUtil trayIconUtil)
 	{
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(lifetime);
 		_platform = Guard.Against.Null(platform);
+		_trayIconUtil = Guard.Against.Null(trayIconUtil);
 
 		var waiter = new TaskCompletionSource<bool>();
 
@@ -33,7 +36,7 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => platform.OpenUrl(WtqConstants.GitHubUrl)),
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new ToolStripSeparator(),
 
@@ -45,15 +48,15 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Settings File",
-					() => platform.OpenFileOrDirectory(platform.PathToWtqConf)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
 
 				CreateItem(
 					"Open Settings Directory",
-					() => platform.OpenFileOrDirectory(platform.PathToWtqConfDir)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
 
 				CreateItem(
 					"Open Logs Directory",
-					() => platform.OpenFileOrDirectory(platform.PathToLogsDir)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
 
 				new ToolStripSeparator(),
 
@@ -65,10 +68,7 @@ public sealed class TrayIcon : IDisposable
 			// Tray Icon
 			_notificationIcon = new NotifyIcon()
 			{
-				Icon = CreateIcon(),
-				ContextMenuStrip = contextMenu,
-				Text = "WTQ",
-				Visible = true,
+				Icon = CreateIcon(), ContextMenuStrip = contextMenu, Text = "WTQ", Visible = true,
 			};
 
 			waiter.SetResult(true);
@@ -94,7 +94,7 @@ public sealed class TrayIcon : IDisposable
 
 	private Icon CreateIcon()
 	{
-		using var str = File.OpenRead(_platform.PathToTrayIcon);
+		using var str = File.OpenRead(_trayIconUtil.TrayIconPath);
 
 		return new Icon(str);
 	}

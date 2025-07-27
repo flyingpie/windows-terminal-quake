@@ -43,6 +43,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
+			.AddSingleton<TrayIconUtil>()
 
 			.AddHostedService<WtqEventHookHandler>()
 			.AddHostedService<WtqFocusTracker>()

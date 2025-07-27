@@ -59,7 +59,7 @@ public class WindowsPlatformServiceTest
 	[TestMethod]
 	public void PathToTrayIcon()
 	{
-		Assert.AreEqual("/TODO", _p.PathToTrayIcon);
+		Assert.AreEqual("/TODO", _p.PathToTrayIconLight);
 	}
 
 	[TestMethod]

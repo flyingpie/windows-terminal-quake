@@ -18,6 +18,11 @@ public interface IPlatformService
 	ICollection<string> DefaultApiUrls { get; }
 
 	/// <summary>
+	/// Attempts to fetch the current color mode from the OS.
+	/// </summary>
+	OsColorMode OsColorMode { get; }
+
+	/// <summary>
 	/// Path to the directory that contains the WTQ app itself.
 	/// </summary>
 	string PathToAppDir { get; }
@@ -43,9 +48,14 @@ public interface IPlatformService
 	string PathToTempDir { get; }
 
 	/// <summary>
-	/// Path to the icon that's used for the tray icon.
+	/// Path to the icon that's used for the tray icon (dark version).
 	/// </summary>
-	string PathToTrayIcon { get; }
+	string PathToTrayIconDark { get; }
+
+	/// <summary>
+	/// Path to the icon that's used for the tray icon (light version).
+	/// </summary>
+	string PathToTrayIconLight { get; }
 
 	/// <summary>
 	/// Path to the user's home directory. Used to resolve settings.
