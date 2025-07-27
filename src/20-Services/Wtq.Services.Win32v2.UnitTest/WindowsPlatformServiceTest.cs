@@ -1,71 +1,92 @@
 using System;
 using System.Linq;
 using Wtq.Configuration;
+using Wtq.Utils;
 
 namespace Wtq.Services.Win32v2.UnitTest;
 
 [TestClass]
 public class WindowsPlatformServiceTest
 {
+	private readonly Mock<IFs> _fs = new(MockBehavior.Strict);
 	private readonly WtqAppOptions _opts = new();
 
 	private readonly WindowsPlatformService _p = new(
 		pathToAppDir: "C:/path/to/app",
-		pathToUserHomeDir: "C:/users/username");
+		pathToUserHomeDir: "C:/users/username",
+		pathToTempDir: "C:/path/to/tmp");
+
+	[TestInitialize]
+	public void Setup()
+	{
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
+
+		Fs.Inst = _fs.Object;
+
+		_fs.Reset();
+	}
 
 	[TestMethod]
 	public void PlatformName()
 	{
-		Assert.AreEqual("Linux Native", _p.PlatformName);
+		Assert.AreEqual("Windows", _p.PlatformName);
 	}
 
 	[TestMethod]
 	public void DefaultApiUrls()
 	{
 		Assert.AreEqual(1, _p.DefaultApiUrls.Count);
-		Assert.AreEqual("http://unix:/tmp/wtq.sock", _p.DefaultApiUrls.First());
+		Assert.AreEqual("http://pipe:/wtq", _p.DefaultApiUrls.First());
 	}
 
 	[TestMethod]
 	public void PathToAppDir()
 	{
-		Assert.AreEqual("/path/to/app", _p.PathToAppDir);
+		Assert.AreEqual("C:/path/to/app", _p.PathToAppDir);
 	}
-
-	// [TestMethod]
-	// public void PathToAppIcon()
-	// {
-	// 	Assert.AreEqual("/TODO", _p.PathToAppIcon);
-	// }
 
 	[TestMethod]
 	public void PathToAssetsDir()
 	{
-		Assert.AreEqual("/path/to/app/assets", _p.PathToAssetsDir);
+		Assert.AreEqual("C:/path/to/app/assets", _p.PathToAssetsDir);
 	}
 
 	[TestMethod]
 	public void PathToLogsDir()
 	{
-		Assert.AreEqual("/TODO", _p.PathToLogsDir);
+		_fs.Setup(m => m.DirExists("C:/path/to/tmp/wtq")).Returns(true);
+
+		Assert.AreEqual("C:/path/to/tmp/wtq", _p.PathToLogsDir);
 	}
 
 	[TestMethod]
 	public void PathToTempDir()
 	{
-		Assert.AreEqual("/TODO", _p.PathToTempDir);
+		_fs.Setup(m => m.DirExists("C:/path/to/tmp/wtq")).Returns(true);
+
+		Assert.AreEqual("C:/path/to/tmp/wtq", _p.PathToTempDir);
 	}
 
 	[TestMethod]
-	public void PathToTrayIcon()
+	public void PathToTrayIconDark()
 	{
-		Assert.AreEqual("/TODO", _p.PathToTrayIconLight);
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+		Assert.AreEqual("C:/path/to/app/assets/nl.flyingpie.wtq-black.ico", _p.PathToTrayIconDark);
+	}
+
+	[TestMethod]
+	public void PathToTrayIconLight()
+	{
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+		Assert.AreEqual("C:/path/to/app/assets/nl.flyingpie.wtq-white.ico", _p.PathToTrayIconLight);
 	}
 
 	[TestMethod]
 	public void PathToUserHomeDir()
 	{
-		Assert.AreEqual("/TODO", _p.PathToUserHomeDir);
+		Assert.AreEqual("C:/users/username", _p.PathToUserHomeDir);
 	}
 
 	[TestMethod]
@@ -89,7 +110,7 @@ public class WindowsPlatformServiceTest
 	[TestMethod]
 	public void PreferredPathWtqConfig()
 	{
-		Assert.AreEqual("/TODO", _p.PreferredPathWtqConfig);
+		Assert.AreEqual("C:/users/username/AppData/Roaming/wtq/wtq.jsonc", _p.PreferredPathWtqConfig);
 	}
 
 	#region CreateProcess

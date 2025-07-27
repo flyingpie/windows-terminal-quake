@@ -39,7 +39,7 @@ public class TrayIconUtil(
 						case OsColorMode.None:
 						case OsColorMode.Unknown:
 						default:
-							return _platform.PathToTrayIconDark;
+							return _platform.PathToTrayIconLight;
 					}
 				}
 			}

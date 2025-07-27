@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Wtq.Services.KWin.DBus;
-using Wtq.Services.KWin.ProcessFactory;
 using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin;

@@ -5,14 +5,10 @@ namespace Wtq.Services;
 /// </summary>
 public abstract class PlatformServiceBase : IPlatformService
 {
-	private readonly ILogger _log;
-
 	protected PlatformServiceBase(
 		string? pathToAppDir = null,
 		string? pathToUserHomeDir = null)
 	{
-		_log = Log.For(GetType());
-
 		PathToAppDir = pathToAppDir ?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
 			throw new WtqException("Could not get path to app directory.");
 
@@ -110,7 +106,7 @@ public abstract class PlatformServiceBase : IPlatformService
 
 			var exp = arg.Argument.ExpandEnvVars();
 
-			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+			Log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
 
 			startInfo.ArgumentList.Add(exp);
 		}
@@ -193,7 +189,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
+			Log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
 		}
 	}
 
@@ -208,7 +204,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not open url {Url}: {Message}", url, ex.Message);
+			Log.LogWarning(ex, "Could not open url {Url}: {Message}", url, ex.Message);
 
 			// // Hack because of this: https://github.com/dotnet/corefx/issues/10361
 			// if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -230,4 +226,6 @@ public abstract class PlatformServiceBase : IPlatformService
 			// }
 		}
 	}
+
+	protected ILogger Log => Wtq.Utils.Log.For(GetType());
 }

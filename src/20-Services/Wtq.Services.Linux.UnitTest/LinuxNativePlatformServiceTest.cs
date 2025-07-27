@@ -34,6 +34,8 @@ public class LinuxNativePlatformServiceTest
 	[TestMethod]
 	public void DefaultApiUrls_XdgRuntimeNotSet()
 	{
+		_fs.Setup(m => m.DirExists(It.IsAny<string>())).Returns(true);
+
 		Assert.AreEqual(1, _p.DefaultApiUrls.Count);
 		Assert.AreEqual("http://unix:/home/username/.local/state/wtq/wtq.sock", _p.DefaultApiUrls.First());
 	}
@@ -42,6 +44,8 @@ public class LinuxNativePlatformServiceTest
 	public void DefaultApiUrls_XdgRuntimeSet()
 	{
 		Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "/path/to/runtime/dir");
+
+		_fs.Setup(m => m.DirExists(It.IsAny<string>())).Returns(true);
 
 		Assert.AreEqual(1, _p.DefaultApiUrls.Count);
 		Assert.AreEqual("http://unix:/path/to/runtime/dir/wtq/wtq.sock", _p.DefaultApiUrls.First());
@@ -172,28 +176,13 @@ public class LinuxNativePlatformServiceTest
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json",
-			"/path/to/app/wtq.jsonc",
-			"/path/to/app/wtq.json5",
-			"/path/to/app/.wtq.json",
-			"/path/to/app/.wtq.jsonc",
-			"/path/to/app/.wtq.json5",
+			"/path/to/app/wtq.json", "/path/to/app/wtq.jsonc", "/path/to/app/wtq.json5", "/path/to/app/.wtq.json", "/path/to/app/.wtq.jsonc", "/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/path/to/xdg/config/home/wtq.json",
-			"/path/to/xdg/config/home/wtq.jsonc",
-			"/path/to/xdg/config/home/wtq.json5",
-			"/path/to/xdg/config/home/.wtq.json",
-			"/path/to/xdg/config/home/.wtq.jsonc",
-			"/path/to/xdg/config/home/.wtq.json5",
+			"/path/to/xdg/config/home/wtq.json", "/path/to/xdg/config/home/wtq.jsonc", "/path/to/xdg/config/home/wtq.json5", "/path/to/xdg/config/home/.wtq.json", "/path/to/xdg/config/home/.wtq.jsonc", "/path/to/xdg/config/home/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json",
-			"/home/username/wtq.jsonc",
-			"/home/username/wtq.json5",
-			"/home/username/.wtq.json",
-			"/home/username/.wtq.jsonc",
-			"/home/username/.wtq.json5",
+			"/home/username/wtq.json", "/home/username/wtq.jsonc", "/home/username/wtq.json5", "/home/username/.wtq.json", "/home/username/.wtq.jsonc", "/home/username/.wtq.json5",
 		};
 
 		Assert.AreEqual(expected.Length, paths.Count);
@@ -212,28 +201,13 @@ public class LinuxNativePlatformServiceTest
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json",
-			"/path/to/app/wtq.jsonc",
-			"/path/to/app/wtq.json5",
-			"/path/to/app/.wtq.json",
-			"/path/to/app/.wtq.jsonc",
-			"/path/to/app/.wtq.json5",
+			"/path/to/app/wtq.json", "/path/to/app/wtq.jsonc", "/path/to/app/wtq.json5", "/path/to/app/.wtq.json", "/path/to/app/.wtq.jsonc", "/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/home/username/.config/wtq.json",
-			"/home/username/.config/wtq.jsonc",
-			"/home/username/.config/wtq.json5",
-			"/home/username/.config/.wtq.json",
-			"/home/username/.config/.wtq.jsonc",
-			"/home/username/.config/.wtq.json5",
+			"/home/username/.config/wtq.json", "/home/username/.config/wtq.jsonc", "/home/username/.config/wtq.json5", "/home/username/.config/.wtq.json", "/home/username/.config/.wtq.jsonc", "/home/username/.config/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json",
-			"/home/username/wtq.jsonc",
-			"/home/username/wtq.json5",
-			"/home/username/.wtq.json",
-			"/home/username/.wtq.jsonc",
-			"/home/username/.wtq.json5",
+			"/home/username/wtq.json", "/home/username/wtq.jsonc", "/home/username/wtq.json5", "/home/username/.wtq.json", "/home/username/.wtq.jsonc", "/home/username/.wtq.json5",
 		};
 
 		Assert.AreEqual(expected.Length, paths.Count);

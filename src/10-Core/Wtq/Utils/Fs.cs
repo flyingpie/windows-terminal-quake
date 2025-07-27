@@ -73,4 +73,35 @@ public static class FsExtensions
 
 		return path;
 	}
+
+	/// <summary>
+	/// Make sure the specified <param name="path"/> exists.
+	/// </summary>
+	public static string EnsureFileDirExists(this string path)
+	{
+		Guard.Against.NullOrWhiteSpace(path);
+
+		var dir = Path.GetDirectoryName(path);
+
+		if (string.IsNullOrWhiteSpace(dir))
+		{
+			throw new FsException($"Getting directory from path '{path}' resulted in an empty string.");
+		}
+
+		if (Fs.Inst.DirExists(dir))
+		{
+			return path;
+		}
+
+		try
+		{
+			Fs.Inst.CreateDir(dir);
+		}
+		catch (Exception ex)
+		{
+			throw new FsException($"Could not create directory '{dir}' for file at path '{path}': {ex.Message}", ex);
+		}
+
+		return path;
+	}
 }

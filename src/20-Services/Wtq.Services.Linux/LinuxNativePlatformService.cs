@@ -22,7 +22,7 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// On Linux, default to a Unix socket.
 	/// </summary>
 	public override ICollection<string> DefaultApiUrls =>
-		[$"http://unix:{XDG_RUNTIME_DIR}/wtq/wtq.sock"];
+		[$"http://unix:{$"{XDG_RUNTIME_DIR}/wtq/wtq.sock".EnsureFileDirExists()}"];
 
 	/// <summary>
 	/// On Linux, executable files generally don't have extensions.<br/>
