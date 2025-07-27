@@ -7,17 +7,27 @@ namespace Wtq.Services.Win32v2;
 [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "This entire project (Win32v2) is Windows-only.")]
 public class WindowsPlatformService : PlatformServiceBase
 {
-	private readonly string _pathToTempDir = Path.GetTempPath();
+	/// <summary>
+	/// E.g. "C:\Users\username\AppData\Roaming".
+	/// </summary>
+	private readonly string _pathToAppDataDir;
+
+	/// <summary>
+	/// E.g. "C:\Users\username\AppData\Local\Temp".
+	/// </summary>
+	private readonly string _pathToTempDir;
 
 	public WindowsPlatformService(
+		string? pathToAppDataDir = null,
 		string? pathToAppDir = null,
-		string? pathToUserHomeDir = null,
-		string? pathToTempDir = null)
+		string? pathToTempDir = null,
+		string? pathToUserHomeDir = null)
 		: base(
 			pathToAppDir: pathToAppDir,
 			pathToUserHomeDir: pathToUserHomeDir)
 	{
-		_pathToTempDir = Guard.Against.Null(pathToTempDir);
+		_pathToAppDataDir = pathToAppDataDir ?? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		_pathToTempDir = pathToTempDir ?? Path.GetTempPath();
 	}
 
 	/// <inheritdoc/>
@@ -63,13 +73,52 @@ public class WindowsPlatformService : PlatformServiceBase
 		Path.Combine(PathToAssetsDir, "nl.flyingpie.wtq-white.ico");
 
 	/// <inheritdoc/>
-	public override string PathToWtqConf { get; }
+	public override string PathToWtqConf
+		=> PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists) ?? PreferredPathWtqConfig;
 
 	/// <inheritdoc/>
-	public override ICollection<string> PathsToWtqConfs { get; }
+	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
+	public override ICollection<string> PathsToWtqConfs
+	{
+		get
+		{
+			var res = new List<string?>();
+
+			// Environment variable
+			res.Add(WtqEnv.WtqConfigFile);
+
+			foreach (var path in new[]
+			{
+				// Next to the app executable
+				PathToAppDir,
+
+				// App data
+				_pathToAppDataDir,
+
+				// Explicitly user home
+				PathToUserHomeDir,
+			})
+			{
+				foreach (var name in WtqConfNames)
+				{
+					foreach (var ext in WtqConfExtensions)
+					{
+						res.Add(Path.Combine(path, $"{name}.{ext}"));
+					}
+				}
+			}
+
+			return res
+				.Where(e => !string.IsNullOrWhiteSpace(e))
+				.Select(e => e!)
+				.Distinct()
+				.ToList();
+		}
+	}
 
 	/// <inheritdoc/>
-	public override string PreferredPathWtqConfig { get; }
+	public override string PreferredPathWtqConfig =>
+		Path.Combine(_pathToAppDataDir, "wtq", "wtq.jsonc").EnsureFileDirExists();
 
 	private static bool? IsDarkMode()
 	{

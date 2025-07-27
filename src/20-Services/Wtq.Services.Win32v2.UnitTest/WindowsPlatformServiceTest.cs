@@ -12,9 +12,10 @@ public class WindowsPlatformServiceTest
 	private readonly WtqAppOptions _opts = new();
 
 	private readonly WindowsPlatformService _p = new(
+		pathToAppDataDir: "C:/users/username/AppData/Roaming",
 		pathToAppDir: "C:/path/to/app",
-		pathToUserHomeDir: "C:/users/username",
-		pathToTempDir: "C:/path/to/tmp");
+		pathToTempDir: "C:/path/to/tmp",
+		pathToUserHomeDir: "C:/users/username");
 
 	[TestInitialize]
 	public void Setup()
@@ -90,26 +91,47 @@ public class WindowsPlatformServiceTest
 	}
 
 	[TestMethod]
-	public void PathToWtqConf()
+	[DataRow("C:/path/to/app/wtq.json")]
+	[DataRow("C:/users/username/wtq.json")]
+	public void PathToWtqConf(string path)
 	{
-		Assert.AreEqual("/TODO", _p.PathToWtqConf);
+		_fs.Reset();
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.FileExists(It.Is<string>(p => p == path))).Returns(true);
+
+		Assert.AreEqual(path, _p.PathToWtqConf);
 	}
 
 	[TestMethod]
-	public void PathToWtqConfDir()
+	[DataRow("C:/path/to/app/wtq.json", "C:/path/to/app")]
+	[DataRow("C:/users/username/wtq.json", "C:/users/username")]
+	public void PathToWtqConfDir(string path, string dir)
 	{
-		Assert.AreEqual("/TODO", _p.PathToWtqConfDir);
+		_fs.Reset();
+		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.FileExists(It.Is<string>(p => p == path))).Returns(true);
+
+		Assert.AreEqual(dir, _p.PathToWtqConfDir);
 	}
 
 	[TestMethod]
-	public void PathsToWtqConfs()
+	public void PathsToWtqConfs_WtqConfigFileEnvSet()
 	{
-		Assert.AreEqual(1234, _p.PathsToWtqConfs.Count);
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "C:/env/path/to/wtq.jsonc");
+
+		var paths = _p.PathsToWtqConfs.ToList();
+
+		Assert.AreEqual(19, paths.Count);
+		Assert.AreEqual("C:/env/path/to/wtq.jsonc", paths[0]);
+
+		// Other stuff is tested in the other tests.
 	}
 
 	[TestMethod]
 	public void PreferredPathWtqConfig()
 	{
+		_fs.Setup(m => m.DirExists(It.IsAny<string>())).Returns(true);
+
 		Assert.AreEqual("C:/users/username/AppData/Roaming/wtq/wtq.jsonc", _p.PreferredPathWtqConfig);
 	}
 
