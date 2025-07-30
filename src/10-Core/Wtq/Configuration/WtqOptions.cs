@@ -112,7 +112,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
-	/// Whether to show the GUI when WTQ is started.
+	/// The tray icon (color) style (dark/light).
 	/// </summary>
 	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
 	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]

@@ -1,7 +1,7 @@
 namespace Wtq.Services;
 
 /// <summary>
-/// Implements a bunch of stuff of <see cref="IPlatformService"/>, that's shared across multiple platforms.
+/// Implements a bunch from stuff of <see cref="IPlatformService"/>, that's shared across multiple platforms.
 /// </summary>
 public abstract class PlatformServiceBase : IPlatformService
 {
@@ -32,9 +32,6 @@ public abstract class PlatformServiceBase : IPlatformService
 
 	/// <inheritdoc/>
 	public virtual string PathToAppDir { get; }
-
-	// /// <inheritdoc/>
-	// public abstract string PathToAppIcon { get; }
 
 	/// <inheritdoc/>
 	public virtual string PathToAssetsDir =>

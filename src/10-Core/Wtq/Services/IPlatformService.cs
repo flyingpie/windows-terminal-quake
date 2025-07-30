@@ -27,11 +27,6 @@ public interface IPlatformService
 	/// </summary>
 	string PathToAppDir { get; }
 
-	// /// <summary>
-	// /// Path to the icon that's used by the GUI (including in the taskbar, but not the tray icon).
-	// /// </summary>
-	// string PathToAppIcon { get; }
-
 	/// <summary>
 	/// Path to the "assets" dir, contains icons and such.
 	/// </summary>
