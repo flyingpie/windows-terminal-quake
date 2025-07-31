@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Linux</RootNamespace>
@@ -12,15 +12,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin\Wtq.Services.KWin.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.Linux\Wtq.Services.Linux.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.TrayIcon\Wtq.Services.TrayIcon.csproj"/>
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="..\..\20-Services\Wtq.Services.UI\wwwroot\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>wwwroot\%(RecursiveDir)%(Filename)%(Extension)</Link>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -28,4 +22,25 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+
+	<ItemGroup>
+		<BlazorStaticAssets Include="../../20-Services/Wtq.Services.UI/wwwroot/**/*"/>
+	</ItemGroup>
+
+	<Target Name="CopyBlazorAssetsBuild" AfterTargets="Build">
+		<Copy
+			SourceFiles="@(BlazorStaticAssets)"
+			DestinationFolder="$(OutputPath)wwwroot/%(RecursiveDir)"
+			SkipUnchangedFiles="true"
+		/>
+	</Target>
+
+	<Target Name="CopyBlazorAssetsPublish" AfterTargets="Publish">
+		<Copy
+			SourceFiles="@(BlazorStaticAssets)"
+			DestinationFolder="$(PublishDir)wwwroot/%(RecursiveDir)"
+			SkipUnchangedFiles="true"/>
+		<RemoveDir Directories="$(PublishDir)wwwroot/_content/Wtq.Services.UI"/>
+	</Target>
+
 </Project>
