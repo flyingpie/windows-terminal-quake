@@ -1,5 +1,9 @@
-namespace Wtq.Configuration;
+namespace Wtq.Utils;
 
+/// <summary>
+/// Represents the theme of the OS (light or dark).<br/>
+/// Used to determine (things like) the tray icon color.
+/// </summary>
 public enum OsColorMode
 {
 	/// <summary>

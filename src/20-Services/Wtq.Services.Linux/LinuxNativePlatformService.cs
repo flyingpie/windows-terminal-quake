@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Wtq.Configuration;
@@ -102,6 +103,36 @@ public class LinuxNativePlatformService : PlatformServiceBase
 
 	public override string PreferredPathWtqConfig =>
 		EnvUtils.GetEnvVarOrDefault(WtqEnv.Names.Config, Path.Combine(XDG_CONFIG_HOME, "wtq.jsonc"));
+
+	/// <summary>
+	/// Linux version uses xdg-open for opening files and directories.
+	/// </summary>
+	public override void OpenFileOrDirectory(string path)
+	{
+		Guard.Against.NullOrWhiteSpace(path);
+
+		try
+		{
+			Process.Start(
+				new ProcessStartInfo()
+				{
+					FileName = path,
+					UseShellExecute = true,
+				});
+		}
+		catch (Exception ex)
+		{
+			Log.LogWarning(ex, "Could not open file, directory or url {Path}: {Message}", path, ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Linux version uses xdg-open for opening urls.
+	/// </summary>
+	public override void OpenUrl(Uri url)
+	{
+		OpenFileOrDirectory(url.ToString());
+	}
 
 	protected string XDG_CONFIG_HOME =>
 		EnvUtils.GetEnvVarOrDefault("XDG_CONFIG_HOME", Path.Combine(PathToUserHomeDir, ".config"));

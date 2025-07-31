@@ -1,17 +1,25 @@
+using System.Runtime.InteropServices;
+
 namespace Wtq.Services;
 
 /// <summary>
-/// Implements a bunch from stuff of <see cref="IPlatformService"/>, that's shared across multiple platforms.
+/// Implements a bunch of stuff from <see cref="IPlatformService"/>, that's shared across multiple platforms.
 /// </summary>
 public abstract class PlatformServiceBase : IPlatformService
 {
+	/// <summary>
+	/// Paramaters are used for mocking in tests, otherwise they're automatically set in the constructor.
+	/// </summary>
 	protected PlatformServiceBase(
 		string? pathToAppDir = null,
 		string? pathToUserHomeDir = null)
 	{
+		// Path to directory where wtq is installed (where wtq or wtq.exe lives).
 		PathToAppDir = pathToAppDir ?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
 			throw new WtqException("Could not get path to app directory.");
 
+		// Windows: C:/users/username
+		// Linux: /home/username
 		PathToUserHomeDir = pathToUserHomeDir ??
 			Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	}
@@ -22,13 +30,13 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public abstract ICollection<string> DefaultApiUrls { get; }
 
-	/// <inheritdoc/>
-	public abstract OsColorMode OsColorMode { get; }
-
 	/// <summary>
 	/// When looking for the existence of a file and whether it's executable, we consider these extensions.
 	/// </summary>
 	public abstract string[] ExecutableExtensions { get; }
+
+	/// <inheritdoc/>
+	public abstract OsColorMode OsColorMode { get; }
 
 	/// <inheritdoc/>
 	public virtual string PathToAppDir { get; }
@@ -65,12 +73,18 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public abstract string PreferredPathWtqConfig { get; }
 
-	public virtual ICollection<string> WtqConfNames =>
+	/// <summary>
+	/// Possible names for the settings file. Used for building potential paths.
+	/// </summary>
+	protected virtual ICollection<string> WtqConfNames =>
 	[
 		"wtq",
 		".wtq",
 	];
 
+	/// <summary>
+	/// Possible extensions for the settings file. Used for building potential paths.
+	/// </summary>
 	public virtual ICollection<string> WtqConfExtensions =>
 	[
 		"json",
@@ -83,26 +97,33 @@ public abstract class PlatformServiceBase : IPlatformService
 	{
 		Guard.Against.Null(opts);
 
+		// Validate filename
 		if (string.IsNullOrWhiteSpace(opts.FileName))
 		{
 			throw new InvalidOperationException($"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'");
 		}
 
+		// Build start info
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
+			FileName = opts.FileName,
+			Arguments = opts.Arguments,
+			WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments
 		foreach (var arg in opts.ArgumentList)
 		{
+			// Skip empty arguments
 			if (string.IsNullOrWhiteSpace(arg.Argument))
 			{
 				continue;
 			}
 
+			// Expand environment variables, also includes "~" for home dir
 			var exp = arg.Argument.ExpandEnvVars();
 
+			// Log, very useful when using environment variables in arguments
 			Log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
 
 			startInfo.ArgumentList.Add(exp);
@@ -117,15 +138,23 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public string? ResolvePath(string fileName)
 	{
+		// If the file exists without any further steps (maybe it's already absolute,
+		// or the file exists in the working), just resolve and return.
 		if (File.Exists(fileName))
 		{
 			return Path.GetFullPath(fileName);
 		}
 
+		// Fetch the "PATH" environment variable for locations that can contain callable executables
 		var values = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+
+		// Loop through all the paths in "PATH"
 		foreach (var path in values.Split(Path.PathSeparator))
 		{
+			// Combine specified filename with current path segment
 			var fullPath = Path.Combine(path, fileName);
+
+			// See if the file exists here
 			if (File.Exists(fullPath))
 			{
 				return fullPath;
@@ -138,22 +167,9 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public virtual bool IsCallable(string? workingDirectory, string fileName)
 	{
-		foreach (var ext in ExecutableExtensions)
-		{
-			var path = fileName + ext;
-
-			if (File.Exists(path))
-			{
-				return true;
-			}
-
-			if (ResolvePath(path) != null)
-			{
-				return true;
-			}
-		}
-
-		return false;
+		// See if the filename is callable with any of the OS-specific extensions (will be
+		// empty for Linux, and ".exe", ".bat" and such for Windows)
+		return ExecutableExtensions.Any(ex => ResolvePath(fileName + ex) != null);
 	}
 
 	/// <inheritdoc/>
@@ -166,9 +182,7 @@ public abstract class PlatformServiceBase : IPlatformService
 			throw new InvalidOperationException($"No such file at path '{path}'.");
 		}
 
-		var pathInfo = new FileInfo(path);
-
-		return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
+		return new FileInfo(path).Attributes.HasFlag(FileAttributes.ReparsePoint);
 	}
 
 	/// <inheritdoc/>
@@ -181,7 +195,8 @@ public abstract class PlatformServiceBase : IPlatformService
 			Process.Start(
 				new ProcessStartInfo()
 				{
-					FileName = path, UseShellExecute = true,
+					FileName = path,
+					UseShellExecute = true,
 				});
 		}
 		catch (Exception ex)
@@ -203,26 +218,22 @@ public abstract class PlatformServiceBase : IPlatformService
 		{
 			Log.LogWarning(ex, "Could not open url {Url}: {Message}", url, ex.Message);
 
-			// // Hack because of this: https://github.com/dotnet/corefx/issues/10361
-			// if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			// {
-			// 	var urlstr = url.ToString().Replace("&", "^&", StringComparison.Ordinal);
-			// 	Process.Start(
-			// 		new ProcessStartInfo(urlstr)
-			// 		{
-			// 			UseShellExecute = true,
-			// 		});
-			// }
-			// else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-			// {
-			// 	Process.Start("xdg-open", url.ToString());
-			// }
-			// else
-			// {
-			// 	throw;
-			// }
+			// Hack because of this: https://github.com/dotnet/corefx/issues/10361
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				var urlstr = url.ToString().Replace("&", "^&", StringComparison.Ordinal);
+				Process.Start(
+					new ProcessStartInfo(urlstr)
+					{
+						UseShellExecute = true,
+					});
+			}
 		}
 	}
 
+	/// <summary>
+	/// We're creating a logger on the fly, because the platform service is initialized soon enough,
+	/// that the logger may not be ready at first.
+	/// </summary>
 	protected ILogger Log => Wtq.Utils.Log.For(GetType());
 }
