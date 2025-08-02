@@ -45,6 +45,12 @@ namespace Wtq.Resources {
             }
         }
         
+        public static string wtq_example {
+            get {
+                return ResourceManager.GetString("wtq_example", resourceCulture);
+            }
+        }
+        
         public static string wtq_example_konsole {
             get {
                 return ResourceManager.GetString("wtq_example_konsole", resourceCulture);

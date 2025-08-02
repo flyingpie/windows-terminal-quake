@@ -74,10 +74,6 @@ public class WindowsPlatformService : PlatformServiceBase
 		Path.Combine(PathToAssetsDir, "nl.flyingpie.wtq-white.ico");
 
 	/// <inheritdoc/>
-	public override string PathToWtqConf
-		=> PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists) ?? PreferredPathWtqConfig;
-
-	/// <inheritdoc/>
 	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
 	public override ICollection<string> PathsToWtqConfs
 	{

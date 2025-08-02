@@ -446,6 +446,12 @@ public static class WtqAppExamples
 					Os = [OSPlatform.Linux, OSPlatform.Windows,],
 					FileName = "spotify",
 				},
+				new()
+				{
+					Name = Flavors.Flatpak,
+					Os = [OSPlatform.Linux],
+					FileName = "com.spotify.Client",
+				},
 			],
 		},
 
@@ -620,6 +626,12 @@ public static class WtqAppExamples
 					Name = Flavors.Native,
 					Os = [OSPlatform.Linux,],
 					FileName = "resources",
+				},
+				new()
+				{
+					Name = Flavors.Flatpak,
+					Os = [OSPlatform.Linux,],
+					FileName = "net.nokyan.Resources",
 				},
 			],
 		},

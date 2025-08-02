@@ -68,7 +68,10 @@ public sealed class TrayIcon : IDisposable
 			// Tray Icon
 			_notificationIcon = new NotifyIcon()
 			{
-				Icon = CreateIcon(), ContextMenuStrip = contextMenu, Text = "WTQ", Visible = true,
+				Icon = CreateIcon(),
+				ContextMenuStrip = contextMenu,
+				Text = "WTQ",
+				Visible = true,
 			};
 
 			waiter.SetResult(true);

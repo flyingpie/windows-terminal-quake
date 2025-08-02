@@ -7,6 +7,8 @@ namespace Wtq.Services;
 /// </summary>
 public abstract class PlatformServiceBase : IPlatformService
 {
+	private string? _pathToWtqConf;
+
 	/// <summary>
 	/// Paramaters are used for mocking in tests, otherwise they're automatically set in the constructor.
 	/// </summary>
@@ -61,7 +63,32 @@ public abstract class PlatformServiceBase : IPlatformService
 	public virtual string PathToUserHomeDir { get; }
 
 	/// <inheritdoc/>
-	public virtual string PathToWtqConf { get; }
+	public virtual string PathToWtqConf
+	{
+		get
+		{
+			// See if we already determined the path
+			if (_pathToWtqConf != null)
+			{
+				return _pathToWtqConf;
+			}
+
+			// Look for existing path
+			_pathToWtqConf = PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists);
+			if (_pathToWtqConf != null)
+			{
+				return _pathToWtqConf;
+			}
+
+			// If no existing file was found, generate an example file at the preferred location, and use that.
+			// Note that the example config is set up to pop the UI, so the user gets a decent out-of-box experience.
+			// TODO: Add toggle to the welcome screen or something, so it's easier to hide the UI on start.
+			_pathToWtqConf = PreferredPathWtqConfig;
+			Log.LogInformation("No settings file found, generating an example file at '{Path}'", _pathToWtqConf);
+			Fs.Inst.WriteAllText(_pathToWtqConf, Resources.Resources.wtq_example);
+			return _pathToWtqConf;
+		}
+	}
 
 	/// <inheritdoc/>
 	public virtual string PathToWtqConfDir =>
@@ -106,9 +133,7 @@ public abstract class PlatformServiceBase : IPlatformService
 		// Build start info
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
-			WorkingDirectory = opts.WorkingDirectory,
+			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments
@@ -195,8 +220,7 @@ public abstract class PlatformServiceBase : IPlatformService
 			Process.Start(
 				new ProcessStartInfo()
 				{
-					FileName = path,
-					UseShellExecute = true,
+					FileName = path, UseShellExecute = true,
 				});
 		}
 		catch (Exception ex)

@@ -16,13 +16,13 @@
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.TrayIcon\Wtq.Services.TrayIcon.csproj"/>
 		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj"/>
 	</ItemGroup>
-
+<!--
 	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<None Update="wtq.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-
+-->
 	<ItemGroup>
 		<BlazorStaticAssets Include="../../20-Services/Wtq.Services.UI/wwwroot/**/*"/>
 	</ItemGroup>

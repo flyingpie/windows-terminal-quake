@@ -24,7 +24,7 @@ public abstract class WtqHostBase
 		}
 		else
 		{
-			await RunCli(args).NoCtx();
+			await RunCliAsync(platform, args).NoCtx();
 		}
 	}
 
@@ -103,8 +103,9 @@ public abstract class WtqHostBase
 		}
 	}
 
-	private async Task RunCli(string[] args) =>
+	private async Task RunCliAsync(IPlatformService platform, string[] args) =>
 		await new ServiceCollection()
+			.AddSingleton(platform)
 			.AddCli()
 			.BuildServiceProvider()
 			.RunCliAsync(args)

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Wtq.Configuration;
 
 namespace Wtq.Services.Linux;
 
@@ -59,9 +58,6 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	public override string PathToTrayIconLight =>
 		Path.Combine(PathToAppDir, "assets", "nl.flyingpie.wtq-white.svg").AssertFileExists();
 
-	public override string PathToWtqConf
-		=> PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists) ?? PreferredPathWtqConfig;
-
 	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
 	public override ICollection<string> PathsToWtqConfs
 	{
@@ -116,8 +112,7 @@ public class LinuxNativePlatformService : PlatformServiceBase
 			Process.Start(
 				new ProcessStartInfo()
 				{
-					FileName = path,
-					UseShellExecute = true,
+					FileName = path, UseShellExecute = true,
 				});
 		}
 		catch (Exception ex)
