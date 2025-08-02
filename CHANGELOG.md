@@ -1,6 +1,7 @@
 # Changelog
 
 ## [vFuture]
+- Feature: Flatpak release
 
 ## [vNext]
 
@@ -8,9 +9,21 @@
 - Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
 - Refactor: Startup/shutdown - More straigh-forward now, and fixed a bunch of cases where part of the process stayed alive when stopping.
 - Refactor: Windows - Make foreground window tracking a bunch more efficient.
-- Feature: Flatpak release
 - Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
 - Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
+- Feature: When saving settings from the GUI, special characters are no longer encoded, which makes the resulting settings file way more readable.
+```jsonc
+  "Apps": [
+    {
+      // Before:
+      "FileName": "notepad\u002B\u002B"
+
+      // After:
+      "FileName": "notepad++"
+    }
+  ]
+}
+```
 
 ## [v2.0.16] / 2025-07-05
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
