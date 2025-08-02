@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using YamlDotNet.Core.Tokens;
 
 namespace Wtq.Services.Win32v2;
 
@@ -47,7 +48,7 @@ public class WindowsPlatformService : PlatformServiceBase
 	/// Try to detect the current color scheme, default to "Light".
 	/// </summary>
 	public override OsColorMode OsColorMode =>
-		IsDarkMode() ?? false ? OsColorMode.Dark : OsColorMode.Light;
+		GetSystemUsesLightTheme() ?? false ? OsColorMode.Light : OsColorMode.Dark;
 
 	/// <inheritdoc/>
 	public override string PathToLogsDir =>
@@ -120,37 +121,32 @@ public class WindowsPlatformService : PlatformServiceBase
 	public override string PreferredPathWtqConfig =>
 		Path.Combine(_pathToAppDataDir, "wtq", "wtq.jsonc").EnsureFileDirExists();
 
-	private static bool? IsDarkMode()
+	private bool? GetSystemUsesLightTheme()
 	{
-		// Path to the color settings in the registry
-		const string registryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-
 		try
 		{
-			using var key = Registry.CurrentUser.OpenSubKey(registryKeyPath);
-			if (key != null)
+			// Fetch "SystemUsesLightTheme" key from registry
+			var systemUsesLightTheme = (int?)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", -1);
+
+			// 1 = TRUE
+			if (systemUsesLightTheme == 1)
 			{
-				var appsUseLightTheme = key.GetValue("AppsUseLightTheme");
-				var systemUseLightTheme = key.GetValue("SystemUsesLightTheme");
-
-				if (appsUseLightTheme != null)
-				{
-					return (int)appsUseLightTheme != 0;
-				}
-				else
-				{
-					Console.WriteLine("AppsUseLightTheme not found.");
-				}
-
-				if (systemUseLightTheme != null)
-				{
-					return (int)systemUseLightTheme != 0;
-				}
+				return true;
 			}
+
+			// 0 = FALSE
+			if (systemUsesLightTheme == 0)
+			{
+				return false;
+			}
+
+			// Key not found
+			Log.LogWarning("No registry key named 'SystemUsesLightTheme' was found");
+			return null;
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("Error accessing the registry: " + ex.Message);
+			Log.LogError(ex, "Error determining OS color mode: {Message}", ex.Message);
 		}
 
 		return null;

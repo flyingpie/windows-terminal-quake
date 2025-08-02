@@ -26,4 +26,24 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+
+	<ItemGroup>
+		<BlazorStaticAssets Include="../../20-Services/Wtq.Services.UI/wwwroot/**/*"/>
+	</ItemGroup>
+
+	<Target Name="CopyBlazorAssetsBuild" AfterTargets="Build">
+		<Copy
+			SourceFiles="@(BlazorStaticAssets)"
+			DestinationFolder="$(OutputPath)wwwroot/%(RecursiveDir)"
+			SkipUnchangedFiles="true"
+		/>
+	</Target>
+
+	<Target Name="CopyBlazorAssetsPublish" AfterTargets="Publish">
+		<Copy
+			SourceFiles="@(BlazorStaticAssets)"
+			DestinationFolder="$(PublishDir)wwwroot/%(RecursiveDir)"
+			SkipUnchangedFiles="true"/>
+		<RemoveDir Directories="$(PublishDir)wwwroot/_content/Wtq.Services.UI"/>
+	</Target>
 </Project>
