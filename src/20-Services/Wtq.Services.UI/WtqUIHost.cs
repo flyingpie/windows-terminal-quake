@@ -61,7 +61,7 @@ public class WtqUIHost
 			.SetIconFile(Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-padding.png"))
 			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
-			.SetSize(1280, 800)
+			.SetSize(1270, 800)
 			.SetTitle(MainWindowTitle);
 	}
 

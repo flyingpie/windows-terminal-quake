@@ -26,8 +26,6 @@
 	protected override void OnInitialized()
 	{
 		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
-
-		// StateHasChanged();
 	}
 
 	private async Task SaveAsync()
@@ -40,6 +38,10 @@
 }
 
 <PageHead Icon="home">Welcome</PageHead>
+
+<p>Thank you for trying out WTQ!</p>
+
+<p>To get started, <RadzenLink Path="/apps" Text="add an app"/>, or find some inspiration in the <RadzenLink Path="/examples" Text="examples"/>.</p>
 
 <!-- Show UI on start -->
 <RadzenStack

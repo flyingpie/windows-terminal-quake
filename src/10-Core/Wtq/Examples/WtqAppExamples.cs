@@ -9,16 +9,21 @@ public static class WtqAppExamples
 {
 	public static class Categories
 	{
-		public const string Browsers = "Browsers";
-		public const string DevTools = "Dev Tools";
-		public const string FileManagers = "File Managers";
-		public const string KeysAndPasswords = "Keys & Passwords";
-		public const string Media = "Media";
-		public const string Misc = "Misc";
-		public const string Monitoring = "Monitoring";
-		public const string NoteTaking = "Note Taking";
-		public const string Social = "Social";
-		public const string Terminals = "Terminals";
+		public static readonly Category Popular = new("Popular")
+		{
+			Priority = 9,
+		};
+
+		public static readonly Category Browsers = new("Browsers");
+		public static readonly Category DevTools = new("Dev Tools");
+		public static readonly Category FileManagers = new("File Managers");
+		public static readonly Category KeysAndPasswords = new("Keys & Passwords");
+		public static readonly Category Media = new("Media");
+		public static readonly Category Misc = new("Misc");
+		public static readonly Category Monitoring = new("Monitoring");
+		public static readonly Category NoteTaking = new("Note Taking");
+		public static readonly Category Social = new("Social");
+		public static readonly Category Terminals = new("Terminals");
 	}
 
 	public static class Flavors
@@ -1044,7 +1049,7 @@ public static class WtqAppExamples
 		// Wezterm
 		new()
 		{
-			Categories = [Categories.Terminals],
+			Categories = [Categories.Popular, Categories.Terminals],
 			Title = "Wezterm",
 			Description = "Cross-platform GPU-accelerated terminal emulator.",
 			Image = "/example-apps/wezterm.webp",
@@ -1063,7 +1068,7 @@ public static class WtqAppExamples
 		// Windows Terminal
 		new()
 		{
-			Categories = [Categories.Terminals],
+			Categories = [Categories.Popular, Categories.Terminals],
 			Title = "Windows Terminal",
 			Description = "Windows Terminal",
 			Image = "/example-apps/windows-terminal.webp",

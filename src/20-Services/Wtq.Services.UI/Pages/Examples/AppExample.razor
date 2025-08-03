@@ -38,7 +38,7 @@
 		}
 	</RadzenStack>
 
-	<p class="rz-m-0">@App.Description</p>
+	<p class="rz-m-0"><em>@App.Description</em></p>
 
 	<RadzenButton Variant="Variant.Text" Text="@App.Link?.ToString()" Style="padding: 0; text-align: left;" Click="() => Platform.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
 

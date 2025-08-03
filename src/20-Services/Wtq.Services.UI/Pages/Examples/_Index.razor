@@ -5,20 +5,18 @@
 @inject NavigationManager NavMan
 @inject IWtqOptionsSaveService SaveService
 
-@layout NarrowLayout
-
 @page "/examples"
 
 @code {
 
-	private string[] _categories = [];
+	private Category[] _categories = [];
 
 	protected override void OnInitialized()
 	{
 		_categories = WtqAppExamples.AppExamples
 			.SelectMany(ex => ex.Categories)
 			.Distinct()
-			.OrderBy(c => c)
+			.OrderByDescending(c => c.Priority)
 			.ToArray();
 	}
 
@@ -56,16 +54,26 @@
 	</span>
 </div>
 
+@for (var i = 0; i < _categories.Length; i++)
+{
+	if (i > 0)
+	{
+		<span class="rz-mx-2 rz-color-base-500">-</span>
+	}
+
+	<RadzenLink Path="@($"/examples#{_categories[i].Name}")" Text="@_categories[i].Name" />
+}
+
 @foreach (var category in _categories)
 {
 
-	<h2 class="rz-my-8 rz-color-base-600">@category</h2>
+	<h2 class="rz-my-8 rz-color-base-600" id="@category.Name">@category.Name</h2>
 	<RadzenRow>
 
 		@foreach (var example in WtqAppExamples
 			.AppExamples
 			.Where(ex => (_isLinux && ex.IsLinux) || (_isWindows && ex.IsWindows))
-			.Where(ex => ex.Categories.Contains(category, StringComparer.OrdinalIgnoreCase))
+			.Where(ex => ex.Categories.Contains(category))
 			.OrderBy(ex => ex.Title))
 		{
 			<RadzenColumn Size="6" SizeLG="4" SizeXL="3">

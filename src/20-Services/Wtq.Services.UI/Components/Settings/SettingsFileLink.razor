@@ -1,3 +1,25 @@
 @inject IPlatformService Platform
 
-Settings backed by file at path <RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" Class="rz-p-1" Click="@(() => Platform.OpenFileOrDirectory(Platform.PathToWtqConf))">@Platform.PathToWtqConf <RadzenIcon Icon="open_in_new" /></RadzenButton>
+@inject TooltipService TooltipService
+
+Settings backed by file at path
+
+<RadzenButton
+	Class="rz-p-1"
+	Click="@(() => Platform.OpenFileOrDirectory(Platform.PathToWtqConf))"
+	Icon="file_open"
+	MouseEnter="@(args => TooltipService.OpenOnTheTop(args, "Open the settings file"))"
+	Size="ButtonSize.Small"
+	Variant="Variant.Text"
+/>
+
+<RadzenButton
+	Class="rz-p-1"
+	Click="@(() => Platform.OpenFileOrDirectory(Platform.PathToWtqConfDir))"
+	Icon="folder_open"
+	MouseEnter="@(args => TooltipService.OpenOnTheTop(args, "Open the settings directory"))"
+	Size="ButtonSize.Small"
+	Variant="Variant.Text"
+/>
+
+<strong>@Platform.PathToWtqConf</strong>
