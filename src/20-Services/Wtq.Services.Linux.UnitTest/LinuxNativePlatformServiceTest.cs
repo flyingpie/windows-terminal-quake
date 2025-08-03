@@ -129,6 +129,7 @@ public class LinuxNativePlatformServiceTest
 	public void PathToWtqConf_Preferred()
 	{
 		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.WriteAllText(It.IsAny<string>(), It.IsAny<string>()));
 
 		Assert.AreEqual("/home/username/.config/wtq.jsonc", _p.PathToWtqConf);
 	}
@@ -149,6 +150,7 @@ public class LinuxNativePlatformServiceTest
 	public void PathToWtqConfDir_Preferred()
 	{
 		_fs.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+		_fs.Setup(m => m.WriteAllText(It.IsAny<string>(), It.IsAny<string>()));
 
 		Assert.AreEqual("/home/username/.config", _p.PathToWtqConfDir);
 	}

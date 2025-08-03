@@ -1,7 +1,6 @@
 using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using YamlDotNet.Core.Tokens;
 
 namespace Wtq.Services.Win32v2;
 
