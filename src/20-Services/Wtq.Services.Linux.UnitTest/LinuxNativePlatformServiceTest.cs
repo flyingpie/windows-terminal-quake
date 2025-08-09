@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Wtq.Utils;
 
 namespace Wtq.Services.Linux.UnitTest;
@@ -169,23 +170,41 @@ public class LinuxNativePlatformServiceTest
 	}
 
 	[TestMethod]
+	[SuppressMessage("ReSharper", "BadListLineBreaks", Justification = "MvdO")]
 	public void PathsToWtqConfs_XdgSet()
 	{
 		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "/path/to/xdg/config/home");
 
 		var paths = _p.PathsToWtqConfs.ToList();
 
+		// @formatter:off
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json", "/path/to/app/wtq.jsonc", "/path/to/app/wtq.json5", "/path/to/app/.wtq.json", "/path/to/app/.wtq.jsonc", "/path/to/app/.wtq.json5",
+			"/path/to/app/wtq.json",
+			"/path/to/app/wtq.jsonc",
+			"/path/to/app/wtq.json5",
+			"/path/to/app/.wtq.json",
+			"/path/to/app/.wtq.jsonc",
+			"/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/path/to/xdg/config/home/wtq.json", "/path/to/xdg/config/home/wtq.jsonc", "/path/to/xdg/config/home/wtq.json5", "/path/to/xdg/config/home/.wtq.json", "/path/to/xdg/config/home/.wtq.jsonc", "/path/to/xdg/config/home/.wtq.json5",
+			"/path/to/xdg/config/home/wtq.json",
+			"/path/to/xdg/config/home/wtq.jsonc",
+			"/path/to/xdg/config/home/wtq.json5",
+			"/path/to/xdg/config/home/.wtq.json",
+			"/path/to/xdg/config/home/.wtq.jsonc",
+			"/path/to/xdg/config/home/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json", "/home/username/wtq.jsonc", "/home/username/wtq.json5", "/home/username/.wtq.json", "/home/username/.wtq.jsonc", "/home/username/.wtq.json5",
+			"/home/username/wtq.json",
+			"/home/username/wtq.jsonc",
+			"/home/username/wtq.json5",
+			"/home/username/.wtq.json",
+			"/home/username/.wtq.jsonc",
+			"/home/username/.wtq.json5",
 		};
+		// @formatter:on
 
 		Assert.AreEqual(expected.Length, paths.Count);
 
@@ -196,21 +215,39 @@ public class LinuxNativePlatformServiceTest
 	}
 
 	[TestMethod]
+	[SuppressMessage("ReSharper", "BadListLineBreaks", Justification = "MvdO")]
 	public void PathsToWtqConfs_XdgNotSet()
 	{
 		var paths = _p.PathsToWtqConfs.ToList();
 
+		// @formatter:off
 		var expected = new[]
 		{
 			// Next to wtq executable.
-			"/path/to/app/wtq.json", "/path/to/app/wtq.jsonc", "/path/to/app/wtq.json5", "/path/to/app/.wtq.json", "/path/to/app/.wtq.jsonc", "/path/to/app/.wtq.json5",
+			"/path/to/app/wtq.json",
+			"/path/to/app/wtq.jsonc",
+			"/path/to/app/wtq.json5",
+			"/path/to/app/.wtq.json",
+			"/path/to/app/.wtq.jsonc",
+			"/path/to/app/.wtq.json5",
 
 			// In XDG config dir.
-			"/home/username/.config/wtq.json", "/home/username/.config/wtq.jsonc", "/home/username/.config/wtq.json5", "/home/username/.config/.wtq.json", "/home/username/.config/.wtq.jsonc", "/home/username/.config/.wtq.json5",
+			"/home/username/.config/wtq.json",
+			"/home/username/.config/wtq.jsonc",
+			"/home/username/.config/wtq.json5",
+			"/home/username/.config/.wtq.json",
+			"/home/username/.config/.wtq.jsonc",
+			"/home/username/.config/.wtq.json5",
 
 			// In user home dir.
-			"/home/username/wtq.json", "/home/username/wtq.jsonc", "/home/username/wtq.json5", "/home/username/.wtq.json", "/home/username/.wtq.jsonc", "/home/username/.wtq.json5",
+			"/home/username/wtq.json",
+			"/home/username/wtq.jsonc",
+			"/home/username/wtq.json5",
+			"/home/username/.wtq.json",
+			"/home/username/.wtq.jsonc",
+			"/home/username/.wtq.json5",
 		};
+		// @formatter:on
 
 		Assert.AreEqual(expected.Length, paths.Count);
 
