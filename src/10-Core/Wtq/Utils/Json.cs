@@ -8,7 +8,7 @@ public static class Json
 {
 	private static readonly ConcurrentDictionary<Type, object> _defs = new();
 
-	private static JsonSerializerOptions Options { get; } = new()
+	private static readonly JsonSerializerOptions _options = new()
 	{
 		Converters =
 		{
@@ -29,7 +29,7 @@ public static class Json
 
 	public static string Serialize(object obj)
 	{
-		return JsonSerializer.Serialize(obj, Options);
+		return JsonSerializer.Serialize(obj, _options);
 	}
 
 	private static void DefaultValuesModifier(JsonTypeInfo typeInfo)
