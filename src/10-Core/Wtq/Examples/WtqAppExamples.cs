@@ -1,10 +1,9 @@
-#pragma warning disable SA1027 // Use tabs correctly // MvdO: Disable when all examples are in place.
+#pragma warning disable // MvdO: Remove when all examples are in place.
 
 using System.Runtime.InteropServices;
 
 namespace Wtq.Examples;
 
-[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "MVdO: Reference data.")]
 public static class WtqAppExamples
 {
 	public static class Categories
