@@ -32,7 +32,7 @@ public sealed partial class Build : NukeBuild
 	[Parameter("GitHub Token")]
 	private readonly string GitHubToken;
 
-	[Required]
+	//[Required]
 	[GitRepository]
 	private readonly GitRepository GitRepository;
 

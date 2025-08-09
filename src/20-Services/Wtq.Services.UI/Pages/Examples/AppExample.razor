@@ -1,4 +1,7 @@
+@using System.Text
 @using Wtq.Examples
+
+@inject IPlatformService Platform
 
 @code {
 
@@ -10,6 +13,19 @@
 	[Parameter]
 	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; } = null!;
 
+	private string GetAddButtonText(WtqAppExampleFlavor flavor)
+	{
+		var sb = new StringBuilder();
+
+		sb.Append("Add");
+
+		if (!string.IsNullOrWhiteSpace(flavor.Name))
+		{
+			sb.Append($" ({flavor.Name})");
+		}
+
+		return sb.ToString();
+	}
 }
 
 <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
@@ -22,32 +38,29 @@
 		}
 	</RadzenStack>
 
-	<p class="rz-m-0" style="height: 3em;">@App.Description</p>
+	<p class="rz-m-0"><em>@App.Description</em></p>
+
+	<RadzenButton Variant="Variant.Text" Text="@App.Link?.ToString()" Style="padding: 0; text-align: left;" Click="() => Platform.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
 
 	<RadzenImage
 		Path="@App.Image"
 		style="width: 100%; height: 160px; object-fit: contain;"
 	/>
 
-	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-		<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
+	<RadzenStack Orientation="Orientation.Vertical">
+		@foreach (var flavor in App.Flavors)
+		{
+			<RadzenButton Variant="Variant.Filled" Icon="add" Text="@GetAddButtonText(flavor)" Click="() => OnSelectApp(App, flavor)" />
 
-		<RadzenStack Orientation="Orientation.Vertical">
-			@foreach (var flavor in App.Flavors)
+			@if (Platform.IsCallable(null, flavor.FileName))
 			{
-				<RadzenButton Variant="Variant.Filled" Icon="add" Text="@flavor.Name" Click="() => OnSelectApp(App, flavor)" />
-
-				@if (Os.IsCallable(null, flavor.FileName))
-				{
-					<p class="rz-color-success-light rz-mt-0">App '@flavor.FileName' seems to exist!</p>
-				}
-				else
-				{
-					<p class="rz-color-danger-light rz-mt-0">App '@flavor.FileName' does NOT seem to exist!</p>
-				}
+				<p class="rz-color-success-light rz-mt-0">App '<strong>@flavor.FileName</strong>' seems to exist!</p>
 			}
-		</RadzenStack>
+			else
+			{
+				<p class="rz-color-danger-light rz-mt-0">App '<strong>@flavor.FileName</strong>' does NOT seem to exist!</p>
+			}
+		}
 	</RadzenStack>
-
 
 </RadzenStack>

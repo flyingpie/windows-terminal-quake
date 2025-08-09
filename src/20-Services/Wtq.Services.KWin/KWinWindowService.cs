@@ -1,17 +1,16 @@
 using Wtq.Configuration;
-using Wtq.Services.KWin.ProcessFactory;
 
 namespace Wtq.Services.KWin;
 
 public class KWinWindowService(
 	IKWinClient kwinClient,
-	IProcessFactory procFactory)
+	IPlatformService platform)
 	: IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<KWinWindowService>();
 
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
-	private readonly IProcessFactory _procFactory = Guard.Against.Null(procFactory);
+	private readonly IPlatformService _procFactory = Guard.Against.Null(platform);
 
 	public Task CreateAsync(
 		WtqAppOptions opts,
@@ -19,7 +18,7 @@ public class KWinWindowService(
 	{
 		Guard.Against.Null(opts);
 
-		using var process = _procFactory.Create(opts);
+		using var process = _procFactory.CreateProcess(opts);
 
 		process.Start();
 

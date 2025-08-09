@@ -5,7 +5,7 @@
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
 @inject Notifier Notifier
-@inject WtqOptionsSaveService SaveService
+@inject IWtqOptionsSaveService SaveService
 @inject NotificationService NotificationService
 
 @page "/global-settings"
@@ -43,7 +43,7 @@
 <PageHead Icon="public">Global settings</PageHead>
 <p>Settings that apply to all apps (unless overridden).</p>
 
-<SettingsFileLink />
+<p><SettingsFileLink /></p>
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="Notifier">

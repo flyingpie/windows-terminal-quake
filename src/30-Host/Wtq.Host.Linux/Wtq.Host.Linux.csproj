@@ -23,10 +23,15 @@
 		</None>
 	</ItemGroup>
 
+	<!--
+		Copy static asses for the UI over, which we need to do manually due to our slightly non-conventional setup,
+		of having the UI in a library, and the main app not being a web app.
+	-->
 	<ItemGroup>
 		<BlazorStaticAssets Include="../../20-Services/Wtq.Services.UI/wwwroot/**/*"/>
 	</ItemGroup>
 
+	<!-- Build: For when we're directly running the project, which includes debugging. -->
 	<Target Name="CopyBlazorAssetsBuild" AfterTargets="Build">
 		<Copy
 			SourceFiles="@(BlazorStaticAssets)"
@@ -35,6 +40,7 @@
 		/>
 	</Target>
 
+	<!-- Publish: For when we're making artifacts to be packaged. -->
 	<Target Name="CopyBlazorAssetsPublish" AfterTargets="Publish">
 		<Copy
 			SourceFiles="@(BlazorStaticAssets)"

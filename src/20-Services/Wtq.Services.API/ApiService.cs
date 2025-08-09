@@ -12,15 +12,18 @@ namespace Wtq.Services.API;
 /// </summary>
 public sealed class ApiService(
 	IOptions<WtqOptions> opts,
+	IPlatformService platformService,
 	IWtqAppRepo appRepo,
 	IWtqBus bus)
 	: WtqHostedService
 {
-	private readonly IOptions<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly ILogger _log = Log.For<ApiService>();
 
+	private readonly IOptions<WtqOptions> _opts = Guard.Against.Null(opts);
+	private readonly IPlatformService _platformService = Guard.Against.Null(platformService);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
+
 	private readonly CancellationTokenSource _cts = new();
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
@@ -35,7 +38,9 @@ public sealed class ApiService(
 
 		var builder = WebApplication.CreateBuilder();
 
-		foreach (var u in opt.Urls)
+		var urls = opt.Urls ?? _platformService.DefaultApiUrls;
+
+		foreach (var u in urls)
 		{
 			// Parse the url as a Uri.
 			if (!Uri.TryCreate(u, UriKind.Absolute, out var uri))
@@ -54,7 +59,9 @@ public sealed class ApiService(
 			}
 		}
 
-		builder.WebHost.UseUrls([.. opt.Urls]);
+		_log.LogInformation("Hosting API on url(s) {Urls}", string.Join(", ", urls));
+
+		builder.WebHost.UseUrls([.. urls]);
 
 		builder.Services
 			.AddLogging(c => c

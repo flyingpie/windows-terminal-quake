@@ -1,5 +1,7 @@
 @inherits WtqSettingBase<string>
 
+@inject IPlatformService Platform
+
 @code {
 
 	[Parameter]
@@ -13,7 +15,7 @@
 
 		@if (!string.IsNullOrWhiteSpace(Value))
 		{
-			@if (Os.IsCallable(WorkingDirectory, Value))
+			@if (Platform.IsCallable(WorkingDirectory, Value))
 			{
 				<p class="rz-color-success-light rz-mt-1">File seems to exist!</p>
 			}

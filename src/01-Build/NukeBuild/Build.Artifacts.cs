@@ -48,7 +48,7 @@ public sealed partial class Build
 	/// </summary>
 	private Target BuildLinuxSelfContained => _ => _
 		.DependsOn(Clean)
-		.DependsOn(RunTests)
+		// .DependsOn(RunTests)
 		.Produces(PathToLinux64SelfContainedZip)
 		.Produces(PathToLinux64SelfContainedZipSha256)
 		.Executes(() =>

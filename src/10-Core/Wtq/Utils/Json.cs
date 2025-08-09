@@ -6,9 +6,9 @@ namespace Wtq.Utils;
 
 public static class Json
 {
-	private static ConcurrentDictionary<Type, object> _defs = new();
+	private static readonly ConcurrentDictionary<Type, object> _defs = new();
 
-	public static JsonSerializerOptions Options { get; } = new()
+	private static JsonSerializerOptions Options { get; } = new()
 	{
 		Converters =
 		{

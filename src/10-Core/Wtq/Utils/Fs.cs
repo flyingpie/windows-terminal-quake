@@ -14,4 +14,6 @@ public class Fs : IFs
 	public bool DirExists(string path) => Directory.Exists(path);
 
 	public bool FileExists(string path) => File.Exists(path);
+
+	public void WriteAllText(string path, string contents) => File.WriteAllText(path, contents);
 }

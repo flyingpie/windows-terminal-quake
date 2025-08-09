@@ -7,4 +7,6 @@ public interface IFs
 	bool DirExists(string path);
 
 	bool FileExists(string path);
+
+	void WriteAllText(string path, string contents);
 }
