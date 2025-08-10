@@ -17,6 +17,11 @@ public sealed partial class Build
 		.Description($"Creating release for the publishable version.")
 		.Executes(async () =>
 		{
+			if (GitRepository == null)
+			{
+				throw new InvalidOperationException($"The '{nameof(GitRepository)}' property was not set, which is required when making a GitHub release.");
+			}
+
 			var token = GitHubActions?.Token ?? GitHubToken
 				?? throw new InvalidOperationException("No GitHub token was specified.");
 
