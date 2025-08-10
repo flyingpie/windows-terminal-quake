@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using System.IO;
 using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
@@ -12,6 +13,7 @@ public class WtqUIHost
 	private readonly ILogger _log = Log.For<WtqUIHost>();
 
 	private readonly IOptions<WtqOptions> _opts;
+	private readonly IPlatformService _platform;
 	private readonly IWtqWindowService _windowService;
 	private readonly PhotinoBlazorApp _app;
 
@@ -19,12 +21,14 @@ public class WtqUIHost
 
 	public WtqUIHost(
 		IOptions<WtqOptions> opts,
+		IPlatformService platform,
 		IWtqBus bus,
 		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
 		_app = Guard.Against.Null(app);
 		_opts = Guard.Against.Null(opts);
+		_platform = Guard.Against.Null(platform);
 		_windowService = Guard.Against.Null(windowService);
 
 		bus.OnEvent<WtqUIRequestedEvent>(_ => OpenMainWindowAsync());
@@ -54,10 +58,10 @@ public class WtqUIHost
 				return true;
 			})
 			.Center()
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			.SetIconFile(Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-padding.png"))
 			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
-			.SetSize(1280, 800)
+			.SetSize(1270, 800)
 			.SetTitle(MainWindowTitle);
 	}
 
