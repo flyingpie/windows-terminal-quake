@@ -82,10 +82,9 @@ public abstract class PlatformServiceBase : IPlatformService
 
 			// If no existing file was found, generate an example file at the preferred location, and use that.
 			// Note that the example config is set up to pop the UI, so the user gets a decent out-of-box experience.
-			// TODO: Add toggle to the welcome screen or something, so it's easier to hide the UI on start.
 			_pathToWtqConf = PreferredPathWtqConfig;
 			Log.LogInformation("No settings file found, generating an example file at '{Path}'", _pathToWtqConf);
-			Fs.Inst.WriteAllText(_pathToWtqConf, Resources.Resources.wtq_example);
+			Fs.Inst.WriteAllText(_pathToWtqConf, GetExampleWtqJsonc());
 			return _pathToWtqConf;
 		}
 	}
@@ -93,6 +92,33 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <inheritdoc/>
 	public virtual string PathToWtqConfDir =>
 		Path.GetDirectoryName(PathToWtqConf) ?? throw new WtqException($"Could not determine directory of path '{PathToWtqConf}'.");
+
+	private string GetExampleWtqJsonc()
+	{
+		var pathToExampleWtqJsonc = Path.Combine(PathToAssetsDir, "wtq.example.jsonc");
+		if (Fs.Inst.FileExists(pathToExampleWtqJsonc))
+		{
+			return Fs.Inst.ReadAllText(pathToExampleWtqJsonc);
+		}
+
+		Log.LogWarning("Example settings file was not found at expected path '{Path}', returning minimal example file", pathToExampleWtqJsonc);
+
+		return
+			"""
+			{
+				// Something went wrong generating an example file, please see the docs and the autocompletion for this file instead.
+				// Also, I'd appreciate it a ton if you could report this issue.
+				"$schema": "wtq.schema.json",
+
+				"Apps": [
+					// Apps go here
+					// {
+					//   "Name": "App1"
+					// }
+				]
+			}
+			""";
+	}
 
 	/// <inheritdoc/>
 	public abstract ICollection<string> PathsToWtqConfs { get; }

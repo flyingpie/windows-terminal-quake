@@ -73,7 +73,10 @@ public class LinuxNativePlatformService : PlatformServiceBase
 				// Next to the app executable
 				PathToAppDir,
 
-				// XDG home, defaults to user home
+				// XDG home, defaults to user home (subfolder)
+				Path.Combine(XDG_CONFIG_HOME, "wtq"),
+
+				// XDG home, defaults to user home (bare)
 				XDG_CONFIG_HOME,
 
 				// Explicitly user home

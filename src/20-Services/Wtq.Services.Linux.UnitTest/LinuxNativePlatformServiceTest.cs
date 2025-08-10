@@ -163,7 +163,7 @@ public class LinuxNativePlatformServiceTest
 
 		var paths = _p.PathsToWtqConfs.ToList();
 
-		Assert.AreEqual(19, paths.Count);
+		Assert.AreEqual(25, paths.Count);
 		Assert.AreEqual("/env/path/to/wtq.jsonc", paths[0]);
 
 		// Other stuff is tested in the other tests.
@@ -188,7 +188,15 @@ public class LinuxNativePlatformServiceTest
 			"/path/to/app/.wtq.jsonc",
 			"/path/to/app/.wtq.json5",
 
-			// In XDG config dir.
+			// In XDG config dir (subfolder).
+			"/path/to/xdg/config/home/wtq/wtq.json",
+			"/path/to/xdg/config/home/wtq/wtq.jsonc",
+			"/path/to/xdg/config/home/wtq/wtq.json5",
+			"/path/to/xdg/config/home/wtq/.wtq.json",
+			"/path/to/xdg/config/home/wtq/.wtq.jsonc",
+			"/path/to/xdg/config/home/wtq/.wtq.json5",
+
+			// In XDG config dir (bare).
 			"/path/to/xdg/config/home/wtq.json",
 			"/path/to/xdg/config/home/wtq.jsonc",
 			"/path/to/xdg/config/home/wtq.json5",
@@ -231,7 +239,15 @@ public class LinuxNativePlatformServiceTest
 			"/path/to/app/.wtq.jsonc",
 			"/path/to/app/.wtq.json5",
 
-			// In XDG config dir.
+			// In XDG config dir (subfolder).
+			"/home/username/.config/wtq/wtq.json",
+			"/home/username/.config/wtq/wtq.jsonc",
+			"/home/username/.config/wtq/wtq.json5",
+			"/home/username/.config/wtq/.wtq.json",
+			"/home/username/.config/wtq/.wtq.jsonc",
+			"/home/username/.config/wtq/.wtq.json5",
+
+			// In XDG config dir (bare).
 			"/home/username/.config/wtq.json",
 			"/home/username/.config/wtq.jsonc",
 			"/home/username/.config/wtq.json5",
