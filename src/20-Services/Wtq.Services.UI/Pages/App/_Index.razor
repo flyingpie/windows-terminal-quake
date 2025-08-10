@@ -5,9 +5,9 @@
 @using Wtq.Services.UI.Components.Settings.Position
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
-@inject Notifier Notifier
-@inject WtqOptionsSaveService SaveService
+@inject IWtqOptionsSaveService SaveService
 @inject NotificationService NotificationService
+@inject Notifier Notifier
 
 @page "/apps/{AppId}"
 @layout NarrowLayout
@@ -18,6 +18,8 @@
 	[Parameter]
 	public string? AppId { get; set; }
 
+	// Grab a copy from the options, so we can bind to it.
+	// We're not using IOptionsSnapshot, as we do want to get notified of updates.
 	public WtqAppOptions AppOpts { get; set; } = null!;
 
 	public WtqOptions GlobalOpts { get; set; } = null!;
@@ -55,8 +57,9 @@
 </PageHead>
 
 <p>Settings specific to <strong>@AppId</strong>.</p>
+<p>Note that you can also configure many of these settings to apply for all apps, through <RadzenLink Path="/global-settings" Text="global settings" />.</p>
 
-<SettingsFileLink />
+<p><SettingsFileLink /></p>
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
