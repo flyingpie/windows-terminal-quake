@@ -1,5 +1,6 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 
+using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -11,7 +12,6 @@ namespace Wtq.Services.Win32v2;
 /// <inheritdoc cref="IWin32"/>
 public class Win32 : IWin32
 {
-
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 
 	private const int HWND_NOTOPMOST = -2;
@@ -133,9 +133,9 @@ public class Win32 : IWin32
 
 		var insertBefore = isAlwaysOnTop ? HWND_TOPMOST : HWND_NOTOPMOST;
 		var flags =
-			SET_WINDOW_POS_FLAGS.SWP_NOMOVE | // Ignore the positional parameters.
-			SET_WINDOW_POS_FLAGS.SWP_NOSIZE // Ignore the size parameters.
-		;
+				SET_WINDOW_POS_FLAGS.SWP_NOMOVE | // Ignore the positional parameters.
+				SET_WINDOW_POS_FLAGS.SWP_NOSIZE // Ignore the size parameters.
+			;
 
 		if (!PI.SetWindowPos(hWnd: (HWND)windowHandle, hWndInsertAfter: (HWND)insertBefore, X: 0, Y: 0, cx: 0, cy: 0, uFlags: flags))
 		{

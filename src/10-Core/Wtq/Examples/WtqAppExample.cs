@@ -15,7 +15,7 @@ public class WtqAppExample
 	/// <summary>
 	/// Categories to bring some order to the "Examples" page.
 	/// </summary>
-	public required string[] Categories { get; init; }
+	public required Category[] Categories { get; init; }
 
 	/// <summary>
 	/// Short description of what the app does.
@@ -42,7 +42,7 @@ public class WtqAppExample
 	/// <summary>
 	/// What operating systems the app runs on. Used for indication and filtering in the UI.
 	/// </summary>
-	public ICollection<OSPlatform> Os => Flavors.SelectMany(f => f.Os).ToList();
+	public ICollection<OSPlatform> Os => Flavors.SelectMany(f => f.Os).Distinct().ToList();
 
 	public bool IsLinux => Os.Contains(OSPlatform.Linux);
 

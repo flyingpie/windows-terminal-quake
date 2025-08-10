@@ -32,9 +32,13 @@ public sealed partial class Build : NukeBuild
 	[Parameter("GitHub Token")]
 	private readonly string GitHubToken;
 
-	[Required]
+	/// <summary>
+	/// Only required when publishing a release to GitHub.<br/>
+	/// Used to be [Required], but that doesn't work in contexts where
+	/// the repo is cloned in a slightly irregular way, like shallow clones.
+	/// </summary>
 	[GitRepository]
-	private readonly GitRepository GitRepository;
+	private readonly GitRepository? GitRepository;
 
 	private AbsolutePath ChangeLogFile => RootDirectory / "CHANGELOG.md";
 
@@ -90,7 +94,15 @@ public sealed partial class Build : NukeBuild
 		.Executes(() => OutputDirectory.CreateOrCleanDirectory());
 
 	/// <summary>
-	/// Tests.
+	/// Tests.<br/>
+	/// Note that tests run across the entire solution, including Windows projects.<br/>
+	/// <br/>
+	/// That means that the Windows targeting stuff in the SDK is necessary.<br/>
+	/// In other words, at the time of writing, the regular OS-provided packages for .Net
+	/// on Linux might not work, as they don't provide the bits required to compile for
+	/// Windows as well.<br/>
+	/// <br/>
+	/// I work around that by installing .Net using the dotnet-install.sh script.
 	/// </summary>
 	private Target RunTests => _ => _
 		.Description("Run all unit tests.")
