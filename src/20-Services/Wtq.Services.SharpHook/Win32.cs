@@ -5,8 +5,6 @@ namespace Wtq.Services.SharpHook;
 
 public class Win32 : IWin32
 {
-	private readonly ILogger _log = Log.For<Win32>();
-
 	public bool IsAltPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
@@ -66,7 +64,6 @@ public class Win32 : IWin32
 		}
 
 		// Now we can return the actual UTF8 representation.
-		_log.LogInformation("Got character '{Char}'", result);
 		return result;
 	}
 
