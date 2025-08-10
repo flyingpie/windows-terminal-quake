@@ -40,6 +40,8 @@ public sealed class ApiService(
 
 		var urls = opt.Urls ?? _platformService.DefaultApiUrls;
 
+		_log.LogInformation("Hosting API on url(s) {Urls}", string.Join(", ", urls));
+
 		foreach (var u in urls)
 		{
 			// Parse the url as a Uri.
@@ -58,8 +60,6 @@ public sealed class ApiService(
 				File.Delete(uri.AbsolutePath);
 			}
 		}
-
-		_log.LogInformation("Hosting API on url(s) {Urls}", string.Join(", ", urls));
 
 		builder.WebHost.UseUrls([.. urls]);
 

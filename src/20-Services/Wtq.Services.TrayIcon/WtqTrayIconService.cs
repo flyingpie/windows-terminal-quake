@@ -119,6 +119,7 @@ public sealed class WtqTrayIconService : WtqHostedService
 		bool enabled = true) =>
 		new(text)
 		{
-			Click = (_, _) => action(), IsDisabled = !enabled,
+			Click = (_, _) => action(),
+			IsDisabled = !enabled,
 		};
 }
