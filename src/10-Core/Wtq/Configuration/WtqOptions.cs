@@ -112,6 +112,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
+	/// The tray icon (color) style (dark/light).
+	/// </summary>
+	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
+	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]
+	[JsonPropertyOrder(106)]
+	public TrayIconStyle? TrayIconStyle { get; set; }
+
+	/// <summary>
 	/// Called right after the options are loaded from file.
 	/// </summary>
 	public void OnPostConfigure()

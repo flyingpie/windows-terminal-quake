@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace Wtq.Services.KWin.UnitTest.ProcessFactory;
+namespace Wtq.Services.Win32v2.UnitTest;
 
 public static class AssertProcess
 {

@@ -1,14 +1,21 @@
 namespace Wtq.Services;
 
-public class WtqOptionsSaveService
+public class WtqOptionsSaveService(IPlatformService platform)
+	: IWtqOptionsSaveService
 {
+	private readonly IPlatformService _platform = Guard.Against.Null(platform);
+
 	public async Task SaveAsync(WtqOptions options)
 	{
-		await File.WriteAllTextAsync(WtqOptionsPath.Instance.Path, Write(options)).NoCtx();
+		Guard.Against.Null(options);
+
+		await File.WriteAllTextAsync(_platform.PathToWtqConf, Write(options)).NoCtx();
 	}
 
 	public string Write(WtqOptions options)
 	{
+		Guard.Against.Null(options);
+
 		options.PrepareForSave();
 
 		return Json.Serialize(options);

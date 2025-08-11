@@ -20,28 +20,6 @@ public static class SystemExtensions
 		return Path.GetFileNameWithoutExtension(fileName)?.EmptyOrWhiteSpaceToNull() ?? fileName;
 	}
 
-	/// <summary>
-	/// Make sure the specified <param name="path"/> exists.
-	/// </summary>
-	public static string GetOrCreateDirectory(this string path)
-	{
-		if (Directory.Exists(path))
-		{
-			return path;
-		}
-
-		try
-		{
-			Directory.CreateDirectory(path);
-		}
-		catch (Exception ex)
-		{
-			throw new WtqException($"Could not create app data directory '{path}': {ex.Message}", ex);
-		}
-
-		return path;
-	}
-
 	public static TValue JsonDeepClone<TValue>(this TValue value)
 	{
 		var json = JsonSerializer.Serialize(value);
