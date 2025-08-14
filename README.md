@@ -44,8 +44,23 @@ After having done that at least once, a shortcut will appear in the start menu, 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
 ### Flatpak (Linux)
+Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
+
+As an alternative, you can use the Flatpak remote hosted on the [sister repository](https://github.com/flyingpie/flatpak).
+It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for building the Flatpak itself, and everything is hosted on GitHub Pages.
+
+The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
+
+#### Per-User
+```bash
+flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak --user install nl.flyingpie.wtq
 ```
-TODO
+
+#### System-Wide
+```bash
+flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak install nl.flyingpie.wtq
 ```
 
 ### Manual (Linux)
