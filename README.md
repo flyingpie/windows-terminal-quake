@@ -43,6 +43,34 @@ After having done that at least once, a shortcut will appear in the start menu, 
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
+### AUR (Linux, Arch-based)
+Multiple versions are published to the Arch User Repository (AUR):
+
+#### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+- Latest stable release, pre-built;
+- Downloads from GitHub Releases;
+- Quicker to install and minimal dependencies.
+
+```bash
+yay -S wtq-bin
+```
+or
+```bash
+paru -S wtq-bin
+```
+
+#### [wtq](https://aur.archlinux.org/packages/wtq)
+- Latest stable release, built from source;
+- Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
+
+```bash
+yay -S wtq
+```
+or
+```bash
+paru -S wtq
+```
+
 ### Flatpak (Linux)
 Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
 
