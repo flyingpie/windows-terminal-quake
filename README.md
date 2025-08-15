@@ -28,9 +28,13 @@ https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
 ### Scoop (Windows)
+> The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+
+```pwsh
+scoop bucket add extras
+scoop install extras/wtq
 ```
-scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
-```
+
 A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
 
 ### WinGet (Windows)
