@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Wtq.Configuration;
 using Wtq.Utils;
@@ -112,6 +113,57 @@ public class WindowsPlatformServiceTest
 		_fs.Setup(m => m.FileExists(It.Is<string>(p => p == path))).Returns(true);
 
 		Assert.AreEqual(dir, _p.PathToWtqConfDir);
+	}
+
+	[TestMethod]
+	[SuppressMessage("ReSharper", "BadListLineBreaks", Justification = "MvdO")]
+	public void PathsToWtqConfs()
+	{
+		var paths = _p.PathsToWtqConfs.ToList();
+
+		// @formatter:off
+		var expected = new[]
+		{
+			// Next to wtq executable.
+			"/path/to/app/wtq.json",
+			"/path/to/app/wtq.jsonc",
+			"/path/to/app/wtq.json5",
+			"/path/to/app/.wtq.json",
+			"/path/to/app/.wtq.jsonc",
+			"/path/to/app/.wtq.json5",
+
+			// In XDG config dir (subfolder).
+			"/home/username/.config/wtq/wtq.json",
+			"/home/username/.config/wtq/wtq.jsonc",
+			"/home/username/.config/wtq/wtq.json5",
+			"/home/username/.config/wtq/.wtq.json",
+			"/home/username/.config/wtq/.wtq.jsonc",
+			"/home/username/.config/wtq/.wtq.json5",
+
+			// In XDG config dir (bare).
+			"/home/username/.config/wtq.json",
+			"/home/username/.config/wtq.jsonc",
+			"/home/username/.config/wtq.json5",
+			"/home/username/.config/.wtq.json",
+			"/home/username/.config/.wtq.jsonc",
+			"/home/username/.config/.wtq.json5",
+
+			// In user home dir.
+			"/home/username/wtq.json",
+			"/home/username/wtq.jsonc",
+			"/home/username/wtq.json5",
+			"/home/username/.wtq.json",
+			"/home/username/.wtq.jsonc",
+			"/home/username/.wtq.json5",
+		};
+		// @formatter:on
+
+		Assert.AreEqual(expected.Length, paths.Count);
+
+		for (var i = 0; i < paths.Count; i++)
+		{
+			Assert.AreEqual(expected[i], paths[i]);
+		}
 	}
 
 	[TestMethod]

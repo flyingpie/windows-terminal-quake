@@ -67,6 +67,8 @@ public sealed partial class Build : NukeBuild
 
 	private AbsolutePath PathToWin64FrameworkDependentZipSha256 => ArtifactsDirectory / "win-x64_framework-dependent.zip.sha256";
 
+	private AbsolutePath PathToWin64SelfContained => StagingDirectory / "win-x64_self-contained";
+
 	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / "win-x64_self-contained.zip";
 
 	private AbsolutePath PathToWin64SelfContainedZipSha256 => ArtifactsDirectory / "win-x64_self-contained.zip.sha256";

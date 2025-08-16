@@ -11,6 +11,8 @@ using Serilog;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
@@ -88,17 +90,21 @@ public partial class Build
 		{
 			// Write shortcut
 			Log.Information($"Writing shortcut to path '{InstallProps.Windows.PathToShortcut}'");
-			// File.WriteAllText(InstallProps.Windows.PathToDesktopFile, InstallProps.Windows.DesktopFile);
+
+			var link = (IShellLink)new ShellLink();
+			link.SetDescription("Enable Quake-mode for (almost) any app");
+			link.SetPath(Path.Combine(InstallProps.Windows.PathToInstall, "wtq.exe"));
+			((IPersistFile)link).Save(InstallProps.Windows.PathToShortcut, false);
 
 			// Copy binaries
 			if (Directory.Exists(InstallProps.Windows.PathToInstall))
 			{
 				Log.Warning($"Directory at path '{InstallProps.Windows.PathToInstall}' already exists, deleting");
-				// Directory.Delete(InstallProps.Windows.PathToInstall, recursive: true);
+				Directory.Delete(InstallProps.Windows.PathToInstall, recursive: true);
 			}
 
 			Log.Information($"Installing WTQ binaries to path '{InstallProps.Windows.PathToInstall}'");
-			// Directory.Move(PathToWindows64SelfContained, InstallProps.Windows.PathToInstall);
+			Directory.Move(PathToWin64SelfContained, InstallProps.Windows.PathToInstall);
 		});
 
 	private Target UninstallWindows => _ => _

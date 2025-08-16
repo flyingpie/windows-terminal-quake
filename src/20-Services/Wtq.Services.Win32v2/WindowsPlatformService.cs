@@ -88,7 +88,10 @@ public class WindowsPlatformService : PlatformServiceBase
 				// Next to the app executable
 				PathToAppDir,
 
-				// App data
+				// App data (subfolder)
+				Path.Combine(_pathToAppDataDir, "wtq"),
+
+				// App data (bare)
 				_pathToAppDataDir,
 
 				// Explicitly user home
@@ -106,7 +109,7 @@ public class WindowsPlatformService : PlatformServiceBase
 
 			return res
 				.Where(e => !string.IsNullOrWhiteSpace(e))
-				.Select(e => e!)
+				.Select(e => Path.GetFullPath(e)!)
 				.Distinct()
 				.ToList();
 		}
