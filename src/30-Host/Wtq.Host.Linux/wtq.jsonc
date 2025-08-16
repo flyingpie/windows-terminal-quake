@@ -3,23 +3,11 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-
 		{
-			"Name": "Konsole",
+			"Name": "Lens",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-			"FileName": "konsole"
-		},
-
-		{
-			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
-			"FileName": "dolphin"
-		},
-
-		{
-			"Name": "SystemMonitor",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
-			"FileName": "plasma-systemmonitor"
+			"FileName": "lens-desktop",
+			"ProcessName": "^lens$"
 		}
 	],
 

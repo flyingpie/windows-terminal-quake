@@ -9,6 +9,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
 using System;
+using System.IO;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
@@ -54,6 +55,8 @@ public sealed partial class Build : NukeBuild
 	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz";
 
 	private AbsolutePath PathToLinux64FrameworkDependentZipSha256 => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz.sha256";
+
+	private AbsolutePath PathToLinux64SelfContained => StagingDirectory / "linux-x64_self-contained";
 
 	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.tar.gz";
 
@@ -115,13 +118,6 @@ public sealed partial class Build : NukeBuild
 			);
 		});
 
-	private Target BuildQuick => _ => _
-		.Description("Build everything, skip tests.")
-		.DependsOn(Clean)
-		.DependsOn(BuildLinux)
-		.DependsOn(BuildWindows)
-		.Executes();
-
 	private Target BuildAll => _ => _
 		.Description("Build everything.")
 		.DependsOn(Clean)
@@ -137,4 +133,72 @@ public sealed partial class Build : NukeBuild
 		.Triggers(CreateWinGetManifest)
 		.Triggers(CreateGitHubRelease)
 		.Executes();
+
+	private static class LinuxInstall
+	{
+		public static string PathToShare => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share");
+		public static string PathToInstall => Path.Combine(PathToShare, "wtq");
+		public static string PathToDesktopFile => Path.Combine(PathToShare, "applications", "wtq.desktop");
+
+		public static string DesktopFile =
+			$"""
+			[Desktop Entry]
+			Name=WTQ
+			Exec=env WEBKIT_DISABLE_DMABUF_RENDERER=1 {LinuxInstall.PathToInstall}/wtq
+			Version=1.0
+			Type=Application
+			Categories=
+			Terminal=false
+			Icon={LinuxInstall.PathToInstall}/assets/icon-v2-64.png
+			Comment=Enable Quake-mode for (almost) any app
+			StartupNotify=true
+			""";
+	}
+
+	private Target InstallLinux => _ => _
+		.Description("Builds Linux version and installs to ~/.local/share/wtq, includes a .desktop file.")
+		// .DependsOn(BuildLinuxSelfContained)
+		.Executes(() =>
+		{
+			// Write wtq.desktop file
+			Log.Information($"Writing wtq.desktop to path '{LinuxInstall.PathToDesktopFile}'");
+			File.WriteAllText(LinuxInstall.PathToDesktopFile, LinuxInstall.DesktopFile);
+
+			Log.Information($"Installing WTQ to path '{LinuxInstall.PathToInstall}'");
+		});
+
+	private Target UninstallLinux => _ => _
+		.Description($"Uninstalls WTQ from ~/.local/share/wtq, as installed by '{nameof(InstallLinux)}'")
+		.Executes(() =>
+		{
+			// Delete wtq.desktop file
+			try
+			{
+				File.Delete(LinuxInstall.PathToDesktopFile);
+			}
+			catch (Exception ex)
+			{
+				Log.Warning(ex, $"Error deleting wtq.desktop file at '{LinuxInstall.PathToDesktopFile}'");
+			}
+
+			try
+			{
+				Directory.Delete(LinuxInstall.PathToInstall, recursive: true);
+			}
+			catch (Exception ex)
+			{
+				Log.Warning(ex, $"Error deleting install dir at '{LinuxInstall.PathToInstall}'");
+			}
+		});
+
+	private Target InstallWindows => _ => _
+		.Description("Builds Windows version and installs to %APPDATA%/wtq, includes a start menu shortcut.")
+		.Executes();
+
+	private Target Install => _ => _
+		.Description($"Calls either '{nameof(InstallLinux)}' or '{nameof(InstallWindows)}', depending on the current OS")
+		.Executes(() =>
+		{
+
+		});
 }

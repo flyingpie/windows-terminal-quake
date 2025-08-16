@@ -15,7 +15,7 @@ public class InfoCommand(IPlatformService platform) : ICommand
 		Console.WriteLine($"Git branch:....................................{WtqConstants.GitBranch}");
 		Console.WriteLine($"Git commit:....................................{WtqConstants.GitCommit}");
 		Console.WriteLine($"-- Paths --------------------------------------------------------");
-		// Console.WriteLine($"{nameof(WtqPaths.AppData)}:....................{WtqPaths.AppData}");
+		// Console.WriteLine($"{nameof(WtqPaths.AppData)}:....................{WtqPaths.AppData}"); // TODO: Fix
 		// Console.WriteLine($"{nameof(WtqPaths.AppDataWtq)}:.................{WtqPaths.AppDataWtq}");
 		// Console.WriteLine($"{nameof(WtqPaths.PreferredWtqConfigPath)}:.....{WtqPaths.PreferredWtqConfigPath}");
 		// Console.WriteLine($"{nameof(WtqPaths.UserHome)}:...................{WtqPaths.UserHome}");

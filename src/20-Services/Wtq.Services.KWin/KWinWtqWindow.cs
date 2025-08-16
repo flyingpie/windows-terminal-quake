@@ -72,8 +72,16 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
+		if (!string.IsNullOrWhiteSpace(opts.ProcessName))
+		{
+			if (!Regex.IsMatch(_window.ResourceName ?? string.Empty, opts.ProcessName, RegexOptions.IgnoreCase))
+			{
+				return false;
+			}
+		}
+
 		// Match by file name.
-		if (!MatchesFileName(opts))
+		else if (!MatchesFileName(opts))
 		{
 			return false;
 		}

@@ -28,7 +28,6 @@
         "BuildLinux",
         "BuildLinuxFrameworkDependent",
         "BuildLinuxSelfContained",
-        "BuildQuick",
         "BuildWindows",
         "BuildWindows64SelfContained",
         "BuildWindowsFrameworkDependent",
@@ -37,8 +36,11 @@
         "CreateScoopManifest",
         "CreateWinGetManifest",
         "Info",
+        "InstallLinux",
+        "InstallWindows",
         "Publish",
-        "RunTests"
+        "RunTests",
+        "UninstallLinux"
       ]
     },
     "Verbosity": {

@@ -51,7 +51,8 @@ public sealed partial class Build
 		.Produces(PathToLinux64SelfContainedZipSha256)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "linux-x64_self-contained";
+			// var st = StagingDirectory / "linux-x64_self-contained";
+			var st = PathToLinux64SelfContained;
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
