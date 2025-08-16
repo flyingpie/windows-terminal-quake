@@ -124,37 +124,37 @@ public class WindowsPlatformServiceTest
 		// @formatter:off
 		var expected = new[]
 		{
-			// Next to wtq executable.
-			"/path/to/app/wtq.json",
-			"/path/to/app/wtq.jsonc",
-			"/path/to/app/wtq.json5",
-			"/path/to/app/.wtq.json",
-			"/path/to/app/.wtq.jsonc",
-			"/path/to/app/.wtq.json5",
+			// Next to wtq executable
+			"C:/path/to/app/wtq.json",
+			"C:/path/to/app/wtq.jsonc",
+			"C:/path/to/app/wtq.json5",
+			"C:/path/to/app/.wtq.json",
+			"C:/path/to/app/.wtq.jsonc",
+			"C:/path/to/app/.wtq.json5",
 
-			// In XDG config dir (subfolder).
-			"/home/username/.config/wtq/wtq.json",
-			"/home/username/.config/wtq/wtq.jsonc",
-			"/home/username/.config/wtq/wtq.json5",
-			"/home/username/.config/wtq/.wtq.json",
-			"/home/username/.config/wtq/.wtq.jsonc",
-			"/home/username/.config/wtq/.wtq.json5",
+			// In AppData/Roaming
+			"C:/users/username/AppData/Roaming/wtq/wtq.json",
+			"C:/users/username/AppData/Roaming/wtq/wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq/wtq.json5",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.json",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.json5",
 
-			// In XDG config dir (bare).
-			"/home/username/.config/wtq.json",
-			"/home/username/.config/wtq.jsonc",
-			"/home/username/.config/wtq.json5",
-			"/home/username/.config/.wtq.json",
-			"/home/username/.config/.wtq.jsonc",
-			"/home/username/.config/.wtq.json5",
+			// In AppData/Roaming/wtq/
+			"C:/users/username/AppData/Roaming/wtq.json",
+			"C:/users/username/AppData/Roaming/wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq.json5",
+			"C:/users/username/AppData/Roaming/.wtq.json",
+			"C:/users/username/AppData/Roaming/.wtq.jsonc",
+			"C:/users/username/AppData/Roaming/.wtq.json5",
 
-			// In user home dir.
-			"/home/username/wtq.json",
-			"/home/username/wtq.jsonc",
-			"/home/username/wtq.json5",
-			"/home/username/.wtq.json",
-			"/home/username/.wtq.jsonc",
-			"/home/username/.wtq.json5",
+			// In user home dir
+			"C:/users/username/wtq.json",
+			"C:/users/username/wtq.jsonc",
+			"C:/users/username/wtq.json5",
+			"C:/users/username/.wtq.json",
+			"C:/users/username/.wtq.jsonc",
+			"C:/users/username/.wtq.json5",
 		};
 		// @formatter:on
 

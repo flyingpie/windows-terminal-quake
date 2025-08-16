@@ -109,7 +109,7 @@ public class WindowsPlatformService : PlatformServiceBase
 
 			return res
 				.Where(e => !string.IsNullOrWhiteSpace(e))
-				.Select(e => Path.GetFullPath(e)!)
+				.Select(e => e!)
 				.Distinct()
 				.ToList();
 		}
