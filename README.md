@@ -28,9 +28,13 @@ https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
 ### Scoop (Windows)
+> The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+
+```pwsh
+scoop bucket add extras
+scoop install extras/wtq
 ```
-scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
-```
+
 A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
 
 ### WinGet (Windows)
@@ -43,9 +47,52 @@ After having done that at least once, a shortcut will appear in the start menu, 
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
-### Flatpak (Linux)
+### AUR (Linux, Arch-based)
+Multiple versions are published to the Arch User Repository (AUR):
+
+#### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+- Latest stable release, pre-built;
+- Downloads from GitHub Releases;
+- Quicker to install and minimal dependencies.
+
+```bash
+yay -S wtq-bin
 ```
-TODO
+or
+```bash
+paru -S wtq-bin
+```
+
+#### [wtq](https://aur.archlinux.org/packages/wtq)
+- Latest stable release, built from source;
+- Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
+
+```bash
+yay -S wtq
+```
+or
+```bash
+paru -S wtq
+```
+
+### Flatpak (Linux)
+Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
+
+As an alternative, you can use the Flatpak remote hosted on the [sister repository](https://github.com/flyingpie/flatpak).
+It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for building the Flatpak itself, and everything is hosted on GitHub Pages.
+
+The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
+
+#### Per-User
+```bash
+flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak --user install nl.flyingpie.wtq
+```
+
+#### System-Wide
+```bash
+flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak install nl.flyingpie.wtq
 ```
 
 ### Manual (Linux)
