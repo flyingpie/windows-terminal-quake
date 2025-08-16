@@ -36,11 +36,14 @@
         "CreateScoopManifest",
         "CreateWinGetManifest",
         "Info",
+        "Install",
         "InstallLinux",
         "InstallWindows",
         "Publish",
         "RunTests",
-        "UninstallLinux"
+        "Uninstall",
+        "UninstallLinux",
+        "UninstallWindows"
       ]
     },
     "Verbosity": {
