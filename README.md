@@ -16,7 +16,7 @@ With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commande
 https://github.com/user-attachments/assets/57372a68-ab69-4cb1-b70d-acf440e5368c
 
 ### CachyOS - KDE Plasma 6
-With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/).
+With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
 
 https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 
