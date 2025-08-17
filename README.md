@@ -2,7 +2,7 @@
 ### Enable Quake-style dropdown for (almost) any application.
 For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
-[Documentation](https://wtq.flyingpie.nl)
+[Installation](#installation) - [Configuration](#configuration) - [Documentation](https://wtq.flyingpie.nl)
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
