@@ -22,10 +22,15 @@ https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 
 # Installation
 
-*Also see the [documentation](https://wtq.flyingpie.nl)*
+- [Scoop](#scoop-windows)
+- [WinGet](#winget-windows)
+- [Arch AUR](#arch-aur-linux)
+- [Flatpak](#flatpak-linux)
+- [Direct Download Script (Linux)](#direct-download-script-linux)
+- [Direct Download (Windows/Linux)](#direct-download-windowslinux)
+- [Build From Source (Windows/Linux)](#build-from-source-windowslinux)
 
-### Manual Download (Windows)
-See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+*Also see the [documentation](https://wtq.flyingpie.nl)*
 
 ### Scoop (Windows)
 > The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
@@ -47,7 +52,7 @@ After having done that at least once, a shortcut will appear in the start menu, 
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
-### AUR (Linux, Arch-based)
+### Arch AUR (Linux)
 Multiple versions are published to the Arch User Repository (AUR):
 
 #### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
@@ -95,7 +100,7 @@ flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak install nl.flyingpie.wtq
 ```
 
-### Manual (Linux)
+### Direct Download Script (Linux)
 See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
@@ -110,6 +115,30 @@ bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quak
 
 > [!NOTE]
 > The WTQ configuration is not removed by this script. These are usually located at ```~/.config/wtq```.
+
+### Direct Download (Windows/Linux)
+See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
+### Build From Source (Windows/Linux)
+You can also clone the repo and run the "Install" build target, which will build and install WTQ:
+- Windows: To ~/AppData/Local/Programs/wtq
+- Linux: To ~/.local/share/wtq (respects XDG spec)
+
+```shell
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.ps1 Install
+# OR
+./build.sh Install
+```
+
+Uninstall:
+```shell
+./build.ps1 Uninstall
+# OR
+./build.sh Uninstall
+```
 
 # Configuration
 
