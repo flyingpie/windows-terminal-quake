@@ -17,6 +17,9 @@ public class KWinWtqWindowTest
 		_window = new KWinWtqWindow(_kwin.Object, _wnd);
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "DesktopFileName" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -39,6 +42,9 @@ public class KWinWtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "ResourceClass" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -61,6 +67,9 @@ public class KWinWtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "ResourceName" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -83,6 +92,9 @@ public class KWinWtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Matching using the "WindowTitle" option, against the "Caption" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
