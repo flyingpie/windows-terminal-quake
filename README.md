@@ -33,6 +33,8 @@ https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 *Also see the [documentation](https://wtq.flyingpie.nl)*
 
 ### Scoop (Windows)
+
+> [!NOTE]
 > The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
 
 ```pwsh
@@ -101,6 +103,10 @@ flatpak install nl.flyingpie.wtq
 ```
 
 ### Direct Download Script (Linux)
+
+> [!NOTE]
+> Requires webkit2gtk-4.1 to be installed
+
 See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
@@ -117,12 +123,23 @@ bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quak
 > The WTQ configuration is not removed by this script. These are usually located at ```~/.config/wtq```.
 
 ### Direct Download (Windows/Linux)
+
+> [!NOTE]
+> [Linux Only] Requires webkit2gtk-4.1 to be installed
+
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
 ### Build From Source (Windows/Linux)
+
+> [!NOTE]
+> Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+
+> [!NOTE]
+> [Linux Only] Requires webkit2gtk-4.1 to be installed
+
 You can also clone the repo and run the "Install" build target, which will build and install WTQ:
-- Windows: To ~/AppData/Local/Programs/wtq
-- Linux: To ~/.local/share/wtq (respects XDG spec)
+- Windows: To ```~/AppData/Local/Programs/wtq```
+- Linux: To ```~/.local/share/wtq (respects XDG spec)```
 
 ```shell
 git clone https://github.com/flyingpie/windows-terminal-quake.git
@@ -138,6 +155,14 @@ Uninstall:
 ./build.ps1 Uninstall
 # OR
 ./build.sh Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```shell
+./build.ps1|sh --help
+
+./build.ps1|sh BuildWindows
+./build.ps1|sh BuildLinux
 ```
 
 # Configuration
