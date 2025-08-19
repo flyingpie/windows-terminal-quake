@@ -14,16 +14,28 @@ public class InfoCommand(IPlatformService platform) : ICommand
 		Console.WriteLine($"Build date:....................................{WtqConstants.BuildDate.ToString("s")}");
 		Console.WriteLine($"Git branch:....................................{WtqConstants.GitBranch}");
 		Console.WriteLine($"Git commit:....................................{WtqConstants.GitCommit}");
+		Console.WriteLine($"OS color mode:.................................{platform.OsColorMode}");
+
 		Console.WriteLine($"-- Paths --------------------------------------------------------");
-		// Console.WriteLine($"{nameof(WtqPaths.AppData)}:....................{WtqPaths.AppData}"); // TODO: Fix
-		// Console.WriteLine($"{nameof(WtqPaths.AppDataWtq)}:.................{WtqPaths.AppDataWtq}");
-		// Console.WriteLine($"{nameof(WtqPaths.PreferredWtqConfigPath)}:.....{WtqPaths.PreferredWtqConfigPath}");
-		// Console.WriteLine($"{nameof(WtqPaths.UserHome)}:...................{WtqPaths.UserHome}");
-		// Console.WriteLine($"{nameof(WtqPaths.GetWtqAppDir)}:...............{WtqPaths.GetWtqAppDir()}");
-		// Console.WriteLine($"{nameof(WtqPaths.WtqConfigFromEnvVar)}:........{WtqPaths.WtqConfigFromEnvVar}");
-		// Console.WriteLine($"{nameof(WtqPaths.WtqConfigPaths)}:.............{string.Join("\n  -", WtqPaths.WtqConfigPaths)}");
-		// Console.WriteLine($"{nameof(WtqPaths.GetWtqLogDir)}:...............{WtqPaths.GetWtqLogDir()}");
-		// Console.WriteLine($"{nameof(WtqPaths.GetWtqTempDir)}:..............{WtqPaths.GetWtqTempDir()}");
+		Console.WriteLine($"PreferredPathToWtqConfig:......................{platform.PreferredPathWtqConfig}");
+
+		Console.WriteLine($"PathToWtqConf:.................................{platform.PathToWtqConf}");
+		Console.WriteLine($"PathToWtqConfDir:..............................{platform.PathToWtqConfDir}");
+
+		Console.WriteLine($"Paths to WTQ configs");
+		foreach (var p in platform.PathsToWtqConfs)
+		{
+			Console.WriteLine($" - {p}{(Fs.Inst.FileExists(p) ? " (exists)" : string.Empty)}");
+		}
+
+		Console.WriteLine($"PathToAppDir:..................................{platform.PathToAppDir}");
+		Console.WriteLine($"PathToAssetsDir:...............................{platform.PathToAssetsDir}");
+		Console.WriteLine($"PathToLogsDir:.................................{platform.PathToLogsDir}");
+		Console.WriteLine($"PathToTempDir:.................................{platform.PathToTempDir}");
+		Console.WriteLine($"PathToTrayIconDark:............................{platform.PathToTrayIconDark}");
+		Console.WriteLine($"PathToTrayIconLight:...........................{platform.PathToTrayIconLight}");
+		Console.WriteLine($"PathToUserHomeDir:.............................{platform.PathToUserHomeDir}");
+
 		Console.WriteLine($"-----------------------------------------------------------------");
 	}
 }
