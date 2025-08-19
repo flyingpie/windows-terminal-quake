@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-public static class InstallProps
+public static class InstallConstants
 {
 	public static class Linux
 	{
