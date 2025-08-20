@@ -42,40 +42,66 @@ public sealed partial class Build : NukeBuild
 	[GitRepository]
 	private readonly GitRepository? GitRepository;
 
-	private AbsolutePath ChangeLogFile => RootDirectory / "CHANGELOG.md";
+	private AbsolutePath ChangeLogFile =>
+		RootDirectory / "CHANGELOG.md";
 
-	private AbsolutePath OutputDirectory => RootDirectory / "_output";
+	private AbsolutePath OutputDirectory =>
+		RootDirectory / "_output";
 
-	private AbsolutePath ArtifactsDirectory => OutputDirectory / "artifacts";
+	private AbsolutePath ArtifactsDirectory =>
+		OutputDirectory / "artifacts";
 
-	private AbsolutePath StagingDirectory => OutputDirectory / "staging";
+	private AbsolutePath StagingDirectory =>
+		OutputDirectory / "staging";
 
 	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
 	private readonly Solution Solution;
 
-	private AbsolutePath PathToLinux64FrameworkDependentZip => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz";
+	private AbsolutePath PathToLinux64FrameworkDependent =>
+		StagingDirectory / "linux-x64_framework-dependent";
 
-	private AbsolutePath PathToLinux64FrameworkDependentZipSha256 => ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz.sha256";
+	private AbsolutePath PathToLinux64FrameworkDependentZip =>
+		ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz";
 
-	private AbsolutePath PathToLinux64SelfContained => StagingDirectory / "linux-x64_self-contained";
+	private AbsolutePath PathToLinux64FrameworkDependentZipSha256 =>
+		ArtifactsDirectory / "linux-x64_framework-dependent.tar.gz.sha256";
 
-	private AbsolutePath PathToLinux64SelfContainedZip => ArtifactsDirectory / "linux-x64_self-contained.tar.gz";
 
-	private AbsolutePath PathToLinux64SelfContainedZipSha256 => ArtifactsDirectory / "linux-x64_self-contained.tar.gz.sha256";
+	private AbsolutePath PathToLinux64SelfContained =>
+		StagingDirectory / "linux-x64_self-contained";
 
-	private AbsolutePath PathToWin64FrameworkDependentZip => ArtifactsDirectory / "win-x64_framework-dependent.zip";
+	private AbsolutePath PathToLinux64SelfContainedZip =>
+		ArtifactsDirectory / "linux-x64_self-contained.tar.gz";
 
-	private AbsolutePath PathToWin64FrameworkDependentZipSha256 => ArtifactsDirectory / "win-x64_framework-dependent.zip.sha256";
+	private AbsolutePath PathToLinux64SelfContainedZipSha256 =>
+		ArtifactsDirectory / "linux-x64_self-contained.tar.gz.sha256";
 
-	private AbsolutePath PathToWin64SelfContained => StagingDirectory / "win-x64_self-contained";
 
-	private AbsolutePath PathToWin64SelfContainedZip => ArtifactsDirectory / "win-x64_self-contained.zip";
+	private AbsolutePath PathToWin64FrameworkDependent =>
+		StagingDirectory / "win-x64_framework-dependent";
 
-	private AbsolutePath PathToWin64SelfContainedZipSha256 => ArtifactsDirectory / "win-x64_self-contained.zip.sha256";
+	private AbsolutePath PathToWin64FrameworkDependentZip =>
+		ArtifactsDirectory / "win-x64_framework-dependent.zip";
 
-	private GitHubActions GitHubActions => GitHubActions.Instance;
+	private AbsolutePath PathToWin64FrameworkDependentZipSha256 =>
+		ArtifactsDirectory / "win-x64_framework-dependent.zip.sha256";
 
-	private string SemVerVersion => XmlTasks.XmlPeekSingle(RootDirectory / "src" / "Directory.Build.props", "//Version");
+
+	private AbsolutePath PathToWin64SelfContained =>
+		StagingDirectory / "win-x64_self-contained";
+
+	private AbsolutePath PathToWin64SelfContainedZip =>
+		ArtifactsDirectory / "win-x64_self-contained.zip";
+
+	private AbsolutePath PathToWin64SelfContainedZipSha256 =>
+		ArtifactsDirectory / "win-x64_self-contained.zip.sha256";
+
+
+	private GitHubActions GitHubActions =>
+		GitHubActions.Instance;
+
+	private string SemVerVersion =>
+		XmlTasks.XmlPeekSingle(RootDirectory / "src" / "Directory.Build.props", "//Version");
 
 	private Target Info => _ => _
 		.Description("Show build settings and output paths.")

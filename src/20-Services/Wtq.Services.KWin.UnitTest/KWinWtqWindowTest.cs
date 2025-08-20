@@ -17,6 +17,9 @@ public class KWinWtqWindowTest
 		_window = new KWinWtqWindow(_kwin.Object, _wnd);
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "DesktopFileName" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -39,6 +42,9 @@ public class KWinWtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "ResourceClass" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -61,6 +67,9 @@ public class KWinWtqWindowTest
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Matching using the "FileName" option, against the "ResourceName" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -77,12 +86,69 @@ public class KWinWtqWindowTest
 	{
 		// Arrange
 		_opts.FileName = opt;
+		_opts.ProcessName = null;
+		_opts.WindowTitle = null;
+
+		_wnd.DesktopFileName = "the-desktop-file-name";
+		_wnd.ResourceClass = "the-resource-class";
 		_wnd.ResourceName = wnd;
+		_wnd.Caption = "the-caption";
 
 		// Act + Assert
 		Assert.AreEqual(isMatch, _window.Matches(_opts));
 	}
 
+	/// <summary>
+	/// Match "ProcessName" with "DesktopFileName".
+	/// </summary>
+	[TestMethod]
+	public void ByProcessName_DesktopFileName()
+	{
+		// Arrange
+		_opts.FileName = "the-file-name";
+		_opts.ProcessName = "the-desktop-file-name";
+
+		_wnd.DesktopFileName = "the-desktop-file-name";
+
+		// Act + Assert
+		Assert.AreEqual(true, _window.Matches(_opts));
+	}
+
+	/// <summary>
+	/// Match "ProcessName" with "ResourceClass".
+	/// </summary>
+	[TestMethod]
+	public void ByProcessName_ResourceClass()
+	{
+		// Arrange
+		_opts.FileName = "the-file-name";
+		_opts.ProcessName = "the-resource-class";
+
+		_wnd.ResourceClass = "the-resource-class";
+
+		// Act + Assert
+		Assert.AreEqual(true, _window.Matches(_opts));
+	}
+
+	/// <summary>
+	/// Match "ProcessName" with "ResourceName".
+	/// </summary>
+	[TestMethod]
+	public void ByProcessName_ResourceName()
+	{
+		// Arrange
+		_opts.FileName = "the-file-name";
+		_opts.ProcessName = "the-resource-name";
+
+		_wnd.ResourceName = "the-resource-name";
+
+		// Act + Assert
+		Assert.AreEqual(true, _window.Matches(_opts));
+	}
+
+	/// <summary>
+	/// Matching using the "WindowTitle" option, against the "Caption" property.
+	/// </summary>
 	[TestMethod]
 
 	// Exact
@@ -107,8 +173,11 @@ public class KWinWtqWindowTest
 	public void ByWindowTitle(string opt, string wnd, bool isMatch)
 	{
 		// Arrange
+		_opts.FileName = "the-file-name";
 		_opts.WindowTitle = opt;
+
 		_wnd.Caption = wnd;
+		_wnd.DesktopFileName = "the-desktop-file-name"; // To verify that the file name is not used to match.
 
 		// Act + Assert
 		Assert.AreEqual(isMatch, _window.Matches(_opts));

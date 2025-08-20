@@ -36,18 +36,18 @@ public partial class Build
 		.Executes(() =>
 		{
 			// Write wtq.desktop file
-			Log.Information($"Writing wtq.desktop to path '{InstallProps.Linux.PathToDesktopFile}'");
-			File.WriteAllText(InstallProps.Linux.PathToDesktopFile, InstallProps.Linux.DesktopFile);
+			Log.Information($"Writing wtq.desktop to path '{InstallConstants.Linux.PathToDesktopFile}'");
+			File.WriteAllText(InstallConstants.Linux.PathToDesktopFile, InstallConstants.Linux.DesktopFile);
 
 			// Copy binaries
-			if (Directory.Exists(InstallProps.Linux.PathToInstall))
+			if (Directory.Exists(InstallConstants.Linux.PathToInstall))
 			{
-				Log.Warning($"Directory at path '{InstallProps.Linux.PathToInstall}' already exists, deleting");
-				Directory.Delete(InstallProps.Linux.PathToInstall, recursive: true);
+				Log.Warning($"Directory at path '{InstallConstants.Linux.PathToInstall}' already exists, deleting");
+				Directory.Delete(InstallConstants.Linux.PathToInstall, recursive: true);
 			}
 
-			Log.Information($"Installing WTQ binaries to path '{InstallProps.Linux.PathToInstall}'");
-			Directory.Move(PathToLinux64SelfContained, InstallProps.Linux.PathToInstall);
+			Log.Information($"Installing WTQ binaries to path '{InstallConstants.Linux.PathToInstall}'");
+			Directory.Move(PathToLinux64SelfContained, InstallConstants.Linux.PathToInstall);
 		});
 
 	private Target UninstallLinux => _ => _
@@ -56,25 +56,25 @@ public partial class Build
 		.Executes(() =>
 		{
 			// Delete wtq.desktop file
-			Log.Information($"Deleting wtq.desktop at path '{InstallProps.Linux.PathToDesktopFile}'");
-			if (File.Exists(InstallProps.Linux.PathToDesktopFile))
+			Log.Information($"Deleting wtq.desktop at path '{InstallConstants.Linux.PathToDesktopFile}'");
+			if (File.Exists(InstallConstants.Linux.PathToDesktopFile))
 			{
-				File.Delete(InstallProps.Linux.PathToDesktopFile);
+				File.Delete(InstallConstants.Linux.PathToDesktopFile);
 			}
 			else
 			{
-				Log.Warning($"Desktop file at path '{InstallProps.Linux.PathToDesktopFile}' doesn't exist");
+				Log.Warning($"Desktop file at path '{InstallConstants.Linux.PathToDesktopFile}' doesn't exist");
 			}
 
 			// Delete binaries
-			Log.Information($"Deleting WTQ binaries at path '{InstallProps.Linux.PathToInstall}'");
-			if (Directory.Exists(InstallProps.Linux.PathToInstall))
+			Log.Information($"Deleting WTQ binaries at path '{InstallConstants.Linux.PathToInstall}'");
+			if (Directory.Exists(InstallConstants.Linux.PathToInstall))
 			{
-				Directory.Delete(InstallProps.Linux.PathToInstall, recursive: true);
+				Directory.Delete(InstallConstants.Linux.PathToInstall, recursive: true);
 			}
 			else
 			{
-				Log.Warning($"Binaries at path '{InstallProps.Linux.PathToInstall}' don't exist");
+				Log.Warning($"Binaries at path '{InstallConstants.Linux.PathToInstall}' don't exist");
 			}
 		});
 
@@ -89,22 +89,22 @@ public partial class Build
 		.Executes(() =>
 		{
 			// Write shortcut
-			Log.Information($"Writing shortcut to path '{InstallProps.Windows.PathToShortcut}'");
+			Log.Information($"Writing shortcut to path '{InstallConstants.Windows.PathToShortcut}'");
 
 			var link = (IShellLink)new ShellLink();
 			link.SetDescription("Enable Quake-mode for (almost) any app");
-			link.SetPath(Path.Combine(InstallProps.Windows.PathToInstall, "wtq.exe"));
-			((IPersistFile)link).Save(InstallProps.Windows.PathToShortcut, false);
+			link.SetPath(Path.Combine(InstallConstants.Windows.PathToInstall, "wtq.exe"));
+			((IPersistFile)link).Save(InstallConstants.Windows.PathToShortcut, false);
 
 			// Copy binaries
-			if (Directory.Exists(InstallProps.Windows.PathToInstall))
+			if (Directory.Exists(InstallConstants.Windows.PathToInstall))
 			{
-				Log.Warning($"Directory at path '{InstallProps.Windows.PathToInstall}' already exists, deleting");
-				Directory.Delete(InstallProps.Windows.PathToInstall, recursive: true);
+				Log.Warning($"Directory at path '{InstallConstants.Windows.PathToInstall}' already exists, deleting");
+				Directory.Delete(InstallConstants.Windows.PathToInstall, recursive: true);
 			}
 
-			Log.Information($"Installing WTQ binaries to path '{InstallProps.Windows.PathToInstall}'");
-			Directory.Move(PathToWin64SelfContained, InstallProps.Windows.PathToInstall);
+			Log.Information($"Installing WTQ binaries to path '{InstallConstants.Windows.PathToInstall}'");
+			Directory.Move(PathToWin64SelfContained, InstallConstants.Windows.PathToInstall);
 		});
 
 	private Target UninstallWindows => _ => _
@@ -113,25 +113,25 @@ public partial class Build
 		.Executes(() =>
 		{
 			// Delete shortcut
-			Log.Information($"Deleting shortcut at path '{InstallProps.Windows.PathToShortcut}'");
-			if (File.Exists(InstallProps.Windows.PathToShortcut))
+			Log.Information($"Deleting shortcut at path '{InstallConstants.Windows.PathToShortcut}'");
+			if (File.Exists(InstallConstants.Windows.PathToShortcut))
 			{
-				File.Delete(InstallProps.Windows.PathToShortcut);
+				File.Delete(InstallConstants.Windows.PathToShortcut);
 			}
 			else
 			{
-				Log.Warning($"Shortcut at path '{InstallProps.Windows.PathToShortcut}' doesn't exist");
+				Log.Warning($"Shortcut at path '{InstallConstants.Windows.PathToShortcut}' doesn't exist");
 			}
 
 			// Delete binaries
-			Log.Information($"Deleting WTQ binaries at path '{InstallProps.Windows.PathToInstall}'");
-			if (Directory.Exists(InstallProps.Windows.PathToInstall))
+			Log.Information($"Deleting WTQ binaries at path '{InstallConstants.Windows.PathToInstall}'");
+			if (Directory.Exists(InstallConstants.Windows.PathToInstall))
 			{
-				Directory.Delete(InstallProps.Windows.PathToInstall, recursive: true);
+				Directory.Delete(InstallConstants.Windows.PathToInstall, recursive: true);
 			}
 			else
 			{
-				Log.Warning($"Binaries at path '{InstallProps.Windows.PathToInstall}' don't exist");
+				Log.Warning($"Binaries at path '{InstallConstants.Windows.PathToInstall}' don't exist");
 			}
 		});
 

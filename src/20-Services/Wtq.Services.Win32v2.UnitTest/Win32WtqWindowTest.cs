@@ -1,5 +1,3 @@
-using Wtq.Configuration;
-
 namespace Wtq.Services.Win32v2.UnitTest;
 
 [TestClass]

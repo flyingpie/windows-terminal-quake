@@ -1,9 +1,3 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Wtq.Configuration;
-using Wtq.Utils;
-
 namespace Wtq.Services.Win32v2.UnitTest;
 
 [TestClass]
@@ -173,7 +167,7 @@ public class WindowsPlatformServiceTest
 
 		var paths = _p.PathsToWtqConfs.ToList();
 
-		Assert.AreEqual(19, paths.Count);
+		Assert.AreEqual(25, paths.Count);
 		Assert.AreEqual("C:/env/path/to/wtq.jsonc", paths[0]);
 
 		// Other stuff is tested in the other tests.
