@@ -30,7 +30,7 @@ public sealed partial class Build
 		.Produces(PathToLinux64FrameworkDependentZipSha256)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "linux-x64_framework-dependent";
+			var st = PathToLinux64FrameworkDependent;
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
@@ -51,7 +51,7 @@ public sealed partial class Build
 		.Produces(PathToLinux64SelfContainedZipSha256)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "linux-x64_self-contained";
+			var st = PathToLinux64SelfContained;
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
@@ -74,7 +74,7 @@ public sealed partial class Build
 		.Produces(PathToWin64FrameworkDependentZipSha256)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "win-x64_framework-dependent";
+			var st = PathToWin64FrameworkDependent;
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
@@ -97,7 +97,7 @@ public sealed partial class Build
 		.Produces(PathToWin64SelfContainedZipSha256)
 		.Executes(() =>
 		{
-			var st = StagingDirectory / "win-x64_self-contained";
+			var st = PathToWin64SelfContained;
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
