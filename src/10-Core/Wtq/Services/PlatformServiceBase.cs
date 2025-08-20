@@ -74,10 +74,17 @@ public abstract class PlatformServiceBase : IPlatformService
 			}
 
 			// Look for existing path
-			_pathToWtqConf = PathsToWtqConfs.FirstOrDefault(Fs.Inst.FileExists);
-			if (_pathToWtqConf != null)
+			foreach (var p in PathsToWtqConfs)
 			{
-				return _pathToWtqConf;
+				Log.LogInformation("Looking for WTQ settings file at path '{Path}'", p);
+
+				if (Fs.Inst.FileExists(p))
+				{
+					Log.LogInformation("Found WTQ settings file at path '{Path}'", p);
+
+					_pathToWtqConf = p;
+					return _pathToWtqConf;
+				}
 			}
 
 			// If no existing file was found, generate an example file at the preferred location, and use that.
