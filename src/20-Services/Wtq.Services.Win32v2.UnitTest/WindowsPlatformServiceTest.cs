@@ -110,13 +110,63 @@ public class WindowsPlatformServiceTest
 	}
 
 	[TestMethod]
+	public void PathsToWtqConfs()
+	{
+		var paths = _p.PathsToWtqConfs.ToList();
+
+		// @formatter:off
+		var expected = new[]
+		{
+			// Next to wtq executable
+			"C:/path/to/app/wtq.json",
+			"C:/path/to/app/wtq.jsonc",
+			"C:/path/to/app/wtq.json5",
+			"C:/path/to/app/.wtq.json",
+			"C:/path/to/app/.wtq.jsonc",
+			"C:/path/to/app/.wtq.json5",
+
+			// In AppData/Roaming/wtq
+			"C:/users/username/AppData/Roaming/wtq/wtq.json",
+			"C:/users/username/AppData/Roaming/wtq/wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq/wtq.json5",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.json",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq/.wtq.json5",
+
+			// In AppData/Roaming
+			"C:/users/username/AppData/Roaming/wtq.json",
+			"C:/users/username/AppData/Roaming/wtq.jsonc",
+			"C:/users/username/AppData/Roaming/wtq.json5",
+			"C:/users/username/AppData/Roaming/.wtq.json",
+			"C:/users/username/AppData/Roaming/.wtq.jsonc",
+			"C:/users/username/AppData/Roaming/.wtq.json5",
+
+			// In user home dir
+			"C:/users/username/wtq.json",
+			"C:/users/username/wtq.jsonc",
+			"C:/users/username/wtq.json5",
+			"C:/users/username/.wtq.json",
+			"C:/users/username/.wtq.jsonc",
+			"C:/users/username/.wtq.json5",
+		};
+		// @formatter:on
+
+		Assert.AreEqual(expected.Length, paths.Count);
+
+		for (var i = 0; i < paths.Count; i++)
+		{
+			Assert.AreEqual(expected[i], paths[i]);
+		}
+	}
+
+	[TestMethod]
 	public void PathsToWtqConfs_WtqConfigFileEnvSet()
 	{
 		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "C:/env/path/to/wtq.jsonc");
 
 		var paths = _p.PathsToWtqConfs.ToList();
 
-		Assert.AreEqual(19, paths.Count);
+		Assert.AreEqual(25, paths.Count);
 		Assert.AreEqual("C:/env/path/to/wtq.jsonc", paths[0]);
 
 		// Other stuff is tested in the other tests.
