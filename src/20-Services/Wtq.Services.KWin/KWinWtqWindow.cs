@@ -72,28 +72,24 @@ public class KWinWtqWindow(
 	{
 		Guard.Against.Null(opts);
 
-		// Match by file name.
-		if (!MatchesFileName(opts))
+		var hasMatchers =
+			!string.IsNullOrWhiteSpace(opts.WindowTitle) ||
+			!string.IsNullOrWhiteSpace(opts.ProcessName);
+
+		// If no other criteria are set, match on the "FileName" setting.
+		if (!hasMatchers)
+		{
+			return MatchesFileName(opts);
+		}
+
+		// Process name
+		if (!MatchesProcessName(opts.ProcessName))
 		{
 			return false;
 		}
 
-		// TODO
-		// Match by resource class (often reverse DNS notation).
-		// if (!string.IsNullOrWhiteSpace(opts.ResourceClass) && opts.ResourceClass.Equals(_window.ResourceClass, StringComparison.OrdinalIgnoreCase))
-		// {
-		//   return true;
-		// }
-
-		// TODO
-		// Match by resource name (close to process name).
-		// if (!string.IsNullOrWhiteSpace(opts.ResourceName) && opts.ResourceName.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
-		// {
-		//   return true;
-		// }
-
-		// Match by window title.
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.Caption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
+		// Window title
+		if (!MatchesWindowTitle(opts.WindowTitle))
 		{
 			return false;
 		}
@@ -139,9 +135,18 @@ public class KWinWtqWindow(
 		_isValid = !string.IsNullOrWhiteSpace(w?.InternalId);
 	}
 
+	/// <summary>
+	/// The filename is primarily used to start an app.<br/>
+	/// Historically, it was assumed the filename was enough to match a window (and thus also used for that),
+	/// but this turns out to not be the case.<br/>
+	/// <br/>
+	/// So now, we can configure additional matchers (like resource name or window title).<br/>
+	/// If no matchers are specified, we try to match the filename against multiple window properties.<br/>
+	/// </summary>
 	private bool MatchesFileName(WtqAppOptions opts)
 	{
 		// If we don't have a filename in the options, consider that "matches anything".
+		// It is assumed another matcher will be used, as the app options will only be valid with at least 1 matcher.
 		if (string.IsNullOrWhiteSpace(opts.FileName))
 		{
 			return true;
@@ -161,6 +166,59 @@ public class KWinWtqWindow(
 
 		// Match by resource name (close to process name).
 		if (opts.FileName.Equals(_window.ResourceName, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// Process name is really a Windows thing, but in an effort to keep the configuration as cross-platform as possible,
+	/// we interpret various windows properties as "process name".<br/>
+	/// They're functionally very similar anyway.
+	/// </summary>
+	private bool MatchesProcessName(string processName)
+	{
+		// If we don't have a process name in the options, consider that "matches anything".
+		// It is assumed another matcher will be used, as the app options will only be valid with at least 1 matcher.
+		if (string.IsNullOrWhiteSpace(processName))
+		{
+			return true;
+		}
+
+		// Match by file name that started the app.
+		if (Regex.IsMatch(_window.DesktopFileName ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by resource class (often reverse DNS notation).
+		if (Regex.IsMatch(_window.ResourceClass ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		{
+			return true;
+		}
+
+		// Match by resource name (close to process name).
+		if (Regex.IsMatch(_window.ResourceName ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	private bool MatchesWindowTitle(string windowTitle)
+	{
+		// If we don't have a window title in the options, consider that "matches anything".
+		// It is assumed another matcher will be used, as the app options will only be valid with at least 1 matcher.
+		if (string.IsNullOrWhiteSpace(windowTitle))
+		{
+			return true;
+		}
+
+		// Match by file name that started the app.
+		if (Regex.IsMatch(_window.Caption ?? string.Empty, windowTitle, RegexOptions.IgnoreCase))
 		{
 			return true;
 		}
