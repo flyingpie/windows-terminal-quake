@@ -110,7 +110,6 @@ public class WindowsPlatformServiceTest
 	}
 
 	[TestMethod]
-	[SuppressMessage("ReSharper", "BadListLineBreaks", Justification = "MvdO")]
 	public void PathsToWtqConfs()
 	{
 		var paths = _p.PathsToWtqConfs.ToList();
