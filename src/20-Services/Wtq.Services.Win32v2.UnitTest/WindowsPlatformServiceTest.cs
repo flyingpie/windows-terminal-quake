@@ -125,7 +125,7 @@ public class WindowsPlatformServiceTest
 			"C:/path/to/app/.wtq.jsonc",
 			"C:/path/to/app/.wtq.json5",
 
-			// In AppData/Roaming
+			// In AppData/Roaming/wtq
 			"C:/users/username/AppData/Roaming/wtq/wtq.json",
 			"C:/users/username/AppData/Roaming/wtq/wtq.jsonc",
 			"C:/users/username/AppData/Roaming/wtq/wtq.json5",
@@ -133,7 +133,7 @@ public class WindowsPlatformServiceTest
 			"C:/users/username/AppData/Roaming/wtq/.wtq.jsonc",
 			"C:/users/username/AppData/Roaming/wtq/.wtq.json5",
 
-			// In AppData/Roaming/wtq/
+			// In AppData/Roaming
 			"C:/users/username/AppData/Roaming/wtq.json",
 			"C:/users/username/AppData/Roaming/wtq.jsonc",
 			"C:/users/username/AppData/Roaming/wtq.json5",
