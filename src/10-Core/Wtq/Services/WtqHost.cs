@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.VisualStudio.Threading;
-using System.Runtime.InteropServices;
 using IAsyncDisposable = System.IAsyncDisposable;
 
 namespace Wtq.Services;
@@ -10,7 +9,12 @@ namespace Wtq.Services;
 /// </summary>
 public class WtqHost
 {
-	private readonly ILogger _log = Log.For<WtqHost>();
+	private static readonly TimeSpan InitTimeout = TimeSpan.FromSeconds(3);
+	private static readonly TimeSpan StartTimeout = TimeSpan.FromSeconds(30);
+	private static readonly TimeSpan StopTimeout = TimeSpan.FromSeconds(30);
+	private static readonly TimeSpan DisposeTimeout = TimeSpan.FromSeconds(3);
+
+	private static readonly ILogger _log = Utils.Log.For<WtqHost>();
 
 	private readonly IEnumerable<IHostedService> _hostedServices;
 	private readonly JoinableTaskFactory _taskFactory = new(JoinableTaskContext.CreateNoOpContext());
@@ -50,7 +54,6 @@ public class WtqHost
 
 	private async Task InitAsync()
 	{
-		var timeout = TimeSpan.FromSeconds(3);
 		var sw1 = Stopwatch.StartNew();
 
 		_log.LogDebug("Initializing services");
@@ -61,7 +64,7 @@ public class WtqHost
 			{
 				_log.LogDebug("Initializing service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.InitAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
+				await srv.InitAsync(Cancel.After(InitTimeout)).TimeoutAfterAsync(InitTimeout).NoCtx();
 				_log.LogDebug("Initialized service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
@@ -77,7 +80,6 @@ public class WtqHost
 
 	private async Task StartAsync()
 	{
-		var timeout = TimeSpan.FromSeconds(3);
 		var sw1 = Stopwatch.StartNew();
 
 		_log.LogDebug("Starting services");
@@ -88,7 +90,7 @@ public class WtqHost
 			{
 				_log.LogDebug("Starting service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.StartAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
+				await srv.StartAsync(Cancel.After(StartTimeout)).TimeoutAfterAsync(StartTimeout).NoCtx();
 				_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
@@ -105,7 +107,6 @@ public class WtqHost
 	private async Task StopAsync()
 	{
 		var sw1 = Stopwatch.StartNew();
-		var timeout = TimeSpan.FromSeconds(3);
 
 		_log.LogDebug("Stopping services");
 
@@ -115,7 +116,7 @@ public class WtqHost
 			{
 				_log.LogDebug("Stopping service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.StopAsync(new CancellationTokenSource(timeout).Token).TimeoutAfterAsync(timeout);
+				await srv.StopAsync(Cancel.After(StopTimeout)).TimeoutAfterAsync(StopTimeout).NoCtx();
 				_log.LogDebug("Stopped service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
@@ -131,7 +132,6 @@ public class WtqHost
 	private async Task DisposeAsync()
 	{
 		var sw1 = Stopwatch.StartNew();
-		var timeout = TimeSpan.FromSeconds(3);
 
 		_log.LogDebug("Disposing services");
 
@@ -141,7 +141,7 @@ public class WtqHost
 			{
 				_log.LogDebug("Disposing service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.DisposeAsync().TimeoutAfterAsync(timeout);
+				await srv.DisposeAsync().TimeoutAfterAsync(DisposeTimeout).NoCtx();
 				_log.LogDebug("Disposed service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
