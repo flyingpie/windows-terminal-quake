@@ -1,7 +1,7 @@
 [CmdletBinding()]
 Param(
-    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
-    [string[]]$BuildArguments
+	[Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
+	[string[]]$BuildArguments
 )
 
 Write-Output "PowerShell $($PSVersionTable.PSEdition) version $($PSVersionTable.PSVersion)"
@@ -24,8 +24,8 @@ $env:NUKE_TELEMETRY_OPTOUT = 1
 ###########################################################################
 
 function ExecSafe([scriptblock] $cmd) {
-    & $cmd
-    if ($LASTEXITCODE) { exit $LASTEXITCODE }
+	& $cmd
+	if ($LASTEXITCODE) { exit $LASTEXITCODE }
 }
 
 Write-Output "Microsoft (R) .NET SDK version $(& dotnet --version)"
