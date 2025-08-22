@@ -1,6 +1,5 @@
 {
 	"$schema": "wtq.schema.json",
-
 	"Apps": [
 		{
 			"Name": "Terminal",
@@ -8,6 +7,14 @@
 				{
 					"Modifiers": "Super",
 					"Key": "OemBackslash"
+				},
+				{
+					"Modifiers": "Super",
+					"Key": "T"
+				},
+				{
+					"Modifiers": "Control",
+					"KeyChar": "t"
 				}
 			],
 			"FileName": "wt",
@@ -19,12 +26,26 @@
 			"Hotkeys": [
 				{
 					"Modifiers": "Super",
-					"KeyChar": "<"
+					"Key": "Oem3"
+				},
+				{
+					"Modifiers": "Control",
+					"KeyChar": "s"
 				}
 			],
 			"FileName": "spotify",
 			"ProcessName": "Spotify",
 			"AttachMode": "Find"
 		}
-	]
+	],
+	"AnimationTargetFps": 60,
+	"HideOnFocusLost": "True",
+	"TaskbarIconVisibility": "AlwaysHidden",
+	"Opacity": 90,
+	"HorizontalScreenCoverage": 95,
+	"VerticalScreenCoverage": 95,
+	"VerticalOffset": 0,
+	"PreferMonitor": "Primary",
+	"MonitorIndex": 0,
+	"AnimationDurationMs": 100
 }

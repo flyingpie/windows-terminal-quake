@@ -1,74 +1,59 @@
-//using Windows.Win32.UI.Input.KeyboardAndMouse;
-//using PI = Windows.Win32.PInvoke;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
+using PI = Windows.Win32.PInvoke;
+using WKC = Wtq.Input.KeyCode;
 
-//namespace Wtq.Services.SharpHook;
+namespace Wtq.Services.SharpHook;
 
-//public class Win32 : IWin32
-//{
-//	public bool IsAltPressed() =>
-//		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
+public class Win32 : IWin32
+{
+	/// <summary>
+	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
+	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
+	/// </summary>
+	public KeyModifiers GetModifiers(WKC keyCode)
+	{
+		var mod2 = KeyModifiers.None;
 
-//	public bool IsControlPressed() =>
-//		IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
+		if (IsAltPressed())
+		{
+			mod2 |= KeyModifiers.Alt;
+		}
 
-//	public bool IsShiftPressed() =>
-//		IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
+		if (IsControlPressed())
+		{
+			mod2 |= KeyModifiers.Control;
+		}
 
-//	public bool IsSuperPressed() =>
-//		IsKeyPressed(VIRTUAL_KEY.VK_LWIN) || IsKeyPressed(VIRTUAL_KEY.VK_RWIN);
+		if (IsShiftPressed())
+		{
+			mod2 |= KeyModifiers.Shift;
+		}
 
-//	/// <summary>
-//	/// Attempts to convert the specified virtual <paramref name="keyCode"/> to a UTF8 character representation,
-//	/// taking the current keyboard layout into account.
-//	/// </summary>
-//	public string? KeyCodeToKeyChar(uint keyCode)
-//	{
-//		// Build a key state.
-//		// The key state represents the state of each virtual key.
-//		// The ToUnicodeEx function uses this to determine whether to return "A" or "a", and "1" or "!", for example.
-//		var keyState = new byte[256];
+		if (IsSuperPressed())
+		{
+			mod2 |= KeyModifiers.Super;
+		}
 
-//		// Only include Shift key if it's currently down.
-//		// We could ask for the actual keyboard state, but we don't want to include modifiers like CONTROL, as they throw off key conversion.
-//		// For example, SHIFT+1 should return "!", but SHIFT+CTRL+1 suddendly returns "1". We're interested in the shifted version ("!") in that case.
-//		if (IsShiftPressed())
-//		{
-//			keyState[(int)VIRTUAL_KEY.VK_SHIFT] = 0x80;
-//		}
+		if (keyCode.IsNumpad())
+		{
+			mod2 |= KeyModifiers.Numpad;
+		}
 
-//		// Get the scan code for the specified key.
-//		var scanCode = PI.MapVirtualKey(keyCode, 0);
+		return mod2;
+	}
 
-//		// Get the currently active keyboard layout.
-//		// TODO: Keyboard layout changes require WTQ restart it seems.
-//		var layout = PI.GetKeyboardLayout_SafeHandle(0);
+	public bool IsAltPressed() =>
+		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
-//		// Build a buffer for the resulting UTF8 string.
-//		var buffer = new Span<char>(new char[5]);
+	public bool IsControlPressed() =>
+		IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
 
-//		// Try to convert the virtual key code.
-//		var length = PI.ToUnicodeEx(
-//			wVirtKey: keyCode,
-//			wScanCode: scanCode,
-//			lpKeyState: keyState,
-//			pwszBuff: buffer,
-//			wFlags: 0,
-//			dwhkl: layout);
+	public bool IsShiftPressed() =>
+		IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
 
-//		var result = buffer.ToString().Trim('\0').Trim();
+	public bool IsSuperPressed() =>
+		IsKeyPressed(VIRTUAL_KEY.VK_LWIN) || IsKeyPressed(VIRTUAL_KEY.VK_RWIN);
 
-//		// The result could still be empty, e.g. for the "Tab" character, which returns \t.
-//		if (string.IsNullOrWhiteSpace(result))
-//		{
-//			return null;
-//		}
-
-//		// Now we can return the actual UTF8 representation.
-//		return result;
-
-//		//return null;
-//	}
-
-//	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
-//		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
-//}
+	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
+		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
+}

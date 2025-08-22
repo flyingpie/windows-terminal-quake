@@ -19,12 +19,6 @@ public sealed class HotkeyOptions
 	[JsonPropertyOrder(1)]
 	public KeyCode Key { get; set; }
 
-	public KeyCode KeyCode
-	{
-		get => Key;
-		set => Key = value;
-	}
-
 	/// <summary>
 	/// The key to use, as a character. This is keyboard-layout-dependent, and points to what a key produces, as opposed to where it is on the keyboard.
 	/// </summary>
