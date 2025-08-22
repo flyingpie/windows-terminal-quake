@@ -72,7 +72,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		// Handle hotkey mappings through key _characters_.
 		_hook.KeyTyped += (s, e) =>
 		{
-			_log.LogTrace("[KeyTyped] Event:{@Event}", e);
+			_log.LogTrace("[KeyTyped] Event:{Event}", e.Describe());
 
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
@@ -102,7 +102,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		// Purely for debugging.
 		_hook.KeyReleased += (s, e) =>
 		{
-			_log.LogTrace("[KeyReleased] Event:{@Event}", e);
+			_log.LogTrace("[KeyReleased] Event:{Event}", e.Describe());
 
 			// Convert SharpHook key code to WTQ one.
 			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
@@ -119,7 +119,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		// Handle hotkey mappings through key _codes_.
 		_hook.KeyPressed += (s, e) =>
 		{
-			_log.LogTrace("[KeyPressed] Event:{@Event}", e);
+			_log.LogTrace("[KeyPressed] Event:{Event}", e.Describe());
 
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
