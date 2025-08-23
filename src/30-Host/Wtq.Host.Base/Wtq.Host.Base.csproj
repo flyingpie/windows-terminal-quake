@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Host.Base</AssemblyName>
 		<RootNamespace>Wtq.Host.Base</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Services.CLI</AssemblyName>
 		<RootNamespace>Wtq.Services.CLI</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

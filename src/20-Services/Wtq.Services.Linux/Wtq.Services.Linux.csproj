@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Services.Linux</AssemblyName>
 		<RootNamespace>Wtq.Services.Linux</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
