@@ -83,34 +83,54 @@
 
 }
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+<RadzenStack Orientation="Orientation.Vertical" Gap="0">
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-	<!-- Shortcut capturing textbox -->
-	<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
-	<input
-		class="rz-textbox"
-		Style="width: 100%;"
-		@onkeydown="HandleKeyDown"
-		@onkeydown:preventDefault="true"
-		@onkeyup="HandleKeyUp"
-		@onfocus="HandleFocusGained"
-		@onblur="HandleFocusLost"
-		Placeholder="Type here to set hotkey."
-		Value="@Description"
-	/>
+		<!-- Shortcut capturing textbox -->
+		<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
+		<input
+			class="rz-textbox"
+			Style="width: 100%;"
+			@onkeydown="HandleKeyDown"
+			@onkeydown:preventDefault="true"
+			@onkeyup="HandleKeyUp"
+			@onfocus="HandleFocusGained"
+			@onblur="HandleFocusLost"
+			Placeholder="Type here to set hotkey."
+			Value="@Description"
+		/>
 
-	<!-- Clear button -->
-	<RadzenButton
-		Icon="backspace"
-		Size="ButtonSize.Medium"
-		Click="@(() => Clear())"
-	/>
+		<!-- Clear button -->
+		<RadzenButton
+			Icon="backspace"
+			Size="ButtonSize.Medium"
+			Click="@(() => Clear())"
+		/>
 
-	<!-- Remove button -->
-	<RadzenButton
-		Icon="delete"
-		Size="ButtonSize.Medium"
-		Click="@(() => OnRemove())"
-	/>
+		<!-- Remove button -->
+		<RadzenButton
+			Icon="delete"
+			Size="ButtonSize.Medium"
+			Click="@(() => OnRemove())"
+		/>
 
+	</RadzenStack>
+
+	<RadzenAlert
+		AllowClose="false"
+		AlertStyle="AlertStyle.Secondary"
+		class="rz-mb-0"
+		Visible="@(Options.Modifiers.HasShift())"
+	>
+
+		The filename suggests you're setting up <Emph>Windows Terminal</Emph>. Note that you need to set <Emph>Process name</Emph> to <Emph></Emph>.
+
+		<RadzenButton
+			Variant="Variant.Text"
+			Click="@(() => {})"
+			Text="Click here"
+			Size="ButtonSize.Small"
+			ButtonStyle="ButtonStyle.Info"
+		/> to do this now.
+	</RadzenAlert>
 </RadzenStack>

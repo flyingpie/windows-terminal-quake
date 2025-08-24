@@ -20,7 +20,7 @@
 		{
 			var s = Options.Sequence;
 			return s.IsEmpty
-				? "(press a shortcut here)"
+				? "(press a key here)"
 				: s.ToShortString();
 		}
 	}
@@ -85,28 +85,28 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-    <RadzenToggleButton
-        Text="Alt"
-        ButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton
+		Text="Alt"
+		ButtonStyle="ButtonStyle.Base" />
 
-    <RadzenToggleButton
-        Text="Control"
-        ButtonStyle="ButtonStyle.Primary"
-    />
+	<RadzenToggleButton
+		Text="Ctrl"
+		ButtonStyle="ButtonStyle.Base"
+	/>
 
-    <RadzenToggleButton
-        Text="Shift"
-        ButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton
+		Text="Shift"
+		ButtonStyle="ButtonStyle.Base" />
 
-    <RadzenToggleButton
-        Text="Super"
-        ButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton
+		Text="Super"
+		ButtonStyle="ButtonStyle.Base" />
 
 	<!-- Shortcut capturing textbox -->
 	<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
 	<input
 		class="rz-textbox"
-		Style="width: 100%;"
+		Style="flex-grow: 1;"
 		@onkeydown="HandleKeyDown"
 		@onkeydown:preventDefault="true"
 		@onkeyup="HandleKeyUp"
