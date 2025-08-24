@@ -44,7 +44,7 @@ public static class InstallConstants
 	public static class Windows
 	{
 		public static string PathToInstall =>
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "wtq");
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "wtq");
 
 		public static string PathToShortcut =>
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "WTQ.lnk");
