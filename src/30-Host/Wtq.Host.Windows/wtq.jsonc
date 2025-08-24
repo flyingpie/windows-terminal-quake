@@ -4,48 +4,18 @@
 		{
 			"Name": "Terminal",
 			"Hotkeys": [
+				 {
+				 	"Modifiers": "Super",
+				 	"KeyChar": "^"
+				 },
 				{
 					"Modifiers": "Super",
-					"KeyChar": "^"
-				},
-				{
-					"Modifiers": "Super",
-					"KeyChar": "T"
-				},
-				{
-					"Modifiers": "Control",
-					"KeyChar": "t"
+					"Key": "OemBackslash"
 				}
 			],
 			"FileName": "wt",
 			"ProcessName": "WindowsTerminal",
 			"AttachMode": "FindOrStart"
-		},
-		{
-			"Name": "Spotify",
-			"Hotkeys": [
-				{
-					"Modifiers": "Super",
-					"Key": "Oem3"
-				},
-				{
-					"Modifiers": "Control",
-					"KeyChar": "s"
-				}
-			],
-			"FileName": "spotify",
-			"ProcessName": "Spotify",
-			"AttachMode": "Find"
 		}
-	],
-	"AnimationTargetFps": 60,
-	"HideOnFocusLost": "True",
-	"TaskbarIconVisibility": "AlwaysHidden",
-	"Opacity": 90,
-	"HorizontalScreenCoverage": 95,
-	"VerticalScreenCoverage": 95,
-	"VerticalOffset": 0,
-	"PreferMonitor": "Primary",
-	"MonitorIndex": 0,
-	"AnimationDurationMs": 100
+	]
 }
