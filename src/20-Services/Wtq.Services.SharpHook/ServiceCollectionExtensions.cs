@@ -11,6 +11,5 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddSharpHookHotkeyService(this IServiceCollection services) =>
 		Guard.Against.Null(services)
 			.AddSingleton<IWin32, Win32>()
-			.AddSingleton<IWin32KeyService, Win32KeyService>()
 			.AddHostedService<SharpHookHotkeyService>();
 }
