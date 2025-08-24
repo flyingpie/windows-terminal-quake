@@ -77,7 +77,7 @@ public class Win32 : IWin32
 	{
 		var keyChar = (char)PI.MapVirtualKey(keyCode, MAP_VIRTUAL_KEY_TYPE.MAPVK_VK_TO_CHAR);
 
-		_log.LogDebug("Mapped key code '{KeyCode}' to character '{KeyChar}'", keyCode, keyChar);
+		_log.LogTrace("Mapped key code '{KeyCode}' to character '{KeyChar}'", keyCode, keyChar);
 
 		return keyChar.ToString();
 	}

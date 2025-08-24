@@ -79,7 +79,6 @@ public class SharpHookHotkeyService : WtqHostedService
 			// Convert SharpHook key code to WTQ one.
 			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
-
 			// Turn key code into sequence.
 			var keySeq = _win32.GetKeySequence(keyCode, e.Data.RawCode);
 
