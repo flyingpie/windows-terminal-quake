@@ -56,8 +56,19 @@
 		mod ^= keyCode.AsModifier();
 
 		Options.Modifiers = mod;
-		Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
-		Options.KeyChar = keyChar;
+
+		if (keyChar == null || keyChar.Equals("dead", StringComparison.OrdinalIgnoreCase))
+		{
+			Options.KeyChar = null;
+			Options.Key = keyCode;
+		}
+		else
+		{
+			Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
+			Options.KeyChar = keyChar;
+		}
+
+//		Console.WriteLine($"KEY:{keyCode}");
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)

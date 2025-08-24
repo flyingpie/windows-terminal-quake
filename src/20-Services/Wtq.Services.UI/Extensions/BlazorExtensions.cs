@@ -36,7 +36,7 @@ public static class BlazorExtensions
 			}
 			else
 			{
-				keyChar = keyCode.ToString();
+//				keyChar = keyCode.ToString();
 			}
 		}
 
@@ -120,6 +120,8 @@ public static class BlazorExtensions
 			case "audiovolumeup":		return KeyCode.VolumeUp;
 			case "audiovolumedown":		return KeyCode.VolumeDown;
 			case "audiovolumemute":		return KeyCode.VolumeMute;
+
+			case "backquote":			return KeyCode.OemTilde;
 		}
 
 		#pragma warning restore SA1027

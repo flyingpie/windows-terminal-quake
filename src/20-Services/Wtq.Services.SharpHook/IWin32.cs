@@ -8,9 +8,11 @@ namespace Wtq.Services.SharpHook;
 public interface IWin32
 {
 	/// <summary>
-	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
-	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
+	/// Converts the specified key code to a <see cref="KeySequence"/>.<br/>
+	/// Includes attempting to resolve the key code to a (keyboard layout dependent) key character.
 	/// </summary>
+	KeySequence GetKeySequence(KeyCode keyCode, ushort rawKeyCode);
+
 	KeyModifiers GetModifiers(WKC keyCode);
 
 	/// <summary>
@@ -32,4 +34,10 @@ public interface IWin32
 	/// Returns whether the SUPER (or "Meta" or "Windows") key is currently held down.
 	/// </summary>
 	bool IsSuperPressed();
+
+	/// <summary>
+	/// Attempts to convert the specified virtual <paramref name="keyCode"/> to a UTF8 character representation,
+	/// taking the current keyboard layout into account.
+	/// </summary>
+	string? KeyCodeToKeyChar(uint keyCode);
 }

@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
-using System.Collections.Concurrent;
-using System.IO;
 using Wtq.Events;
 using Wtq.Services.SharpHook.Input;
 using WKC = Wtq.Input.KeyCode;
@@ -69,54 +67,36 @@ public class SharpHookHotkeyService : WtqHostedService
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		// Handle hotkey mappings through key _characters_.
-		_hook.KeyTyped += (s, e) =>
-		{
-			_log.LogTrace("[KeyTyped] Event:{Event}", e.Describe());
+		//// Handle hotkey mappings through key _characters_.
+		//_hook.KeyTyped += (s, e) =>
+		//{
+		//	_log.LogTrace("[KeyTyped] Event:{Event}", e.Describe());
 
-			// If hotkeys are suspended, don't do anything.
-			if (_isSuspended)
-			{
-				return;
-			}
+		//	// If hotkeys are suspended, don't do anything.
+		//	if (_isSuspended)
+		//	{
+		//		return;
+		//	}
 
-			// Convert SharpHook key code to WTQ one.
-			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
+		//	// Convert SharpHook key code to WTQ one.
+		//	var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
-			// Get key modifiers from OS.
-			var keyMod = _win32.GetModifiers(keyCode);
+		//	// Get key modifiers from OS.
+		//	var keyMod = _win32.GetModifiers(keyCode);
 
-			// Turn key code into sequence.
-			var keySeq = new KeySequence(keyMod, e.Data.KeyChar.ToString(), WKC.None);
+		//	// Turn key code into sequence.
+		//	var keySeq = new KeySequence(keyMod, e.Data.KeyChar.ToString(), WKC.None);
 
-			_log.LogDebug("[KeyTyped] Got key sequence '{Sequence}'", keySeq);
+		//	_log.LogDebug("[KeyTyped] Got key sequence '{Sequence}'", keySeq);
 
-			if (HandleHotkeyPressed(e, keySeq))
-			{
-				// Prevent the key from activating other possible actions.
-				// Especially useful when the SUPER ("Windows") key was involved.
-				e.SuppressEvent = true;
-			}
-		};
+		//	//if (HandleHotkeyPressed(keySeq))
+		//	//{
+		//	//	// Prevent the key from activating other possible actions.
+		//	//	// Especially useful when the SUPER ("Windows") key was involved.
+		//	//	e.SuppressEvent = true;
+		//	//}
+		//};
 
-		// Purely for debugging.
-		_hook.KeyReleased += (s, e) =>
-		{
-			_log.LogTrace("[KeyReleased] Event:{Event}", e.Describe());
-
-			// Convert SharpHook key code to WTQ one.
-			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
-
-			// Get key modifiers from OS.
-			var keyMod = _win32.GetModifiers(keyCode);
-
-			// Turn key code into sequence.
-			var keySeq = new KeySequence(keyMod, null, keyCode);
-
-			_log.LogDebug("[KeyReleased] Got key sequence '{Sequence}'", keySeq);
-		};
-
-		// Handle hotkey mappings through key _codes_.
 		_hook.KeyPressed += (s, e) =>
 		{
 			_log.LogTrace("[KeyPressed] Event:{Event}", e.Describe());
@@ -131,14 +111,15 @@ public class SharpHookHotkeyService : WtqHostedService
 			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
 			// Get key modifiers from OS.
-			var keyMod = _win32.GetModifiers(keyCode);
+			//var keyMod = _win32.GetModifiers(keyCode);
 
 			// Turn key code into sequence.
-			var keySeq = new KeySequence(keyMod, null, keyCode);
+//			var keySeq = new KeySequence(keyMod, null, keyCode);
+			var keySeq = _win32.GetKeySequence(keyCode, e.Data.RawCode);
 
 			_log.LogDebug("[KeyPressed] Got key sequence '{Sequence}'", keySeq);
 
-			if (HandleHotkeyPressed(e, keySeq))
+			if (HandleHotkeyPressed(keySeq))
 			{
 				// Prevent the key from activating other possible actions.
 				// Especially useful when the SUPER ("Windows") key was involved.
@@ -171,7 +152,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		}
 	}
 
-	private bool HandleHotkeyPressed(KeyboardHookEventArgs e, KeySequence keySeq)
+	private bool HandleHotkeyPressed(KeySequence keySeq)
 	{
 		// Look for a registered hotkey matching the one just pressed.
 		var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);

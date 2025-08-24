@@ -1,46 +1,51 @@
 {
 	"$schema": "wtq.schema.json",
-
 	"Apps": [
-
-		// Windows Terminal
 		{
-			"Name": "Windows Terminal",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
+			"Name": "Terminal",
+			"Hotkeys": [
+				{
+					"Modifiers": "Super",
+					"KeyChar": "^"
+				},
+				{
+					"Modifiers": "Super",
+					"KeyChar": "T"
+				},
+				{
+					"Modifiers": "Control",
+					"KeyChar": "t"
+				}
+			],
 			"FileName": "wt",
-			"ProcessName": "^WindowsTerminal$"
+			"ProcessName": "WindowsTerminal",
+			"AttachMode": "FindOrStart"
 		},
-
-		// Explorer
 		{
-			"Name": "Explorer",
-			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
-			"FileName": "explorer",
-			"WindowClass": "^CabinetWClass$"
+			"Name": "Spotify",
+			"Hotkeys": [
+				{
+					"Modifiers": "Super",
+					"Key": "Oem3"
+				},
+				{
+					"Modifiers": "Control",
+					"KeyChar": "s"
+				}
+			],
+			"FileName": "spotify",
+			"ProcessName": "Spotify",
+			"AttachMode": "Find"
 		}
 	],
-
-	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
-	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" }, { "Key": "SuperRight" } ],
-
-	// What monitor to preferably drop the terminal.
-	// "WithCursor" (default), "Primary" or "AtIndex".
-	// Can be overridden per app.
-	"PreferMonitor": "WithCursor",
-
-	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
-	// Zero based, eg. 0, 1, etc.
-	// Defaults to "0".
-	// Can be overridden per app.
-	"MonitorIndex": 0,
-
-	// Horizontal screen coverage, as a percentage (defaults to 95).
+	"AnimationTargetFps": 60,
+	"HideOnFocusLost": "True",
+	"TaskbarIconVisibility": "AlwaysHidden",
+	"Opacity": 90,
 	"HorizontalScreenCoverage": 95,
-
-	// Vertical screen coverage, as a percentage (defaults to 95).
 	"VerticalScreenCoverage": 95,
-
-	"Api": {
-		"Enable": true
-	}
+	"VerticalOffset": 0,
+	"PreferMonitor": "Primary",
+	"MonitorIndex": 0,
+	"AnimationDurationMs": 100
 }

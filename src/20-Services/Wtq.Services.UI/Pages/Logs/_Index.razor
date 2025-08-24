@@ -6,9 +6,9 @@
 
 @code {
 
-	private readonly Debouncer _debouncer = new();
+    private readonly Debouncer _debouncer = new();
 
-	private HashSet<LogEventLevel> _levels = new()
+    private HashSet<LogEventLevel> _levels = new()
 	{
 		LogEventLevel.Fatal,
 		LogEventLevel.Error,
@@ -18,11 +18,19 @@
 		// LogEventLevel.Verbose,
 	};
 
-	private string? _searchTerm;
+    private string? _searchTerm;
 
-	public ICollection<LogEvent> DataFiltered => Logs.Events
-		.Where(e => _levels.Contains(e.Level))
-		.Where(e => e.MessageTemplate?.Text?.Contains(_searchTerm ?? string.Empty, StringComparison.OrdinalIgnoreCase) ?? false)
+    public ICollection<LogEvent> DataFiltered => Logs.Events
+        .Where(e => _levels.Contains(e.Level))
+        //		.Where(e => e.MessageTemplate?.Text?.Contains(_searchTerm ?? string.Empty, StringComparison.OrdinalIgnoreCase) ?? false)
+        .Where(e =>
+        {
+            var msg = e.RenderMessage();
+
+            return string.IsNullOrWhiteSpace(_searchTerm) ||
+                e.Properties.Any(p => p.Value?.ToString()?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (msg?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ?? false);
+        })
 		.ToList();
 
 	public BadgeStyle LogLevelToBadgeStyle(LogEventLevel level)
