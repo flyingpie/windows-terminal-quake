@@ -66,6 +66,11 @@ public class SharpHookHotkeyService : WtqHostedService
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
+		_hook.KeyReleased += (s, e) =>
+		{
+			_log.LogTrace("[KeyReleased] Event:{Event}", e.Describe());
+		};
+
 		_hook.KeyPressed += (s, e) =>
 		{
 			_log.LogTrace("[KeyPressed] Event:{Event}", e.Describe());

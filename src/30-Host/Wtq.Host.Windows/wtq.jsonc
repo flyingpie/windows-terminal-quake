@@ -4,13 +4,9 @@
 		{
 			"Name": "Terminal",
 			"Hotkeys": [
-				 {
-				 	"Modifiers": "Super",
-				 	"KeyChar": "^"
-				 },
 				{
-					"Modifiers": "Super",
-					"Key": "OemBackslash"
+					"Modifiers": "Control",
+					"KeyChar": "1"
 				}
 			],
 			"FileName": "wt",
