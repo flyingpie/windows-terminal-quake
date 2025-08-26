@@ -2,6 +2,8 @@
 	<PropertyGroup>
 		<Version>2.0.17</Version>
 
+		<TargetFramework>net9.0</TargetFramework>
+
 		<!-- Some features we use require a documentation file, like analyzers, and the docs manifest generation -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
@@ -113,7 +115,20 @@
 		<EnableNETAnalyzers>false</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
 		<RunAnalyzers>false</RunAnalyzers>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<EnableMSTestRunner>true</EnableMSTestRunner>
+		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+		<TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
 	</PropertyGroup>
+
+	<ItemGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
+		<PackageReference Include="coverlet.collector"/>
+		<PackageReference Include="Moq"/>
+		<PackageReference Include="MSTest"/>
+		<PackageReference Include="SystemTextJson.JsonDiffPatch.MSTest"/>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">

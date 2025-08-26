@@ -23,10 +23,10 @@
 		<PackageVersion Include="BlazorMonaco" Version="3.3.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="7.2.2"/>
+		<PackageVersion Include="Radzen.Blazor" Version="7.3.0"/>
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8"/>
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.6.9"/>
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.7.0"/>
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.3.0"/>
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0"/>
@@ -40,10 +40,8 @@
 		<PackageVersion Include="SystemTextJson.JsonDiffPatch.MSTest" Version="2.0.0"/>
 		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- Testing -->
-		<PackageVersion Include="coverlet.collector" Version="6.0.4"/>
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+		<PackageVersion Include="MSTest" Version="3.10.2"/>
 		<PackageVersion Include="Moq" Version="4.20.72"/>
-		<PackageVersion Include="MSTest.TestAdapter" Version="3.10.2"/>
-		<PackageVersion Include="MSTest.TestFramework" Version="3.10.2"/>
+		<PackageVersion Include="coverlet.collector" Version="6.0.4"/>
 	</ItemGroup>
 </Project>
