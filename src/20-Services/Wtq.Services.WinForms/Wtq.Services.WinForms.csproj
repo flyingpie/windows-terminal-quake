@@ -3,9 +3,8 @@
 		<AssemblyName>Wtq.Services.WinForms</AssemblyName>
 		<RootNamespace>Wtq.Services.WinForms</RootNamespace>
 
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>$(TargetFramework)-windows</TargetFramework>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
-
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 

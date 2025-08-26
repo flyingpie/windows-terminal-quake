@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Services.SharpHook</AssemblyName>
 		<RootNamespace>Wtq.Services.SharpHook</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

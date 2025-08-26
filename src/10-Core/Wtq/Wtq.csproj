@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Core</AssemblyName>
 		<RootNamespace>Wtq</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -3,8 +3,6 @@
 		<AssemblyName>Wtq.Services.UI</AssemblyName>
 		<RootNamespace>Wtq.Services.UI</RootNamespace>
 
-		<TargetFramework>net9.0</TargetFramework>
-
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 	</PropertyGroup>
 
