@@ -10,7 +10,7 @@
   "Apps": [
     {
       // Before:
-      "Hotkeys": [{ "Modifiers": "Control, Shift", "KeyChar": "!" }] // Shifted "1" => "!"
+      "Hotkeys": [{ "Modifiers": "Control, Shift", "KeyChar": "!" }], // Shifted "1" => "!"
 
       // After:
       "Hotkeys": [{ "Modifiers": "Control, Shift", "KeyChar": "1" }]
@@ -18,7 +18,7 @@
   ]
 }
 ```
-- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
+- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be deterministic. Also fixes the "Windows" page in the GUI.
 - Bugfix: (Windows) Some hotkey combos were broken when using the "Super" (Windows key) modifier.
 - Bugfix: (Windows) In some cases, toggling apps could lead to the selected keyboard layout disappearing (wild, I know).
 - Bugfix: GUI - Logs can be filtered on category and parameter values now.
@@ -29,12 +29,13 @@
 - Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
 - Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
 - Feature: GUI - Can show "DEBUG" and "VERBOSE" logs now, regardless of WTQ's global log level.
+- Feature: Nicer (I mean, that's what I think) out-of-the-box experience, with a (mostly empty) sample wtq.jsonc, and pops the GUI at first (with a quick "turn off" button nearby).
 - Feature: When saving settings from the GUI, special characters are no longer encoded, which makes the resulting settings file way more readable.
 ```jsonc
   "Apps": [
     {
       // Before:
-      "FileName": "notepad\u002B\u002B"
+      "FileName": "notepad\u002B\u002B",
 
       // After:
       "FileName": "notepad++"
