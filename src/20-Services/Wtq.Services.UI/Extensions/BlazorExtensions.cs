@@ -34,10 +34,6 @@ public static class BlazorExtensions
 			{
 				_log.LogWarning("Attempting to parse non-character key '{KeyChar}', but parsing failed. Keeping current value, but this may result in undesired behavior. Please file a bug at {Url}", keyChar, WtqConstants.GitHubUrl);
 			}
-			else
-			{
-//				keyChar = keyCode.ToString();
-			}
 		}
 
 		var loc = ev.ToKeyLocation();

@@ -3,7 +3,6 @@ using SharpHook;
 using SharpHook.Data;
 using Wtq.Events;
 using Wtq.Services.SharpHook.Input;
-using WKC = Wtq.Input.KeyCode;
 
 namespace Wtq.Services.SharpHook;
 

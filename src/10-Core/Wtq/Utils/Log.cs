@@ -48,7 +48,7 @@ public static class Log
 				formatProvider: CultureInfo.InvariantCulture,
 				outputTemplate: LogTemplate,
 				path: Path.Combine(pathToLogsDir, "logs-.txt"),
-				//restrictedToMinimumLevel: LogLevel,
+				restrictedToMinimumLevel: LogLevel,
 				retainedFileCountLimit: 5,
 				rollingInterval: RollingInterval.Day);
 

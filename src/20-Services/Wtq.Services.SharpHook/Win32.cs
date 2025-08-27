@@ -25,7 +25,7 @@ public class Win32 : IWin32
 	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
 	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
 	/// </summary>
-	public KeyModifiers GetModifiers(WKC keyCode)
+	private KeyModifiers GetModifiers(WKC keyCode)
 	{
 		var mod2 = KeyModifiers.None;
 
@@ -57,23 +57,35 @@ public class Win32 : IWin32
 		return mod2;
 	}
 
-	public bool IsAltPressed() =>
+	/// <summary>
+	/// Returns whether the ALT key is currently held down.
+	/// </summary>
+	private bool IsAltPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
-	public bool IsControlPressed() =>
+	/// <summary>
+	/// Returns whether the CONTROL key is currently held down.
+	/// </summary>
+	private bool IsControlPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
 
-	public bool IsShiftPressed() =>
+	/// <summary>
+	/// Returns whether the SHIFT key is currently held down.
+	/// </summary>
+	private bool IsShiftPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
 
-	public bool IsSuperPressed() =>
+	/// <summary>
+	/// Returns whether the SUPER (or "Meta" or "Windows") key is currently held down.
+	/// </summary>
+	private bool IsSuperPressed() =>
 		IsKeyPressed(VIRTUAL_KEY.VK_LWIN) || IsKeyPressed(VIRTUAL_KEY.VK_RWIN);
 
 	/// <summary>
 	/// Attempts to convert the specified virtual <paramref name="keyCode"/> to a UTF8 character representation,
 	/// taking the current keyboard layout into account.
 	/// </summary>
-	public string? KeyCodeToKeyChar(uint keyCode)
+	private string? KeyCodeToKeyChar(uint keyCode)
 	{
 		var keyChar = (char)PI.MapVirtualKey(keyCode, MAP_VIRTUAL_KEY_TYPE.MAPVK_VK_TO_CHAR);
 
