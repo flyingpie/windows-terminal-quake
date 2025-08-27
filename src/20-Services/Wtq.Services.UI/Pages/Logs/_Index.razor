@@ -5,6 +5,7 @@
 @inject InAppLogSink Logs
 
 @code {
+	private static LogEventLevel[] LogLevels = Enum.GetValues<LogEventLevel>();
 
 	private readonly Debouncer _debouncer = new();
 
@@ -22,51 +23,82 @@
 
 	public ICollection<LogEvent> DataFiltered => Logs.Events
 		.Where(e => _levels.Contains(e.Level))
-		.Where(e => e.MessageTemplate?.Text?.Contains(_searchTerm ?? string.Empty, StringComparison.OrdinalIgnoreCase) ?? false)
+		.Where(e =>
+		{
+			var msg = e.RenderMessage();
+
+			return string.IsNullOrWhiteSpace(_searchTerm) ||
+				e.Properties.Any(p => p.Value?.ToString()?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(msg?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ?? false);
+		})
 		.ToList();
 
-	public BadgeStyle LogLevelToBadgeStyle(LogEventLevel level)
+	public BadgeStyle LogLevelToBadgeStyle(LogEventLevel level) => level switch
 	{
-		if (!_levels.Contains(level))
-		{
-			return BadgeStyle.Dark;
-		}
+		LogEventLevel.Fatal => BadgeStyle.Danger,
+		LogEventLevel.Error => BadgeStyle.Danger,
+		LogEventLevel.Warning => BadgeStyle.Warning,
+		LogEventLevel.Information => BadgeStyle.Primary,
+		LogEventLevel.Debug => BadgeStyle.Info,
+		LogEventLevel.Verbose => BadgeStyle.Light,
+		_ => BadgeStyle.Secondary
+	};
 
-		return level switch
-		{
-			LogEventLevel.Fatal => BadgeStyle.Danger,
-			LogEventLevel.Error => BadgeStyle.Danger,
-			LogEventLevel.Warning => BadgeStyle.Warning,
-			LogEventLevel.Information => BadgeStyle.Primary,
-			LogEventLevel.Debug => BadgeStyle.Info,
-			LogEventLevel.Verbose => BadgeStyle.Light,
-			_ => BadgeStyle.Secondary
-		};
-	}
-
-	public ButtonStyle LogLevelToButtonStyle(LogEventLevel level)
+	public ButtonStyle LogLevelToButtonStyle(LogEventLevel level) => level switch
 	{
-		if (!_levels.Contains(level))
-		{
-			return ButtonStyle.Dark;
-		}
-
-		return level switch
-		{
-			LogEventLevel.Fatal => ButtonStyle.Danger,
-			LogEventLevel.Error => ButtonStyle.Danger,
-			LogEventLevel.Warning => ButtonStyle.Warning,
-			LogEventLevel.Information => ButtonStyle.Primary,
-			LogEventLevel.Debug => ButtonStyle.Info,
-			LogEventLevel.Verbose => ButtonStyle.Light,
-			_ => ButtonStyle.Secondary
-		};
-	}
+		LogEventLevel.Fatal => ButtonStyle.Danger,
+		LogEventLevel.Error => ButtonStyle.Danger,
+		LogEventLevel.Warning => ButtonStyle.Warning,
+		LogEventLevel.Information => ButtonStyle.Primary,
+		LogEventLevel.Debug => ButtonStyle.Info,
+		LogEventLevel.Verbose => ButtonStyle.Light,
+		_ => ButtonStyle.Secondary
+	};
 
 	protected override void OnInitialized()
 	{
 		Logs.OnEvent = () => _debouncer.Debounce(() => InvokeAsync(StateHasChanged));
 	}
+
+	#region Levels
+
+	private bool IsFatalEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Fatal);
+		set => ToggleLevel(LogEventLevel.Fatal);
+	}
+
+	private bool IsErrorEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Error);
+		set => ToggleLevel(LogEventLevel.Error);
+	}
+
+	private bool IsWarningEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Warning);
+		set => ToggleLevel(LogEventLevel.Warning);
+	}
+
+	private bool IsInformationEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Information);
+		set => ToggleLevel(LogEventLevel.Information);
+	}
+
+	private bool IsDebugEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Debug);
+		set => ToggleLevel(LogEventLevel.Debug);
+	}
+
+	private bool IsVerboseEnabled
+	{
+		get => _levels.Contains(LogEventLevel.Verbose);
+		set => ToggleLevel(LogEventLevel.Verbose);
+	}
+
+	#endregion
 
 	private void ToggleLevel(LogEventLevel level)
 	{
@@ -82,17 +114,46 @@
 
 <PageHead Icon="subject">Logs</PageHead>
 
-<RadzenStack Orientation="Orientation.Horizontal" class="rz-my-2">
-	<RadzenTextBox Style="flex-grow: 1;" @bind-Value="_searchTerm" @oninput="@(i => _searchTerm = i.Value?.ToString())"></RadzenTextBox>
+<RadzenStack Orientation="Orientation.Horizontal" class="rz-my-2" AlignItems="AlignItems.Center">
+	<RadzenTextBox
+		Style="flex-grow: 1;"
+		@bind-Value="_searchTerm"
+		@oninput="@(i => _searchTerm = i.Value?.ToString())"
+		Placeholder="Searchterm..."
+	/>
+
 	<RadzenStack Orientation="Orientation.Horizontal">
-		@foreach (var level in Enum.GetValues<LogEventLevel>())
-		{
-			<RadzenButton
-				ButtonStyle="@LogLevelToButtonStyle(level)"
-				Click="() => ToggleLevel(level)"
-			>@level
-			</RadzenButton>
-		}
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Verbose)">
+			<RadzenCheckBox Name="@($"chk-log-level-1")" @bind-Value="IsVerboseEnabled" />
+			<RadzenLabel Text="Verbose" Component="@($"chk-log-level-1")" class="rz-ms-2" />
+		</RadzenBadge>
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Debug)">
+			<RadzenCheckBox Name="@($"chk-log-level-2")" @bind-Value="IsDebugEnabled" />
+			<RadzenLabel Text="Debug" Component="@($"chk-log-level-2")" class="rz-ms-2" />
+		</RadzenBadge>
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Information)">
+			<RadzenCheckBox Name="@($"chk-log-level-3")" @bind-Value="IsInformationEnabled" />
+			<RadzenLabel Text="Information" Component="@($"chk-log-level-3")" class="rz-ms-2" />
+		</RadzenBadge>
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Warning)">
+			<RadzenCheckBox Name="@($"chk-log-level-4")" @bind-Value="IsWarningEnabled" />
+			<RadzenLabel Text="Warning" Component="@($"chk-log-level-4")" class="rz-ms-2" />
+		</RadzenBadge>
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Error)">
+			<RadzenCheckBox Name="@($"chk-log-level-5")" @bind-Value="IsErrorEnabled" />
+			<RadzenLabel Text="Error" Component="@($"chk-log-level-5")" class="rz-ms-2" />
+		</RadzenBadge>
+
+		<RadzenBadge BadgeStyle="LogLevelToBadgeStyle(LogEventLevel.Fatal)">
+			<RadzenCheckBox Name="@($"chk-log-level-6")" @bind-Value="IsFatalEnabled" />
+			<RadzenLabel Text="Fatal" Component="@($"chk-log-level-6")" class="rz-ms-2" />
+		</RadzenBadge>
+
 	</RadzenStack>
 </RadzenStack>
 
