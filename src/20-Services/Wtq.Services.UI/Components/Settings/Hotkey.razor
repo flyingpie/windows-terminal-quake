@@ -1,5 +1,6 @@
 @using Wtq.Services.UI.Extensions
 
+@inject IPlatformService Platform
 @inject IWtqBus Bus
 
 @code {
@@ -56,8 +57,17 @@
 		mod ^= keyCode.AsModifier();
 
 		Options.Modifiers = mod;
-		Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
-		Options.KeyChar = keyChar;
+
+		if (keyChar == null || keyChar.Equals("dead", StringComparison.OrdinalIgnoreCase))
+		{
+			Options.KeyChar = null;
+			Options.Key = keyCode;
+		}
+		else
+		{
+			Options.Key = KeyCode.None; // To reset existing none-empty values from the settings.
+			Options.KeyChar = keyChar;
+		}
 	}
 
 	private void HandleKeyUp(KeyboardEventArgs e)
@@ -74,34 +84,66 @@
 
 }
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
+<RadzenStack Orientation="Orientation.Vertical" Gap="0">
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8">
 
-	<!-- Shortcut capturing textbox -->
-	<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
-	<input
-		class="rz-textbox"
-		Style="width: 100%;"
-		@onkeydown="HandleKeyDown"
-		@onkeydown:preventDefault="true"
-		@onkeyup="HandleKeyUp"
-		@onfocus="HandleFocusGained"
-		@onblur="HandleFocusLost"
-		Placeholder="Type here to set hotkey."
-		Value="@Description"
-	/>
+		<!-- Shortcut capturing textbox -->
+		<!-- We're preventing default actions so we can intercept more stuff that's already bound to something (like "F5" without refreshing the page). -->
+		<input
+			class="rz-textbox"
+			Style="width: 100%;"
+			@onkeydown="HandleKeyDown"
+			@onkeydown:preventDefault="true"
+			@onkeyup="HandleKeyUp"
+			@onfocus="HandleFocusGained"
+			@onblur="HandleFocusLost"
+			Placeholder="Type here to set hotkey."
+			Value="@Description"
+		/>
 
-	<!-- Clear button -->
-	<RadzenButton
-		Icon="backspace"
-		Size="ButtonSize.Medium"
-		Click="@(() => Clear())"
-	/>
+		<!-- Clear button -->
+		<RadzenButton
+			Icon="backspace"
+			Size="ButtonSize.Medium"
+			Click="@(() => Clear())"
+		/>
 
-	<!-- Remove button -->
-	<RadzenButton
-		Icon="delete"
-		Size="ButtonSize.Medium"
-		Click="@(() => OnRemove())"
-	/>
+		<!-- Remove button -->
+		<RadzenButton
+			Icon="delete"
+			Size="ButtonSize.Medium"
+			Click="@(() => OnRemove())"
+		/>
 
+	</RadzenStack>
+
+	<RadzenAlert
+		AllowClose="false"
+		AlertStyle="AlertStyle.Secondary"
+		class="rz-mb-0"
+		Visible="@(Os.IsWindows && Options.Modifiers.HasShift())"
+	>
+
+		<p>
+			Using <RadzenBadge Text="SHIFT" BadgeStyle="BadgeStyle.Info" /> in the hotkey may require using
+			the non-shifted character in the settings (for example, <strong>1</strong> instead of <strong>!</strong>).
+		</p>
+
+		<p>
+			Sadly, this isn't supported by the UI at this point, so please do that manually through the
+
+			<RadzenButton
+				ButtonStyle="ButtonStyle.Info"
+				Class="rz-p-1"
+				Click="@(() => Platform.OpenFileOrDirectory(Platform.PathToWtqConf))"
+				Icon="file_open"
+				Size="ButtonSize.Small"
+				Text="settings file"
+				Variant="Variant.Text"
+			/>, after saving.
+		</p>
+
+		<p>Sorry for the inconvenience!</p>
+
+	</RadzenAlert>
 </RadzenStack>
