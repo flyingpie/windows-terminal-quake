@@ -1,7 +1,6 @@
 # Changelog
 
 ## [vFuture]
-- Feature: Flatpak release
 
 ## [vNext]
 
@@ -22,12 +21,14 @@
 - Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.
 - Bugfix: (Windows) Some hotkey combos were broken when using the "Super" (Windows key) modifier.
 - Bugfix: (Windows) In some cases, toggling apps could lead to the selected keyboard layout disappearing (wild, I know).
+- Bugfix: GUI - Logs can be filtered on category and parameter values now.
 - Refactor: Startup/shutdown - More straigh-forward now, and fixed a bunch of cases where part of the process stayed alive when stopping.
 - Refactor: Windows - Make foreground window tracking a bunch more efficient.
 - Feature: AUR release; Flatpak release (custom remote); Scoop release has been moved to the official "extras" bucket".
 - Feature: Build script can directly install WTQ now, using "build.ps1|sh install".
 - Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
 - Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
+- Feature: GUI - Can show "DEBUG" and "VERBOSE" logs now, regardless of WTQ's global log level.
 - Feature: When saving settings from the GUI, special characters are no longer encoded, which makes the resulting settings file way more readable.
 ```jsonc
   "Apps": [
