@@ -15,7 +15,7 @@ public class SharpHookHotkeyService : WtqHostedService
 
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqBus _bus;
-	private readonly IWin32KeyService _keyService;
+	private readonly IWin32 _win32;
 
 	private readonly SimpleGlobalHook _hook;
 
@@ -25,11 +25,11 @@ public class SharpHookHotkeyService : WtqHostedService
 	public SharpHookHotkeyService(
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqBus bus,
-		IWin32KeyService keyService)
+		IWin32 win32)
 	{
 		_opts = Guard.Against.Null(opts);
 		_bus = Guard.Against.Null(bus);
-		_keyService = Guard.Against.Null(keyService);
+		_win32 = Guard.Against.Null(win32);
 
 		_bus.OnEvent<WtqSuspendHotkeysEvent>(_ =>
 		{
@@ -57,7 +57,6 @@ public class SharpHookHotkeyService : WtqHostedService
 	{
 		_log.LogDebug("Disposing SharpHook");
 
-		// TODO: Seems that some thread still runs even after disposing.
 		_hook.Stop();
 		_hook.Dispose();
 
@@ -66,10 +65,14 @@ public class SharpHookHotkeyService : WtqHostedService
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
+		_hook.KeyReleased += (s, e) =>
+		{
+			_log.LogTrace("[KeyReleased] Event:{Event}", e.Describe());
+		};
+
 		_hook.KeyPressed += (s, e) =>
 		{
-			// Make sure we start out _not_ suppressing a key event (seems to stick to previous value sometimes?).
-			e.SuppressEvent = false;
+			_log.LogTrace("[KeyPressed] Event:{Event}", e.Describe());
 
 			// If hotkeys are suspended, don't do anything.
 			if (_isSuspended)
@@ -81,25 +84,16 @@ public class SharpHookHotkeyService : WtqHostedService
 			var keyCode = e.Data.KeyCode.ToWtqKeyCode();
 
 			// Turn key code into sequence.
-			var keySeq = _keyService.GetKeySequence(keyCode, e.Data.RawCode);
+			var keySeq = _win32.GetKeySequence(keyCode, e.Data.RawCode);
 
-			_log.LogDebug("Got key sequence '{Sequence}'", keySeq);
+			_log.LogDebug("[KeyPressed] Got key sequence '{Sequence}'", keySeq);
 
-			// Look for a registered hotkey matching the one just pressed.
-			var hk = GetHotkeys().FirstOrDefault(h => h.Sequence == keySeq);
-			if (hk == null)
+			if (HandleHotkeyPressed(keySeq))
 			{
-				_log.LogDebug("No hotkey mapping found for key sequence '{Sequence}'", keySeq);
-				return;
+				// Prevent the key from activating other possible actions.
+				// Especially useful when the SUPER ("Windows") key was involved.
+				e.SuppressEvent = true;
 			}
-
-			// Prevent the key from activating other possible actions. Especially useful when the SUPER ("Windows") key was involved.
-			e.SuppressEvent = true;
-
-			_log.LogDebug("Got hotkey mapping for key sequence '{Sequence}' (mapping: {Mapping})", keySeq, hk);
-
-			// Send hotkey pressed event for routing.
-			_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
 		};
 
 		_hookTask = _hook.RunAsync();
@@ -111,19 +105,46 @@ public class SharpHookHotkeyService : WtqHostedService
 	/// Returns the full list of <see cref="HotkeyOptions"/>, both globally and per app.<br/>
 	/// Used to determine whether we should send an event, as we're seeing _all_ key presses.
 	/// </summary>
-	private IEnumerable<HotkeyOptions> GetHotkeys()
+	private IEnumerable<(HotkeyOptions HotkeyOpts, WtqAppOptions? AppOpts)> GetHotkeys()
 	{
+		// Global hotkeys
 		foreach (var hk in _opts.CurrentValue.Hotkeys)
 		{
-			yield return hk;
+			yield return (hk, null);
 		}
 
+		// Per-app hotkeys
 		foreach (var app in _opts.CurrentValue.Apps)
 		{
 			foreach (var hk in app.Hotkeys)
 			{
-				yield return hk;
+				yield return (hk, app);
 			}
 		}
+	}
+
+	private bool HandleHotkeyPressed(KeySequence keySeq)
+	{
+		// Look for a registered hotkey matching the one just pressed.
+		var hk = GetHotkeys().FirstOrDefault(h => h.HotkeyOpts.Sequence == keySeq);
+		if (hk.HotkeyOpts == null)
+		{
+			_log.LogDebug("No hotkey mapping found for key sequence '{Sequence}'", keySeq);
+			return false;
+		}
+
+		if (hk.AppOpts == null)
+		{
+			_log.LogDebug("Got global hotkey mapping for key sequence '{Sequence}'", keySeq);
+		}
+		else
+		{
+			_log.LogDebug("Got app hotkey mapping for key sequence '{Sequence}' and app '{App}'", keySeq, hk.AppOpts);
+		}
+
+		// Send hotkey pressed event for routing.
+		_bus.Publish(new WtqHotkeyPressedEvent(keySeq));
+
+		return true;
 	}
 }
