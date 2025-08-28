@@ -173,13 +173,14 @@ public sealed partial class Build : NukeBuild
 		.DependsOn(RunTests)
 		.DependsOn(BuildLinux)
 		.DependsOn(BuildWindows)
+		.Triggers(CreateFlatpakManifest)
+		.Triggers(CreateScoopManifest)
+		.Triggers(CreateWinGetManifest)
 		.Executes();
 
 	private Target Publish => _ => _
 		.Description("Build everything and publish to GitHub.")
 		.DependsOn(BuildAll)
-		.Triggers(CreateScoopManifest)
-		.Triggers(CreateWinGetManifest)
 		.Triggers(CreateGitHubRelease)
 		.Executes();
 }

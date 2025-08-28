@@ -2,6 +2,7 @@
 // ReSharper disable All
 
 using Nuke.Common;
+using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
 using System;
 using System.IO;
@@ -73,6 +74,9 @@ public sealed partial class Build
 			await File.WriteAllTextAsync(scoop / "wtq-latest.json", manifest);
 			await File.WriteAllTextAsync(scoop / "wtq-nightly.json", manifest);
 			await File.WriteAllTextAsync(scoop / $"wtq-{SemVerVersion}.json", manifest);
+
+			// Keep old scoop dir on root around for now, as it's referenced by local Scoop clients.
+			scoop.CopyToDirectory(RootDirectory);
 		});
 
 	/// <summary>
