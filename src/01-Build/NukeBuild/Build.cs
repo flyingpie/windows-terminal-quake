@@ -173,6 +173,7 @@ public sealed partial class Build : NukeBuild
 		.DependsOn(RunTests)
 		.DependsOn(BuildLinux)
 		.DependsOn(BuildWindows)
+		.Triggers(CreateAurManifest)
 		.Triggers(CreateFlatpakManifest)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)
