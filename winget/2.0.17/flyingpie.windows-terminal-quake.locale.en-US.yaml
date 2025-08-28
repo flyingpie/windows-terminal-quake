@@ -10,4 +10,4 @@ LicenseUrl: https://github.com/flyingpie/windows-terminal-quake/blob/master/LICE
 ShortDescription: Turn any app into a Quake-style toggleable app.
 Moniker: windows-terminal-quake
 ManifestType: defaultLocale
-ManifestVersion: 1.5.0
+ManifestVersion: 1.10.0
