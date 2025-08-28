@@ -38,7 +38,7 @@ modules:
       # Source repo
       - type: git
         url: https://github.com/flyingpie/windows-terminal-quake.git
-        commit: 0732e5e65227f0a45e97fd118b7e4c5e7f058236
+        commit: e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631
 
       # NuGet sources
       - ./nuget-sources.json
@@ -52,12 +52,10 @@ modules:
         path: ./nl.flyingpie.wtq.metainfo.xml
 
     build-commands:
-      - cp nl.flyingpie.wtq.* /app/bin/
-      - install -D nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
-      - install -D nl.flyingpie.wtq.metainfo.xml /app/share/metainfo/nl.flyingpie.wtq.metainfo.xml
-
       - dotnet publish -c Release --no-self-contained --source ./nuget-sources ./src/30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -Rv _output/build/bin/Wtq.Host.Linux/net9.0/publish/* ${FLATPAK_DEST}/bin
       - install -D assets/nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq.svg
       - install -D assets/nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
+      - install -D nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop
+      - install -D nl.flyingpie.wtq.metainfo.xml /app/share/metainfo/nl.flyingpie.wtq.metainfo.xml

@@ -46,7 +46,7 @@ public sealed partial class Build
 		.Executes(async () =>
 		{
 			var templateRoot = PkgDirectory / "flatpak" / "_template";
-			var manifestRoot = PkgDirectory / "flatpak" / SemVerVersion;
+			var manifestRoot = PkgDirectory / "flatpak" / "latest";
 			var prefix = "nl.flyingpie.wtq";
 
 			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
@@ -100,7 +100,7 @@ public sealed partial class Build
 			await File.WriteAllTextAsync(scoop / $"wtq-{SemVerVersion}.json", manifest);
 
 			// Keep old scoop dir on root around for now, as it's referenced by local Scoop clients.
-			scoop.CopyToDirectory(RootDirectory);
+			scoop.CopyToDirectory(RootDirectory, ExistsPolicy.MergeAndOverwrite);
 		});
 
 	/// <summary>
