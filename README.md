@@ -50,7 +50,7 @@ winget install windows-terminal-quake
 ```
 You can then call ```wtq``` from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called **WTQ - Main Window**.
+After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
@@ -138,8 +138,8 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 > [Linux Only] Requires webkit2gtk-4.1 to be installed
 
 You can also clone the repo and run the "Install" build target, which will build and install WTQ:
-- Windows: To ```~/AppData/Local/Programs/wtq```
-- Linux: To ```~/.local/share/wtq (respects XDG spec)```
+- Windows: At ```~/AppData/Local/wtq```
+- Linux: At ```~/.local/share/wtq (respects XDG spec)```
 
 ```shell
 git clone https://github.com/flyingpie/windows-terminal-quake.git
