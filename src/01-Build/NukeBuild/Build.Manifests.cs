@@ -18,6 +18,30 @@ public sealed partial class Build
 	/// <summary>
 	/// Scoop manifest.
 	/// </summary>
+	private Target CreateAurManifest => _ => _
+		.Executes(async () =>
+		{
+			var aur = PkgDirectory / "aur";
+			var aurWtq = aur / "wtq";
+			var aurWtqBin = aur / "wtq-bin";
+
+			foreach (var dir in new[] { aurWtq, aurWtqBin })
+			{
+				var tpl = await File.ReadAllTextAsync(dir / "_template");
+				var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
+
+				var pkgbuild = tpl
+					.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
+					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
+
+				await File.WriteAllTextAsync(dir / "PKGBUILD", pkgbuild);
+			}
+		});
+
+	/// <summary>
+	/// Flatpak manifest.
+	/// </summary>
 	private Target CreateFlatpakManifest => _ => _
 		.Executes(async () =>
 		{

@@ -32,6 +32,7 @@
         "BuildWindows64SelfContained",
         "BuildWindowsFrameworkDependent",
         "Clean",
+        "CreateAurManifest",
         "CreateFlatpakManifest",
         "CreateGitHubRelease",
         "CreateScoopManifest",
