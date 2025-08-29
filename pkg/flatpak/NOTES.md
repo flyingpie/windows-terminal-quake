@@ -12,7 +12,7 @@ Ability to expose unix pipe/tcp socket
 wget https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
 
 ## Generate nuget-sources.json
-python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 24.08 nuget-sources.json ../src/30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj
+python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 24.08 nuget-sources.json ../../src/30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj
 
 ## Install deps from Flathub
 flatpak-builder build-dir --user --install-deps-from=flathub --download-only <app-id>.yml

@@ -25,7 +25,7 @@ public sealed partial class Build
 	/// Linux x64 framework dependent.
 	/// </summary>
 	private Target BuildLinuxFrameworkDependent => _ => _
-		.DependsOn(Clean)
+		.DependsOn(Restore)
 		.Produces(PathToLinux64FrameworkDependentZip)
 		.Produces(PathToLinux64FrameworkDependentZipSha256)
 		.Executes(() =>
@@ -43,10 +43,10 @@ public sealed partial class Build
 		});
 
 	/// <summary>
-	/// Windows x64 self-contained.
+	/// Linux x64 self-contained.
 	/// </summary>
 	private Target BuildLinuxSelfContained => _ => _
-		.DependsOn(Clean)
+		.DependsOn(Restore)
 		.Produces(PathToLinux64SelfContainedZip)
 		.Produces(PathToLinux64SelfContainedZipSha256)
 		.Executes(() =>
@@ -69,7 +69,7 @@ public sealed partial class Build
 	/// Windows x64 framework dependent.
 	/// </summary>
 	private Target BuildWindowsFrameworkDependent => _ => _
-		.DependsOn(Clean)
+		.DependsOn(Restore)
 		.Produces(PathToWin64FrameworkDependentZip)
 		.Produces(PathToWin64FrameworkDependentZipSha256)
 		.Executes(() =>
@@ -92,7 +92,7 @@ public sealed partial class Build
 	/// Windows x64 self-contained.
 	/// </summary>
 	private Target BuildWindows64SelfContained => _ => _
-		.DependsOn(Clean)
+		.DependsOn(Restore)
 		.Produces(PathToWin64SelfContainedZip)
 		.Produces(PathToWin64SelfContainedZipSha256)
 		.Executes(() =>

@@ -11,7 +11,6 @@ echo "Installing WTQ to directory '$WTQ_DIR'..."
 echo "Creating .desktop file at '$WTQ_DESKTOP_FILE'..."
 
 # Download WTQ.
-# mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/download/vNext/linux-x64_self-contained.tar.gz | tar -zx -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
 mkdir -p $WTQ_DIR && curl -L https://github.com/flyingpie/windows-terminal-quake/releases/latest/download/linux-x64_self-contained.tar.gz | tar -zx -C $WTQ_DIR && chmod +x $WTQ_DIR/wtq
 
 # Create .desktop file.
@@ -25,7 +24,7 @@ Version=1.0
 Type=Application
 Categories=
 Terminal=false
-Icon=$WTQ_DIR/assets/icon-v2-64.png
+Icon=$WTQ_DIR/assets/nl.flyingpie.wtq-white.svg
 Comment=Enable Quake-mode for (almost) any app
 StartupNotify=true
 " > $WTQ_DESKTOP_FILE
