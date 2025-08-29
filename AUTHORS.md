@@ -19,6 +19,7 @@ Add names from issues and discussions.
 * [KateReller](https://github.com/KateReller)
 * [Maarten](https://github.com/survivorbat)
 * [Mark Johnson](https://github.com/marxjohnson)
+* [Markus Moser](https://github.com/markusmo3)
 * [metya](https://github.com/metya)
 * [Mike F](https://github.com/mikef-nl)
 * [Morten Lyng](https://github.com/LordLyng)
