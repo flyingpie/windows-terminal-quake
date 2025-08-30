@@ -10,7 +10,7 @@ using PI = Windows.Win32.PInvoke;
 namespace Wtq.Services.Win32v2;
 
 /// <inheritdoc cref="IWin32"/>
-internal class Win32 : IWin32
+public class Win32 : IWin32
 {
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 
