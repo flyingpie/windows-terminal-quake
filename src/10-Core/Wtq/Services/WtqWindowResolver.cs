@@ -33,7 +33,7 @@ public sealed class WtqWindowResolver(
 
 	private async Task<WtqWindow?> FindOrStartAsync(WtqAppOptions opts, bool allowStartNew)
 	{
-		_log.LogInformation("Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})", opts, allowStartNew);
+		_log.Log(allowStartNew ? LogLevel.Information : LogLevel.Debug, "Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})", opts, allowStartNew);
 
 		// Look for an existing window first.
 		var window1 = await FindWindowAsync(opts, CancellationToken.None).NoCtx();

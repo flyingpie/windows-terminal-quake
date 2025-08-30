@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
+using Windows.Win32.UI.WindowsAndMessaging;
 using Wtq.Services.Win32v2.Native;
+using PI = Windows.Win32.PInvoke;
 
 namespace Wtq.Services.Win32v2;
 
@@ -59,6 +61,28 @@ public sealed class Win32WtqWindow : WtqWindow
 	[CanBeMatchedOn]
 	public override string? WindowTitle =>
 		_window.WindowCaption;
+
+	private SHOW_WINDOW_CMD? _windowState;
+
+	public string WindowState
+	{
+		get
+		{
+			if(_windowState == null)
+			{
+				WINDOWPLACEMENT wp = default;
+
+				if(!PI.GetWindowPlacement((Windows.Win32.Foundation.HWND)WindowHandle, ref wp))
+				{
+					var dbg = 2;
+				}
+
+				_windowState = wp.showCmd;
+			}
+
+			return _windowState.ToString();
+		}
+	}
 
 	public override bool Matches(WtqAppOptions opts)
 	{
@@ -225,5 +249,17 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	public override string ToString() => $"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
 
-	public override Task UpdateAsync() => Task.CompletedTask;
+	public override Task UpdateAsync()
+	{
+		// Make sure the window state is set to "NORMAL", as otherwise it may not be receptive to moving and resizing.
+		var state = _win32.GetWindowState(_window.WindowHandle);
+
+		if (state != WindowShowStyle.ShowNormal)
+		{
+			_log.LogWarning("Window '{Window}' state was set to unexpected state '{State}'", this, state);
+			_win32.SetWindowState(_window.WindowHandle, WindowShowStyle.ShowNormal);
+		}
+
+		return Task.CompletedTask;
+	}
 }
