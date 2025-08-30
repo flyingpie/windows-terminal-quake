@@ -95,6 +95,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow,												width: 120),
 		new("Location",			w => ((Win32WtqWindow)w).Rect.Location.ToShortString(),								width: 120),
 		new("Size",				w => ((Win32WtqWindow)w).Rect.Size.ToShortString(),									width: 120),
+		new("State",			w => ((Win32WtqWindow)w).WindowState,												width: 120),
 
 		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId,													width: 120),
 		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId,							isVisible: false,		width: 120),

@@ -10,7 +10,7 @@ using PI = Windows.Win32.PInvoke;
 namespace Wtq.Services.Win32v2;
 
 /// <inheritdoc cref="IWin32"/>
-public class Win32 : IWin32
+internal class Win32 : IWin32
 {
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 
@@ -127,6 +127,19 @@ public class Win32 : IWin32
 	}
 
 	/// <inheritdoc/>
+	public WindowShowStyle GetWindowState(nint windowHandle)
+	{
+		WINDOWPLACEMENT placement = default;
+
+		if (!PI.GetWindowPlacement((HWND)windowHandle, ref placement))
+		{
+			throw new InvalidOperationException($"Could not get windows state for window with handle '{windowHandle}'.", new Win32Exception());
+		}
+
+		return (WindowShowStyle)placement.showCmd;
+	}
+
+	/// <inheritdoc/>
 	public void SetAlwaysOnTop(nint windowHandle, bool isAlwaysOnTop)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -204,6 +217,17 @@ public class Win32 : IWin32
 		else
 		{
 			_log.LogWarning("Synthetic input event workaround failed, window may not have focus");
+		}
+	}
+
+	/// <inheritdoc/>
+	public void SetWindowState(nint windowHandle, WindowShowStyle state)
+	{
+		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
+		if (!PI.ShowWindow((HWND)windowHandle, (Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD)state))
+		{
+			throw new InvalidOperationException($"Could not set window state to '{state}' of window with handle '{windowHandle}'.");
 		}
 	}
 

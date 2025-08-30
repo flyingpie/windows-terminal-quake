@@ -11,12 +11,11 @@
 			"ProcessName": "^WindowsTerminal$"
 		},
 
-		// Explorer
+
 		{
-			"Name": "Explorer",
+			"Name": "KeePassXC",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
-			"FileName": "explorer",
-			"WindowClass": "^CabinetWClass$"
+			"FileName": "KeePassXC1"
 		}
 	],
 

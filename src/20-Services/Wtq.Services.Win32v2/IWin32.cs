@@ -55,6 +55,9 @@ public interface IWin32
 		nint windowHandle,
 		Rectangle rectangle);
 
+	WindowShowStyle GetWindowState(
+		nint windowHandle);
+
 	/// <summary>
 	/// Toggles a window to be always-on-top.
 	/// </summary>
@@ -67,6 +70,10 @@ public interface IWin32
 	/// </summary>
 	void SetForegroundWindow(
 		nint windowHandle);
+
+	void SetWindowState(
+		nint windowHandle,
+		WindowShowStyle state);
 
 	/// <summary>
 	/// Attempts to set the title of a window. Note that this may not always work, depending on what kind of window we're dealing with.
