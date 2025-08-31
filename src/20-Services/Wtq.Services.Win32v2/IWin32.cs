@@ -56,6 +56,12 @@ public interface IWin32
 		Rectangle rectangle);
 
 	/// <summary>
+	/// Returns a window state, describing - for example - whether a window is minimized.
+	/// </summary>
+	WindowShowStyle GetWindowState(
+		nint windowHandle);
+
+	/// <summary>
 	/// Toggles a window to be always-on-top.
 	/// </summary>
 	void SetAlwaysOnTop(
@@ -67,6 +73,13 @@ public interface IWin32
 	/// </summary>
 	void SetForegroundWindow(
 		nint windowHandle);
+
+	/// <summary>
+	/// Sets a window state, for example whether a window is minimized.
+	/// </summary>
+	void SetWindowState(
+		nint windowHandle,
+		WindowShowStyle state);
 
 	/// <summary>
 	/// Attempts to set the title of a window. Note that this may not always work, depending on what kind of window we're dealing with.
