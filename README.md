@@ -11,7 +11,7 @@ For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 # Showcase
 
 ### Windows 10
-With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
+With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd), [Process Hacker](https://processhacker.sourceforge.io/) and [KeePassXC](https://keepassxc.org/).
 
 https://github.com/user-attachments/assets/57372a68-ab69-4cb1-b70d-acf440e5368c
 
@@ -22,10 +22,10 @@ https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
 
 # Installation
 
-- [Scoop](#scoop-windows)
-- [WinGet](#winget-windows)
-- [Arch AUR](#arch-aur-linux)
-- [Flatpak](#flatpak-linux)
+- [Scoop (Windows)](#scoop-windows)
+- [WinGet (Windows)](#winget-windows)
+- [Arch AUR (Linux)](#arch-aur-linux)
+- [Flatpak (Linux)](#flatpak-linux)
 - [Direct Download Script (Linux)](#direct-download-script-linux)
 - [Direct Download (Windows/Linux)](#direct-download-windowslinux)
 - [Build From Source (Windows/Linux)](#build-from-source-windowslinux)
