@@ -55,6 +55,9 @@ public interface IWin32
 		nint windowHandle,
 		Rectangle rectangle);
 
+	/// <summary>
+	/// Returns a window state, describing - for example - whether a window is minimized.
+	/// </summary>
 	WindowShowStyle GetWindowState(
 		nint windowHandle);
 
@@ -71,6 +74,9 @@ public interface IWin32
 	void SetForegroundWindow(
 		nint windowHandle);
 
+	/// <summary>
+	/// Sets a window state, for example whether a window is minimized.
+	/// </summary>
 	void SetWindowState(
 		nint windowHandle,
 		WindowShowStyle state);
