@@ -99,7 +99,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId,													width: 120),
 		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId,							isVisible: false,		width: 120),
-		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle,						isVisible: false,		width: 120),
+		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle,						isVisible: false,		width: 140),
 
 #pragma warning restore SA1027 // Use tabs correctly
 
