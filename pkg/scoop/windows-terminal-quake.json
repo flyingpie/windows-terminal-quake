@@ -1,0 +1,25 @@
+{
+  "version": "v1.6.0",
+  "description": "Companion program for the new Windows Terminal that enables Quake-style drop down",
+  "homepage": "https://github.com/flyingpie/windows-terminal-quake",
+  "bin": "windows-terminal-quake.exe",
+  "shortcuts": [
+    [
+        "windows-terminal-quake.exe",
+        "Windows Terminal Quake"
+    ]
+],
+  "persist": "windows-terminal-quake.json",
+  "checkver": "github",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/flyingpie/windows-terminal-quake/releases/download/v1.6/windows-terminal-quake-1.6.0-2023-10-29_1637.zip",
+      "hash": "ca51f159745bc97764e529aa369ad19d8a7319ceda90bb79203a81f703861788"
+    }
+  },
+  "suggest": {
+    "terminal": [
+      "main/windows-terminal"
+    ]
+  }
+}

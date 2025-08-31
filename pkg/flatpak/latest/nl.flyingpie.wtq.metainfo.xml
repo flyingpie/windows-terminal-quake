@@ -43,40 +43,30 @@
 
 	<screenshots>
 		<screenshot type="default">
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/35095c4cfc8514f196b66ca1798c4f6d86516377/assets/screenshots/welcome-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631/assets/screenshots/welcome-1.png</image>
 			<caption>Welcome page.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/35095c4cfc8514f196b66ca1798c4f6d86516377/assets/screenshots/examples-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631/assets/screenshots/examples-1.png</image>
 			<caption>Some examples of applications that can be used with WTQ.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/35095c4cfc8514f196b66ca1798c4f6d86516377/assets/screenshots/app-settings-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631/assets/screenshots/app-settings-1.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/35095c4cfc8514f196b66ca1798c4f6d86516377/assets/screenshots/app-settings-2.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631/assets/screenshots/app-settings-2.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/35095c4cfc8514f196b66ca1798c4f6d86516377/assets/screenshots/app-settings-3.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/e4b13e3b9dd1f0a821efb1c15566a7ec6ca69631/assets/screenshots/app-settings-3.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 	</screenshots>
 
 	<releases>
-		<release version="2.0.17" date="2025-07-20">
-			<description>
-				<p>Changelog</p>
-				<ul>
-					<li>Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be determinate. Also fixes the "Windows" page in the GUI.</li>
-					<li>Refactor: Windows - Make foreground window tracking a bunch more efficient.</li>
-					<li>Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.</li>
-					<li>Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.</li>
-					<li>Feature: Flatpak release</li>
-				</ul>
-			</description>
-			<url>https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.17</url>
+		<release version="2.0.17.1" date="2025-08-28">
+			<url>https://github.com/flyingpie/windows-terminal-quake/releases/tag/vNext</url>
 		</release>
 	</releases>
 </component>
