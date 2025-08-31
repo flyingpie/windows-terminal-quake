@@ -129,6 +129,10 @@ public class Win32 : IWin32
 	/// <inheritdoc/>
 	public WindowShowStyle GetWindowState(nint windowHandle)
 	{
+		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
+		_log.LogTrace("{MethodName}({WindowHandle})", nameof(GetWindowState), windowHandle);
+
 		WINDOWPLACEMENT placement = default;
 
 		if (!PI.GetWindowPlacement((HWND)windowHandle, ref placement))
@@ -224,6 +228,8 @@ public class Win32 : IWin32
 	public void SetWindowState(nint windowHandle, WindowShowStyle state)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
+		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetWindowState), windowHandle);
 
 		if (!PI.ShowWindow((HWND)windowHandle, (Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD)state))
 		{

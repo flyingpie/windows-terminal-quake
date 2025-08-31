@@ -1,7 +1,5 @@
 using System.Text.RegularExpressions;
-using Windows.Win32.UI.WindowsAndMessaging;
 using Wtq.Services.Win32v2.Native;
-using PI = Windows.Win32.PInvoke;
 
 namespace Wtq.Services.Win32v2;
 
@@ -62,27 +60,8 @@ public sealed class Win32WtqWindow : WtqWindow
 	public override string? WindowTitle =>
 		_window.WindowCaption;
 
-	private SHOW_WINDOW_CMD? _windowState;
-
-	public string WindowState
-	{
-		get
-		{
-			if(_windowState == null)
-			{
-				WINDOWPLACEMENT wp = default;
-
-				if(!PI.GetWindowPlacement((Windows.Win32.Foundation.HWND)WindowHandle, ref wp))
-				{
-					var dbg = 2;
-				}
-
-				_windowState = wp.showCmd;
-			}
-
-			return _windowState.ToString();
-		}
-	}
+	public string WindowState =>
+		_win32.GetWindowState(_window.WindowHandle).ToString();
 
 	public override bool Matches(WtqAppOptions opts)
 	{

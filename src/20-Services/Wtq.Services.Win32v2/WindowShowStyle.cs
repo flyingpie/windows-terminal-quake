@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Wtq.Services.Win32v2;
 
+/// <summary>
+/// https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles.
+/// </summary>
 public enum WindowShowStyle
 {
 	/// <summary>Hides the window and activates another window.</summary>
