@@ -23,7 +23,7 @@
 		<PackageVersion Include="BlazorMonaco" Version="3.3.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="7.3.0"/>
+		<PackageVersion Include="Radzen.Blazor" Version="7.3.3"/>
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8"/>
 		<PackageVersion Include="Scalar.AspNetCore" Version="2.7.0"/>
