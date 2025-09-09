@@ -43,10 +43,15 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Mo
 
 [A command-line installer for Windows.](https://scoop.sh/)
 
-```shell
-scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
+!!! note
+	The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+
+```pwsh
+scoop bucket add extras
+scoop install extras/wtq
 ```
-A shortcut is then available named "**WTQ - Windows Terminal Quake**", or you can just run "**wtq**" from a command line or **Win+R**.
+
+A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
 
 ![](assets/screenshots/win-startmenu-scoop.png)
 /// caption
@@ -54,20 +59,20 @@ Start menu entry after installation.
 ///
 
 Update (just WTQ):
-```shell
-scoop update wtq-latest
+```pwsh
+scoop update wtq
 ```
 
 #### WinGet
 
 [The Windows package manager.](https://github.com/microsoft/winget-cli)
 
-```shell
+```pwsh
 winget install windows-terminal-quake
 ```
 You can then call "**wtq**" from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called "**WTQ - Main Window**".
+After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![](assets/screenshots/win-startmenu-winget.png)
 /// caption
@@ -75,15 +80,14 @@ Start menu entry after installation.
 ///
 
 Update (just WTQ):
-```shell
+```pwsh
 winget upgrade windows-terminal-quake
 ```
-
 
 !!! note "Where's WTQ Installed?"
 	You can run
 
-	```shell
+	```pwsh
 	winget --info
 	```
 
@@ -101,28 +105,123 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 - **Self-Contained**<br/>Slightly larger, but does not require dependencies to be installed (i.e. .Net).
 - **Framework-Dependent**<br/>Smaller, but requires .Net 9 to be installed.
 
+#### Build From Source
+
+!!! note "Dependencies"
+	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+
+You can also clone the repo and run the **Install** build target, which will build and install WTQ: ```~/AppData/Local/wtq```.
+
+```pwsh
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.ps1 Install
+```
+
+Uninstall:
+
+```pwsh
+./build.ps1 Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```pwsh
+./build.ps1 --help
+```
+
 ### :fontawesome-brands-linux: Linux
+
+#### Arch AUR
+Multiple versions are published to the Arch User Repository (AUR):
+
+###### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+- Latest stable release, pre-built;
+- Downloads from GitHub Releases;
+- Quicker to install and minimal dependencies.
+
+```bash
+yay -S wtq-bin
+```
+or
+```bash
+paru -S wtq-bin
+```
+
+###### [wtq](https://aur.archlinux.org/packages/wtq)
+- Latest stable release, built from source;
+- Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
+
+```bash
+yay -S wtq
+```
+or
+```bash
+paru -S wtq
+```
+
+#### Flatpak
+
+Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
+
+As an alternative, you can use the Flatpak remote hosted on the [sister repository](https://github.com/flyingpie/flatpak).
+It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for building the Flatpak itself, and everything is hosted on GitHub Pages.
+
+The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
+
+###### Per-User
+```bash
+flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak --user install nl.flyingpie.wtq
+```
+
+###### System-Wide
+```bash
+flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak install nl.flyingpie.wtq
+```
 
 #### Manual
 
 See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a ```wtq.desktop``` file.
 
 As a 1-liner:
-```shell
+```bash
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
 ```
 
 And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
-```shell
+```bash
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
 ```
 
 !!! note "Settings File Remains"
 	The WTQ settings are not removed by this script. These are usually located at ```~/.config/wtq```, also see [Settings](#settings).
 
-#### Flatpak
+#### Build From Source
 
-!!! danger "TODO"
+!!! note "Dependencies"
+	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+	- Requires webkit2gtk-4.1 to be installed
+
+You can also clone the repo and run the **Install** build target, which will build and install WTQ at ```~/.local/share/wtq``` (respects XDG spec).
+
+```bash
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.sh Install
+```
+
+Uninstall:
+```bash
+./build.sh Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```bash
+./build.sh --help
+```
 
 ## :material-lightbulb: App examples
 

@@ -544,6 +544,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#tray-icon-color-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tray icon (color) style
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -695,6 +704,15 @@
   <a href="#process-name" class="md-nav__link">
     <span class="md-ellipsis">
       Process name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main window
     </span>
   </a>
   
@@ -1322,6 +1340,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#tray-icon-color-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tray icon (color) style
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1473,6 +1500,15 @@
   <a href="#process-name" class="md-nav__link">
     <span class="md-ellipsis">
       Process name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main window
     </span>
   </a>
   
@@ -2036,6 +2072,24 @@ but still have a way back should things go awry.</p>
     "ShowUiOnStart": "False",
     // ...
 }</code></pre>
+<h5 id="tray-icon-color-style">Tray icon (color) style<a class="headerlink" href="#tray-icon-color-style" title="Permanent link">&para;</a></h5>
+<p>The tray icon (color) style (dark/light).</p>
+<p>Defaults to <code>Auto</code></p>
+<ul>
+<li>
+<p><strong>Auto</strong><br/>Attempt to detect the OS theme and use the appropriate style based on that.</p>
+</li>
+<li>
+<p><strong>Dark</strong><br/>Dark icon, works best on lighter themes.</p>
+</li>
+<li>
+<p><strong>Light</strong><br/>Light icon, works best on darker themes.</p>
+</li>
+</ul>
+<pre class="highlight"><code class="language-json">{
+    "TrayIconStyle": "Auto",
+    // ...
+}</code></pre>
 <h4 id="animation">Animation<a class="headerlink" href="#animation" title="Permanent link">&para;</a></h4>
 <h5 id="animation-target-fps">Animation target FPS<a class="headerlink" href="#animation-target-fps" title="Permanent link">&para;</a></h5>
 <p>How many frames per second the animation should be.</p>
@@ -2146,6 +2200,34 @@ example, with filename <strong>wt</strong>, and process name <strong>WindowsTerm
     "Filename": "wt",
     "ProcessName": "^WindowsTerminal$"
   }
+}</code></pre>
+<h5 id="main-window">Main window<a class="headerlink" href="#main-window" title="Permanent link">&para;</a></h5>
+<p>(Windows only) Matches only "main" windows; the initial window a process spawns.</p>
+<p>When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
+that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+When the other (non-main) windows cannot be easily differentiated from the main window (for example through
+the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.</p>
+<p>A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.</p>
+
+<p>Defaults to <code>Either</code></p>
+<ul>
+<li>
+<p><strong>MainWindowOnly</strong><br/>Match main windows only.</p>
+</li>
+<li>
+<p><strong>NonMainWindowOnly</strong><br/>Match non-main windows only.</p>
+</li>
+<li>
+<p><strong>Either</strong><br/>Match main- and non-main windows.</p>
+</li>
+</ul>
+<pre class="highlight"><code class="language-json">{
+    "Apps": [
+        {
+            "MainWindow": "Either"
+            // ...
+        }
+    ]
 }</code></pre>
 <h5 id="window-class">Window class<a class="headerlink" href="#window-class" title="Permanent link">&para;</a></h5>
 <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
