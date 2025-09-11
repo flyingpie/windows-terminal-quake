@@ -1,42 +1,45 @@
-# Setup python virtual env
+# Docs
+
+## Setup python virtual env
+
 https://python.land/virtual-environments/virtualenv
 
-```shell
+```bash
 py -m venv py3
 ```
 
-# Activate virtual env
+## Activate virtual env
 
 ```ps1
 py3\Scripts\Activate.ps1
 ```
 
-```shell
+```bash
 source py3/bin/activate
 ```
 
-# Install dependencies
+## Install dependencies
 
 Under project folder:
 
-```shell
+```bash
 pip install -r requirements.txt
 ```
 
-# Run dev server
+## Run dev server
 
-```shell
+```bash
 mkdocs serve
 ```
 
-# Build docs
+## Build docs
 
-```shell
+```bash
 mkdocs build
 ```
 
-# Upgrade Pip packages
+## Upgrade Pip packages
 
-```shell
+```bash
 cat requirements.txt | cut -f1 -d= | xargs pip install -U
 ```
