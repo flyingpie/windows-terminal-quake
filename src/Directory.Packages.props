@@ -12,7 +12,7 @@
 		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
 		<PackageVersion Include="SharpHook" Version="7.0.1"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
-		<PackageVersion Include="System.Resources.Extensions" Version="9.0.8"/>
+		<PackageVersion Include="System.Resources.Extensions" Version="9.0.9"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
 		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
 		<!-- Analyzers -->
