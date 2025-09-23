@@ -11,7 +11,8 @@ Add names from issues and discussions.
 
 # Contributors
 * [Adam](https://github.com/avere001)
-* [Alex](https://github.com/aleybe)
+* [Alex (aleybe)](https://github.com/aleybe)
+* [Alex (SkeLLLa)](https://github.com/SkeLLLa)
 * [Christian Käser](https://github.com/dfyx)
 * [Douglas Lara](https://github.com/douglara)
 * [Jacky](https://github.com/possum-enjoyer)
