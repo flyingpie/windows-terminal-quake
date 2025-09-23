@@ -2038,11 +2038,11 @@ flatpak --user install nl.flyingpie.wtq</code></pre>
 <pre class="highlight"><code class="language-bash">flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak install nl.flyingpie.wtq</code></pre>
 <h4 id="manual_1">Manual<a class="headerlink" href="#manual_1" title="Permanent link">&para;</a></h4>
-<p>See the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh">~/linux/install-or-upgrade-wtq.sh script</a> that downloads the latest version of WTQ, installs it to <code>~/.local/share/wtq</code>, and creates a <code>wtq.desktop</code> file.</p>
+<p>See the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh">/linux/install-or-upgrade-wtq.sh script</a> that downloads the latest version of WTQ, installs it to <code>~/.local/share/wtq</code>, and creates a <strong>wtq.desktop</strong> file.</p>
 <p>As a 1-liner:
-<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)</code></pre></p>
-<p>And the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh">~/linux/uninstall-wtq.sh uninstall script</a>.
-<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)</code></pre></p>
+<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)</code></pre></p>
+<p>And the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh">/linux/uninstall-wtq.sh uninstall script</a>.
+<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)</code></pre></p>
 <div class="admonition note">
 <p class="admonition-title">Settings File Remains</p>
 <p>The WTQ settings are not removed by this script. These are usually located at <code>~/.config/wtq</code>, also see <a href="#settings">Settings</a>.</p>
