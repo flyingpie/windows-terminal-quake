@@ -124,9 +124,10 @@
 
 	<ItemGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
 		<PackageReference Include="coverlet.collector"/>
+		<PackageReference Include="Microsoft.NET.Test.Sdk"/>
 		<PackageReference Include="Moq"/>
 		<PackageReference Include="MSTest"/>
-		<PackageReference Include="SystemTextJson.JsonDiffPatch.MSTest"/>
+		<PackageReference Include="SystemTextJson.JsonDiffPatch"/>
 	</ItemGroup>
 
 	<ItemGroup>

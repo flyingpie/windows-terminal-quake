@@ -5,10 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Wtq\Wtq.csproj"/>
 	</ItemGroup>
 </Project>
