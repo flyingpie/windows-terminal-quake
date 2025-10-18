@@ -1,10 +1,9 @@
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization.Metadata;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization.Metadata;
 
-namespace Wtq.Core.UnitTest;
+namespace Wtq.Core.UnitTest.Utils;
 
 /// <summary>
 /// Provides a set of static methods to verify that JSON objects can meet criteria in tests.
