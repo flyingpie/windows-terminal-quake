@@ -1,3 +1,5 @@
+using Wtq.Core.UnitTest.Utils;
+
 namespace Wtq.Core.UnitTest.Services;
 
 [TestClass]
