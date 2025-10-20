@@ -16,6 +16,13 @@
 				"WTQ_CONFIG_FILE": "~/.config/wtq/wtq.jsonc",
 				"__WTQ_LOG_LEVEL": "VERBOSE"
 			}
+		},
+		"CLI": {
+			"commandName": "Project",
+			"commandLineArgs": "apps list",
+			"environmentVariables": {
+				"__WTQ_LOG_LEVEL": "VERBOSE"
+			}
 		}
 	}
 }

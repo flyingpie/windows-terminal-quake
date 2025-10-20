@@ -1,7 +1,10 @@
-using DeclarativeCommandLine.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.IO.Pipes;
 using System.Net.Sockets;
+using Wtq.Configuration;
+using Wtq.Exceptions;
+using Wtq.Services.CLI.Commands;
 using Wtq.Services.CLI.Commands.Apps;
 
 namespace Wtq.Services.CLI;
@@ -13,14 +16,28 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
-			.AddDeclarativeCommandLine()
-			.AddAllCommandsFromAssemblies<AppsCommand>()
+			.AddScoped<AppsCommand>()
+			.AddScoped<CloseCommand>()
+			.AddScoped<InfoCommand>()
+			.AddScoped<ListCommand>()
+			.AddScoped<OpenCommand>()
 			.AddSingleton<HttpClient>(p =>
 			{
-				var handler = new SocketsHttpHandler()
+				var opts = p.GetRequiredService<IOptions<WtqOptions>>().Value;
+				var platform = p.GetRequiredService<IPlatformService>();
+				var urls = opts.Api.Urls ?? platform.DefaultApiUrls;
+				var url = new Uri(urls.First());
+
+				var handler = new SocketsHttpHandler();
+
+				if (url.Host.Equals("pipe", StringComparison.OrdinalIgnoreCase))
 				{
-					ConnectCallback = Os.IsWindows ? WindowsNamedPipe() : UnixSocket(),
-				};
+					handler.ConnectCallback = WindowsNamedPipe();
+				}
+				else if (url.Host.Equals("unix", StringComparison.OrdinalIgnoreCase))
+				{
+					handler.ConnectCallback = UnixSocket(url.AbsolutePath);
+				}
 
 				return new HttpClient(handler)
 				{
@@ -29,10 +46,11 @@ public static class ServiceCollectionExtensions
 			});
 	}
 
-	private static Func<SocketsHttpConnectionContext, CancellationToken, ValueTask<Stream>> UnixSocket() =>
-		async (ctx, ct) =>
+	private static Func<SocketsHttpConnectionContext, CancellationToken, ValueTask<Stream>> UnixSocket(string socketPath) =>
+		async (_, ct) =>
 		{
-			var socketPath = "/tmp/wtq.sock";
+			var log = Log.For(nameof(UnixSocket));
+			log.LogDebug("Connecting to Unix socket at '{SocketPath}'", socketPath);
 
 			// Define the type of socket we want, i.e. a UDS stream-oriented socket
 			var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
@@ -41,7 +59,7 @@ public static class ServiceCollectionExtensions
 			var endpoint = new UnixDomainSocketEndPoint(socketPath);
 
 			// Connect to the server!
-			await socket.ConnectAsync(endpoint, ct);
+			await socket.ConnectAsync(endpoint, ct).NoCtx();
 
 			// Wrap the socket in a NetworkStream and return it
 			// Setting ownsSocket: true means the NetworkStream will
@@ -50,7 +68,7 @@ public static class ServiceCollectionExtensions
 		};
 
 	private static Func<SocketsHttpConnectionContext, CancellationToken, ValueTask<Stream>> WindowsNamedPipe() =>
-		async (ctx, ct) =>
+		async (_, ct) =>
 		{
 			var stream = new NamedPipeClientStream(
 				serverName: ".",

@@ -10,5 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="DeclarativeCommandLine"/>
+		<PackageReference Include="DeclarativeCommandLine.Generator"/>
 	</ItemGroup>
 </Project>

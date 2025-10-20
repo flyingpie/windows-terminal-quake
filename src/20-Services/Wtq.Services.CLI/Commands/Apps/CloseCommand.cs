@@ -1,10 +1,12 @@
 namespace Wtq.Services.CLI.Commands.Apps;
 
-[Command<AppsCommand>]
+[Command(Parent = typeof(AppsCommand))]
 public class CloseCommand(HttpClient client) : IAsyncCommand
 {
-	public async Task ExecuteAsync()
+	public async Task ExecuteAsync(CancellationToken ct = default)
 	{
-		var r = await client.PostAsync("/apps/close", new StringContent(""));
+		using var content = new StringContent(string.Empty);
+
+		_ = await client.PostAsync("/apps/close", content, ct).NoCtx();
 	}
 }

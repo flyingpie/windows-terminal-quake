@@ -1,12 +1,12 @@
 namespace Wtq.Services.CLI.Commands.Apps;
 
-[Command<AppsCommand>]
+[Command(Parent = typeof(AppsCommand))]
 public class ListCommand(HttpClient client) : IAsyncCommand
 {
-	public async Task ExecuteAsync()
+	public async Task ExecuteAsync(CancellationToken ct = default)
 	{
-		var r = await client.GetStringAsync("/apps");
+		var response = await client.GetStringAsync(new Uri("/apps", UriKind.Relative), ct).NoCtx();
 
-		Console.WriteLine($"LIST APP {r}");
+		Console.WriteLine($"LIST APP {response}");
 	}
 }

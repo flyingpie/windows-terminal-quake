@@ -4,7 +4,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0"/>
-		<PackageVersion Include="DeclarativeCommandLine" Version="1.0.0"/>
+		<PackageVersion Include="DeclarativeCommandLine" Version="2.0.3"/>
+		<PackageVersion Include="DeclarativeCommandLine.Generator" Version="2.0.3"/>
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.10"/>
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.217"/>
