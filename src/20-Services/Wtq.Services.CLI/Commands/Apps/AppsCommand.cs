@@ -1,6 +1,6 @@
 namespace Wtq.Services.CLI.Commands.Apps;
 
-[Command]
+[Command(Parent = typeof(AppRootCommand))]
 public class AppsCommand
 {
 }

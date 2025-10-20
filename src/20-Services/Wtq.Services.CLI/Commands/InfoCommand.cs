@@ -1,6 +1,6 @@
 namespace Wtq.Services.CLI.Commands;
 
-[Command]
+[Command(Parent = typeof(AppRootCommand))]
 public class InfoCommand(IPlatformService platform) : ICommand
 {
 	public void Execute()
