@@ -6,7 +6,7 @@ For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
-![Preview](./assets/logo-01.webp)
+![Preview](./assets/logo-02.webp)
 
 # Showcase
 
