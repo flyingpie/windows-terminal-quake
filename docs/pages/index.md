@@ -13,14 +13,14 @@ See [Installation](#installation) to get started.
 
 ---
 
-Here's an example where WTQ runs on **Windows 10**, toggling [Windows Terminal](), [Double Commander](), [Process Hacker]() and [KeePassXC]().
+Here's an example where WTQ runs on **Windows 11**, toggling [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
 <video controls loop>
-<source src="/assets/video/wtq-win10.mp4" />
+<source src="/assets/video/wtq-win11.mp4" />
 </video>
 
-And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Monitor]() and [KeePassXC]().
+And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
 <video controls loop>
-<source src="/assets/video/wtq-kde6.mp4" />
+<source src="/assets/video/wtq-kde6-neon.mp4" />
 </video>
 
 !!! note "Why "Quake" Style"
