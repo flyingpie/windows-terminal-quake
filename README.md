@@ -11,14 +11,16 @@ For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 # Showcase
 
 ### Windows 11
-With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd), [Process Hacker](https://processhacker.sourceforge.io/) and [KeePassXC](https://keepassxc.org/).
 
-https://github.com/user-attachments/assets/57372a68-ab69-4cb1-b70d-acf440e5368c
+With [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
+
+https://github.com/user-attachments/assets/2246539c-711b-44c4-b295-f019513240b1
 
 ### KDE Plasma 6
-With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
 
-https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
+With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
+
+https://github.com/user-attachments/assets/0bbdb71c-be6d-48e1-9df8-2c03f6b978cb
 
 # Installation
 
