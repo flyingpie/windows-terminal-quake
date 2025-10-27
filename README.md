@@ -6,26 +6,28 @@ For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
-![Preview](./assets/logo-01.webp)
+![Preview](./assets/logo-02.webp)
 
 # Showcase
 
-### Windows 10
-With [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
+### Windows 11
 
-https://github.com/user-attachments/assets/57372a68-ab69-4cb1-b70d-acf440e5368c
+With [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
 
-### CachyOS - KDE Plasma 6
-With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
+https://github.com/user-attachments/assets/2246539c-711b-44c4-b295-f019513240b1
 
-https://github.com/user-attachments/assets/c1b386fc-9026-48d9-87e8-081a26b0ff45
+### KDE Plasma 6
+
+With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
+
+https://github.com/user-attachments/assets/0bbdb71c-be6d-48e1-9df8-2c03f6b978cb
 
 # Installation
 
-- [Scoop](#scoop-windows)
-- [WinGet](#winget-windows)
-- [Arch AUR](#arch-aur-linux)
-- [Flatpak](#flatpak-linux)
+- [Scoop (Windows)](#scoop-windows)
+- [WinGet (Windows)](#winget-windows)
+- [Arch AUR (Linux)](#arch-aur-linux)
+- [Flatpak (Linux)](#flatpak-linux)
 - [Direct Download Script (Linux)](#direct-download-script-linux)
 - [Direct Download (Windows/Linux)](#direct-download-windowslinux)
 - [Build From Source (Windows/Linux)](#build-from-source-windowslinux)
@@ -50,7 +52,7 @@ winget install windows-terminal-quake
 ```
 You can then call ```wtq``` from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called **WTQ - Main Window**.
+After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
@@ -107,16 +109,16 @@ flatpak install nl.flyingpie.wtq
 > [!NOTE]
 > Requires webkit2gtk-4.1 to be installed
 
-See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
+See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)
 ```
 
-And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh).
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)
 ```
 
 > [!NOTE]
@@ -138,8 +140,8 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 > [Linux Only] Requires webkit2gtk-4.1 to be installed
 
 You can also clone the repo and run the "Install" build target, which will build and install WTQ:
-- Windows: To ```~/AppData/Local/Programs/wtq```
-- Linux: To ```~/.local/share/wtq (respects XDG spec)```
+- Windows: At ```~/AppData/Local/wtq```
+- Linux: At ```~/.local/share/wtq (respects XDG spec)```
 
 ```shell
 git clone https://github.com/flyingpie/windows-terminal-quake.git

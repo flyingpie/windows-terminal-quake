@@ -51,6 +51,12 @@ public sealed partial class Build : NukeBuild
 	private AbsolutePath ArtifactsDirectory =>
 		OutputDirectory / "artifacts";
 
+	private AbsolutePath PkgDirectory =>
+		RootDirectory / "pkg";
+
+	private AbsolutePath NupkgsDirectory =>
+		OutputDirectory / "nupkgs";
+
 	private AbsolutePath StagingDirectory =>
 		OutputDirectory / "staging";
 
@@ -126,6 +132,21 @@ public sealed partial class Build : NukeBuild
 		.Executes(() => OutputDirectory.CreateOrCleanDirectory());
 
 	/// <summary>
+	/// Restore NuGet packages.<br/>
+	/// We use a separate task for this, as we need to restore to a custom directory, so we can build a Flatpak manifest.
+	/// </summary>
+	private Target Restore => _ => _
+		.Description("Restore NuGet packages.")
+		.DependsOn(Clean)
+		.Executes(() =>
+		{
+			DotNetRestore(_ => _
+				.SetProjectFile(Solution.Path)
+				.SetPackageDirectory(NupkgsDirectory)
+			);
+		});
+
+	/// <summary>
 	/// Tests.<br/>
 	/// Note that tests run across the entire solution, including Windows projects.<br/>
 	/// <br/>
@@ -138,7 +159,7 @@ public sealed partial class Build : NukeBuild
 	/// </summary>
 	private Target RunTests => _ => _
 		.Description("Run all unit tests.")
-		.DependsOn(Clean)
+		.DependsOn(Restore)
 		.Executes(() =>
 		{
 			DotNetTest(_ => _
@@ -149,17 +170,18 @@ public sealed partial class Build : NukeBuild
 
 	private Target BuildAll => _ => _
 		.Description("Build everything.")
-		.DependsOn(Clean)
 		.DependsOn(RunTests)
 		.DependsOn(BuildLinux)
 		.DependsOn(BuildWindows)
+		.Triggers(CreateAurManifest)
+		.Triggers(CreateFlatpakManifest)
+		.Triggers(CreateScoopManifest)
+		.Triggers(CreateWinGetManifest)
 		.Executes();
 
 	private Target Publish => _ => _
 		.Description("Build everything and publish to GitHub.")
 		.DependsOn(BuildAll)
-		.Triggers(CreateScoopManifest)
-		.Triggers(CreateWinGetManifest)
 		.Triggers(CreateGitHubRelease)
 		.Executes();
 }

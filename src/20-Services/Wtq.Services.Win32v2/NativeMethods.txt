@@ -3,6 +3,7 @@ EnumWindows
 GetClassName
 GetForegroundWindow
 GetWindowLong
+GetWindowPlacement
 GetWindowRect
 GetWindowText
 GetWindowThreadProcessId
@@ -18,6 +19,7 @@ SetLayeredWindowAttributes
 SetWindowLong
 SetWindowPos
 SetWindowText
+ShowWindow
 VK_MENU
 WM_NULL
 WM_PAINT

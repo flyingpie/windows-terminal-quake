@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.10.0.schema.json
+PackageIdentifier: flyingpie.windows-terminal-quake
+PackageVersion: $PACKAGE_VERSION$
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+- RelativeFilePath: wtq.exe
+  PortableCommandAlias: wtq
+Commands:
+- wtq
+ArchiveBinariesDependOnPath: true
+ReleaseDate: $RELEASE_DATE$
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/$GH_RELEASE_VERSION$/win-x64_self-contained.zip
+  InstallerSha256: $SELF_CONTAINED_SHA256$
+ManifestType: installer
+ManifestVersion: 1.10.0

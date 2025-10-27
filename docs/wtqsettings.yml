@@ -76,6 +76,28 @@ WtqSettings:
         HasExample: false
         Example: ""
         Remarks: ""
+      - DisplayName: Tray icon (color) style
+        SettingName: TrayIconStyle
+        Description: The tray icon (color) style (dark/light).
+        IsGlobal: true
+        IsApp: false
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Auto
+        ExampleValue: Auto
+        EnumValues:
+        - Value: Auto
+          DisplayName: Auto
+          Description: Attempt to detect the OS theme and use the appropriate style based on that.
+        - Value: Dark
+          DisplayName: Dark
+          Description: Dark icon, works best on lighter themes.
+        - Value: Light
+          DisplayName: Light
+          Description: Light icon, works best on darker themes.
+        HasExample: false
+        Example: ""
+        Remarks: ""
     - Name: Animation
       Settings:
       - DisplayName: Animation target FPS
@@ -254,6 +276,39 @@ WtqSettings:
               "ProcessName": "^WindowsTerminal$"
             }
           }
+        Remarks: ""
+      - DisplayName: Main window
+        SettingName: MainWindow
+        Description: >-
+          <p>(Windows only) Matches only "main" windows; the initial window a process spawns.</p>
+
+          <p>When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
+
+          that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+
+          When the other (non-main) windows cannot be easily differentiated from the main window (for example through
+
+          the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.</p>
+
+          <p>A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.</p>
+        IsGlobal: false
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Either
+        ExampleValue: Either
+        EnumValues:
+        - Value: MainWindowOnly
+          DisplayName: Main window only
+          Description: Match main windows only.
+        - Value: NonMainWindowOnly
+          DisplayName: Non-main window only
+          Description: Match non-main windows only.
+        - Value: Either
+          DisplayName: Either
+          Description: Match main- and non-main windows.
+        HasExample: false
+        Example: ""
         Remarks: ""
       - DisplayName: Window class
         SettingName: WindowClass
