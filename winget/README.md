@@ -13,7 +13,7 @@
 - Copy ```~/winget/2.0.8/``` to ```~/manifests/f/flyingpie/windows-terminal-quake/2.0.8/```
 
 ## Test Release
-- Get [SandboxTest.ps1](https://github.com/microsoft/winget-pkgs/blob/master/Tools/SandboxTest.ps1).
+- Get [SandboxTest.ps1](https://raw.githubusercontent.com/microsoft/winget-pkgs/refs/heads/master/Tools/SandboxTest.ps1).
 - Test in sandbox:
 ```ps1
 ./SandboxTest.ps1 -Manifest winget-pkgs\manifests\f\flyingpie\windows-terminal-quake\2.0.8\
