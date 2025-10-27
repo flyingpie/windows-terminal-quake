@@ -35,24 +35,24 @@
 
 	public BadgeStyle LogLevelToBadgeStyle(LogEventLevel level) => level switch
 	{
-		LogEventLevel.Fatal => BadgeStyle.Danger,
-		LogEventLevel.Error => BadgeStyle.Danger,
-		LogEventLevel.Warning => BadgeStyle.Warning,
-		LogEventLevel.Information => BadgeStyle.Primary,
-		LogEventLevel.Debug => BadgeStyle.Info,
-		LogEventLevel.Verbose => BadgeStyle.Light,
-		_ => BadgeStyle.Secondary
+		LogEventLevel.Fatal			=> BadgeStyle.Danger,
+		LogEventLevel.Error			=> BadgeStyle.Danger,
+		LogEventLevel.Warning		=> BadgeStyle.Warning,
+		LogEventLevel.Information	=> BadgeStyle.Primary,
+		LogEventLevel.Debug			=> BadgeStyle.Info,
+		LogEventLevel.Verbose		=> BadgeStyle.Light,
+		_							=> BadgeStyle.Secondary
 	};
 
 	public ButtonStyle LogLevelToButtonStyle(LogEventLevel level) => level switch
 	{
-		LogEventLevel.Fatal => ButtonStyle.Danger,
-		LogEventLevel.Error => ButtonStyle.Danger,
-		LogEventLevel.Warning => ButtonStyle.Warning,
-		LogEventLevel.Information => ButtonStyle.Primary,
-		LogEventLevel.Debug => ButtonStyle.Info,
-		LogEventLevel.Verbose => ButtonStyle.Light,
-		_ => ButtonStyle.Secondary
+		LogEventLevel.Fatal			=> ButtonStyle.Danger,
+		LogEventLevel.Error			=> ButtonStyle.Danger,
+		LogEventLevel.Warning		=> ButtonStyle.Warning,
+		LogEventLevel.Information	=> ButtonStyle.Primary,
+		LogEventLevel.Debug			=> ButtonStyle.Info,
+		LogEventLevel.Verbose		=> ButtonStyle.Light,
+		_							=> ButtonStyle.Secondary
 	};
 
 	protected override void OnInitialized()

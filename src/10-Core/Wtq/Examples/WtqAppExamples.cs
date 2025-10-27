@@ -610,7 +610,8 @@ public static class WtqAppExamples
 				{
 					Name = Flavors.Native,
 					Os = [OSPlatform.Windows,],
-					FileName = "procexp64",
+					FileName = "procexp",
+					ProcessName = "procexp64",
 				},
 			],
 		},
