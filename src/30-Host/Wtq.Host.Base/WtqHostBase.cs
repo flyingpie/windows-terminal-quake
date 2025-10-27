@@ -1,10 +1,8 @@
-using DeclarativeCommandLine.Extensions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Wtq.Services;
 using Wtq.Services.API;
 using Wtq.Services.CLI;
+using Wtq.Services.CLI.Commands;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
@@ -13,6 +11,8 @@ public abstract class WtqHostBase
 {
 	public async Task RunAsync(string[] args)
 	{
+		Guard.Against.Null(args);
+
 		var platform = CreatePlatformService();
 
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
@@ -35,6 +35,27 @@ public abstract class WtqHostBase
 		// Implemented by OS-specific implementations.
 	}
 
+	/// <summary>
+	/// This is called whenever the app is being run in CLI mode (i.e. with command line arguments).
+	/// </summary>
+	private static async Task<int> RunCliAsync(IPlatformService platform, string[] args)
+	{
+		var p = new ServiceCollection()
+			.AddSingleton(platform)
+			.AddConfiguration(platform, args)
+			.AddCli()
+			.BuildServiceProvider();
+
+		return await new CommandBuilder()
+			.Build(t => p.GetRequiredService(t))
+			.Parse(args)
+			.InvokeAsync()
+			.NoCtx();
+	}
+
+	/// <summary>
+	/// This is called when the app is being run in GUI mode (i.e. without command line arguments).
+	/// </summary>
 	private void RunApp(IPlatformService platform, string[] args)
 	{
 		var log = Log.For<WtqHostBase>();
@@ -47,49 +68,11 @@ public abstract class WtqHostBase
 
 		try
 		{
-			// Find path to settings files (wtq.jsonc or similar).
-			var pathToWtqConf = platform.PathToWtqConf;
-
-			// Write wtq.schema.json.
-			WtqSchema.WriteFor(pathToWtqConf);
-
-			// Load config file.
-			var config = new ConfigurationBuilder()
-				.SetBasePath(Path.GetDirectoryName(pathToWtqConf)!)
-				.AddEnvironmentVariables()
-				.AddJsonFile(f =>
-				{
-					f.ReloadOnChange = true;
-					f.Optional = false;
-					f.Path = Path.GetFileName(pathToWtqConf);
-					f.OnLoadException = x =>
-					{
-						log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
-					};
-
-					if (platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
-					{
-						log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
-
-						f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
-						{
-							UseActivePolling = true,
-							UsePollingFileWatcher = true,
-						};
-					}
-				})
-				.AddCommandLine(args)
-				.Build();
-
 			WtqUIHostBuilder.Run(s =>
 			{
 				s
-					.AddOptionsWithValidateOnStart<WtqOptions>()
-					.PostConfigure(o => o.OnPostConfigure())
-					.Bind(config);
-
-				s
 					.AddSingleton(platform)
+					.AddConfiguration(platform, args)
 					.AddApi()
 					.AddUI()
 					.AddWtqCore();
@@ -102,12 +85,4 @@ public abstract class WtqHostBase
 			log.LogError(ex, "Error running application: {Message}", ex.Message);
 		}
 	}
-
-	private async Task RunCliAsync(IPlatformService platform, string[] args) =>
-		await new ServiceCollection()
-			.AddSingleton(platform)
-			.AddCli()
-			.BuildServiceProvider()
-			.RunCliAsync(args)
-			.NoCtx();
 }

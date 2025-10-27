@@ -1,13 +1,15 @@
 namespace Wtq.Services.CLI.Commands.Apps;
 
-[Command<AppsCommand>]
+[Command(Parent = typeof(AppsCommand))]
 public class OpenCommand(HttpClient client) : IAsyncCommand
 {
-	[Option(IsRequired = true)]
+	[Option(Required = true)]
 	public string App { get; set; } = null!;
 
-	public async Task ExecuteAsync()
+	public async Task ExecuteAsync(CancellationToken ct = default)
 	{
-		var r = await client.PostAsync($"/apps/open?appName={App}", new StringContent(""));
+		using var content = new StringContent(string.Empty);
+
+		_ = await client.PostAsync(new Uri($"/apps/open?appName={App}", UriKind.Relative), content, ct).NoCtx();
 	}
 }

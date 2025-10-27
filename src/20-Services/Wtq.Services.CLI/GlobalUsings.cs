@@ -1,6 +1,5 @@
 global using Ardalis.GuardClauses;
 global using DeclarativeCommandLine;
-global using DeclarativeCommandLine.Attributes;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using System;
