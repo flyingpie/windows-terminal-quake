@@ -20,7 +20,7 @@
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.15.0.120848"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- GUI -->
-		<PackageVersion Include="BlazorMonaco" Version="3.3.0"/>
+		<PackageVersion Include="BlazorMonaco" Version="3.4.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
 		<PackageVersion Include="Radzen.Blazor" Version="8.1.0"/>
