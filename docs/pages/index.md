@@ -44,7 +44,7 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/we
 [A command-line installer for Windows.](https://scoop.sh/)
 
 !!! note
-	The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+	The WTQ Scoop package has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
 
 ```pwsh
 scoop bucket add extras
