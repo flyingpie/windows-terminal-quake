@@ -10,12 +10,15 @@ public class WtqAppExampleFlavor
 		{
 			Name = example.Title,
 			FileName = FileName,
+			ProcessName = ProcessName,
 		};
 	}
 
 	public required string Name { get; init; }
 
 	public string? FileName { get; set; }
+
+	public string? ProcessName { get; set; }
 
 	/// <summary>
 	/// What operating systems the app runs on. Used for indication and filtering in the UI.
