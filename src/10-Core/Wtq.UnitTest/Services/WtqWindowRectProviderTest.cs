@@ -35,11 +35,10 @@ public class WtqWindowRectProviderTest
 	[DataRow(	Center,		50,		50,		0,			Never,		0,		0,		1920,		1080,			560,	0,		800,	600)] // False
 	public async Task Test1(
 		HorizontalAlign hAlign, int hCov, int vCov, int vOffs, Resizing resize,		// Alignment
-		int sX, int sY, int sW, int sH,											// Screen
-		int wX, int wY, int wW, int wH											// Expected window
+		int sX, int sY, int sW, int sH,												// Screen
+		int wX, int wY, int wW, int wH												// Expected window
 	)
 	{
-		// _opts.Setup(a => a.GetScreenRectAsync()).ReturnsAsync(null);
 		var currWindowRect = new Rectangle(0, 0, 800, 600);
 
 		_opts.HorizontalAlign = hAlign;
@@ -58,8 +57,6 @@ public class WtqWindowRectProviderTest
 		Assert.AreEqual(wY, res.Y);
 		Assert.AreEqual(wW, res.Width);
 		Assert.AreEqual(wH, res.Height);
-
-		var dbg = 2;
 	}
 }
 

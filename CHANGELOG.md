@@ -8,7 +8,7 @@
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
 - Bugfix: Updated CLI to load settings and fetch listening endpoint.
 - Bugfix: When a window gets minimized, WTQ could not longer toggle it.
-- Feature: "Resize" option (defaults to "true"), can be used to disable resizing the app's window.
+- Feature: "Resize" option (defaults to "Always"), can be used to disable resizing the app's window (disables alignment settings).
 
 ## [v2.0.17] / 2025-08-27
 - Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:

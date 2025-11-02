@@ -83,7 +83,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(Resizing.Always)]
 	[Display(GroupName = Gn.Behavior, Name = "Resize app window")]
-	[JsonPropertyOrder(4000)]
+	[JsonPropertyOrder(4001)]
 	public Resizing? Resize { get; set; }
 
 	/// <summary>
@@ -91,7 +91,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4001)]
+	[JsonPropertyOrder(4002)]
 	public float? HorizontalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -99,7 +99,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(Wc.HorizontalAlign.Center)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal align")]
-	[JsonPropertyOrder(4002)]
+	[JsonPropertyOrder(4003)]
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
@@ -107,7 +107,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4003)]
+	[JsonPropertyOrder(4004)]
 	public float? VerticalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -116,7 +116,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[DefaultValue(0f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical offset", Prompt = "In pixels")]
 	[Range(0, 1000)]
-	[JsonPropertyOrder(4004)]
+	[JsonPropertyOrder(4005)]
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>
