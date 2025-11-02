@@ -181,6 +181,15 @@ flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak install nl.flyingpie.wtq
 ```
 
+These permissions are enabled by default:
+
+```bash
+--socket=wayland                            # (required) So we can run the GUI
+--talk-name=org.kde.KWin                    # (required) So we can talk to KWin for querying windows
+--talk-name=org.kde.StatusNotifierWatcher   # (required) So we can create a tray icon
+--talk-name=org.freedesktop.Flatpak         # (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")
+```
+
 #### Manual
 
 See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
