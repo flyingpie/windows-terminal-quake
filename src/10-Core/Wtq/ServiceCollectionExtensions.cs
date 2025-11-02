@@ -42,6 +42,8 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
 			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
+			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
+			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 			.AddSingleton<TrayIconUtil>()
 

@@ -4,6 +4,11 @@
 
 ## [vNext]
 
+## [v2.0.18] / 2025-xx-xx
+- Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
+- Bugfix: Updated CLI to load settings and fetch listening endpoint.
+- Bugfix: When a window gets minimized, WTQ could not longer toggle it.
+
 ## [v2.0.17] / 2025-08-27
 - Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:
 ```jsonc

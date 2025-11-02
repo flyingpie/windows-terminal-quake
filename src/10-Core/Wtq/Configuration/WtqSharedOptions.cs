@@ -4,6 +4,12 @@ using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
+public enum Sizing
+{
+	Always,
+	Never,
+}
+
 /// <summary>
 /// Options that are available both in global- and per-app options.
 /// </summary>
@@ -70,6 +76,21 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#endregion
 
 	#region 4000 - Position
+
+	/// <summary>
+	/// Whether to resize the app window when toggling onto the screen, to apply other settings
+	/// like <see cref="HorizontalScreenCoverage"/>.<br/>
+	/// <br/>
+	/// By setting this to "false", the app window size will be maintained, effectively disabling some other settings
+	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
+	/// <br/>
+	/// This is useful for cases when an app's size heavily impacts its contents, including when resizing a
+	/// window clears its contents (seems to be the most common with Electron apps).
+	/// </summary>
+	[DefaultValue(true)]
+	[Display(GroupName = Gn.Behavior, Name = "Resize app window")]
+	[JsonPropertyOrder(4000)]
+	public bool? Resize { get; set; }
 
 	/// <summary>
 	/// Horizontal screen coverage, as a percentage.
