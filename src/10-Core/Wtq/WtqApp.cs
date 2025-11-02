@@ -12,8 +12,9 @@ namespace Wtq;
 /// - It can start a process, if configured as such;
 /// - It has methods to do actions like open/close the window, set opacity, etc.
 /// </summary>
-public class WtqApp : IAsyncDisposable
+public sealed class WtqApp : IAsyncDisposable
 {
+	private readonly Guid _id = Guid.NewGuid();
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
 
 	private readonly ILogger _log;
@@ -145,7 +146,7 @@ public class WtqApp : IAsyncDisposable
 		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 	}
 
-	public virtual async Task<Rectangle> GetWindowRectAsync()
+	public async Task<Rectangle> GetWindowRectAsync()
 	{
 		if (!IsAttached)
 		{

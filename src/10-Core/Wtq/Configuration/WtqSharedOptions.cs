@@ -4,7 +4,7 @@ using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
-public enum Sizing
+public enum Resizing
 {
 	Always,
 	Never,
@@ -90,7 +90,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[DefaultValue(true)]
 	[Display(GroupName = Gn.Behavior, Name = "Resize app window")]
 	[JsonPropertyOrder(4000)]
-	public bool? Resize { get; set; }
+	public Reizing? Resize { get; set; }
 
 	/// <summary>
 	/// Horizontal screen coverage, as a percentage.
