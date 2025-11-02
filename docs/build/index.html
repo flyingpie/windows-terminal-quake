@@ -2055,6 +2055,11 @@ flatpak --user install nl.flyingpie.wtq</code></pre>
 <h6 id="system-wide">System-Wide<a class="headerlink" href="#system-wide" title="Permanent link">&para;</a></h6>
 <pre class="highlight"><code class="language-bash">flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak install nl.flyingpie.wtq</code></pre>
+<p>These permissions are enabled by default:</p>
+<pre class="highlight"><code class="language-bash">--socket=wayland                            # (required) So we can run the GUI
+--talk-name=org.kde.KWin                    # (required) So we can talk to KWin for querying windows
+--talk-name=org.kde.StatusNotifierWatcher   # (required) So we can create a tray icon
+--talk-name=org.freedesktop.Flatpak         # (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")</code></pre>
 <h4 id="manual_1">Manual<a class="headerlink" href="#manual_1" title="Permanent link">&para;</a></h4>
 <p>See the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh">/linux/install-or-upgrade-wtq.sh script</a> that downloads the latest version of WTQ, installs it to <code>~/.local/share/wtq</code>, and creates a <strong>wtq.desktop</strong> file.</p>
 <p>As a 1-liner:
@@ -2521,15 +2526,16 @@ opt-out in the other program.</p>
 like HorizontalScreenCoverage.</p>
 <p>By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
 (like the aforementioned HorizontalScreenCoverage).</p>
-<p>This is useful for cases when an app's size heavily impacts its contents, including when resizing a
-window clears its contents (seems to be the most common with Electron apps).</p>
+<p>This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
+window clears its contents (seems to be most common with Electron apps).</p>
 <p>Defaults to <code>Always</code></p>
 <ul>
 <li>
 <p><strong>Always</strong><br/>Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).</p>
 </li>
 <li>
-<p><strong>Never</strong><br/>Never resize the app window, ignoring aligment settings (like HorizontalScreenCoverage).</p>
+<p><strong>Never</strong><br/>Never resize the app window, ignoring alignment settings (like HorizontalScreenCoverage).
+Useful for apps that don't respond well to resizes.</p>
 </li>
 </ul>
 <pre class="highlight"><code class="language-json">{

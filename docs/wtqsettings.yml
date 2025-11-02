@@ -481,9 +481,9 @@ WtqSettings:
           (like the aforementioned HorizontalScreenCoverage).
 
 
-          This is useful for cases when an app's size heavily impacts its contents, including when resizing a
+          This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
 
-          window clears its contents (seems to be the most common with Electron apps).
+          window clears its contents (seems to be most common with Electron apps).
         IsGlobal: true
         IsApp: true
         IsEnum: true
@@ -496,7 +496,10 @@ WtqSettings:
           Description: Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).
         - Value: Never
           DisplayName: Never
-          Description: Never resize the app window, ignoring aligment settings (like HorizontalScreenCoverage).
+          Description: >-
+            Never resize the app window, ignoring alignment settings (like HorizontalScreenCoverage).
+
+            Useful for apps that don't respond well to resizes.
         HasExample: false
         Example: ""
         Remarks: ""
