@@ -79,10 +79,10 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
 	/// <br/>
 	/// This is useful for cases when an app's size heavily impacts its contents, including when resizing a
-	/// window clears its contents (seems to be the most common with Electron apps).
+	/// window clears its contents (seems to be most common with Electron apps).
 	/// </summary>
 	[DefaultValue(Resizing.Always)]
-	[Display(GroupName = Gn.Behavior, Name = "Resize app window")]
+	[Display(GroupName = Gn.Position, Name = "Resize app window")]
 	[JsonPropertyOrder(4001)]
 	public Resizing? Resize { get; set; }
 

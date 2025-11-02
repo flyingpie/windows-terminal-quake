@@ -468,6 +468,38 @@ WtqSettings:
         Remarks: ""
     - Name: Position
       Settings:
+      - DisplayName: Resize app window
+        SettingName: Resize
+        Description: >-
+          Whether to resize the app window when toggling onto the screen, to apply other settings
+
+          like HorizontalScreenCoverage.
+
+
+          By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+
+          (like the aforementioned HorizontalScreenCoverage).
+
+
+          This is useful for cases when an app's size heavily impacts its contents, including when resizing a
+
+          window clears its contents (seems to be the most common with Electron apps).
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Always
+        ExampleValue: Always
+        EnumValues:
+        - Value: Always
+          DisplayName: Always
+          Description: Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).
+        - Value: Never
+          DisplayName: Never
+          Description: Never resize the app window, ignoring aligment settings (like HorizontalScreenCoverage).
+        HasExample: false
+        Example: ""
+        Remarks: ""
       - DisplayName: Horizontal screen coverage
         SettingName: HorizontalScreenCoverage
         Description: Horizontal screen coverage, as a percentage.

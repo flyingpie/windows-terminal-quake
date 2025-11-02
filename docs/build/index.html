@@ -893,6 +893,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#resize-app-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resize app window
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#horizontal-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
       Horizontal screen coverage
@@ -1716,6 +1725,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#resize-app-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resize app window
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#horizontal-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
       Horizontal screen coverage
@@ -1949,7 +1967,7 @@ Fit that with Quake-style toggling, and you get <strong>"Windows Terminal Quake"
 <p><a href="https://scoop.sh/">A command-line installer for Windows.</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The WTQ Scoop packages has moved to the Scoop <a href="https://github.com/ScoopInstaller/Extras">extras bucket</a>.</p>
+<p>The WTQ Scoop package has moved to the Scoop <a href="https://github.com/ScoopInstaller/Extras">extras bucket</a>.</p>
 </div>
 <pre class="highlight"><code class="language-pwsh">scoop bucket add extras
 scoop install extras/wtq</code></pre>
@@ -2498,6 +2516,33 @@ opt-out in the other program.</p>
     ]
 }</code></pre>
 <h4 id="position">Position<a class="headerlink" href="#position" title="Permanent link">&para;</a></h4>
+<h5 id="resize-app-window">Resize app window<a class="headerlink" href="#resize-app-window" title="Permanent link">&para;</a></h5>
+<p>Whether to resize the app window when toggling onto the screen, to apply other settings
+like HorizontalScreenCoverage.</p>
+<p>By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+(like the aforementioned HorizontalScreenCoverage).</p>
+<p>This is useful for cases when an app's size heavily impacts its contents, including when resizing a
+window clears its contents (seems to be the most common with Electron apps).</p>
+<p>Defaults to <code>Always</code></p>
+<ul>
+<li>
+<p><strong>Always</strong><br/>Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).</p>
+</li>
+<li>
+<p><strong>Never</strong><br/>Never resize the app window, ignoring aligment settings (like HorizontalScreenCoverage).</p>
+</li>
+</ul>
+<pre class="highlight"><code class="language-json">{
+    // Globally:
+    "Resize": "Always",
+
+    // For one app only:
+    "Apps": [
+        {
+            "Resize": "Always"
+        }
+    ]
+}</code></pre>
 <h5 id="horizontal-screen-coverage">Horizontal screen coverage<a class="headerlink" href="#horizontal-screen-coverage" title="Permanent link">&para;</a></h5>
 <p>Horizontal screen coverage, as a percentage.</p>
 <p>Defaults to <code>95</code></p>
