@@ -5,6 +5,7 @@ public enum Resizing
 	/// <summary>
 	/// Used for detecting serialization issues.
 	/// </summary>
+	[DisplayFlags(IsVisible = false)] // Don't show this in the GUI, it's purely for internal use.
 	None = 0,
 
 	/// <summary>

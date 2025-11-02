@@ -159,6 +159,9 @@
 		<RadzenFieldset Text="Position">
 			<RadzenStack Gap="1rem">
 
+				<!-- Resize -->
+				<WtqSettingRadio					TProperty="Resizing"				Get="() => AppOpts.Resize"						Set="v => AppOpts.Resize = v"						Default="() => GlobalOpts.Resize" />
+
 				<!-- Horizontal screen coverage -->
 				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.HorizontalScreenCoverage"	Set="v => AppOpts.HorizontalScreenCoverage = v"		Default="() => GlobalOpts.HorizontalScreenCoverage" />
 
