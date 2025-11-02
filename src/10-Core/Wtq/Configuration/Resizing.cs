@@ -17,7 +17,8 @@ public enum Resizing
 	Always,
 
 	/// <summary>
-	/// Never resize the app window, ignoring aligment settings (like <see cref="WtqSharedOptions.HorizontalScreenCoverage"/>).
+	/// Never resize the app window, ignoring alignment settings (like <see cref="WtqSharedOptions.HorizontalScreenCoverage"/>).<br/>
+	/// Useful for apps that don't respond well to resizes.
 	/// </summary>
 	Never,
 }
