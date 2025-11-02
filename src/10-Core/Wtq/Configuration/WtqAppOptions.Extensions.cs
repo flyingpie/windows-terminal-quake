@@ -122,6 +122,14 @@ public static class WtqAppOptionsExtensions
 		return OptionUtils.Cascade<PreferMonitor>(o => o.PreferMonitor, app, app.Global);
 	}
 
+	/// <inheritdoc cref="WtqSharedOptions.Resize"/>
+	public static Resizing GetResize(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<Resizing>(o => o.Resize, app, app.Global);
+	}
+
 	/// <inheritdoc cref="WtqSharedOptions.TaskbarIconVisibility"/>
 	public static TaskbarIconVisibility GetTaskbarIconVisibility(this WtqAppOptions app)
 	{

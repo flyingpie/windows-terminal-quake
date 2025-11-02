@@ -84,4 +84,39 @@ public class WtqAppOptionsExtensionsTest
 	}
 
 	#endregion
+
+	#region Resize
+
+	[TestMethod]
+	public void GetResize_Default()
+	{
+		Assert.AreEqual(Resizing.Always, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_Global()
+	{
+		_gbl.Resize = Resizing.Never;
+
+		Assert.AreEqual(Resizing.Never, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_App()
+	{
+		_app.Resize = Resizing.Never;
+
+		Assert.AreEqual(Resizing.Never, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_GlobalAndApp()
+	{
+		_gbl.Resize = Resizing.Never;
+		_app.Resize = Resizing.Always;
+
+		Assert.AreEqual(Resizing.Always, _app.GetResize());
+	}
+
+	#endregion
 }

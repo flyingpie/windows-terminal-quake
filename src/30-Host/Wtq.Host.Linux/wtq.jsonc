@@ -9,11 +9,12 @@
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "konsole"
 		},
-
+		
 		{
 			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
-			"FileName": "dolphin"
+			"FileName": "dolphin",
+			"Resize": "Never"
 		},
 
 		{

@@ -72,11 +72,26 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 4000 - Position
 
 	/// <summary>
+	/// Whether to resize the app window when toggling onto the screen, to apply other settings
+	/// like <see cref="HorizontalScreenCoverage"/>.<br/>
+	/// <br/>
+	/// By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
+	/// <br/>
+	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
+	/// window clears its contents (seems to be most common with Electron apps).
+	/// </summary>
+	[DefaultValue(Resizing.Always)]
+	[Display(GroupName = Gn.Position, Name = "Resize app window")]
+	[JsonPropertyOrder(4001)]
+	public Resizing? Resize { get; set; }
+
+	/// <summary>
 	/// Horizontal screen coverage, as a percentage.
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4001)]
+	[JsonPropertyOrder(4002)]
 	public float? HorizontalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -84,7 +99,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(Wc.HorizontalAlign.Center)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal align")]
-	[JsonPropertyOrder(4002)]
+	[JsonPropertyOrder(4003)]
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
@@ -92,7 +107,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4003)]
+	[JsonPropertyOrder(4004)]
 	public float? VerticalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -101,7 +116,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[DefaultValue(0f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical offset", Prompt = "In pixels")]
 	[Range(0, 1000)]
-	[JsonPropertyOrder(4004)]
+	[JsonPropertyOrder(4005)]
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>
