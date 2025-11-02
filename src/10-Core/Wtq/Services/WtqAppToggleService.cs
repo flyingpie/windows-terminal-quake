@@ -2,6 +2,7 @@ namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppToggleService"/>
 public class WtqAppToggleService(
+	IWtqTargetScreenRectProvider targetScreenRectProvider,
 	IWtqWindowRectProvider windowRectProvider,
 	IWtqTween tween)
 	: IWtqAppToggleService
@@ -15,6 +16,7 @@ public class WtqAppToggleService(
 	private static readonly Point BehindScreenLocation = new(0, -30_000);
 
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
+	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider = Guard.Against.Null(targetScreenRectProvider);
 	private readonly IWtqWindowRectProvider _windowRectProvider = Guard.Against.Null(windowRectProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
 
@@ -26,13 +28,13 @@ public class WtqAppToggleService(
 		// Animation duration.
 		var durationMs = GetDurationMs(app, mods);
 
-		// Get the screen- and window rectangles.
-		var currScreenRect = await app.GetScreenRectAsync().NoCtx();
-		var currWindowRect = await app.GetWindowRectAsync().NoCtx();
+		// Get rect of the screen where the app needs to go to.
+		var screenRectDst = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
+		var windowRectCur = await app.GetWindowRectAsync().NoCtx();
 
 		// Source & target rects.
-		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(currScreenRect, currWindowRect, app.Options).NoCtx();
-		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(currScreenRect, currWindowRect, app.Options).NoCtx();
+		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
+		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
