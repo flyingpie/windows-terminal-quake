@@ -1,6 +1,6 @@
-using static Wtq.Configuration.OffScreenLocation;
 using Gn = Wtq.WtqConstants.Settings.GroupNames;
 using Wc = Wtq.Configuration;
+using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 

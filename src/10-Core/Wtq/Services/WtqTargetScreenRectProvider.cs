@@ -1,13 +1,21 @@
 namespace Wtq.Services;
 
+public interface IWtqTargetScreenRectProvider
+{
+	/// <summary>
+	/// Returns the rectangle of the screen that should be used to toggle the <paramref name="opts"/> to.
+	/// </summary>
+	Task<Rectangle> GetTargetScreenRectAsync(
+		WtqAppOptions opts
+	);
+}
+
 public class WtqTargetScreenRectProvider(IWtqScreenInfoProvider screenInfoProvider) : IWtqTargetScreenRectProvider
 {
 	private readonly ILogger _log = Log.For<WtqTargetScreenRectProvider>();
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 
-	/// <summary>
-	/// Returns the rectangle of the screen that should be used to toggle the <paramref name="opts"/> to.
-	/// </summary>
+	/// <inheritdoc/>
 	public async Task<Rectangle> GetTargetScreenRectAsync(WtqAppOptions opts)
 	{
 		Guard.Against.Null(opts);
