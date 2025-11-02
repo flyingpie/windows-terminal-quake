@@ -5,7 +5,7 @@ namespace Wtq.Services;
 public interface IWtqWindowRectProvider
 {
 	Task<Rectangle> GetOnScreenRectAsync(
-		Rectangle screenRectSrc,
+		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
 		WtqAppOptions opts
 	);
@@ -32,7 +32,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 	/// Get the position rect a window should be when on-screen.
 	/// </summary>
 	public async Task<Rectangle> GetOnScreenRectAsync(
-		Rectangle screenRectSrc,
+		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
 		WtqAppOptions opts
 	)
@@ -43,8 +43,8 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		var wnd = opts.GetResize() == Resizing.Always
 			? new Rectangle()
 			{
-				Width = (int)(screenRectSrc.Width * opts.GetHorizontalScreenCoverageIndex()),
-				Height = (int)(screenRectSrc.Height * opts.GetVerticalScreenCoverageIndex()),
+				Width = (int)(screenRectDst.Width * opts.GetHorizontalScreenCoverageIndex()),
+				Height = (int)(screenRectDst.Height * opts.GetVerticalScreenCoverageIndex()),
 			}
 			: new Rectangle()
 			{
@@ -56,13 +56,13 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		var x = opts.GetHorizontalAlign() switch
 		{
 			// Left
-			HorizontalAlign.Left => screenRectSrc.X,
+			HorizontalAlign.Left => screenRectDst.X,
 
 			// Right
-			HorizontalAlign.Right => screenRectSrc.X + (screenRectSrc.Width - wnd.Width),
+			HorizontalAlign.Right => screenRectDst.X + (screenRectDst.Width - wnd.Width),
 
 			// Center
-			_ => screenRectSrc.X + (int)Math.Ceiling((screenRectSrc.Width / 2f) - (wnd.Width / 2f)),
+			_ => screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 		};
 
 		return new Rectangle()
@@ -71,7 +71,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 			X = x,
 
 			// Y, top of the screen + offset
-			Y = screenRectSrc.Y + (int)opts.GetVerticalOffset(),
+			Y = screenRectDst.Y + (int)opts.GetVerticalOffset(),
 
 			// Horizontal Width, based on the width of the screen and HorizontalScreenCoverage
 			Width = wnd.Width,

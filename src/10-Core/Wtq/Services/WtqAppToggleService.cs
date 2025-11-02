@@ -33,8 +33,8 @@ public class WtqAppToggleService(
 		var windowRectCur = await app.GetWindowRectAsync().NoCtx();
 
 		// Source & target rects.
-		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
 		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
+		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options).NoCtx();
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 

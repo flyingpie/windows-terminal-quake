@@ -48,7 +48,7 @@ public class WtqWindowRectProviderTest
 		_opts.Resize = resize;
 
 		var res = await _wndRectProvider.GetOnScreenRectAsync(
-			screenRectSrc: new(sX, sY, sW, sH),
+			screenRectDst: new(sX, sY, sW, sH),
 			currWindowRect,
 			opts: _opts
 		);
