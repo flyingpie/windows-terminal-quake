@@ -29,11 +29,32 @@ public class WtqAppToggleService(
 		var durationMs = GetDurationMs(app, mods);
 
 		// Get rect of the screen where the app needs to go to.
+		// Usually the screen with the cursor.
 		var screenRectDst = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
+
+		// Get current window rect.
+		// Used to grab the current size, if we're not allowed to resize the window.
 		var windowRectCur = await app.GetWindowRectAsync().NoCtx();
 
 		// Source & target rects.
+		// Note that "current" and "source" rects are often the same, but _can_ be different.
+		//
+		// For example, when a window has toggled off of a different screen than where we're toggling it onto.
+		// In such cases, the "current" rect could be above screen 1, where the "source" rect could be above screen 2.
+		//
+		// If we'd just move from wherever the window was left when toggled off last, the window could move from above
+		// the first screen, to across the second, diagonally.
+		//
+		// Another case where these could be different, is when the available screens have changed since
+		// last toggle (i.e. when a screen has been (dis)connected).
+		//
+		// By explicitly determining a new, and possibly different "source" rect, we get more consistent and
+		// predictable animations.
+		//
+		// The "dest" rect, where we want the app to move to.
 		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
+
+		// The "source" rect, where the window is coming from.
 		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options).NoCtx();
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
@@ -76,6 +97,7 @@ public class WtqAppToggleService(
 		var durationMs = GetDurationMs(app, mods);
 
 		// Get the screen rectangle.
+		// Used to find free space we can move the window to.
 		var screenRectSrc = await app.GetScreenRectAsync().NoCtx();
 
 		// Source & target rects.

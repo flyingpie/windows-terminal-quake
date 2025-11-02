@@ -78,7 +78,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
 	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
 	/// <br/>
-	/// This is useful for cases when an app's size heavily impacts its contents, including when resizing a
+	/// This is useful for cases when resizing an app's window heavily impacts its contents, including when resizing a
 	/// window clears its contents (seems to be most common with Electron apps).
 	/// </summary>
 	[DefaultValue(Resizing.Always)]

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using static Wtq.Configuration.HorizontalAlign;
 using static Wtq.Configuration.Resizing;
 
@@ -33,7 +32,7 @@ public class WtqWindowRectProviderTest
 	// Resize
 	[DataRow(	Center,		50,		50,		0,			Always,		0,		0,		1920,		1080,			480,	0,		960,	540)] // True
 	[DataRow(	Center,		50,		50,		0,			Never,		0,		0,		1920,		1080,			560,	0,		800,	600)] // False
-	public async Task Test1(
+	public async Task GetOnScreenRectAsyncTest(
 		HorizontalAlign hAlign, int hCov, int vCov, int vOffs, Resizing resize,		// Alignment
 		int sX, int sY, int sW, int sH,												// Screen
 		int wX, int wY, int wW, int wH												// Expected window
@@ -58,24 +57,31 @@ public class WtqWindowRectProviderTest
 		Assert.AreEqual(wW, res.Width);
 		Assert.AreEqual(wH, res.Height);
 	}
-}
-
-[TestClass]
-public class WtqTargetScreenRectProviderTest
-{
-	private readonly Mock<IWtqScreenInfoProvider> _screenInfoProvider = new(MockBehavior.Strict);
-
-	private WtqTargetScreenRectProvider _provider = null!;
-
-	[TestInitialize]
-	public void Setup()
-	{
-		_provider = new(_screenInfoProvider.Object);
-	}
 
 	[TestMethod]
-	public async Task Test1()
+	//			off-screen-locs,											scr[]										wnd[]
+	[DataRow(	new[] { OffScreenLocation.Above },							0,		0,		1920,		1080,			0,		-700,	800,	600)]
+	public async Task GetOffScreenRectAsyncTest(
+		OffScreenLocation[] locs,
+		int sX, int sY, int sW, int sH,												// Screen
+		int wX, int wY, int wW, int wH												// Expected window
+	)
 	{
+		var currWindowRect = new Rectangle(0, 0, 800, 600);
 
+		_opts.OffScreenLocations = locs;
+
+		_screenInfoProvider.Setup(m => m.GetScreenRectsAsync()).ReturnsAsync([new(sX, sY, sW, sH)]);
+
+		var res = await _wndRectProvider.GetOffScreenRectAsync(
+			screenRectSrc: new(sX, sY, sW, sH),
+			currWindowRect,
+			opts: _opts
+		);
+
+		Assert.AreEqual(wX, res.Value.X);
+		Assert.AreEqual(wY, res.Value.Y);
+		Assert.AreEqual(wW, res.Value.Width);
+		Assert.AreEqual(wH, res.Value.Height);
 	}
 }

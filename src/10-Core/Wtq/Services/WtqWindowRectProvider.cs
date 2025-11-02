@@ -2,20 +2,36 @@ using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Services;
 
+/// <summary>
+/// Calculates rectangles (with both a location and a size) where app windows can be moved to,
+/// when toggling on- or off the screen.
+/// </summary>
 public interface IWtqWindowRectProvider
 {
+	/// <summary>
+	/// Calculates a rectangle that an app window can be moved to, when toggling ON.
+	/// </summary>
 	Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
 		WtqAppOptions opts
 	);
 
+	/// <summary>
+	/// Calculates a rectangle that an app window can be moved to, when toggling OFF.<br/>
+	/// Returns null if no free location could be found.
+	/// </summary>
 	Task<Rectangle?> GetOffScreenRectAsync(
 		Rectangle screenRectSrc,
 		Rectangle windowRectSrc,
 		WtqAppOptions opts
 	);
 
+	/// <summary>
+	/// Calculates rectangles around the specified screen, where an app window could be moved to.<br/>
+	/// The rectangles are returned in the order as specified by <see cref="WtqSharedOptions.OffScreenLocations"/>.<br/>
+	/// Note that this doesn't yet take into account other screens, these may overlap with.
+	/// </summary>
 	Rectangle[] GetOffScreenRects(
 		Rectangle screenRect,
 		Rectangle windowRect,
@@ -23,14 +39,12 @@ public interface IWtqWindowRectProvider
 	);
 }
 
+/// <inheritdoc cref="IWtqWindowRectProvider"/>
 public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : IWtqWindowRectProvider
 {
-	private readonly ILogger _log = Log.For<WtqWindowRectProvider>();
 	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 
-	/// <summary>
-	/// Get the position rect a window should be when on-screen.
-	/// </summary>
+	/// <inheritdoc/>
 	public async Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
@@ -81,10 +95,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		};
 	}
 
-	/// <summary>
-	/// Get the rect a window should move to when off-screen.<br/>
-	/// Returns null if no free location could be found.
-	/// </summary>
+	/// <inheritdoc/>
 	public async Task<Rectangle?> GetOffScreenRectAsync(
 		Rectangle screenRectSrc,
 		Rectangle windowRectSrc,
@@ -106,10 +117,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		return !targetRect.IsEmpty ? targetRect : null;
 	}
 
-	/// <summary>
-	/// Returns a set of rectangles, each a possible off-screen position for the window to move to.<br/>
-	/// The list is ordered by <see cref="OffScreenLocation"/>, as specified in the settings.
-	/// </summary>
+	/// <inheritdoc/>
 	public Rectangle[] GetOffScreenRects(
 		Rectangle screenRect,
 		Rectangle windowRect,

@@ -1,5 +1,8 @@
 namespace Wtq.Configuration;
 
+/// <summary>
+/// Whether- and when to resize app windows.
+/// </summary>
 public enum Resizing
 {
 	/// <summary>
