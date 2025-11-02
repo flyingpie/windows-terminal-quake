@@ -14,7 +14,6 @@ namespace Wtq;
 /// </summary>
 public sealed class WtqApp : IAsyncDisposable
 {
-	private readonly Guid _id = Guid.NewGuid();
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
 
 	private readonly ILogger _log;
@@ -111,6 +110,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// Reset app props.
 		await ResetPropsAsync().NoCtx();
+
+		_updateLock.Dispose();
 	}
 
 	/// <summary>
@@ -232,7 +233,7 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Make sure this method always runs non-concurrently.
-		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
+		using var l = await _updateLock.WaitAsync(Cancel.After(TimeSpan.FromSeconds(15))).ConfigureAwait(false);
 
 		// Ask window to update its state first.
 		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
@@ -395,12 +396,8 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		// Get the screen with the cursor, to move the window to.
 		var scr = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
-		if (scr == null || scr.IsEmpty) // TODO: This can be null in the future.
-		{
-			scr = new(Point.Empty, WtqConstants.Sizes._1920x1080);
-		}
 
-		// Calculate a convenient target locatino & size for the window.
+		// Calculate a convenient target location & size for the window.
 		var dstSize = scr.Size.MultiplyF(.9f);
 		var dstLoc = dstSize.CenterInRectangle(scr);
 
