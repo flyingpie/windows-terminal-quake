@@ -120,6 +120,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task<Rectangle> GetScreenRectAsync()
 	{
+		if (!IsAttached)
+		{
+			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
+		}
+
 		_log.LogDebug("Looking for current screen rect for app {App}", this);
 
 		// Get all screen rects.
@@ -170,6 +175,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		if (!IsOptionsValid())
+		{
+			return false;
+		}
+
 		_log.LogInformation("Opening app '{App}'", this);
 
 		if (IsOpen)
@@ -216,6 +226,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
+		if (!IsOptionsValid())
+		{
+			return;
+		}
+
 		// Make sure this method always runs non-concurrently.
 		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
 
@@ -265,6 +280,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc)
 	{
+		if (!IsAttached)
+		{
+			return;
+		}
+
 		// Fetch current window location.
 		var rect = await window.GetWindowRectAsync().NoCtx();
 
@@ -391,5 +411,16 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// ...then resize, since in some cases (at least on KWin), we can only resize visible windows it seems.
 		await ResizeWindowAsync(dstSize).NoCtx();
+	}
+
+	private bool IsOptionsValid()
+	{
+		if (Options.IsValid)
+		{
+			return true;
+		}
+
+		_log.LogWarning("Options for app {App} not valid. Please check settings, and/or the GUI for suggestions", this);
+		return false;
 	}
 }

@@ -79,7 +79,8 @@ public class KWinWtqWindow(
 		// If no other criteria are set, match on the "FileName" setting.
 		if (!hasMatchers)
 		{
-			return MatchesFileName(opts);
+			// If no "FileName" criterion has been set either, don't match anything.
+			return !string.IsNullOrWhiteSpace(opts.FileName) && MatchesFileName(opts);
 		}
 
 		// Process name
