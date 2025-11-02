@@ -230,13 +230,20 @@ public sealed class Win32WtqWindow : WtqWindow
 
 	public override Task UpdateAsync()
 	{
-		// Make sure the window state is set to "NORMAL", as otherwise it may not be receptive to moving and resizing.
-		var state = _win32.GetWindowState(_window.WindowHandle);
-
-		if (state != WindowShowStyle.ShowNormal)
+		try
 		{
-			_log.LogWarning("Window '{Window}' state was set to unexpected state '{State}'", this, state);
-			_win32.SetWindowState(_window.WindowHandle, WindowShowStyle.ShowNormal);
+			// Make sure the window state is set to "NORMAL", as otherwise it may not be receptive to moving and resizing.
+			var state = _win32.GetWindowState(_window.WindowHandle);
+
+			if (state != WindowShowStyle.ShowNormal)
+			{
+				_log.LogWarning("Window '{Window}' state was set to unexpected state '{State}'", this, state);
+				_win32.SetWindowState(_window.WindowHandle, WindowShowStyle.ShowNormal);
+			}
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not get window state for window '{Window}': {Message}", this, ex.Message);
 		}
 
 		return Task.CompletedTask;
