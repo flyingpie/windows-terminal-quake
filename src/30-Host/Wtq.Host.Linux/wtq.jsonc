@@ -8,7 +8,7 @@
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "konsole",
-			"Resize": false
+			"Resize": "Never"
 		},
 
 		{

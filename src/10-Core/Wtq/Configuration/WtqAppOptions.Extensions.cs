@@ -123,11 +123,11 @@ public static class WtqAppOptionsExtensions
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.Resize"/>
-	public static bool GetResize(this WtqAppOptions app)
+	public static Resizing GetResize(this WtqAppOptions app)
 	{
 		Guard.Against.Null(app);
 
-		return OptionUtils.Cascade<bool>(o => o.Resize, app, app.Global);
+		return OptionUtils.Cascade<Resizing>(o => o.Resize, app, app.Global);
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.TaskbarIconVisibility"/>

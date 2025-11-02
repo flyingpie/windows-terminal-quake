@@ -40,7 +40,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		Guard.Against.Null(opts);
 
 		// Calculate app window size.
-		var wnd = opts.GetResize()
+		var wnd = opts.GetResize() == Resizing.Always
 			? new Rectangle()
 			{
 				Width = (int)(screenRectSrc.Width * opts.GetHorizontalScreenCoverageIndex()),

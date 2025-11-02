@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using static Wtq.Configuration.HorizontalAlign;
+using static Wtq.Configuration.Resizing;
 
 namespace Wtq.Core.UnitTest.Services;
 
@@ -20,20 +21,20 @@ public class WtqWindowRectProviderTest
 	[TestMethod]
 	// v-align
 	//			h-align,	h-cov,	v-cov,	v-offset,	resize,		scr[]										wnd[]
-	[DataRow(	Center,		50,		50,		0,			true,		0,		0,		1920,		1080,			480,	0,		960,	540)]
+	[DataRow(	Center,		50,		50,		0,			Always,		0,		0,		1920,		1080,			480,	0,		960,	540)]
 	// Left - Center - Right
-	[DataRow(	Left,		50,		50,		0,			true,		0,		0,		1920,		1080,			0,		0,		960,	540)] // Left
-	[DataRow(	Center,		50,		50,		0,			true,		0,		0,		1920,		1080,			480,	0,		960,	540)] // Center
-	[DataRow(	Right,		50,		50,		0,			true,		0,		0,		1920,		1080,			960,	0,		960,	540)] // Right
+	[DataRow(	Left,		50,		50,		0,			Always,		0,		0,		1920,		1080,			0,		0,		960,	540)] // Left
+	[DataRow(	Center,		50,		50,		0,			Always,		0,		0,		1920,		1080,			480,	0,		960,	540)] // Center
+	[DataRow(	Right,		50,		50,		0,			Always,		0,		0,		1920,		1080,			960,	0,		960,	540)] // Right
 	// Vertical offset
-	[DataRow(	Center,		50,		50,		0,			true,		0,		0,		1920,		1080,			480,	0,		960,	540)] // 0
-	[DataRow(	Center,		50,		50,		50,			true,		0,		0,		1920,		1080,			480,	50,		960,	540)] // 50
-	[DataRow(	Center,		50,		50,		150,		true,		0,		0,		1920,		1080,			480,	150,	960,	540)] // 150
+	[DataRow(	Center,		50,		50,		0,			Always,		0,		0,		1920,		1080,			480,	0,		960,	540)] // 0
+	[DataRow(	Center,		50,		50,		50,			Always,		0,		0,		1920,		1080,			480,	50,		960,	540)] // 50
+	[DataRow(	Center,		50,		50,		150,		Always,		0,		0,		1920,		1080,			480,	150,	960,	540)] // 150
 	// Resize
-	[DataRow(	Center,		50,		50,		0,			true,		0,		0,		1920,		1080,			480,	0,		960,	540)] // True
-	[DataRow(	Center,		50,		50,		0,			false,		0,		0,		1920,		1080,			560,	0,		800,	600)] // False
+	[DataRow(	Center,		50,		50,		0,			Always,		0,		0,		1920,		1080,			480,	0,		960,	540)] // True
+	[DataRow(	Center,		50,		50,		0,			Never,		0,		0,		1920,		1080,			560,	0,		800,	600)] // False
 	public async Task Test1(
-		HorizontalAlign hAlign, int hCov, int vCov, int vOffs, bool resize,		// Alignment
+		HorizontalAlign hAlign, int hCov, int vCov, int vOffs, Resizing resize,		// Alignment
 		int sX, int sY, int sW, int sH,											// Screen
 		int wX, int wY, int wW, int wH											// Expected window
 	)
