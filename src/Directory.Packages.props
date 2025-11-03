@@ -8,7 +8,7 @@
 		<PackageVersion Include="DeclarativeCommandLine.Generator" Version="2.0.3"/>
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.10"/>
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
-		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.228"/>
+		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.238"/>
 		<PackageVersion Include="Namotion.Reflection" Version="3.4.3"/>
 		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
 		<PackageVersion Include="SharpHook" Version="7.0.3"/>
