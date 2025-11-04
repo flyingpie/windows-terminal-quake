@@ -18,6 +18,7 @@
   ]
 }
 ```
+- Feature: GUI - "Off-Screen Locations" can now be configured from the GUI.
 
 ## [v2.0.17] / 2025-08-27
 - Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:
