@@ -2,36 +2,103 @@
 
 @code {
 
-	// private void Remove(HotkeyOptions hk)
-	// {
-	// 	Value.Remove(hk);
-	//
-	// 	StateHasChanged();
-	// }
+	protected override void OnInitialized()
+	{
+		var locs = Value ?? WtqConstants.DefaultOffScreenLocations; // TODO: Default collection values aren't coming through Value yet.
+
+		Locs = locs.Select(l => new OffScrLoc() { IsActive = true, Loc = l}).ToList();
+
+		foreach (var val in WtqConstants.DefaultOffScreenLocations)
+		{
+			if (Locs.Any(l => l.Loc == val))
+			{
+				continue;
+			}
+
+			Locs.Add(new() { IsActive = false, Loc = val});
+		}
+	}
+
+	private List<OffScrLoc> Locs { get; set; }
+
+	private void SetActive(OffScrLoc loc, bool isActive)
+	{
+		loc.IsActive = isActive;
+
+		UpdateValue();
+	}
+
+	private void Up(OffScrLoc loc) => MoveLoc(loc, -1);
+
+	private void Down(OffScrLoc loc) => MoveLoc(loc, 1);
+
+	private void MoveLoc(OffScrLoc loc, int pos)
+	{
+		var idx = Locs.IndexOf(loc);
+		Locs.Remove(loc);
+		Locs.Insert(idx + pos, loc);
+
+		UpdateValue();
+	}
+
+	private void UpdateValue()
+	{
+		Value = Locs.Where(l => l.IsActive).Select(l => l.Loc).ToList();
+
+		StateHasChanged();
+	}
+
+	private class OffScrLoc
+	{
+		public bool IsActive { get; set; }
+
+		public OffScreenLocation Loc { get; set; }
+	}
 
 }
 
 <WtqSetting TProperty="ICollection<OffScreenLocation>" Get="Get" Set="Set">
 	<Content>
 
-		TODO
+		<RadzenStack>
 
-		@* <RadzenStack> *@
-		@* *@
-		@* 	@foreach (var hk in Value) *@
-		@* 	{ *@
-		@* 		<Hotkey Options="hk" OnRemove="@(() => Remove(hk))"/> *@
-		@* 	} *@
-		@* *@
-		@* 	<RadzenStack> *@
-		@* 		<RadzenButton *@
-		@* 			Icon="add" *@
-		@* 			Size="ButtonSize.Medium" *@
-		@* 			Click="@(() => Value.Add(new()))" *@
-		@* 		/> *@
-		@* 	</RadzenStack> *@
-		@* *@
-		@* </RadzenStack> *@
+			@for (var i = 0; i < Locs.Count; i++)
+			{
+				var j = i;
+				var loc = Locs[i];
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0">
+					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8" JustifyContent="JustifyContent.SpaceBetween">
+
+						<RadzenCheckBox
+							TValue="bool"
+							@bind-Value="loc.IsActive"
+							Change="v => SetActive(loc, v)"
+						/>
+
+						<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1;" />
+
+						<!-- Clear button -->
+						<RadzenButton
+							Click="() => Up(loc)"
+							Icon="keyboard_arrow_up"
+							Size="ButtonSize.Medium"
+							Disabled="j == 0"
+						/>
+
+						<!-- Remove button -->
+						<RadzenButton
+							Click="() => Down(loc)"
+							Icon="keyboard_arrow_down"
+							Size="ButtonSize.Medium"
+							Disabled="j == Locs.Count - 1"
+						/>
+
+					</RadzenStack>
+				</RadzenStack>
+			}
+
+		</RadzenStack>
 
 	</Content>
 </WtqSetting>

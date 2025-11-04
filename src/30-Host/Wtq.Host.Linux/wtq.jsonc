@@ -7,7 +7,8 @@
 		{
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-			"FileName": "konsole"
+			"FileName": "konsole",
+			"OffScreenLocations": ["Left", "Right"]
 		},
 		
 		{
@@ -46,5 +47,9 @@
 
 	"Api": {
 		"Enable": true
-	}
+	},
+
+	"ShowUiOnStart": true,
+
+	"OffScreenLocations": ["Left", "Right"]
 }

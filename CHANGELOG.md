@@ -8,6 +8,7 @@
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
 - Bugfix: Updated CLI to load settings and fetch listening endpoint.
 - Bugfix: When a window gets minimized, WTQ could not longer toggle it.
+- Bugfix: When adding an app without any matching criteria, any window would be attached to (now only attaches when at least 1 criterion is present).
 - Feature: "Resize" option (defaults to "Always"), can be used to disable resizing the app's window (disables alignment settings). Useful for apps that don't respond well to being resized, like some Electron apps.
 ```jsonc
   "Apps": [

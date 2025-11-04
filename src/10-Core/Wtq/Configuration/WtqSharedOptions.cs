@@ -129,6 +129,10 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// <para>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
 	/// </para>
+	/// <para>
+	/// If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
+	/// without any animation.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
