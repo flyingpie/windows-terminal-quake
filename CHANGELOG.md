@@ -8,6 +8,7 @@
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
 - Bugfix: Updated CLI to load settings and fetch listening endpoint.
 - Bugfix: When a window gets minimized, WTQ could not longer toggle it.
+- Bugfix: When adding an app without any matching criteria, any window would be attached to (now only attaches when at least 1 criterion is present).
 - Feature: "Resize" option (defaults to "Always"), can be used to disable resizing the app's window (disables alignment settings). Useful for apps that don't respond well to being resized, like some Electron apps.
 ```jsonc
   "Apps": [
@@ -17,6 +18,7 @@
   ]
 }
 ```
+- Feature: GUI - "Off-Screen Locations" can now be configured from the GUI.
 
 ## [v2.0.17] / 2025-08-27
 - Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:

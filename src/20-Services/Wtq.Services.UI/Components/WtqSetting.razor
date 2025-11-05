@@ -13,6 +13,9 @@
 
 	public string? Subtitle => AttrUtils.GetPrompt(Get);
 
+	[CascadingParameter]
+	public Notifier Notifier { get; set; } = null!;
+
 	[EditorRequired]
 	[Parameter]
 	public RenderFragment Content { get; set; } = null!;
@@ -44,7 +47,12 @@
 	private IEnumerable<ValidationResult> ValidationResultsForProperty
 		=> ValidationResults.Where(v => v.MemberNames.Any(m => m.Equals(PropertyName)));
 
-	private void Reset() => Set(default);
+	private void Reset()
+	{
+		Set(default);
+
+		Notifier.Notify();
+	}
 
 	private void ShowTooltip(ElementReference elementReference, TooltipOptions options)
 		=> TooltipService.Open(
