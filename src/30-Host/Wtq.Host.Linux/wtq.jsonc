@@ -51,5 +51,5 @@
 
 	"ShowUiOnStart": true,
 
-	"OffScreenLocations": ["Left", "Right"]
+	//"OffScreenLocations": ["Left", "Right"]
 }

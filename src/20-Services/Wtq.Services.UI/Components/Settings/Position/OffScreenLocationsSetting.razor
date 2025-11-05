@@ -2,12 +2,27 @@
 
 @code {
 
+	private List<OffScrLoc> Locs { get; set; }
+
 	protected override void OnInitialized()
 	{
+		Notifier.OnNotify(() => InvokeAsync(UpdateLocs));
+
+		UpdateLocs();
+	}
+
+	private void UpdateLocs()
+	{
+		// Get current setting value:
+		// - App-specific
+		// - Global
+		// - Default (currently from constant, instead of attribute)
 		var locs = Value ?? WtqConstants.DefaultOffScreenLocations; // TODO: Default collection values aren't coming through Value yet.
 
+		// Convert value to view model.
 		Locs = locs.Select(l => new OffScrLoc() { IsActive = true, Loc = l}).ToList();
 
+		// Add inactive values.
 		foreach (var val in WtqConstants.DefaultOffScreenLocations)
 		{
 			if (Locs.Any(l => l.Loc == val))
@@ -17,9 +32,9 @@
 
 			Locs.Add(new() { IsActive = false, Loc = val});
 		}
-	}
 
-	private List<OffScrLoc> Locs { get; set; }
+		StateHasChanged();
+	}
 
 	private void SetActive(OffScrLoc loc, bool isActive)
 	{
@@ -34,19 +49,26 @@
 
 	private void MoveLoc(OffScrLoc loc, int pos)
 	{
-		var idx = Locs.IndexOf(loc);
-		Locs.Remove(loc);
-		Locs.Insert(idx + pos, loc);
+		var l = Locs.FirstOrDefault(ll => ll.Loc == loc.Loc);
+		var idx = Locs.IndexOf(l);
+
+		Locs.Remove(l);
+
+		var ins = idx + pos;
+
+		if (ins < 0)
+		{
+			Locs.Add(l);
+		}
+		else
+		{
+			Locs.Insert(idx + pos, l);
+		}
 
 		UpdateValue();
 	}
 
-	private void UpdateValue()
-	{
-		Value = Locs.Where(l => l.IsActive).Select(l => l.Loc).ToList();
-
-		StateHasChanged();
-	}
+	private void UpdateValue() => Value = Locs.Where(l => l.IsActive).Select(l => l.Loc).ToList();
 
 	private class OffScrLoc
 	{
@@ -57,42 +79,32 @@
 
 }
 
-<WtqSetting TProperty="ICollection<OffScreenLocation>" Get="Get" Set="Set">
+<WtqSetting TProperty="ICollection<OffScreenLocation>" Get="Get" Set="Set" Default="Default">
 	<Content>
 
 		<RadzenStack>
 
-			@for (var i = 0; i < Locs.Count; i++)
+			@foreach (var loc in Locs)
 			{
-				var j = i;
-				var loc = Locs[i];
-
 				<RadzenStack Orientation="Orientation.Vertical" Gap="0">
 					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8" JustifyContent="JustifyContent.SpaceBetween">
 
-						<RadzenCheckBox
-							TValue="bool"
-							@bind-Value="loc.IsActive"
-							Change="v => SetActive(loc, v)"
-						/>
+						<!-- Active -->
+						<RadzenCheckBox TValue="bool" @bind-Value="loc.IsActive" Change="v => SetActive(loc, v)"/>
 
-						<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1;" />
+						<!-- Label -->
+						@if (loc.IsActive)
+						{
+							<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1;" />
+						}
+						else
+						{
+							<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1; text-decoration: line-through;" />
+						}
 
-						<!-- Clear button -->
-						<RadzenButton
-							Click="() => Up(loc)"
-							Icon="keyboard_arrow_up"
-							Size="ButtonSize.Medium"
-							Disabled="j == 0"
-						/>
-
-						<!-- Remove button -->
-						<RadzenButton
-							Click="() => Down(loc)"
-							Icon="keyboard_arrow_down"
-							Size="ButtonSize.Medium"
-							Disabled="j == Locs.Count - 1"
-						/>
+						<!-- Up/Down -->
+						<RadzenButton Click="() => Up(loc)" Icon="keyboard_arrow_up" Size="ButtonSize.Medium"/>
+						<RadzenButton Click="() => Down(loc)" Icon="keyboard_arrow_down" Size="ButtonSize.Medium"/>
 
 					</RadzenStack>
 				</RadzenStack>

@@ -25,7 +25,6 @@
 	private Func<object?>? _get;
 	private Func<object?>? _default;
 	private DefaultValueAttribute? _defaultAttr;
-	private DefaultCollectionValueAttribute? _defaultCollAttr;
 
 	protected TProperty Value
 	{
@@ -53,12 +52,6 @@
 			{
 				return (TProperty?)def;
 			}
-
-			// var defc = (_defaultCollAttr ??= Default.GetMemberInfo().GetCustomAttribute<DefaultCollectionValueAttribute>())?.Values;
-			// if (defc != null)
-			// {
-			// 	return (TProperty?)defc;
-			// }
 
 			return default;
 		}
