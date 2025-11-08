@@ -4,6 +4,9 @@
 
 ## [vNext]
 
+## [v2.0.19] / 2025-xx-xx
+- Bugfix - GUI - "Off-Screen Locations" - Update state when changing app page
+
 ## [v2.0.18] / 2025-xx-xx
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
 - Bugfix: Updated CLI to load settings and fetch listening endpoint.
