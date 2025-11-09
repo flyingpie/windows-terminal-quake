@@ -91,6 +91,11 @@ public interface IPlatformService
 	bool IsCallable(string? workingDirectory, string fileName);
 
 	/// <summary>
+	/// Returns whether another WTQ process is running, used to prevent multiple WTQ instances.
+	/// </summary>
+	bool IsWtqRunning();
+
+	/// <summary>
 	/// Opens the specified <paramref name="path"/> using the default application (e.g. usually Explorer on Windows).
 	/// </summary>
 	void OpenFileOrDirectory(string path);
