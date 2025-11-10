@@ -37,7 +37,7 @@
 		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0"/>
 		<!-- Serialization -->
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
-		<PackageVersion Include="NJsonSchema" Version="11.5.1"/>
+		<PackageVersion Include="NJsonSchema" Version="11.5.2"/>
 		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- Testing -->
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0"/>
