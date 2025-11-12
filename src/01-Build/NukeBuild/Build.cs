@@ -16,7 +16,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
 	"ci",
-	GitHubActionsImage.Ubuntu2204, // Note that on later versions, .Net 9 is not (yet) available.
+	GitHubActionsImage.Ubuntu2404,
 	FetchDepth = 0,
 	OnPushBranches = ["master"],
 	OnWorkflowDispatchOptionalInputs = ["name"],
