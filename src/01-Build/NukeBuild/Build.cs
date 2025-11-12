@@ -6,6 +6,7 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
 using System;
@@ -163,8 +164,10 @@ public sealed partial class Build : NukeBuild
 		.Executes(() =>
 		{
 			DotNetTest(_ => _
-				.SetProjectFile(Solution.Path)
-				.SetVerbosity(DotNetVerbosity.normal)
+				.AddProcessAdditionalArguments("--solution", Solution.Path)
+				.SetConfiguration(Configuration)
+				.SetNoRestore(true)
+				.SetOutput("detailed")
 			);
 		});
 

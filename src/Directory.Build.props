@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<Version>2.0.19</Version>
 
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 
 		<!-- Some features we use require a documentation file, like analyzers, and the docs manifest generation -->
@@ -105,12 +105,6 @@
 			https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-runner-intro
 		-->
 		<EnableMSTestRunner>true</EnableMSTestRunner>
-
-		<!--
-			Use MSTest as the runner instead of the default VSTest.
-			https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-integration-dotnet-test
-		-->
-		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 
 		<!--
 			Show failure per test instead of grouped together.

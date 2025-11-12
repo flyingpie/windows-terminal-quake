@@ -5,7 +5,9 @@
 ## [vNext]
 
 ## [v2.0.19] / 2025-xx-xx
-- Bugfix - GUI - "Off-Screen Locations" - Update state when changing app page
+- Bugfix - GUI - "Off-Screen Locations" - Update state when changing app page.
+- Feature - Single-instance mode - Only allow a single instance of WTQ to run (i.e. stop when another instance is already running).
+- Maintenance - .Net 10.
 
 ## [v2.0.18] / 2025-xx-xx
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
