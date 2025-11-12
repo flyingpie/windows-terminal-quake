@@ -78,7 +78,7 @@ public sealed partial class Build
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
+				.SetFramework("net10.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetSelfContained(false));
@@ -101,7 +101,7 @@ public sealed partial class Build
 
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
-				.SetFramework("net9.0-windows")
+				.SetFramework("net10.0-windows")
 				.SetProject(Solution._0_Host.Wtq_Host_Windows)
 				.SetOutput(st)
 				.SetRuntime("win-x64")

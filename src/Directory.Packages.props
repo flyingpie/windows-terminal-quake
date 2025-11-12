@@ -4,29 +4,31 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0"/>
-		<PackageVersion Include="DeclarativeCommandLine" Version="2.0.4"/>
-		<PackageVersion Include="DeclarativeCommandLine.Generator" Version="2.0.4"/>
-		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.10"/>
+		<PackageVersion Include="DeclarativeCommandLine" Version="2.0.5"/>
+		<PackageVersion Include="DeclarativeCommandLine.Generator" Version="2.0.5"/>
+		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.0"/>
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.242"/>
 		<PackageVersion Include="Namotion.Reflection" Version="3.4.3"/>
 		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
 		<PackageVersion Include="SharpHook" Version="7.0.3"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
-		<PackageVersion Include="System.Resources.Extensions" Version="9.0.10"/>
+		<PackageVersion Include="System.Resources.Extensions" Version="10.0.0"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
 		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.15.0.120848"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
+		<!-- Docs -->
+		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- GUI -->
 		<PackageVersion Include="BlazorMonaco" Version="3.4.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="8.1.8"/>
+		<PackageVersion Include="Radzen.Blazor" Version="8.3.0"/>
 		<!-- HTTP API -->
-		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10"/>
+		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
 		<PackageVersion Include="Scalar.AspNetCore" Version="2.10.3"/>
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.3.0"/>
@@ -38,13 +40,12 @@
 		<!-- Serialization -->
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
 		<PackageVersion Include="NJsonSchema" Version="11.5.2"/>
-		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- Testing -->
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0"/>
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1"/>
 		<PackageVersion Include="Moq" Version="4.20.72"/>
-		<PackageVersion Include="MSTest" Version="4.0.1"/>
+		<PackageVersion Include="MSTest" Version="4.0.2"/>
 		<PackageVersion Include="SystemTextJson.JsonDiffPatch" Version="2.0.0"/>
 		<PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.1.0"/>
-		<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.0.1"/>
+		<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.0.2"/>
 	</ItemGroup>
 </Project>
