@@ -10,7 +10,19 @@ namespace Wtq.Services.UI;
 
 public static class WtqUIHostBuilder
 {
-	public static void Run(Action<IServiceCollection> services)
+	public static void Run(Action<IServiceCollection> services, bool gui)
+	{
+		if (gui)
+		{
+			RunGui(services);
+		}
+		else
+		{
+			RunHeadless(services);
+		}
+	}
+
+	public static void RunGui(Action<IServiceCollection> services)
 	{
 		Guard.Against.Null(services);
 
@@ -58,5 +70,49 @@ public static class WtqUIHostBuilder
 		lifetime.NotifyStarted();
 
 		app.Run();
+	}
+
+	public static void RunHeadless(Action<IServiceCollection> services)
+	{
+		Guard.Against.Null(services);
+
+		var s = new ServiceCollection();
+
+		using var invoker = new WtqUIInvoker();
+
+		s
+			.AddLogging()
+			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
+			.AddSingleton<IWtqUIService>(_ => invoker)
+		;
+
+		services(s);
+
+		var p = s.BuildServiceProvider();
+
+		var lifetime = (ApplicationLifetime)p.GetRequiredService<IHostApplicationLifetime>();
+
+		// Note that this handler needs to be called pretty early, otherwise other handles may be run first, like the AspNetCore one (if the API is enabled).
+		// Note that we shouldn't ignore the return value, as it can get optimized out in "Release" mode, causing the entire handler to not work (as it gets finalized immediately).
+		using var reg = PosixSignalRegistration.Create(
+			PosixSignal.SIGINT,
+			ctx =>
+			{
+				ctx.Cancel = true;
+
+				lifetime.StopApplication(); // "Stopping"
+			});
+
+		invoker.Action = a => a();
+
+		_ = new WtqHost(
+			lifetime,
+			p.GetRequiredService<IEnumerable<IHostedService>>(),
+			() => {});
+
+		lifetime.NotifyStarted();
+
+		Console.WriteLine("Running");
+		Console.ReadLine();
 	}
 }
