@@ -5,6 +5,8 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 
+		<InvariantGlobalization>true</InvariantGlobalization>
+
 		<!-- Some features we use require a documentation file, like analyzers, and the docs manifest generation -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 

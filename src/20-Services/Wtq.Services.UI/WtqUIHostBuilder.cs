@@ -109,6 +109,7 @@ public static class WtqUIHostBuilder
 		_ = new WtqHost(
 			lifetime,
 			p.GetRequiredService<IEnumerable<IHostedService>>(),
+			p.GetRequiredService<IPlatformService>(),
 			() => {});
 
 		lifetime.NotifyStarted();
