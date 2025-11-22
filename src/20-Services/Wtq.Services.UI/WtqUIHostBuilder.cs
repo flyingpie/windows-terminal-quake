@@ -114,7 +114,10 @@ public static class WtqUIHostBuilder
 
 		lifetime.NotifyStarted();
 
-		Console.WriteLine("Running");
-		Console.ReadLine();
+		var exit = new TaskCompletionSource();
+
+		lifetime.ApplicationStopped.Register(() => exit.SetResult());
+
+		exit.Task.GetAwaiter().GetResult();
 	}
 }
