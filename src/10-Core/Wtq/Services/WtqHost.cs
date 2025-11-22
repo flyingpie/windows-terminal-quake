@@ -15,18 +15,21 @@ public class WtqHost
 	private static readonly TimeSpan DisposeTimeout = TimeSpan.FromSeconds(3);
 
 	private static readonly ILogger _log = Utils.Log.For<WtqHost>();
+	private readonly JoinableTaskFactory _taskFactory = new(JoinableTaskContext.CreateNoOpContext());
 
 	private readonly IEnumerable<IHostedService> _hostedServices;
-	private readonly JoinableTaskFactory _taskFactory = new(JoinableTaskContext.CreateNoOpContext());
+	private readonly IPlatformService _platformService;
 
 	public WtqHost(
 		IHostApplicationLifetime appLifetime,
 		IEnumerable<IHostedService> hostedServices,
+		IPlatformService platformService,
 		Action onExit)
 	{
 		_ = Guard.Against.Null(appLifetime);
 		_ = Guard.Against.Null(onExit);
 		_hostedServices = Guard.Against.Null(hostedServices);
+		_platformService = Guard.Against.Null(platformService);
 
 		// Initializing + Starting
 		_ = appLifetime.ApplicationStarted.Register(() =>
@@ -54,6 +57,12 @@ public class WtqHost
 
 	private async Task InitAsync()
 	{
+		if (_platformService.IsWtqRunning())
+		{
+			_log.LogWarning("WTQ seems to already be running. Running multiple instances can cause some really weird behavior, so I'm stopping this instance. If you don't see another instance already running, try killing all WTQ processes and start again.");
+			Environment.Exit(-1);
+		}
+
 		var sw1 = Stopwatch.StartNew();
 
 		_log.LogDebug("Initializing services");

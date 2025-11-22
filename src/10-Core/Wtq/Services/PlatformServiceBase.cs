@@ -231,6 +231,24 @@ public abstract class PlatformServiceBase : IPlatformService
 	}
 
 	/// <inheritdoc/>
+	public virtual bool IsWtqRunning()
+	{
+		// Get a reference to this process, so we can filter it out when looking for other processes.
+		var self = Process.GetCurrentProcess();
+
+		// Look for other WTQ processes.
+		var otherWtq = Process.GetProcessesByName(self.ProcessName).FirstOrDefault(p => p.Id != self.Id);
+
+		if (otherWtq != null)
+		{
+			Log.LogWarning("Found other WTQ process (PID:{Pid})", otherWtq.Id);
+			return true;
+		}
+
+		return false;
+	}
+
+	/// <inheritdoc/>
 	public virtual bool ShouldUsePollingFileWatcherForPath(string path)
 	{
 		Guard.Against.NullOrWhiteSpace(path);
