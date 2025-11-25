@@ -10,7 +10,6 @@
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.253"/>
 		<PackageVersion Include="Namotion.Reflection" Version="3.4.3"/>
-		<PackageVersion Include="Nuke.Common" Version="10.0.0"/>
 		<PackageVersion Include="SharpHook" Version="7.0.3"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
 		<PackageVersion Include="System.Resources.Extensions" Version="10.0.0"/>
@@ -20,6 +19,11 @@
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.15.0.120848"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
+		<!-- Build -->
+		<PackageVersion Include="Microsoft.Build" Version="18.0.2"/>
+		<PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.0.2"/>
+		<PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.0.2"/>
+		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
 		<!-- Docs -->
 		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- GUI -->

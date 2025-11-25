@@ -14,14 +14,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-[GitHubActions(
-	"ci",
-	GitHubActionsImage.Ubuntu2404,
-	FetchDepth = 0,
-	OnPushBranches = ["master"],
-	OnWorkflowDispatchOptionalInputs = ["name"],
-	EnableGitHubToken = true,
-	InvokedTargets = [nameof(Publish)])]
 public sealed partial class Build : NukeBuild
 {
 	public static int Main() => Execute<Build>(x => x.BuildAll);
