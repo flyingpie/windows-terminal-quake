@@ -2061,6 +2061,12 @@ flatpak install nl.flyingpie.wtq</code></pre>
 --talk-name=org.kde.StatusNotifierWatcher   # (required) So we can create a tray icon
 --talk-name=org.freedesktop.Flatpak         # (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")</code></pre>
 <h4 id="manual_1">Manual<a class="headerlink" href="#manual_1" title="Permanent link">&para;</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Dependencies</p>
+<ul>
+<li>Requires webkit2gtk-4.1 to be installed</li>
+</ul>
+</div>
 <p>See the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh">/linux/install-or-upgrade-wtq.sh script</a> that downloads the latest version of WTQ, installs it to <code>~/.local/share/wtq</code>, and creates a <strong>wtq.desktop</strong> file.</p>
 <p>As a 1-liner:
 <pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)</code></pre></p>
@@ -2620,6 +2626,8 @@ Useful for apps that don't respond well to resizes.</p>
 <p>When moving an app off the screen, WTQ looks for an empty space to move the window to.</p>
 <p>Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.</p>
 <p>By default, WTQ looks for empty space in this order: Above, Below, Left, Right.</p>
+<p>If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
+without any animation.</p>
 
 <p>Defaults to <code>None</code></p>
 <pre class="highlight"><code class="language-json">{

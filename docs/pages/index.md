@@ -192,6 +192,9 @@ These permissions are enabled by default:
 
 #### Manual
 
+!!! note "Dependencies"
+	- Requires webkit2gtk-4.1 to be installed
+
 See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
