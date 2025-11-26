@@ -46,7 +46,7 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/we
 !!! note
 	The WTQ Scoop package has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
 
-```pwsh
+```shell
 scoop bucket add extras
 scoop install extras/wtq
 ```
@@ -59,7 +59,7 @@ Start menu entry after installation.
 ///
 
 Update (just WTQ):
-```pwsh
+```shell
 scoop update wtq
 ```
 
@@ -67,7 +67,7 @@ scoop update wtq
 
 [The Windows package manager.](https://github.com/microsoft/winget-cli)
 
-```pwsh
+```shell
 winget install windows-terminal-quake
 ```
 You can then call "**wtq**" from the command line.
@@ -80,19 +80,20 @@ Start menu entry after installation.
 ///
 
 Update (just WTQ):
-```pwsh
+```shell
 winget upgrade windows-terminal-quake
 ```
 
 !!! note "Where's WTQ Installed?"
 	You can run
 
-	```pwsh
+	```shell
 	winget --info
 	```
 
 	To find out where apps are installed:
-	```
+
+	```shell
 	Windows Package Manager v1.10.340
 	(...)
 	Portable Package Root (User)       %LOCALAPPDATA%\Microsoft\WinGet\Packages
@@ -112,7 +113,7 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 
 You can also clone the repo and run the **Install** build target, which will build and install WTQ: ```~/AppData/Local/wtq```.
 
-```pwsh
+```shell
 git clone https://github.com/flyingpie/windows-terminal-quake.git
 cd windows-terminal-quake
 
@@ -121,12 +122,12 @@ cd windows-terminal-quake
 
 Uninstall:
 
-```pwsh
+```shell
 ./build.ps1 Uninstall
 ```
 
 You can also take a look at the build options, do see more options for building, including without actually installing:
-```pwsh
+```shell
 ./build.ps1 --help
 ```
 
