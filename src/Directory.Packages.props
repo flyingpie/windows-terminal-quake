@@ -23,7 +23,7 @@
 		<PackageVersion Include="Microsoft.Build" Version="18.0.2"/>
 		<PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.0.2"/>
 		<PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.0.2"/>
-		<PackageVersion Include="Nuke.Common" Version="9.0.4"/>
+		<PackageVersion Include="Nuke.Common" Version="10.0.1"/>
 		<!-- Docs -->
 		<PackageVersion Include="YamlDotNet" Version="16.3.0"/>
 		<!-- GUI -->
