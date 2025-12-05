@@ -16,7 +16,7 @@ public abstract class WtqHostBase
 		var platform = CreatePlatformService();
 
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
-		Log.Configure(platform.PathToLogsDir); // ~25MB
+		Log.Configure(platform.PathToLogsDir);
 
 		if (args.Length == 0)
 		{
