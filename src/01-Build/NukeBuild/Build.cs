@@ -53,7 +53,7 @@ public sealed partial class Build : NukeBuild
 	private AbsolutePath StagingDirectory =>
 		OutputDirectory / "staging";
 
-	[Solution(GenerateProjects = true, SuppressBuildProjectCheck = true)]
+	[Solution(GenerateProjects = true)]
 	private readonly Solution Solution;
 
 	private AbsolutePath PathToLinux64FrameworkDependent =>
