@@ -1,5 +1,5 @@
 <Solution>
-	<Folder Name="/00-Sln/">
+	<Folder Name="/Q00-Sln/">
 		<File Path="../.editorconfig" />
 		<File Path="../.gitignore" />
 		<File Path="../CHANGELOG.md" />
@@ -10,14 +10,14 @@
 		<File Path="Directory.Build.props" />
 		<File Path="Directory.Packages.props" />
 	</Folder>
-	<Folder Name="/01-Build/">
+	<Folder Name="/Q01-Build/">
 		<Project Path="01-Build/NukeBuild/NukeBuild.csproj" />
 	</Folder>
-	<Folder Name="/10-Core/">
+	<Folder Name="/Q10-Core/">
 		<Project Path="10-Core/Wtq.UnitTest/Wtq.UnitTest.csproj" />
 		<Project Path="10-Core/Wtq/Wtq.csproj" />
 	</Folder>
-	<Folder Name="/20-Services/">
+	<Folder Name="/Q20-Services/">
 		<Project Path="20-Services/Wtq.Services.API/Wtq.Services.API.csproj" />
 		<Project Path="20-Services/Wtq.Services.CLI/Wtq.Services.CLI.csproj" />
 		<Project Path="20-Services/Wtq.Services.KWin.UnitTest/Wtq.Services.KWin.UnitTest.csproj" />
@@ -32,7 +32,7 @@
 		<Project Path="20-Services/Wtq.Services.Win32v2/Wtq.Services.Win32v2.csproj" />
 		<Project Path="20-Services/Wtq.Services.WinForms/Wtq.Services.WinForms.csproj" />
 	</Folder>
-	<Folder Name="/30-Host/">
+	<Folder Name="/Q30-Host/">
 		<Project Path="30-Host/Wtq.Host.Base/Wtq.Host.Base.csproj" />
 		<Project Path="30-Host/Wtq.Host.Docs/Wtq.Host.Docs.csproj" />
 		<Project Path="30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj" />
