@@ -75,10 +75,11 @@ public abstract class WtqHostBase
 					.AddConfiguration(platform, args)
 					.AddApi()
 					.AddUI()
-					.AddWtqCore();
+					.AddWtqCore()
+				;
 
 				ConfigureServices(s);
-			});
+			}, gui: false);
 		}
 		catch (Exception ex)
 		{

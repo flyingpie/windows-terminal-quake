@@ -40,7 +40,7 @@ public static class Log
 				restrictedToMinimumLevel: LogLevel)
 
 			// In-app.
-			.WriteTo.Sink(InAppLogSink.Instance)
+			// .WriteTo.Sink(InAppLogSink.Instance)
 
 			// Plain text.
 			.WriteTo.File(
