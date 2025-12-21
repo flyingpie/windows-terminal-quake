@@ -37,7 +37,7 @@
 		<MSBuildTreatWarningsAsErrors Condition="' $(Configuration)' == 'Release' ">true</MSBuildTreatWarningsAsErrors>
 		-->
 		<!-- TODO: Remove when we do a warning cleanup -->
-		<WarningLevel>0</WarningLevel>
+		<!-- <WarningLevel>0</WarningLevel> -->
 
 		<!--
 			CS8669:	The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
