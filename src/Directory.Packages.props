@@ -14,7 +14,7 @@
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
 		<PackageVersion Include="System.Resources.Extensions" Version="10.0.1"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
-		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
+		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.22.0"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.16.1.129956"/>
