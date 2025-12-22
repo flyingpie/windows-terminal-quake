@@ -17,7 +17,7 @@
 		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.16.1.129956"/>
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.17.0.131074"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- Build -->
 		<PackageVersion Include="Microsoft.Build" Version="18.0.2"/>
