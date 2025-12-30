@@ -15,19 +15,9 @@ public static class WtqConstants
 	public static string AppInformationalVersion =>
 		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).ProductVersion ?? "<unknown>";
 
-	public static DateTimeOffset BuildConfiguration
-	{
-		get
-		{
-			var v = Assembly.GetExecutingAssembly()
-				.GetCustomAttributes<AssemblyMetadataAttribute>()
-				.FirstOrDefault(attr => attr.Key == "BuildConfiguration")?.Value;
-
-			return DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var p)
-				? p
-				: DateTimeOffset.MinValue;
-		}
-	}
+	public static string BuildConfiguration => Assembly.GetExecutingAssembly()
+		.GetCustomAttributes<AssemblyMetadataAttribute>()
+		.FirstOrDefault(attr => attr.Key == "BuildConfiguration")?.Value;
 
 	public static DateTimeOffset BuildDate
 	{
