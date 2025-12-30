@@ -27,9 +27,9 @@
 		<Project Path="20-Services/Wtq.Services.SharpHook/Wtq.Services.SharpHook.csproj" />
 		<Project Path="20-Services/Wtq.Services.TrayIcon/Wtq.Services.TrayIcon.csproj" />
 		<Project Path="20-Services/Wtq.Services.UI/Wtq.Services.UI.csproj" />
-		<Project Path="20-Services/Wtq.Services.Win32v2.UnitTest/Wtq.Services.Win32v2.UnitTest.csproj" />
-		<Project Path="20-Services/Wtq.Services.Win32v2/Wtq.Services.Win32v2.csproj" />
+		<Project Path="20-Services/Wtq.Services.Win32.UnitTest/Wtq.Services.Win32.UnitTest.csproj" />
 		<Project Path="20-Services/Wtq.Services.WinForms/Wtq.Services.WinForms.csproj" />
+		<Project Path="20-Services/Wtq.Services.Win32/Wtq.Services.Win32.csproj" />
 	</Folder>
 	<Folder Name="/Q30-Host/">
 		<Project Path="30-Host/Wtq.Host.Base/Wtq.Host.Base.csproj" />

@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>Wtq.Services.Win32v2</AssemblyName>
-		<RootNamespace>Wtq.Services.Win32v2</RootNamespace>
+		<AssemblyName>Wtq.Services.Win32</AssemblyName>
+		<RootNamespace>Wtq.Services.Win32</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

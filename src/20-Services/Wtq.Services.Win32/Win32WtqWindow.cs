@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using Wtq.Services.Win32v2.Native;
+using Wtq.Services.Win32.Native;
 
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 public sealed class Win32WtqWindow : WtqWindow
 {

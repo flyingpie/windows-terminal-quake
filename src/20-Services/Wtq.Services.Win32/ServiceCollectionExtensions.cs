@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 public static class ServiceCollectionExtensions
 {
 	private static readonly ILogger Log = Utils.Log.For<Win32>();
 
-	public static IServiceCollection AddWin32V2WindowService(this IServiceCollection services)
+	public static IServiceCollection AddWin32Service(this IServiceCollection services)
 	{
 		Log.LogInformation("Using Win32 v2 window service (new behavior, please report any issues and consider disabling this if you run into any)");
 

@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Wtq.Services.Win32v2.Native;
+namespace Wtq.Services.Win32.Native;
 
 /// <summary>
 /// Provides access to the Windows taskbar.

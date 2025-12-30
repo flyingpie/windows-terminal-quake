@@ -1,4 +1,4 @@
-namespace Wtq.Services.Win32v2.Native;
+namespace Wtq.Services.Win32.Native;
 
 public static class Shell32
 {

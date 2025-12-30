@@ -1,4 +1,4 @@
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 public class Win32Window(Func<bool> hasExited)
 {

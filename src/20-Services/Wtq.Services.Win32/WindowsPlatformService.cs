@@ -2,9 +2,9 @@ using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
-[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "This entire project (Win32v2) is Windows-only.")]
+[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "This entire project (Win32) is Windows-only.")]
 public class WindowsPlatformService : PlatformServiceBase
 {
 	/// <summary>

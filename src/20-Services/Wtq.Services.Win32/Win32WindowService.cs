@@ -1,4 +1,4 @@
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 public sealed class Win32WindowService(IWin32 win32) :
 	IDisposable,

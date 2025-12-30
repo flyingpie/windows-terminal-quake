@@ -1,4 +1,4 @@
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 /// <summary>
 /// https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles.

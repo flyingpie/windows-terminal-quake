@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Wtq.Services.Win32v2.Native;
+namespace Wtq.Services.Win32.Native;
 
 /// <inheritdoc cref="ITaskbarList"/>
 [ComImport]

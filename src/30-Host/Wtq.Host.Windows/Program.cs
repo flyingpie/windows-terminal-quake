@@ -1,4 +1,4 @@
-using Wtq.Services.Win32v2;
+using Wtq.Services.Win32;
 
 namespace Wtq.Host.Windows;
 

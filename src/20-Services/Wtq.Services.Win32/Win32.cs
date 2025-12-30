@@ -8,7 +8,7 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using PI = Windows.Win32.PInvoke;
 
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 /// <inheritdoc cref="IWin32"/>
 public class Win32 : IWin32
