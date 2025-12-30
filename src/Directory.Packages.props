@@ -13,11 +13,11 @@
 		<PackageVersion Include="SharpHook" Version="7.1.0"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
 		<PackageVersion Include="System.Resources.Extensions" Version="10.0.1"/>
-		<PackageVersion Include="Tmds.DBus" Version="0.21.2"/>
-		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.2"/>
+		<PackageVersion Include="Tmds.DBus" Version="0.23.0"/>
+		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.23.0"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.16.1.129956"/>
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.17.0.131074"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- Build -->
 		<PackageVersion Include="Microsoft.Build" Version="18.0.2"/>
@@ -30,10 +30,10 @@
 		<PackageVersion Include="BlazorMonaco" Version="3.4.0"/>
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="8.4.0"/>
+		<PackageVersion Include="Radzen.Blazor" Version="8.4.2"/>
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1"/>
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.11.6"/>
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.11.10"/>
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.3.0"/>
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0"/>
