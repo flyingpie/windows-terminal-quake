@@ -34,7 +34,7 @@ public static class ConfigurationExtensions
 		var pathToWtqConf = platform.PathToWtqConf;
 
 		// Write wtq.schema.json.
-		WtqSchema.WriteFor(pathToWtqConf); // ~40MB
+		WtqSchema.WriteFor(pathToWtqConf);
 
 		// Load config file.
 		var config = new ConfigurationBuilder()

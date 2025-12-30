@@ -5,10 +5,7 @@
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
 
-				"__WTQ_LOG_LEVEL": "VERBOSE",
-				"__DOTNET_DefaultStackSize": "100000",
-				"__DOTNET_GCHeapHardLimit": "0x10000000",
-				"__DOTNET_GCHeapCount": "2"
+				"__WTQ_LOG_LEVEL": "VERBOSE"
 			}
 		},
 		"Config From User Home": {
