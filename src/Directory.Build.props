@@ -5,6 +5,9 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 
+		<!-- This shaves off some globalization-related libraries, that are not really necessary for this app, but do save some tens of MBs of memory. -->
+		<InvariantGlobalization>true</InvariantGlobalization>
+
 		<!-- Some features we use require a documentation file, like analyzers, and the docs manifest generation -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
