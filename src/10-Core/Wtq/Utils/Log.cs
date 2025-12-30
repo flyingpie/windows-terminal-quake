@@ -39,9 +39,6 @@ public static class Log
 				outputTemplate: LogTemplate,
 				restrictedToMinimumLevel: LogLevel)
 
-			// In-app.
-			.WriteTo.Sink(InAppLogSink.Instance)
-
 			// Plain text.
 			.WriteTo.File(
 				fileSizeLimitBytes: 10_000_000,
