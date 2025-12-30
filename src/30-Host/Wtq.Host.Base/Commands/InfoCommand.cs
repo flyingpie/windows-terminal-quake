@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
-using Wtq.Configuration;
+using Wtq.Services;
 
-namespace Wtq.Services.CLI.Commands;
+namespace Wtq.Host.Base.Commands;
 
 [Command(Parent = typeof(AppRootCommand))]
 public class InfoCommand(IOptions<WtqOptions> opts, IPlatformService platform) : ICommand

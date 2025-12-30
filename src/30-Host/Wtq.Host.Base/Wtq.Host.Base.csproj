@@ -5,9 +5,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DeclarativeCommandLine"/>
+		<PackageReference Include="DeclarativeCommandLine.Generator"/>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.API\Wtq.Services.API.csproj"/>
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.CLI\Wtq.Services.CLI.csproj"/>
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj"/>
 	</ItemGroup>
 </Project>

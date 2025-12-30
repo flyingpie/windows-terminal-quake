@@ -18,12 +18,10 @@ public sealed class WtqTrayIconService : WtqHostedService
 		IHostApplicationLifetime lifetime,
 		IPlatformService platform,
 		IWtqBus bus,
-		IWtqUIService ui,
 		TrayIconUtil trayIconUtil)
 	{
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(lifetime);
-		_ = Guard.Against.Null(ui);
 		_platform = Guard.Against.Null(platform);
 		_trayIconUtil = trayIconUtil;
 
@@ -73,7 +71,9 @@ public sealed class WtqTrayIconService : WtqHostedService
 			TimeSpan.FromMilliseconds(200), // The action is blocking, so this value doesn't actually matter much.
 			ct =>
 			{
-				ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
+				// ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
+
+				_icon.MessageLoopIteration(true);
 
 				return Task.CompletedTask;
 			});
