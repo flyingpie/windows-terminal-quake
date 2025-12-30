@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 
 namespace Wtq.Utils;
@@ -25,6 +26,11 @@ public static class SystemExtensions
 		var json = JsonSerializer.Serialize(value);
 
 		return JsonSerializer.Deserialize<TValue>(json)!;
+	}
+
+	public static string ToIso8601(this DateTimeOffset dateTimeOffset)
+	{
+		return dateTimeOffset.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
 	}
 
 	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)

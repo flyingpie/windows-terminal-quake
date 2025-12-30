@@ -1,149 +1,212 @@
+using System.Text.RegularExpressions;
 using Wtq.Services.Win32.Native;
 
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WtqWindow(
-	Process process)
-	: WtqWindow
+public sealed class Win32WtqWindow : WtqWindow
 {
-	private static readonly ILogger _log = Log.For<Win32WtqWindow>();
+	private readonly ILogger _log;
 
-	private readonly Process _process = Guard.Against.Null(process);
+	private readonly IWin32 _win32;
+	private readonly Win32Window _window;
 
-	public override string Id => _process.Id.ToString(CultureInfo.InvariantCulture);
+	public Win32WtqWindow(IWin32 win32, Win32Window window)
+	{
+		_win32 = Guard.Against.Null(win32);
+		_window = Guard.Against.Null(window);
 
-	public override bool IsValid => !_process.HasExited;
+		_log = Log.For($"{nameof(Win32WtqWindow)}|{window}");
+	}
 
 	[CanBeMatchedOn]
-	public override string? Name => _process.ProcessName;
+	public override string Id =>
+		 _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
+
+	public bool IsMainWindow =>
+		_window.IsMainWindow;
+
+	public override bool IsValid =>
+		!_window.HasExited && // Check whether the process that owns the window is still running.
+		_win32.IsValidWindow(_window.WindowHandle); // Check whether the window itself is still valid (could be closed while the owning process is still running).
 
 	[CanBeMatchedOn]
-	public override string? WindowTitle => _process.MainWindowTitle;
+	public override string? Name =>
+		_window.ProcessName;
+
+	[CanBeMatchedOn]
+	public uint ProcessId =>
+		_window.ProcessId;
+
+	[CanBeMatchedOn]
+	public string? ProcessName =>
+		_window.ProcessName;
+
+	public Rectangle Rect =>
+		_window.Rect;
+
+	[CanBeMatchedOn]
+	public uint ThreadId =>
+		_window.ThreadId;
+
+	[CanBeMatchedOn]
+	public string? WindowClass =>
+		_window.WindowClass;
+
+	[CanBeMatchedOn]
+	public nint WindowHandle =>
+		_window.WindowHandle;
+
+	[CanBeMatchedOn]
+	public override string? WindowTitle =>
+		_window.WindowCaption;
+
+	public string WindowState =>
+		_win32.GetWindowState(_window.WindowHandle).ToString();
+
+	public override bool Matches(WtqAppOptions opts)
+	{
+		Guard.Against.Null(opts);
+
+		// Process name
+		if (!string.IsNullOrWhiteSpace(opts.ProcessName))
+		{
+			if (!Regex.IsMatch(_window.ProcessName ?? string.Empty, opts.ProcessName, RegexOptions.IgnoreCase))
+			{
+				return false;
+			}
+		}
+
+		// If no process name was specified, use the filename instead (but without .exe or such).
+		else if (!string.IsNullOrWhiteSpace(opts.FileName))
+		{
+			var fileName = opts.FileName.GetFileNameWithoutExtension();
+			if (!fileName.Equals(_window.ProcessName, StringComparison.OrdinalIgnoreCase))
+			{
+				return false;
+			}
+		}
+
+		// Window class
+		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !Regex.IsMatch(_window.WindowClass ?? string.Empty, opts.WindowClass, RegexOptions.IgnoreCase))
+		{
+			return false;
+		}
+
+		// Window title
+		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.WindowCaption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
+		{
+			return false;
+		}
+
+		// Main window
+		if (opts.GetMainWindow() == MainWindowState.MainWindowOnly && !_window.IsMainWindow)
+		{
+			return false;
+		}
+
+		if (opts.GetMainWindow() == MainWindowState.NonMainWindowOnly && _window.IsMainWindow)
+		{
+			return false;
+		}
+
+		return true;
+	}
 
 	public override Task BringToForegroundAsync()
 	{
-		User32.ForceForegroundWindow(_process.MainWindowHandle);
-		User32.ForcePaint(_process.MainWindowHandle);
+		_log.LogDebug("{MethodName}", nameof(BringToForegroundAsync));
+
+		try
+		{
+			_win32.SetForegroundWindow(_window.WindowHandle);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could set foreground window '{Window}': {Message}", this, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
 
 	public override Task<Rectangle> GetWindowRectAsync()
 	{
-		var bounds = default(Bounds);
+		var rect = _win32.GetWindowRect(_window.WindowHandle);
 
-		User32.GetWindowRect(_process.MainWindowHandle, ref bounds);
-
-		return Task.FromResult(bounds.ToRectangle());
-	}
-
-	public override bool Matches(WtqAppOptions opts)
-	{
-		Guard.Against.Null(opts);
-
-		var expectedProcName = opts.ProcessName;
-		if (string.IsNullOrWhiteSpace(expectedProcName))
-		{
-			expectedProcName = System.IO.Path.GetFileNameWithoutExtension(opts.FileName);
-		}
-
-		return expectedProcName.Equals(_process.ProcessName, StringComparison.OrdinalIgnoreCase);
-	}
-
-	public override async Task SetLocationAsync(Point location)
-	{
-		var r = await GetWindowRectAsync().NoCtx();
-
-		_log.LogDebug("{MethodName}({Location}) ({Rectangle})", nameof(SetLocationAsync), location, r);
-
-		User32.MoveWindow(
-			hWnd: _process.MainWindowHandle,
-			x: location.X,
-			y: location.Y,
-			nWidth: r.Width,
-			nHeight: r.Height,
-			bRepaint: true);
-	}
-
-	public override async Task SetSizeAsync(Size size)
-	{
-		var r = await GetWindowRectAsync().NoCtx();
-
-		_log.LogDebug("{MethodName}({Size}) ({Rectangle})", nameof(SetSizeAsync), size, r);
-
-		User32.MoveWindow(
-			hWnd: _process.MainWindowHandle,
-			x: r.X,
-			y: r.Y,
-			nWidth: size.Width,
-			nHeight: size.Height,
-			bRepaint: true);
+		return Task.FromResult(rect);
 	}
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
-		if (_process.MainWindowHandle == IntPtr.Zero)
+		try
 		{
-			throw new WtqException("Process handle zero");
+			_win32.SetAlwaysOnTop(_window.WindowHandle, isAlwaysOnTop);
 		}
-
-		var isSet = User32.SetWindowPos(
-			_process.MainWindowHandle,
-			isAlwaysOnTop ? User32.HWNDTOPMOST : User32.HWNDNOTOPMOST,
-			0,
-			0,
-			0,
-			0,
-			User32.TOPMOSTFLAGS);
-
-		if (!isSet)
+		catch (Exception ex)
 		{
-			throw new WtqException("Could not set window top most");
+			_log.LogWarning(ex, "Could set 'always on top' window '{Window}' to '{IsAlwaysOnTop}': {Message}", this, isAlwaysOnTop, ex.Message);
 		}
 
 		return Task.CompletedTask;
 	}
 
+	public override async Task SetLocationAsync(Point location)
+	{
+		// Get current window rect.
+		var rect = await GetWindowRectAsync().NoCtx();
+
+		// Set new location.
+		rect.Location = location;
+
+		// Update window rect.
+		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
+	}
+
+	public override async Task SetSizeAsync(Size size)
+	{
+		if (size.Width < 200 || size.Height < 200)
+		{
+			throw new InvalidOperationException($"Attempted to set window size to something under 200x200, which can mess up windows.");
+		}
+
+		// Get current window rect.
+		var rect = await GetWindowRectAsync().NoCtx();
+
+		// Set new size.
+		rect.Size = size;
+
+		// Update window rect.
+		_win32.MoveWindow(_window.WindowHandle, rect);
+
+		// Update window object.
+		_window.Rect = rect;
+	}
+
 	public override Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
-		// Get handle to the main window
-		var handle = _process.MainWindowHandle;
-
-		_log.LogDebug("Setting taskbar icon visibility for process with main window handle '{Handle}'", handle);
-
-		Shell32.SetTaskbarIconVisible(handle, isVisible);
+		try
+		{
+			Shell32.SetTaskbarIconVisible(_window.WindowHandle, isVisible);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not set visibility for window '{Window}' to '{IsVisible}': {Message}", this, isVisible, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
 
 	public override Task SetTransparencyAsync(int transparency)
 	{
-		if (transparency >= 100)
+		try
 		{
-			return Task.CompletedTask;
+			_win32.SetWindowTransparency(_window.WindowHandle, transparency);
 		}
-
-		if (_process.MainWindowHandle == IntPtr.Zero)
+		catch (Exception ex)
 		{
-			throw new WtqException("Process handle zero");
-		}
-
-		// Get original window properties
-		var props = User32.GetWindowLong(_process.MainWindowHandle, User32.GWLEXSTYLE);
-
-		// Add "WS_EX_LAYERED"-flag (required for transparency).
-		User32.SetWindowLong(_process.MainWindowHandle, User32.GWLEXSTYLE, props | User32.WSEXLAYERED);
-
-		// Set transparency
-		var isSet = User32.SetLayeredWindowAttributes(
-			_process.MainWindowHandle,
-			0,
-			(byte)Math.Ceiling(255f / 100f * transparency),
-			User32.LWAALPHA);
-
-		if (!isSet)
-		{
-			throw new WtqException("Could not set window opacity");
+			_log.LogWarning(ex, "Could not set transparency for window '{Window}' to '{Transparency}': {Message}", this, transparency, ex.Message);
 		}
 
 		return Task.CompletedTask;
@@ -151,10 +214,38 @@ public sealed class Win32WtqWindow(
 
 	public override Task SetWindowTitleAsync(string title)
 	{
-		User32.SetWindowText(_process.MainWindowHandle, title);
+		try
+		{
+			_win32.SetWindowTitle(_window.WindowHandle, title);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not set title for window '{Window}' to '{Title}': {Message}", this, title, ex.Message);
+		}
 
 		return Task.CompletedTask;
 	}
 
-	public override Task UpdateAsync() => Task.CompletedTask;
+	public override string ToString() => $"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
+
+	public override Task UpdateAsync()
+	{
+		try
+		{
+			// Make sure the window state is set to "NORMAL", as otherwise it may not be receptive to moving and resizing.
+			var state = _win32.GetWindowState(_window.WindowHandle);
+
+			if (state != WindowShowStyle.ShowNormal)
+			{
+				_log.LogWarning("Window '{Window}' state was set to unexpected state '{State}'", this, state);
+				_win32.SetWindowState(_window.WindowHandle, WindowShowStyle.ShowNormal);
+			}
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Could not get window state for window '{Window}': {Message}", this, ex.Message);
+		}
+
+		return Task.CompletedTask;
+	}
 }

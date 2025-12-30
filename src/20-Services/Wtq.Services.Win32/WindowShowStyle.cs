@@ -1,11 +1,8 @@
-namespace Wtq.Services.Win32.Native;
+namespace Wtq.Services.Win32;
 
 /// <summary>
-/// Enumeration of the different ways of showing a window using ShowWindow.
+/// https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles.
 /// </summary>
-[Flags]
-[SuppressMessage("Design", "CA1008:Enums should have zero value", Justification = "MvdO: In line with Win32 API naming.")]
-[SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "MvdO: In line with Win32 API naming.")]
 public enum WindowShowStyle
 {
 	/// <summary>Hides the window and activates another window.</summary>

@@ -1,4 +1,4 @@
-namespace Wtq.Services.Win32v2;
+namespace Wtq.Services.Win32;
 
 /// <summary>
 /// Provides access to Windows OS functions.
