@@ -1,7 +1,10 @@
+AttachConsole
+ATTACH_PARENT_PROCESS
 CreateFile
 EnumWindows
 GetClassName
 GetForegroundWindow
+GetStdHandle
 GetWindowLong
 GetWindowPlacement
 GetWindowRect
@@ -16,6 +19,7 @@ SendMessageTimeout
 SendMessageTimeoutFlags
 SetForegroundWindow
 SetLayeredWindowAttributes
+SetStdHandle
 SetWindowLong
 SetWindowPos
 SetWindowText

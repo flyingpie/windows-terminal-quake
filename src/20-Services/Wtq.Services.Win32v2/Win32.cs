@@ -1,8 +1,9 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 
-using Microsoft.Win32;
+using System.IO;
 using System.Runtime.InteropServices;
 using Windows.Win32.Foundation;
+using Windows.Win32.System.Console;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using PI = Windows.Win32.PInvoke;
@@ -12,6 +13,7 @@ namespace Wtq.Services.Win32v2;
 /// <inheritdoc cref="IWin32"/>
 public class Win32 : IWin32
 {
+#pragma warning disable CA1707 // Identifiers should not contain underscores // MvdO: In line with MSDN.
 #pragma warning disable SA1310 // MvdO: Naming kept consistent with MSDN.
 
 	private const int HWND_NOTOPMOST = -2;
@@ -20,8 +22,12 @@ public class Win32 : IWin32
 	private const int WS_EX_LAYERED = 0x80000;
 
 #pragma warning restore SA1310
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 
 	private readonly ILogger _log = Log.For<Win32>();
+
+	public static bool AttachConsole() =>
+		PI.AttachConsole(PI.ATTACH_PARENT_PROCESS);
 
 	/// <inheritdoc/>
 	public unsafe nint? GetForegroundWindowHandle()
@@ -141,6 +147,26 @@ public class Win32 : IWin32
 		}
 
 		return (WindowShowStyle)placement.showCmd;
+	}
+
+	public static void RedirectConsoleStreams()
+	{
+		// StdOut & StdErr
+		var stdOut = PI.GetStdHandle(STD_HANDLE.STD_OUTPUT_HANDLE);
+		var safeStdOut = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdOut, false);
+		var stdoutWriter = new StreamWriter(new FileStream(safeStdOut, FileAccess.Write))
+		{
+			AutoFlush = true,
+		};
+
+		Console.SetOut(stdoutWriter);
+		Console.SetError(stdoutWriter);
+
+		// StdIn
+		var stdIn = PI.GetStdHandle(STD_HANDLE.STD_INPUT_HANDLE);
+		var safeStdIn = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdIn, false);
+		var stdinReader = new StreamReader(new FileStream(safeStdIn, FileAccess.Read));
+		Console.SetIn(stdinReader);
 	}
 
 	/// <inheritdoc/>
