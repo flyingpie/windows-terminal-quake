@@ -1,5 +1,5 @@
 {
-	"version": "2.0.18",
+	"version": "2.0.19",
 	"description": "Turn any app into a Quake-style toggleable app.",
 	"homepage": "https://github.com/flyingpie/windows-terminal-quake",
 	"bin": "wtq.exe",
@@ -12,8 +12,8 @@
 	"checkver": "github",
 	"architecture": {
 		"64bit": {
-			"url": "https://github.com/flyingpie/windows-terminal-quake/releases/download/v2.0.18/win-x64_self-contained.zip",
-			"hash": "ccfd7a9e62d38ed2e7d47f70fb1a52af4c2646434c0f916e4831dd63b7dffc97"
+			"url": "https://github.com/flyingpie/windows-terminal-quake/releases/download/v2.0.19/win-x64_self-contained.zip",
+			"hash": "22a29fc1926bcfaf750785082c8148168d29987410bc4dad318855a70a4b03eb"
 		}
 	}
 }
