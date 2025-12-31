@@ -13,6 +13,6 @@ ReleaseDate: 2025-12-31
 Installers:
 - Architecture: x64
   InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/v2.0.19/win-x64_self-contained.zip
-  InstallerSha256: 22a29fc1926bcfaf750785082c8148168d29987410bc4dad318855a70a4b03eb
+  InstallerSha256: 1c5539f0e83839c4f978e1248cc6063eec5547472e6dc48777ebbf91f8aa0f25
 ManifestType: installer
 ManifestVersion: 1.10.0

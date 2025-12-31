@@ -43,23 +43,23 @@
 
 	<screenshots>
 		<screenshot type="default">
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/1623d4fbf15171900870972ac4e6a1427a6b1469/assets/screenshots/welcome-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/welcome-1.png</image>
 			<caption>Welcome page.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/1623d4fbf15171900870972ac4e6a1427a6b1469/assets/screenshots/examples-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/examples-1.png</image>
 			<caption>Some examples of applications that can be used with WTQ.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/1623d4fbf15171900870972ac4e6a1427a6b1469/assets/screenshots/app-settings-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-1.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/1623d4fbf15171900870972ac4e6a1427a6b1469/assets/screenshots/app-settings-2.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-2.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/1623d4fbf15171900870972ac4e6a1427a6b1469/assets/screenshots/app-settings-3.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-3.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 	</screenshots>

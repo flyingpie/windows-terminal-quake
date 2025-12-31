@@ -28,7 +28,7 @@ public sealed partial class Build
 			foreach (var dir in new[] { aurWtq, aurWtqBin })
 			{
 				var tpl = await File.ReadAllTextAsync(dir / "_template");
-				var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
+				var sha256 = PathToLinux64SelfContainedZip.GetFileHashSha256();
 
 				var pkgbuild = tpl
 					.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
@@ -88,7 +88,7 @@ public sealed partial class Build
 			var scoop = PkgDirectory / "scoop";
 
 			var tpl = await File.ReadAllTextAsync(scoop / "_template.json");
-			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
+			var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
 
 			var manifest = tpl
 				.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
@@ -112,7 +112,7 @@ public sealed partial class Build
 			var templateRoot = PkgDirectory / "winget" / "_template";
 			var manifestRoot = PkgDirectory / "winget" / SemVerVersion;
 			var prefix = "flyingpie.windows-terminal-quake";
-			var sha256 = Convert.ToHexString(await SHA256.HashDataAsync(File.OpenRead(PathToWin64SelfContainedZip))).ToLowerInvariant();
+			var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
 
 			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
 
