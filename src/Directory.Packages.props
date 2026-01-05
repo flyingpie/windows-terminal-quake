@@ -49,7 +49,7 @@
 		<PackageVersion Include="Moq" Version="4.20.72"/>
 		<PackageVersion Include="MSTest" Version="4.0.2"/>
 		<PackageVersion Include="SystemTextJson.JsonDiffPatch" Version="2.0.0"/>
-		<PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.1.0"/>
+		<PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.3.1"/>
 		<PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.0.2"/>
 	</ItemGroup>
 </Project>
