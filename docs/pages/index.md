@@ -247,6 +247,9 @@ WTQ comes with an HTTP API (**disabled** by default), that can be used to contro
 !!! warning "Opt-In"
 	For clarity, the HTTP API is **disabled by default**. No socket is opened until **enabled manually**.
 
+!!! note "Event Hooks"
+	For going the other direction, where WTQ notifies someone else, see [Event Hooks](#event-hooks).
+
 It can be enabled by setting **Enable** to **true**:
 
 ```json
@@ -279,7 +282,35 @@ The root address of the API will return an [OpenAPI-driven](https://www.openapis
 
 ## :material-chat: Event Hooks
 
-!!! danger "TODO"
+When WTQ is running, various **events** occur, which can be hooked to trigger some action.
+
+For example, to execute a script whenever an app is toggled **on**:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": "AppToggledOn",
+			"FileName": "some-script"
+		}
+	]
+}
+```
+
+The **EventPattern** property accepts regular expressions. For example, to hook everything:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": ".*",
+			"FileName": "some-script"
+		}
+	]
+}
+```
+
+- WtqAppToggledEvent
 
 ## :material-cog: Settings
 

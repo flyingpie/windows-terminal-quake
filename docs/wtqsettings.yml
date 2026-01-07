@@ -10,7 +10,6 @@ WtqSettings:
         Description: Applications to enable Quake-style dropdown for.
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: true
         DefaultValue: 
@@ -31,7 +30,6 @@ WtqSettings:
         Description: Global hotkeys, that toggle either the first, or the most recently toggled app.
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -50,7 +48,6 @@ WtqSettings:
         Description: WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -77,7 +74,6 @@ WtqSettings:
           but still have a way back should things go awry.</p>
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: false
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -91,7 +87,6 @@ WtqSettings:
         Description: Whether to show the GUI when WTQ is started.
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: false
@@ -105,7 +100,6 @@ WtqSettings:
         Description: The tray icon (color) style (dark/light).
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: Auto
@@ -135,7 +129,6 @@ WtqSettings:
           <p>Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.</p>
         IsGlobal: true
         IsApp: false
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 40
@@ -157,7 +150,6 @@ WtqSettings:
           <p>Appears in logs.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: true
         DefaultValue: 
@@ -175,7 +167,6 @@ WtqSettings:
         Description: One or more keyboard shortcuts that toggle in- and out this particular app.
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -196,7 +187,6 @@ WtqSettings:
           <p>Note that you can also put absolute paths in here.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: true
         DefaultValue: 
@@ -213,7 +203,6 @@ WtqSettings:
           <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -230,7 +219,6 @@ WtqSettings:
           <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -258,7 +246,6 @@ WtqSettings:
           <p>Useful if the <strong>filename</strong> isn't available through PATH.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -279,7 +266,6 @@ WtqSettings:
           <p>Supports regular expressions.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -311,7 +297,6 @@ WtqSettings:
           <p>A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: Either
@@ -337,7 +322,6 @@ WtqSettings:
           <p>Supports regular expressions.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -354,7 +338,6 @@ WtqSettings:
           <p>Supports regular expressions.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -377,7 +360,6 @@ WtqSettings:
           opt-out in the other program.</p>
         IsGlobal: false
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -399,7 +381,6 @@ WtqSettings:
           <p>I.e. whether to start an app instance if one cannot be found.</p>
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: FindOrStart
@@ -424,7 +405,6 @@ WtqSettings:
         Description: Whether the app should always be on top of other windows, regardless of whether it has focus.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: false
@@ -438,7 +418,6 @@ WtqSettings:
         Description: Whether the app should be toggled off when another app gets focus.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: Always
@@ -458,7 +437,6 @@ WtqSettings:
         Description: When to show the app window icon on the taskbar.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: AlwaysHidden
@@ -484,7 +462,6 @@ WtqSettings:
           <p>0 (invisible) - 100 (opaque).</p>
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 100
@@ -513,7 +490,6 @@ WtqSettings:
           window clears its contents (seems to be most common with Electron apps).
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: Always
@@ -536,7 +512,6 @@ WtqSettings:
         Description: Horizontal screen coverage, as a percentage.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 95
@@ -550,7 +525,6 @@ WtqSettings:
         Description: Where to position an app on the chosen monitor, horizontally.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: Center
@@ -573,7 +547,6 @@ WtqSettings:
         Description: Vertical screen coverage as a percentage (0-100).
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 95
@@ -587,7 +560,6 @@ WtqSettings:
         Description: How much room to leave between the top of the app window and the top of the screen, in pixels.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 0
@@ -610,7 +582,6 @@ WtqSettings:
           without any animation.</p>
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
@@ -626,7 +597,6 @@ WtqSettings:
         Description: Which monitor to preferably drop the app.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: WithCursor
@@ -652,7 +622,6 @@ WtqSettings:
           <p>Zero based, e.g. 0, 1, etc.</p>
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 0
@@ -668,7 +637,6 @@ WtqSettings:
         Description: How long the animation should take, in milliseconds.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 250
@@ -682,7 +650,6 @@ WtqSettings:
         Description: The animation type to use when toggling on an application.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: EaseOutQuart
@@ -720,7 +687,6 @@ WtqSettings:
         Description: The animation type to use when toggling off an application.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: true
         IsRequired: false
         DefaultValue: EaseInQuart
@@ -760,7 +726,6 @@ WtqSettings:
         Description: Execute a program when some event occurs.
         IsGlobal: true
         IsApp: true
-        IsDefaultValueVisible: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
