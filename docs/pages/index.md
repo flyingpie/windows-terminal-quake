@@ -240,6 +240,47 @@ You can also take a look at the build options, do see more options for building,
 
 !!! danger "TODO"
 
+## :material-api: HTTP API
+
+WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.
+
+!!! warning "Opt-In"
+	For clarity, the HTTP API is **disabled by default**. No socket is opened until **enabled manually**.
+
+It can be enabled by setting **Enable** to **true**:
+
+```json
+{
+  "Api": {
+    "Enable": true
+  }
+}
+```
+
+By default, the HTTP API is made available through a named pipe (**//pipe:/wtq** on Windows, **/run/user/&lt;UID&gt;</UID>/wtq/wtq.sock** on Linux).
+This makes it such that no ports need to be allocated, and no ports are exposed externally.
+
+Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the **Urls** setting, for example **localhost**, on port **7997**:
+
+```json
+{
+  "Api": {
+    "Enable": true,
+    "Urls": ["http://127.0.0.1:7997"]
+  }
+}
+```
+
+Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.
+
+The root address of the API will return an [OpenAPI-driven](https://www.openapis.org/) documentation page, with all the available endpoints:
+
+![API](assets/img/api.png)
+
+## :material-chat: Event Hooks
+
+!!! danger "TODO"
+
 ## :material-cog: Settings
 
 Settings are stored in a JSON file, usually named ```wtq.jsonc```.
@@ -329,7 +370,7 @@ If no settings were found at any of these locations, WTQ creates a settings file
 
 {{ Setting.Description }}
 
-{% if not Setting.IsRequired %}
+{% if not Setting.IsRequired and Setting.DefaultValue %}
 
 Defaults to ```{{ Setting.DefaultValue }}```
 
