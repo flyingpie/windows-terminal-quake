@@ -8,7 +8,7 @@ namespace Wtq.Configuration;
 public class WtqAppEventHookOptions
 {
 	private readonly ILogger _log = Log.For<WtqAppEventHookOptions>();
-	private ICollection<string> _argumentList = [];
+	private ICollection<ProcessArgument> _argumentList = [];
 
 	/// <summary>
 	/// A pattern that determines what event or events to hit.<br/>
@@ -32,11 +32,24 @@ public class WtqAppEventHookOptions
 	/// </summary>
 	[Display(GroupName = Gn.Events, Name = "Argument list")]
 	[JsonPropertyOrder(7003)]
-	public ICollection<string> ArgumentList
+	public ICollection<ProcessArgument> ArgumentList
 	{
 		get => _argumentList;
 		set => _argumentList = value ?? [];
 	}
+
+	/// <summary>
+	/// <para>
+	/// Working directory when starting a new process.
+	/// </para>
+	/// <para>
+	/// Useful if the <strong>filename</strong> isn't available through PATH.
+	/// </para>
+	/// </summary>
+	[Display(GroupName = Gn.Events, Name = "Working directory")]
+	[JsonPropertyOrder(7004)]
+	[Required]
+	public string WorkingDirectory { get; set; } = null!;
 
 	public async Task ExecuteAsync(IDictionary<string, object?> parameters)
 	{
@@ -59,9 +72,24 @@ public class WtqAppEventHookOptions
 
 			// Add filename and arguments, both support environment variables.
 			p.StartInfo.FileName = FileName.ExpandEnvVars();
-			foreach (var a in _argumentList.Where(a => !string.IsNullOrWhiteSpace(a)))
+			p.StartInfo.WorkingDirectory = WorkingDirectory?.ExpandEnvVars();
+
+			// Arguments
+			foreach (var arg in _argumentList)
 			{
-				p.StartInfo.ArgumentList.Add(a.ExpandEnvVars());
+				// Skip empty arguments
+				if (string.IsNullOrWhiteSpace(arg.Argument))
+				{
+					continue;
+				}
+
+				// Expand environment variables, also includes "~" for home dir
+				var exp = arg.Argument.ExpandEnvVars();
+
+				// Log, very useful when using environment variables in arguments
+				_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+
+				p.StartInfo.ArgumentList.Add(exp);
 			}
 
 			// Execute the process in the background, prevents command prompts from popping up on Windows.
