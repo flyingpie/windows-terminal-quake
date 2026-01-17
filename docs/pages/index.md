@@ -240,6 +240,46 @@ You can also take a look at the build options, do see more options for building,
 
 !!! danger "TODO"
 
+## :material-chat: Event Hooks
+
+When WTQ is running, various events occur, which can be hooked to trigger some action.
+
+!!! note "Event Hooks"
+	For going the other direction, where you tell WTQ to do something, see [HTTP API](#http-api).
+
+For example, to execute a script whenever an app is toggled **on**:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": "AppToggledOn",
+			"FileName": "some-script",
+			"WorkingDirectory": "/path/to/script"
+		}
+	]
+}
+```
+
+The **EventPattern** property accepts regular expressions. For example, to hook everything:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": ".*",
+			"FileName": "some-script"
+		}
+	]
+}
+```
+
+- AppToggledOn
+Fired when an app is toggling onto the screen.
+
+- AppToggledOff
+Fired when an app is toggling off the screen.
+
 ## :material-api: HTTP API
 
 WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.
@@ -279,38 +319,6 @@ Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.
 The root address of the API will return an [OpenAPI-driven](https://www.openapis.org/) documentation page, with all the available endpoints:
 
 ![API](assets/img/api.png)
-
-## :material-chat: Event Hooks
-
-When WTQ is running, various **events** occur, which can be hooked to trigger some action.
-
-For example, to execute a script whenever an app is toggled **on**:
-
-```json
-{
-	"EventHooks": [
-		{
-			"EventPattern": "AppToggledOn",
-			"FileName": "some-script"
-		}
-	]
-}
-```
-
-The **EventPattern** property accepts regular expressions. For example, to hook everything:
-
-```json
-{
-	"EventHooks": [
-		{
-			"EventPattern": ".*",
-			"FileName": "some-script"
-		}
-	]
-}
-```
-
-- WtqAppToggledEvent
 
 ## :material-cog: Settings
 

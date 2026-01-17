@@ -7,6 +7,7 @@ namespace Wtq.Events;
 /// Note that this event is used for OS-specific hotkey-handling.<br/>
 /// The non-platform-specific <see cref="WtqHotkeyRoutingService"/> catches these, and fires new events that include the relevant app.
 /// </summary>
+[DisplayName("HotkeyPressed")]
 public sealed class WtqHotkeyPressedEvent(KeySequence sequence) : WtqEvent
 {
 	/// <summary>
