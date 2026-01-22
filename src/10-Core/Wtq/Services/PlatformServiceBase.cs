@@ -166,7 +166,9 @@ public abstract class PlatformServiceBase : IPlatformService
 		// Build start info
 		var startInfo = new ProcessStartInfo()
 		{
-			FileName = opts.FileName, Arguments = opts.Arguments, WorkingDirectory = opts.WorkingDirectory,
+			Arguments = opts.Arguments,
+			FileName = opts.FileName,
+			WorkingDirectory = opts.WorkingDirectory,
 		};
 
 		// Arguments
