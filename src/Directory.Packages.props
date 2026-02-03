@@ -12,7 +12,7 @@
 		<PackageVersion Include="Namotion.Reflection" Version="3.4.3"/>
 		<PackageVersion Include="SharpHook" Version="7.1.1"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.5.0"/>
-		<PackageVersion Include="System.Resources.Extensions" Version="10.0.1"/>
+		<PackageVersion Include="System.Resources.Extensions" Version="10.0.2"/>
 		<PackageVersion Include="Tmds.DBus" Version="0.23.0"/>
 		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.23.0"/>
 		<!-- Analyzers -->
