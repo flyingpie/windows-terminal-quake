@@ -43,6 +43,25 @@ WtqSettings:
             ]
           }
         Remarks: ""
+      - DisplayName: API
+        SettingName: Api
+        Description: WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+            "Api": {
+              "Enable": true,
+              "Urls": ["http://127.0.0.1:7997"]
+            }
+          }
+        Remarks: ""
       - DisplayName: Feature flags
         SettingName: FeatureFlags
         Description: >-
@@ -114,21 +133,6 @@ WtqSettings:
         IsRequired: false
         DefaultValue: 40
         ExampleValue: 40
-        EnumValues: 
-        HasExample: false
-        Example: ""
-        Remarks: ""
-    - Name: 
-      Settings:
-      - DisplayName: Api
-        SettingName: Api
-        Description: Options related to the HTTP API, that can be used to control WTQ programmatically.
-        IsGlobal: true
-        IsApp: false
-        IsEnum: false
-        IsRequired: false
-        DefaultValue: 
-        ExampleValue: 
         EnumValues: 
         HasExample: false
         Example: ""
