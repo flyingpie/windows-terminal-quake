@@ -509,21 +509,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#http-api" class="md-nav__link">
+  <a href="#event-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HTTP API
+        Event Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Event Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#event-hooks" class="md-nav__link">
+  <a href="#http-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Event Hooks
+        HTTP API
       
     </span>
   </a>
@@ -1497,21 +1514,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#http-api" class="md-nav__link">
+  <a href="#event-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HTTP API
+        Event Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Event Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#event-hooks" class="md-nav__link">
+  <a href="#http-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Event Hooks
+        HTTP API
       
     </span>
   </a>
@@ -2407,11 +2441,117 @@ cd windows-terminal-quake
 <div class="admonition danger">
 <p class="admonition-title">TODO</p>
 </div>
+<h2 id="event-hooks"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"/></svg></span> Event Hooks<a class="headerlink" href="#event-hooks" title="Permanent link">&para;</a></h2>
+<p>When WTQ is running, various events occur, which can be hooked to trigger some action.</p>
+<div class="admonition note">
+<p class="admonition-title">Event Hooks</p>
+<p>For going the other direction, where you tell WTQ to do something, see <a href="#http-api">HTTP API</a>.</p>
+</div>
+<p>For example, to execute a script whenever an app is toggled <strong>on</strong>:</p>
+<pre class="highlight"><code class="language-json">{
+    "EventHooks": [
+        {
+            "EventPattern": "AppToggledOn",
+            "FileName": "some-script",
+            "WorkingDirectory": "/path/to/script"
+        }
+    ]
+}</code></pre>
+<p>The <strong>EventPattern</strong> property accepts regular expressions. For example, to hook everything:</p>
+<pre class="highlight"><code class="language-json">{
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "some-script"
+        }
+    ]
+}</code></pre>
+<ul>
+<li><strong>AppToggledOn</strong>: Fired when an app is toggling onto the screen.</li>
+<li><strong>AppToggledOff</strong>: Fired when an app is toggling off the screen.</li>
+</ul>
+<p>Additionally, some environment variables are passed to the executed command:</p>
+<ul>
+<li><strong>WTQ_EVENT_NAME</strong>: The name of the event that fired;</li>
+<li><strong>WTQ_APP_NAME</strong>: The app that relates to the event, if any;</li>
+<li><strong>WTQ_IS_SWITCHING</strong>: "True" if currently switching from one app to another;</li>
+</ul>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<p>Running a PowerShell script when toggling, to play a sound:</p>
+<pre class="highlight"><code class="language-ps1">if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
+{
+    if ($env:WTQ_IS_SWITCHING -eq "True")
+    {
+        # Don't do anything (see below)
+    }
+    else
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/on.mp3" | Out-Null
+    }
+}
+
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
+{
+    if ($env:WTQ_IS_SWITCHING -eq "True")
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/switch.mp3" | Out-Null
+    }
+    else
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/off.mp3" | Out-Null
+    }
+}</code></pre>
+<p>And <code>wtq.jsonc</code>:</p>
+<pre class="highlight"><code class="language-json">{
+    (...)
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "pwsh",
+            "ArgumentList": [ { "Argument": "wtq-sound.ps1" } ],
+            "WorkingDirectory": "C:/downloads"
+        }
+    ]</code></pre>
+<p>The same demo, but in Bash:</p>
+<pre class="highlight"><code class="language-bash">if [ $WTQ_EVENT_NAME = "AppToggledOn" ]; then
+    if [ $WTQ_IS_SWITCHING = "True" ]; then
+        # Don't do anything (see below)
+    else
+        ffplay -nodisp -autoexit ~/Downloads/on.mp3 &amp;&gt; /dev/null
+    fi
+fi
+
+if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
+    if [ $WTQ_IS_SWITCHING = "True" ]; then
+        ffplay -nodisp -autoexit ~/Downloads/switch.mp3 &amp;&gt; /dev/null
+    else
+        ffplay -nodisp -autoexit ~/Downloads/off.mp3 &amp;&gt; /dev/null
+    fi
+fi</code></pre>
+<p>And <code>wtq.jsonc</code>:</p>
+<pre class="highlight"><code class="language-json">{
+    (...)
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "bash",
+            "ArgumentList": [ { "Argument": "wtq-sound" } ],
+            "WorkingDirectory": "~/Downloads"
+        }
+    ]</code></pre>
 <h2 id="http-api"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg></span> HTTP API<a class="headerlink" href="#http-api" title="Permanent link">&para;</a></h2>
 <p>WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.</p>
 <div class="admonition warning">
 <p class="admonition-title">Opt-In</p>
 <p>For clarity, the HTTP API is <strong>disabled by default</strong>. No socket is opened until <strong>enabled manually</strong>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Event Hooks</p>
+<p>For going the other direction, where WTQ notifies someone else, see <a href="#event-hooks">Event Hooks</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Requires Restart</p>
+<p>Making changes to this part of the settings requires a WTQ restart.</p>
 </div>
 <p>It can be enabled by setting <strong>Enable</strong> to <strong>true</strong>:</p>
 <pre class="highlight"><code class="language-json">{
@@ -2419,7 +2559,7 @@ cd windows-terminal-quake
     "Enable": true
   }
 }</code></pre>
-<p>By default, the HTTP API is made available through a named pipe (<strong>//pipe:/wtq</strong> on Windows, <strong>/run/user/&lt;UID&gt;</UID>/wtq/wtq.sock</strong> on Linux).
+<p>By default, the HTTP API is made available through a named pipe (<strong>//pipe:/wtq</strong> on Windows, <strong>/run/user/USERNAME/wtq/wtq.sock</strong> on Linux).
 This makes it such that no ports need to be allocated, and no ports are exposed externally.</p>
 <p>Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the <strong>Urls</strong> setting, for example <strong>localhost</strong>, on port <strong>7997</strong>:</p>
 <pre class="highlight"><code class="language-json">{
@@ -2431,10 +2571,29 @@ This makes it such that no ports need to be allocated, and no ports are exposed 
 <p>Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.</p>
 <p>The root address of the API will return an <a href="https://www.openapis.org/">OpenAPI-driven</a> documentation page, with all the available endpoints:</p>
 <p><img alt="API" src="assets/img/api.png" /></p>
-<h2 id="event-hooks"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"/></svg></span> Event Hooks<a class="headerlink" href="#event-hooks" title="Permanent link">&para;</a></h2>
-<div class="admonition danger">
-<p class="admonition-title">TODO</p>
-</div>
+<p>For example, using Curl to fetch all configured apps:</p>
+<pre class="highlight"><code class="language-bash">curl http://localhost:7997/apps | jq
+{
+    "apps": [
+        {
+            "name": "KeePassXC",
+            "isAttached": true,
+            "isOpen": false
+        },
+        {
+            "name": "Dolphin",
+            "isAttached": true,
+            "isOpen": false
+        },
+        {
+            "name": "WezTerm",
+            "isAttached": true,
+            "isOpen": true
+        }
+    ]
+}</code></pre>
+<p>Or to open a specific app:</p>
+<pre class="highlight"><code class="language-bash">curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"</code></pre>
 <h2 id="settings"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/></svg></span> Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
 <p>Settings are stored in a JSON file, usually named <code>wtq.jsonc</code>.</p>
 <p>The file can use the extension <code>.json</code>, <code>.jsonc</code> or <code>.json5</code>. The latter two are supported, so that editors like VSCode automatically switch to <strong>"JSON with Comments"</strong>, making working with comments nicer.</p>

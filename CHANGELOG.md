@@ -7,6 +7,8 @@
 
 ## [v2.1.0] / 2026-xx-xx
 - Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr)
+- Docs: Added some more information on the API and event hooks
+- Refactor: Event hooks changed a little bit, see the docs for the current settings syntax
 
 ## [v2.0.19] / 2025-12-31
 - Bugfix: GUI - "Off-Screen Locations" - Update state when changing app page.
