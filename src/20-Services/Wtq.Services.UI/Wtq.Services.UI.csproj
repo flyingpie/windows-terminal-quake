@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BlazorMonaco"/>
 		<PackageReference Include="Microsoft.Extensions.Hosting"/>
 		<PackageReference Include="Photino.Blazor"/>
 		<PackageReference Include="Radzen.Blazor"/>
