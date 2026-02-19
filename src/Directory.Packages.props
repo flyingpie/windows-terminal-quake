@@ -20,7 +20,7 @@
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.18.0.131500"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- Build -->
-		<PackageVersion Include="Microsoft.Build" Version="18.0.2"/>
+		<PackageVersion Include="Microsoft.Build" Version="18.3.3"/>
 		<PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.3.3"/>
 		<PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.3.3"/>
 		<PackageVersion Include="Nuke.Common" Version="10.1.0"/>
