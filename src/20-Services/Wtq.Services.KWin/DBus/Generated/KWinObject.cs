@@ -12,7 +12,7 @@ internal class KWinObject
 
 	public ObjectPath Path { get; }
 
-	protected Connection Connection => Service.Connection;
+	protected Tmds.DBus.Protocol.DBusConnection Connection => Service.Connection;
 
 	protected KWinObject(KWinService service, ObjectPath path)
 		=> (Service, Path) = (service, path);
