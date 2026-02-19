@@ -118,11 +118,8 @@
 
 	<ItemGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
 		<PackageReference Include="Microsoft.NET.Test.Sdk"/>
-		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage"/>
-		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport"/>
 		<PackageReference Include="Moq"/>
 		<PackageReference Include="MSTest"/>
-		<PackageReference Include="SystemTextJson.JsonDiffPatch"/>
 	</ItemGroup>
 
 	<!--
