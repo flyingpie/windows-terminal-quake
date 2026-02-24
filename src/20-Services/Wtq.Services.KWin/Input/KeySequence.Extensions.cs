@@ -124,7 +124,7 @@ public static class KeySequenceExtensions
 			// The Most Popular Keys
 			case KeyCode.Escape:					return "Esc";
 			case KeyCode.PrintScreen:				return "Print";
-			case KeyCode.Return:					return "Esc";
+			case KeyCode.Return:					return "Return";
 			case KeyCode.Space:						return "Space";
 			case KeyCode.Tab:						return "Tab";
 
