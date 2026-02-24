@@ -1,6 +1,6 @@
 using Tmds.DBus;
-using Address = Tmds.DBus.Protocol.Address;
-using Connection = Tmds.DBus.Protocol.Connection;
+using Address = Tmds.DBus.Protocol.DBusAddress;
+using Connection = Tmds.DBus.Protocol.DBusConnection;
 
 namespace Wtq.Services.KWin.DBus;
 

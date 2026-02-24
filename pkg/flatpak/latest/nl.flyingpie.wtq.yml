@@ -3,11 +3,11 @@ runtime: org.gnome.Platform
 runtime-version: "48"
 sdk: org.gnome.Sdk
 sdk-extensions:
- - org.freedesktop.Sdk.Extension.dotnet9
+ - org.freedesktop.Sdk.Extension.dotnet10
 build-options:
-  prepend-path: "/usr/lib/sdk/dotnet9/bin"
-  append-ld-library-path: "/usr/lib/sdk/dotnet9/lib"
-  prepend-pkg-config-path: "/usr/lib/sdk/dotnet9/lib/pkgconfig"
+  prepend-path: "/usr/lib/sdk/dotnet10/bin"
+  append-ld-library-path: "/usr/lib/sdk/dotnet10/lib"
+  prepend-pkg-config-path: "/usr/lib/sdk/dotnet10/lib/pkgconfig"
 
 command: wtq
 
@@ -27,7 +27,7 @@ modules:
   - name: dotnet
     buildsystem: simple
     build-commands:
-    - /usr/lib/sdk/dotnet9/bin/install.sh
+    - /usr/lib/sdk/dotnet10/bin/install.sh
 
   # WTQ
   - name: wtq
@@ -38,7 +38,7 @@ modules:
       # Source repo
       - type: git
         url: https://github.com/flyingpie/windows-terminal-quake.git
-        commit: 5bc646507977275574dd4f485c22b81f7ef66905
+        commit: 4366a91b4cf7fb625805f63fc7a24d02882a38da
 
       # NuGet sources
       - ./nuget-sources.json
@@ -54,7 +54,7 @@ modules:
     build-commands:
       - dotnet publish -c Release --no-self-contained --source ./nuget-sources ./src/30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj
       - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -Rv _output/build/bin/Wtq.Host.Linux/net9.0/publish/* ${FLATPAK_DEST}/bin
+      - cp -Rv _output/build/bin/Wtq.Host.Linux/net10.0/publish/* ${FLATPAK_DEST}/bin
       - install -D assets/nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq.svg
       - install -D assets/nl.flyingpie.wtq-white.svg /app/share/icons/hicolor/scalable/apps/nl.flyingpie.wtq-white.svg
       - install -D nl.flyingpie.wtq.desktop /app/share/applications/nl.flyingpie.wtq.desktop

@@ -83,8 +83,20 @@ public sealed class WtqOptions : WtqSharedOptions
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
-	/// Options related to the HTTP API, that can be used to control WTQ programmatically.
+	/// WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Api": {
+	///     "Enable": true,
+	///     "Urls": ["http://127.0.0.1:7997"]
+	///   }
+	/// }
+	/// </code>
+	/// </example>
+	[Display(GroupName = Gn.General, Name = "API")]
+	[JsonPropertyOrder(104)]
 	public WtqApiOptions? Api { get; set; }
 
 	/// <summary>
@@ -100,7 +112,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
-	[JsonPropertyOrder(104)]
+	[JsonPropertyOrder(105)]
 	public FeatureFlags? FeatureFlags { get; set; }
 
 	/// <summary>
@@ -108,7 +120,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// </summary>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.General, Name = "Show UI on start")]
-	[JsonPropertyOrder(105)]
+	[JsonPropertyOrder(106)]
 	public bool? ShowUiOnStart { get; set; }
 
 	/// <summary>
@@ -116,7 +128,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// </summary>
 	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
 	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]
-	[JsonPropertyOrder(106)]
+	[JsonPropertyOrder(107)]
 	public TrayIconStyle? TrayIconStyle { get; set; }
 
 	/// <summary>

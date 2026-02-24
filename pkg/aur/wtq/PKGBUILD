@@ -1,6 +1,6 @@
 # Maintainer: Marco van den Oever <arch@flyingpie.nl>
 pkgname=wtq
-pkgver=2.0.18
+pkgver=2.0.19
 pkgrel=1
 pkgdesc="Enable Quake-style dropdown for (almost) any application."
 arch=("x86_64")
@@ -10,11 +10,11 @@ depends=(
 	"libappindicator-gtk3"
 	"webkit2gtk-4.1"
 )
-makedepends=("dotnet-sdk>=9")
+makedepends=("dotnet-sdk>=10")
 provides=()
 conflicts=()
 source=(
-	"git+https://github.com/flyingpie/windows-terminal-quake.git#tag=v2.0.18"
+	"git+https://github.com/flyingpie/windows-terminal-quake.git#tag=v2.0.19"
 )
 noextract=()
 sha256sums=(

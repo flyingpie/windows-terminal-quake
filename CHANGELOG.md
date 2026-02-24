@@ -1,17 +1,23 @@
 # Changelog
 
 ## [vFuture]
+- Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
 ## [vNext]
 
-## [v2.0.19] / 2025-xx-xx
-- Bugfix - GUI - "Off-Screen Locations" - Update state when changing app page.
-- Bugfix - Only consider 'attached' apps when looking for 'open' ones (caused some broken toggles just after WTQ start).
-- Feature - GUI - Debug info.
-- Feature - Removed in-app log sink (too complicated and resource-intensive).
-- Feature - Single-instance mode - Only allow a single instance of WTQ to run (i.e. stop when another instance is already running).
-- Maintenance - .Net 10.
-- Maintenance - Removed 'Win32v1', replaced by 'Win32v2'.
+## [v2.1.0] / 2026-xx-xx
+- Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr)
+- Docs: Added some more information on the API and event hooks
+- Refactor: Event hooks changed a little bit, see the docs for the current settings syntax
+
+## [v2.0.19] / 2025-12-31
+- Bugfix: GUI - "Off-Screen Locations" - Update state when changing app page.
+- Bugfix: Only consider 'attached' apps when looking for 'open' ones (caused some broken toggles just after WTQ start).
+- Feature: GUI - Debug info.
+- Feature: Removed in-app log sink (too complicated and resource-intensive).
+- Feature: Single-instance mode - Only allow a single instance of WTQ to run (i.e. stop when another instance is already running).
+- Maintenance: .Net 10.
+- Maintenance: Removed 'Win32v1', replaced by 'Win32v2'.
 
 ## [v2.0.18] / 2025-11-05
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.

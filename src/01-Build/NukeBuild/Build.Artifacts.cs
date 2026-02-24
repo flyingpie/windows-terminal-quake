@@ -35,7 +35,9 @@ public sealed partial class Build
 			DotNetPublish(_ => _
 				.SetConfiguration(Configuration)
 				.SetProject(Solution.Q30_Host.Wtq_Host_Linux)
-				.SetOutput(st));
+				.SetOutput(st)
+				.SetRuntime("linux-x64")
+				.SetSelfContained(false));
 
 			st.TarGZipTo(PathToLinux64FrameworkDependentZip, fileMode: FileMode.CreateNew);
 
@@ -81,6 +83,7 @@ public sealed partial class Build
 				.SetFramework("net10.0-windows")
 				.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
 				.SetOutput(st)
+				.SetRuntime("win-x64")
 				.SetSelfContained(false));
 
 			st.ZipTo(PathToWin64FrameworkDependentZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);

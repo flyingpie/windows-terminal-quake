@@ -6,9 +6,9 @@ namespace Wtq.Services.KWin.DBus.Generated;
 
 internal class KWinService
 {
-	public Tmds.DBus.Protocol.Connection Connection { get; }
+	public Tmds.DBus.Protocol.DBusConnection Connection { get; }
 	public string Destination { get; }
-	public KWinService(Tmds.DBus.Protocol.Connection connection, string destination) => (Connection, Destination) = (connection, destination);
+	public KWinService(Tmds.DBus.Protocol.DBusConnection connection, string destination) => (Connection, Destination) = (connection, destination);
 	public KWin CreateKWin(string path) => new KWin(this, path);
 	public Scripting CreateScripting(string path) => new Scripting(this, path);
 	public Component CreateComponent(string path) => new Component(this, path);

@@ -240,6 +240,203 @@ You can also take a look at the build options, do see more options for building,
 
 !!! danger "TODO"
 
+## :material-chat: Event Hooks
+
+When WTQ is running, various events occur, which can be hooked to trigger some action.
+
+!!! note "Event Hooks"
+	For going the other direction, where you tell WTQ to do something, see [HTTP API](#http-api).
+
+For example, to execute a script whenever an app is toggled **on**:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": "AppToggledOn",
+			"FileName": "some-script",
+			"WorkingDirectory": "/path/to/script"
+		}
+	]
+}
+```
+
+The **EventPattern** property accepts regular expressions. For example, to hook everything:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "some-script"
+		}
+	]
+}
+```
+
+- **AppToggledOn**: Fired when an app is toggling onto the screen.
+- **AppToggledOff**: Fired when an app is toggling off the screen.
+
+Additionally, some environment variables are passed to the executed command:
+
+- **WTQ_EVENT_NAME**: The name of the event that fired;
+- **WTQ_APP_NAME**: The app that relates to the event, if any;
+- **WTQ_IS_SWITCHING**: "True" if currently switching from one app to another;
+
+### Examples
+
+Running a PowerShell script when toggling, to play a sound:
+
+```ps1
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
+{
+	if ($env:WTQ_IS_SWITCHING -eq "True")
+	{
+		# Don't do anything (see below)
+	}
+	else
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/on.mp3" | Out-Null
+	}
+}
+
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
+{
+	if ($env:WTQ_IS_SWITCHING -eq "True")
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/switch.mp3" | Out-Null
+	}
+	else
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/off.mp3" | Out-Null
+	}
+}
+```
+
+And ```wtq.jsonc```:
+
+```json
+{
+	(...)
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "pwsh",
+			"ArgumentList": [ { "Argument": "wtq-sound.ps1" } ],
+			"WorkingDirectory": "C:/downloads"
+		}
+	]
+```
+
+The same demo, but in Bash:
+
+```bash
+if [ $WTQ_EVENT_NAME = "AppToggledOn" ]; then
+	if [ $WTQ_IS_SWITCHING = "True" ]; then
+		# Don't do anything (see below)
+	else
+		ffplay -nodisp -autoexit ~/Downloads/on.mp3 &> /dev/null
+	fi
+fi
+
+if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
+	if [ $WTQ_IS_SWITCHING = "True" ]; then
+		ffplay -nodisp -autoexit ~/Downloads/switch.mp3 &> /dev/null
+	else
+		ffplay -nodisp -autoexit ~/Downloads/off.mp3 &> /dev/null
+	fi
+fi
+```
+
+And ```wtq.jsonc```:
+
+```json
+{
+	(...)
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "bash",
+			"ArgumentList": [ { "Argument": "wtq-sound" } ],
+			"WorkingDirectory": "~/Downloads"
+		}
+	]
+```
+
+## :material-api: HTTP API
+
+WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.
+
+!!! warning "Opt-In"
+	For clarity, the HTTP API is **disabled by default**. No socket is opened until **enabled manually**.
+
+!!! note "Event Hooks"
+	For going the other direction, where WTQ notifies someone else, see [Event Hooks](#event-hooks).
+
+!!! note "Requires Restart"
+	Making changes to this part of the settings requires a WTQ restart.
+
+It can be enabled by setting **Enable** to **true**:
+
+```json
+{
+  "Api": {
+    "Enable": true
+  }
+}
+```
+
+By default, the HTTP API is made available through a named pipe (**//pipe:/wtq** on Windows, **/run/user/USERNAME/wtq/wtq.sock** on Linux).
+This makes it such that no ports need to be allocated, and no ports are exposed externally.
+
+Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the **Urls** setting, for example **localhost**, on port **7997**:
+
+```json
+{
+  "Api": {
+    "Enable": true,
+    "Urls": ["http://127.0.0.1:7997"]
+  }
+}
+```
+
+Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.
+
+The root address of the API will return an [OpenAPI-driven](https://www.openapis.org/) documentation page, with all the available endpoints:
+
+![API](assets/img/api.png)
+
+For example, using Curl to fetch all configured apps:
+
+```bash
+curl http://localhost:7997/apps | jq
+{
+	"apps": [
+		{
+			"name": "KeePassXC",
+			"isAttached": true,
+			"isOpen": false
+		},
+		{
+			"name": "Dolphin",
+			"isAttached": true,
+			"isOpen": false
+		},
+		{
+			"name": "WezTerm",
+			"isAttached": true,
+			"isOpen": true
+		}
+	]
+}
+```
+
+Or to open a specific app:
+
+```bash
+curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"
+```
+
 ## :material-cog: Settings
 
 Settings are stored in a JSON file, usually named ```wtq.jsonc```.
@@ -329,7 +526,7 @@ If no settings were found at any of these locations, WTQ creates a settings file
 
 {{ Setting.Description }}
 
-{% if not Setting.IsRequired %}
+{% if not Setting.IsRequired and Setting.DefaultValue %}
 
 Defaults to ```{{ Setting.DefaultValue }}```
 

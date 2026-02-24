@@ -43,30 +43,30 @@
 
 	<screenshots>
 		<screenshot type="default">
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/5bc646507977275574dd4f485c22b81f7ef66905/assets/screenshots/welcome-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/welcome-1.png</image>
 			<caption>Welcome page.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/5bc646507977275574dd4f485c22b81f7ef66905/assets/screenshots/examples-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/examples-1.png</image>
 			<caption>Some examples of applications that can be used with WTQ.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/5bc646507977275574dd4f485c22b81f7ef66905/assets/screenshots/app-settings-1.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-1.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/5bc646507977275574dd4f485c22b81f7ef66905/assets/screenshots/app-settings-2.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-2.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/5bc646507977275574dd4f485c22b81f7ef66905/assets/screenshots/app-settings-3.png</image>
+			<image>https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/4366a91b4cf7fb625805f63fc7a24d02882a38da/assets/screenshots/app-settings-3.png</image>
 			<caption>Some of the settings that can be applied to a toggled app.</caption>
 		</screenshot>
 	</screenshots>
 
 	<releases>
-		<release version="2.0.18" date="2025-11-05">
-			<url>https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.18</url>
+		<release version="2.0.19" date="2025-12-31">
+			<url>https://github.com/flyingpie/windows-terminal-quake/releases/tag/v2.0.19</url>
 		</release>
 	</releases>
 </component>

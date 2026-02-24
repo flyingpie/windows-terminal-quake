@@ -10,7 +10,7 @@ depends=(
 	"libappindicator-gtk3"
 	"webkit2gtk-4.1"
 )
-makedepends=("dotnet-sdk>=9")
+makedepends=("dotnet-sdk>=10")
 provides=()
 conflicts=()
 source=(
