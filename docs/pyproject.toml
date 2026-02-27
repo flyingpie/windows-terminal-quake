@@ -31,7 +31,7 @@ dependencies = [
     "pathspec==0.12.1",
     "platformdirs==4.4.0",
     "pygments==2.19.2",
-    "pymdown-extensions==10.16.1",
+    "pymdown-extensions==10.21",
     "pyparsing==3.2.3",
     "python-dateutil==2.9.0.post0",
     "pyyaml==6.0.3",
