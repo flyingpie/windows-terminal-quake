@@ -14,12 +14,8 @@
 			"matchDatasources": "nuget"
 		},
 		{
-			"groupName": "PEP621",
-			"matchDatasources": "pep621"
-		},
-		{
-			"groupName": "PyEnv",
-			"matchDatasources": "pyenv"
+			"groupName": "PyPy",
+			"matchDatasources": "pypy"
 		}
 	],
 
