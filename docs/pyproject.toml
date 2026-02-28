@@ -5,7 +5,7 @@ description = "Documentation for WTQ"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "babel==2.17.0",
+    "babel==2.18.0",
     "backrefs==5.9",
     "bracex==2.6",
     "certifi==2025.11.12",
