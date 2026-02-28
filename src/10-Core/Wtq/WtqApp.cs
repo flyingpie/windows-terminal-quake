@@ -42,6 +42,8 @@ public sealed class WtqApp : IAsyncDisposable
 		Name = Guard.Against.NullOrWhiteSpace(name);
 	}
 
+	public bool IsActive { get; set; } = true;
+
 	/// <summary>
 	/// Whether an active process is being tracked by this app instance.
 	/// </summary>
@@ -75,6 +77,8 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task CloseAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		IsActive = true;
+
 		if (!IsOpen)
 		{
 			return;
@@ -98,20 +102,7 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async ValueTask DisposeAsync()
 	{
-		// TODO: Add ability to close attached processes when app closes.
-		if (!IsAttached)
-		{
-			_log.LogDebug("App is not attached, not doing anything for cleanup");
-			return;
-		}
-
-		// Reset window location & size.
-		await ResetLocationAndSizeAsync().NoCtx();
-
-		// Reset app props.
-		await ResetPropsAsync().NoCtx();
-
-		_updateLock.Dispose();
+		await SuspendAsync().NoCtx();
 	}
 
 	/// <summary>
@@ -183,6 +174,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 		_log.LogInformation("Opening app '{App}'", this);
 
+		IsActive = true;
+
 		if (IsOpen)
 		{
 			_log.LogWarning("App '{App}' is already open, skipping further actions", this);
@@ -218,6 +211,27 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		await Window.SetSizeAsync(size).NoCtx();
+	}
+
+	public async Task SuspendAsync()
+	{
+		IsActive = false;
+
+		// TODO: Add ability to close attached processes when app closes.
+		if (!IsAttached)
+		{
+			_log.LogInformation("App is not attached, not doing anything for cleanup");
+			return;
+		}
+
+		// Stop update loop.
+		await (_loop?.DisposeAsync() ?? ValueTask.CompletedTask).NoCtx();
+
+		// Reset window location & size.
+		await ResetLocationAndSizeAsync().NoCtx();
+
+		// Reset app props.
+		await ResetPropsAsync().NoCtx();
 	}
 
 	public override string ToString() => $"[App:{Options}] {Window?.ToString() ?? "<no process>"}";

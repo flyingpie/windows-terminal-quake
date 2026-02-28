@@ -14,6 +14,7 @@ public sealed class WtqService : WtqHostedService
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
 	private WtqWindow? _lastNonWtqWindow;
+	private WtqAppToggledEvent? _lastEvent;
 
 	public WtqService(
 		ILogger<WtqService> log,
@@ -54,6 +55,20 @@ public sealed class WtqService : WtqHostedService
 			_log.LogWarning("No app found with name '{AppName}'", ev.AppName);
 			return;
 		}
+
+		if (_lastEvent != null)
+		{
+			var diff = ev.Timestamp - _lastEvent.Timestamp;
+
+			if (app.IsAttached && ev.AppName.Equals(_lastEvent.AppName, StringComparison.OrdinalIgnoreCase) && diff < TimeSpan.FromMilliseconds(300))
+			{
+				Console.WriteLine("OnAppToggledEventAsync");
+				await app.SuspendAsync().NoCtx();
+				return;
+			}
+		}
+
+		_lastEvent = ev;
 
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
