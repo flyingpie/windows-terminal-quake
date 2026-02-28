@@ -32,7 +32,7 @@ dependencies = [
     "platformdirs==4.9.2",
     "pygments==2.19.2",
     "pymdown-extensions==10.21",
-    "pyparsing==3.2.3",
+    "pyparsing==3.3.2",
     "python-dateutil==2.9.0.post0",
     "pyyaml==6.0.3",
     "pyyaml-env-tag==1.1",
