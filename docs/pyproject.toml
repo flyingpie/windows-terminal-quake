@@ -39,7 +39,7 @@ dependencies = [
     "regex==2025.11.3",
     "requests==2.32.5",
     "six==1.17.0",
-    "super-collections==0.5.3",
+    "super-collections==0.6.2",
     "termcolor==3.1.0",
     "urllib3==2.6.3",
     "watchdog==6.0.0",
