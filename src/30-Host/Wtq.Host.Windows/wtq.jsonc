@@ -1,0 +1,46 @@
+{
+	"$schema": "wtq.schema.json",
+
+	"Apps": [
+
+		// Windows Terminal
+		{
+			"Name": "Windows Terminal",
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
+			"FileName": "wt",
+			"ProcessName": "^WindowsTerminal$"
+		},
+
+		// Explorer
+		{
+			"Name": "Explorer",
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
+			"FileName": "explorer",
+			"WindowClass": "^CabinetWClass$"
+		}
+	],
+
+	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
+	"Hotkeys": [ { "Modifiers": "Control", "KeyChar": "Q" }, { "Key": "SuperRight" } ],
+
+	// What monitor to preferably drop the terminal.
+	// "WithCursor" (default), "Primary" or "AtIndex".
+	// Can be overridden per app.
+	"PreferMonitor": "WithCursor",
+
+	// If "PreferMonitor" is set to "AtIndex", this setting determines what monitor to choose.
+	// Zero based, eg. 0, 1, etc.
+	// Defaults to "0".
+	// Can be overridden per app.
+	"MonitorIndex": 0,
+
+	// Horizontal screen coverage, as a percentage (defaults to 95).
+	"HorizontalScreenCoverage": 95,
+
+	// Vertical screen coverage, as a percentage (defaults to 95).
+	"VerticalScreenCoverage": 95,
+
+	"Api": {
+		"Enable": true
+	}
+}

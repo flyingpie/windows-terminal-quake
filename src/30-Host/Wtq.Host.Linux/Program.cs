@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
+
 namespace Wtq.Host.Linux;
 
 public static class Program
 {
-	public static void Main(string[] args) => new WtqLinux().Run(args);
+	public static Task Main(string[] args) => new WtqLinux().RunAsync(args);
 }

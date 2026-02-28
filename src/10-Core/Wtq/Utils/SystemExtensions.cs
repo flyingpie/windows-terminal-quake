@@ -1,16 +1,10 @@
+using System.Globalization;
 using System.Text.Json;
 
 namespace Wtq.Utils;
 
 public static class SystemExtensions
 {
-	public static TValue JsonDeepClone<TValue>(this TValue value)
-	{
-		var json = JsonSerializer.Serialize(value);
-
-		return JsonSerializer.Deserialize<TValue>(json)!;
-	}
-
 	/// <summary>
 	/// "" => null<br/>
 	/// " " => null<br/>
@@ -20,26 +14,30 @@ public static class SystemExtensions
 	/// </summary>
 	public static string? EmptyOrWhiteSpaceToNull(this string? input) => string.IsNullOrWhiteSpace(input) ? null : input;
 
+	public static string GetFileNameWithoutExtension(this string fileName)
+	{
+		Guard.Against.NullOrWhiteSpace(fileName);
+
+		return Path.GetFileNameWithoutExtension(fileName)?.EmptyOrWhiteSpaceToNull() ?? fileName;
+	}
+
+	public static TValue JsonDeepClone<TValue>(this TValue value)
+	{
+		var json = JsonSerializer.Serialize(value);
+
+		return JsonSerializer.Deserialize<TValue>(json)!;
+	}
+
+	public static string ToIso8601(this DateTimeOffset dateTimeOffset)
+	{
+		return dateTimeOffset.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+	}
+
 	public static IEnumerable<ValidationResult> Validate(this IValidatableObject validatable)
 	{
 		Guard.Against.Null(validatable);
 
 		return validatable.Validate(new ValidationContext(new object()));
-	}
-
-	/// <summary>
-	/// Replace variables such as "%ENV_VAR%".<br/>
-	/// E.g. "User %USER% is logged in" => "User username1 is logged in".<br/>
-	/// Also replaces "~" with the path to the user's home directory.
-	/// </summary>
-	public static string ExpandEnvVars(this string source)
-	{
-		Guard.Against.Null(source);
-
-		return Environment
-				.ExpandEnvironmentVariables(source)
-				?.Replace("~", WtqPaths.UserHome)
-			?? string.Empty;
 	}
 
 	/// <summary>

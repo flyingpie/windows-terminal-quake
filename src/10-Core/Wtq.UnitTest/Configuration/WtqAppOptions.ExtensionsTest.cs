@@ -16,6 +16,8 @@ public class WtqAppOptionsExtensionsTest
 		};
 	}
 
+	#region HideOnFocusLost
+
 	[TestMethod]
 	public void GetHideOnFocusLost_Default()
 	{
@@ -46,4 +48,75 @@ public class WtqAppOptionsExtensionsTest
 
 		Assert.AreEqual(HideOnFocusLost.UnlessFocusChangedScreen, _app.GetHideOnFocusLost());
 	}
+
+	#endregion
+
+	#region MainWindow
+
+	[TestMethod]
+	public void GetMainWindow_Default()
+	{
+		Assert.AreEqual(MainWindowState.Either, _app.GetMainWindow());
+	}
+
+	[TestMethod]
+	public void GetMainWindow_Either()
+	{
+		_app.MainWindow = MainWindowState.Either;
+
+		Assert.AreEqual(MainWindowState.Either, _app.GetMainWindow());
+	}
+
+	[TestMethod]
+	public void GetMainWindow_MainWindowOnly()
+	{
+		_app.MainWindow = MainWindowState.MainWindowOnly;
+
+		Assert.AreEqual(MainWindowState.MainWindowOnly, _app.GetMainWindow());
+	}
+
+	[TestMethod]
+	public void GetMainWindow_NonMainWindowOnly()
+	{
+		_app.MainWindow = MainWindowState.NonMainWindowOnly;
+
+		Assert.AreEqual(MainWindowState.NonMainWindowOnly, _app.GetMainWindow());
+	}
+
+	#endregion
+
+	#region Resize
+
+	[TestMethod]
+	public void GetResize_Default()
+	{
+		Assert.AreEqual(Resizing.Always, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_Global()
+	{
+		_gbl.Resize = Resizing.Never;
+
+		Assert.AreEqual(Resizing.Never, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_App()
+	{
+		_app.Resize = Resizing.Never;
+
+		Assert.AreEqual(Resizing.Never, _app.GetResize());
+	}
+
+	[TestMethod]
+	public void GetResize_GlobalAndApp()
+	{
+		_gbl.Resize = Resizing.Never;
+		_app.Resize = Resizing.Always;
+
+		Assert.AreEqual(Resizing.Always, _app.GetResize());
+	}
+
+	#endregion
 }

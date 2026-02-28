@@ -1,11 +1,45 @@
+using System.Globalization;
+using System.Reflection;
 using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq;
 
 public static class WtqConstants
 {
-	public static string AppVersion { get; }
-		= typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+	public static string AppVersion =>
+		typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
+
+	public static string AppFileVersion =>
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).FileVersion ?? "<unknown>";
+
+	public static string AppInformationalVersion =>
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).ProductVersion ?? "<unknown>";
+
+	public static string BuildConfiguration => Assembly.GetExecutingAssembly()
+		.GetCustomAttributes<AssemblyMetadataAttribute>()
+		.FirstOrDefault(attr => attr.Key == "BuildConfiguration")?.Value;
+
+	public static DateTimeOffset BuildDate
+	{
+		get
+		{
+			var v = Assembly.GetExecutingAssembly()
+				.GetCustomAttributes<AssemblyMetadataAttribute>()
+				.FirstOrDefault(attr => attr.Key == "BuildTimestamp")?.Value;
+
+			return DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var p)
+				? p
+				: DateTimeOffset.MinValue;
+		}
+	}
+
+	public static string? GitBranch => Assembly.GetExecutingAssembly()
+		.GetCustomAttributes<AssemblyMetadataAttribute>()
+		.FirstOrDefault(attr => attr.Key == "GitBranch")?.Value;
+
+	public static string? GitCommit => Assembly.GetExecutingAssembly()
+		.GetCustomAttributes<AssemblyMetadataAttribute>()
+		.FirstOrDefault(attr => attr.Key == "GitCommit")?.Value;
 
 	public static Uri DocumentationUrl { get; }
 		= new("https://wtq.flyingpie.nl");
@@ -43,21 +77,6 @@ public static class WtqConstants
 		.Select(k => new
 		{
 			Description = k.GetAttribute<AnimationType, DisplayAttribute>(),
-			Key = k,
-		})
-		.Where(k => k.Description != null)
-		.Select(k => k.Key)
-		.Distinct()
-		.ToArray();
-
-	/// <summary>
-	/// Returns a list of <see cref="Keys"/> that include a <see cref="DisplayAttribute"/>, and de-duplicated.
-	/// </summary>
-	public static ICollection<Keys> CommonKeys { get; } = Enum
-		.GetValues<Keys>()
-		.Select(k => new
-		{
-			Description = k.GetAttribute<Keys, DisplayAttribute>(),
 			Key = k,
 		})
 		.Where(k => k.Description != null)

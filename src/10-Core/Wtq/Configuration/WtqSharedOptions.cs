@@ -13,8 +13,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 2000 - Process
 
 	/// <summary>
-	/// How WTQ should get to an instance of a running app.<br/>
+	/// <para>
+	/// How WTQ should get to an instance of a running app.
+	/// </para>
+	/// <para>
 	/// I.e. whether to start an app instance if one cannot be found.
+	/// </para>
 	/// </summary>
 	[DefaultValue(Wc.AttachMode.FindOrStart)]
 	[Display(GroupName = Gn.Process, Name = "Attach mode")]
@@ -50,8 +54,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <summary>
-	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
+	/// <para>
+	/// Make the window see-through (applies to the entire window, including the title bar).
+	/// </para>
+	/// <para>
 	/// 0 (invisible) - 100 (opaque).
+	/// </para>
 	/// </summary>
 	[DefaultValue(100)]
 	[Display(GroupName = Gn.Behavior)]
@@ -64,11 +72,26 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 4000 - Position
 
 	/// <summary>
+	/// Whether to resize the app window when toggling onto the screen, to apply other settings
+	/// like <see cref="HorizontalScreenCoverage"/>.<br/>
+	/// <br/>
+	/// By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
+	/// <br/>
+	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
+	/// window clears its contents (seems to be most common with Electron apps).
+	/// </summary>
+	[DefaultValue(Resizing.Always)]
+	[Display(GroupName = Gn.Position, Name = "Resize app window")]
+	[JsonPropertyOrder(4001)]
+	public Resizing? Resize { get; set; }
+
+	/// <summary>
 	/// Horizontal screen coverage, as a percentage.
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4001)]
+	[JsonPropertyOrder(4002)]
 	public float? HorizontalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -76,7 +99,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(Wc.HorizontalAlign.Center)]
 	[Display(GroupName = Gn.Position, Name = "Horizontal align")]
-	[JsonPropertyOrder(4002)]
+	[JsonPropertyOrder(4003)]
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
@@ -84,7 +107,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4003)]
+	[JsonPropertyOrder(4004)]
 	public float? VerticalScreenCoverage { get; set; }
 
 	/// <summary>
@@ -93,14 +116,39 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[DefaultValue(0f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical offset", Prompt = "In pixels")]
 	[Range(0, 1000)]
-	[JsonPropertyOrder(4004)]
+	[JsonPropertyOrder(4005)]
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>
-	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
-	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.<br/>
+	/// <para>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.
+	/// </para>
+	/// <para>
+	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.
+	/// </para>
+	/// <para>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+	/// </para>
+	/// <para>
+	/// If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
+	/// without any animation.
+	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///     // Globally:
+	///     "OffScreenLocations": ["Above", "Below", "Left", "Right"],
+	///
+	///     // For one app only:
+	///     "Apps": [
+	///         {
+	///             "OffScreenLocations": ["Above", "Below", "Left", "Right"],
+	///         }
+	///     ]
+	/// }
+	/// </code>
+	/// </example>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
 	[JsonPropertyOrder(4005)]
@@ -119,8 +167,12 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
-	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.<br/>
+	/// <para>
+	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.
+	/// </para>
+	/// <para>
 	/// Zero based, e.g. 0, 1, etc.
+	/// </para>
 	/// </summary>
 	[DefaultValue(0)]
 	[Display(GroupName = Gn.Monitor, Name = "Monitor index")]

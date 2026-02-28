@@ -1,0 +1,3 @@
+GetKeyState
+MapVirtualKey
+VIRTUAL_KEY

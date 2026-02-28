@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Services.Linux.UnitTest</AssemblyName>
+		<RootNamespace>Wtq.Services.Linux.UnitTest</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wtq.Services.Linux\Wtq.Services.Linux.csproj"/>
+	</ItemGroup>
+</Project>

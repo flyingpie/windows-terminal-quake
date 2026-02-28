@@ -2,74 +2,186 @@
 ### Enable Quake-style dropdown for (almost) any application.
 For **Windows 10** & **11**, and **KDE Plasma 5** & **6** (Wayland only).
 
+[Installation](#installation) - [Configuration](#configuration) - [Documentation](https://wtq.flyingpie.nl)
+
 [![WTQ CI](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml/badge.svg)](https://github.com/flyingpie/windows-terminal-quake/actions/workflows/ci.yml)
 
-![Preview](./assets/logo-01.webp)
+![Preview](./assets/logo-02.webp)
 
 # Showcase
 
-On **Windows 10**, with [Windows Terminal](https://github.com/microsoft/terminal), [Double Commander](https://github.com/doublecmd/doublecmd) and [Process Hacker](https://processhacker.sourceforge.io/).
+### Windows 11
 
-https://github.com/flyingpie/windows-terminal-quake/assets/1295673/04360031-424e-49c4-b453-47e4f55822b4
+With [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
 
-| On **CachyOS**, with [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/), [System Monitor](https://apps.kde.org/plasma-systemmonitor/), [KeePassXC](https://keepassxc.org/) and [Spotify](https://www.spotify.com/us/download/). | On **CachyOS**, combined with [Kando](https://github.com/kando-menu/kando). |
-| --- | --- |
-| <video src="https://github.com/user-attachments/assets/5a668737-1147-4861-93b6-be637c0d3eaf" /> | <video src="https://github.com/user-attachments/assets/532964f3-2e3b-4c60-9b08-7ffbb3662096" />  |
+https://github.com/user-attachments/assets/2246539c-711b-44c4-b295-f019513240b1
+
+### KDE Plasma 6
+
+With [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
+
+https://github.com/user-attachments/assets/0bbdb71c-be6d-48e1-9df8-2c03f6b978cb
 
 # Installation
 
-## Manual Download (Windows)
-See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+- [Scoop (Windows)](#scoop-windows)
+- [WinGet (Windows)](#winget-windows)
+- [Arch AUR (Linux)](#arch-aur-linux)
+- [Flatpak (Linux)](#flatpak-linux)
+- [Direct Download Script (Linux)](#direct-download-script-linux)
+- [Direct Download (Windows/Linux)](#direct-download-windowslinux)
+- [Build From Source (Windows/Linux)](#build-from-source-windowslinux)
 
-## Scoop (Windows)
-```
-scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
-```
-A shortcut is then available named 'WTQ - Windows Terminal Quake', or you can just run 'wtq' from a command line or Win+R.
+*Also see the [documentation](https://wtq.flyingpie.nl)*
 
-## WinGet (Windows)
+### Scoop (Windows)
+
+> [!NOTE]
+> The WTQ Scoop packages has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+
+```pwsh
+scoop bucket add extras
+scoop install extras/wtq
+```
+
+A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
+
+### WinGet (Windows)
 ```
 winget install windows-terminal-quake
 ```
-You can then call 'wtq' from the command line.
+You can then call ```wtq``` from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called 'WTQ - Main Window'.
+After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![image](https://github.com/user-attachments/assets/aebaf70c-76d3-4d51-9c28-1f6a7ad4b78f)
 
-## Flatpak (Linux)
+### Arch AUR (Linux)
+Multiple versions are published to the Arch User Repository (AUR):
+
+#### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+- Latest stable release, pre-built;
+- Downloads from GitHub Releases;
+- Quicker to install and minimal dependencies.
+
+```bash
+yay -S wtq-bin
 ```
-TODO
+or
+```bash
+paru -S wtq-bin
 ```
 
-## Manual (Linux)
-See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ~/.local/share/wtq, and creates a wtq.desktop file.
+#### [wtq](https://aur.archlinux.org/packages/wtq)
+- Latest stable release, built from source;
+- Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
+
+```bash
+yay -S wtq
+```
+or
+```bash
+paru -S wtq
+```
+
+### Flatpak (Linux)
+Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
+
+As an alternative, you can use the Flatpak remote hosted on the [sister repository](https://github.com/flyingpie/flatpak).
+It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for building the Flatpak itself, and everything is hosted on GitHub Pages.
+
+The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
+
+#### Per-User
+```bash
+flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak --user install nl.flyingpie.wtq
+```
+
+#### System-Wide
+```bash
+flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak install nl.flyingpie.wtq
+```
+
+### Direct Download Script (Linux)
+
+> [!NOTE]
+> Requires webkit2gtk-4.1 to be installed
+
+See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)
 ```
 
-And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
+And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh).
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)
 ```
 
 > [!NOTE]
-> The WTQ configuration is not removed by this script. These are usually located at ~/.config/wtq.
+> The WTQ configuration is not removed by this script. These are usually located at ```~/.config/wtq```.
+
+### Direct Download (Windows/Linux)
+
+> [!NOTE]
+> [Linux Only] Requires webkit2gtk-4.1 to be installed
+
+See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
+
+### Build From Source (Windows/Linux)
+
+> [!NOTE]
+> Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+
+> [!NOTE]
+> [Linux Only] Requires webkit2gtk-4.1 to be installed
+
+You can also clone the repo and run the "Install" build target, which will build and install WTQ:
+- Windows: At ```~/AppData/Local/wtq```
+- Linux: At ```~/.local/share/wtq (respects XDG spec)```
+
+```shell
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.ps1 Install
+# OR
+./build.sh Install
+```
+
+Uninstall:
+```shell
+./build.ps1 Uninstall
+# OR
+./build.sh Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```shell
+./build.ps1|sh --help
+
+./build.ps1|sh BuildWindows
+./build.ps1|sh BuildLinux
+```
 
 # Configuration
+
+*Also see the [documentation](https://wtq.flyingpie.nl)*
+
 After starting WTQ, an icon will appear in the tray, which has some useful buttons in the context menu:
 ![wtq-context-menu](https://github.com/user-attachments/assets/d9045c85-b3a3-4c57-8d2f-53ab55fc4e38)
 
 From there, the settings file can quickly be opened using "Open Settings File".
 
 A JSON schema file should be generated next to the settings file, enabling intellisense-like features in supporting editors:
+
 ![image](https://github.com/user-attachments/assets/c7ec61f2-4e98-41d5-8fc3-4a082a7d6a97)
 
-## Up Next
+There's also an GUI available to configure WTQ, through the same context menu - "Open Main Window".
 
-Available since version **2.0.12**, and currently in development, is a GUI to assist with configuring WTQ.
 ![image](https://github.com/user-attachments/assets/511f167e-a0b9-4882-bcb3-0d4a4fe0fb26)
 ![image](https://github.com/user-attachments/assets/9d172f29-53eb-47b6-9fc3-0f5b71d7cff9)
 

@@ -30,9 +30,18 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	private readonly IWtqBus _bus;
 
 	// Set on service init.
-	private KWinService _kwinService = null!;
 	private KGlobalAccel _kGlobalAccel = null!;
 	private Component _kwinComponent = null!;
+
+	/// <summary>
+	/// When registering a shortcut with the same id multiple times (in the KWin script),
+	/// it seems we're getting key sequence data from the first version.<br/>
+	/// <br/>
+	/// To work around this, we unregister everything, but use a shortcut id that's
+	/// unique across the lifetime of the WTQ process. That solves the problem, basically
+	/// by treating shortcut registrations as immutable.
+	/// </summary>
+	private int _shortcutId;
 
 	public KWinHotkeyService(
 		IDBusConnection dbus,
@@ -56,13 +65,13 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
 	{
-		_kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
-		_kGlobalAccel = _kwinService.CreateKGlobalAccel("/kglobalaccel");
-		_kwinComponent = _kwinService.CreateComponent("/component/kwin");
+		var kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
+		_kGlobalAccel = kwinService.CreateKGlobalAccel("/kglobalaccel");
+		_kwinComponent = kwinService.CreateComponent("/component/kwin");
 
 		_dbusObj.OnPressShortcut((arg) =>
 		{
-			_bus.Publish(new WtqHotkeyPressedEvent(arg.Mod, arg.Key));
+			_bus.Publish(new WtqHotkeyPressedEvent(arg));
 
 			return Task.CompletedTask;
 		});
@@ -116,7 +125,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		{
 			if (await _kGlobalAccel.UnregisterAsync("kwin", kwinShortcutName).NoCtx())
 			{
-				_log.LogInformation("Unregistered {Name}", kwinShortcutName);
+				_log.LogDebug("Unregistered {Name}", kwinShortcutName);
 			}
 			else
 			{
@@ -130,18 +139,17 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	private async Task RegisterGlobalHotkeysAsync(CancellationToken cancellationToken)
 	{
-		var globalHkIndex = 0;
 		foreach (var hk in _opts.CurrentValue.Hotkeys)
 		{
 			// Unique identifier.
-			var id = $"{WtqShortcutPrefix}_global_{globalHkIndex++}";
+			var id = $"{WtqShortcutPrefix}_global_{_shortcutId++}";
 
 			// Descriptive name that shows up in the "Shortcuts" window.
 			var name = "WTQ hotkey - Global";
 
 			_log.LogInformation("Registering global hotkey '{Key}' with id '{Id}'", hk, id);
 
-			await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+			await _kwinClient.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken).NoCtx();
 		}
 	}
 
@@ -151,18 +159,17 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		{
 			var appName = app.Name.ToLowerInvariant();
 
-			var appHkIndex = 0;
 			foreach (var hk in app.Hotkeys)
 			{
 				// Unique identifier.
-				var id = $"{WtqShortcutPrefix}_app_{appName}_{appHkIndex++}";
+				var id = $"{WtqShortcutPrefix}_app_{appName}_{_shortcutId++}";
 
 				// Descriptive name that shows up in the "Shortcuts" window.
 				var name = $"WTQ hotkey - App - {app.Name}";
 
 				_log.LogInformation("Registering app hotkey '{Key}' with id '{Id}', for app '{App}'", hk, id, app);
 
-				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Modifiers, hk.Key, cancellationToken).NoCtx();
+				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken).NoCtx();
 			}
 		}
 	}

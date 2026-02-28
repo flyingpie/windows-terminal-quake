@@ -4,14 +4,14 @@
 @inject DialogService Dialog
 @inject NavigationManager NavMan
 @inject Notifier Notifier
-@inject WtqOptionsSaveService SaveService
+@inject IWtqOptionsSaveService SaveService
 
 @page "/apps"
 @layout NarrowLayout
 
 @code {
 
-	public WtqOptions GlobalOpts { get; set; }
+	public WtqOptions GlobalOpts { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{
@@ -59,7 +59,7 @@
 <p>Here are the applications who's windows can be toggle on and -off.</p>
 <p>Take a look at the <RadzenLink Path="/examples" Text="Examples" /> page for, well, examples.</p>
 
-<SettingsFileLink />
+<p><SettingsFileLink /></p>
 
 <RadzenStack>
 
@@ -74,7 +74,7 @@
 						<h2 class="rz-m-0 rz-mx-4">@app.Name</h2>
 						@foreach (var hk in @app.Hotkeys)
 						{
-							<RadzenBadge BadgeStyle="BadgeStyle.Primary">@hk</RadzenBadge>
+							<RadzenBadge BadgeStyle="BadgeStyle.Primary" class="rz-mr-1">@hk.Sequence.ToShortString()</RadzenBadge>
 						}
 					</RadzenStack>
 				</RadzenColumn>

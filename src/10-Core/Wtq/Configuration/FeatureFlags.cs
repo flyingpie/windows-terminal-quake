@@ -10,15 +10,6 @@ namespace Wtq.Configuration;
 public class FeatureFlags
 {
 	/// <summary>
-	/// (Windows only) Switches to finding- and capturing windows starting from the _window_, instead of from the _process_.<br/>
-	/// Enables attaching to windows other than an application's main window (useful for browsers, for example), and other
-	/// cases where a single process spawns a bunch of windows (like the Windows file explorer, which is part of the "explorer" process).<br/>
-	/// <br/>
-	/// Pretty radically different from the previous implementation, so we're feature-flagging it for a while.
-	/// </summary>
-	public bool NewWindowCapture { get; set; }
-
-	/// <summary>
 	/// (Windows only) Switches the hotkey subsystem to using SharpHook, instead of registering through an invisible WinForm's window message loop.<br/>
 	/// Enables more keys (such as the "Windows", or "Meta", or "Super" modifier).<br/>
 	/// <br/>

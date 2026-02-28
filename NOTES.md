@@ -14,6 +14,7 @@
 - webkitgtk 4.1 dependency
 - Uitgebreidere example wtq.jsonc, met meer opties (en alles uitgecomment?)
 - Log levels tweaken, naar een stuk minder "info"
+- Ctrl+C doesn't kill always process properly
 
 ## SharpHook
 The current default hotkey registration system uses a method where an invisible WinForms Window is created, and we then hook into its message pump to listen for hotkey presses, even when WTQ does not have focus (implemented here: https://github.com/flyingpie/windows-terminal-quake/blob/master/src/20-Services/Wtq.Services.WinForms/Native/HotkeyManager.cs).

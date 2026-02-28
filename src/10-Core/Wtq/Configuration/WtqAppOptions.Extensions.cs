@@ -86,6 +86,10 @@ public static class WtqAppOptionsExtensions
 		return app.GetHorizontalScreenCoverage() / 100f;
 	}
 
+	/// <inheritdoc cref="WtqAppOptions.MainWindow"/>
+	public static MainWindowState GetMainWindow(this WtqAppOptions app) =>
+		Guard.Against.Null(app).MainWindow ?? AttrUtils.GetDefaultValueFor<MainWindowState>(() => app.MainWindow);
+
 	/// <inheritdoc cref="WtqSharedOptions.MonitorIndex"/>
 	public static int GetMonitorIndex(this WtqAppOptions app)
 	{
@@ -116,6 +120,14 @@ public static class WtqAppOptionsExtensions
 		Guard.Against.Null(app);
 
 		return OptionUtils.Cascade<PreferMonitor>(o => o.PreferMonitor, app, app.Global);
+	}
+
+	/// <inheritdoc cref="WtqSharedOptions.Resize"/>
+	public static Resizing GetResize(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<Resizing>(o => o.Resize, app, app.Global);
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.TaskbarIconVisibility"/>

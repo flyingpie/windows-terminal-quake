@@ -1,21 +1,97 @@
 # Changelog
 
 ## [vFuture]
-- Feature: GUI - Suspend key presses when the hotkey field has focus (for Windows).
+- Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
 ## [vNext]
 
-## [v2.0.16] / 2025-xx-xx
-- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method
-- Feature: Added 'WindowClass' as a property to match windows on (Windows only)
+## [v2.1.0] / 2026-xx-xx
+- Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr)
+- Docs: Added some more information on the API and event hooks
+- Refactor: Event hooks changed a little bit, see the docs for the current settings syntax
+
+## [v2.0.19] / 2025-12-31
+- Bugfix: GUI - "Off-Screen Locations" - Update state when changing app page.
+- Bugfix: Only consider 'attached' apps when looking for 'open' ones (caused some broken toggles just after WTQ start).
+- Feature: GUI - Debug info.
+- Feature: Removed in-app log sink (too complicated and resource-intensive).
+- Feature: Single-instance mode - Only allow a single instance of WTQ to run (i.e. stop when another instance is already running).
+- Maintenance: .Net 10.
+- Maintenance: Removed 'Win32v1', replaced by 'Win32v2'.
+
+## [v2.0.18] / 2025-11-05
+- Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
+- Bugfix: Updated CLI to load settings and fetch listening endpoint.
+- Bugfix: When a window gets minimized, WTQ could not longer toggle it.
+- Bugfix: When adding an app without any matching criteria, any window would be attached to (now only attaches when at least 1 criterion is present).
+- Feature: "Resize" option (defaults to "Always"), can be used to disable resizing the app's window (disables alignment settings). Useful for apps that don't respond well to being resized, like some Electron apps.
+```jsonc
+  "Apps": [
+    {
+      "Resize": "Always | Never"
+    }
+  ]
+}
+```
+- Feature: GUI - "Off-Screen Locations" can now be configured from the GUI.
+
+## [v2.0.17] / 2025-08-27
+- Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:
+```jsonc
+  "Apps": [
+    {
+      // Before:
+      "Hotkeys": [{ "Modifiers": "Control, Shift", "KeyChar": "!" }], // Shifted "1" => "!"
+
+      // After:
+      "Hotkeys": [{ "Modifiers": "Control, Shift", "KeyChar": "1" }]
+    }
+  ]
+}
+```
+- Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be deterministic. Also fixes the "Windows" page in the GUI.
+- Bugfix: (Windows) Some hotkey combos were broken when using the "Super" (Windows key) modifier.
+- Bugfix: (Windows) In some cases, toggling apps could lead to the selected keyboard layout disappearing (wild, I know).
+- Bugfix: GUI - Logs can be filtered on category and parameter values now.
+- Refactor: Startup/shutdown - More straigh-forward now, and fixed a bunch of cases where part of the process stayed alive when stopping.
+- Refactor: Windows - Make foreground window tracking a bunch more efficient.
+- Feature: AUR release; Flatpak release (custom remote); Scoop release has been moved to the official "extras" bucket".
+- Feature: Build script can directly install WTQ now, using "build.ps1|sh install".
+- Feature: Periodically update 'window props', e.g. opacity, always-on-top and taskbar icon visibility. Eases issues around these properties being reset on workspace switches.
+- Feature: Windows - "MainWindow": Match on whether a window is a process's "main" window.
+- Feature: GUI - Can show "DEBUG" and "VERBOSE" logs now, regardless of WTQ's global log level.
+- Feature: Nicer (I mean, that's what I think) out-of-the-box experience, with a (mostly empty) sample wtq.jsonc, and pops the GUI at first (with a quick "turn off" button nearby).
+- Feature: When saving settings from the GUI, special characters are no longer encoded, which makes the resulting settings file way more readable.
+```jsonc
+  "Apps": [
+    {
+      // Before:
+      "FileName": "notepad\u002B\u002B",
+
+      // After:
+      "FileName": "notepad++"
+    }
+  ]
+}
+```
+
+## [v2.0.16] / 2025-07-05
+- Bugfix: Implemented missing parts for "ArgumentList" to work.
+- Bugfix: Properly close & dispose logger when the application fully exits.
+- Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method (thanks to [Chuckie Chen](https://github.com/ChuckieChen945), #187).
+- Bugfix: Windows - In some cases a window couldn't be brought to the foreground, due to Windows preventing abuse of said function.
+- Feature: API & CLI to control WTQ programmatically (thanks to [Tim Gilevich](https://github.com/dwarfovich) #194).
+- Feature: Added 'WindowClass' as a property to match windows on (Windows only).
+- Feature: Added 'WorkingDirectory' setting, for use when starting a new process.
 - Feature: Apps can now be matched on their window title (see "WindowTitle" property in app settings).
 - Feature: Feature flags, for scary features (such as the new window capture mentioned earlier, and the new hotkey registration through SharpHook).
 - Feature: GUI - Make JSON settings visible on "Settings (JSON)" page. Cannot be saved yet.
+- Feature: GUI - Suspend key presses when the hotkey field has focus (for Windows, only works with the SharpHook hotkey registration for now) #66.
 - Feature: New hotkey registration subsystem through the use of [SharpHook](https://github.com/TolikPylypchuk/SharpHook), which allows binding the "Windows" modifier on Windows.
-- Feature: User events - Run command when an event is fired (such as when an app toggles on or off).
-- Refactor: Docs - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
-- Refactor: Docs - Updated documentation page.
-- Refactor: Tweaked log levels to be less verbose.
+- Feature: User events - Run command when an event is fired (such as when an app toggles on or off) (thanks to [Sergio Compean](https://github.com/surgiie), #181).
+- Refactor: [Docs](https://wtq.flyingpie.nl) - Unified much of the documentation around settings, to use the same (comment based) data source across the GUI, the documentation page, and the JSON schema.
+- Refactor: [Docs](https://wtq.flyingpie.nl) - Updated documentation page.
+- Refactor: Tweaked log levels to be less verbose (thanks to [Maarten](https://github.com/survivorbat)).
 - Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
 
 ## [v2.0.15] / 2025-03-21

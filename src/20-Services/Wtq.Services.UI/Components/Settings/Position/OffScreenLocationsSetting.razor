@@ -2,36 +2,120 @@
 
 @code {
 
-	// private void Remove(HotkeyOptions hk)
-	// {
-	// 	Value.Remove(hk);
-	//
-	// 	StateHasChanged();
-	// }
+	private List<OffScrLoc> Locs { get; set; }
+
+	protected override void OnInitialized()
+	{
+		Notifier.OnNotify(() => InvokeAsync(UpdateLocs));
+
+		UpdateLocs();
+	}
+
+	protected override void OnParametersSet()
+	{
+		UpdateLocs();
+	}
+
+	private void UpdateLocs()
+	{
+		// Get current setting value:
+		// - App-specific
+		// - Global
+		// - Default (currently from constant, instead of attribute)
+		var locs = Value ?? WtqConstants.DefaultOffScreenLocations; // TODO: Default collection values aren't coming through Value yet.
+
+		// Convert value to view model.
+		Locs = locs.Select(l => new OffScrLoc() { IsActive = true, Loc = l}).ToList();
+
+		// Add inactive values.
+		foreach (var val in WtqConstants.DefaultOffScreenLocations)
+		{
+			if (Locs.Any(l => l.Loc == val))
+			{
+				continue;
+			}
+
+			Locs.Add(new() { IsActive = false, Loc = val});
+		}
+
+		StateHasChanged();
+	}
+
+	private void SetActive(OffScrLoc loc, bool isActive)
+	{
+		loc.IsActive = isActive;
+
+		UpdateValue();
+	}
+
+	private void Up(OffScrLoc loc) => MoveLoc(loc, -1);
+
+	private void Down(OffScrLoc loc) => MoveLoc(loc, 1);
+
+	private void MoveLoc(OffScrLoc loc, int pos)
+	{
+		var l = Locs.FirstOrDefault(ll => ll.Loc == loc.Loc);
+		var idx = Locs.IndexOf(l);
+
+		Locs.Remove(l);
+
+		var ins = idx + pos;
+
+		if (ins < 0)
+		{
+			Locs.Add(l);
+		}
+		else
+		{
+			Locs.Insert(idx + pos, l);
+		}
+
+		UpdateValue();
+	}
+
+	private void UpdateValue() => Value = Locs.Where(l => l.IsActive).Select(l => l.Loc).ToList();
+
+	private class OffScrLoc
+	{
+		public bool IsActive { get; set; }
+
+		public OffScreenLocation Loc { get; set; }
+	}
 
 }
 
-<WtqSetting TProperty="ICollection<OffScreenLocation>" Get="Get" Set="Set">
+<WtqSetting TProperty="ICollection<OffScreenLocation>" Get="Get" Set="Set" Default="Default">
 	<Content>
 
-		TODO
+		<RadzenStack>
 
-		@* <RadzenStack> *@
-		@* *@
-		@* 	@foreach (var hk in Value) *@
-		@* 	{ *@
-		@* 		<Hotkey Options="hk" OnRemove="@(() => Remove(hk))"/> *@
-		@* 	} *@
-		@* *@
-		@* 	<RadzenStack> *@
-		@* 		<RadzenButton *@
-		@* 			Icon="add" *@
-		@* 			Size="ButtonSize.Medium" *@
-		@* 			Click="@(() => Value.Add(new()))" *@
-		@* 		/> *@
-		@* 	</RadzenStack> *@
-		@* *@
-		@* </RadzenStack> *@
+			@foreach (var loc in Locs)
+			{
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0">
+					<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="8" JustifyContent="JustifyContent.SpaceBetween">
+
+						<!-- Active -->
+						<RadzenCheckBox TValue="bool" @bind-Value="loc.IsActive" Change="v => SetActive(loc, v)"/>
+
+						<!-- Label -->
+						@if (loc.IsActive)
+						{
+							<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1;" />
+						}
+						else
+						{
+							<RadzenLabel Text="@loc.Loc.ToString()" Style="flex: 1; text-decoration: line-through;" />
+						}
+
+						<!-- Up/Down -->
+						<RadzenButton Click="() => Up(loc)" Icon="keyboard_arrow_up" Size="ButtonSize.Medium"/>
+						<RadzenButton Click="() => Down(loc)" Icon="keyboard_arrow_down" Size="ButtonSize.Medium"/>
+
+					</RadzenStack>
+				</RadzenStack>
+			}
+
+		</RadzenStack>
 
 	</Content>
 </WtqSetting>

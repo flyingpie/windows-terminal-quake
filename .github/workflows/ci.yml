@@ -27,13 +27,16 @@ on:
         required: false
 
 jobs:
-  windows-latest:
-    name: windows-latest
-    runs-on: windows-latest
+  ubuntu-24_04:
+    name: ubuntu-24_04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:
@@ -41,8 +44,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: PublishRelease'
-        run: ./src/build.cmd PublishRelease
+      - name: 'Run: Publish'
+        run: ./src/build.cmd Publish
         env:
           name: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,18 +54,38 @@ jobs:
         with:
           name: win-x64_self-contained.zip
           path: _output/artifacts/win-x64_self-contained.zip
+      - name: 'Publish: win-x64_self-contained.zip.sha256'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-x64_self-contained.zip.sha256
+          path: _output/artifacts/win-x64_self-contained.zip.sha256
       - name: 'Publish: win-x64_framework-dependent.zip'
         uses: actions/upload-artifact@v4
         with:
           name: win-x64_framework-dependent.zip
           path: _output/artifacts/win-x64_framework-dependent.zip
+      - name: 'Publish: win-x64_framework-dependent.zip.sha256'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-x64_framework-dependent.zip.sha256
+          path: _output/artifacts/win-x64_framework-dependent.zip.sha256
       - name: 'Publish: linux-x64_self-contained.tar.gz'
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64_self-contained.tar.gz
           path: _output/artifacts/linux-x64_self-contained.tar.gz
+      - name: 'Publish: linux-x64_self-contained.tar.gz.sha256'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64_self-contained.tar.gz.sha256
+          path: _output/artifacts/linux-x64_self-contained.tar.gz.sha256
       - name: 'Publish: linux-x64_framework-dependent.tar.gz'
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64_framework-dependent.tar.gz
           path: _output/artifacts/linux-x64_framework-dependent.tar.gz
+      - name: 'Publish: linux-x64_framework-dependent.tar.gz.sha256'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64_framework-dependent.tar.gz.sha256
+          path: _output/artifacts/linux-x64_framework-dependent.tar.gz.sha256

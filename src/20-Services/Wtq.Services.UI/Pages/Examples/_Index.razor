@@ -1,28 +1,30 @@
+@using Wtq.Examples
+
 @inject IOptionsMonitor<WtqOptions> WtqOptions
 @inject DialogService Dialog
 @inject NavigationManager NavMan
-@inject WtqOptionsSaveService SaveService
+@inject IWtqOptionsSaveService SaveService
 
 @page "/examples"
 
 @code {
 
-	private string[] _categories = [];
+	private Category[] _categories = [];
 
 	protected override void OnInitialized()
 	{
 		_categories = WtqAppExamples.AppExamples
 			.SelectMany(ex => ex.Categories)
 			.Distinct()
-			.OrderBy(c => c)
+			.OrderByDescending(c => c.Priority)
 			.ToArray();
 	}
 
-	private async Task AddApp(WtqAppExample example)
+	private async Task AddApp(WtqAppExample example, WtqAppExampleFlavor flavor)
 	{
 		var opt = WtqOptions.CurrentValue;
 
-		var app = example.Factory();
+		var app = flavor.Factory(example);
 		opt.Apps.Add(app);
 
 		await SaveService.SaveAsync(opt).NoCtx();
@@ -30,8 +32,8 @@
 		NavMan.NavigateTo($"/apps/{app.Name}");
 	}
 
-	private bool _isLinux = WtqEnv.IsLinux;
-	private bool _isWindows = WtqEnv.IsWindows;
+	private bool _isLinux = Os.IsLinux;
+	private bool _isWindows = Os.IsWindows;
 
 }
 
@@ -52,52 +54,32 @@
 	</span>
 </div>
 
+@for (var i = 0; i < _categories.Length; i++)
+{
+	if (i > 0)
+	{
+		<span class="rz-mx-2 rz-color-base-500">-</span>
+	}
+
+	<RadzenLink Path="@($"/examples#{_categories[i].Name}")" Text="@_categories[i].Name" />
+}
+
 @foreach (var category in _categories)
 {
 
-	<h2 class="rz-my-8 rz-color-base-600">@category</h2>
+	<h2 class="rz-my-8 rz-color-base-600" id="@category.Name">@category.Name</h2>
 	<RadzenRow>
 
 		@foreach (var example in WtqAppExamples
 			.AppExamples
-			.Where(ex => _isLinux && ex.IsLinux || _isWindows && ex.IsWindows)
-			.Where(ex => ex.Categories.Contains(category, StringComparer.OrdinalIgnoreCase))
+			.Where(ex => (_isLinux && ex.IsLinux) || (_isWindows && ex.IsWindows))
+			.Where(ex => ex.Categories.Contains(category))
 			.OrderBy(ex => ex.Title))
 		{
 			<RadzenColumn Size="6" SizeLG="4" SizeXL="3">
 				<RadzenCard>
 
-					<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
-						<h2 style="margin: 0;">@example.Title</h2>
-
-						<RadzenStack Orientation="Orientation.Horizontal">
-							@foreach (var os in example.Os)
-							{
-								<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
-							}
-						</RadzenStack>
-
-						<p class="rz-m-0" style="height: 3em;">@example.Description</p>
-
-						<RadzenImage
-							Path="@example.Image"
-							style="width: 100%; object-fit: cover; height: 160px;"
-						/>
-
-						<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
-							<RadzenButton Variant="Variant.Outlined" Text="Visit website" Click="() => Os.OpenUrl(example.Link)" Disabled="@(example.Link == null)" />
-							<RadzenButton Variant="Variant.Filled" Text="Add" Click="() => AddApp(example)" />
-						</RadzenStack>
-
-						@if (Os.IsCallable(example.FileName))
-						{
-							<p class="rz-color-success-light rz-mt-1">App '@example.FileName' seems to exist!</p>
-						}
-						else
-						{
-							<p class="rz-color-danger-light rz-mt-1">App '@example.FileName' does NOT seem to exist!</p>
-						}
-					</RadzenStack>
+					<AppExample App="example" OnSelectApp="AddApp" />
 
 				</RadzenCard>
 			</RadzenColumn>

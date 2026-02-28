@@ -3,22 +3,16 @@
 		<AssemblyName>Wtq.Services.UI</AssemblyName>
 		<RootNamespace>Wtq.Services.UI</RootNamespace>
 
-		<TargetFramework>net9.0</TargetFramework>
+		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BlazorMonaco" />
-		<PackageReference Include="Photino.Blazor" />
-		<PackageReference Include="Radzen.Blazor" />
+		<PackageReference Include="Microsoft.Extensions.Hosting"/>
+		<PackageReference Include="Photino.Blazor"/>
+		<PackageReference Include="Radzen.Blazor"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Update="wwwroot\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
 	</ItemGroup>
 </Project>

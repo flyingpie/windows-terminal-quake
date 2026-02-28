@@ -2,10 +2,10 @@
 
 @code {
 	[CascadingParameter]
-	public IEnumerable<ValidationResult> ValidationResults { get; set; }
+	public IEnumerable<ValidationResult>? ValidationResults { get; set; }
 }
 
-@foreach (var v in ValidationResults)
+@foreach (var v in ValidationResults ?? [])
 {
 	@if (v.MemberNames.Any())
 	{

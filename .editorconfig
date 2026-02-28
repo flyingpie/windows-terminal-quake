@@ -1,14 +1,8 @@
 root = true
 
 [*]
-
-# Charset
 charset = utf-8
-
-# New line preferences
 insert_final_newline = false
-
-# Indentation and spacing
 indent_style = tab
 indent_size = 4
 tab_width = 4
@@ -16,8 +10,6 @@ tab_width = 4
 [*.yml]
 indent_style = space
 indent_size = 2
-
-#### .NET Coding Conventions ####
 
 [*.cs]
 
@@ -195,7 +187,6 @@ csharp_preserve_single_line_statements = true
 #### Naming styles ####
 
 # Naming rules
-
 dotnet_naming_rule.interface_should_be_begins_with_i.severity = warning
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
 dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
@@ -209,7 +200,6 @@ dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_m
 dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
 
 # Symbol specifications
-
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.interface.required_modifiers = 
@@ -223,7 +213,6 @@ dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, int
 dotnet_naming_symbols.non_field_members.required_modifiers = 
 
 # Naming styles
-
 dotnet_naming_style.pascal_case.required_prefix = 
 dotnet_naming_style.pascal_case.required_suffix = 
 dotnet_naming_style.pascal_case.word_separator = 
@@ -234,26 +223,32 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
+# Enable everything
+dotnet_diagnostic.severity = warning
+
 # Disabled for this project.
-## TODO: Enable some
-dotnet_diagnostic.CA1031.severity = none # CA1031: Do not catch general exception types
-dotnet_diagnostic.CA1401.severity = none # CA1401: P/Invokes should not be visible
-dotnet_diagnostic.CA1806.severity = suggestion # CA1806: Do not ignore method results
-dotnet_diagnostic.CA1824.severity = none # CA1824: Mark assemblies with NeutralResourcesLanguageAttribute
-dotnet_diagnostic.CA1848.severity = none # CA1848: Use the LoggerMessage delegates
-dotnet_diagnostic.CA2254.severity = none # CA2254: Template should be a static expression
-dotnet_diagnostic.CA5392.severity = none # CA5392: Use DefaultDllImportSearchPaths attribute for P/Invokes
-dotnet_diagnostic.CS1591.severity = none # CS1591: Missing XML comment for publicly visible type or member
-dotnet_diagnostic.IDE0066.severity = none # IDE0066: Convert switch statement to expression
-dotnet_diagnostic.S1135.severity = none # S1135: Track uses of "TODO" tags
-dotnet_diagnostic.S125.severity = none # S125: Sections of code should not be commented out
-dotnet_diagnostic.S4200.severity = none # S4200: Native methods should be wrapped
-dotnet_diagnostic.S6602.severity = none # S6602: "Find" method should be used instead of the "FirstOrDefault" extension
-dotnet_diagnostic.S6605.severity = none # S6605: Collection-specific "Exists" method should be used instead of the "Any" extension
-dotnet_diagnostic.SA1101.severity = none # SA1101: Prefix local calls with this
-dotnet_diagnostic.SA1309.severity = none # SA1309: Field names should not begin with underscore
-dotnet_diagnostic.SA1600.severity = none # SA1600: Elements should be documented
-dotnet_diagnostic.SA1611.severity = none # SA1611: Element parameters should be documented
-dotnet_diagnostic.SA1615.severity = none # SA1615: Element return value should be documented
-dotnet_diagnostic.SA1623.severity = none # SA1623: Property summary documentation should match accessors
-dotnet_diagnostic.SA1633.severity = none # SA1633: File should have header
+dotnet_diagnostic.CA1031.severity    = none # CA1031      : Do not catch general exception types
+dotnet_diagnostic.CA1824.severity    = none # CA1824      : Mark assemblies with NeutralResourcesLanguageAttribute
+dotnet_diagnostic.CA1848.severity    = none # CA1848      : Use the LoggerMessage delegates
+dotnet_diagnostic.CS1591.severity    = none # CS1591      : Missing XML comment for publicly visible type or member
+dotnet_diagnostic.IDE0066.severity   = none # IDE0066     : Convert switch statement to expression
+dotnet_diagnostic.S105.severity      = none # S105        : Tabulation characters should not be used
+dotnet_diagnostic.S109.severity      = none # S109        : Magic numbers should not be used
+dotnet_diagnostic.S113.severity      = none # S113        : Files should end with a newline
+dotnet_diagnostic.S1135.severity     = none # S1135       : Track uses of "TODO" tags
+dotnet_diagnostic.S1309.severity     = none # S1309       : Track uses of in-source issue suppressions
+dotnet_diagnostic.S1451.severity     = none # S1451       : Track lack of copyright and license headers
+dotnet_diagnostic.S2221.severity     = none # S2221       : "Exception" should not be caught
+dotnet_diagnostic.S3990.severity     = none # S3990       : Assemblies should be marked as CLS compliant
+dotnet_diagnostic.S3992.severity     = none # S3992       : Assemblies should explicitly specify COM visibility
+dotnet_diagnostic.S4055.severity     = none # S4055       : Literals should not be passed as localized parameters
+dotnet_diagnostic.SA1101.severity    = none # SA1101      : Prefix local calls with this
+dotnet_diagnostic.SA1124.severity    = none # SA1124      : Do not use regions
+dotnet_diagnostic.SA1309.severity    = none # SA1309      : Field names should not begin with underscore
+dotnet_diagnostic.SA1412.severity    = none # SA1412      : Store files as UTF-8 with byte order mark
+dotnet_diagnostic.SA1600.severity    = none # SA1600      : Elements should be documented
+dotnet_diagnostic.SA1609.severity    = none # SA1609      : Property documentation should have value
+dotnet_diagnostic.SA1611.severity    = none # SA1611      : Element parameters should be documented
+dotnet_diagnostic.SA1615.severity    = none # SA1615      : Element return value should be documented
+dotnet_diagnostic.SA1623.severity    = none # SA1623      : Property summary documentation should match accessors
+dotnet_diagnostic.SA1633.severity    = none # SA1633      : File should have header

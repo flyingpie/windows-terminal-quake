@@ -3,13 +3,24 @@
 	"$schema": "wtq.schema.json",
 
 	"Apps": [
-		// Example with Dolphin
+
+		{
+			"Name": "Konsole",
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
+			"FileName": "konsole"
+		},
+		
 		{
 			"Name": "Dolphin",
-			"Hotkeys": [{ "Modifiers": "Control", "Key": "D1" }],
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
 			"FileName": "dolphin",
-			"HorizontalScreenCoverage": 80,
-			"AlwaysOnTop": true
+			"Resize": "Never"
+		},
+
+		{
+			"Name": "SystemMonitor",
+			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
+			"FileName": "plasma-systemmonitor"
 		}
 	],
 
@@ -31,5 +42,9 @@
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95
+	"VerticalScreenCoverage": 95,
+
+	"Api": {
+		"Enable": true
+	}
 }

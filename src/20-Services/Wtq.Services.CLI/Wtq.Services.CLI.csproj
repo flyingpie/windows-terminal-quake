@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.Services.CLI</AssemblyName>
+		<RootNamespace>Wtq.Services.CLI</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DeclarativeCommandLine"/>
+		<PackageReference Include="DeclarativeCommandLine.Generator"/>
+	</ItemGroup>
+</Project>

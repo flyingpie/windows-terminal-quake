@@ -1,7 +1,7 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photino.Blazor;
+using System.IO;
 using Wtq.Configuration;
 
 namespace Wtq.Services.UI;
@@ -11,75 +11,67 @@ public class WtqUIHost
 	private const string MainWindowTitle = "WTQ - Main Window";
 
 	private readonly ILogger _log = Log.For<WtqUIHost>();
+
+	private readonly IOptions<WtqOptions> _opts;
+	private readonly IPlatformService _platform;
+	private readonly IWtqWindowService _windowService;
 	private readonly PhotinoBlazorApp _app;
 
-	private readonly IWtqWindowService _windowService;
 	private bool _isClosing;
 
 	public WtqUIHost(
 		IOptions<WtqOptions> opts,
-		IEnumerable<IHostedService> hostedServices,
-		IHostApplicationLifetime appLifetime,
+		IPlatformService platform,
 		IWtqBus bus,
 		IWtqWindowService windowService,
 		PhotinoBlazorApp app)
 	{
+		_app = Guard.Against.Null(app);
+		_opts = Guard.Against.Null(opts);
+		_platform = Guard.Against.Null(platform);
 		_windowService = Guard.Against.Null(windowService);
 
-		_app = Guard.Against.Null(app);
-		_ = Guard.Against.Null(appLifetime);
-		_ = Guard.Against.Null(bus);
-		_ = Guard.Against.Null(hostedServices);
+		bus.OnEvent<WtqUIRequestedEvent>(_ => OpenMainWindowAsync());
 
-		bus.OnEvent<WtqUIRequestedEvent>(e => OpenMainWindowAsync());
+		SetupMainWindow();
+	}
 
-		_ = appLifetime.ApplicationStarted.Register(() =>
-		{
-			Task.WaitAll(hostedServices.Select(srv => srv.StartAsync(CancellationToken.None)));
-		});
-
-		_ = appLifetime.ApplicationStopping.Register(
-			() =>
-			{
-				Task.WaitAll(hostedServices.Select(t => t.StopAsync(CancellationToken.None)));
-
-				_isClosing = true;
-
-				app.MainWindow.Close();
-
-				Task.WaitAll(hostedServices.OfType<IAsyncDisposable>().Select(t => t.DisposeAsync()).Select(t => t.AsTask()));
-
-				Log.CloseAndFlush();
-
-				// TODO: Remove this.
-				// When using SharpHook, some threads seem to hang around when otherwise exiting the app.
-				_ = Task.Run(async () =>
-				{
-					await Task.Delay(TimeSpan.FromSeconds(2));
-
-					Environment.Exit(0);
-				});
-			});
-
-		_ = app.MainWindow
+	private void SetupMainWindow()
+	{
+		_ = _app.MainWindow
 			.RegisterWindowCreatedHandler((s, a) =>
 			{
-				if (!opts.Value.GetShowUiOnStart())
+				if (!_opts.Value.GetShowUiOnStart())
 				{
 					_ = Task.Run(CloseMainWindowAsync);
 				}
 			})
 			.RegisterWindowClosingHandler((s, a) =>
 			{
+				if (_isClosing)
+				{
+					return false;
+				}
+
 				_ = Task.Run(CloseMainWindowAsync);
 
-				return !_isClosing;
+				return true;
 			})
 			.Center()
-			.SetIconFile(WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png"))
+			.SetIconFile(Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-padding.png"))
+			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
-			.SetSize(1280, 800)
+			.SetSize(1270, 800)
 			.SetTitle(MainWindowTitle);
+	}
+
+	/// <summary>
+	/// Close UI (like, for real, as opposed to just hiding it).
+	/// </summary>
+	public void Exit()
+	{
+		_isClosing = true;
+		_app.MainWindow.Close();
 	}
 
 	private async Task CloseMainWindowAsync()

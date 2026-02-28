@@ -8,8 +8,8 @@ public static class MathUtils
 	public static int CeilI(this float f) => (int)Math.Ceiling(f);
 
 	/// <summary>
-	/// Returns a <see cref="Point"/> that represents <paramref name="src"/>, centered within <paramref name="dst"/>.<br/>
-	/// https://stackoverflow.com/a/59347321
+	/// Returns a <see cref="Point"/> that represents <paramref name="inner"/>, centered within <paramref name="outer"/>.<br/>
+	/// https://stackoverflow.com/a/59347321.
 	/// </summary>
 	public static Point CenterInRectangle(this Size inner, Rectangle outer) =>
 		new()
@@ -39,4 +39,8 @@ public static class MathUtils
 	/// Multiply <paramref name="sz"/> by a float, truncating back to an integer <see cref="Size"/>.
 	/// </summary>
 	public static Size MultiplyF(this Size sz, float factor) => ((SizeF)sz * factor).ToSize();
+
+	public static string ToShortString(this Point point) => $"({point.X}, {point.Y})";
+
+	public static string ToShortString(this Size size) => $"{size.Width}x{size.Height}";
 }

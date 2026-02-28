@@ -1,12 +1,47 @@
 @page "/debug-info"
-@layout NarrowLayout
 
-@code {
-
-
-
-}
+@inject IOptions<WtqOptions> Opts
+@inject IPlatformService Platform
 
 <PageHead Icon="public">Debug info</PageHead>
+<p>Some information about WTQ, mostly useful when troubleshooting.</p>
 
-<h2><RadzenIcon Icon="construction" />&nbsp;TODO</h2>
+<RadzenTable>
+	<RadzenTableBody>
+
+		<RadzenTableRow><RadzenTableCell colspan="2"><h3>App</h3></RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Platform</RadzenTableCell>								<RadzenTableCell>@Platform.PlatformName</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>App version</RadzenTableCell>							<RadzenTableCell>@WtqConstants.AppVersion</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>File version</RadzenTableCell>							<RadzenTableCell>@WtqConstants.AppFileVersion</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Informational version</RadzenTableCell>				<RadzenTableCell>@WtqConstants.AppInformationalVersion</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Build configuration</RadzenTableCell>					<RadzenTableCell>@WtqConstants.BuildConfiguration</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Build date</RadzenTableCell>							<RadzenTableCell>@WtqConstants.BuildDate.ToIso8601()</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Git branch</RadzenTableCell>							<RadzenTableCell>@WtqConstants.GitBranch</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Git commit</RadzenTableCell>							<RadzenTableCell>@WtqConstants.GitCommit</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>OS color mode</RadzenTableCell>						<RadzenTableCell>@Platform.OsColorMode</RadzenTableCell></RadzenTableRow>
+
+		<RadzenTableRow><RadzenTableCell colspan="2"><h3>API</h3></RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>API enabled</RadzenTableCell>							<RadzenTableCell>@(Opts.Value.Api?.Enable ?? false)</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>API endpoints</RadzenTableCell>						<RadzenTableCell>@(string.Join(", ", Opts.Value.Api?.Urls ?? Platform.DefaultApiUrls))</RadzenTableCell></RadzenTableRow>
+
+		<RadzenTableRow><RadzenTableCell colspan="2"><h3>Config paths</h3></RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Preferred path to WTQ config</RadzenTableCell>			<RadzenTableCell>@Platform.PreferredPathWtqConfig</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to WTQ config</RadzenTableCell>					<RadzenTableCell>@Platform.PathToWtqConf</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to WTQ config dir</RadzenTableCell>				<RadzenTableCell>@Platform.PathToWtqConfDir</RadzenTableCell></RadzenTableRow>
+
+		@foreach (var p in Platform.PathsToWtqConfs)
+		{
+			<RadzenTableRow><RadzenTableCell>Path to WTQ config</RadzenTableCell>				<RadzenTableCell>@p @((Fs.Inst.FileExists(p) ? " (exists)" : string.Empty))</RadzenTableCell></RadzenTableRow>
+		}
+
+		<RadzenTableRow><RadzenTableCell colspan="2"><h3>Misc paths</h3></RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to app dir</RadzenTableCell>						<RadzenTableCell>@Platform.PathToAppDir</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to assets dir</RadzenTableCell>					<RadzenTableCell>@Platform.PathToAssetsDir</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to logs dir</RadzenTableCell>						<RadzenTableCell>@Platform.PathToLogsDir</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to temp dir</RadzenTableCell>						<RadzenTableCell>@Platform.PathToTempDir</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to tray icon (dark)</RadzenTableCell>				<RadzenTableCell>@Platform.PathToTrayIconDark</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to tray icon (light)</RadzenTableCell>			<RadzenTableCell>@Platform.PathToTrayIconLight</RadzenTableCell></RadzenTableRow>
+		<RadzenTableRow><RadzenTableCell>Path to user home dir</RadzenTableCell>				<RadzenTableCell>@Platform.PathToUserHomeDir</RadzenTableCell></RadzenTableRow>
+	</RadzenTableBody>
+</RadzenTable>
+

@@ -49,7 +49,7 @@ extra_javascript:
   - assets/highlight/highlight.pack.js
   - assets/config.js
 extra_css:
-  - assets/highlight/styles/vs2015.css
+  - assets/highlight/styles/wtq.css
   - assets/styles.css
 
 markdown_extensions:

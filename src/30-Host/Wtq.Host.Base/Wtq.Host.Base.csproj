@@ -2,12 +2,12 @@
 	<PropertyGroup>
 		<AssemblyName>Wtq.Host.Base</AssemblyName>
 		<RootNamespace>Wtq.Host.Base</RootNamespace>
-
-		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
-		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj" />
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.API\Wtq.Services.API.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.CLI\Wtq.Services.CLI.csproj"/>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj"/>
 	</ItemGroup>
 </Project>

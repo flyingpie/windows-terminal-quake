@@ -3,14 +3,12 @@
 		<AssemblyName>Wtq.Services.WinForms</AssemblyName>
 		<RootNamespace>Wtq.Services.WinForms</RootNamespace>
 
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>$(TargetFramework)-windows</TargetFramework>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
-
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
-		<ProjectReference Include="..\Wtq.Services.Win32\Wtq.Services.Win32.csproj" />
 	</ItemGroup>
 </Project>

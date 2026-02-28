@@ -1,0 +1,66 @@
+@using System.Text
+@using Wtq.Examples
+
+@inject IPlatformService Platform
+
+@code {
+
+	[EditorRequired]
+	[Parameter]
+	public WtqAppExample App { get; set; } = null!;
+
+	[EditorRequired]
+	[Parameter]
+	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; } = null!;
+
+	private string GetAddButtonText(WtqAppExampleFlavor flavor)
+	{
+		var sb = new StringBuilder();
+
+		sb.Append("Add");
+
+		if (!string.IsNullOrWhiteSpace(flavor.Name))
+		{
+			sb.Append($" ({flavor.Name})");
+		}
+
+		return sb.ToString();
+	}
+}
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap=".5em">
+	<h2 style="margin: 0;">@App.Title</h2>
+
+	<RadzenStack Orientation="Orientation.Horizontal">
+		@foreach (var os in App.Os)
+		{
+			<RadzenBadge BadgeStyle="BadgeStyle.Secondary">@os</RadzenBadge>
+		}
+	</RadzenStack>
+
+	<p class="rz-m-0"><em>@App.Description</em></p>
+
+	<RadzenButton Variant="Variant.Text" Text="@App.Link?.ToString()" Style="padding: 0; text-align: left;" Click="() => Platform.OpenUrl(App.Link)" Disabled="@(App.Link == null)" />
+
+	<RadzenImage
+		Path="@App.Image"
+		style="width: 100%; height: 160px; object-fit: contain;"
+	/>
+
+	<RadzenStack Orientation="Orientation.Vertical">
+		@foreach (var flavor in App.Flavors)
+		{
+			<RadzenButton Variant="Variant.Filled" Icon="add" Text="@GetAddButtonText(flavor)" Click="() => OnSelectApp(App, flavor)" />
+
+			@if (Platform.IsCallable(null, flavor.FileName))
+			{
+				<p class="rz-color-success-light rz-mt-0">App '<strong>@flavor.FileName</strong>' seems to exist!</p>
+			}
+			else
+			{
+				<p class="rz-color-danger-light rz-mt-0">App '<strong>@flavor.FileName</strong>' does NOT seem to exist!</p>
+			}
+		}
+	</RadzenStack>
+
+</RadzenStack>

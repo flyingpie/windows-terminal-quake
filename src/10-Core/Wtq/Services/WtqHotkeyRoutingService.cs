@@ -12,7 +12,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 	private readonly IWtqBus _bus;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 
-	private WtqApp? _prevApp;
+	private string? _prevAppName;
 
 	public WtqHotkeyRoutingService(
 		IOptionsMonitor<WtqOptions> opts,
@@ -23,69 +23,40 @@ public class WtqHotkeyRoutingService : WtqHostedService
 		_appRepo = appRepo ?? throw new ArgumentNullException(nameof(appRepo));
 		_bus = bus ?? throw new ArgumentNullException(nameof(bus));
 
-		_opts.OnChange(SendRegisterEvents);
+		_bus.OnEvent<WtqHotkeyPressedEvent>(e => HandleHotkeyPressedEventAsync(e.Sequence));
+	}
 
-		_bus.OnEvent<WtqHotkeyPressedEvent>(e =>
+	public Task HandleHotkeyPressedEventAsync(KeySequence sequence)
+	{
+		// Look for app that has the specified hotkey configured.
+		var app = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.Any(hk => hk.Sequence == sequence));
+		if (app != null)
 		{
-			// Look for app that has the specified hotkey configured.
-			// Fall back to most recently toggled app.
-			// Fall back to first configured app after that.
-			var app = GetAppForHotkey(e.Modifiers, e.Key) ?? _prevApp ?? _appRepo.GetPrimary();
+			_bus.Publish(new WtqAppToggledEvent(app.Name));
+			_prevAppName = app.Name;
 
-			if (app == null)
+			return Task.CompletedTask;
+		}
+
+		// Look for a global (non-app-specific) hotkey.
+		if (_opts.CurrentValue.Hotkeys.Any(hk => hk.Sequence == sequence))
+		{
+			var globalApp = _prevAppName // Prefer most recently toggled app.
+				?? _appRepo.GetPrimary()?.Name; // Fall back to first configured app after that.
+
+			if (globalApp == null)
 			{
-				_log.LogWarning("No app found for hotkey '{Modifiers}+{Key}'", e.Modifiers, e.Key);
+				_log.LogWarning("Could not find a candidate app for global hotkey '{Sequence}', maybe no apps were configured?", sequence);
 				return Task.CompletedTask;
 			}
 
-			_bus.Publish(new WtqAppToggledEvent(app.Name));
-
-			_prevApp = app;
+			_bus.Publish(new WtqAppToggledEvent(globalApp));
+			_prevAppName = globalApp;
 
 			return Task.CompletedTask;
-		});
-	}
+		}
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
-	{
-		SendRegisterEvents(_opts.CurrentValue);
-
+		_log.LogWarning("Got unmapped hotkey '{Sequence}'. This could mean something went wrong during hotkey registration", sequence);
 		return Task.CompletedTask;
-	}
-
-	private WtqApp? GetAppForHotkey(KeyModifiers keyMods, Keys key)
-	{
-		var opt = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.HasHotkey(key, keyMods));
-
-		return opt == null
-			? null
-			: _appRepo.GetByName(opt.Name);
-	}
-
-	private void SendRegisterEvents(WtqOptions opts)
-	{
-		foreach (var app in opts.Apps)
-		{
-			foreach (var hk in app.Hotkeys)
-			{
-				_bus.Publish(
-					new WtqHotkeyDefinedEvent()
-					{
-						AppOptions = app,
-						Key = hk.Key,
-						Modifiers = hk.Modifiers,
-					});
-			}
-		}
-
-		foreach (var hk in opts.Hotkeys)
-		{
-			_bus.Publish(
-				new WtqHotkeyDefinedEvent()
-				{
-					Key = hk.Key,
-					Modifiers = hk.Modifiers,
-				});
-		}
 	}
 }

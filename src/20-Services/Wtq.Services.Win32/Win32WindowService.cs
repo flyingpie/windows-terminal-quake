@@ -1,17 +1,15 @@
-using Wtq.Services.Win32.Extensions;
-using Wtq.Services.Win32.Native;
-
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WindowService :
+public sealed class Win32WindowService(IWin32 win32) :
 	IDisposable,
 	IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
 	private readonly SemaphoreSlim _lock = new(1);
-
 	private readonly InitLock _initLock = new();
+
+	private readonly IWin32 _win32 = Guard.Against.Null(win32);
 
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
@@ -33,7 +31,7 @@ public sealed class Win32WindowService :
 		_initLock.Dispose();
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(
+	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken)
 	{
@@ -41,9 +39,16 @@ public sealed class Win32WindowService :
 
 		await InitAsync().NoCtx();
 
-		var processes = await GetWindowsAsync(cancellationToken).NoCtx();
+		var allWindows = await GetWindowsAsync(cancellationToken).NoCtx();
 
-		return processes.FirstOrDefault(p => p.Matches(opts));
+		// TODO: Logging
+
+		return allWindows
+			.OfType<Win32WtqWindow>()
+			.Where(p => p.Matches(opts))
+			.OrderByDescending(w => w.IsMainWindow)
+			.Cast<WtqWindow>()
+			.ToList();
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(
@@ -53,11 +58,22 @@ public sealed class Win32WindowService :
 
 		try
 		{
-			var fg = GetForegroundProcessId();
-			if (fg > 0)
+			// Find the handle of the foreground window.
+			var foregroundWindowHandle = _win32.GetForegroundWindowHandle();
+			if (foregroundWindowHandle == null || foregroundWindowHandle <= 0)
 			{
-				return new Win32WtqWindow(Process.GetProcessById((int)fg));
+				return null;
 			}
+
+			// Turn the handle into a Win32Window.
+			var win32Window = _win32.GetWindow(foregroundWindowHandle.Value);
+			if (win32Window == null)
+			{
+				return null;
+			}
+
+			// Wrap the result in a Win32WtqWindow.
+			return new Win32WtqWindow(_win32, win32Window);
 		}
 		catch (Exception ex)
 		{
@@ -67,6 +83,28 @@ public sealed class Win32WindowService :
 		return null;
 	}
 
+	public List<WtqWindowProperty> GetWindowProperties() =>
+	[
+
+#pragma warning disable SA1027 // Use tabs correctly
+
+		new("ProcessName",		w => ((Win32WtqWindow)w).ProcessName),
+		new("WindowTitle",		w => w.WindowTitle),
+		new("WindowClass",		w => ((Win32WtqWindow)w).WindowClass),
+
+		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow,												width: 120),
+		new("Location",			w => ((Win32WtqWindow)w).Rect.Location.ToShortString(),								width: 120),
+		new("Size",				w => ((Win32WtqWindow)w).Rect.Size.ToShortString(),									width: 120),
+		new("State",			w => ((Win32WtqWindow)w).WindowState,												width: 120),
+
+		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId,													width: 120),
+		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId,							isVisible: false,		width: 120),
+		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle,						isVisible: false,		width: 140),
+
+#pragma warning restore SA1027 // Use tabs correctly
+
+	];
+
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
 		CancellationToken cancellationToken)
 	{
@@ -75,14 +113,6 @@ public sealed class Win32WindowService :
 		await UpdateProcessesAsync().NoCtx();
 
 		return _processes;
-	}
-
-	private static uint GetForegroundProcessId()
-	{
-		var hwnd = User32.GetForegroundWindow();
-		User32.GetWindowThreadProcessId(hwnd, out uint pid);
-
-		return pid;
 	}
 
 	private async Task CreateProcessAsync(WtqAppOptions opts)
@@ -97,8 +127,26 @@ public sealed class Win32WindowService :
 		{
 			FileName = opts.FileName,
 			Arguments = opts.Arguments,
-			UseShellExecute = false,
+			WorkingDirectory = opts.WorkingDirectory,
+
+			// If this is set to "false", some apps like PowerShell are spawned within the command prompt,
+			// if WTQ runs from the command line.
+			//
+			// However, it used to be "false" (the default) for a long time, so we may find issues with this change.
+			UseShellExecute = true,
 		};
+
+		// Arguments
+		foreach (var arg in opts.ArgumentList
+			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
+			.Select(a => a.Argument!))
+		{
+			var exp = arg.ExpandEnvVars();
+
+			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+
+			process.StartInfo.ArgumentList.Add(exp);
+		}
 
 		// Start
 		try
@@ -141,24 +189,12 @@ public sealed class Win32WindowService :
 
 			_log.LogDebug("Looking up list of processes");
 			_nextLookup = DateTimeOffset.UtcNow.Add(_lookupInterval);
-			var res = new List<WtqWindow>();
-			foreach (var proc in Process.GetProcesses())
-			{
-				if (!proc.TryGetHasExited(out var hasExited) || hasExited)
-				{
-					continue;
-				}
 
-				if (!proc.TryGetMainWindowHandle(out var mainWindowHandle) || mainWindowHandle == 0)
-				{
-					continue;
-				}
-
-				var wtqProcess = new Win32WtqWindow(proc);
-				res.Add(wtqProcess);
-			}
-
-			_processes = res;
+			_processes = _win32
+				.GetWindowList()
+				.Where(w => !w.Rect.Size.IsEmpty)
+				.Select(w => (WtqWindow)new Win32WtqWindow(_win32, w))
+				.ToList();
 		}
 		finally
 		{

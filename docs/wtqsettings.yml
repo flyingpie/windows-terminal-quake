@@ -18,19 +18,16 @@ WtqSettings:
         HasExample: true
         Example: >-
           {
-          	"Apps": [
-          		{ "Name": "App 1" },
-          		{ "Name": "App 2" },
-          		// ...
-          	]
+            "Apps": [
+              { "Name": "App 1" },
+              { "Name": "App 2" },
+              // ...
+            ]
           }
-        Remarks: See the GUI and the [docs](#app-examples) for some examples.
+        Remarks: See the GUI and the <a href="#app-examples">docs</a> for some examples.
       - DisplayName: Hotkeys
         SettingName: Hotkeys
-        Description: >-
-          Global hotkeys, that toggle either the first, or the most recently toggled app.
-
-          Optional.
+        Description: Global hotkeys, that toggle either the first, or the most recently toggled app.
         IsGlobal: true
         IsApp: false
         IsEnum: false
@@ -41,10 +38,49 @@ WtqSettings:
         HasExample: true
         Example: >-
           {
-          	"Hotkeys": [
-          		{ "Modifiers": "Control", "Key": "Q" }
-          	]
+            "Hotkeys": [
+              { "Modifiers": "Control", "Key": "Q" }
+            ]
           }
+        Remarks: ""
+      - DisplayName: API
+        SettingName: Api
+        Description: WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+            "Api": {
+              "Enable": true,
+              "Urls": ["http://127.0.0.1:7997"]
+            }
+          }
+        Remarks: ""
+      - DisplayName: Feature flags
+        SettingName: FeatureFlags
+        Description: >-
+          <p>Sometimes functionality is added or changed that carries more risk of introducing bugs.</p>
+
+          <p>For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.</p>
+
+          <p>That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
+
+          but still have a way back should things go awry.</p>
+        IsGlobal: true
+        IsApp: false
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
         Remarks: ""
       - DisplayName: Show UI on start
         SettingName: ShowUiOnStart
@@ -59,16 +95,38 @@ WtqSettings:
         HasExample: false
         Example: ""
         Remarks: ""
+      - DisplayName: Tray icon (color) style
+        SettingName: TrayIconStyle
+        Description: The tray icon (color) style (dark/light).
+        IsGlobal: true
+        IsApp: false
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Auto
+        ExampleValue: Auto
+        EnumValues:
+        - Value: Auto
+          DisplayName: Auto
+          Description: Attempt to detect the OS theme and use the appropriate style based on that.
+        - Value: Dark
+          DisplayName: Dark
+          Description: Dark icon, works best on lighter themes.
+        - Value: Light
+          DisplayName: Light
+          Description: Light icon, works best on darker themes.
+        HasExample: false
+        Example: ""
+        Remarks: ""
     - Name: Animation
       Settings:
       - DisplayName: Animation target FPS
         SettingName: AnimationTargetFps
         Description: >-
-          How many frames per second the animation should be.
+          <p>How many frames per second the animation should be.</p>
 
-          Note that this may not be hit if moving windows takes too long, hence "target" fps.
+          <p>Note that this may not be hit if moving windows takes too long, hence "target" fps.</p>
 
-          Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
+          <p>Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.</p>
         IsGlobal: true
         IsApp: false
         IsEnum: false
@@ -87,9 +145,9 @@ WtqSettings:
       - DisplayName: Name
         SettingName: Name
         Description: >-
-          A logical name for the app, used to identify it across config reloads.
+          <p>A logical name for the app, used to identify it across config reloads.</p>
 
-          Appears in logs.
+          <p>Appears in logs.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -100,8 +158,8 @@ WtqSettings:
         HasExample: true
         Example: >-
           {
-          	"Name": "Terminal",
-          	// ...
+            "Name": "Terminal",
+            // ...
           }
         Remarks: ""
       - DisplayName: Hotkeys
@@ -122,9 +180,11 @@ WtqSettings:
       - DisplayName: Filename
         SettingName: FileName
         Description: >-
-          The **filename** to use when starting a new process for the app.
+          <p>The <strong>filename</strong> to use when starting a new process for the app.</p>
 
-          E.g. **notepad**, **dolphin**, etc.
+          <p>E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.</p>
+
+          <p>Note that you can also put absolute paths in here.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -135,37 +195,12 @@ WtqSettings:
         HasExample: false
         Example: ""
         Remarks: See the "Examples" page in the GUI for, well, examples.
-      - DisplayName: Process name
-        SettingName: ProcessName
-        Description: >-
-          Apps sometimes have **process names** different from their **filenames**.
-
-          This field can be used to look for the process name in such cases. Windows Terminal is an
-
-          example, with filename **wt**, and process name **WindowsTerminal**.
-        IsGlobal: false
-        IsApp: true
-        IsEnum: false
-        IsRequired: false
-        DefaultValue: 
-        ExampleValue: 
-        EnumValues: 
-        HasExample: true
-        Example: >-
-          {
-          	// Using with Windows Terminal requires both "Filename" and "ProcessName".
-          	"Apps": {
-          		"Filename": "wt",
-          		"ProcessName": "WindowsTerminal"
-          	}
-          }
-        Remarks: ""
       - DisplayName: Arguments
         SettingName: Arguments
         Description: >-
-          Command-line arguments that should be passed to the app when it's started.
+          <p>Command-line arguments that should be passed to the app when it's started.</p>
 
-          Note that this only applies when using an **AttachMode** that starts the app.
+          <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -179,9 +214,9 @@ WtqSettings:
       - DisplayName: Argument list
         SettingName: ArgumentList
         Description: >-
-          Command-line arguments that should be passed to the app when it's started.
+          <p>Command-line arguments that should be passed to the app when it's started.</p>
 
-          Note that this only applies when using an **AttachMode** that starts the app.
+          <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -192,26 +227,121 @@ WtqSettings:
         HasExample: true
         Example: >-
           {
-          	"Apps": [
-          		{
-          			"ArgumentList": [
-          				"--allow-screencapture",
-          				"--debug-info",
-          			],
-          			// ...
-          		}
-          	]
+            "Apps": [
+              {
+                "ArgumentList": [
+                  "--allow-screencapture",
+                  "--debug-info",
+                ],
+                // ...
+              }
+            ]
           }
         Remarks: ""
-      - DisplayName: Window title
-        SettingName: WindowTitle
-        Description: ""
+      - DisplayName: Working directory
+        SettingName: WorkingDirectory
+        Description: >-
+          <p>Working directory when starting a new process.</p>
+
+          <p>Useful if the <strong>filename</strong> isn't available through PATH.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
         IsRequired: false
         DefaultValue: 
-        ExampleValue: Mozilla Firefox - WhatsApp
+        ExampleValue: 
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Process name
+        SettingName: ProcessName
+        Description: >-
+          <p>Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
+
+          This field can be used to look for the process name in such cases. Windows Terminal is an
+
+          example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.</p>
+
+          <p>Supports regular expressions.</p>
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
+        HasExample: true
+        Example: >-
+          {
+            // Using with Windows Terminal requires both "Filename" and "ProcessName".
+            "Apps": {
+              "Filename": "wt",
+              "ProcessName": "^WindowsTerminal$"
+            }
+          }
+        Remarks: ""
+      - DisplayName: Main window
+        SettingName: MainWindow
+        Description: >-
+          <p>(Windows only) Matches only "main" windows; the initial window a process spawns.</p>
+
+          <p>When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
+
+          that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+
+          When the other (non-main) windows cannot be easily differentiated from the main window (for example through
+
+          the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.</p>
+
+          <p>A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.</p>
+        IsGlobal: false
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Either
+        ExampleValue: Either
+        EnumValues:
+        - Value: MainWindowOnly
+          DisplayName: Main window only
+          Description: Match main windows only.
+        - Value: NonMainWindowOnly
+          DisplayName: Non-main window only
+          Description: Match non-main windows only.
+        - Value: Either
+          DisplayName: Either
+          Description: Match main- and non-main windows.
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Window class
+        SettingName: WindowClass
+        Description: >-
+          <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
+
+          <p>Supports regular expressions.</p>
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: ^ApplicationFrameWindow$
+        EnumValues: 
+        HasExample: false
+        Example: ""
+        Remarks: ""
+      - DisplayName: Window title
+        SettingName: WindowTitle
+        Description: >-
+          <p>Match windows based on their title (sometimes referred to as "caption").</p>
+
+          <p>Supports regular expressions.</p>
+        IsGlobal: false
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: ^Mozilla Firefox - WhatsApp$
         EnumValues: 
         HasExample: false
         Example: ""
@@ -221,14 +351,13 @@ WtqSettings:
       - DisplayName: Window title override
         SettingName: WindowTitleOverride
         Description: >-
-          Attempt to set the window title to a specific value.
+          <p>Attempt to set the window title to a specific value.</p>
 
-
-          Useful for cases where multiple programs control window placement (such as when
+          <p>Useful for cases where multiple programs control window placement (such as when
 
           using WTQ together with a window manager) and the window title can be used to
 
-          opt-out in the other program.
+          opt-out in the other program.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -247,9 +376,9 @@ WtqSettings:
       - DisplayName: Attach mode
         SettingName: AttachMode
         Description: >-
-          How WTQ should get to an instance of a running app.
+          <p>How WTQ should get to an instance of a running app.</p>
 
-          I.e. whether to start an app instance if one cannot be found.
+          <p>I.e. whether to start an app instance if one cannot be found.</p>
         IsGlobal: true
         IsApp: true
         IsEnum: true
@@ -259,13 +388,13 @@ WtqSettings:
         EnumValues:
         - Value: Find
           DisplayName: Find
-          Description: Only look for existing app instances (but don't create one).
+          Description: Only look for <strong>existing</strong> app instances (but don't create one).
         - Value: FindOrStart
           DisplayName: Find or start
-          Description: Look for an existing app instance, create one if one does not exist yet.
+          Description: Look for an <strong>existing</strong> app instance, <strong>create one</strong> if one does not exist yet.
         - Value: Manual
           DisplayName: Manual
-          Description: Attach to whatever app is in the foreground when pressing an assigned hotkey.
+          Description: Attach to <strong>whatever app is in the foreground</strong> when pressing an assigned hotkey.
         HasExample: false
         Example: ""
         Remarks: ""
@@ -315,22 +444,22 @@ WtqSettings:
         EnumValues:
         - Value: AlwaysHidden
           DisplayName: Always hidden
-          Description: '**Never** show the taskbar icon.'
+          Description: <strong>Never</strong> show the taskbar icon.
         - Value: AlwaysVisible
           DisplayName: Always visible
-          Description: '**Always** show the taskbar icon (note that this can look a bit weird when the app is toggled off).'
+          Description: <strong>Always</strong> show the taskbar icon (note that this can look a bit weird when the app is toggled off).
         - Value: WhenAppVisible
           DisplayName: When the app is visible
-          Description: Only show the taskbar icon when the app is toggled **on**.
+          Description: Only show the taskbar icon when the app is toggled <strong>on</strong>.
         HasExample: false
         Example: ""
         Remarks: ""
       - DisplayName: Opacity
         SettingName: Opacity
         Description: >-
-          Make the window see-through (applies to the entire window, including the title bar).
+          <p>Make the window see-through (applies to the entire window, including the title bar).</p>
 
-          0 (invisible) - 100 (opaque).
+          <p>0 (invisible) - 100 (opaque).</p>
         IsGlobal: true
         IsApp: true
         IsEnum: false
@@ -343,6 +472,41 @@ WtqSettings:
         Remarks: ""
     - Name: Position
       Settings:
+      - DisplayName: Resize app window
+        SettingName: Resize
+        Description: >-
+          Whether to resize the app window when toggling onto the screen, to apply other settings
+
+          like HorizontalScreenCoverage.
+
+
+          By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+
+          (like the aforementioned HorizontalScreenCoverage).
+
+
+          This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
+
+          window clears its contents (seems to be most common with Electron apps).
+        IsGlobal: true
+        IsApp: true
+        IsEnum: true
+        IsRequired: false
+        DefaultValue: Always
+        ExampleValue: Always
+        EnumValues:
+        - Value: Always
+          DisplayName: Always
+          Description: Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).
+        - Value: Never
+          DisplayName: Never
+          Description: >-
+            Never resize the app window, ignoring alignment settings (like HorizontalScreenCoverage).
+
+            Useful for apps that don't respond well to resizes.
+        HasExample: false
+        Example: ""
+        Remarks: ""
       - DisplayName: Horizontal screen coverage
         SettingName: HorizontalScreenCoverage
         Description: Horizontal screen coverage, as a percentage.
@@ -407,11 +571,15 @@ WtqSettings:
       - DisplayName: Off-screen locations
         SettingName: OffScreenLocations
         Description: >-
-          When moving an app off the screen, WTQ looks for an empty space to move the window to.
+          <p>When moving an app off the screen, WTQ looks for an empty space to move the window to.</p>
 
-          Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.
+          <p>Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.</p>
 
-          By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
+          <p>By default, WTQ looks for empty space in this order: Above, Below, Left, Right.</p>
+
+          <p>If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
+
+          without any animation.</p>
         IsGlobal: true
         IsApp: true
         IsEnum: false
@@ -419,8 +587,8 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: "{\n    // Globally:\n    \"OffScreenLocations\": [\"Above\", \"Below\", \"Left\", \"Right\"],\n            \n    // For one app only:\n    \"Apps\": [\n        {\n            \"OffScreenLocations\": [\"Above\", \"Below\", \"Left\", \"Right\"],\n        }\n    ]\n}"
         Remarks: ""
     - Name: Monitor
       Settings:
@@ -439,19 +607,19 @@ WtqSettings:
           Description: The monitor where the mouse cursor is currently at.
         - Value: AtIndex
           DisplayName: At index
-          Description: The monitor at the index as specified by **MonitorIndex** (0-based).
+          Description: The monitor at the index as specified by <strong>MonitorIndex</strong> (0-based).
         - Value: Primary
           DisplayName: Primary
-          Description: The monitor considered **primary** by the OS.
+          Description: The monitor considered <strong>primary</strong> by the OS.
         HasExample: false
         Example: ""
         Remarks: ""
       - DisplayName: Monitor index
         SettingName: MonitorIndex
         Description: >-
-          If **PreferMonitor** is set to **AtIndex**, this setting determines what monitor to choose.
+          <p>If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.</p>
 
-          Zero based, e.g. 0, 1, etc.
+          <p>Zero based, e.g. 0, 1, etc.</p>
         IsGlobal: true
         IsApp: true
         IsEnum: false
@@ -548,6 +716,21 @@ WtqSettings:
         - Value: EaseOutQuart
           DisplayName: Ease out quadratic
           Description: ""
+        HasExample: false
+        Example: ""
+        Remarks: ""
+    - Name: Events
+      Settings:
+      - DisplayName: Event hooks
+        SettingName: EventHooks
+        Description: Execute a program when some event occurs.
+        IsGlobal: true
+        IsApp: true
+        IsEnum: false
+        IsRequired: false
+        DefaultValue: 
+        ExampleValue: 
+        EnumValues: 
         HasExample: false
         Example: ""
         Remarks: ""

@@ -26,15 +26,15 @@ If you want to toggle Windows Terminal, you can point WTQ to it, instead of the 
 #### Have Windows Terminal Not Attach To New Command Prompts
 If you want to have separate windows for PowerShell.exe, pwsh.exe, cmd.exe, etc., configure Windows Terminal to not attach to them:
 
-![](../assets/img/wt-default-host-01.png)
+![](assets/img/wt-default-host-01.png)
 
 This can also be done from the Windows Settings:
 
-![](../assets/img/wt-default-host-02.png)
+![](assets/img/wt-default-host-02.png)
 
 ## WTQ Doesn't Work Properly With The Windows Terminal Preview Version
 This could have to do with the "wt.exe" alias not pointing to the correct Windows Terminal version.
 
 In Windows Settings, look for "App execution aliases", and make sure that "wt.exe" is enabled for the desired version of Windows Terminal:
 
-![](../assets/img/wt-alias-01.png)
+![](assets/img/wt-alias-01.png)

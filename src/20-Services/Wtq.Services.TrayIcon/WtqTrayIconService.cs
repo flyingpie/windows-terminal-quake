@@ -1,97 +1,104 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NotificationIcon.NET;
-using System.Runtime.InteropServices;
 
 namespace Wtq.Services.TrayIcon;
 
 public sealed class WtqTrayIconService : WtqHostedService
 {
-	private readonly bool _isWin = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+	private readonly ILogger _log = Log.For<WtqTrayIconService>();
 
-	private readonly IHostApplicationLifetime _lifetime;
-	private readonly IWtqBus _bus;
-	private readonly IWtqUIService _ui;
+	private readonly IPlatformService _platform;
+	private readonly TrayIconUtil _trayIconUtil;
 
-	private NotifyIcon? _icon;
-	private Worker? _loop;
+	private readonly NotifyIcon _icon;
+	private readonly RecurringTask _loop;
 
 	public WtqTrayIconService(
 		IHostApplicationLifetime lifetime,
+		IPlatformService platform,
 		IWtqBus bus,
-		IWtqUIService ui)
+		IWtqUIService ui,
+		TrayIconUtil trayIconUtil)
 	{
-		_lifetime = lifetime;
-		_bus = Guard.Against.Null(bus);
-		_ui = Guard.Against.Null(ui);
-
-		new Thread(ShowStatusIcon).Start();
-	}
-
-	protected override async ValueTask OnDisposeAsync()
-	{
-		if (_icon != null)
-		{
-			_icon.Dispose();
-			_icon = null;
-		}
-
-		if (_loop != null)
-		{
-			await _loop.DisposeAsync().NoCtx();
-			_loop = null;
-		}
-	}
-
-	private void ShowStatusIcon()
-	{
-		// It seems Windows wants its icons as ICO files, while Linux supports PNG.
-		// Also, on Linux the icon requires some padding.
-		var iconPath = _isWin
-			? WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico")
-			: WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-padding.png");
+		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(lifetime);
+		_ = Guard.Against.Null(ui);
+		_platform = Guard.Against.Null(platform);
+		_trayIconUtil = trayIconUtil;
 
 		_icon = NotifyIcon.Create(
-			iconPath,
+			_trayIconUtil.TrayIconPath,
 			[
 				CreateItem(
-					$"Version {WtqConstants.AppVersion}",
+					$"Version {WtqConstants.AppVersion} ({_platform.PlatformName})",
 					() => { },
 					enabled: false),
 
 				new SeparatorItem(),
 
 				CreateItem(
-					$"Open Project Website (GitHub)",
-					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
+					"Open Project Website (GitHub)",
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new SeparatorItem(),
 
 				CreateItem(
 					"Open Main Window",
-					() => _bus.Publish(new WtqUIRequestedEvent())),
+					() => bus.Publish(new WtqUIRequestedEvent())),
 
 				new SeparatorItem(),
 
 				CreateItem(
 					"Open Settings File",
-					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
 
 				CreateItem(
 					"Open Settings Directory",
-					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
 
 				CreateItem(
 					"Open Logs",
-					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
 
 				new SeparatorItem(),
 
 				CreateItem(
 					"Quit",
-					() => _lifetime.StopApplication()),
+					lifetime.StopApplication),
 			]);
 
-		if (_isWin)
+		_loop = new(
+			nameof(WtqTrayIconService),
+			TimeSpan.FromMilliseconds(200), // The action is blocking, so this value doesn't actually matter much.
+			ct =>
+			{
+				ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
+
+				return Task.CompletedTask;
+			});
+	}
+
+	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		new Thread(ShowStatusIcon).Start();
+
+		return Task.CompletedTask;
+	}
+
+	protected override ValueTask OnDisposeAsync()
+	{
+		_icon.Dispose();
+
+		// Don't wait for the loop to fully dispose, as it can take a while due to the thread waiting on a GUI loop iteration.
+		_ = _loop.DisposeAsync();
+
+		return ValueTask.CompletedTask;
+	}
+
+	private void ShowStatusIcon()
+	{
+		if (Os.IsWindows)
 		{
 			// On Windows, we can just block the thread on the tray icon UI.
 			_icon.Show();
@@ -102,28 +109,17 @@ public sealed class WtqTrayIconService : WtqHostedService
 			// That means the threads can step on each other's state, crashing the UI stack.
 			//
 			// So we send any UI work to the main UI's thread, keeping UI stuff single-threaded.
-			_loop = new(
-				nameof(WtqTrayIconService),
-				ct =>
-				{
-					_ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
-
-					return Task.CompletedTask;
-				},
-				TimeSpan.FromMilliseconds(200));
+			_loop.Start();
 		}
-
 	}
 
 	private static MenuItem CreateItem(
 		string text,
 		Action action,
-		bool enabled = true)
-	{
-		return new MenuItem(text)
+		bool enabled = true) =>
+		new(text)
 		{
-			Click = (s, e) => action(),
+			Click = (_, _) => action(),
 			IsDisabled = !enabled,
 		};
-	}
 }

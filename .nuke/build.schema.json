@@ -24,20 +24,29 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
+        "BuildAll",
+        "BuildLinux",
+        "BuildLinuxFrameworkDependent",
+        "BuildLinuxSelfContained",
+        "BuildWindows",
+        "BuildWindows64SelfContained",
+        "BuildWindowsFrameworkDependent",
         "Clean",
+        "CreateAurManifest",
+        "CreateFlatpakManifest",
         "CreateGitHubRelease",
         "CreateScoopManifest",
         "CreateWinGetManifest",
-        "PublishDebug",
-        "PublishLinux64",
-        "PublishLinux64FrameworkDependent",
-        "PublishLinux64SelfContained",
-        "PublishRelease",
-        "PublishWin64",
-        "PublishWin64FrameworkDependent",
-        "PublishWin64SelfContained",
-        "ReportInfo",
-        "RunTests"
+        "Info",
+        "Install",
+        "InstallLinux",
+        "InstallWindows",
+        "Publish",
+        "Restore",
+        "RunTests",
+        "Uninstall",
+        "UninstallLinux",
+        "UninstallWindows"
       ]
     },
     "Verbosity": {
@@ -126,10 +135,6 @@
         "GitHubToken": {
           "type": "string",
           "description": "GitHub Token"
-        },
-        "SemVerVersion": {
-          "type": "string",
-          "description": "Version"
         },
         "Solution": {
           "type": "string",

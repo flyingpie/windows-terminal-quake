@@ -14,13 +14,14 @@ namespace Wtq;
 /// </summary>
 public sealed class WtqApp : IAsyncDisposable
 {
+	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
+
 	private readonly ILogger _log;
 
 	private readonly Func<WtqAppOptions> _optionsAccessor;
 	private readonly IWtqAppToggleService _toggler;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
-	private readonly Worker _loop;
 
 	private Point? _lastLoc;
 
@@ -111,6 +112,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task<Rectangle> GetScreenRectAsync()
 	{
+		if (!IsAttached)
+		{
+			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
+		}
+
 		_log.LogDebug("Looking for current screen rect for app {App}", this);
 
 		// Get all screen rects.
@@ -161,6 +167,11 @@ public sealed class WtqApp : IAsyncDisposable
 
 	public async Task<bool> OpenAsync(ToggleModifiers mods = ToggleModifiers.None)
 	{
+		if (!IsOptionsValid())
+		{
+			return false;
+		}
+
 		_log.LogInformation("Opening app '{App}'", this);
 
 		IsActive = true;
@@ -230,10 +241,13 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public async Task UpdateLocalAppStateAsync(bool allowStartNew)
 	{
-		if (!IsActive)
+		if (!IsOptionsValid())
 		{
 			return;
 		}
+
+		// Make sure this method always runs non-concurrently.
+		using var l = await _updateLock.WaitAsync(Cancel.After(TimeSpan.FromSeconds(15))).ConfigureAwait(false);
 
 		// Ask window to update its state first.
 		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
@@ -241,6 +255,8 @@ public sealed class WtqApp : IAsyncDisposable
 		// Check that if we have a process handle, the process is still active.
 		if (IsAttached)
 		{
+			await UpdateWindowPropsAsync().NoCtx();
+
 			if (_lastLoc != null)
 			{
 				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
@@ -279,6 +295,11 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	private async Task CheckAndRestoreWindowRectAsync(WtqWindow window, Point lastLoc)
 	{
+		if (!IsAttached)
+		{
+			return;
+		}
+
 		// Fetch current window location.
 		var rect = await window.GetWindowRectAsync().NoCtx();
 
@@ -389,12 +410,8 @@ public sealed class WtqApp : IAsyncDisposable
 	{
 		// Get the screen with the cursor, to move the window to.
 		var scr = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
-		if (scr == null || scr.IsEmpty) // TODO: This can be null in the future.
-		{
-			scr = new(Point.Empty, WtqConstants.Sizes._1920x1080);
-		}
 
-		// Calculate a convenient target locatino & size for the window.
+		// Calculate a convenient target location & size for the window.
 		var dstSize = scr.Size.MultiplyF(.9f);
 		var dstLoc = dstSize.CenterInRectangle(scr);
 
@@ -405,5 +422,16 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// ...then resize, since in some cases (at least on KWin), we can only resize visible windows it seems.
 		await ResizeWindowAsync(dstSize).NoCtx();
+	}
+
+	private bool IsOptionsValid()
+	{
+		if (Options.IsValid)
+		{
+			return true;
+		}
+
+		_log.LogWarning("Options for app {App} not valid. Please check settings, and/or the GUI for suggestions", this);
+		return false;
 	}
 }

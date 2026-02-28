@@ -3,12 +3,14 @@ using Wtq.Configuration;
 namespace Wtq.Services.KWin;
 
 public class KWinWindowService(
-	IKWinClient kwinClient)
+	IKWinClient kwinClient,
+	IPlatformService platform)
 	: IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<KWinWindowService>();
 
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
+	private readonly IPlatformService _procFactory = Guard.Against.Null(platform);
 
 	public Task CreateAsync(
 		WtqAppOptions opts,
@@ -16,20 +18,14 @@ public class KWinWindowService(
 	{
 		Guard.Against.Null(opts);
 
-		using var process = new Process();
-
-		process.StartInfo = new ProcessStartInfo()
-		{
-			FileName = opts.FileName,
-			Arguments = opts.Arguments,
-		};
+		using var process = _procFactory.CreateProcess(opts);
 
 		process.Start();
 
 		return Task.CompletedTask;
 	}
 
-	public async Task<WtqWindow?> FindWindowAsync(
+	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
 		CancellationToken cancellationToken)
 	{
@@ -39,14 +35,16 @@ public class KWinWindowService(
 		{
 			var clients = await GetWindowsAsync(cancellationToken).NoCtx();
 
-			return clients.FirstOrDefault(c => c.Matches(opts));
+			return clients
+				.Where(c => c.Matches(opts))
+				.ToList();
 		}
 		catch (Exception ex)
 		{
 			_log.LogError(ex, "Failed to look up list of windows: {Message}", ex.Message);
 		}
 
-		return null;
+		return [];
 	}
 
 	public async Task<WtqWindow?> GetForegroundWindowAsync(
@@ -61,12 +59,22 @@ public class KWinWindowService(
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
 	[
+
+#pragma warning disable SA1027 // Use tabs correctly
+
 		new("Filename",			w => ((KWinWtqWindow)w).DesktopFileName),
+		new("WindowTitle",		w => w.WindowTitle),
+
 		new("ResourceClass",	w => ((KWinWtqWindow)w).ResourceClass),
 		new("ResourceName",		w => ((KWinWtqWindow)w).ResourceName),
-		new("WindowTitle",		w => w.WindowTitle),
-		new("FrameGeometry",	w => ((KWinWtqWindow)w).FrameGeometry),
-		new("Id",				w => w.Id),
+
+		new("Location",			w => ((KWinWtqWindow)w).FrameGeometry?.Location.ToShortString(),		width: 50),
+		new("Size",				w => ((KWinWtqWindow)w).FrameGeometry?.Size.ToShortString(),			width: 50),
+
+		new("Id",				w => w.Id,																isVisible: false),
+
+#pragma warning restore SA1027 // Use tabs correctly
+
 	];
 
 	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)

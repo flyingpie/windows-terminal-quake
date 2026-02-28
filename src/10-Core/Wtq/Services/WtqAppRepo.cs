@@ -1,16 +1,18 @@
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppRepo"/>.
-public sealed class WtqAppRepo : IWtqAppRepo
+public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
+	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
+
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqAppToggleService _toggleService;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
 
 	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(StringComparer.OrdinalIgnoreCase);
-	private readonly Worker _loop;
+	private readonly RecurringTask _loop;
 
 	public WtqAppRepo(
 		IHostApplicationLifetime lifetime,
@@ -21,38 +23,34 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	{
 		_ = Guard.Against.Null(lifetime);
 		_opts = Guard.Against.Null(opts);
-		_toggleService = Guard.Against.Null(toggleService);
 		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+		_toggleService = Guard.Against.Null(toggleService);
 		_windowResolver = Guard.Against.Null(procResolver);
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
 
-		_ = Task.Run(async () =>
-		{
-			// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-			// "StartApps": "OnWtqStart | OnHotkeyPress"
-			await UpdateAppsAsync(allowStartNew: true).NoCtx();
-		});
-
-		// When WTQ stops, reset all tracked apps.
-		lifetime.ApplicationStopping.Register(() =>
-		{
-			// TODO: Find a nicer way to handle this.
-			DisposeAsync().GetAwaiter().GetResult();
-		});
-
 		// Start loop that updates app state periodically.
 		_loop = new(
 			$"{nameof(WtqAppRepo)}.UpdateAppStates",
-			_ => UpdateAppsAsync(allowStartNew: false),
-			TimeSpan.FromSeconds(1));
+			TimeSpan.FromSeconds(1),
+			_ => UpdateAppsAsync(allowStartNew: false));
 	}
 
-	public async ValueTask DisposeAsync()
+	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	{
+		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+		// "StartApps": "OnWtqStart | OnHotkeyPress"
+		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+
+		_loop.Start();
+	}
+
+	protected override async Task OnStopAsync(CancellationToken cancellationToken)
 	{
 		await _loop.DisposeAsync().NoCtx();
 
+		// When WTQ stops, reset all tracked apps.
 		foreach (var app in _apps)
 		{
 			await app.Value.DisposeAsync().NoCtx();
@@ -70,7 +68,7 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	{
 		Guard.Against.NullOrWhiteSpace(name);
 
-		return _apps.Values.FirstOrDefault(a => a.Name == name);
+		return _apps.Values.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 	}
 
 	/// <inheritdoc/>
@@ -84,7 +82,8 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	/// <inheritdoc/>
 	public WtqApp? GetOpen()
 	{
-		return _apps.Values.FirstOrDefault(a => a.IsOpen);
+		// Note that we only want apps that are actually attached, in addition to the "open" ones.
+		return _apps.Values.FirstOrDefault(a => a is { IsAttached: true, IsOpen: true });
 	}
 
 	/// <inheritdoc/>
@@ -120,6 +119,9 @@ public sealed class WtqAppRepo : IWtqAppRepo
 	/// </summary>
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
+		// Make sure this method always runs non-concurrently.
+		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
+
 		_log.LogDebug("Updating apps (allow start new: {AllowStartNow})", allowStartNew);
 
 		// Add app handles for options that don't have one yet.

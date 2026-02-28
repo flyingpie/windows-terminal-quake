@@ -1,16 +1,74 @@
 @page "/"
+@using Wtq.Services.UI.Components.Settings
+
 @layout NarrowLayout
 
+@inject IOptionsMonitor<WtqOptions> WtqOpts
+@inject IWtqOptionsSaveService SaveService
+@inject NotificationService NotificationService
+
 @code {
+
+	// Grab a copy from the options, so we can bind to it.
+	// We're not using IOptionsSnapshot, as we do want to get notified of updates.
+	public WtqOptions GlobalOpts { get; set; } = null!;
+
+	private bool ShowUiOnStart
+	{
+		get => GlobalOpts.ShowUiOnStart ?? false;
+		set
+		{
+			GlobalOpts.ShowUiOnStart = value;
+			InvokeAsync(SaveAsync);
+		}
+	}
+
+	protected override void OnInitialized()
+	{
+		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+	}
+
+	private async Task SaveAsync()
+	{
+		await SaveService.SaveAsync(GlobalOpts).NoCtx();
+
+		NotificationService.Notify(NotificationSeverity.Info, "Settings saved");
+	}
 
 }
 
 <PageHead Icon="home">Welcome</PageHead>
 
+<p>Thank you for trying out WTQ!</p>
+
+<p>To get started, <RadzenLink Path="/apps" Text="add an app"/>, or find some inspiration in the <RadzenLink Path="/examples" Text="examples"/>.</p>
+
+<!-- Show UI on start -->
+<RadzenStack
+	Orientation="Orientation.Vertical"
+	style="position: absolute; right: 0; bottom: 0; left: 0; padding: 1em; margin-top: 2em; background-color: #19191a;"
+>
+	<div>
+		<SettingsFileLink />
+	</div>
+
+	<RadzenStack
+		Orientation="Orientation.Horizontal"
+		JustifyContent="JustifyContent.Start"
+	>
+		<RadzenCheckBox Name="chk-show-ui-on-start" @bind-Value="ShowUiOnStart"/>
+		<RadzenLabel class="pointer" Text="Show UI when WTQ starts" for="chk-show-ui-on-start"/>
+	</RadzenStack>
+</RadzenStack>
+
 <style>
 	body {
-		background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/splash-screen-1.png') !important;
+		background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/img/splash-screen-1.jpg') !important;
 		background-position: center center !important;
 		background-size: cover !important;
+	}
+
+	.pointer {
+		cursor: pointer;
 	}
 </style>

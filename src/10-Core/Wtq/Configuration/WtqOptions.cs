@@ -6,11 +6,15 @@ namespace Wtq.Configuration;
 /// Defines WTQ-wide options, including the list of configured apps.
 /// </summary>
 [Display(Name = ":material-earth: Global options")]
-public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
+public sealed class WtqOptions : WtqSharedOptions
 {
 	/// <summary>
-	/// Path to wtq.schema.json.<br/>
+	/// <para>
+	/// Path to wtq.schema.json.
+	/// </para>
+	/// <para>
 	/// Used for adding intellisense-like features to editors that support JSON schema (such as VSCode).
+	/// </para>
 	/// </summary>
 	/// <remarks>
 	/// Fixed value, changes to this property in the wtq.jsonc will be ignored/overwritten.
@@ -29,11 +33,11 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Apps": [
-	/// 		{ "Name": "App 1" },
-	/// 		{ "Name": "App 2" },
-	/// 		// ...
-	/// 	]
+	///   "Apps": [
+	///     { "Name": "App 1" },
+	///     { "Name": "App 2" },
+	///     // ...
+	///   ]
 	/// }
 	/// </code>
 	/// </example>
@@ -44,15 +48,14 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 		= [];
 
 	/// <summary>
-	/// Global hotkeys, that toggle either the first, or the most recently toggled app.<br/>
-	/// Optional.
+	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	/// <example>
 	/// <code>
 	/// {
-	/// 	"Hotkeys": [
-	/// 		{ "Modifiers": "Control", "Key": "Q" }
-	/// 	]
+	///   "Hotkeys": [
+	///     { "Modifiers": "Control", "Key": "Q" }
+	///   ]
 	/// }
 	/// </code>
 	/// </example>
@@ -63,9 +66,15 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 
 
 	/// <summary>
-	/// How many frames per second the animation should be.<br/>
-	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.<br/>
+	/// <para>
+	/// How many frames per second the animation should be.
+	/// </para>
+	/// <para>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.
+	/// </para>
+	/// <para>
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
+	/// </para>
 	/// </summary>
 	[DefaultValue(40)]
 	[Display(GroupName = Gn.Animation, Name = "Animation target FPS")]
@@ -74,14 +83,36 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
-	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
-	/// <br/>
-	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>
+	/// WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Api": {
+	///     "Enable": true,
+	///     "Urls": ["http://127.0.0.1:7997"]
+	///   }
+	/// }
+	/// </code>
+	/// </example>
+	[Display(GroupName = Gn.General, Name = "API")]
+	[JsonPropertyOrder(104)]
+	public WtqApiOptions? Api { get; set; }
+
+	/// <summary>
+	/// <para>
+	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.
+	/// </para>
+	/// <para>
+	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.
+	/// </para>
+	/// <para>
 	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
 	/// but still have a way back should things go awry.
+	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
-	[JsonPropertyOrder(104)]
+	[JsonPropertyOrder(105)]
 	public FeatureFlags? FeatureFlags { get; set; }
 
 	/// <summary>
@@ -89,8 +120,16 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 	/// </summary>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.General, Name = "Show UI on start")]
-	[JsonPropertyOrder(105)]
+	[JsonPropertyOrder(106)]
 	public bool? ShowUiOnStart { get; set; }
+
+	/// <summary>
+	/// The tray icon (color) style (dark/light).
+	/// </summary>
+	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
+	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]
+	[JsonPropertyOrder(107)]
+	public TrayIconStyle? TrayIconStyle { get; set; }
 
 	/// <summary>
 	/// Called right after the options are loaded from file.
@@ -113,7 +152,8 @@ public sealed class WtqOptions : WtqSharedOptions, IValidatableObject
 			app.PrepareForSave();
 		}
 
-		foreach (var hk in Hotkeys.Where(hk => hk.IsEmpty).ToList()) // Explicit ToList() since we're modifying it from within the loop.
+		// Explicit ToList() since we're modifying it from within the loop.
+		foreach (var hk in Hotkeys.Where(hk => hk.Sequence.IsEmpty).ToList())
 		{
 			Hotkeys.Remove(hk);
 		}

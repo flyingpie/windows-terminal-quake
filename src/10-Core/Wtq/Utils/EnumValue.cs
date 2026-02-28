@@ -9,7 +9,7 @@ public class EnumValue<TValue>
 	private string? _displayName;
 	private string? _doc;
 
-	public TValue Value { get; set; }
+	public required TValue Value { get; init; }
 
 	public DisplayAttribute? Display { get; set; }
 
@@ -25,9 +25,7 @@ public class EnumValue
 	private string? _displayName;
 	private string? _doc;
 
-	// public Type EnumType { get; set; }
-
-	public object Value { get; set; }
+	public required object Value { get; init; }
 
 	public DisplayAttribute? Display { get; set; }
 

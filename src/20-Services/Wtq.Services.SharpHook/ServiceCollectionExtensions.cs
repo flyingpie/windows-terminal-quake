@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using Wtq.Services.SharpHook;
+using Wtq.Services.SharpHook.Input;
 
-namespace Wtq.Services.Win32;
+namespace Wtq.Services.SharpHook;
 
 public static class ServiceCollectionExtensions
 {
@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
 	/// </summary>
 	public static IServiceCollection AddSharpHookHotkeyService(this IServiceCollection services) =>
 		Guard.Against.Null(services)
+			.AddSingleton<IWin32, Win32>()
 			.AddHostedService<SharpHookHotkeyService>();
 }

@@ -1,18 +1,23 @@
-using Wtq.Configuration;
-
 namespace Wtq.Services.WinForms;
 
 public sealed class TrayIcon : IDisposable
 {
+	private readonly IPlatformService _platform;
+	private readonly TrayIconUtil _trayIconUtil;
+
 	private NotifyIcon? _notificationIcon;
 
 	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
 	public TrayIcon(
 		IHostApplicationLifetime lifetime,
-		IWtqBus bus)
+		IWtqBus bus,
+		IPlatformService platform,
+		TrayIconUtil trayIconUtil)
 	{
-		_ = Guard.Against.Null(lifetime);
 		_ = Guard.Against.Null(bus);
+		_ = Guard.Against.Null(lifetime);
+		_platform = Guard.Against.Null(platform);
+		_trayIconUtil = Guard.Against.Null(trayIconUtil);
 
 		var waiter = new TaskCompletionSource<bool>();
 
@@ -24,14 +29,14 @@ public sealed class TrayIcon : IDisposable
 			[
 				CreateItem(
 					$"Version {WtqConstants.AppVersion}",
-					() => {},
+					() => { },
 					enabled: false),
 
 				new ToolStripSeparator(),
 
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => Os.OpenUrl(WtqConstants.GitHubUrl)),
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
 
 				new ToolStripSeparator(),
 
@@ -43,15 +48,15 @@ public sealed class TrayIcon : IDisposable
 
 				CreateItem(
 					"Open Settings File",
-					() => Os.OpenFileOrDirectory(WtqOptionsPath.Instance.Path)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
 
 				CreateItem(
 					"Open Settings Directory",
-					() => Os.OpenFileOrDirectory(Path.GetDirectoryName(WtqOptionsPath.Instance.Path)!)),
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
 
 				CreateItem(
 					"Open Logs Directory",
-					() => Os.OpenFileOrDirectory(WtqPaths.GetWtqLogDir())),
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
 
 				new ToolStripSeparator(),
 
@@ -72,7 +77,10 @@ public sealed class TrayIcon : IDisposable
 			waiter.SetResult(true);
 
 			Application.Run();
-		});
+		})
+		{
+			Name = nameof(WinFormsTrayIconService),
+		};
 
 		notifyThread.Start();
 
@@ -83,12 +91,13 @@ public sealed class TrayIcon : IDisposable
 	{
 		_notificationIcon?.Dispose();
 		_notificationIcon = null;
+
+		Application.Exit();
 	}
 
-	private static Icon CreateIcon()
+	private Icon CreateIcon()
 	{
-		var path = WtqPaths.GetPathRelativeToWtqAppDir("assets", "icon-v2-256-nopadding.ico");
-		using var str = File.OpenRead(path);
+		using var str = File.OpenRead(_trayIconUtil.TrayIconPath);
 
 		return new Icon(str);
 	}

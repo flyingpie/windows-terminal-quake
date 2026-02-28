@@ -36,18 +36,20 @@ public static class ServiceCollectionExtensions
 
 			// Utils
 			.AddSingleton<IWtqTween, WtqTween>()
-			.AddSingleton(_ => InAppLogSink.Instance)
 
 			// Core App Logic
-			.AddSingleton<IWtqAppRepo, WtqAppRepo>()
 			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
 			.AddSingleton<IWtqBus, WtqBus>()
+			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
+			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
+			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<WtqOptionsSaveService>()
+			.AddSingleton<TrayIconUtil>()
 
 			.AddHostedService<WtqEventHookHandler>()
 			.AddHostedService<WtqFocusTracker>()
 			.AddHostedService<WtqHotkeyRoutingService>()
-			.AddHostedService<WtqService>();
+			.AddHostedService<WtqService>()
+			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
 	}
 }

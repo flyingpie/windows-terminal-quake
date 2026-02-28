@@ -7,6 +7,7 @@ internal sealed class KWinScriptService(
 	: IKWinScriptService
 {
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
+	private readonly ILogger _log = Log.For<KWinScriptService>();
 
 	public async Task<KWinScript> LoadScriptAsync(string path)
 	{
@@ -22,6 +23,8 @@ internal sealed class KWinScriptService(
 		{
 			await scr.UnloadScriptAsync(id).NoCtx();
 		}
+
+		_log.LogDebug("Loading KWin script from path '{Path}'", path);
 
 		if (!File.Exists(path))
 		{

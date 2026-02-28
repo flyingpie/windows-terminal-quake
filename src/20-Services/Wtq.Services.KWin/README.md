@@ -1,5 +1,11 @@
 # Wtq.Services.KWin
 
+## Codegen
+```bash
+dotnet tool update -g Tmds.DBus.Tool
+dotnet dbus codegen --protocol-api --bus session --service org.kde.KWin
+```
+
 ## API Docs
 https://develop.kde.org/docs/plasma/kwin/api/
 

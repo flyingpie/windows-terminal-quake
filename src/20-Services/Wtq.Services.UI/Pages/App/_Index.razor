@@ -5,9 +5,9 @@
 @using Wtq.Services.UI.Components.Settings.Position
 
 @inject IOptionsMonitor<WtqOptions> WtqOpts
-@inject Notifier Notifier
-@inject WtqOptionsSaveService SaveService
+@inject IWtqOptionsSaveService SaveService
 @inject NotificationService NotificationService
+@inject Notifier Notifier
 
 @page "/apps/{AppId}"
 @layout NarrowLayout
@@ -18,9 +18,11 @@
 	[Parameter]
 	public string? AppId { get; set; }
 
-	public WtqAppOptions AppOpts { get; set; }
+	// Grab a copy from the options, so we can bind to it.
+	// We're not using IOptionsSnapshot, as we do want to get notified of updates.
+	public WtqAppOptions AppOpts { get; set; } = null!;
 
-	public WtqOptions GlobalOpts { get; set; }
+	public WtqOptions GlobalOpts { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{
@@ -55,8 +57,9 @@
 </PageHead>
 
 <p>Settings specific to <strong>@AppId</strong>.</p>
+<p>Note that you can also configure many of these settings to apply for all apps, through <RadzenLink Path="/global-settings" Text="global settings" />.</p>
 
-<SettingsFileLink />
+<p><SettingsFileLink /></p>
 
 <CascadingValue Value="GlobalOpts">
 <CascadingValue Value="AppOpts">
@@ -99,14 +102,17 @@
 				<!-- Refer to examples page. -->
 				<RadzenAlert AllowClose="false" AlertStyle="AlertStyle.Secondary">
 					See the <RadzenLink Path="/windows" Text="Windows" /> page for open windows, to get suggestions on
-					what values to use for <strong>filename</strong> and/or <strong>process name</strong>.
+					what values to use for <strong>filename</strong>, <strong>process name</strong> and others.
 				</RadzenAlert>
 
 				<!-- Filename -->
-				<FilenameSetting														Get="() => AppOpts.FileName"					Set="v => AppOpts.FileName = v" />
+				<FilenameSetting														Get="() => AppOpts.FileName"					Set="v => AppOpts.FileName = v"																			WorkingDirectory="@AppOpts.WorkingDirectory" />
 
 				<!-- Alerts about known apps, and any specific configuration they require. -->
 				<KnownAppAlerts AppOpts="AppOpts" />
+
+				<!-- Working dir -->
+				<WtqSettingTextBox														Get="() => AppOpts.WorkingDirectory"			Set="v => AppOpts.WorkingDirectory = v" />
 
 				<!-- Process name -->
 				<WtqSettingTextBox														Get="() => AppOpts.ProcessName"					Set="v => AppOpts.ProcessName = v" />
@@ -116,6 +122,9 @@
 
 				<!-- Attach mode -->
 				<WtqSettingRadio					TProperty="AttachMode"				Get="() => AppOpts.AttachMode"					Set="v => AppOpts.AttachMode = v"					Default="() => GlobalOpts.AttachMode" />
+
+				<!-- Main window -->
+				<WtqSettingRadio					TProperty="MainWindowState"			Get="() => AppOpts.MainWindow"					Set="v => AppOpts.MainWindow = v"					Default="() => AppOpts.MainWindow" />
 
 				<!-- Window class -->
 				<WtqSettingTextBox														Get="() => AppOpts.WindowClass"					Set="v => AppOpts.WindowClass = v" />
@@ -150,6 +159,9 @@
 		<RadzenFieldset Text="Position">
 			<RadzenStack Gap="1rem">
 
+				<!-- Resize -->
+				<WtqSettingRadio					TProperty="Resizing"				Get="() => AppOpts.Resize"						Set="v => AppOpts.Resize = v"						Default="() => GlobalOpts.Resize" />
+
 				<!-- Horizontal screen coverage -->
 				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.HorizontalScreenCoverage"	Set="v => AppOpts.HorizontalScreenCoverage = v"		Default="() => GlobalOpts.HorizontalScreenCoverage" />
 
@@ -163,7 +175,7 @@
 				<WtqSettingNumberSlider				TProperty="float?"					Get="() => AppOpts.VerticalOffset"				Set="v => AppOpts.VerticalOffset = v"				Default="() => GlobalOpts.VerticalOffset" />
 
 				<!-- Off-screen locations -->
-				<OffScreenLocationsSetting												Get="() => GlobalOpts.OffScreenLocations"		Set="v => GlobalOpts.OffScreenLocations = v"		Default="() => GlobalOpts.OffScreenLocations" />
+				<OffScreenLocationsSetting												Get="() => AppOpts.OffScreenLocations"			Set="v => AppOpts.OffScreenLocations = v"			Default="() => GlobalOpts.OffScreenLocations" />
 
 			</RadzenStack>
 		</RadzenFieldset>

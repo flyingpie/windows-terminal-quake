@@ -13,14 +13,14 @@ See [Installation](#installation) to get started.
 
 ---
 
-Here's an example where WTQ runs on **Windows 10**, toggling [Windows Terminal](), [Double Commander](), [Process Hacker]() and [KeePassXC]().
+Here's an example where WTQ runs on **Windows 11**, toggling [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
 <video controls loop>
-<source src="/assets/video/wtq-win10.mp4" />
+<source src="/assets/video/wtq-win11.mp4" />
 </video>
 
-And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Monitor]() and [KeePassXC]().
+And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
 <video controls loop>
-<source src="/assets/video/wtq-kde6.mp4" />
+<source src="/assets/video/wtq-kde6-neon.mp4" />
 </video>
 
 !!! note "Why "Quake" Style"
@@ -43,10 +43,15 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](), [Dolphin]() [System Mo
 
 [A command-line installer for Windows.](https://scoop.sh/)
 
+!!! note
+	The WTQ Scoop package has moved to the Scoop [extras bucket](https://github.com/ScoopInstaller/Extras).
+
 ```shell
-scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/wtq-latest.json
+scoop bucket add extras
+scoop install extras/wtq
 ```
-A shortcut is then available named "**WTQ - Windows Terminal Quake**", or you can just run "**wtq**" from a command line or **Win+R**.
+
+A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
 
 ![](assets/screenshots/win-startmenu-scoop.png)
 /// caption
@@ -55,7 +60,7 @@ Start menu entry after installation.
 
 Update (just WTQ):
 ```shell
-scoop update wtq-latest
+scoop update wtq
 ```
 
 #### WinGet
@@ -67,7 +72,7 @@ winget install windows-terminal-quake
 ```
 You can then call "**wtq**" from the command line.
 
-After having done that at least once, a shortcut will appear in the start menu, called "**WTQ - Main Window**".
+After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
 ![](assets/screenshots/win-startmenu-winget.png)
 /// caption
@@ -79,7 +84,6 @@ Update (just WTQ):
 winget upgrade windows-terminal-quake
 ```
 
-
 !!! note "Where's WTQ Installed?"
 	You can run
 
@@ -88,7 +92,8 @@ winget upgrade windows-terminal-quake
 	```
 
 	To find out where apps are installed:
-	```
+
+	```shell
 	Windows Package Manager v1.10.340
 	(...)
 	Portable Package Root (User)       %LOCALAPPDATA%\Microsoft\WinGet\Packages
@@ -101,32 +106,336 @@ See [the latest release](https://github.com/flyingpie/windows-terminal-quake/rel
 - **Self-Contained**<br/>Slightly larger, but does not require dependencies to be installed (i.e. .Net).
 - **Framework-Dependent**<br/>Smaller, but requires .Net 9 to be installed.
 
+#### Build From Source
+
+!!! note "Dependencies"
+	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+
+You can also clone the repo and run the **Install** build target, which will build and install WTQ: ```~/AppData/Local/wtq```.
+
+```shell
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.ps1 Install
+```
+
+Uninstall:
+
+```shell
+./build.ps1 Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```shell
+./build.ps1 --help
+```
+
 ### :fontawesome-brands-linux: Linux
+
+#### Arch AUR
+Multiple versions are published to the Arch User Repository (AUR):
+
+###### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+- Latest stable release, pre-built;
+- Downloads from GitHub Releases;
+- Quicker to install and minimal dependencies.
+
+```bash
+yay -S wtq-bin
+```
+or
+```bash
+paru -S wtq-bin
+```
+
+###### [wtq](https://aur.archlinux.org/packages/wtq)
+- Latest stable release, built from source;
+- Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
+
+```bash
+yay -S wtq
+```
+or
+```bash
+paru -S wtq
+```
+
+#### Flatpak
+
+Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.
+
+As an alternative, you can use the Flatpak remote hosted on the [sister repository](https://github.com/flyingpie/flatpak).
+It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for building the Flatpak itself, and everything is hosted on GitHub Pages.
+
+The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
+
+###### Per-User
+```bash
+flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak --user install nl.flyingpie.wtq
+```
+
+###### System-Wide
+```bash
+flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
+flatpak install nl.flyingpie.wtq
+```
+
+These permissions are enabled by default:
+
+```bash
+--socket=wayland                            # (required) So we can run the GUI
+--talk-name=org.kde.KWin                    # (required) So we can talk to KWin for querying windows
+--talk-name=org.kde.StatusNotifierWatcher   # (required) So we can create a tray icon
+--talk-name=org.freedesktop.Flatpak         # (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")
+```
 
 #### Manual
 
-See the [~/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a ```wtq.desktop``` file.
+!!! note "Dependencies"
+	- Requires webkit2gtk-4.1 to be installed
+
+See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
 
 As a 1-liner:
-```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/install-or-upgrade-wtq.sh)
+```bash
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)
 ```
 
-And the [~/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/linux/uninstall-wtq.sh).
-```shell
-bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/linux/uninstall-wtq.sh)
+And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh).
+```bash
+bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)
 ```
 
 !!! note "Settings File Remains"
 	The WTQ settings are not removed by this script. These are usually located at ```~/.config/wtq```, also see [Settings](#settings).
 
-#### Flatpak
+#### Build From Source
 
-!!! danger "TODO"
+!!! note "Dependencies"
+	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+	- Requires webkit2gtk-4.1 to be installed
+
+You can also clone the repo and run the **Install** build target, which will build and install WTQ at ```~/.local/share/wtq``` (respects XDG spec).
+
+```bash
+git clone https://github.com/flyingpie/windows-terminal-quake.git
+cd windows-terminal-quake
+
+./build.sh Install
+```
+
+Uninstall:
+```bash
+./build.sh Uninstall
+```
+
+You can also take a look at the build options, do see more options for building, including without actually installing:
+```bash
+./build.sh --help
+```
 
 ## :material-lightbulb: App examples
 
 !!! danger "TODO"
+
+## :material-chat: Event Hooks
+
+When WTQ is running, various events occur, which can be hooked to trigger some action.
+
+!!! note "Event Hooks"
+	For going the other direction, where you tell WTQ to do something, see [HTTP API](#http-api).
+
+For example, to execute a script whenever an app is toggled **on**:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": "AppToggledOn",
+			"FileName": "some-script",
+			"WorkingDirectory": "/path/to/script"
+		}
+	]
+}
+```
+
+The **EventPattern** property accepts regular expressions. For example, to hook everything:
+
+```json
+{
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "some-script"
+		}
+	]
+}
+```
+
+- **AppToggledOn**: Fired when an app is toggling onto the screen.
+- **AppToggledOff**: Fired when an app is toggling off the screen.
+
+Additionally, some environment variables are passed to the executed command:
+
+- **WTQ_EVENT_NAME**: The name of the event that fired;
+- **WTQ_APP_NAME**: The app that relates to the event, if any;
+- **WTQ_IS_SWITCHING**: "True" if currently switching from one app to another;
+
+### Examples
+
+Running a PowerShell script when toggling, to play a sound:
+
+```ps1
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
+{
+	if ($env:WTQ_IS_SWITCHING -eq "True")
+	{
+		# Don't do anything (see below)
+	}
+	else
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/on.mp3" | Out-Null
+	}
+}
+
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
+{
+	if ($env:WTQ_IS_SWITCHING -eq "True")
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/switch.mp3" | Out-Null
+	}
+	else
+	{
+		$o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/off.mp3" | Out-Null
+	}
+}
+```
+
+And ```wtq.jsonc```:
+
+```json
+{
+	(...)
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "pwsh",
+			"ArgumentList": [ { "Argument": "wtq-sound.ps1" } ],
+			"WorkingDirectory": "C:/downloads"
+		}
+	]
+```
+
+The same demo, but in Bash:
+
+```bash
+if [ $WTQ_EVENT_NAME = "AppToggledOn" ]; then
+	if [ $WTQ_IS_SWITCHING = "True" ]; then
+		# Don't do anything (see below)
+	else
+		ffplay -nodisp -autoexit ~/Downloads/on.mp3 &> /dev/null
+	fi
+fi
+
+if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
+	if [ $WTQ_IS_SWITCHING = "True" ]; then
+		ffplay -nodisp -autoexit ~/Downloads/switch.mp3 &> /dev/null
+	else
+		ffplay -nodisp -autoexit ~/Downloads/off.mp3 &> /dev/null
+	fi
+fi
+```
+
+And ```wtq.jsonc```:
+
+```json
+{
+	(...)
+	"EventHooks": [
+		{
+			"EventPattern": ".+",
+			"FileName": "bash",
+			"ArgumentList": [ { "Argument": "wtq-sound" } ],
+			"WorkingDirectory": "~/Downloads"
+		}
+	]
+```
+
+## :material-api: HTTP API
+
+WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.
+
+!!! warning "Opt-In"
+	For clarity, the HTTP API is **disabled by default**. No socket is opened until **enabled manually**.
+
+!!! note "Event Hooks"
+	For going the other direction, where WTQ notifies someone else, see [Event Hooks](#event-hooks).
+
+!!! note "Requires Restart"
+	Making changes to this part of the settings requires a WTQ restart.
+
+It can be enabled by setting **Enable** to **true**:
+
+```json
+{
+  "Api": {
+    "Enable": true
+  }
+}
+```
+
+By default, the HTTP API is made available through a named pipe (**//pipe:/wtq** on Windows, **/run/user/USERNAME/wtq/wtq.sock** on Linux).
+This makes it such that no ports need to be allocated, and no ports are exposed externally.
+
+Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the **Urls** setting, for example **localhost**, on port **7997**:
+
+```json
+{
+  "Api": {
+    "Enable": true,
+    "Urls": ["http://127.0.0.1:7997"]
+  }
+}
+```
+
+Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.
+
+The root address of the API will return an [OpenAPI-driven](https://www.openapis.org/) documentation page, with all the available endpoints:
+
+![API](assets/img/api.png)
+
+For example, using Curl to fetch all configured apps:
+
+```bash
+curl http://localhost:7997/apps | jq
+{
+	"apps": [
+		{
+			"name": "KeePassXC",
+			"isAttached": true,
+			"isOpen": false
+		},
+		{
+			"name": "Dolphin",
+			"isAttached": true,
+			"isOpen": false
+		},
+		{
+			"name": "WezTerm",
+			"isAttached": true,
+			"isOpen": true
+		}
+	]
+}
+```
+
+Or to open a specific app:
+
+```bash
+curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"
+```
 
 ## :material-cog: Settings
 
@@ -217,7 +526,7 @@ If no settings were found at any of these locations, WTQ creates a settings file
 
 {{ Setting.Description }}
 
-{% if not Setting.IsRequired %}
+{% if not Setting.IsRequired and Setting.DefaultValue %}
 
 Defaults to ```{{ Setting.DefaultValue }}```
 
@@ -239,21 +548,15 @@ Defaults to ```{{ Setting.DefaultValue }}```
 
 {% elif Setting.IsGlobal and Setting.IsApp %}
 
-Globally:
 ```json
 {
+	// Globally:
 	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-	// ...
-}
-```
 
-For one app only:
-```json
-{
+	// For one app only:
 	"Apps": [
 		{
 			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
-			// ...
 		}
 	]
 }
