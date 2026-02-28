@@ -269,15 +269,15 @@ wheels = [
 
 [[package]]
 name = "mkdocs-include-markdown-plugin"
-version = "7.1.8"
+version = "7.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "mkdocs" },
     { name = "wcmatch" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9f/b8/47913765aa5e765d48d1bc33385cc02d23da4aeba42b7cba9a8e6af58cc0/mkdocs_include_markdown_plugin-7.1.8.tar.gz", hash = "sha256:9cc79f60c452e4db885c32b4cd63feea1f96012b6720be49a2ce6a1fbad77458", size = 23567, upload-time = "2025-09-26T09:22:56.685Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3f/03/cd5e4383e677a3192127c4da67cb6046a8b1ae32ef6201f4faffd4b0c7a5/mkdocs_include_markdown_plugin-7.2.1.tar.gz", hash = "sha256:5d94db87b06cd303619dbaebba5f7f43a3ded7fd7709451d26f08c176376ffec", size = 25395, upload-time = "2026-01-25T15:02:27.861Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/3f/c7b2a7934aa9ff70d2f2f2eca44806e6e02219a55123842b17040e48385c/mkdocs_include_markdown_plugin-7.1.8-py3-none-any.whl", hash = "sha256:eed91cdb22c9035c8d8421523c97bee3796e2df626afefae11e97dd0c6854573", size = 27645, upload-time = "2025-09-26T09:22:55.742Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/0f/73a1d330183e79b21ee1b1a5dd4102fad1bd70231cf3b0620a7391b3c813/mkdocs_include_markdown_plugin-7.2.1-py3-none-any.whl", hash = "sha256:30da634c568ea5d5f9e5881d51f80ac30d8c5f891cec160344ad7a0fdaea6286", size = 29512, upload-time = "2026-01-25T15:02:26.333Z" },
 ]
 
 [[package]]
@@ -647,7 +647,7 @@ requires-dist = [
     { name = "mergedeep", specifier = "==1.3.4" },
     { name = "mkdocs", specifier = "==1.6.1" },
     { name = "mkdocs-get-deps", specifier = "==0.2.0" },
-    { name = "mkdocs-include-markdown-plugin", specifier = "==7.1.8" },
+    { name = "mkdocs-include-markdown-plugin", specifier = "==7.2.1" },
     { name = "mkdocs-macros-plugin", specifier = "==1.3.9" },
     { name = "mkdocs-material", specifier = "==9.7.3" },
     { name = "mkdocs-material-extensions", specifier = "==1.3.1" },
