@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "babel==2.18.0",
-    "backrefs==5.9",
+    "backrefs==6.2",
     "bracex==2.6",
     "certifi==2025.11.12",
     "charset-normalizer==3.4.4",
