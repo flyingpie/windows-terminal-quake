@@ -14,8 +14,8 @@
 			"matchDatasources": "nuget"
 		},
 		{
-			"groupName": "PyPy",
-			"matchDatasources": "pypy"
+			"groupName": "Python",
+			"matchDatasources": ["pypi", "python-version"]
 		}
 	],
 
