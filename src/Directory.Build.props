@@ -104,11 +104,14 @@
 	-->
 	<PropertyGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
 		<!--
+			Using Microsoft Test Platform, which can embed the test runner in the test DLL.
+		-->
+		<OutputType>Exe</OutputType>
+		<!--
 			Opt-in to the Microsoft Testing Platform.
 			https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-runner-intro
 		-->
 		<EnableMSTestRunner>true</EnableMSTestRunner>
-
 		<!--
 			Show failure per test instead of grouped together.
 			https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-integration-dotnet-test
