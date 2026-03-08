@@ -50,42 +50,42 @@ jobs:
           name: ${{ github.event.inputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Publish: win-x64_self-contained.zip'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: win-x64_self-contained.zip
           path: _output/artifacts/win-x64_self-contained.zip
       - name: 'Publish: win-x64_self-contained.zip.sha256'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: win-x64_self-contained.zip.sha256
           path: _output/artifacts/win-x64_self-contained.zip.sha256
       - name: 'Publish: win-x64_framework-dependent.zip'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: win-x64_framework-dependent.zip
           path: _output/artifacts/win-x64_framework-dependent.zip
       - name: 'Publish: win-x64_framework-dependent.zip.sha256'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: win-x64_framework-dependent.zip.sha256
           path: _output/artifacts/win-x64_framework-dependent.zip.sha256
       - name: 'Publish: linux-x64_self-contained.tar.gz'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64_self-contained.tar.gz
           path: _output/artifacts/linux-x64_self-contained.tar.gz
       - name: 'Publish: linux-x64_self-contained.tar.gz.sha256'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64_self-contained.tar.gz.sha256
           path: _output/artifacts/linux-x64_self-contained.tar.gz.sha256
       - name: 'Publish: linux-x64_framework-dependent.tar.gz'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64_framework-dependent.tar.gz
           path: _output/artifacts/linux-x64_framework-dependent.tar.gz
       - name: 'Publish: linux-x64_framework-dependent.tar.gz.sha256'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64_framework-dependent.tar.gz.sha256
           path: _output/artifacts/linux-x64_framework-dependent.tar.gz.sha256
