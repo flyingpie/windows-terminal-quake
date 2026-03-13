@@ -28,7 +28,7 @@
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="9.1.0"/>
+		<PackageVersion Include="Radzen.Blazor" Version="10.0.2"/>
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4"/>
 		<PackageVersion Include="Scalar.AspNetCore" Version="2.13.3"/>
