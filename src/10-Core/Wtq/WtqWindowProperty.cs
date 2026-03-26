@@ -9,9 +9,24 @@ public class WtqWindowProperty(
 	bool isVisible = true,
 	int? width = null)
 {
+	private readonly ILogger _log = Log.For<WtqWindowProperty>();
+
+	private Func<WtqWindow, object?> _accessor = Guard.Against.Null(accessor);
+
 	public string Name { get; } = Guard.Against.NullOrWhiteSpace(name);
 
-	public Func<WtqWindow, object?> Accessor { get; } = Guard.Against.Null(accessor);
+	public Func<WtqWindow, object?> Accessor => w =>
+	{
+		try
+		{
+			return _accessor(w);
+		}
+		catch (Exception ex)
+		{
+			_log.LogWarning(ex, "Error fetching property '{Property}' from window '{Window}': {Message}", Name, this, ex.Message);
+			return null;
+		}
+	};
 
 	/// <summary>
 	/// Whether the property should be visible by default (in the GUI).<br/>
