@@ -30,7 +30,7 @@ dependencies = [
     "paginate==0.5.7",
     "pathspec==1.0.4",
     "platformdirs==4.9.4",
-    "pygments==2.19.2",
+    "pygments==2.20.0",
     "pymdown-extensions==10.21",
     "pyparsing==3.3.2",
     "python-dateutil==2.9.0.post0",
