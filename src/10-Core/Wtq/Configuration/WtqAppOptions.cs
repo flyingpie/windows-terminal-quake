@@ -28,17 +28,18 @@ public sealed class WtqAppOptions : WtqSharedOptions
 
 	/// <summary>
 	/// <para>
-	/// A logical name for the app, used to identify it across config reloads.
-	/// </para>
-	/// <para>
-	/// Appears in logs.
+	/// A logical name for the app, used to identify it across config reloads, and it appears in logs.
 	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
 	/// {
-	///   "Name": "Terminal",
-	///   // ...
+	///   "Apps": [
+	///     {
+	///       "Name": "Terminal",
+	///       // (App settings here)
+	///     }
+	///   ]
 	/// }
 	/// </code>
 	/// </example>
@@ -49,8 +50,31 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	public string? Name { get; set; }
 
 	/// <summary>
+	/// <para>
 	/// One or more keyboard shortcuts that toggle in- and out this particular app.
+	/// </para>
+	/// <para>
+	/// Also note <a href="#hotkeys">Global Hotkeys</a>, which handles hotkeys that toggle the most recent app.
+	/// </para>
+	/// <para>
+	/// See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.
+	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Apps": [
+	///     {
+	///       "Hotkeys": [
+	///         { "Modifiers": "Control", "Key": "Q" }
+	///       ]
+	///       // ...
+	///     }
+	///   ]
+	///   // ...
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.App)]
 	[JsonPropertyOrder(1002)]
 	public ICollection<HotkeyOptions> Hotkeys
@@ -65,18 +89,32 @@ public sealed class WtqAppOptions : WtqSharedOptions
 
 	/// <summary>
 	/// <para>
-	/// The <strong>filename</strong> to use when starting a new process for the app.
+	/// The <strong>filename</strong> to use when starting a new process for the app. If no <a href="#process-name">ProcessName</a> is set,
+	/// the value of this property is also used to match against the names of running processes (to find the process to attach to).
 	/// </para>
 	/// <para>
 	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
 	/// </para>
 	/// <para>
-	/// Note that you can also put absolute paths in here.
+	/// Note that (if the app is not in the OS PATH), you can also put absolute paths in here,
+	/// or specify the working directory through <a href="#working-directory">WorkingDirectory</a>.
 	/// </para>
 	/// </summary>
 	/// <remarks>
 	/// See the "Examples" page in the GUI for, well, examples.
 	/// </remarks>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Apps": [
+	///     {
+	///       "FileName": "wt" | "wezterm-gui" | "spotify" | etc.
+	///       // ...
+	///     }
+	///   ]
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Filename")]
 	[ExampleValue("wt")]
 	[JsonPropertyOrder(2001)]
@@ -94,7 +132,23 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// <para>
 	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
 	/// </para>
+	/// <para>
+	/// This is mostly here for backward-compatibility reasons. Prefer <a href="#argument-list">ArgumentList</a>,
+	/// which handles complex arguments and escaping better.
+	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Apps": [
+	///     {
+	///       "Arguments": null | "arg1 arg2"
+	///       // ...
+	///     }
+	///   ]
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Process)]
 	[JsonPropertyOrder(2002)]
 	public string? Arguments { get; set; }
@@ -104,7 +158,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// Command-line arguments that should be passed to the app when it's started.
 	/// </para>
 	/// <para>
-	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
+	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app (i.e., when WTQ actually starts the app).
 	/// </para>
 	/// </summary>
 	/// <example>
@@ -138,6 +192,18 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// Useful if the <strong>filename</strong> isn't available through PATH.
 	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Apps": [
+	///     {
+	///       "WorkingDirectory": null | "/path/to/dir" | "C:/path/to/dir" | "C:\\path\\to\\dir"
+	///       // ...
+	///     }
+	///   ]
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Working directory")]
 	[JsonPropertyOrder(2004)]
 	public string? WorkingDirectory
@@ -155,15 +221,21 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// <para>
 	/// Supports regular expressions.
 	/// </para>
+	/// <para>
+	/// Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
 	/// {
 	///   // Using with Windows Terminal requires both "Filename" and "ProcessName".
-	///   "Apps": {
-	///     "Filename": "wt",
-	///     "ProcessName": "^WindowsTerminal$"
-	///   }
+	///   "Apps": [
+	///     {
+	///       "Filename": "wt",
+	///       "ProcessName": "^WindowsTerminal$",
+	///       // ...
+	///     }
+	///   ]
 	/// }
 	/// </code>
 	/// </example>
@@ -200,6 +272,9 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// </para>
 	/// <para>
 	/// Supports regular expressions.
+	/// </para>
+	/// <para>
+	/// Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.
 	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window class")]
@@ -241,10 +316,22 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	/// using WTQ together with a window manager) and the window title can be used to
 	/// opt-out in the other program.
 	/// </para>
+	/// <para>
+	/// Note that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit.
+	/// </para>
 	/// </summary>
-	/// <remarks>
-	/// Note that this doesn't work for all windows, as it depends on factors like the app's GUI kit.
-	/// </remarks>
+	/// <example>
+	/// <code>
+	/// {
+	///   "Apps": [
+	///     {
+	///       "WindowTitleOverride": "New Window Title",
+	///       // ...
+	///     }
+	///   ]
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.Behavior, Name = "Window title override")]
 	[JsonPropertyOrder(3005)]
 	public string? WindowTitleOverride

@@ -79,7 +79,7 @@
 		@Content
 
 		<!-- Description -->
-		<p class="rz-color-base-500 rz-m-0 rz-mt-1 description">@((MarkupString)Get.GetMemberInfo()!.GetSummary()!)</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1 description">@((MarkupString)(Get.GetMemberInfo()?.GetSummary()?.RemoveLinks() ?? string.Empty))</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)

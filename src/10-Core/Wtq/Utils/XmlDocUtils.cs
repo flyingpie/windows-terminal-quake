@@ -1,5 +1,6 @@
 using Namotion.Reflection;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Wtq.Utils;
 
@@ -25,5 +26,16 @@ public static class XmlDocUtils
 			?? throw new InvalidOperationException($"Could not get member info for enum type '{enumType.FullName}'.");
 
 		return GetSummary(member);
+	}
+
+	private static readonly Regex _aHrefRegex = new(@"<a\b[^>]*>(.*?)</a>", RegexOptions.Compiled);
+
+	public static string RemoveLinks(this string source)
+	{
+		Guard.Against.Null(source);
+
+		// var result = Regex.Replace(source, @"<a\b[^>]*>(.*?)</a>", "$1", RegexOptions.IgnoreCase);
+
+		return _aHrefRegex.Replace(source, "$1");
 	}
 }

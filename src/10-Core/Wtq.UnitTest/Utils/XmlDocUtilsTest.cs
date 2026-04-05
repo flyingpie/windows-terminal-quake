@@ -55,6 +55,15 @@ public class XmlDocUtilsTest
 			summary);
 	}
 
+	[TestMethod]
+	[DataRow("""Some text without links""", """Some text without links""")]
+	[DataRow("""Some text <a href="#">with</a> links""", """Some text with links""")]
+	[DataRow("""Some text <a href="https://domain.tld/path/to/resource?query=string&key=value">with</a> links""", """Some text with links""")]
+	public void RemoveLinksTest(string before, string expected)
+	{
+		Assert.AreEqual(expected, before.RemoveLinks());
+	}
+
 	private class TestClass
 	{
 		/// <summary>

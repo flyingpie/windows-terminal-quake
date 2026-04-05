@@ -19,15 +19,26 @@ WtqSettings:
         Example: >-
           {
             "Apps": [
-              { "Name": "App 1" },
-              { "Name": "App 2" },
+              {
+                "Name": "App 1",
+                // (App settings here)
+              },
+              {
+                "Name": "App 2",
+                // (App settings here)
+              },
               // ...
             ]
           }
         Remarks: See the GUI and the <a href="#app-examples">docs</a> for some examples.
       - DisplayName: Hotkeys
         SettingName: Hotkeys
-        Description: Global hotkeys, that toggle either the first, or the most recently toggled app.
+        Description: >-
+          <p>Global hotkeys, that toggle either the first, or the most recently toggled app.</p>
+
+          <p>Also note <a href="#hotkeys_1">App Hotkeys</a>, which handles hotkeys for a single particular app.</p>
+
+          <p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
         IsGlobal: true
         IsApp: false
         IsEnum: false
@@ -41,11 +52,15 @@ WtqSettings:
             "Hotkeys": [
               { "Modifiers": "Control", "Key": "Q" }
             ]
+            // ...
           }
         Remarks: ""
       - DisplayName: API
         SettingName: Api
-        Description: WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
+        Description: >-
+          <p>WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.</p>
+
+          <p>See the <a href="#http-api">HTTP API section</a> for more information and usage examples.</p>
         IsGlobal: true
         IsApp: false
         IsEnum: false
@@ -60,6 +75,7 @@ WtqSettings:
               "Enable": true,
               "Urls": ["http://127.0.0.1:7997"]
             }
+            // ...
           }
         Remarks: ""
       - DisplayName: Feature flags
@@ -71,7 +87,7 @@ WtqSettings:
 
           <p>That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
 
-          but still have a way back should things go awry.</p>
+          but still have a way back should things go awry, without necessarily reverting to a previous version.</p>
         IsGlobal: true
         IsApp: false
         IsEnum: false
@@ -79,8 +95,14 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "FeatureFlags": {
+              // (Currently no feature flags available)
+            }
+            // ...
+          }
         Remarks: ""
       - DisplayName: Show UI on start
         SettingName: ShowUiOnStart
@@ -92,8 +114,12 @@ WtqSettings:
         DefaultValue: false
         ExampleValue: false
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "ShowUiOnStart": false | true
+            // ...
+          }
         Remarks: ""
       - DisplayName: Tray icon (color) style
         SettingName: TrayIconStyle
@@ -107,15 +133,19 @@ WtqSettings:
         EnumValues:
         - Value: Auto
           DisplayName: Auto
-          Description: Attempt to detect the OS theme and use the appropriate style based on that.
+          Description: Attempt to detect the OS theme and use the appropriate style based on that (currently Windows only).
         - Value: Dark
           DisplayName: Dark
           Description: Dark icon, works best on lighter themes.
         - Value: Light
           DisplayName: Light
           Description: Light icon, works best on darker themes.
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "TrayIconStyle": "Auto | Dark | Light"
+            // ...
+          }
         Remarks: ""
     - Name: Animation
       Settings:
@@ -134,8 +164,12 @@ WtqSettings:
         DefaultValue: 40
         ExampleValue: 40
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "AnimationTargetFps": 40
+            // ...
+          }
         Remarks: ""
   - Name: ':material-application-outline: App options'
     Description: Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
@@ -144,10 +178,7 @@ WtqSettings:
       Settings:
       - DisplayName: Name
         SettingName: Name
-        Description: >-
-          <p>A logical name for the app, used to identify it across config reloads.</p>
-
-          <p>Appears in logs.</p>
+        Description: <p>A logical name for the app, used to identify it across config reloads, and it appears in logs.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -158,13 +189,22 @@ WtqSettings:
         HasExample: true
         Example: >-
           {
-            "Name": "Terminal",
-            // ...
+            "Apps": [
+              {
+                "Name": "Terminal",
+                // (App settings here)
+              }
+            ]
           }
         Remarks: ""
       - DisplayName: Hotkeys
         SettingName: Hotkeys
-        Description: One or more keyboard shortcuts that toggle in- and out this particular app.
+        Description: >-
+          <p>One or more keyboard shortcuts that toggle in- and out this particular app.</p>
+
+          <p>Also note <a href="#hotkeys">Global Hotkeys</a>, which handles hotkeys that toggle the most recent app.</p>
+
+          <p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -172,19 +212,34 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "Apps": [
+              {
+                "Hotkeys": [
+                  { "Modifiers": "Control", "Key": "Q" }
+                ]
+                // ...
+              }
+            ]
+            // ...
+          }
         Remarks: ""
     - Name: Process
       Settings:
       - DisplayName: Filename
         SettingName: FileName
         Description: >-
-          <p>The <strong>filename</strong> to use when starting a new process for the app.</p>
+          <p>The <strong>filename</strong> to use when starting a new process for the app. If no <a href="#process-name">ProcessName</a> is set,
+
+          the value of this property is also used to match against the names of running processes (to find the process to attach to).</p>
 
           <p>E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.</p>
 
-          <p>Note that you can also put absolute paths in here.</p>
+          <p>Note that (if the app is not in the OS PATH), you can also put absolute paths in here,
+
+          or specify the working directory through <a href="#working-directory">WorkingDirectory</a>.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -192,8 +247,16 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: wt
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "Apps": [
+              {
+                "FileName": "wt" | "wezterm-gui" | "spotify" | etc.
+                // ...
+              }
+            ]
+          }
         Remarks: See the "Examples" page in the GUI for, well, examples.
       - DisplayName: Arguments
         SettingName: Arguments
@@ -201,6 +264,10 @@ WtqSettings:
           <p>Command-line arguments that should be passed to the app when it's started.</p>
 
           <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
+
+          <p>This is mostly here for backward-compatibility reasons. Prefer <a href="#argument-list">ArgumentList</a>,
+
+          which handles complex arguments and escaping better.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -208,15 +275,23 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "Apps": [
+              {
+                "Arguments": null | "arg1 arg2"
+                // ...
+              }
+            ]
+          }
         Remarks: ""
       - DisplayName: Argument list
         SettingName: ArgumentList
         Description: >-
           <p>Command-line arguments that should be passed to the app when it's started.</p>
 
-          <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
+          <p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app (i.e., when WTQ actually starts the app).</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -251,8 +326,16 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
+        HasExample: true
+        Example: >-
+          {
+            "Apps": [
+              {
+                "WorkingDirectory": null | "/path/to/dir" | "C:/path/to/dir" | "C:\\path\\to\\dir"
+                // ...
+              }
+            ]
+          }
         Remarks: ""
       - DisplayName: Process name
         SettingName: ProcessName
@@ -264,6 +347,8 @@ WtqSettings:
           example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.</p>
 
           <p>Supports regular expressions.</p>
+
+          <p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -275,10 +360,13 @@ WtqSettings:
         Example: >-
           {
             // Using with Windows Terminal requires both "Filename" and "ProcessName".
-            "Apps": {
-              "Filename": "wt",
-              "ProcessName": "^WindowsTerminal$"
-            }
+            "Apps": [
+              {
+                "Filename": "wt",
+                "ProcessName": "^WindowsTerminal$",
+                // ...
+              }
+            ]
           }
         Remarks: ""
       - DisplayName: Main window
@@ -320,6 +408,8 @@ WtqSettings:
           <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
 
           <p>Supports regular expressions.</p>
+
+          <p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -358,6 +448,8 @@ WtqSettings:
           using WTQ together with a window manager) and the window title can be used to
 
           opt-out in the other program.</p>
+
+          <p>Note that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit.</p>
         IsGlobal: false
         IsApp: true
         IsEnum: false
@@ -365,9 +457,17 @@ WtqSettings:
         DefaultValue: 
         ExampleValue: 
         EnumValues: 
-        HasExample: false
-        Example: ""
-        Remarks: Note that this doesn't work for all windows, as it depends on factors like the app's GUI kit.
+        HasExample: true
+        Example: >-
+          {
+            "Apps": [
+              {
+                "WindowTitleOverride": "New Window Title",
+                // ...
+              }
+            ]
+          }
+        Remarks: ""
   - Name: ':material-cogs: Shared options'
     Description: Options that are available both in global- and per-app options.
     Groups:
@@ -594,7 +694,7 @@ WtqSettings:
       Settings:
       - DisplayName: Prefer monitor
         SettingName: PreferMonitor
-        Description: Which monitor to preferably drop the app.
+        Description: Which monitor to preferably toggle the app onto.
         IsGlobal: true
         IsApp: true
         IsEnum: true

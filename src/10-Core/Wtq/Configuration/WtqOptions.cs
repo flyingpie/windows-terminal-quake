@@ -34,8 +34,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <code>
 	/// {
 	///   "Apps": [
-	///     { "Name": "App 1" },
-	///     { "Name": "App 2" },
+	///     {
+	///       "Name": "App 1",
+	///       // (App settings here)
+	///     },
+	///     {
+	///       "Name": "App 2",
+	///       // (App settings here)
+	///     },
 	///     // ...
 	///   ]
 	/// }
@@ -48,7 +54,15 @@ public sealed class WtqOptions : WtqSharedOptions
 		= [];
 
 	/// <summary>
+	/// <para>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
+	/// </para>
+	/// <para>
+	/// Also note <a href="#hotkeys_1">App Hotkeys</a>, which handles hotkeys for a single particular app.
+	/// </para>
+	/// <para>
+	/// See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -56,6 +70,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	///   "Hotkeys": [
 	///     { "Modifiers": "Control", "Key": "Q" }
 	///   ]
+	///   // ...
 	/// }
 	/// </code>
 	/// </example>
@@ -76,6 +91,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
 	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "AnimationTargetFps": 40
+	///   // ...
+	/// }
+	/// </code>
+	/// </example>
 	[DefaultValue(40)]
 	[Display(GroupName = Gn.Animation, Name = "Animation target FPS")]
 	[JsonPropertyOrder(103)]
@@ -83,7 +106,12 @@ public sealed class WtqOptions : WtqSharedOptions
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
+	/// <para>
 	/// WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
+	/// </para>
+	/// <para>
+	/// See the <a href="#http-api">HTTP API section</a> for more information and usage examples.
+	/// </para>
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -92,6 +120,7 @@ public sealed class WtqOptions : WtqSharedOptions
 	///     "Enable": true,
 	///     "Urls": ["http://127.0.0.1:7997"]
 	///   }
+	///   // ...
 	/// }
 	/// </code>
 	/// </example>
@@ -108,9 +137,19 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// </para>
 	/// <para>
 	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
-	/// but still have a way back should things go awry.
+	/// but still have a way back should things go awry, without necessarily reverting to a previous version.
 	/// </para>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "FeatureFlags": {
+	///     // (Currently no feature flags available)
+	///   }
+	///   // ...
+	/// }
+	/// </code>
+	/// </example>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
 	[JsonPropertyOrder(105)]
 	public FeatureFlags? FeatureFlags { get; set; }
@@ -118,6 +157,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <summary>
 	/// Whether to show the GUI when WTQ is started.
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "ShowUiOnStart": false | true
+	///   // ...
+	/// }
+	/// </code>
+	/// </example>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.General, Name = "Show UI on start")]
 	[JsonPropertyOrder(106)]
@@ -126,6 +173,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <summary>
 	/// The tray icon (color) style (dark/light).
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// {
+	///   "TrayIconStyle": "Auto | Dark | Light"
+	///   // ...
+	/// }
+	/// </code>
+	/// </example>
 	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
 	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]
 	[JsonPropertyOrder(107)]

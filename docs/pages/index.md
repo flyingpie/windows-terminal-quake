@@ -240,6 +240,234 @@ You can also take a look at the build options, do see more options for building,
 
 !!! danger "TODO"
 
+## :material-monitor: GUI
+
+!!! danger "TODO"
+
+## :material-keyboard: Hotkeys, Keys and KeyChars
+
+Keys can be specified in 2 ways:
+
+- A **virtual key code** (the **Key** property). Generally the preferred method on Windows.
+
+This maps to the **physical key** on the keyboard, regardless of what character it produces.
+
+The hotkey system on Windows sends virtual key codes to WTQ (and _not_ what character it produces). So on Windows, binding on virtual key codes generally works best (as no additional transformations are necessary).
+
+Key codes are also mapped to key characters, so the **KeyChar** property usually still works. But this has some limitations, such as likely needing to restart WTQ when switching keyboard layouts. Hence it's recommended to use **Key** on Windows, which stays closer to the events Windows is sending.
+
+- A **key character** (the **KeyChar** property). Generally the preferred method on Linux.
+
+This maps to the **produced character**, regardless of what physical key was pressed.
+
+On Linux, hotkey presses are sent to WTQ as _typed characters_, taking the keyboard layout into account. So on Linux, binding on key characters generally works best (as no additional transformations are necessary).
+
+Key characters are also mapped to key codes, so the **Key** property usually still works. But this has limitations when the keyboard layout differs from US ANSI, where virtual key codes are based on. Hence it's recommended to use **KeyChar** on Linux, which stays closer to the events Linux is sending.
+
+!!! note
+	The [GUI](#gui) can be helpful in figuring out what codes- or characters to use here.
+
+See [this issue](https://github.com/flyingpie/windows-terminal-quake/issues/199) for more information on why the split exists.
+
+See [Global Hotkeys](#hotkeys) to configure hotkeys that trigger the most recent app, and [App Hotkeys](#hotkeys_1) that trigger a specific app.
+
+```json
+{
+	"Hotkeys": [
+
+		//
+		// Using virtual key codes (recommended on Windows)
+		//
+
+		// CTRL+Q
+		{ "Modifiers": "Control", "Key": "Q" }
+
+		// CTRL+1
+		{ "Modifiers": "Control", "Key": "D1" }
+
+		// CTRL,ALT+1
+		{ "Modifiers": "Control,Alt", "Key": "D1" },
+
+		// CTRL,SHIFT+Q
+		{ "Modifiers": "Control,Shift", "Key": "Q" },
+
+		// All modifiers ("Super" also being known as "Meta", or the "Windows" key)
+		{ "Modifiers": "Alt,Control,Shift,Super", "Key": "Q" }
+
+		//
+		// Using key characters (recommended on Linux)
+		//
+
+		// CTRL+Q
+		{ "Modifiers": "Control", "KeyChar": "Q" }
+
+		// CTRL+1
+		{ "Modifiers": "Control", "KeyChar": "1" },
+
+		// CTRL,ALT+1
+		{ "Modifiers": "Control,Alt", "KeyChar": "1" },
+
+		// CTRL,SHIFT+Q
+		{ "Modifiers": "Control,Shift", "KeyChar": "Q" },
+
+		// All modifiers ("Super" also being known as "Meta", or the "Windows" key)
+		{ "Modifiers": "Alt,Control,Shift,Super", "KeyChar": "Q" }
+
+	]
+	// ...
+}
+```
+
+## :material-cog: Settings
+
+Settings are stored in a JSON file, usually named ```wtq.jsonc```.
+
+The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**, making working with comments nicer.
+
+### Settings File Locations
+
+!!! note "Where's My Settings File?"
+	The file can be in several places, to support different use cases and preferences.
+
+	You can quickly open either the settings _file_, or the _directory_ that contains the settings file by clicking the tray icon -> **Open Settings File**, or **Open Settings Directory**.
+
+	![](assets/tray-icon.png)
+	/// caption
+	Tray icon menu options.
+	///
+
+	Additionally, it's also displayed in the GUI, with a link for convenience.
+
+	![](assets/link-to-settings.png)
+	/// caption
+	Settings location in the GUI.
+	///
+
+#### :fontawesome-brands-windows: On Windows
+
+These locations are considered, in order:
+
+1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+1. Next to the WTQ executable
+	- When using **Scoop**: ```C:\Users\username\scoop\apps\wtq-latest\current```
+	- When using **WinGet**: ```C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe```
+	- Or wherever else the ```wtq.exe``` file is
+1. In **%USERPROFILE%\\.config**
+	- ```C:\users\username\.config\wtq.json```
+1. In user home
+	- ```C:\users\username\wtq.json```
+1. In user home, as a dot file
+	- ```C:\users\username\.wtq.json```
+1. In app data 
+	- ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+
+If no settings were found at any of these locations, WTQ creates a settings file at ```C:\Users\username\AppData\Roaming\wtq\wtq.jsonc```.
+
+#### :fontawesome-brands-linux: On Linux
+
+These locations are considered, in order:
+
+1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+1. Next to the WTQ executable
+	- When using the install script: ```/home/username/.local/share/wtq```
+1. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
+	- ```/home/username/.config/wtq.json```
+1. In **~/.config** (the default for XDG_CONFIG_HOME, if is it not defined)
+	- ```/home/username/.config/wtq.json```
+1. In user home
+	- ```/home/username/wtq.json```
+1. In user home, as a dot file
+	- ```/home/username/.wtq.json```
+
+If no settings were found at any of these locations, WTQ creates a settings file at ```$XDG_CONFIG_HOME```: ```/home/username/.config/wtq/wtq.jsonc```.
+
+!!! danger "TODO"
+	TODO: Mention wtq.schema.json
+
+{% for Category in WtqSettings.Categories %}
+
+### {{ Category.Name }}
+
+{{ Category.Description }}
+
+{% for Group in Category.Groups %}
+
+#### {{ Group.Name }}
+
+{% for Setting in Group.Settings %}
+
+##### {{ Setting.DisplayName }}
+
+{% if Setting.Description|length == 0 %}
+!!! danger "TODO"
+{% endif %}
+
+{{ Setting.Description }}
+
+{% if not Setting.IsRequired and Setting.DefaultValue %}
+
+Defaults to ```{{ Setting.DefaultValue }}```
+
+{% endif %}
+
+{% if Setting.IsEnum %}
+{% for EnumVal in Setting.EnumValues %}
+
+- **{{ EnumVal.Value }}**<br/>{{ EnumVal.Description }}
+
+{% endfor %}
+{% endif %}
+
+{% if Setting.HasExample %}
+
+```json
+{{ Setting.Example }}
+```
+
+{% elif Setting.IsGlobal and Setting.IsApp %}
+
+```json
+{
+	// Globally:
+	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
+
+	// For one app only:
+	"Apps": [
+		{
+			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
+		}
+	]
+}
+```
+
+{% elif Setting.IsGlobal %}
+
+```json
+{
+	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
+	// ...
+}
+```
+
+{% elif Setting.IsApp %}
+
+```json
+{
+	"Apps": [
+		{
+			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
+			// ...
+		}
+	]
+}
+```
+
+{% endif %}
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
 ## :material-chat: Event Hooks
 
 When WTQ is running, various events occur, which can be hooked to trigger some action.
@@ -436,159 +664,6 @@ Or to open a specific app:
 ```bash
 curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"
 ```
-
-## :material-cog: Settings
-
-Settings are stored in a JSON file, usually named ```wtq.jsonc```.
-
-The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**, making working with comments nicer.
-
-### Settings File Locations
-
-!!! note "Where's My Settings File?"
-	The file can be in several places, to support different use cases and preferences.
-
-	You can quickly open either the settings _file_, or the _directory_ that contains the settings file by clicking the tray icon -> **Open Settings File**, or **Open Settings Directory**.
-
-	![](assets/tray-icon.png)
-	/// caption
-	Tray icon menu options.
-	///
-
-	Additionally, it's also displayed in the GUI, with a link for convenience.
-
-	![](assets/link-to-settings.png)
-	/// caption
-	Settings location in the GUI.
-	///
-
-#### :fontawesome-brands-windows: On Windows
-
-These locations are considered, in order:
-
-1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
-1. Next to the WTQ executable
-	- When using **Scoop**: ```C:\Users\username\scoop\apps\wtq-latest\current```
-	- When using **WinGet**: ```C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe```
-	- Or wherever else the ```wtq.exe``` file is
-1. In **%USERPROFILE%\\.config**
-	- ```C:\users\username\.config\wtq.json```
-1. In user home
-	- ```C:\users\username\wtq.json```
-1. In user home, as a dot file
-	- ```C:\users\username\.wtq.json```
-1. In app data 
-	- ```C:\users\username\AppData\Roaming\wtq\wtq.json```
-
-If no settings were found at any of these locations, WTQ creates a settings file at ```C:\Users\username\AppData\Roaming\wtq\wtq.jsonc```.
-
-#### :fontawesome-brands-linux: On Linux
-
-These locations are considered, in order:
-
-1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
-1. Next to the WTQ executable
-	- When using the install script: ```/home/username/.local/share/wtq```
-1. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
-	- ```/home/username/.config/wtq.json```
-1. In **~/.config** (the default for XDG_CONFIG_HOME, if is it not defined)
-	- ```/home/username/.config/wtq.json```
-1. In user home
-	- ```/home/username/wtq.json```
-1. In user home, as a dot file
-	- ```/home/username/.wtq.json```
-
-If no settings were found at any of these locations, WTQ creates a settings file at ```$XDG_CONFIG_HOME```: ```/home/username/.config/wtq/wtq.jsonc```.
-
-!!! danger "TODO"
-	TODO: Mention wtq.schema.json
-
-!!! danger "TODO"
-	TODO: Mention GUI
-
-{% for Category in WtqSettings.Categories %}
-
-### {{ Category.Name }}
-
-{{ Category.Description }}
-
-{% for Group in Category.Groups %}
-
-#### {{ Group.Name }}
-
-{% for Setting in Group.Settings %}
-
-##### {{ Setting.DisplayName }}
-
-{% if Setting.Description|length == 0 %}
-!!! danger "TODO"
-{% endif %}
-
-{{ Setting.Description }}
-
-{% if not Setting.IsRequired and Setting.DefaultValue %}
-
-Defaults to ```{{ Setting.DefaultValue }}```
-
-{% endif %}
-
-{% if Setting.IsEnum %}
-{% for EnumVal in Setting.EnumValues %}
-
-- **{{ EnumVal.Value }}**<br/>{{ EnumVal.Description }}
-
-{% endfor %}
-{% endif %}
-
-{% if Setting.HasExample %}
-
-```json
-{{ Setting.Example }}
-```
-
-{% elif Setting.IsGlobal and Setting.IsApp %}
-
-```json
-{
-	// Globally:
-	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-
-	// For one app only:
-	"Apps": [
-		{
-			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
-		}
-	]
-}
-```
-
-{% elif Setting.IsGlobal %}
-
-```json
-{
-	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-	// ...
-}
-```
-
-{% elif Setting.IsApp %}
-
-```json
-{
-	"Apps": [
-		{
-			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
-			// ...
-		}
-	]
-}
-```
-
-{% endif %}
-
-{% endfor %}
-{% endfor %}
-{% endfor %}
 
 ## :material-excavator: Building From Source
 

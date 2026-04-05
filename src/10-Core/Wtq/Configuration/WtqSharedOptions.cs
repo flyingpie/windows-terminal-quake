@@ -159,7 +159,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 5000 - Monitor
 
 	/// <summary>
-	/// Which monitor to preferably drop the app.
+	/// Which monitor to preferably toggle the app onto.
 	/// </summary>
 	[DefaultValue(Wc.PreferMonitor.WithCursor)]
 	[Display(GroupName = Gn.Monitor, Name = "Prefer monitor")]
