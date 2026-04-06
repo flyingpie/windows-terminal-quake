@@ -250,7 +250,7 @@ You can also take a look at the build options, do see more options for building,
 ./build.sh --help
 ```
 
-## :material-lightbulb: App examples
+## :material-lightbulb: Examples
 
 !!! danger "TODO"
 
@@ -402,6 +402,8 @@ If no settings were found at any of these locations, WTQ creates a settings file
 
 Defines WTQ-wide options, including the list of configured apps.
 
+Note that you can also use [shared options](#shared-options) here.
+
 #### General
 
 ##### Apps
@@ -519,6 +521,8 @@ Defaults to `40`
 
 Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
 
+Note that you can also use [shared options](#shared-options) here.
+
 #### App
 
 ##### Name
@@ -631,7 +635,7 @@ which handles complex arguments and escaping better.</p>
 This field can be used to look for the process name in such cases. Windows Terminal is an
 example, with filename **wt**, and process name **WindowsTerminal**.</p>
 <p>Supports regular expressions.</p>
-<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+<p>Also see <a href="#examples">Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 ```json
 {
@@ -678,7 +682,7 @@ Defaults to `Either`
 
 <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
 <p>Supports regular expressions.</p>
-<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+<p>Also see <a href="#examples">Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 ```json
 {

@@ -39,12 +39,9 @@ public class WtqAppEventHookOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// Working directory when starting a new process.
-	/// </para>
-	/// <para>
-	/// Useful if the <strong>filename</strong> isn't available through PATH.
-	/// </para>
+	/// Working directory when starting a new process.<br/>
+	/// <br/>
+	/// Useful if the <b>filename</b> isn't available through PATH.
 	/// </summary>
 	[Display(GroupName = Gn.Events, Name = "Working directory")]
 	[JsonPropertyOrder(7004)]

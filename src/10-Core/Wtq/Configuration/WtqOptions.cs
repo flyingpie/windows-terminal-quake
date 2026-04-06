@@ -9,44 +9,22 @@ namespace Wtq.Configuration;
 public sealed class WtqOptions : WtqSharedOptions
 {
 	/// <summary>
-	/// <para>
-	/// Path to wtq.schema.json.
-	/// </para>
-	/// <para>
-	/// Used for adding intellisense-like features to editors that support JSON schema (such as VSCode).
-	/// </para>
-	/// </summary>
-	/// <remarks>
+	/// Path to wtq.schema.json.<br/>
+	/// <br/>
+	/// Used for adding intellisense-like features to editors that support JSON schema (such as VSCode).<br/>
+	/// <br/>
 	/// Fixed value, changes to this property in the wtq.jsonc will be ignored/overwritten.
-	/// </remarks>
+	/// </summary>
 	[DisplayFlags(IsVisible = false)]
 	[JsonPropertyName("$schema")]
 	[JsonPropertyOrder(0)]
 	public string Schema { get; } = "wtq.schema.json";
 
 	/// <summary>
-	/// Applications to enable Quake-style dropdown for.
+	/// Applications to enable Quake-style dropdown for.<br/>
+	/// <br/>
+	/// See the <b>Examples</b> page or the docs for some examples.
 	/// </summary>
-	/// <remarks>
-	/// See the GUI and the <a href="#app-examples">docs</a> for some examples.
-	/// </remarks>
-	/// <example>
-	/// <code>
-	/// {
-	///   "Apps": [
-	///     {
-	///       "Name": "App 1",
-	///       // (App settings here)
-	///     },
-	///     {
-	///       "Name": "App 2",
-	///       // (App settings here)
-	///     },
-	///     // ...
-	///   ]
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.General)]
 	[JsonPropertyOrder(101)]
 	[Required]
@@ -54,26 +32,8 @@ public sealed class WtqOptions : WtqSharedOptions
 		= [];
 
 	/// <summary>
-	/// <para>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
-	/// </para>
-	/// <para>
-	/// Also note <a href="#hotkeys_1">App Hotkeys</a>, which handles hotkeys for a single particular app.
-	/// </para>
-	/// <para>
-	/// See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.
-	/// </para>
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "Hotkeys": [
-	///     { "Modifiers": "Control", "Key": "Q" }
-	///   ]
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.General)]
 	[JsonPropertyOrder(102)]
 	public ICollection<HotkeyOptions> Hotkeys { get; set; }
@@ -81,24 +41,12 @@ public sealed class WtqOptions : WtqSharedOptions
 
 
 	/// <summary>
-	/// <para>
-	/// How many frames per second the animation should be.
-	/// </para>
-	/// <para>
-	/// Note that this may not be hit if moving windows takes too long, hence "target" fps.
-	/// </para>
-	/// <para>
+	/// How many frames per second the animation should be.<br/>
+	/// <br/>
+	/// Note that this may not be hit if moving windows takes too long, hence "target" FPS.<br/>
+	/// <br/>
 	/// Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.
-	/// </para>
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "AnimationTargetFps": 40
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[DefaultValue(40)]
 	[Display(GroupName = Gn.Animation, Name = "Animation target FPS")]
 	[JsonPropertyOrder(103)]
@@ -106,50 +54,22 @@ public sealed class WtqOptions : WtqSharedOptions
 	public int? AnimationTargetFps { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.
-	/// </para>
-	/// <para>
-	/// See the <a href="#http-api">HTTP API section</a> for more information and usage examples.
-	/// </para>
+	/// WTQ comes with an HTTP API (<b>disabled</b> by default), that can be used to control WTQ programmatically.<br/>
+	/// <br/>
+	/// See the docs for more information and usage examples.
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "Api": {
-	///     "Enable": true,
-	///     "Urls": ["http://127.0.0.1:7997"]
-	///   }
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.General, Name = "API")]
 	[JsonPropertyOrder(104)]
 	public WtqApiOptions? Api { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.
-	/// </para>
-	/// <para>
-	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.
-	/// </para>
-	/// <para>
-	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
-	/// but still have a way back should things go awry, without necessarily reverting to a previous version.
-	/// </para>
+	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
+	/// <br/>
+	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>
+	/// <br/>
+	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches, dev builds, etc.),
+	/// but still have a way back should things go awry, without reverting to a previous version.
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "FeatureFlags": {
-	///     // (Currently no feature flags available)
-	///   }
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.General, Name = "Feature flags")]
 	[JsonPropertyOrder(105)]
 	public FeatureFlags? FeatureFlags { get; set; }
@@ -157,14 +77,6 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <summary>
 	/// Whether to show the GUI when WTQ is started.
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "ShowUiOnStart": false | true
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.General, Name = "Show UI on start")]
 	[JsonPropertyOrder(106)]
@@ -173,14 +85,6 @@ public sealed class WtqOptions : WtqSharedOptions
 	/// <summary>
 	/// The tray icon (color) style (dark/light).
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "TrayIconStyle": "Auto | Dark | Light"
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[DefaultValue(Wtq.Configuration.TrayIconStyle.Auto)]
 	[Display(GroupName = Gn.General, Name = "Tray icon (color) style")]
 	[JsonPropertyOrder(107)]

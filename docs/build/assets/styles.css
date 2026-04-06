@@ -1,8 +1,10 @@
 [data-md-color-scheme="slate"] {
+	--md-code-bg-color: #0a0c11;
 	--md-default-bg-color: hsl(228, 29.4%, 3.3%);
 }
 
-.md-header--shadow, .md-tabs {
+.md-header--shadow,
+.md-tabs {
 	border-bottom: 1px #448aff solid;
 }
 
@@ -11,10 +13,7 @@
 	font-family: 'Raleway';
 	font-style: normal;
 	font-weight: 400;
-	src: local(""), url("raleway/raleway.woff2") format("woff2"), url("raleway/raleway.woff") format("woff"); }
-
-body, input {
-/*	font-family: Raleway, Helvetica, Arial, sans-serif;*/
+	src: local(""), url("raleway/raleway.woff2") format("woff2"), url("raleway/raleway.woff") format("woff");
 }
 
 /* Footer padding */
@@ -27,7 +26,7 @@ body, input {
 	font-style: italic;
 }
 
-/* Indent sections of the left nav to make it more readable */ 
+/* Indent sections of the left nav to make it more readable */
 /* Section is disabled, but keep this around for if we re-enable it again */
 .md-nav__list {
 	margin-left: .5rem;
