@@ -14,17 +14,15 @@ See [Installation](#installation) to get started.
 ---
 
 Here's an example where WTQ runs on **Windows 11**, toggling [Windows Terminal](https://github.com/microsoft/terminal), [Q-Dir](https://q-dir.com/), [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) and [KeePassXC](https://keepassxc.org/).
-<video controls loop>
-<source src="/assets/video/wtq-win11.mp4" />
-</video>
+
+<video controls loop><source src="/assets/video/wtq-win11.mp4" /></video>
 
 And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/wezterm/index.html), [Dolphin](https://apps.kde.org/dolphin/) [System Monitor](https://apps.kde.org/plasma-systemmonitor/) and [KeePassXC](https://keepassxc.org/).
-<video controls loop>
-<source src="/assets/video/wtq-kde6-neon.mp4" />
-</video>
+
+<video controls loop><source src="/assets/video/wtq-kde6-neon.mp4" /></video>
 
 !!! note "Why "Quake" Style"
-	The game [Quake (by id Software)](https://en.wikipedia.org/wiki/Quake_(video_game)) is generally considered the game that popularized toggling of the console onto the screen, by sliding it from the top.
+	The game [Quake (by id Software)](<https://en.wikipedia.org/wiki/Quake_(video_game)>) is generally considered the game that popularized toggling of the console onto the screen, by sliding it from the top.
 	See [this video](https://www.youtube.com/watch?v=sDrDK7BigEc) for an example of what that looked like.
 
 !!! note "The "WTQ" Name"
@@ -35,7 +33,7 @@ And here's one on **KDE Plasma 6**, toggling [WezTerm](https://wezfurlong.org/we
 
 	So now I refer to it as **"WTQ"**, not having the balls to straight up rename it.
 
-## :material-download: Installation 
+## :material-download: Installation
 
 ### :fontawesome-brands-windows: Windows
 
@@ -51,14 +49,15 @@ scoop bucket add extras
 scoop install extras/wtq
 ```
 
-A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run ```wtq``` from a command line or Win+R.
+A shortcut is then available named **WTQ - Windows Terminal Quake**, or you can just run `wtq` from a command line or Win+R.
 
-![](assets/screenshots/win-startmenu-scoop.png)
+![WTQ in Windows start menu, with Scoop installation](assets/screenshots/win-startmenu-scoop.png)
 /// caption
 Start menu entry after installation.
 ///
 
 Update (just WTQ):
+
 ```shell
 scoop update wtq
 ```
@@ -70,16 +69,18 @@ scoop update wtq
 ```shell
 winget install windows-terminal-quake
 ```
+
 You can then call "**wtq**" from the command line.
 
 After having done that **at least once**, a shortcut will appear in the start menu, called **WTQ - Main Window**.
 
-![](assets/screenshots/win-startmenu-winget.png)
+![WTQ in Windows start menu, with WinGet installation](assets/screenshots/win-startmenu-winget.png)
 /// caption
 Start menu entry after installation.
 ///
 
 Update (just WTQ):
+
 ```shell
 winget upgrade windows-terminal-quake
 ```
@@ -96,7 +97,7 @@ winget upgrade windows-terminal-quake
 	```shell
 	Windows Package Manager v1.10.340
 	(...)
-	Portable Package Root (User)       %LOCALAPPDATA%\Microsoft\WinGet\Packages
+	Portable Package Root (User) %LOCALAPPDATA%\Microsoft\WinGet\Packages
 	```
 
 #### Manual
@@ -104,14 +105,14 @@ winget upgrade windows-terminal-quake
 See [the latest release](https://github.com/flyingpie/windows-terminal-quake/releases/latest), and pick a zip.
 
 - **Self-Contained**<br/>Slightly larger, but does not require dependencies to be installed (i.e. .Net).
-- **Framework-Dependent**<br/>Smaller, but requires .Net 9 to be installed.
+- **Framework-Dependent**<br/>Smaller, but requires .Net 10 to be installed.
 
 #### Build From Source
 
 !!! note "Dependencies"
-	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
+	- Requires the [.Net 10 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
 
-You can also clone the repo and run the **Install** build target, which will build and install WTQ: ```~/AppData/Local/wtq```.
+You can also clone the repo and run the **Install** build target, which will build and install WTQ: `~/AppData/Local/wtq`.
 
 ```shell
 git clone https://github.com/flyingpie/windows-terminal-quake.git
@@ -127,6 +128,7 @@ Uninstall:
 ```
 
 You can also take a look at the build options, do see more options for building, including without actually installing:
+
 ```shell
 ./build.ps1 --help
 ```
@@ -134,9 +136,11 @@ You can also take a look at the build options, do see more options for building,
 ### :fontawesome-brands-linux: Linux
 
 #### Arch AUR
+
 Multiple versions are published to the Arch User Repository (AUR):
 
 ###### [wtq-bin](https://aur.archlinux.org/packages/wtq-bin) (Recommended)
+
 - Latest stable release, pre-built;
 - Downloads from GitHub Releases;
 - Quicker to install and minimal dependencies.
@@ -144,19 +148,24 @@ Multiple versions are published to the Arch User Repository (AUR):
 ```bash
 yay -S wtq-bin
 ```
+
 or
+
 ```bash
 paru -S wtq-bin
 ```
 
 ###### [wtq](https://aur.archlinux.org/packages/wtq)
+
 - Latest stable release, built from source;
 - Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.
 
 ```bash
 yay -S wtq
 ```
+
 or
+
 ```bash
 paru -S wtq
 ```
@@ -171,12 +180,14 @@ It uses the [Flatter](https://github.com/andyholmes/flatter) GitHub Action for b
 The app itself and the Flatpaks are [built entirely from source, using GitHub Actions](https://github.com/flyingpie/flatpak/actions/workflows/flatpak-repo.yml), in the open.
 
 ###### Per-User
+
 ```bash
 flatpak --user remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak --user install nl.flyingpie.wtq
 ```
 
 ###### System-Wide
+
 ```bash
 flatpak remote-add flyingpie https://flatpak.flyingpie.nl/index.flatpakrepo
 flatpak install nl.flyingpie.wtq
@@ -185,10 +196,10 @@ flatpak install nl.flyingpie.wtq
 These permissions are enabled by default:
 
 ```bash
---socket=wayland                            # (required) So we can run the GUI
---talk-name=org.kde.KWin                    # (required) So we can talk to KWin for querying windows
---talk-name=org.kde.StatusNotifierWatcher   # (required) So we can create a tray icon
---talk-name=org.freedesktop.Flatpak         # (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")
+--socket=wayland							# (required) So we can run the GUI
+--talk-name=org.kde.KWin					# (required) So we can talk to KWin for querying windows
+--talk-name=org.kde.StatusNotifierWatcher	# (required) So we can create a tray icon
+--talk-name=org.freedesktop.Flatpak			# (optional) So we can start processes (e.g. "flatpak-spawn --host dolphin")
 ```
 
 #### Manual
@@ -196,28 +207,29 @@ These permissions are enabled by default:
 !!! note "Dependencies"
 	- Requires webkit2gtk-4.1 to be installed
 
-See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to ```~/.local/share/wtq```, and creates a **wtq.desktop** file.
+See the [/linux/install-or-upgrade-wtq.sh script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh) that downloads the latest version of WTQ, installs it to `~/.local/share/wtq`, and creates a **wtq.desktop** file.
 
 As a 1-liner:
+
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)
 ```
 
 And the [/linux/uninstall-wtq.sh uninstall script](https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh).
+
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)
 ```
 
 !!! note "Settings File Remains"
-	The WTQ settings are not removed by this script. These are usually located at ```~/.config/wtq```, also see [Settings](#settings).
+	The WTQ settings are not removed by this script. These are usually located at `~/.config/wtq`, also see [Settings](#settings).
 
 #### Build From Source
 
 !!! note "Dependencies"
-	- Requires the [.Net 9 SDK](https://dotnet.microsoft.com/en-us/download) to be installed
-	- Requires webkit2gtk-4.1 to be installed
+	- Requires the [.Net 10 SDK](https://dotnet.microsoft.com/en-us/download) to be installed - Requires webkit2gtk-4.1 to be installed
 
-You can also clone the repo and run the **Install** build target, which will build and install WTQ at ```~/.local/share/wtq``` (respects XDG spec).
+You can also clone the repo and run the **Install** build target, which will build and install WTQ at `~/.local/share/wtq` (respects XDG spec).
 
 ```bash
 git clone https://github.com/flyingpie/windows-terminal-quake.git
@@ -227,11 +239,13 @@ cd windows-terminal-quake
 ```
 
 Uninstall:
+
 ```bash
 ./build.sh Uninstall
 ```
 
 You can also take a look at the build options, do see more options for building, including without actually installing:
+
 ```bash
 ./build.sh --help
 ```
@@ -320,9 +334,9 @@ See [Global Hotkeys](#hotkeys) to configure hotkeys that trigger the most recent
 
 ## :material-cog: Settings
 
-Settings are stored in a JSON file, usually named ```wtq.jsonc```.
+Settings are stored in a JSON file, usually named `wtq.jsonc`.
 
-The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**, making working with comments nicer.
+The file can use the extension `.json`, `.jsonc` or `.json5`. The latter two are supported, so that editors like VSCode automatically switch to **"JSON with Comments"**, making working with comments nicer.
 
 ### Settings File Locations
 
@@ -347,126 +361,797 @@ The file can use the extension ```.json```, ```.jsonc``` or ```.json5```. The la
 
 These locations are considered, in order:
 
-1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+1. A path defined by an environment variable named `WTQ_CONFIG_FILE` (regardless of filename or extension)
 1. Next to the WTQ executable
-	- When using **Scoop**: ```C:\Users\username\scoop\apps\wtq-latest\current```
-	- When using **WinGet**: ```C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe```
-	- Or wherever else the ```wtq.exe``` file is
+	- When using **Scoop**: `C:\Users\username\scoop\apps\wtq-latest\current`
+	- When using **WinGet**: `C:\Users\username\AppData\Local\Microsoft\WinGet\Packages\flyingpie.windows-terminal-quake_Microsoft.Winget.Source_8wekyb3d8bbwe`
+	- Or wherever else the `wtq.exe` file is
 1. In **%USERPROFILE%\\.config**
-	- ```C:\users\username\.config\wtq.json```
+	- `C:\users\username\.config\wtq.json`
 1. In user home
-	- ```C:\users\username\wtq.json```
+	- `C:\users\username\wtq.json`
 1. In user home, as a dot file
-	- ```C:\users\username\.wtq.json```
-1. In app data 
-	- ```C:\users\username\AppData\Roaming\wtq\wtq.json```
+	- `C:\users\username\.wtq.json`
+1. In app data
+	- `C:\users\username\AppData\Roaming\wtq\wtq.json`
 
-If no settings were found at any of these locations, WTQ creates a settings file at ```C:\Users\username\AppData\Roaming\wtq\wtq.jsonc```.
+If no settings were found at any of these locations, WTQ creates a settings file at `C:\Users\username\AppData\Roaming\wtq\wtq.jsonc`.
 
 #### :fontawesome-brands-linux: On Linux
 
 These locations are considered, in order:
 
-1. A path defined by an environment variable named ```WTQ_CONFIG_FILE``` (regardless of filename or extension)
+1. A path defined by an environment variable named `WTQ_CONFIG_FILE` (regardless of filename or extension)
 1. Next to the WTQ executable
-	- When using the install script: ```/home/username/.local/share/wtq```
-1. In ```$XDG_CONFIG_HOME```, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
-	- ```/home/username/.config/wtq.json```
+	- When using the install script: `/home/username/.local/share/wtq`
+1. In `$XDG_CONFIG_HOME`, if defined (following to the [XDG spec](https://specifications.freedesktop.org/basedir-spec/latest/))
+	- `/home/username/.config/wtq.json`
 1. In **~/.config** (the default for XDG_CONFIG_HOME, if is it not defined)
-	- ```/home/username/.config/wtq.json```
+	- `/home/username/.config/wtq.json`
 1. In user home
-	- ```/home/username/wtq.json```
+	- `/home/username/wtq.json`
 1. In user home, as a dot file
-	- ```/home/username/.wtq.json```
+	- `/home/username/.wtq.json`
 
-If no settings were found at any of these locations, WTQ creates a settings file at ```$XDG_CONFIG_HOME```: ```/home/username/.config/wtq/wtq.jsonc```.
+If no settings were found at any of these locations, WTQ creates a settings file at `$XDG_CONFIG_HOME`: `/home/username/.config/wtq/wtq.jsonc`.
 
 !!! danger "TODO"
 	TODO: Mention wtq.schema.json
 
-{% for Category in WtqSettings.Categories %}
+### :material-earth: Global options
 
-### {{ Category.Name }}
+Defines WTQ-wide options, including the list of configured apps.
 
-{{ Category.Description }}
+#### General
 
-{% for Group in Category.Groups %}
+##### Apps
 
-#### {{ Group.Name }}
-
-{% for Setting in Group.Settings %}
-
-##### {{ Setting.DisplayName }}
-
-{% if Setting.Description|length == 0 %}
-!!! danger "TODO"
-{% endif %}
-
-{{ Setting.Description }}
-
-{% if not Setting.IsRequired and Setting.DefaultValue %}
-
-Defaults to ```{{ Setting.DefaultValue }}```
-
-{% endif %}
-
-{% if Setting.IsEnum %}
-{% for EnumVal in Setting.EnumValues %}
-
-- **{{ EnumVal.Value }}**<br/>{{ EnumVal.Description }}
-
-{% endfor %}
-{% endif %}
-
-{% if Setting.HasExample %}
-
-```json
-{{ Setting.Example }}
-```
-
-{% elif Setting.IsGlobal and Setting.IsApp %}
+Applications to enable Quake-style dropdown for.
 
 ```json
 {
-	// Globally:
-	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-
-	// For one app only:
 	"Apps": [
 		{
-			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
+			"Name": "App 1"
+			// (App settings here)
+		},
+		{
+			"Name": "App 2"
+			// (App settings here)
+		}
+		// ...
+	]
+}
+```
+
+##### Hotkeys
+
+<p>Global hotkeys, that toggle either the first, or the most recently toggled app.</p>
+<p>Also note <a href="#hotkeys_1">App Hotkeys</a>, which handles hotkeys for a single particular app.</p>
+<p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
+
+```json
+{
+	"Hotkeys": [{ "Modifiers": "Control", "Key": "Q" }]
+	// ...
+}
+```
+
+##### API
+
+<p>WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.</p>
+<p>See the <a href="#http-api">HTTP API section</a> for more information and usage examples.</p>
+
+```json
+{
+	"Api": {
+		"Enable": true,
+		"Urls": ["http://127.0.0.1:7997"]
+	}
+	// ...
+}
+```
+
+##### Feature flags
+
+<p>Sometimes functionality is added or changed that carries more risk of introducing bugs.</p>
+<p>For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.</p>
+<p>That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
+but still have a way back should things go awry, without necessarily reverting to a previous version.</p>
+
+```json
+{
+	"FeatureFlags": {
+		// (Currently no feature flags available)
+	}
+	// ...
+}
+```
+
+##### Show UI on start
+
+Whether to show the GUI when WTQ is started.
+
+```json
+{
+	"ShowUiOnStart": false | true
+	// ...
+}
+```
+
+##### Tray icon (color) style
+
+The tray icon (color) style (dark/light).
+
+Defaults to `Auto`
+
+- **Auto**<br/>Attempt to detect the OS theme and use the appropriate style based on that (currently Windows only).
+
+- **Dark**<br/>Dark icon, works best on lighter themes.
+
+- **Light**<br/>Light icon, works best on darker themes.
+
+```json
+{
+	"TrayIconStyle": "Auto | Dark | Light"
+	// ...
+}
+```
+
+#### Animation
+
+##### Animation target FPS
+
+<p>How many frames per second the animation should be.</p>
+<p>Note that this may not be hit if moving windows takes too long, hence "target" fps.</p>
+<p>Must be between 5 and 120, to prevent issues that can arise with values that are too low or too high.</p>
+
+Defaults to `40`
+
+```json
+{
+	"AnimationTargetFps": 40
+	// ...
+}
+```
+
+### :material-application-outline: App options
+
+Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).
+
+#### App
+
+##### Name
+
+<p>A logical name for the app, used to identify it across config reloads, and it appears in logs.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"Name": "Terminal"
+			// (App settings here)
 		}
 	]
 }
 ```
 
-{% elif Setting.IsGlobal %}
+##### Hotkeys
 
-```json
-{
-	"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}",
-	// ...
-}
-```
-
-{% elif Setting.IsApp %}
+<p>One or more keyboard shortcuts that toggle in- and out this particular app.</p>
+<p>Also note <a href="#hotkeys">Global Hotkeys</a>, which handles hotkeys that toggle the most recent app.</p>
+<p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
 
 ```json
 {
 	"Apps": [
 		{
-			"{{ Setting.SettingName }}": "{{ Setting.ExampleValue }}"
+			"Hotkeys": [{ "Modifiers": "Control", "Key": "Q" }]
+			// ...
+		}
+	]
+	// ...
+}
+```
+
+#### Process
+
+##### Filename
+
+<p>The **filename** to use when starting a new process for the app. If no <a href="#process-name">ProcessName</a> is set,
+the value of this property is also used to match against the names of running processes (to find the process to attach to).</p>
+<p>E.g. **notepad**, **dolphin**, etc.</p>
+<p>Note that (if the app is not in the OS PATH), you can also put absolute paths in here,
+or specify the working directory through <a href="#working-directory">WorkingDirectory</a>.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"FileName": "wt" | "wezterm-gui" | "spotify" | etc.
 			// ...
 		}
 	]
 }
 ```
 
-{% endif %}
+##### Arguments
 
-{% endfor %}
-{% endfor %}
-{% endfor %}
+<p>Command-line arguments that should be passed to the app when it's started.</p>
+<p>Note that this only applies when using an **AttachMode** that starts the app.</p>
+<p>This is mostly here for backward-compatibility reasons. Prefer <a href="#argument-list">ArgumentList</a>,
+which handles complex arguments and escaping better.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"Arguments": null | "arg1 arg2"
+			// ...
+		}
+	]
+}
+```
+
+##### Argument list
+
+<p>Command-line arguments that should be passed to the app when it's started.</p>
+<p>Note that this only applies when using an **AttachMode** that starts the app (i.e., when WTQ actually starts the app).</p>
+
+```json
+{
+	"Apps": [
+		{
+			"ArgumentList": ["--allow-screencapture", "--debug-info"]
+			// ...
+		}
+	]
+}
+```
+
+##### Working directory
+
+<p>Working directory when starting a new process.</p>
+<p>Useful if the **filename** isn't available through PATH.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"WorkingDirectory": null | "/path/to/dir" | "C:/path/to/dir" | "C:\\path\\to\\dir"
+			// ...
+		}
+	]
+}
+```
+
+##### Process name
+
+<p>Apps sometimes have **process names** different from their **filenames**.
+This field can be used to look for the process name in such cases. Windows Terminal is an
+example, with filename **wt**, and process name **WindowsTerminal**.</p>
+<p>Supports regular expressions.</p>
+<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+
+```json
+{
+	// Using with Windows Terminal requires both "Filename" and "ProcessName".
+	"Apps": [
+		{
+			"Filename": "wt",
+			"ProcessName": "^WindowsTerminal$"
+			// ...
+		}
+	]
+}
+```
+
+##### Main window
+
+<p>(Windows only) Matches only "main" windows; the initial window a process spawns.</p>
+<p>When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
+that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+When the other (non-main) windows cannot be easily differentiated from the main window (for example through
+the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.</p>
+<p>A common example of an app where this would **not** help, is a browser, that can spawn tons of windows on the same process name.</p>
+
+Defaults to `Either`
+
+- **MainWindowOnly**<br/>Match main windows only.
+
+- **NonMainWindowOnly**<br/>Match non-main windows only.
+
+- **Either**<br/>Match main- and non-main windows.
+
+```json
+{
+	"Apps": [
+		{
+			"MainWindow": "Either"
+			// ...
+		}
+	]
+}
+```
+
+##### Window class
+
+<p>(Windows only) Matches windows based on their Win32 Window Class.</p>
+<p>Supports regular expressions.</p>
+<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"WindowClass": "^ApplicationFrameWindow$"
+			// ...
+		}
+	]
+}
+```
+
+##### Window title
+
+<p>Match windows based on their title (sometimes referred to as "caption").</p>
+<p>Supports regular expressions.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"WindowTitle": "^Mozilla Firefox - WhatsApp$"
+			// ...
+		}
+	]
+}
+```
+
+#### Behavior
+
+##### Window title override
+
+<p>Attempt to set the window title to a specific value.</p>
+<p>Useful for cases where multiple programs control window placement (such as when
+using WTQ together with a window manager) and the window title can be used to
+opt-out in the other program.</p>
+<p>Note that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit.</p>
+
+```json
+{
+	"Apps": [
+		{
+			"WindowTitleOverride": "New Window Title"
+			// ...
+		}
+	]
+}
+```
+
+### :material-cogs: Shared options
+
+Options that are available both in global- and per-app options.
+
+#### Process
+
+##### Attach mode
+
+<p>How WTQ should get to an instance of a running app.</p>
+<p>I.e. whether to start an app instance if one cannot be found.</p>
+
+Defaults to `FindOrStart`
+
+- **Find**<br/>Only look for **existing** app instances (but don't create one).
+
+- **FindOrStart**<br/>Look for an **existing** app instance, **create one** if one does not exist yet.
+
+- **Manual**<br/>Attach to **whatever app is in the foreground** when pressing an assigned hotkey.
+
+```json
+{
+	// Globally:
+	"AttachMode": "FindOrStart",
+
+	// For one app only:
+	"Apps": [
+		{
+			"AttachMode": "FindOrStart"
+		}
+	]
+}
+```
+
+#### Behavior
+
+##### Always on top
+
+Whether the app should always be on top of other windows, regardless of whether it has focus.
+
+```json
+{
+	// Globally:
+	"AlwaysOnTop": "False",
+
+	// For one app only:
+	"Apps": [
+		{
+			"AlwaysOnTop": "False"
+		}
+	]
+}
+```
+
+##### Hide on focus lost
+
+Whether the app should be toggled off when another app gets focus.
+
+Defaults to `Always`
+
+- **Always**<br/>Toggle off the app when focus is lost.
+
+- **Never**<br/>Do not toggle off the app when focus is lost.
+
+```json
+{
+	// Globally:
+	"HideOnFocusLost": "Always",
+
+	// For one app only:
+	"Apps": [
+		{
+			"HideOnFocusLost": "Always"
+		}
+	]
+}
+```
+
+##### Taskbar icon visibility
+
+When to show the app window icon on the taskbar.
+
+Defaults to `AlwaysHidden`
+
+- **AlwaysHidden**<br/>**Never** show the taskbar icon.
+
+- **AlwaysVisible**<br/>**Always** show the taskbar icon (note that this can look a bit weird when the app is toggled off).
+
+- **WhenAppVisible**<br/>Only show the taskbar icon when the app is toggled **on**.
+
+```json
+{
+	// Globally:
+	"TaskbarIconVisibility": "AlwaysHidden",
+
+	// For one app only:
+	"Apps": [
+		{
+			"TaskbarIconVisibility": "AlwaysHidden"
+		}
+	]
+}
+```
+
+##### Opacity
+
+<p>Make the window see-through (applies to the entire window, including the title bar).</p>
+<p>0 (invisible) - 100 (opaque).</p>
+
+Defaults to `100`
+
+```json
+{
+	// Globally:
+	"Opacity": "80",
+
+	// For one app only:
+	"Apps": [
+		{
+			"Opacity": "80"
+		}
+	]
+}
+```
+
+#### Position
+
+##### Resize app window
+
+Whether to resize the app window when toggling onto the screen, to apply other settings
+like HorizontalScreenCoverage.
+
+By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
+(like the aforementioned HorizontalScreenCoverage).
+
+This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
+window clears its contents (seems to be most common with Electron apps).
+
+Defaults to `Always`
+
+- **Always**<br/>Always resize the app window to match the alignment settings (like HorizontalScreenCoverage).
+
+- **Never**<br/>Never resize the app window, ignoring alignment settings (like HorizontalScreenCoverage).
+  Useful for apps that don't respond well to resizes.
+
+```json
+{
+	// Globally:
+	"Resize": "Always",
+
+	// For one app only:
+	"Apps": [
+		{
+			"Resize": "Always"
+		}
+	]
+}
+```
+
+##### Horizontal screen coverage
+
+Horizontal screen coverage, as a percentage.
+
+Defaults to `95`
+
+```json
+{
+	// Globally:
+	"HorizontalScreenCoverage": "95",
+
+	// For one app only:
+	"Apps": [
+		{
+			"HorizontalScreenCoverage": "95"
+		}
+	]
+}
+```
+
+##### Horizontal align
+
+Where to position an app on the chosen monitor, horizontally.
+
+Defaults to `Center`
+
+- **Center**<br/>Center of the screen.
+
+- **Left**<br/>Left of the screen.
+
+- **Right**<br/>Right of the screen.
+
+```json
+{
+	// Globally:
+	"HorizontalAlign": "Center",
+
+	// For one app only:
+	"Apps": [
+		{
+			"HorizontalAlign": "Center"
+		}
+	]
+}
+```
+
+##### Vertical screen coverage
+
+Vertical screen coverage as a percentage (0-100).
+
+Defaults to `95`
+
+```json
+{
+	// Globally:
+	"VerticalScreenCoverage": "95",
+
+	// For one app only:
+	"Apps": [
+		{
+			"VerticalScreenCoverage": "95"
+		}
+	]
+}
+```
+
+##### Vertical offset
+
+How much room to leave between the top of the app window and the top of the screen, in pixels.
+
+```json
+{
+	// Globally:
+	"VerticalOffset": "0",
+
+	// For one app only:
+	"Apps": [
+		{
+			"VerticalOffset": "0"
+		}
+	]
+}
+```
+
+##### Off-screen locations
+
+<p>When moving an app off the screen, WTQ looks for an empty space to move the window to.</p>
+<p>Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.</p>
+<p>By default, WTQ looks for empty space in this order: Above, Below, Left, Right.</p>
+<p>If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
+without any animation.</p>
+
+```json
+{
+	// Globally:
+	"OffScreenLocations": ["Above", "Below", "Left", "Right"],
+
+	// For one app only:
+	"Apps": [
+		{
+			"OffScreenLocations": ["Above", "Below", "Left", "Right"]
+		}
+	]
+}
+```
+
+#### Monitor
+
+##### Prefer monitor
+
+Which monitor to preferably toggle the app onto.
+
+Defaults to `WithCursor`
+
+- **WithCursor**<br/>The monitor where the mouse cursor is currently at.
+
+- **AtIndex**<br/>The monitor at the index as specified by **MonitorIndex** (0-based).
+
+- **Primary**<br/>The monitor considered **primary** by the OS.
+
+```json
+{
+	// Globally:
+	"PreferMonitor": "WithCursor",
+
+	// For one app only:
+	"Apps": [
+		{
+			"PreferMonitor": "WithCursor"
+		}
+	]
+}
+```
+
+##### Monitor index
+
+<p>If **PreferMonitor** is set to **AtIndex**, this setting determines what monitor to choose.</p>
+<p>Zero based, e.g. 0, 1, etc.</p>
+
+```json
+{
+	// Globally:
+	"MonitorIndex": "0",
+
+	// For one app only:
+	"Apps": [
+		{
+			"MonitorIndex": "0"
+		}
+	]
+}
+```
+
+#### Animation
+
+##### Animation duration
+
+How long the animation should take, in milliseconds.
+
+Defaults to `250`
+
+```json
+{
+	// Globally:
+	"AnimationDurationMs": "250",
+
+	// For one app only:
+	"Apps": [
+		{
+			"AnimationDurationMs": "250"
+		}
+	]
+}
+```
+
+##### Animation type (toggle ON)
+
+The animation type to use when toggling on an application.
+
+Defaults to `EaseOutQuart`
+
+- **Linear**<br/>
+
+- **EaseInOutSine**<br/>
+
+- **EaseInBack**<br/>
+
+- **EaseInCubic**<br/>
+
+- **EaseInQuart**<br/>
+
+- **EaseOutBack**<br/>
+
+- **EaseOutCubic**<br/>
+
+- **EaseOutQuart**<br/>
+
+```json
+{
+	// Globally:
+	"AnimationTypeToggleOn": "EaseOutQuart",
+
+	// For one app only:
+	"Apps": [
+		{
+			"AnimationTypeToggleOn": "EaseOutQuart"
+		}
+	]
+}
+```
+
+##### Animation type (toggle OFF)
+
+The animation type to use when toggling off an application.
+
+Defaults to `EaseInQuart`
+
+- **Linear**<br/>
+
+- **EaseInOutSine**<br/>
+
+- **EaseInBack**<br/>
+
+- **EaseInCubic**<br/>
+
+- **EaseInQuart**<br/>
+
+- **EaseOutBack**<br/>
+
+- **EaseOutCubic**<br/>
+
+- **EaseOutQuart**<br/>
+
+```json
+{
+	// Globally:
+	"AnimationTypeToggleOff": "EaseInQuart",
+
+	// For one app only:
+	"Apps": [
+		{
+			"AnimationTypeToggleOff": "EaseInQuart"
+		}
+	]
+}
+```
+
+#### Events
+
+##### Event hooks
+
+Execute a program when some event occurs.
+
+```json
+{
+	// Globally:
+	"EventHooks": "None",
+
+	// For one app only:
+	"Apps": [
+		{
+			"EventHooks": "None"
+		}
+	]
+}
+```
 
 ## :material-chat: Event Hooks
 
@@ -541,7 +1226,7 @@ if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
 }
 ```
 
-And ```wtq.jsonc```:
+And `wtq.jsonc`:
 
 ```json
 {
@@ -576,7 +1261,7 @@ if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
 fi
 ```
 
-And ```wtq.jsonc```:
+And `wtq.jsonc`:
 
 ```json
 {
@@ -608,9 +1293,9 @@ It can be enabled by setting **Enable** to **true**:
 
 ```json
 {
-  "Api": {
-    "Enable": true
-  }
+	"Api": {
+		"Enable": true
+	}
 }
 ```
 
@@ -621,10 +1306,10 @@ Though because it can be useful to have a proper socket (for example to be able 
 
 ```json
 {
-  "Api": {
-    "Enable": true,
-    "Urls": ["http://127.0.0.1:7997"]
-  }
+	"Api": {
+		"Enable": true,
+		"Urls": ["http://127.0.0.1:7997"]
+	}
 }
 ```
 
@@ -673,7 +1358,7 @@ curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"
 
 !!! danger "TODO"
 
-``` mermaid
+```mermaid
 graph LR
   A[Start] --> B{Error?};
   B -->|Yes| C[Hmm...];

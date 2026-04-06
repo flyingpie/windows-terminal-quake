@@ -1,14 +1,14 @@
 site_name: WTQ - Quake Mode For (Almost) Any App
 site_author: flyingpie
 
-docs_dir: 'pages'
-site_dir: 'build'
+docs_dir: "pages"
+site_dir: "build"
 
 nav:
-- WTQ v2: index.md
-- WTQ v1: v1.md
-- Reporting Issues: reporting-issues.md
-- FAQ: faq.md
+  - WTQ v2: index.md
+  - WTQ v1: v1.md
+  - Reporting Issues: reporting-issues.md
+  - FAQ: faq.md
 
 theme:
   name: material
@@ -71,9 +71,3 @@ markdown_extensions:
   - toc:
       toc_depth: 5
       permalink: true
-
-plugins:
-  - include-markdown
-  - macros:
-      include_yaml:
-        - wtqsettings.yml
