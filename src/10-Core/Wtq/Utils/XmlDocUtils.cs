@@ -10,20 +10,19 @@ public static class XmlDocUtils
 		FormattingMode = XmlDocsFormattingMode.Html,
 	};
 
-	public static string? GetExample(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo).GetXmlDocsTag("example", _xmlDocsOptions);
+	public static string? GetSummary(this MemberInfo memberInfo)
+	{
+		Guard.Against.Null(memberInfo);
 
-	public static string? GetRemarks(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo).GetXmlDocsTag("remarks", _xmlDocsOptions);
-
-	public static string? GetSummary(this MemberInfo memberInfo) =>
-		Guard.Against.Null(memberInfo).GetXmlDocsTag("summary", _xmlDocsOptions);
+		return Guard.Against.Null(memberInfo).GetXmlDocsTag("summary", _xmlDocsOptions)?.Replace("\n", "<br/>");
+	}
 
 	public static string? GetSummaryEnum(this object val, Type enumType)
 	{
-		var member = enumType.GetMember(val.ToString()!).FirstOrDefault()
-			?? throw new InvalidOperationException($"Could not get member info for enum type '{enumType.FullName}'.");
+		Guard.Against.Null(val);
+		Guard.Against.Null(enumType);
 
-		return GetSummary(member);
+		return enumType.GetMember(val.ToString()!).FirstOrDefault().GetSummary()
+			?? throw new InvalidOperationException($"Could not get member info for enum type '{enumType.FullName}'.");
 	}
 }

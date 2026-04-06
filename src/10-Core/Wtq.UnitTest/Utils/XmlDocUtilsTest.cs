@@ -6,39 +6,6 @@ namespace Wtq.Core.UnitTest.Utils;
 public class XmlDocUtilsTest
 {
 	[TestMethod]
-	public void GetExample()
-	{
-		// Act
-		var summary = TestClass.PropertyInfo.GetExample().ReplaceLineEndings();
-
-		// Assert
-		Assert.AreEqual(
-			"""
-			{
-			  "Name": "Value"
-			}
-			""",
-			summary);
-	}
-
-	[TestMethod]
-	public void GetRemarks()
-	{
-		// Act
-		var summary = TestClass.PropertyInfo.GetRemarks().ReplaceLineEndings();
-
-		// Assert
-		Assert.AreEqual(
-			"""
-			The Remarks.
-			Another line.
-			<p>With paragraph.</p>
-			With <strong>strong</strong> words.
-			""",
-			summary);
-	}
-
-	[TestMethod]
 	public void GetSummary()
 	{
 		// Act
@@ -50,9 +17,15 @@ public class XmlDocUtilsTest
 			The Summary.
 			Another line.
 			<p>With paragraph.</p>
-			With <strong>strong</strong> words.
+			With <b>strong</b> words.
 			""",
 			summary);
+	}
+
+	[TestMethod]
+	public void GetSummaryEnum()
+	{
+		Assert.Inconclusive();
 	}
 
 	private class TestClass
@@ -61,13 +34,13 @@ public class XmlDocUtilsTest
 		/// The Summary.<br/>
 		/// Another line.
 		/// <para>With paragraph.</para>
-		/// With <strong>strong</strong> words.
+		/// With <b>strong</b> words.
 		/// </summary>
 		/// <remarks>
 		/// The Remarks.<br/>
 		/// Another line.
 		/// <para>With paragraph.</para>
-		/// With <strong>strong</strong> words.
+		/// With <b>strong</b> words.
 		/// </remarks>
 		/// <example>
 		/// <code>

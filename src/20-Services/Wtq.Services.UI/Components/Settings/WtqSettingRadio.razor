@@ -28,9 +28,9 @@
 
 					<RadzenRadioButtonListItem Value="v.Value">
 						<Template>
-							<div style="cursor: pointer; max-width: 300px;">
+							<div style="cursor: pointer;">
 								<strong>@(v.DisplayName)</strong>
-								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)(v.Doc ?? string.Empty))</p>
+								<p class="rz-color-base-500 rz-m-0">@((MarkupString?)(v.Summary ?? string.Empty))</p>
 							</div>
 						</Template>
 					</RadzenRadioButtonListItem>

@@ -12,7 +12,7 @@ public enum TrayIconStyle
 	None = 0,
 
 	/// <summary>
-	/// Attempt to detect the OS theme and use the appropriate style based on that.
+	/// Attempt to detect the OS theme and use the appropriate style based on that (currently Windows only).
 	/// </summary>
 	Auto,
 
