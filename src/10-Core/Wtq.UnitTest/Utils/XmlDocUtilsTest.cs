@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 
 namespace Wtq.Core.UnitTest.Utils;
@@ -12,20 +13,20 @@ public class XmlDocUtilsTest
 		var summary = TestClass.PropertyInfo.GetSummary().ReplaceLineEndings();
 
 		// Assert
-		Assert.AreEqual(
-			"""
-			The Summary.
-			Another line.
-			<p>With paragraph.</p>
-			With <b>strong</b> words.
-			""",
-			summary);
+		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary);
 	}
 
 	[TestMethod]
 	public void GetSummaryEnum()
 	{
-		Assert.Inconclusive();
+		// Act
+		var summaries = EnumUtils.GetValues<TestEnum>().ToList();
+		Assert.HasCount(1, summaries);
+
+		var summary = summaries[0];
+
+		// Assert
+		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary.Summary);
 	}
 
 	private class TestClass
@@ -33,24 +34,20 @@ public class XmlDocUtilsTest
 		/// <summary>
 		/// The Summary.<br/>
 		/// Another line.
-		/// <para>With paragraph.</para>
 		/// With <b>strong</b> words.
 		/// </summary>
-		/// <remarks>
-		/// The Remarks.<br/>
-		/// Another line.
-		/// <para>With paragraph.</para>
-		/// With <b>strong</b> words.
-		/// </remarks>
-		/// <example>
-		/// <code>
-		/// {
-		///   "Name": "Value"
-		/// }
-		/// </code>
-		/// </example>
 		public string? Property { get; set; }
 
 		public static PropertyInfo PropertyInfo => typeof(TestClass).GetProperty(nameof(Property))!;
+	}
+
+	public enum TestEnum
+	{
+		/// <summary>
+		/// The Summary.<br/>
+		/// Another line.
+		/// With <b>strong</b> words.
+		/// </summary>
+		EnumValue1,
 	}
 }
