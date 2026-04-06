@@ -67,7 +67,7 @@
 	<!-- Label -->
 	<RadzenColumn Size="4">
 		<RadzenStack Orientation="Orientation.Vertical" Gap="2">
-			<RadzenLabel class="@LabelClass"><strong>@Title</strong></RadzenLabel>
+			<RadzenLabel class="@LabelClass"><b>@Title</b></RadzenLabel>
 
 			<p class="rz-color-base-500 rz-m-0">@Subtitle</p>
 		</RadzenStack>
@@ -79,7 +79,7 @@
 		@Content
 
 		<!-- Description -->
-		<p class="rz-color-base-500 rz-m-0 rz-mt-1 description">@((MarkupString)Get.GetMemberInfo()!.GetSummary()!)</p>
+		<p class="rz-color-base-500 rz-m-0 rz-mt-1 description">@((MarkupString)(Get.GetMemberInfo()?.GetSummary() ?? string.Empty))</p>
 
 		<!-- Validation -->
 		@foreach (var v in ValidationResultsForProperty)

@@ -13,12 +13,9 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 2000 - Process
 
 	/// <summary>
-	/// <para>
-	/// How WTQ should get to an instance of a running app.
-	/// </para>
-	/// <para>
+	/// How WTQ should get to an instance of a running app.<br/>
+	/// <br/>
 	/// I.e. whether to start an app instance if one cannot be found.
-	/// </para>
 	/// </summary>
 	[DefaultValue(Wc.AttachMode.FindOrStart)]
 	[Display(GroupName = Gn.Process, Name = "Attach mode")]
@@ -54,12 +51,9 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// Make the window see-through (applies to the entire window, including the title bar).
-	/// </para>
-	/// <para>
+	/// Make the window see-through (applies to the entire window, including the title bar).<br/>
+	/// <br/>
 	/// 0 (invisible) - 100 (opaque).
-	/// </para>
 	/// </summary>
 	[DefaultValue(100)]
 	[Display(GroupName = Gn.Behavior)]
@@ -72,11 +66,9 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 4000 - Position
 
 	/// <summary>
-	/// Whether to resize the app window when toggling onto the screen, to apply other settings
-	/// like <see cref="HorizontalScreenCoverage"/>.<br/>
+	/// Whether to resize the app window when toggling onto the screen. Used to adhere to settings like <b>horizontal screen coverage</b>.<br/>
 	/// <br/>
-	/// By setting this to "Never", the app window size will be maintained, effectively disabling some other settings
-	/// (like the aforementioned <see cref="HorizontalScreenCoverage"/>).<br/>
+	/// By setting this to <b>Never</b>, the app window size will be maintained.<br/>
 	/// <br/>
 	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
 	/// window clears its contents (seems to be most common with Electron apps).
@@ -120,35 +112,15 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public float? VerticalOffset { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.
-	/// </para>
-	/// <para>
+	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
+	/// <br/>
 	/// Depending on your monitor setup, this may be above the screen, but switches to below if another monitor exists there.
-	/// </para>
-	/// <para>
+	/// <br/>
 	/// By default, WTQ looks for empty space in this order: Above, Below, Left, Right.
-	/// </para>
-	/// <para>
+	/// <br/>
 	/// If no free space can be found in any of the specified locations, the app will just blink on- and off the screen,
 	/// without any animation.
-	/// </para>
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///     // Globally:
-	///     "OffScreenLocations": ["Above", "Below", "Left", "Right"],
-	///
-	///     // For one app only:
-	///     "Apps": [
-	///         {
-	///             "OffScreenLocations": ["Above", "Below", "Left", "Right"],
-	///         }
-	///     ]
-	/// }
-	/// </code>
-	/// </example>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
 	[JsonPropertyOrder(4005)]
@@ -159,7 +131,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	#region 5000 - Monitor
 
 	/// <summary>
-	/// Which monitor to preferably drop the app.
+	/// Which monitor to preferably toggle the app onto.
 	/// </summary>
 	[DefaultValue(Wc.PreferMonitor.WithCursor)]
 	[Display(GroupName = Gn.Monitor, Name = "Prefer monitor")]
@@ -167,12 +139,9 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public PreferMonitor? PreferMonitor { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.
-	/// </para>
-	/// <para>
+	/// If <b>PreferMonitor</b> is set to <b>AtIndex</b>, this setting determines what monitor to choose.<br/>
+	/// <br/>
 	/// Zero based, e.g. 0, 1, etc.
-	/// </para>
 	/// </summary>
 	[DefaultValue(0)]
 	[Display(GroupName = Gn.Monitor, Name = "Monitor index")]

@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.5">
     
     
       
@@ -142,6 +142,46 @@
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
     
     
       <div class="md-header__source">
@@ -509,38 +549,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#event-hooks" class="md-nav__link">
+  <a href="#gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Event Hooks
+        GUI
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Event Hooks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#http-api" class="md-nav__link">
+  <a href="#hotkeys-keys-and-keychars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HTTP API
+        Hotkeys, Keys and KeyChars
       
     </span>
   </a>
@@ -1201,7 +1224,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#event-hooks_1" class="md-nav__link">
+  <a href="#event-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
         Event hooks
@@ -1223,6 +1246,45 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-hooks_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Event Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP API
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1514,38 +1576,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#event-hooks" class="md-nav__link">
+  <a href="#gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Event Hooks
+        GUI
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Event Hooks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#http-api" class="md-nav__link">
+  <a href="#hotkeys-keys-and-keychars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HTTP API
+        Hotkeys, Keys and KeyChars
       
     </span>
   </a>
@@ -2206,7 +2251,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#event-hooks_1" class="md-nav__link">
+  <a href="#event-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
         Event hooks
@@ -2228,6 +2273,45 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-hooks_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Event Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP API
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2284,14 +2368,10 @@
 <p>See <a href="#installation">Installation</a> to get started.</p>
 <hr />
 <p>Here's an example where WTQ runs on <strong>Windows 11</strong>, toggling <a href="https://github.com/microsoft/terminal">Windows Terminal</a>, <a href="https://q-dir.com/">Q-Dir</a>, <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer">Process Explorer</a> and <a href="https://keepassxc.org/">KeePassXC</a>.</p>
-<video controls loop>
-<source src="/assets/video/wtq-win11.mp4" />
-</video>
+<video controls loop><source src="/assets/video/wtq-win11.mp4" /></video>
 
 <p>And here's one on <strong>KDE Plasma 6</strong>, toggling <a href="https://wezfurlong.org/wezterm/index.html">WezTerm</a>, <a href="https://apps.kde.org/dolphin/">Dolphin</a> <a href="https://apps.kde.org/plasma-systemmonitor/">System Monitor</a> and <a href="https://keepassxc.org/">KeePassXC</a>.</p>
-<video controls loop>
-<source src="/assets/video/wtq-kde6-neon.mp4" />
-</video>
+<video controls loop><source src="/assets/video/wtq-kde6-neon.mp4" /></video>
 
 <div class="admonition note">
 <p class="admonition-title">Why "Quake" Style</p>
@@ -2317,26 +2397,26 @@ Fit that with Quake-style toggling, and you get <strong>"Windows Terminal Quake"
 scoop install extras/wtq</code></pre>
 <p>A shortcut is then available named <strong>WTQ - Windows Terminal Quake</strong>, or you can just run <code>wtq</code> from a command line or Win+R.</p>
 <figure>
-<p><img alt="" src="assets/screenshots/win-startmenu-scoop.png" /></p>
+<p><img alt="WTQ in Windows start menu, with Scoop installation" src="assets/screenshots/win-startmenu-scoop.png" /></p>
 <figcaption>
 <p>Start menu entry after installation.</p>
 </figcaption>
 </figure>
-<p>Update (just WTQ):
-<pre class="highlight"><code class="language-shell">scoop update wtq</code></pre></p>
+<p>Update (just WTQ):</p>
+<pre class="highlight"><code class="language-shell">scoop update wtq</code></pre>
 <h4 id="winget">WinGet<a class="headerlink" href="#winget" title="Permanent link">&para;</a></h4>
 <p><a href="https://github.com/microsoft/winget-cli">The Windows package manager.</a></p>
-<p><pre class="highlight"><code class="language-shell">winget install windows-terminal-quake</code></pre>
-You can then call "<strong>wtq</strong>" from the command line.</p>
+<pre class="highlight"><code class="language-shell">winget install windows-terminal-quake</code></pre>
+<p>You can then call "<strong>wtq</strong>" from the command line.</p>
 <p>After having done that <strong>at least once</strong>, a shortcut will appear in the start menu, called <strong>WTQ - Main Window</strong>.</p>
 <figure>
-<p><img alt="" src="assets/screenshots/win-startmenu-winget.png" /></p>
+<p><img alt="WTQ in Windows start menu, with WinGet installation" src="assets/screenshots/win-startmenu-winget.png" /></p>
 <figcaption>
 <p>Start menu entry after installation.</p>
 </figcaption>
 </figure>
-<p>Update (just WTQ):
-<pre class="highlight"><code class="language-shell">winget upgrade windows-terminal-quake</code></pre></p>
+<p>Update (just WTQ):</p>
+<pre class="highlight"><code class="language-shell">winget upgrade windows-terminal-quake</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Where's WTQ Installed?</p>
 <p>You can run</p>
@@ -2344,19 +2424,19 @@ You can then call "<strong>wtq</strong>" from the command line.</p>
 <p>To find out where apps are installed:</p>
 <pre class="highlight"><code class="language-shell">Windows Package Manager v1.10.340
 (...)
-Portable Package Root (User)       %LOCALAPPDATA%\Microsoft\WinGet\Packages</code></pre>
+Portable Package Root (User) %LOCALAPPDATA%\Microsoft\WinGet\Packages</code></pre>
 </div>
 <h4 id="manual">Manual<a class="headerlink" href="#manual" title="Permanent link">&para;</a></h4>
 <p>See <a href="https://github.com/flyingpie/windows-terminal-quake/releases/latest">the latest release</a>, and pick a zip.</p>
 <ul>
 <li><strong>Self-Contained</strong><br/>Slightly larger, but does not require dependencies to be installed (i.e. .Net).</li>
-<li><strong>Framework-Dependent</strong><br/>Smaller, but requires .Net 9 to be installed.</li>
+<li><strong>Framework-Dependent</strong><br/>Smaller, but requires .Net 10 to be installed.</li>
 </ul>
 <h4 id="build-from-source">Build From Source<a class="headerlink" href="#build-from-source" title="Permanent link">&para;</a></h4>
 <div class="admonition note">
 <p class="admonition-title">Dependencies</p>
 <ul>
-<li>Requires the <a href="https://dotnet.microsoft.com/en-us/download">.Net 9 SDK</a> to be installed</li>
+<li>Requires the <a href="https://dotnet.microsoft.com/en-us/download">.Net 10 SDK</a> to be installed</li>
 </ul>
 </div>
 <p>You can also clone the repo and run the <strong>Install</strong> build target, which will build and install WTQ: <code>~/AppData/Local/wtq</code>.</p>
@@ -2366,8 +2446,8 @@ cd windows-terminal-quake
 ./build.ps1 Install</code></pre>
 <p>Uninstall:</p>
 <pre class="highlight"><code class="language-shell">./build.ps1 Uninstall</code></pre>
-<p>You can also take a look at the build options, do see more options for building, including without actually installing:
-<pre class="highlight"><code class="language-shell">./build.ps1 --help</code></pre></p>
+<p>You can also take a look at the build options, do see more options for building, including without actually installing:</p>
+<pre class="highlight"><code class="language-shell">./build.ps1 --help</code></pre>
 <h3 id="linux"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M220.9 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7M199 125c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4m221 278.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7M223.8 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8m-40.7-11.5c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1m-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3q-2.1-7.35 4.2-12.3m3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9m-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2m257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6M173.4 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5"/></svg></span> Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
 <h4 id="arch-aur">Arch AUR<a class="headerlink" href="#arch-aur" title="Permanent link">&para;</a></h4>
 <p>Multiple versions are published to the Arch User Repository (AUR):</p>
@@ -2377,17 +2457,17 @@ cd windows-terminal-quake
 <li>Downloads from GitHub Releases;</li>
 <li>Quicker to install and minimal dependencies.</li>
 </ul>
-<p><pre class="highlight"><code class="language-bash">yay -S wtq-bin</code></pre>
-or
-<pre class="highlight"><code class="language-bash">paru -S wtq-bin</code></pre></p>
+<pre class="highlight"><code class="language-bash">yay -S wtq-bin</code></pre>
+<p>or</p>
+<pre class="highlight"><code class="language-bash">paru -S wtq-bin</code></pre>
 <h6 id="wtq"><a href="https://aur.archlinux.org/packages/wtq">wtq</a><a class="headerlink" href="#wtq" title="Permanent link">&para;</a></h6>
 <ul>
 <li>Latest stable release, built from source;</li>
 <li>Purist open source, but takes a bit longer to install and has a bit more (build-time) dependencies.</li>
 </ul>
-<p><pre class="highlight"><code class="language-bash">yay -S wtq</code></pre>
-or
-<pre class="highlight"><code class="language-bash">paru -S wtq</code></pre></p>
+<pre class="highlight"><code class="language-bash">yay -S wtq</code></pre>
+<p>or</p>
+<pre class="highlight"><code class="language-bash">paru -S wtq</code></pre>
 <h4 id="flatpak">Flatpak<a class="headerlink" href="#flatpak" title="Permanent link">&para;</a></h4>
 <p>Since WTQ only supports KDE Plasma on Linux, it's not a great fit for Flathub.</p>
 <p>As an alternative, you can use the Flatpak remote hosted on the <a href="https://github.com/flyingpie/flatpak">sister repository</a>.
@@ -2412,10 +2492,10 @@ flatpak install nl.flyingpie.wtq</code></pre>
 </ul>
 </div>
 <p>See the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/install-or-upgrade-wtq.sh">/linux/install-or-upgrade-wtq.sh script</a> that downloads the latest version of WTQ, installs it to <code>~/.local/share/wtq</code>, and creates a <strong>wtq.desktop</strong> file.</p>
-<p>As a 1-liner:
-<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)</code></pre></p>
-<p>And the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh">/linux/uninstall-wtq.sh uninstall script</a>.
-<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)</code></pre></p>
+<p>As a 1-liner:</p>
+<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/install-or-upgrade-wtq.sh)</code></pre>
+<p>And the <a href="https://github.com/flyingpie/windows-terminal-quake/blob/master/pkg/linux/uninstall-wtq.sh">/linux/uninstall-wtq.sh uninstall script</a>.</p>
+<pre class="highlight"><code class="language-bash">bash &lt;(curl -s https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/refs/heads/master/pkg/linux/uninstall-wtq.sh)</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Settings File Remains</p>
 <p>The WTQ settings are not removed by this script. These are usually located at <code>~/.config/wtq</code>, also see <a href="#settings">Settings</a>.</p>
@@ -2424,8 +2504,7 @@ flatpak install nl.flyingpie.wtq</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Dependencies</p>
 <ul>
-<li>Requires the <a href="https://dotnet.microsoft.com/en-us/download">.Net 9 SDK</a> to be installed</li>
-<li>Requires webkit2gtk-4.1 to be installed</li>
+<li>Requires the <a href="https://dotnet.microsoft.com/en-us/download">.Net 10 SDK</a> to be installed - Requires webkit2gtk-4.1 to be installed</li>
 </ul>
 </div>
 <p>You can also clone the repo and run the <strong>Install</strong> build target, which will build and install WTQ at <code>~/.local/share/wtq</code> (respects XDG spec).</p>
@@ -2433,167 +2512,82 @@ flatpak install nl.flyingpie.wtq</code></pre>
 cd windows-terminal-quake
 
 ./build.sh Install</code></pre>
-<p>Uninstall:
-<pre class="highlight"><code class="language-bash">./build.sh Uninstall</code></pre></p>
-<p>You can also take a look at the build options, do see more options for building, including without actually installing:
-<pre class="highlight"><code class="language-bash">./build.sh --help</code></pre></p>
+<p>Uninstall:</p>
+<pre class="highlight"><code class="language-bash">./build.sh Uninstall</code></pre>
+<p>You can also take a look at the build options, do see more options for building, including without actually installing:</p>
+<pre class="highlight"><code class="language-bash">./build.sh --help</code></pre>
 <h2 id="app-examples"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg></span> App examples<a class="headerlink" href="#app-examples" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">TODO</p>
 </div>
-<h2 id="event-hooks"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"/></svg></span> Event Hooks<a class="headerlink" href="#event-hooks" title="Permanent link">&para;</a></h2>
-<p>When WTQ is running, various events occur, which can be hooked to trigger some action.</p>
-<div class="admonition note">
-<p class="admonition-title">Event Hooks</p>
-<p>For going the other direction, where you tell WTQ to do something, see <a href="#http-api">HTTP API</a>.</p>
+<h2 id="gui"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16H3V4h18m0-2H3c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h7v2H8v2h8v-2h-2v-2h7a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2"/></svg></span> GUI<a class="headerlink" href="#gui" title="Permanent link">&para;</a></h2>
+<div class="admonition danger">
+<p class="admonition-title">TODO</p>
 </div>
-<p>For example, to execute a script whenever an app is toggled <strong>on</strong>:</p>
-<pre class="highlight"><code class="language-json">{
-    "EventHooks": [
-        {
-            "EventPattern": "AppToggledOn",
-            "FileName": "some-script",
-            "WorkingDirectory": "/path/to/script"
-        }
-    ]
-}</code></pre>
-<p>The <strong>EventPattern</strong> property accepts regular expressions. For example, to hook everything:</p>
-<pre class="highlight"><code class="language-json">{
-    "EventHooks": [
-        {
-            "EventPattern": ".+",
-            "FileName": "some-script"
-        }
-    ]
-}</code></pre>
+<h2 id="hotkeys-keys-and-keychars"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 10h-2V8h2m0 5h-2v-2h2m-3-1h-2V8h2m0 5h-2v-2h2m0 6H8v-2h8m-9-5H5V8h2m0 5H5v-2h2m1 0h2v2H8m0-5h2v2H8m3 1h2v2h-2m0-5h2v2h-2m9-5H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2"/></svg></span> Hotkeys, Keys and KeyChars<a class="headerlink" href="#hotkeys-keys-and-keychars" title="Permanent link">&para;</a></h2>
+<p>Keys can be specified in 2 ways:</p>
 <ul>
-<li><strong>AppToggledOn</strong>: Fired when an app is toggling onto the screen.</li>
-<li><strong>AppToggledOff</strong>: Fired when an app is toggling off the screen.</li>
+<li>A <strong>virtual key code</strong> (the <strong>Key</strong> property). Generally the preferred method on Windows.</li>
 </ul>
-<p>Additionally, some environment variables are passed to the executed command:</p>
+<p>This maps to the <strong>physical key</strong> on the keyboard, regardless of what character it produces.</p>
+<p>The hotkey system on Windows sends virtual key codes to WTQ (and <em>not</em> what character it produces). So on Windows, binding on virtual key codes generally works best (as no additional transformations are necessary).</p>
+<p>Key codes are also mapped to key characters, so the <strong>KeyChar</strong> property usually still works. But this has some limitations, such as likely needing to restart WTQ when switching keyboard layouts. Hence it's recommended to use <strong>Key</strong> on Windows, which stays closer to the events Windows is sending.</p>
 <ul>
-<li><strong>WTQ_EVENT_NAME</strong>: The name of the event that fired;</li>
-<li><strong>WTQ_APP_NAME</strong>: The app that relates to the event, if any;</li>
-<li><strong>WTQ_IS_SWITCHING</strong>: "True" if currently switching from one app to another;</li>
+<li>A <strong>key character</strong> (the <strong>KeyChar</strong> property). Generally the preferred method on Linux.</li>
 </ul>
-<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
-<p>Running a PowerShell script when toggling, to play a sound:</p>
-<pre class="highlight"><code class="language-ps1">if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
-{
-    if ($env:WTQ_IS_SWITCHING -eq "True")
-    {
-        # Don't do anything (see below)
-    }
-    else
-    {
-        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/on.mp3" | Out-Null
-    }
-}
-
-if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
-{
-    if ($env:WTQ_IS_SWITCHING -eq "True")
-    {
-        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/switch.mp3" | Out-Null
-    }
-    else
-    {
-        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/off.mp3" | Out-Null
-    }
-}</code></pre>
-<p>And <code>wtq.jsonc</code>:</p>
-<pre class="highlight"><code class="language-json">{
-    (...)
-    "EventHooks": [
-        {
-            "EventPattern": ".+",
-            "FileName": "pwsh",
-            "ArgumentList": [ { "Argument": "wtq-sound.ps1" } ],
-            "WorkingDirectory": "C:/downloads"
-        }
-    ]</code></pre>
-<p>The same demo, but in Bash:</p>
-<pre class="highlight"><code class="language-bash">if [ $WTQ_EVENT_NAME = "AppToggledOn" ]; then
-    if [ $WTQ_IS_SWITCHING = "True" ]; then
-        # Don't do anything (see below)
-    else
-        ffplay -nodisp -autoexit ~/Downloads/on.mp3 &amp;&gt; /dev/null
-    fi
-fi
-
-if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
-    if [ $WTQ_IS_SWITCHING = "True" ]; then
-        ffplay -nodisp -autoexit ~/Downloads/switch.mp3 &amp;&gt; /dev/null
-    else
-        ffplay -nodisp -autoexit ~/Downloads/off.mp3 &amp;&gt; /dev/null
-    fi
-fi</code></pre>
-<p>And <code>wtq.jsonc</code>:</p>
-<pre class="highlight"><code class="language-json">{
-    (...)
-    "EventHooks": [
-        {
-            "EventPattern": ".+",
-            "FileName": "bash",
-            "ArgumentList": [ { "Argument": "wtq-sound" } ],
-            "WorkingDirectory": "~/Downloads"
-        }
-    ]</code></pre>
-<h2 id="http-api"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg></span> HTTP API<a class="headerlink" href="#http-api" title="Permanent link">&para;</a></h2>
-<p>WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.</p>
-<div class="admonition warning">
-<p class="admonition-title">Opt-In</p>
-<p>For clarity, the HTTP API is <strong>disabled by default</strong>. No socket is opened until <strong>enabled manually</strong>.</p>
-</div>
+<p>This maps to the <strong>produced character</strong>, regardless of what physical key was pressed.</p>
+<p>On Linux, hotkey presses are sent to WTQ as <em>typed characters</em>, taking the keyboard layout into account. So on Linux, binding on key characters generally works best (as no additional transformations are necessary).</p>
+<p>Key characters are also mapped to key codes, so the <strong>Key</strong> property usually still works. But this has limitations when the keyboard layout differs from US ANSI, where virtual key codes are based on. Hence it's recommended to use <strong>KeyChar</strong> on Linux, which stays closer to the events Linux is sending.</p>
 <div class="admonition note">
-<p class="admonition-title">Event Hooks</p>
-<p>For going the other direction, where WTQ notifies someone else, see <a href="#event-hooks">Event Hooks</a>.</p>
+<p class="admonition-title">Note</p>
+<p>The <a href="#gui">GUI</a> can be helpful in figuring out what codes- or characters to use here.</p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Requires Restart</p>
-<p>Making changes to this part of the settings requires a WTQ restart.</p>
-</div>
-<p>It can be enabled by setting <strong>Enable</strong> to <strong>true</strong>:</p>
+<p>See <a href="https://github.com/flyingpie/windows-terminal-quake/issues/199">this issue</a> for more information on why the split exists.</p>
+<p>See <a href="#hotkeys">Global Hotkeys</a> to configure hotkeys that trigger the most recent app, and <a href="#hotkeys_1">App Hotkeys</a> that trigger a specific app.</p>
 <pre class="highlight"><code class="language-json">{
-  "Api": {
-    "Enable": true
-  }
-}</code></pre>
-<p>By default, the HTTP API is made available through a named pipe (<strong>//pipe:/wtq</strong> on Windows, <strong>/run/user/USERNAME/wtq/wtq.sock</strong> on Linux).
-This makes it such that no ports need to be allocated, and no ports are exposed externally.</p>
-<p>Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the <strong>Urls</strong> setting, for example <strong>localhost</strong>, on port <strong>7997</strong>:</p>
-<pre class="highlight"><code class="language-json">{
-  "Api": {
-    "Enable": true,
-    "Urls": ["http://127.0.0.1:7997"]
-  }
-}</code></pre>
-<p>Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.</p>
-<p>The root address of the API will return an <a href="https://www.openapis.org/">OpenAPI-driven</a> documentation page, with all the available endpoints:</p>
-<p><img alt="API" src="assets/img/api.png" /></p>
-<p>For example, using Curl to fetch all configured apps:</p>
-<pre class="highlight"><code class="language-bash">curl http://localhost:7997/apps | jq
-{
-    "apps": [
-        {
-            "name": "KeePassXC",
-            "isAttached": true,
-            "isOpen": false
-        },
-        {
-            "name": "Dolphin",
-            "isAttached": true,
-            "isOpen": false
-        },
-        {
-            "name": "WezTerm",
-            "isAttached": true,
-            "isOpen": true
-        }
+    "Hotkeys": [
+
+        //
+        // Using virtual key codes (recommended on Windows)
+        //
+
+        // CTRL+Q
+        { "Modifiers": "Control", "Key": "Q" }
+
+        // CTRL+1
+        { "Modifiers": "Control", "Key": "D1" }
+
+        // CTRL,ALT+1
+        { "Modifiers": "Control,Alt", "Key": "D1" },
+
+        // CTRL,SHIFT+Q
+        { "Modifiers": "Control,Shift", "Key": "Q" },
+
+        // All modifiers ("Super" also being known as "Meta", or the "Windows" key)
+        { "Modifiers": "Alt,Control,Shift,Super", "Key": "Q" }
+
+        //
+        // Using key characters (recommended on Linux)
+        //
+
+        // CTRL+Q
+        { "Modifiers": "Control", "KeyChar": "Q" }
+
+        // CTRL+1
+        { "Modifiers": "Control", "KeyChar": "1" },
+
+        // CTRL,ALT+1
+        { "Modifiers": "Control,Alt", "KeyChar": "1" },
+
+        // CTRL,SHIFT+Q
+        { "Modifiers": "Control,Shift", "KeyChar": "Q" },
+
+        // All modifiers ("Super" also being known as "Meta", or the "Windows" key)
+        { "Modifiers": "Alt,Control,Shift,Super", "KeyChar": "Q" }
+
     ]
+    // ...
 }</code></pre>
-<p>Or to open a specific app:</p>
-<pre class="highlight"><code class="language-bash">curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"</code></pre>
 <h2 id="settings"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/></svg></span> Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
 <p>Settings are stored in a JSON file, usually named <code>wtq.jsonc</code>.</p>
 <p>The file can use the extension <code>.json</code>, <code>.jsonc</code> or <code>.json5</code>. The latter two are supported, so that editors like VSCode automatically switch to <strong>"JSON with Comments"</strong>, making working with comments nicer.</p>
@@ -2638,7 +2632,7 @@ This makes it such that no ports need to be allocated, and no ports are exposed 
 <li><code>C:\users\username\.wtq.json</code></li>
 </ul>
 </li>
-<li>In app data <ul>
+<li>In app data<ul>
 <li><code>C:\users\username\AppData\Roaming\wtq\wtq.json</code></li>
 </ul>
 </li>
@@ -2674,51 +2668,60 @@ This makes it such that no ports need to be allocated, and no ports are exposed 
 <p class="admonition-title">TODO</p>
 <p>TODO: Mention wtq.schema.json</p>
 </div>
-<div class="admonition danger">
-<p class="admonition-title">TODO</p>
-<p>TODO: Mention GUI</p>
-</div>
 <h3 id="global-options"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.9 17.39c-.26-.8-1.01-1.39-1.9-1.39h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.984 7.984 0 0 1 2.9 12.8M11 19.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1a2 2 0 0 0 2 2m1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> Global options<a class="headerlink" href="#global-options" title="Permanent link">&para;</a></h3>
 <p>Defines WTQ-wide options, including the list of configured apps.</p>
 <h4 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h4>
 <h5 id="apps">Apps<a class="headerlink" href="#apps" title="Permanent link">&para;</a></h5>
 <p>Applications to enable Quake-style dropdown for.</p>
 <pre class="highlight"><code class="language-json">{
-  "Apps": [
-    { "Name": "App 1" },
-    { "Name": "App 2" },
-    // ...
-  ]
+    "Apps": [
+        {
+            "Name": "App 1"
+            // (App settings here)
+        },
+        {
+            "Name": "App 2"
+            // (App settings here)
+        }
+        // ...
+    ]
 }</code></pre>
 <h5 id="hotkeys">Hotkeys<a class="headerlink" href="#hotkeys" title="Permanent link">&para;</a></h5>
 <p>Global hotkeys, that toggle either the first, or the most recently toggled app.</p>
+<p>Also note <a href="#hotkeys_1">App Hotkeys</a>, which handles hotkeys for a single particular app.</p>
+<p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
+
 <pre class="highlight"><code class="language-json">{
-  "Hotkeys": [
-    { "Modifiers": "Control", "Key": "Q" }
-  ]
+    "Hotkeys": [{ "Modifiers": "Control", "Key": "Q" }]
+    // ...
 }</code></pre>
 <h5 id="api">API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h5>
-<p>WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.</p>
+<p>WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.</p>
+<p>See the <a href="#http-api">HTTP API section</a> for more information and usage examples.</p>
+
 <pre class="highlight"><code class="language-json">{
-  "Api": {
-    "Enable": true,
-    "Urls": ["http://127.0.0.1:7997"]
-  }
+    "Api": {
+        "Enable": true,
+        "Urls": ["http://127.0.0.1:7997"]
+    }
+    // ...
 }</code></pre>
 <h5 id="feature-flags">Feature flags<a class="headerlink" href="#feature-flags" title="Permanent link">&para;</a></h5>
 <p>Sometimes functionality is added or changed that carries more risk of introducing bugs.</p>
 <p>For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.</p>
 <p>That way, we can still merge to master, and make it part of the stable release version (reducing branches and dev builds and what not),
-but still have a way back should things go awry.</p>
+but still have a way back should things go awry, without necessarily reverting to a previous version.</p>
 
 <pre class="highlight"><code class="language-json">{
-    "FeatureFlags": "None",
+    "FeatureFlags": {
+        // (Currently no feature flags available)
+    }
     // ...
 }</code></pre>
 <h5 id="show-ui-on-start">Show UI on start<a class="headerlink" href="#show-ui-on-start" title="Permanent link">&para;</a></h5>
 <p>Whether to show the GUI when WTQ is started.</p>
 <pre class="highlight"><code class="language-json">{
-    "ShowUiOnStart": "False",
+    "ShowUiOnStart": false | true
     // ...
 }</code></pre>
 <h5 id="tray-icon-color-style">Tray icon (color) style<a class="headerlink" href="#tray-icon-color-style" title="Permanent link">&para;</a></h5>
@@ -2726,7 +2729,7 @@ but still have a way back should things go awry.</p>
 <p>Defaults to <code>Auto</code></p>
 <ul>
 <li>
-<p><strong>Auto</strong><br/>Attempt to detect the OS theme and use the appropriate style based on that.</p>
+<p><strong>Auto</strong><br/>Attempt to detect the OS theme and use the appropriate style based on that (currently Windows only).</p>
 </li>
 <li>
 <p><strong>Dark</strong><br/>Dark icon, works best on lighter themes.</p>
@@ -2736,7 +2739,7 @@ but still have a way back should things go awry.</p>
 </li>
 </ul>
 <pre class="highlight"><code class="language-json">{
-    "TrayIconStyle": "Auto",
+    "TrayIconStyle": "Auto | Dark | Light"
     // ...
 }</code></pre>
 <h4 id="animation">Animation<a class="headerlink" href="#animation" title="Permanent link">&para;</a></h4>
@@ -2747,95 +2750,107 @@ but still have a way back should things go awry.</p>
 
 <p>Defaults to <code>40</code></p>
 <pre class="highlight"><code class="language-json">{
-    "AnimationTargetFps": "40",
+    "AnimationTargetFps": 40
     // ...
 }</code></pre>
 <h3 id="app-options"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m0 18H3V6h18z"/></svg></span> App options<a class="headerlink" href="#app-options" title="Permanent link">&para;</a></h3>
 <p>Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).</p>
 <h4 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h4>
 <h5 id="name">Name<a class="headerlink" href="#name" title="Permanent link">&para;</a></h5>
-<p>A logical name for the app, used to identify it across config reloads.</p>
-<p>Appears in logs.</p>
+<p>A logical name for the app, used to identify it across config reloads, and it appears in logs.</p>
 
-<pre class="highlight"><code class="language-json">{
-  "Name": "Terminal",
-  // ...
-}</code></pre>
-<h5 id="hotkeys_1">Hotkeys<a class="headerlink" href="#hotkeys_1" title="Permanent link">&para;</a></h5>
-<p>One or more keyboard shortcuts that toggle in- and out this particular app.</p>
 <pre class="highlight"><code class="language-json">{
     "Apps": [
         {
-            "Hotkeys": "None"
-            // ...
+            "Name": "Terminal"
+            // (App settings here)
         }
     ]
 }</code></pre>
-<h4 id="process">Process<a class="headerlink" href="#process" title="Permanent link">&para;</a></h4>
-<h5 id="filename">Filename<a class="headerlink" href="#filename" title="Permanent link">&para;</a></h5>
-<p>The <strong>filename</strong> to use when starting a new process for the app.</p>
-<p>E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.</p>
-<p>Note that you can also put absolute paths in here.</p>
+<h5 id="hotkeys_1">Hotkeys<a class="headerlink" href="#hotkeys_1" title="Permanent link">&para;</a></h5>
+<p>One or more keyboard shortcuts that toggle in- and out this particular app.</p>
+<p>Also note <a href="#hotkeys">Global Hotkeys</a>, which handles hotkeys that toggle the most recent app.</p>
+<p>See <a href="#hotkeys-keys-and-keychars">Hotkeys, Keys and KeyChars</a> for more information and examples.</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
         {
-            "FileName": "wt"
+            "Hotkeys": [{ "Modifiers": "Control", "Key": "Q" }]
+            // ...
+        }
+    ]
+    // ...
+}</code></pre>
+<h4 id="process">Process<a class="headerlink" href="#process" title="Permanent link">&para;</a></h4>
+<h5 id="filename">Filename<a class="headerlink" href="#filename" title="Permanent link">&para;</a></h5>
+<p>The **filename** to use when starting a new process for the app. If no <a href="#process-name">ProcessName</a> is set,
+the value of this property is also used to match against the names of running processes (to find the process to attach to).</p>
+<p>E.g. **notepad**, **dolphin**, etc.</p>
+<p>Note that (if the app is not in the OS PATH), you can also put absolute paths in here,
+or specify the working directory through <a href="#working-directory">WorkingDirectory</a>.</p>
+
+<pre class="highlight"><code class="language-json">{
+    "Apps": [
+        {
+            "FileName": "wt" | "wezterm-gui" | "spotify" | etc.
             // ...
         }
     ]
 }</code></pre>
 <h5 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h5>
 <p>Command-line arguments that should be passed to the app when it's started.</p>
-<p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
+<p>Note that this only applies when using an **AttachMode** that starts the app.</p>
+<p>This is mostly here for backward-compatibility reasons. Prefer <a href="#argument-list">ArgumentList</a>,
+which handles complex arguments and escaping better.</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
         {
-            "Arguments": "None"
+            "Arguments": null | "arg1 arg2"
             // ...
         }
     ]
 }</code></pre>
 <h5 id="argument-list">Argument list<a class="headerlink" href="#argument-list" title="Permanent link">&para;</a></h5>
 <p>Command-line arguments that should be passed to the app when it's started.</p>
-<p>Note that this only applies when using an <strong>AttachMode</strong> that starts the app.</p>
-
-<pre class="highlight"><code class="language-json">{
-  "Apps": [
-    {
-      "ArgumentList": [
-        "--allow-screencapture",
-        "--debug-info",
-      ],
-      // ...
-    }
-  ]
-}</code></pre>
-<h5 id="working-directory">Working directory<a class="headerlink" href="#working-directory" title="Permanent link">&para;</a></h5>
-<p>Working directory when starting a new process.</p>
-<p>Useful if the <strong>filename</strong> isn't available through PATH.</p>
+<p>Note that this only applies when using an **AttachMode** that starts the app (i.e., when WTQ actually starts the app).</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
         {
-            "WorkingDirectory": "None"
+            "ArgumentList": ["--allow-screencapture", "--debug-info"]
+            // ...
+        }
+    ]
+}</code></pre>
+<h5 id="working-directory">Working directory<a class="headerlink" href="#working-directory" title="Permanent link">&para;</a></h5>
+<p>Working directory when starting a new process.</p>
+<p>Useful if the **filename** isn't available through PATH.</p>
+
+<pre class="highlight"><code class="language-json">{
+    "Apps": [
+        {
+            "WorkingDirectory": null | "/path/to/dir" | "C:/path/to/dir" | "C:\\path\\to\\dir"
             // ...
         }
     ]
 }</code></pre>
 <h5 id="process-name">Process name<a class="headerlink" href="#process-name" title="Permanent link">&para;</a></h5>
-<p>Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
+<p>Apps sometimes have **process names** different from their **filenames**.
 This field can be used to look for the process name in such cases. Windows Terminal is an
-example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.</p>
+example, with filename **wt**, and process name **WindowsTerminal**.</p>
 <p>Supports regular expressions.</p>
+<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 <pre class="highlight"><code class="language-json">{
-  // Using with Windows Terminal requires both "Filename" and "ProcessName".
-  "Apps": {
-    "Filename": "wt",
-    "ProcessName": "^WindowsTerminal$"
-  }
+    // Using with Windows Terminal requires both "Filename" and "ProcessName".
+    "Apps": [
+        {
+            "Filename": "wt",
+            "ProcessName": "^WindowsTerminal$"
+            // ...
+        }
+    ]
 }</code></pre>
 <h5 id="main-window">Main window<a class="headerlink" href="#main-window" title="Permanent link">&para;</a></h5>
 <p>(Windows only) Matches only "main" windows; the initial window a process spawns.</p>
@@ -2843,7 +2858,7 @@ example, with filename <strong>wt</strong>, and process name <strong>WindowsTerm
 that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
 When the other (non-main) windows cannot be easily differentiated from the main window (for example through
 the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.</p>
-<p>A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.</p>
+<p>A common example of an app where this would **not** help, is a browser, that can spawn tons of windows on the same process name.</p>
 
 <p>Defaults to <code>Either</code></p>
 <ul>
@@ -2868,6 +2883,7 @@ the window class or -title), the "is-main-window"-property can be very useful to
 <h5 id="window-class">Window class<a class="headerlink" href="#window-class" title="Permanent link">&para;</a></h5>
 <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
 <p>Supports regular expressions.</p>
+<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
@@ -2895,11 +2911,12 @@ the window class or -title), the "is-main-window"-property can be very useful to
 <p>Useful for cases where multiple programs control window placement (such as when
 using WTQ together with a window manager) and the window title can be used to
 opt-out in the other program.</p>
+<p>Note that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit.</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
         {
-            "WindowTitleOverride": "None"
+            "WindowTitleOverride": "New Window Title"
             // ...
         }
     ]
@@ -3026,7 +3043,7 @@ window clears its contents (seems to be most common with Electron apps).</p>
 </li>
 <li>
 <p><strong>Never</strong><br/>Never resize the app window, ignoring alignment settings (like HorizontalScreenCoverage).
-Useful for apps that don't respond well to resizes.</p>
+  Useful for apps that don't respond well to resizes.</p>
 </li>
 </ul>
 <pre class="highlight"><code class="language-json">{
@@ -3120,13 +3137,13 @@ without any animation.</p>
     // For one app only:
     "Apps": [
         {
-            "OffScreenLocations": ["Above", "Below", "Left", "Right"],
+            "OffScreenLocations": ["Above", "Below", "Left", "Right"]
         }
     ]
 }</code></pre>
 <h4 id="monitor">Monitor<a class="headerlink" href="#monitor" title="Permanent link">&para;</a></h4>
 <h5 id="prefer-monitor">Prefer monitor<a class="headerlink" href="#prefer-monitor" title="Permanent link">&para;</a></h5>
-<p>Which monitor to preferably drop the app.</p>
+<p>Which monitor to preferably toggle the app onto.</p>
 <p>Defaults to <code>WithCursor</code></p>
 <ul>
 <li>
@@ -3151,7 +3168,7 @@ without any animation.</p>
     ]
 }</code></pre>
 <h5 id="monitor-index">Monitor index<a class="headerlink" href="#monitor-index" title="Permanent link">&para;</a></h5>
-<p>If <strong>PreferMonitor</strong> is set to <strong>AtIndex</strong>, this setting determines what monitor to choose.</p>
+<p>If **PreferMonitor** is set to **AtIndex**, this setting determines what monitor to choose.</p>
 <p>Zero based, e.g. 0, 1, etc.</p>
 
 <pre class="highlight"><code class="language-json">{
@@ -3261,7 +3278,7 @@ without any animation.</p>
     ]
 }</code></pre>
 <h4 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h4>
-<h5 id="event-hooks_1">Event hooks<a class="headerlink" href="#event-hooks_1" title="Permanent link">&para;</a></h5>
+<h5 id="event-hooks">Event hooks<a class="headerlink" href="#event-hooks" title="Permanent link">&para;</a></h5>
 <p>Execute a program when some event occurs.</p>
 <pre class="highlight"><code class="language-json">{
     // Globally:
@@ -3274,6 +3291,159 @@ without any animation.</p>
         }
     ]
 }</code></pre>
+<h2 id="event-hooks_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"/></svg></span> Event Hooks<a class="headerlink" href="#event-hooks_1" title="Permanent link">&para;</a></h2>
+<p>When WTQ is running, various events occur, which can be hooked to trigger some action.</p>
+<div class="admonition note">
+<p class="admonition-title">Event Hooks</p>
+<p>For going the other direction, where you tell WTQ to do something, see <a href="#http-api">HTTP API</a>.</p>
+</div>
+<p>For example, to execute a script whenever an app is toggled <strong>on</strong>:</p>
+<pre class="highlight"><code class="language-json">{
+    "EventHooks": [
+        {
+            "EventPattern": "AppToggledOn",
+            "FileName": "some-script",
+            "WorkingDirectory": "/path/to/script"
+        }
+    ]
+}</code></pre>
+<p>The <strong>EventPattern</strong> property accepts regular expressions. For example, to hook everything:</p>
+<pre class="highlight"><code class="language-json">{
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "some-script"
+        }
+    ]
+}</code></pre>
+<ul>
+<li><strong>AppToggledOn</strong>: Fired when an app is toggling onto the screen.</li>
+<li><strong>AppToggledOff</strong>: Fired when an app is toggling off the screen.</li>
+</ul>
+<p>Additionally, some environment variables are passed to the executed command:</p>
+<ul>
+<li><strong>WTQ_EVENT_NAME</strong>: The name of the event that fired;</li>
+<li><strong>WTQ_APP_NAME</strong>: The app that relates to the event, if any;</li>
+<li><strong>WTQ_IS_SWITCHING</strong>: "True" if currently switching from one app to another;</li>
+</ul>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<p>Running a PowerShell script when toggling, to play a sound:</p>
+<pre class="highlight"><code class="language-ps1">if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
+{
+    if ($env:WTQ_IS_SWITCHING -eq "True")
+    {
+        # Don't do anything (see below)
+    }
+    else
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/on.mp3" | Out-Null
+    }
+}
+
+if ($env:WTQ_EVENT_NAME -eq "AppToggledOff")
+{
+    if ($env:WTQ_IS_SWITCHING -eq "True")
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/switch.mp3" | Out-Null
+    }
+    else
+    {
+        $o = ffplay -nodisp -autoexit -loglevel -8 "C:/downloads/off.mp3" | Out-Null
+    }
+}</code></pre>
+<p>And <code>wtq.jsonc</code>:</p>
+<pre class="highlight"><code class="language-json">{
+    (...)
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "pwsh",
+            "ArgumentList": [ { "Argument": "wtq-sound.ps1" } ],
+            "WorkingDirectory": "C:/downloads"
+        }
+    ]</code></pre>
+<p>The same demo, but in Bash:</p>
+<pre class="highlight"><code class="language-bash">if [ $WTQ_EVENT_NAME = "AppToggledOn" ]; then
+    if [ $WTQ_IS_SWITCHING = "True" ]; then
+        # Don't do anything (see below)
+    else
+        ffplay -nodisp -autoexit ~/Downloads/on.mp3 &amp;&gt; /dev/null
+    fi
+fi
+
+if [ $WTQ_EVENT_NAME = "AppToggledOff" ]; then
+    if [ $WTQ_IS_SWITCHING = "True" ]; then
+        ffplay -nodisp -autoexit ~/Downloads/switch.mp3 &amp;&gt; /dev/null
+    else
+        ffplay -nodisp -autoexit ~/Downloads/off.mp3 &amp;&gt; /dev/null
+    fi
+fi</code></pre>
+<p>And <code>wtq.jsonc</code>:</p>
+<pre class="highlight"><code class="language-json">{
+    (...)
+    "EventHooks": [
+        {
+            "EventPattern": ".+",
+            "FileName": "bash",
+            "ArgumentList": [ { "Argument": "wtq-sound" } ],
+            "WorkingDirectory": "~/Downloads"
+        }
+    ]</code></pre>
+<h2 id="http-api"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg></span> HTTP API<a class="headerlink" href="#http-api" title="Permanent link">&para;</a></h2>
+<p>WTQ comes with an HTTP API (<strong>disabled</strong> by default), that can be used to control WTQ programmatically.</p>
+<div class="admonition warning">
+<p class="admonition-title">Opt-In</p>
+<p>For clarity, the HTTP API is <strong>disabled by default</strong>. No socket is opened until <strong>enabled manually</strong>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Event Hooks</p>
+<p>For going the other direction, where WTQ notifies someone else, see <a href="#event-hooks">Event Hooks</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Requires Restart</p>
+<p>Making changes to this part of the settings requires a WTQ restart.</p>
+</div>
+<p>It can be enabled by setting <strong>Enable</strong> to <strong>true</strong>:</p>
+<pre class="highlight"><code class="language-json">{
+    "Api": {
+        "Enable": true
+    }
+}</code></pre>
+<p>By default, the HTTP API is made available through a named pipe (<strong>//pipe:/wtq</strong> on Windows, <strong>/run/user/USERNAME/wtq/wtq.sock</strong> on Linux).
+This makes it such that no ports need to be allocated, and no ports are exposed externally.</p>
+<p>Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the <strong>Urls</strong> setting, for example <strong>localhost</strong>, on port <strong>7997</strong>:</p>
+<pre class="highlight"><code class="language-json">{
+    "Api": {
+        "Enable": true,
+        "Urls": ["http://127.0.0.1:7997"]
+    }
+}</code></pre>
+<p>Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.</p>
+<p>The root address of the API will return an <a href="https://www.openapis.org/">OpenAPI-driven</a> documentation page, with all the available endpoints:</p>
+<p><img alt="API" src="assets/img/api.png" /></p>
+<p>For example, using Curl to fetch all configured apps:</p>
+<pre class="highlight"><code class="language-bash">curl http://localhost:7997/apps | jq
+{
+    "apps": [
+        {
+            "name": "KeePassXC",
+            "isAttached": true,
+            "isOpen": false
+        },
+        {
+            "name": "Dolphin",
+            "isAttached": true,
+            "isOpen": false
+        },
+        {
+            "name": "WezTerm",
+            "isAttached": true,
+            "isOpen": true
+        }
+    ]
+}</code></pre>
+<p>Or to open a specific app:</p>
+<pre class="highlight"><code class="language-bash">curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"</code></pre>
 <h2 id="building-from-source"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.5 18.5c.54 0 1 .46 1 1s-.46 1-1 1h-12c-.54 0-1-.46-1-1s.46-1 1-1zm0-1.5h-12C5.13 17 4 18.13 4 19.5S5.13 22 6.5 22h12a2.5 2.5 0 0 0 0-5m2.5-6h-3V7h-5l-3 4v5h12zm-9.46 0 1.96-2.5H16V11zM9.76 3.41 4.76 2 2 11.83c-.34 1.28.41 2.61 1.7 2.97l1.16.32 3.29-2.83-3.88-1.08 1.88-6.75 2.79.78c.56.29 1.77 1.1 2.53 2.13L12.5 6h.44c-1.26-1.59-3.09-2.54-3.18-2.59"/></svg></span> Building From Source<a class="headerlink" href="#building-from-source" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">TODO</p>

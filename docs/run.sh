@@ -1,3 +1,3 @@
 #!/bin/bash
 
-uv run mkdocs serve
+uv run properdocs serve

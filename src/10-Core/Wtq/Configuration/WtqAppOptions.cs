@@ -27,21 +27,8 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	#region 1000 - App
 
 	/// <summary>
-	/// <para>
-	/// A logical name for the app, used to identify it across config reloads.
-	/// </para>
-	/// <para>
-	/// Appears in logs.
-	/// </para>
+	/// A logical name for the app, used to identify it across config reloads, and it appears in logs.
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "Name": "Terminal",
-	///   // ...
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.App)]
 	[JsonPropertyOrder(1001)]
 	[NotNull]
@@ -64,19 +51,16 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	#region 2000 - Process
 
 	/// <summary>
-	/// <para>
-	/// The <strong>filename</strong> to use when starting a new process for the app.
-	/// </para>
-	/// <para>
-	/// E.g. <strong>notepad</strong>, <strong>dolphin</strong>, etc.
-	/// </para>
-	/// <para>
-	/// Note that you can also put absolute paths in here.
-	/// </para>
+	/// The <b>filename</b> to use when starting a new process for the app. If no <b>process name</b> is set,
+	/// the value of this property is also used to match against the names of running processes (to find the process to attach to).<br/>
+	/// <br/>
+	/// E.g. <b>notepad</b>, <b>dolphin</b>, etc.
+	/// <br/>
+	/// Note that (if the app is not in the OS PATH), you can also put absolute paths in here,
+	/// or specify the working directory through <b>working directory</b>.<br/>
+	/// <br/>
+	/// See the <b>Examples</b> page for, well, examples.
 	/// </summary>
-	/// <remarks>
-	/// See the "Examples" page in the GUI for, well, examples.
-	/// </remarks>
 	[Display(GroupName = Gn.Process, Name = "Filename")]
 	[ExampleValue("wt")]
 	[JsonPropertyOrder(2001)]
@@ -88,40 +72,22 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// Command-line arguments that should be passed to the app when it's started.
-	/// </para>
-	/// <para>
-	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
-	/// </para>
+	/// Command-line arguments that should be passed to the app when it's started.<br/>
+	/// <br/>
+	/// Note that this only applies when using an <b>AttachMode</b> that starts the app.<br/>
+	/// <br/>
+	/// This is mostly here for backward-compatibility reasons. Prefer <b>argument list</b>,
+	/// which handles complex arguments and escaping better.
 	/// </summary>
 	[Display(GroupName = Gn.Process)]
 	[JsonPropertyOrder(2002)]
 	public string? Arguments { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// Command-line arguments that should be passed to the app when it's started.
-	/// </para>
-	/// <para>
-	/// Note that this only applies when using an <strong>AttachMode</strong> that starts the app.
-	/// </para>
+	/// Command-line arguments that should be passed to the app when it's started.<br/>
+	/// <br/> 
+	/// Note that this only applies when using an <b>AttachMode</b> that starts the app (i.e., when WTQ actually starts the app).<br/>
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   "Apps": [
-	///     {
-	///       "ArgumentList": [
-	///         "--allow-screencapture",
-	///         "--debug-info",
-	///       ],
-	///       // ...
-	///     }
-	///   ]
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Argument list")]
 	[JsonPropertyOrder(2003)]
 	public ICollection<ProcessArgument> ArgumentList
@@ -131,12 +97,9 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// Working directory when starting a new process.
-	/// </para>
-	/// <para>
-	/// Useful if the <strong>filename</strong> isn't available through PATH.
-	/// </para>
+	/// Working directory when starting a new process.<br/>
+	/// <br/>
+	/// Useful if the <b>filename</b> isn't available through PATH.
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Working directory")]
 	[JsonPropertyOrder(2004)]
@@ -147,26 +110,15 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// Apps sometimes have <strong>process names</strong> different from their <strong>filenames</strong>.
+	/// Apps sometimes have <b>process names</b> different from their <b>filenames</b>.<br/>
+	/// <br/>
 	/// This field can be used to look for the process name in such cases. Windows Terminal is an
-	/// example, with filename <strong>wt</strong>, and process name <strong>WindowsTerminal</strong>.
-	/// </para>
-	/// <para>
-	/// Supports regular expressions.
-	/// </para>
+	/// example, with filename <b>wt</b>, and process name <b>WindowsTerminal</b>.<br/>
+	/// <br/>
+	/// Supports regular expressions.<br/>
+	/// <br/>
+	/// Also see the <b>Examples</b> page for more cases where this is relevant, and the <b>Windows</b> page on how to find values.
 	/// </summary>
-	/// <example>
-	/// <code>
-	/// {
-	///   // Using with Windows Terminal requires both "Filename" and "ProcessName".
-	///   "Apps": {
-	///     "Filename": "wt",
-	///     "ProcessName": "^WindowsTerminal$"
-	///   }
-	/// }
-	/// </code>
-	/// </example>
 	[Display(GroupName = Gn.Process, Name = "Process name")]
 	[JsonPropertyOrder(2005)]
 	public string? ProcessName
@@ -176,18 +128,15 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// (Windows only) Matches only "main" windows; the initial window a process spawns.
-	/// </para>
-	/// <para>
+	/// (Windows only) Matches only "main" windows; the initial window a process spawns.<br/>
+	/// <br/>
 	/// When a process spawns multiple windows, 1 is usually the "main" window. In many cases, this is also the window
-	/// that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.
+	/// that you'd want to use WTQ with. Non-main-windows are usually child windows like popups and such.<br/>
+	/// <br/>
 	/// When the other (non-main) windows cannot be easily differentiated from the main window (for example through
-	/// the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.
-	/// </para>
-	/// <para>
-	/// A common example of an app where this would <strong>not</strong> help, is a browser, that can spawn tons of windows on the same process name.
-	/// </para>
+	/// the window class or -title), the "is-main-window"-property can be very useful to home in on the desired window.<br/>
+	/// <br/>
+	/// A common example of an app where this would <b>not</b> help, is a browser, that can spawn tons of windows on the same process name.
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Main window")]
 	[DefaultValue(MainWindowState.Either)]
@@ -195,12 +144,11 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	public MainWindowState? MainWindow { get; set; }
 
 	/// <summary>
-	/// <para>
-	/// (Windows only) Matches windows based on their Win32 Window Class.
-	/// </para>
-	/// <para>
+	/// (Windows only) Matches windows based on their Win32 Window Class.<br/>
+	/// <br/>
 	/// Supports regular expressions.
-	/// </para>
+	/// <br/>
+	/// A common example of an app where this would <b>not</b> help, is a browser, that can spawn tons of windows on the same process name.
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window class")]
 	[ExampleValue("^ApplicationFrameWindow$")]
@@ -212,12 +160,9 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	}
 
 	/// <summary>
-	/// <para>
-	/// Match windows based on their title (sometimes referred to as "caption").
-	/// </para>
-	/// <para>
+	/// Match windows based on their title (sometimes referred to as "caption").<br/>
+	/// <br/>
 	/// Supports regular expressions.
-	/// </para>
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Window title")]
 	[ExampleValue("^Mozilla Firefox - WhatsApp$")]
@@ -233,18 +178,13 @@ public sealed class WtqAppOptions : WtqSharedOptions
 	#region 3000 - Behavior
 
 	/// <summary>
-	/// <para>
-	/// Attempt to set the window title to a specific value.
-	/// </para>
-	/// <para>
-	/// Useful for cases where multiple programs control window placement (such as when
-	/// using WTQ together with a window manager) and the window title can be used to
-	/// opt-out in the other program.
-	/// </para>
+	/// Attempt to set the window title to a specific value.<br/>
+	/// <br/>
+	/// Useful for cases where multiple programs control window placement (such as when using WTQ together with a window manager)
+	/// and the window title can be used to opt-out in the other program.<br/>
+	/// <br/>
+	/// Note that this doesn't work for all windows, as it depends on factors like the app's GUI toolkit.
 	/// </summary>
-	/// <remarks>
-	/// Note that this doesn't work for all windows, as it depends on factors like the app's GUI kit.
-	/// </remarks>
 	[Display(GroupName = Gn.Behavior, Name = "Window title override")]
 	[JsonPropertyOrder(3005)]
 	public string? WindowTitleOverride
@@ -286,7 +226,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 		// Require a filename, process name or window title.
 		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
 		{
-			yield return new("Either a <strong>filename</strong>, a <strong>process name</strong> or a <strong>window title</strong> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
+			yield return new("Either a <b>filename</b>, a <b>process name</b> or a <b>window title</b> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
 		}
 
 		// Require at least 1 hotkey.

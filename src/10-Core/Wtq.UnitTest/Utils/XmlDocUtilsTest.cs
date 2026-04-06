@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 
 namespace Wtq.Core.UnitTest.Utils;
@@ -6,53 +7,26 @@ namespace Wtq.Core.UnitTest.Utils;
 public class XmlDocUtilsTest
 {
 	[TestMethod]
-	public void GetExample()
-	{
-		// Act
-		var summary = TestClass.PropertyInfo.GetExample().ReplaceLineEndings();
-
-		// Assert
-		Assert.AreEqual(
-			"""
-			{
-			  "Name": "Value"
-			}
-			""",
-			summary);
-	}
-
-	[TestMethod]
-	public void GetRemarks()
-	{
-		// Act
-		var summary = TestClass.PropertyInfo.GetRemarks().ReplaceLineEndings();
-
-		// Assert
-		Assert.AreEqual(
-			"""
-			The Remarks.
-			Another line.
-			<p>With paragraph.</p>
-			With <strong>strong</strong> words.
-			""",
-			summary);
-	}
-
-	[TestMethod]
 	public void GetSummary()
 	{
 		// Act
 		var summary = TestClass.PropertyInfo.GetSummary().ReplaceLineEndings();
 
 		// Assert
-		Assert.AreEqual(
-			"""
-			The Summary.
-			Another line.
-			<p>With paragraph.</p>
-			With <strong>strong</strong> words.
-			""",
-			summary);
+		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary);
+	}
+
+	[TestMethod]
+	public void GetSummaryEnum()
+	{
+		// Act
+		var summaries = EnumUtils.GetValues<TestEnum>().ToList();
+		Assert.HasCount(1, summaries);
+
+		var summary = summaries[0];
+
+		// Assert
+		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary.Summary);
 	}
 
 	private class TestClass
@@ -60,24 +34,20 @@ public class XmlDocUtilsTest
 		/// <summary>
 		/// The Summary.<br/>
 		/// Another line.
-		/// <para>With paragraph.</para>
-		/// With <strong>strong</strong> words.
+		/// With <b>strong</b> words.
 		/// </summary>
-		/// <remarks>
-		/// The Remarks.<br/>
-		/// Another line.
-		/// <para>With paragraph.</para>
-		/// With <strong>strong</strong> words.
-		/// </remarks>
-		/// <example>
-		/// <code>
-		/// {
-		///   "Name": "Value"
-		/// }
-		/// </code>
-		/// </example>
 		public string? Property { get; set; }
 
 		public static PropertyInfo PropertyInfo => typeof(TestClass).GetProperty(nameof(Property))!;
+	}
+
+	public enum TestEnum
+	{
+		/// <summary>
+		/// The Summary.<br/>
+		/// Another line.
+		/// With <b>strong</b> words.
+		/// </summary>
+		EnumValue1,
 	}
 }
