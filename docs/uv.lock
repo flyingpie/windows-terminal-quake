@@ -369,6 +369,29 @@ wheels = [
 ]
 
 [[package]]
+name = "properdocs"
+version = "1.6.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "ghp-import" },
+    { name = "jinja2" },
+    { name = "markdown" },
+    { name = "markupsafe" },
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "platformdirs" },
+    { name = "pyyaml" },
+    { name = "pyyaml-env-tag" },
+    { name = "watchdog" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ec/29/f27a4e1eddf72ed3db6e47818fbafe6debbf09fd7051f9c1a007239b46ef/properdocs-1.6.7.tar.gz", hash = "sha256:adc7b16e562890af0e098a7e5b02e3a81c20894a87d6a28d345c9300de73c26e", size = 276141, upload-time = "2026-03-20T20:07:48.167Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/4d/fc923f5c85318ee8cc903566dc4e0ebe41b2dfc1d2ecf5546db232397ed6/properdocs-1.6.7-py3-none-any.whl", hash = "sha256:6fa0cfa2e01bf338f684892c8a506cf70ea88ae7f3479c933b6fa20168101cbd", size = 225406, upload-time = "2026-03-20T20:07:46.875Z" },
+]
+
+[[package]]
 name = "pygments"
 version = "2.20.0"
 source = { registry = "https://pypi.org/simple" }
@@ -638,7 +661,6 @@ dependencies = [
     { name = "markdown" },
     { name = "markupsafe" },
     { name = "mergedeep" },
-    { name = "mkdocs" },
     { name = "mkdocs-get-deps" },
     { name = "mkdocs-include-markdown-plugin" },
     { name = "mkdocs-macros-plugin" },
@@ -648,6 +670,7 @@ dependencies = [
     { name = "paginate" },
     { name = "pathspec" },
     { name = "platformdirs" },
+    { name = "properdocs" },
     { name = "pygments" },
     { name = "pymdown-extensions" },
     { name = "pyparsing" },
@@ -682,7 +705,6 @@ requires-dist = [
     { name = "markdown", specifier = "==3.10.2" },
     { name = "markupsafe", specifier = "==3.0.3" },
     { name = "mergedeep", specifier = "==1.3.4" },
-    { name = "mkdocs", specifier = "==1.6.1" },
     { name = "mkdocs-get-deps", specifier = "==0.2.2" },
     { name = "mkdocs-include-markdown-plugin", specifier = "==7.2.1" },
     { name = "mkdocs-macros-plugin", specifier = "==1.5.0" },
@@ -692,6 +714,7 @@ requires-dist = [
     { name = "paginate", specifier = "==0.5.7" },
     { name = "pathspec", specifier = "==1.0.4" },
     { name = "platformdirs", specifier = "==4.9.4" },
+    { name = "properdocs", specifier = ">=1.6.7" },
     { name = "pygments", specifier = "==2.20.0" },
     { name = "pymdown-extensions", specifier = "==10.21" },
     { name = "pyparsing", specifier = "==3.3.2" },
