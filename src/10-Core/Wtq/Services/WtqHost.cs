@@ -27,7 +27,6 @@ public class WtqHost
 	)
 	{
 		_ = Guard.Against.Null(appLifetime);
-		// _ = Guard.Against.Null(onExit);
 		_hostedServices = Guard.Against.Null(hostedServices);
 		_platformService = Guard.Against.Null(platformService);
 

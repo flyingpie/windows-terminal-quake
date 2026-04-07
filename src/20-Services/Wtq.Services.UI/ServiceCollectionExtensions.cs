@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddBlazorDesktop()
-			.AddSingleton<PhotinoBlazorApp2>()
+			.AddSingleton<WtqPhotinoBlazorApp>()
 			.AddRadzenComponents()
 			.AddTransient<Notifier>()
 			.AddTransient<WtqUIHost>();

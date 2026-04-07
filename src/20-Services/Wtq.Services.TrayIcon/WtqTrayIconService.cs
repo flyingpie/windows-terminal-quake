@@ -71,8 +71,6 @@ public sealed class WtqTrayIconService : WtqHostedService
 			TimeSpan.FromMilliseconds(200), // The action is blocking, so this value doesn't actually matter much.
 			ct =>
 			{
-				// ui.RunOnUIThread(() => _icon.MessageLoopIteration(true));
-
 				_icon.MessageLoopIteration(true);
 
 				return Task.CompletedTask;

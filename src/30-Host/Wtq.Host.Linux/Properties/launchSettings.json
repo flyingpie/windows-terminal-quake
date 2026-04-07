@@ -2,7 +2,7 @@
 	"profiles": {
 		"Config From CSProj": {
 			"commandName": "Project",
-			"commandLineArgs": "gui",
+			"_commandLineArgs": "gui",
 			"environmentVariables": {
 				"WEBKIT_DISABLE_DMABUF_RENDERER": "1",
 
