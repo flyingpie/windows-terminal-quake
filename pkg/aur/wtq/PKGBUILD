@@ -1,6 +1,6 @@
 # Maintainer: Marco van den Oever <arch@flyingpie.nl>
 pkgname=wtq
-pkgver=2.0.19
+pkgver=2.1.0
 pkgrel=1
 pkgdesc="Enable Quake-style dropdown for (almost) any application."
 arch=("x86_64")
@@ -14,7 +14,7 @@ makedepends=("dotnet-sdk>=10")
 provides=()
 conflicts=()
 source=(
-	"git+https://github.com/flyingpie/windows-terminal-quake.git#tag=v2.0.19"
+	"git+https://github.com/flyingpie/windows-terminal-quake.git#tag=v2.1.0"
 )
 noextract=()
 sha256sums=(
