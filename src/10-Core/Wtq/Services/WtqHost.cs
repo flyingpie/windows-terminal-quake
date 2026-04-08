@@ -23,11 +23,10 @@ public class WtqHost
 	public WtqHost(
 		IHostApplicationLifetime appLifetime,
 		IEnumerable<IHostedService> hostedServices,
-		IPlatformService platformService,
-		Action onExit)
+		IPlatformService platformService
+	)
 	{
 		_ = Guard.Against.Null(appLifetime);
-		_ = Guard.Against.Null(onExit);
 		_hostedServices = Guard.Against.Null(hostedServices);
 		_platformService = Guard.Against.Null(platformService);
 
@@ -51,7 +50,7 @@ public class WtqHost
 		{
 			_taskFactory.Run(DisposeAsync);
 
-			onExit();
+			// onExit();
 		});
 	}
 

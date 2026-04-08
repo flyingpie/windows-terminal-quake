@@ -1,125 +1,85 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Photino.Blazor;
 using System.IO;
-using Wtq.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Photino.Blazor;
+using Photino.NET;
 
 namespace Wtq.Services.UI;
 
-public class WtqUIHost
+public class WtqUIHost(IPlatformService platform, WtqPhotinoBlazorApp app)
 {
-	private const string MainWindowTitle = "WTQ - Main Window";
+	private readonly IPlatformService _platform = Guard.Against.Null(platform);
 
-	private readonly ILogger _log = Log.For<WtqUIHost>();
-
-	private readonly IOptions<WtqOptions> _opts;
-	private readonly IPlatformService _platform;
-	private readonly IWtqWindowService _windowService;
-	private readonly PhotinoBlazorApp _app;
-
-	private bool _isClosing;
-
-	public WtqUIHost(
-		IOptions<WtqOptions> opts,
-		IPlatformService platform,
-		IWtqBus bus,
-		IWtqWindowService windowService,
-		PhotinoBlazorApp app)
+	public void Run()
 	{
-		_app = Guard.Against.Null(app);
-		_opts = Guard.Against.Null(opts);
-		_platform = Guard.Against.Null(platform);
-		_windowService = Guard.Against.Null(windowService);
-
-		bus.OnEvent<WtqUIRequestedEvent>(_ => OpenMainWindowAsync());
-
-		SetupMainWindow();
-	}
-
-	private void SetupMainWindow()
-	{
-		_ = _app.MainWindow
-			.RegisterWindowCreatedHandler((s, a) =>
-			{
-				if (!_opts.Value.GetShowUiOnStart())
-				{
-					_ = Task.Run(CloseMainWindowAsync);
-				}
-			})
-			.RegisterWindowClosingHandler((s, a) =>
-			{
-				if (_isClosing)
-				{
-					return false;
-				}
-
-				_ = Task.Run(CloseMainWindowAsync);
-
-				return true;
-			})
+		app.MainWindow
+			//
 			.Center()
 			.SetIconFile(Path.Combine(_platform.PathToAssetsDir, "icon-v2-256-padding.png"))
 			.SetJavascriptClipboardAccessEnabled(true)
 			.SetLogVerbosity(0)
 			.SetSize(1270, 800)
-			.SetTitle(MainWindowTitle);
+			.SetTitle("WTQ - Main Window");
+
+		app.Run();
 	}
+}
 
-	/// <summary>
-	/// Close UI (like, for real, as opposed to just hiding it).
-	/// </summary>
-	public void Exit()
+public class WtqPhotinoBlazorApp
+{
+	public WtqPhotinoBlazorApp(IServiceProvider services)
 	{
-		_isClosing = true;
-		_app.MainWindow.Close();
-	}
+		var rootComponents = new RootComponentList();
+		rootComponents.Add<App>("app");
 
-	private async Task CloseMainWindowAsync()
-	{
-		_app.MainWindow.SetMinimized(true);
+		Services = services;
+		RootComponents = Services.GetService<BlazorWindowRootComponents>();
+		MainWindow = Services.GetService<PhotinoWindow>();
+		WindowManager = Services.GetService<PhotinoWebViewManager>();
+		MainWindow
+			.SetTitle("Photino.Blazor App")
+			.SetUseOsDefaultSize(false)
+			.SetUseOsDefaultLocation(false)
+			.SetWidth(1000)
+			.SetHeight(900)
+			.SetLeft(450)
+			.SetTop(100);
 
-		var w = await FindWtqMainWindowAsync().NoCtx();
-
-		if (w == null)
+		MainWindow.RegisterCustomSchemeHandler(
+			PhotinoWebViewManager.BlazorAppScheme,
+			new(HandleWebRequest)
+		);
+		foreach ((Type, string) rootComponent in rootComponents)
 		{
-			_log.LogWarning("Could not find WTQ main window");
-			return;
+			RootComponents.Add(rootComponent.Item1, rootComponent.Item2);
+		}
+	}
+
+	public IServiceProvider Services { get; }
+
+	public BlazorWindowRootComponents RootComponents { get; }
+
+	public PhotinoWindow MainWindow { get; }
+
+	public PhotinoWebViewManager WindowManager { get; }
+
+	public void Run()
+	{
+		if (string.IsNullOrWhiteSpace(MainWindow.StartUrl))
+		{
+			MainWindow.StartUrl = "/";
 		}
 
-		await w.SetTaskbarIconVisibleAsync(false).NoCtx();
+		WindowManager.Navigate(MainWindow.StartUrl);
+		MainWindow.WaitForClose();
 	}
 
-	private async Task OpenMainWindowAsync()
+	private Stream HandleWebRequest(
+		object sender,
+		string scheme,
+		string url,
+		out string contentType
+	)
 	{
-		var w = await FindWtqMainWindowAsync().NoCtx();
-
-		if (w == null)
-		{
-			return;
-		}
-
-		_app.MainWindow.SetMinimized(false);
-
-		await w.BringToForegroundAsync().NoCtx();
-		await w.SetTaskbarIconVisibleAsync(true).NoCtx();
-	}
-
-	private async Task<WtqWindow?> FindWtqMainWindowAsync()
-	{
-		for (var i = 0; i < 10; i++)
-		{
-			var windows = await _windowService.GetWindowsAsync(CancellationToken.None).NoCtx();
-
-			var mainWindow = windows.FirstOrDefault(w => w.WindowTitle == MainWindowTitle);
-
-			if (mainWindow != null)
-			{
-				return mainWindow;
-			}
-
-			await Task.Delay(TimeSpan.FromMilliseconds(200)).NoCtx();
-		}
-
-		return null;
+		return WindowManager.HandleWebRequest(sender, scheme, url, out contentType);
 	}
 }

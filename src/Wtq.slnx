@@ -19,7 +19,6 @@
 	</Folder>
 	<Folder Name="/Q20-Services/">
 		<Project Path="20-Services/Wtq.Services.API/Wtq.Services.API.csproj" />
-		<Project Path="20-Services/Wtq.Services.CLI/Wtq.Services.CLI.csproj" />
 		<Project Path="20-Services/Wtq.Services.KWin.UnitTest/Wtq.Services.KWin.UnitTest.csproj" />
 		<Project Path="20-Services/Wtq.Services.KWin/Wtq.Services.KWin.csproj" />
 		<Project Path="20-Services/Wtq.Services.Linux.UnitTest/Wtq.Services.Linux.UnitTest.csproj" />
