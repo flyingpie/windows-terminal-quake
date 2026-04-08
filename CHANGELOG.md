@@ -1,16 +1,22 @@
 # Changelog
 
 ## [vFuture]
+
 - Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
 ## [vNext]
 
 ## [v2.1.0] / 2026-xx-xx
+
+- Bugfix: GUI - The "Windows" page could break in some cases
+- Bugfix: KWin - "Return" key incorrectly mapped to "Esc"
 - Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr)
 - Docs: Added some more information on the API and event hooks
 - Refactor: Event hooks changed a little bit, see the docs for the current settings syntax
+- Refactor: Moved out docs generation, turns out it's a bit too complex and limits the docs themselves too much
 
 ## [v2.0.19] / 2025-12-31
+
 - Bugfix: GUI - "Off-Screen Locations" - Update state when changing app page.
 - Bugfix: Only consider 'attached' apps when looking for 'open' ones (caused some broken toggles just after WTQ start).
 - Feature: GUI - Debug info.
@@ -20,11 +26,13 @@
 - Maintenance: Removed 'Win32v1', replaced by 'Win32v2'.
 
 ## [v2.0.18] / 2025-11-05
+
 - Bugfix: Updated example for "Process Explorer" to correct start- and attach to new instance.
 - Bugfix: Updated CLI to load settings and fetch listening endpoint.
 - Bugfix: When a window gets minimized, WTQ could not longer toggle it.
 - Bugfix: When adding an app without any matching criteria, any window would be attached to (now only attaches when at least 1 criterion is present).
 - Feature: "Resize" option (defaults to "Always"), can be used to disable resizing the app's window (disables alignment settings). Useful for apps that don't respond well to being resized, like some Electron apps.
+
 ```jsonc
   "Apps": [
     {
@@ -33,10 +41,13 @@
   ]
 }
 ```
+
 - Feature: GUI - "Off-Screen Locations" can now be configured from the GUI.
 
 ## [v2.0.17] / 2025-08-27
+
 - Breaking change: On Windows, when using a hotkey with the "Shift" modifier and the "KeyChar" in the settings, you need to use the non-shifted character now:
+
 ```jsonc
   "Apps": [
     {
@@ -49,6 +60,7 @@
   ]
 }
 ```
+
 - Bugfix: Use "WindowHandle" as the unique window id for Win32, as that turns out to be deterministic. Also fixes the "Windows" page in the GUI.
 - Bugfix: (Windows) Some hotkey combos were broken when using the "Super" (Windows key) modifier.
 - Bugfix: (Windows) In some cases, toggling apps could lead to the selected keyboard layout disappearing (wild, I know).
@@ -62,6 +74,7 @@
 - Feature: GUI - Can show "DEBUG" and "VERBOSE" logs now, regardless of WTQ's global log level.
 - Feature: Nicer (I mean, that's what I think) out-of-the-box experience, with a (mostly empty) sample wtq.jsonc, and pops the GUI at first (with a quick "turn off" button nearby).
 - Feature: When saving settings from the GUI, special characters are no longer encoded, which makes the resulting settings file way more readable.
+
 ```jsonc
   "Apps": [
     {
@@ -76,6 +89,7 @@
 ```
 
 ## [v2.0.16] / 2025-07-05
+
 - Bugfix: Implemented missing parts for "ArgumentList" to work.
 - Bugfix: Properly close & dispose logger when the application fully exits.
 - Bugfix: Scoop - Removed "persist"-property from the Scoop manifest, since settings are loaded from the same location regardless of installation method (thanks to [Chuckie Chen](https://github.com/ChuckieChen945), #187).
@@ -95,9 +109,11 @@
 - Refactor: Windows - Reworked how window handles are found. Before, a process was looked up, and its main window could be attached to. Now, the search process starts at the list of available windows, regardless of process.
 
 ## [v2.0.15] / 2025-03-21
+
 - Bugfix: HideOnFocusLost broke
 
 ## [v2.0.14] / 2025-03-17
+
 - Bugfix: GUI - Disabled the external changes notification for now, as we don't have a straight-forward way of reliably detecting this.
 - Bugfix: GUI - Don't hide the sidebar (that was a feature, but it doesn't work for this use case).
 - Bugfix: GUI - Properly reload app data when switching from one app to the other.
@@ -113,11 +129,13 @@
 - Refactor: Windows - Changed taskbar icon visibility toggling method from messing with EXSTYLE properties to ITaskbarList.
 
 ## [v2.0.13] / 2025-02-07
+
 - Bugfix: [169](https://github.com/flyingpie/windows-terminal-quake/issues/169), missing entry from the "Keys" list, for some specific keyboard layouts.
 - Bugfix: Issue where the WinGet release wouldn't work straight away, due to working directories being weird because of the shim WinGet creates.
 - Added banner to the GUI, to highlight that it's still in preview.
 
 ## [v2.0.12] / 2025-02-06
+
 - Generate a JSON schema file on WTQ start, next to wherever **wtq.jsonc** is (e.g. **wtq.schema.json**). This provides autocompletion and validation in supported editors (such as VS Code).
 - Initial work on a graphical UI. It can be accessed through the tray icon.
 - Updated tray icon to fit in with other icons better.
@@ -127,9 +145,11 @@
 - Handle cases where we can't find an off-screen location when toggling, by falling back to instantly toggling into- and out of a black hole, instead of animating anywhere.
 
 ## [v2.0.11] / 2024-11-07
+
 - Support for KDE Plasma 5 & 6 (KWin, currently Wayland only).
 - Reworked how apps are started (mostly when WTQ starts), should fix a lot of cases where multiple instances of an app (such as Windows Terminal) are started (fixes [145](https://github.com/flyingpie/windows-terminal-quake/issues/145)).
 - Added **WindowTitleOverride**, which attempts to set the title of a window. Useful for "tagging" a window as being managed by WTQ, so they can be filtered out in other applications (see [#144](https://github.com/flyingpie/windows-terminal-quake/issues/144)).
+
 ```jsonc
 {
   "Apps": [
@@ -147,6 +167,7 @@
 WTQ will look for an empty space outside the screen, starting above, then below, then to the left, then to the right. Whichever location that does not overlap with a screen wins, in order.
 
 The order can be changed using the "OffScreenLocations" setting:
+
 ```jsonc
 {
   "Apps": [
@@ -164,9 +185,10 @@ The order can be changed using the "OffScreenLocations" setting:
 ```
 
 ## [v2.0.10] / 2024-07-16
+
 - Correctly handle multiple monitor setup, where apps that got toggled off lingered around at the top of the screen (fixes [#133](https://github.com/flyingpie/windows-terminal-quake/issues/133)).
 
-- Added options to control the animation speed and style: 
+- Added options to control the animation speed and style:
   - **AnimationDurationMs** How long the animation takes.
   - **AnimationDurationMsWhenSwitchingApps** How long the animation takes, when switching between WTQ-attached apps.
   - **AnimationTargetFps** How often to attempt to move an application window per second.
@@ -186,6 +208,7 @@ This was especially problematic when starting a conhost-hosted app (such as Powe
 - Added **AlwaysOnTop**, which forces an app to always be above other windows, even if it doesn't have focus.
 
 ## [v2.0.9] / 2024-05-20
+
 - When an app is toggled up, it retains its original screen (fixes [#64](https://github.com/flyingpie/windows-terminal-quake/issues/64)).
 - Reworked how windows are tracked and attached to, should fix a lot of "Main window handle not available yet"-issues.
 - Added support for multiple configuration file locations (see docs for more info).
@@ -194,6 +217,7 @@ This was especially problematic when starting a conhost-hosted app (such as Powe
 - Added "HideOnFocusLost", which controls whether an app should be toggled out if another app gains focus.
 
 Globally, for all apps:
+
 ```json
 {
   "HideOnFocusLost": true | false
@@ -201,6 +225,7 @@ Globally, for all apps:
 ```
 
 Or per app:
+
 ```json
 {
   "Apps": [
@@ -214,10 +239,12 @@ Or per app:
 ```
 
 ## [v2.0.8] / 2024-04-28
+
 - Automated Scoop and WinGet manifest generation.
 - Automated GitHub release creation.
 
 ## [v2.0.7] / 2024-04-19
+
 - Added opacity;
 - Toggleable task bar icon visibility.
 
