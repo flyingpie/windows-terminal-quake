@@ -9,14 +9,14 @@
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.5"/>
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.14.15"/>
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.269"/>
-		<PackageVersion Include="Namotion.Reflection" Version="3.4.3"/>
+		<PackageVersion Include="Namotion.Reflection" Version="3.5.1"/>
 		<PackageVersion Include="SharpHook" Version="7.1.1"/>
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.6.1"/>
-		<PackageVersion Include="Tmds.DBus" Version="0.90.3"/>
-		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.90.3"/>
+		<PackageVersion Include="Tmds.DBus" Version="0.92.0"/>
+		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.92.0"/>
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15"/>
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.21.0.135717"/>
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.22.0.136894"/>
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556"/>
 		<!-- Build -->
 		<PackageVersion Include="Microsoft.Build" Version="18.4.0"/>
@@ -28,10 +28,10 @@
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
-		<PackageVersion Include="Radzen.Blazor" Version="10.0.2"/>
+		<PackageVersion Include="Radzen.Blazor" Version="10.2.1"/>
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5"/>
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.13.8"/>
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.13.20"/>
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.3.1"/>
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0"/>
@@ -41,10 +41,10 @@
 		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0"/>
 		<!-- Serialization -->
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.4"/>
-		<PackageVersion Include="NJsonSchema" Version="11.5.2"/>
+		<PackageVersion Include="NJsonSchema" Version="11.6.0"/>
 		<!-- Testing -->
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0"/>
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.4.0"/>
 		<PackageVersion Include="Moq" Version="4.20.72"/>
-		<PackageVersion Include="MSTest" Version="4.1.0"/>
+		<PackageVersion Include="MSTest" Version="4.2.1"/>
 	</ItemGroup>
 </Project>
