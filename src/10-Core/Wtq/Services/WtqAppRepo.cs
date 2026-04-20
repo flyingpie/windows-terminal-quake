@@ -87,6 +87,21 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	}
 
 	/// <inheritdoc/>
+	public IEnumerable<WtqApp> GetAllOpen()
+	{
+		return _apps.Values.Where(a => a is { IsAttached: true, IsOpen: true });
+	}
+
+	/// <inheritdoc/>
+	public WtqApp? GetOpenOnScreen(Rectangle screenRect)
+	{
+		return _apps.Values.FirstOrDefault(a =>
+			a is { IsAttached: true, IsOpen: true } &&
+			a.CurrentScreenRect.HasValue &&
+			a.CurrentScreenRect.Value.IntersectsWith(screenRect));
+	}
+
+	/// <inheritdoc/>
 	public WtqApp? GetPrimary()
 	{
 		return _apps.Values.FirstOrDefault();

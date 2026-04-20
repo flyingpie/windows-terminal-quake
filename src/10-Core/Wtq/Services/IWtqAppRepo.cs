@@ -28,6 +28,18 @@ public interface IWtqAppRepo
 	WtqApp? GetOpen();
 
 	/// <summary>
+	/// Returns all apps that are currently toggled onto the screen.
+	/// </summary>
+	IEnumerable<WtqApp> GetAllOpen();
+
+	/// <summary>
+	/// Returns the app that is currently toggled onto a screen that overlaps the given <paramref name="screenRect"/> (if any).
+	/// Used for per-screen app management in multi-monitor setups.
+	/// </summary>
+	WtqApp? GetOpenOnScreen(
+		Rectangle screenRect);
+
+	/// <summary>
 	/// Returns the "primary" app, currently just the first one in the settings list (if any).
 	/// </summary>
 	WtqApp? GetPrimary();

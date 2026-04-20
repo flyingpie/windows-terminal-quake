@@ -16,4 +16,14 @@ public class FeatureFlags
 	/// While implementing this, some subtle issues were encountered. Although all the known ones have been fixed, it's enough of a change that we're feature-flagging it for a while.
 	/// </summary>
 	public bool SharpHook { get; set; }
+
+	/// <summary>
+	/// When enabled, allows one WTQ app per screen instead of one globally.<br/>
+	/// Toggling an app on a screen only closes other WTQ apps on that same screen, allowing apps on
+	/// different monitors to remain open simultaneously.<br/>
+	/// <br/>
+	/// When disabled, restores the legacy behavior where toggling any app closes the previously-open app
+	/// regardless of which screen it was on.
+	/// </summary>
+	public bool PerScreenApps { get; set; } = true;
 }
