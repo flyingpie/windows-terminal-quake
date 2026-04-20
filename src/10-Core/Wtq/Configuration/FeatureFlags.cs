@@ -21,11 +21,11 @@ public class FeatureFlags
 
 	/// <summary>
 	/// When enabled, allows one WTQ app per screen instead of one globally.<br/>
-	/// Toggling an app on a screen only closes other WTQ apps on that same screen, allowing apps on
-	/// different monitors to remain open simultaneously.<br/>
+	/// Toggling an app on a screen only closes other WTQ apps on that same screen,
+	/// allowing apps on different monitors to remain open simultaneously.<br/>
 	/// <br/>
-	/// When disabled, restores the legacy behavior where toggling any app closes the previously-open app
-	/// regardless of which screen it was on.
+	/// When disabled, restores the legacy behavior where toggling any app closes the
+	/// previously-open app regardless of which screen it was on.
 	/// </summary>
 	[DefaultValue(true)]
 	[Display(Name = "Per-screen apps", Prompt = "Allow one app per monitor")]
