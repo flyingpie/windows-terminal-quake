@@ -36,6 +36,7 @@
 	private void Reload()
 	{
 		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+		GlobalOpts.FeatureFlags ??= new FeatureFlags();
 	}
 
 }
