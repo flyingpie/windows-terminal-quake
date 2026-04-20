@@ -86,6 +86,9 @@
 		<RadzenFieldset Text="Behavior">
 			<RadzenStack Gap="1rem">
 
+				<!-- Per-screen apps -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.FeatureFlags!.PerScreenApps"	Set="v => GlobalOpts.FeatureFlags!.PerScreenApps = v ?? true"	Default="() => (bool?)true" />
+
 				<!-- Always on top -->
 				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v"					Default="() => GlobalOpts.AlwaysOnTop" />
 
