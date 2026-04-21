@@ -163,4 +163,22 @@ public static class WtqAppOptionsExtensions
 
 		return app.GetVerticalScreenCoverage() / 100f;
 	}
+
+	/// <inheritdoc cref="WtqSharedOptions.VerticalScreenCoverageSecondScreen"/>
+	public static float GetVerticalScreenCoverageForSecondScreen(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<float>(o => o.VerticalScreenCoverageSecondScreen, app, app.Global);
+	}
+
+	/// <summary>
+	/// <see cref="WtqSharedOptions.VerticalScreenCoverageSecondScreen"/> as an index (0 - 1).
+	/// </summary>
+	public static float GetVerticalScreenCoverageIndexForSecondScreen(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return app.GetVerticalScreenCoverageForSecondScreen() / 100f;
+	}
 }

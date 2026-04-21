@@ -4,6 +4,7 @@ namespace Wtq.Services;
 public class WtqAppToggleService(
 	IWtqTargetScreenRectProvider targetScreenRectProvider,
 	IWtqWindowRectProvider windowRectProvider,
+	IWtqScreenInfoProvider screenInfoProvider,
 	IWtqTween tween)
 	: IWtqAppToggleService
 {
@@ -18,6 +19,7 @@ public class WtqAppToggleService(
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
 	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider = Guard.Against.Null(targetScreenRectProvider);
 	private readonly IWtqWindowRectProvider _windowRectProvider = Guard.Against.Null(windowRectProvider);
+	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
 
 	/// <inheritdoc/>
@@ -31,6 +33,11 @@ public class WtqAppToggleService(
 		// Get rect of the screen where the app needs to go to.
 		// Usually the screen with the cursor.
 		var screenRectDst = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
+
+		// Determine whether the target screen is the primary monitor,
+		// so we can choose the correct vertical coverage setting.
+		var primaryScreenRect = await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
+		var isPrimaryScreen = screenRectDst.IntersectsWith(primaryScreenRect);
 
 		// Get current window rect.
 		// Used to grab the current size, if we're not allowed to resize the window.
@@ -52,7 +59,7 @@ public class WtqAppToggleService(
 		// predictable animations.
 		//
 		// The "dest" rect, where we want the app to move to.
-		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
+		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options, isPrimaryScreen).NoCtx();
 
 		// The "source" rect, where the window is coming from.
 		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options).NoCtx();
@@ -70,6 +77,13 @@ public class WtqAppToggleService(
 			await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
 			return;
 		}
+
+		// Pre-position the window to the off-screen source location BEFORE resizing.
+		// This prevents cross-monitor WM_DPICHANGED when the window is at an unexpected
+		// position (e.g., on a different-DPI monitor from a previous session). Resizing at
+		// the wrong position can span multiple monitors, triggering DPI changes that cause
+		// the target app to fight WTQ's positioning.
+		await app.MoveWindowAsync(windowRectSrc.Value.Location).NoCtx();
 
 		// Resize window.
 		await app.ResizeWindowAsync(windowRectDst.Size).NoCtx();
