@@ -70,8 +70,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// <br/>
 	/// By setting this to <b>Never</b>, the app window size will be maintained.<br/>
 	/// <br/>
-	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
-	/// window clears its contents (seems to be most common with Electron apps).
+	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a window clears its contents (seems to be most common with Electron apps).
 	/// </summary>
 	[DefaultValue(Resizing.Always)]
 	[Display(GroupName = Gn.Position, Name = "Resize app window")]
