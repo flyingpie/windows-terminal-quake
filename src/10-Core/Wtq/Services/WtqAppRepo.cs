@@ -93,9 +93,9 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	}
 
 	/// <inheritdoc/>
-	public WtqApp? GetOpenOnScreen(Rectangle screenRect)
+	public IEnumerable<WtqApp> GetOpenOnScreen(Rectangle screenRect)
 	{
-		return _apps.Values.FirstOrDefault(a =>
+		return _apps.Values.Where(a =>
 			a is { IsAttached: true, IsOpen: true } &&
 			a.CurrentScreenRect.HasValue &&
 			a.CurrentScreenRect.Value.IntersectsWith(screenRect));

@@ -11,19 +11,19 @@ public interface IWtqAppRepo
 	IEnumerable<WtqApp> GetAll();
 
 	/// <summary>
-	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config (if any).
+	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config.
 	/// </summary>
 	WtqApp? GetByName(
 		string name);
 
 	/// <summary>
-	/// Returns the <see cref="WtqApp"/> instance for the specified <paramref name="window"/> (if any).
+	/// Returns the <see cref="WtqApp"/> instance for the specified <paramref name="window"/>.
 	/// </summary>
 	WtqApp? GetByWindow(
 		WtqWindow window);
 
 	/// <summary>
-	/// Returns the app that is currently toggled onto the screen (if any).
+	/// Returns the app that is currently toggled onto the screen.
 	/// </summary>
 	WtqApp? GetOpen();
 
@@ -33,14 +33,14 @@ public interface IWtqAppRepo
 	IEnumerable<WtqApp> GetAllOpen();
 
 	/// <summary>
-	/// Returns the app that is currently toggled onto a screen that overlaps the given <paramref name="screenRect"/> (if any).
+	/// Returns the apps that are currently toggled onto a screen that overlaps the given <paramref name="screenRect"/>.
 	/// Used for per-screen app management in multi-monitor setups.
 	/// </summary>
-	WtqApp? GetOpenOnScreen(
+	IEnumerable<WtqApp> GetOpenOnScreen(
 		Rectangle screenRect);
 
 	/// <summary>
-	/// Returns the "primary" app, currently just the first one in the settings list (if any).
+	/// Returns the "primary" app, currently just the first one in the settings list.
 	/// </summary>
 	WtqApp? GetPrimary();
 }

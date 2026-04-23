@@ -11,7 +11,7 @@ public sealed class WtqService : WtqHostedService
 	private readonly ILogger _log;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
-	private readonly IWtqScreenInfoProvider _screenInfoProvider;
+	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider;
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
@@ -21,13 +21,13 @@ public sealed class WtqService : WtqHostedService
 		ILogger<WtqService> log,
 		IWtqAppRepo appRepo,
 		IWtqBus bus,
-		IWtqScreenInfoProvider screenInfoProvider,
+		IWtqTargetScreenRectProvider targetScreenRectProvider,
 		IOptionsMonitor<WtqOptions> opts)
 	{
 		_log = Guard.Against.Null(log);
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
-		_screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+		_targetScreenRectProvider = Guard.Against.Null(targetScreenRectProvider);
 		_opts = Guard.Against.Null(opts);
 
 		_bus.OnEvent<WtqAppToggledEvent>(OnAppToggledEventAsync);
@@ -85,19 +85,29 @@ public sealed class WtqService : WtqHostedService
 			if (perScreen)
 			{
 				// Per-screen mode: only close apps on the same screen as the target.
-				var targetScreen = await _screenInfoProvider.GetScreenWithCursorAsync().NoCtx();
+				// Use the target screen rect provider so the "same screen" determination
+				// respects the app's PreferMonitor setting (Primary, AtIndex, WithCursor).
+				var targetScreen = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
 
-				var openOnScreen = _appRepo.GetOpenOnScreen(targetScreen);
-				if (openOnScreen != null && openOnScreen != app)
+				// Close all open apps on the same screen (handles edge cases where
+				// multiple apps end up on one screen due to stale or missing state).
+				var openOnScreen = _appRepo.GetOpenOnScreen(targetScreen)
+					.Where(a => a != app)
+					.ToList();
+
+				if (openOnScreen.Count > 0)
 				{
-					_log.LogInformation(
-						"Closing app '{AppClosing}' on same screen, opening app '{AppOpening}'",
-						openOnScreen,
-						app);
+					foreach (var toClose in openOnScreen)
+					{
+						_log.LogInformation(
+							"Closing app '{AppClosing}' on same screen, opening app '{AppOpening}'",
+							toClose,
+							app);
 
-					_bus.Publish(new WtqAppToggledOffEvent(openOnScreen.Name, true));
+						_bus.Publish(new WtqAppToggledOffEvent(toClose.Name, true));
 
-					await openOnScreen.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+						await toClose.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+					}
 
 					_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
 
