@@ -37,7 +37,10 @@ public class WtqAppToggleService(
 		// Determine whether the target screen is the primary monitor,
 		// so we can choose the correct vertical coverage setting.
 		var primaryScreenRect = await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
-		var isPrimaryScreen = screenRectDst.IntersectsWith(primaryScreenRect);
+
+		// Use exact equality rather than IntersectsWith, since overlapping or
+		// workarea-adjusted screen rects could misclassify a non-primary screen.
+		var isPrimaryScreen = screenRectDst.Equals(primaryScreenRect);
 
 		// Get current window rect.
 		// Used to grab the current size, if we're not allowed to resize the window.

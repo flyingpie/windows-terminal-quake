@@ -110,7 +110,6 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// Useful for setups where the primary monitor has a taskbar (requiring coverage &lt; 100%)
 	/// but secondary monitors occupy the full screen height.
 	/// </summary>
-	[DefaultValue(100f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical coverage (secondary screen)", Prompt = "Percentage")]
 	[Range(0, 100)]
 	[JsonPropertyOrder(4006)]
