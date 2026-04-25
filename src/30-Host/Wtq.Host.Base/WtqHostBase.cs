@@ -38,7 +38,7 @@ public abstract class WtqHostBase
 		{
 			var log = Log.For<WtqHostBase>();
 			log.LogInformation("Process exit");
-			
+
 			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
 			Log.CloseAndFlush();
 		};
