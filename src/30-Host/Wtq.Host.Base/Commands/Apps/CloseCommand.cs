@@ -1,4 +1,4 @@
-namespace Wtq.Services.CLI.Commands.Apps;
+namespace Wtq.Host.Base.Commands.Apps;
 
 [Command(Parent = typeof(AppsCommand))]
 public class CloseCommand(HttpClient client) : IAsyncCommand

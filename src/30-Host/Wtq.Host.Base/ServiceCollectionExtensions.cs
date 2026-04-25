@@ -2,12 +2,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.IO.Pipes;
 using System.Net.Sockets;
-using Wtq.Configuration;
-using Wtq.Exceptions;
-using Wtq.Services.CLI.Commands;
-using Wtq.Services.CLI.Commands.Apps;
+using Wtq.Host.Base.Commands;
+using Wtq.Host.Base.Commands.Apps;
+using Wtq.Services;
 
-namespace Wtq.Services.CLI;
+namespace Wtq.Host.Base;
 
 public static class ServiceCollectionExtensions
 {
@@ -16,6 +15,7 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
+			.AddScoped<AppRootCommand>()
 			.AddScoped<AppsCommand>()
 			.AddScoped<CloseCommand>()
 			.AddScoped<InfoCommand>()
