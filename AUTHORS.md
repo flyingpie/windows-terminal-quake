@@ -29,6 +29,7 @@ Add names from issues and discussions.
 * [Mike F](https://github.com/mikef-nl)
 * [Morten Lyng](https://github.com/LordLyng)
 * [Muko](https://github.com/Muko-Tabi)
+* [Nebez Kassem](https://github.com/nabaxo)
 * [Neil Santos](https://github.com/nlsantos)
 * [NikhilSaini38](https://github.com/NikhilSaini38)
 * [prutkdmi](https://github.com/prutkdmi)
