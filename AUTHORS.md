@@ -29,6 +29,7 @@ Add names from issues and discussions.
 * [Muko](https://github.com/Muko-Tabi)
 * [Neil Santos](https://github.com/nlsantos)
 * [NikhilSaini38](https://github.com/NikhilSaini38)
+* [prutkdmi](https://github.com/prutkdmi)
 * [Rafael Pereira](https://github.com/bsides)
 * [Raphael Mobis Tacla](https://github.com/rmobis)
 * [Sait Sami Kocataş](https://github.com/Deliganli)
