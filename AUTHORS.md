@@ -15,6 +15,7 @@ Add names from issues and discussions.
 * [Alex (SkeLLLa)](https://github.com/SkeLLLa)
 * [Avestura](https://github.com/avestura)
 * [Christian Käser](https://github.com/dfyx)
+* [Chuckie Chen](https://github.com/ChuckieChen945)
 * [Douglas Lara](https://github.com/douglara)
 * [Jacky](https://github.com/possum-enjoyer)
 * [Jannik Stuckstätte](https://github.com/einwickler)
