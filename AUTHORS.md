@@ -21,6 +21,7 @@ Add names from issues and discussions.
 * [Maarten](https://github.com/survivorbat)
 * [Mark Johnson](https://github.com/marxjohnson)
 * [Markus Moser](https://github.com/markusmo3)
+* [Maya](https://github.com/aarchangel64)
 * [metya](https://github.com/metya)
 * [Mike F](https://github.com/mikef-nl)
 * [Morten Lyng](https://github.com/LordLyng)
