@@ -2,18 +2,20 @@
 
 ## [vFuture]
 
-- Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
-
 ## [vNext]
 
-## [v2.1.0] / 2026-xx-xx
+## [v2.2.0] / 2026-xx-xx
+- Bugfix: On Linux, logout or shutdown was blocked by WTQ.
+- Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
-- Bugfix: GUI - The "Windows" page could break in some cases
-- Bugfix: KWin - "Return" key incorrectly mapped to "Esc"
-- Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr)
-- Docs: Added some more information on the API and event hooks
-- Refactor: Event hooks changed a little bit, see the docs for the current settings syntax
-- Refactor: Moved out docs generation, turns out it's a bit too complex and limits the docs themselves too much
+## [v2.1.0] / 2026-04-08
+
+- Bugfix: GUI - The "Windows" page could break in some cases.
+- Bugfix: KWin - "Return" key incorrectly mapped to "Esc".
+- Bugfix: Windows framework-dependent build was missing "wtq.exe" (thanks to https://github.com/bllngr).
+- Docs: Added some more information on the API and event hooks.
+- Refactor: Event hooks changed a little bit, see the docs for the current settings syntax.
+- Refactor: Moved out docs generation, turns out it's a bit too complex and limits the docs themselves too much.
 
 ## [v2.0.19] / 2025-12-31
 
