@@ -49,8 +49,6 @@ public class WtqHost
 		_ = appLifetime.ApplicationStopped.Register(() =>
 		{
 			_taskFactory.Run(DisposeAsync);
-
-			// onExit();
 		});
 	}
 
