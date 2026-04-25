@@ -35,6 +35,14 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public bool? AlwaysOnTop { get; set; }
 
 	/// <summary>
+	/// TODO
+	/// </summary>
+	[DefaultValue(Wc.Exclusive.Always)]
+	[Display(GroupName = Gn.Behavior, Name = "Exclusive")]
+	[JsonPropertyOrder(3002)]
+	public Exclusive? Exclusive { get; set; }
+
+	/// <summary>
 	/// Whether the app should be toggled off when another app gets focus.
 	/// </summary>
 	[DefaultValue(Wc.HideOnFocusLost.Always)]

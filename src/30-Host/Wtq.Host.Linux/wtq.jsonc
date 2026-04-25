@@ -14,13 +14,15 @@
 			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
 			"FileName": "dolphin",
+			"Exclusive": "Never",
 			"Resize": "Never"
 		},
 
 		{
 			"Name": "SystemMonitor",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
-			"FileName": "plasma-systemmonitor"
+			"FileName": "plasma-systemmonitor",
+			"Exclusive": "Never"
 		}
 	],
 

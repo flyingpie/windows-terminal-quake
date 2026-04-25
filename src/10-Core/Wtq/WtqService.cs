@@ -58,21 +58,24 @@ public sealed class WtqService : WtqHostedService
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 
-		// "Switching apps"
-		// If a previously toggled app (that is not the to-be-toggled app) is still open, close it first.
-		var open = _appRepo.GetOpen();
-		if (open != null && open != app)
+		// If this apps wants to be the only active one, see if we need to toggle off other apps first.
+		if (app.Options.Exclusive == Exclusive.Always)
 		{
-			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+			// "Switching apps"
+			// If previously toggled apps (that are not the to-be-toggled app) are still open, close them first.
+			foreach (var open in _appRepo.GetOpen().Where(o => o != app).ToList())
+			{
+				_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
 
-			_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
+				_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
 
-			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+				await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
 
-			_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
+				_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
 
-			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
-			return;
+				await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+				return;
+			}
 		}
 
 		// "Toggling app"

@@ -35,16 +35,16 @@ public class PostCloseAppEndpoint : ControllerBase
 		// If no specific app name was specified, just close whatever app is currently open.
 		else
 		{
-			var open = appRepo.GetOpen();
-
-			// Make sure an open app was found.
-			if (open == null)
-			{
-				return BadRequest();
-			}
-
-			// If an open app was found, close it.
-			await open.CloseAsync().NoCtx();
+			// var open = appRepo.GetOpen();
+			//
+			// // Make sure an open app was found.
+			// if (open == null)
+			// {
+			// 	return BadRequest();
+			// }
+			//
+			// // If an open app was found, close it.
+			// await open.CloseAsync().NoCtx();
 		}
 
 		return Ok();

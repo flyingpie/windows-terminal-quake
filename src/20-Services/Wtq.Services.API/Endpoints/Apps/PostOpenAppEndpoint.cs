@@ -32,7 +32,7 @@ public class PostOpenAppEndpoint : ControllerBase
 		if (openApp != null)
 		{
 			// If another app is already open, close it first.
-			await openApp.CloseAsync().NoCtx();
+			// await openApp.CloseAsync().NoCtx();
 		}
 
 		// Open the requested app.
