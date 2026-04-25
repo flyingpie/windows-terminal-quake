@@ -37,6 +37,7 @@ Add names from issues and discussions.
 * [Scott Hanselman](https://github.com/shanselman)
 * [Sergio Compean](https://github.com/surgiie)
 * [shrddr](https://github.com/shrddr)
+* [Taivas Jumala](https://github.com/TaivasJumala)
 * [The Pigeon Of Time](https://github.com/thepigeonoftime)
 * [Tim Gilevich](https://github.com/dwarfovich)
 * [Tim Molderez](https://github.com/timmolderez)
