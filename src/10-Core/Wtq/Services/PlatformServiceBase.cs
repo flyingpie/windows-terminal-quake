@@ -44,6 +44,9 @@ public abstract class PlatformServiceBase : IPlatformService
 	public virtual string PathToAppDir { get; }
 
 	/// <inheritdoc/>
+	public virtual string PathToAppExe => Path.Combine(PathToAppDir, "wtq");
+
+	/// <inheritdoc/>
 	public virtual string PathToAssetsDir =>
 		Path.Combine(PathToAppDir, "assets");
 

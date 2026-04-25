@@ -50,6 +50,9 @@ public class WindowsPlatformService : PlatformServiceBase
 		GetSystemUsesLightTheme() ?? false ? OsColorMode.Light : OsColorMode.Dark;
 
 	/// <inheritdoc/>
+	public override string PathToAppExe => Path.Combine(PathToAppDir, "wtq.exe");
+
+	/// <inheritdoc/>
 	public override string PathToLogsDir =>
 		PathToTempDir;
 
