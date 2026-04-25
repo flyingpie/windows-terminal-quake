@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Photino.Blazor;
 using Radzen;
 
 namespace Wtq.Services.UI;
@@ -10,7 +11,10 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
+			.AddBlazorDesktop()
 			.AddRadzenComponents()
-			.AddTransient<Notifier>();
+			.AddSingleton<WtqPhotinoBlazorApp>()
+			.AddTransient<Notifier>()
+			.AddTransient<WtqUIHost>();
 	}
 }

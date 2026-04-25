@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
 			.AddScoped<AppRootCommand>()
 			.AddScoped<AppsCommand>()
 			.AddScoped<CloseCommand>()
+			.AddScoped<GuiCommand>()
 			.AddScoped<InfoCommand>()
 			.AddScoped<ListCommand>()
 			.AddScoped<OpenCommand>()
