@@ -66,6 +66,12 @@ public sealed class WtqApp : IAsyncDisposable
 	public WtqAppOptions Options => _optionsAccessor();
 
 	/// <summary>
+	/// The screen rectangle that this app is currently displayed on, or null if the app is toggled off.<br/>
+	/// Used to track per-screen open state for multi-monitor setups.
+	/// </summary>
+	public Rectangle? CurrentScreenRect { get; set; }
+
+	/// <summary>
 	/// The <see cref="WtqWindow"/> that is tracked by this app (if any).
 	/// </summary>
 	public WtqWindow? Window { get; private set; }
@@ -81,6 +87,7 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		IsOpen = false;
+		CurrentScreenRect = null;
 
 		if (!IsAttached)
 		{
@@ -206,6 +213,9 @@ public sealed class WtqApp : IAsyncDisposable
 
 		// Move app onto screen.
 		await _toggler.ToggleOnAsync(this, mods).NoCtx();
+
+		// Track which screen this app is now displayed on.
+		CurrentScreenRect = await GetScreenRectAsync().NoCtx();
 
 		return true;
 	}

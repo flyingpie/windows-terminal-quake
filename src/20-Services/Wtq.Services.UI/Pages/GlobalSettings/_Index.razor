@@ -36,6 +36,7 @@
 	private void Reload()
 	{
 		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+		GlobalOpts.FeatureFlags ??= new FeatureFlags();
 	}
 
 }
@@ -127,6 +128,9 @@
 
 		<RadzenFieldset Text="Monitor">
 			<RadzenStack Gap="1rem">
+
+				<!-- Per-screen apps -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.FeatureFlags!.PerScreenApps"	Set="v => GlobalOpts.FeatureFlags!.PerScreenApps = v ?? true"	Default="() => (bool?)true" />
 
 				<!-- Prefer monitor -->
 				<WtqSettingRadio					TProperty="PreferMonitor"			Get="() => GlobalOpts.PreferMonitor"				Set="v => GlobalOpts.PreferMonitor = v"					Default="() => GlobalOpts.PreferMonitor" />

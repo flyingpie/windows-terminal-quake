@@ -11,6 +11,8 @@ public sealed class WtqService : WtqHostedService
 	private readonly ILogger _log;
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
+	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider;
+	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
 	private WtqWindow? _lastNonWtqWindow;
@@ -18,11 +20,15 @@ public sealed class WtqService : WtqHostedService
 	public WtqService(
 		ILogger<WtqService> log,
 		IWtqAppRepo appRepo,
-		IWtqBus bus)
+		IWtqBus bus,
+		IWtqTargetScreenRectProvider targetScreenRectProvider,
+		IOptionsMonitor<WtqOptions> opts)
 	{
 		_log = Guard.Against.Null(log);
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
+		_targetScreenRectProvider = Guard.Against.Null(targetScreenRectProvider);
+		_opts = Guard.Against.Null(opts);
 
 		_bus.OnEvent<WtqAppToggledEvent>(OnAppToggledEventAsync);
 		_bus.OnEvent<WtqWindowFocusChangedEvent>(OnWindowFocusChangedEventAsync);
@@ -58,24 +64,8 @@ public sealed class WtqService : WtqHostedService
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 
-		// "Switching apps"
-		// If a previously toggled app (that is not the to-be-toggled app) is still open, close it first.
-		var open = _appRepo.GetOpen();
-		if (open != null && open != app)
-		{
-			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+		var perScreen = _opts.CurrentValue.FeatureFlags?.PerScreenApps ?? true;
 
-			_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
-
-			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
-
-			_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
-
-			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
-			return;
-		}
-
-		// "Toggling app"
 		if (app.IsOpen)
 		{
 			// Toggle OFF
@@ -92,12 +82,71 @@ public sealed class WtqService : WtqHostedService
 		else
 		{
 			// Toggle ON
-			_log.LogInformation("Opening previously closed app '{App}'", app);
+			if (perScreen)
+			{
+				// Per-screen mode: only close apps on the same screen as the target.
+				// Use the target screen rect provider so the "same screen" determination
+				// respects the app's PreferMonitor setting (Primary, AtIndex, WithCursor).
+				var targetScreen = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
 
-			_bus.Publish(new WtqAppToggledOnEvent(app.Name, false));
+				// Close all open apps on the same screen (handles edge cases where
+				// multiple apps end up on one screen due to stale or missing state).
+				var openOnScreen = _appRepo.GetOpenOnScreen(targetScreen)
+					.Where(a => a != app)
+					.ToList();
 
-			// Open app.
-			await app.OpenAsync().NoCtx();
+				if (openOnScreen.Count > 0)
+				{
+					foreach (var toClose in openOnScreen)
+					{
+						_log.LogInformation(
+							"Closing app '{AppClosing}' on same screen, opening app '{AppOpening}'",
+							toClose,
+							app);
+
+						_bus.Publish(new WtqAppToggledOffEvent(toClose.Name, true));
+
+						await toClose.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+					}
+
+					_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
+
+					await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+				}
+				else
+				{
+					_log.LogInformation("Opening previously closed app '{App}'", app);
+
+					_bus.Publish(new WtqAppToggledOnEvent(app.Name, false));
+
+					await app.OpenAsync().NoCtx();
+				}
+			}
+			else
+			{
+				// Legacy mode: close any open app globally before opening the new one.
+				var open = _appRepo.GetOpen();
+				if (open != null && open != app)
+				{
+					_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+
+					_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
+
+					await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+
+					_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
+
+					await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+				}
+				else
+				{
+					_log.LogInformation("Opening previously closed app '{App}'", app);
+
+					_bus.Publish(new WtqAppToggledOnEvent(app.Name, false));
+
+					await app.OpenAsync().NoCtx();
+				}
+			}
 		}
 	}
 
