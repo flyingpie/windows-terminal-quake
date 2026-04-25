@@ -13,6 +13,7 @@ Add names from issues and discussions.
 * [Adam](https://github.com/avere001)
 * [Alex (aleybe)](https://github.com/aleybe)
 * [Alex (SkeLLLa)](https://github.com/SkeLLLa)
+* [Avestura](https://github.com/avestura)
 * [Christian Käser](https://github.com/dfyx)
 * [Douglas Lara](https://github.com/douglara)
 * [Jacky](https://github.com/possum-enjoyer)
