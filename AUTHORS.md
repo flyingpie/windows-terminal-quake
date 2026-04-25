@@ -17,6 +17,7 @@ Add names from issues and discussions.
 * [Douglas Lara](https://github.com/douglara)
 * [Jacky](https://github.com/possum-enjoyer)
 * [Jannik Stuckstätte](https://github.com/einwickler)
+* [Julius Bullinger](https://github.com/bllngr)
 * [KateReller](https://github.com/KateReller)
 * [Maarten](https://github.com/survivorbat)
 * [Mark Johnson](https://github.com/marxjohnson)
