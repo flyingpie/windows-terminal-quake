@@ -7,7 +7,11 @@
 		{
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-			"FileName": "konsole"
+			"FileName": "konsole",
+			"Exclusive": "Never",
+			"HideOnFocusLost": "Never",
+			"HorizontalScreenCoverage": 45,
+			"HorizontalAlign": "Left"
 		},
 		
 		{
@@ -15,14 +19,15 @@
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
 			"FileName": "dolphin",
 			"Exclusive": "Never",
-			"Resize": "Never"
+			"HideOnFocusLost": "Never",
+			"HorizontalScreenCoverage": 45,
+			"HorizontalAlign": "Right"
 		},
 
 		{
 			"Name": "SystemMonitor",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "3" }],
-			"FileName": "plasma-systemmonitor",
-			"Exclusive": "Never"
+			"FileName": "plasma-systemmonitor"
 		}
 	],
 

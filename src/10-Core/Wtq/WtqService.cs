@@ -6,6 +6,7 @@ namespace Wtq;
 /// Orchestrates toggling on- and off of apps, and sending focus to the right window.
 /// </summary>
 // TODO: Better name.
+// TODO: Class desperately needs unit tests.
 public sealed class WtqService : WtqHostedService
 {
 	private readonly ILogger _log;
@@ -60,22 +61,30 @@ public sealed class WtqService : WtqHostedService
 
 		// "Switching apps"
 		// If previously toggled apps (that are not the to-be-toggled app) are still open, close them first.
+		var isSwitching = false;
 		foreach (var open in _appRepo.GetOpen().Where(o => o != app).ToList())
 		{
 			// If either this app, or the active one, wants to be the _only_ active one, close the open one.
-			if (app.Options.Exclusive == Exclusive.Always || open.Options.Exclusive == Exclusive.Always)
+			if (app.Options.GetExclusive() != Exclusive.Always && open.Options.GetExclusive() != Exclusive.Always)
 			{
-				_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
-
-				_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
-
-				await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
-
-				_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
-
-				await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
-				return;
+				continue;
 			}
+
+			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+
+			_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
+
+			await open.CloseAsync(ToggleModifiers.SwitchingApps).NoCtx();
+
+			isSwitching = true;
+		}
+
+		if (isSwitching)
+		{
+			_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
+
+			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+			return;
 		}
 
 		// "Toggling app"
@@ -106,6 +115,7 @@ public sealed class WtqService : WtqHostedService
 
 	/// <summary>
 	/// Handles events where the focus moved to another window.
+	/// TODO: With the addition of multiple apps active, this needs some rework.
 	/// </summary>
 	private async Task OnWindowFocusChangedEventAsync(WtqWindowFocusChangedEvent ev)
 	{

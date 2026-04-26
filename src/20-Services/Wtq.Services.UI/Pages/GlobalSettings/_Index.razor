@@ -89,6 +89,9 @@
 				<!-- Always on top -->
 				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.AlwaysOnTop"					Set="v => GlobalOpts.AlwaysOnTop = v"					Default="() => GlobalOpts.AlwaysOnTop" />
 
+				<!-- Exclusive -->
+				<WtqSettingRadio					TProperty="Exclusive"				Get="() => GlobalOpts.Exclusive"					Set="v => GlobalOpts.Exclusive = v"						Default="() => GlobalOpts.Exclusive" />
+
 				<!-- Hide on focus lost -->
 				<WtqSettingRadio					TProperty="HideOnFocusLost"			Get="() => GlobalOpts.HideOnFocusLost"				Set="v => GlobalOpts.HideOnFocusLost = v"				Default="() => GlobalOpts.HideOnFocusLost" />
 
