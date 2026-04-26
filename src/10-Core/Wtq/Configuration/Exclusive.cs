@@ -15,20 +15,14 @@ public enum Exclusive
 	None = 0,
 
 	/// <summary>
-	/// Toggle off the app when focus is lost.
+	/// App can co-exist with other non-exclusive apps.
 	/// </summary>
 	[Display(Name = "Always")]
 	Always,
 
 	/// <summary>
-	/// Do not toggle off the app when focus is lost.
+	/// App will be the only one on-screen at the same time.
 	/// </summary>
 	[Display(Name = "Never")]
 	Never,
-
-	///// <summary>
-	///// Only toggle off the app when focus went to an app on a different screen.
-	///// </summary>
-	//[Display(Name = "Unless focus changed screen")]
-	//WithinScreen,
 }
