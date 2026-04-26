@@ -7,14 +7,21 @@
 		{
 			"Name": "Konsole",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
-			"FileName": "konsole"
+			"FileName": "konsole",
+			"Exclusive": "Never",
+			"HideOnFocusLost": "Never",
+			"HorizontalScreenCoverage": 45,
+			"HorizontalAlign": "Left"
 		},
 		
 		{
 			"Name": "Dolphin",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }],
 			"FileName": "dolphin",
-			"Resize": "Never"
+			"Exclusive": "Never",
+			"HideOnFocusLost": "Never",
+			"HorizontalScreenCoverage": 45,
+			"HorizontalAlign": "Right"
 		},
 
 		{

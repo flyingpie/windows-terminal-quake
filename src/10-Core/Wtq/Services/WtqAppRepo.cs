@@ -80,10 +80,10 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	}
 
 	/// <inheritdoc/>
-	public WtqApp? GetOpen()
+	public List<WtqApp> GetOpen()
 	{
 		// Note that we only want apps that are actually attached, in addition to the "open" ones.
-		return _apps.Values.FirstOrDefault(a => a is { IsAttached: true, IsOpen: true });
+		return _apps.Values.Where(a => a is { IsAttached: true, IsOpen: true }).ToList();
 	}
 
 	/// <inheritdoc/>

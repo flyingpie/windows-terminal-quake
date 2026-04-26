@@ -35,11 +35,20 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public bool? AlwaysOnTop { get; set; }
 
 	/// <summary>
+	/// When an app should be the only one on-screen, of all configured apps.<br/>
+	/// Changing this allows multiple apps active at the same time.
+	/// </summary>
+	[DefaultValue(Wc.Exclusive.Always)]
+	[Display(GroupName = Gn.Behavior, Name = "Exclusive")]
+	[JsonPropertyOrder(3002)]
+	public Exclusive? Exclusive { get; set; }
+
+	/// <summary>
 	/// Whether the app should be toggled off when another app gets focus.
 	/// </summary>
 	[DefaultValue(Wc.HideOnFocusLost.Always)]
 	[Display(GroupName = Gn.Behavior, Name = "Hide on focus lost")]
-	[JsonPropertyOrder(3002)]
+	[JsonPropertyOrder(3003)]
 	public HideOnFocusLost? HideOnFocusLost { get; set; }
 
 	/// <summary>
@@ -47,7 +56,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(Wc.TaskbarIconVisibility.AlwaysHidden)]
 	[Display(GroupName = Gn.Behavior, Name = "Taskbar icon visibility")]
-	[JsonPropertyOrder(3003)]
+	[JsonPropertyOrder(3004)]
 	public TaskbarIconVisibility? TaskbarIconVisibility { get; set; }
 
 	/// <summary>
@@ -58,7 +67,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[DefaultValue(100)]
 	[Display(GroupName = Gn.Behavior)]
 	[ExampleValue(80)]
-	[JsonPropertyOrder(3004)]
+	[JsonPropertyOrder(3005)]
 	public int? Opacity { get; set; }
 
 	#endregion
