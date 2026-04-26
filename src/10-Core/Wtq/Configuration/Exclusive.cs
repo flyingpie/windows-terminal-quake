@@ -15,13 +15,13 @@ public enum Exclusive
 	None = 0,
 
 	/// <summary>
-	/// App can co-exist with other non-exclusive apps.
+	/// App will be the only one on-screen at the same time.
 	/// </summary>
 	[Display(Name = "Always")]
 	Always,
 
 	/// <summary>
-	/// App will be the only one on-screen at the same time.
+	/// App can co-exist with other non-exclusive apps.
 	/// </summary>
 	[Display(Name = "Never")]
 	Never,
