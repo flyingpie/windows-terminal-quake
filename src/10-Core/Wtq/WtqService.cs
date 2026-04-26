@@ -58,12 +58,12 @@ public sealed class WtqService : WtqHostedService
 		// Wait for service-wide lock.
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 
-		// If this apps wants to be the only active one, see if we need to toggle off other apps first.
-		if (app.Options.Exclusive == Exclusive.Always)
+		// "Switching apps"
+		// If previously toggled apps (that are not the to-be-toggled app) are still open, close them first.
+		foreach (var open in _appRepo.GetOpen().Where(o => o != app).ToList())
 		{
-			// "Switching apps"
-			// If previously toggled apps (that are not the to-be-toggled app) are still open, close them first.
-			foreach (var open in _appRepo.GetOpen().Where(o => o != app).ToList())
+			// If either this app, or the active one, wants to be the _only_ active one, close the open one.
+			if (app.Options.Exclusive == Exclusive.Always || open.Options.Exclusive == Exclusive.Always)
 			{
 				_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
 

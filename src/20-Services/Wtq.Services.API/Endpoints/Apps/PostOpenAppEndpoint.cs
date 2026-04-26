@@ -27,12 +27,10 @@ public class PostOpenAppEndpoint : ControllerBase
 			return BadRequest();
 		}
 
-		// Look up any currently open app.
-		var openApp = appRepo.GetOpen();
-		if (openApp != null)
+		// If another app is already open, close it first.
+		foreach (var open in appRepo.GetOpen())
 		{
-			// If another app is already open, close it first.
-			// await openApp.CloseAsync().NoCtx();
+			await open.CloseAsync().NoCtx();
 		}
 
 		// Open the requested app.
