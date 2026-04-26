@@ -6,6 +6,7 @@
 
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ.
+- Feature: Non-exclusive apps. Multiple apps can be on-screen at the same time.
 - Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
 ## [v2.1.0] / 2026-04-08
