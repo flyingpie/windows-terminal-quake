@@ -8,15 +8,16 @@
 			"Name": "Windows Terminal",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "wt",
-			"ProcessName": "^WindowsTerminal$"
+			"ProcessName": "^WindowsTerminal$",
+			"HideOnFocusLost": "Never"
 		},
 
 		// Explorer
 		{
 			"Name": "Explorer",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
-			"FileName": "explorer",
-			"WindowClass": "^CabinetWClass$"
+			"FileName": "keepassxc",
+			"HideOnFocusLost": "Never"
 		}
 	],
 

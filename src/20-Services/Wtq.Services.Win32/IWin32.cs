@@ -42,6 +42,9 @@ public interface IWin32
 	string? GetWindowTitle(
 		nint windowHandle);
 
+	bool IsOnCurrentVirtualDesktop(
+		nint windowHandle);
+
 	/// <summary>
 	/// Returns whether the specified window handle (still) points to a valid window.
 	/// </summary>

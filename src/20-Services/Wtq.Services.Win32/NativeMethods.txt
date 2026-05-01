@@ -11,6 +11,7 @@ GetWindowRect
 GetWindowText
 GetWindowThreadProcessId
 IsWindow
+IVirtualDesktopManager
 keybd_event
 KEYEVENTF_KEYUP
 MoveWindow
@@ -24,6 +25,7 @@ SetWindowLong
 SetWindowPos
 SetWindowText
 ShowWindow
+VirtualDesktopManager
 VK_MENU
 WM_NULL
 WM_PAINT

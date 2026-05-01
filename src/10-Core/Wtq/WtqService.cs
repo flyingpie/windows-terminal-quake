@@ -9,7 +9,8 @@ namespace Wtq;
 // TODO: Class desperately needs unit tests.
 public sealed class WtqService : WtqHostedService
 {
-	private readonly ILogger _log;
+	private readonly ILogger _log = Log.For<WtqService>();
+
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
@@ -17,11 +18,9 @@ public sealed class WtqService : WtqHostedService
 	private WtqWindow? _lastNonWtqWindow;
 
 	public WtqService(
-		ILogger<WtqService> log,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
 	{
-		_log = Guard.Against.Null(log);
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
 
@@ -84,6 +83,14 @@ public sealed class WtqService : WtqHostedService
 			_bus.Publish(new WtqAppToggledOnEvent(app.Name, true));
 
 			await app.OpenAsync(ToggleModifiers.SwitchingApps).NoCtx();
+			return;
+		}
+
+		// Re-focus
+		if (app.IsOpen && !(await app.Window.HasFocusAsync()))
+		{
+			_log.LogInformation("Re-focusing app '{App}'", app);
+			await app.Window.BringToForegroundAsync();
 			return;
 		}
 

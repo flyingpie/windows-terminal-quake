@@ -135,6 +135,20 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.FromResult(rect);
 	}
 
+	public override Task<bool> HasFocusAsync()
+	{
+		var fg = _win32.GetForegroundWindowHandle();
+
+		return Task.FromResult(_window.MainWindowHandle == fg);
+	}
+
+	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
+	{
+		var isOnCurrentDesktop = _win32.IsOnCurrentVirtualDesktop(_window.MainWindowHandle);
+
+		return Task.FromResult(isOnCurrentDesktop);
+	}
+
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
 		try
