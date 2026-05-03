@@ -86,12 +86,14 @@ public sealed class WtqService : WtqHostedService
 			return;
 		}
 
-		// Re-focus
+		// Move to current virtual desktop
 		if (app.IsOpen && !(await app.Window.IsOnCurrentVirtualDesktopAsync()))
 		{
 			_log.LogInformation("Moving app '{App}' to current virtual desktop", app);
-			await app.Window.MoveToCurrentVirtualDesktopAsync();
-			return;
+			//await app.Window.MoveToCurrentVirtualDesktopAsync();
+			app.Window.SetTaskbarIconVisibleAsync(false);
+			app.Window.SetTaskbarIconVisibleAsync(true);
+			//return;
 		}
 
 		// Re-focus
