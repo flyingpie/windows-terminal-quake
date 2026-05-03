@@ -60,6 +60,13 @@ public class KWinWtqWindow(
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
 	}
 
+	public override async Task<bool> HasFocusAsync()
+	{
+		var fg = await _kwinClient.GetForegroundWindowAsync(CancellationToken.None);
+
+		return fg.InternalId?.Equals(_window.InternalId, StringComparison.OrdinalIgnoreCase) ?? false;
+	}
+
 	public override async Task<Rectangle> GetWindowRectAsync()
 	{
 		var w = await _kwinClient.GetWindowAsync(_window, CancellationToken.None).NoCtx();
@@ -67,6 +74,9 @@ public class KWinWtqWindow(
 		// TODO: Handle null.
 		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty;
 	}
+
+	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
+		=> Task.FromResult(true); // TODO: Implement
 
 	public override bool Matches(WtqAppOptions opts)
 	{
@@ -96,6 +106,11 @@ public class KWinWtqWindow(
 		}
 
 		return true;
+	}
+
+	public override Task MoveToCurrentVirtualDesktopAsync()
+	{
+		return Task.CompletedTask; // TODO
 	}
 
 	public override async Task SetLocationAsync(Point location)

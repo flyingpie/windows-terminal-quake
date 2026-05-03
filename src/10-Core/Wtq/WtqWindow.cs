@@ -42,6 +42,13 @@ public abstract class WtqWindow
 	public abstract Task BringToForegroundAsync();
 
 	/// <summary>
+	/// Returns whether this window currently has focus (i.e., receives input).
+	/// </summary>
+	public abstract Task<bool> HasFocusAsync();
+
+	public abstract Task<bool> IsOnCurrentVirtualDesktopAsync();
+
+	/// <summary>
 	/// The rectangle of the window itself, includes both position and size.
 	/// </summary>
 	public abstract Task<Rectangle> GetWindowRectAsync();
@@ -79,6 +86,8 @@ public abstract class WtqWindow
 
 		return false;
 	}
+
+	public abstract Task MoveToCurrentVirtualDesktopAsync();
 
 	public abstract Task SetLocationAsync(Point location);
 

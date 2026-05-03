@@ -5,6 +5,8 @@ namespace Wtq.Services.Win32;
 /// </summary>
 public interface IWin32
 {
+	Guid? GetCurrentVirtualDesktopId();
+
 	/// <summary>
 	/// Returns the id of the window that currently has focus.<br/>
 	/// Returns null if no window was found.
@@ -42,6 +44,9 @@ public interface IWin32
 	string? GetWindowTitle(
 		nint windowHandle);
 
+	bool IsOnCurrentVirtualDesktop(
+		nint windowHandle);
+
 	/// <summary>
 	/// Returns whether the specified window handle (still) points to a valid window.
 	/// </summary>
@@ -54,6 +59,13 @@ public interface IWin32
 	void MoveWindow(
 		nint windowHandle,
 		Rectangle rectangle);
+
+	/// <summary>
+	/// TODO
+	/// </summary>
+	void MoveWindowToVirtualDesktop(
+		nint windowHandle,
+		Guid virtualDesktopId);
 
 	/// <summary>
 	/// Returns a window state, describing - for example - whether a window is minimized.

@@ -1,10 +1,12 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Console;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.UI.Shell;
 using Windows.Win32.UI.WindowsAndMessaging;
 using PI = Windows.Win32.PInvoke;
 
@@ -23,6 +25,8 @@ public class Win32 : IWin32
 
 #pragma warning restore SA1310
 #pragma warning restore CA1707 // Identifiers should not contain underscores
+
+	private readonly IVirtualDesktopManager _virtDeskMan = (IVirtualDesktopManager)new VirtualDesktopManager();
 
 	private readonly ILogger _log = Log.For<Win32>();
 
@@ -108,6 +112,24 @@ public class Win32 : IWin32
 	}
 
 	/// <inheritdoc/>
+	public unsafe Guid? GetCurrentVirtualDesktopId()
+	{
+		return null;
+	}
+
+	/// <inheritdoc/>
+	public unsafe bool IsOnCurrentVirtualDesktop(nint windowHandle)
+	{
+		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
+
+		BOOL isOnCurrDesktop;
+
+		_virtDeskMan.IsWindowOnCurrentVirtualDesktop((HWND)windowHandle, &isOnCurrDesktop);
+
+		return isOnCurrDesktop;
+	}
+
+	/// <inheritdoc/>
 	public bool IsValidWindow(nint windowHandle)
 	{
 		// When the window handle is zero, we don't need to ask the OS, as that is invalid by default.
@@ -130,6 +152,14 @@ public class Win32 : IWin32
 		{
 			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.", new Win32Exception());
 		}
+	}
+
+	/// <inheritdoc/>
+	public void MoveWindowToVirtualDesktop(
+		nint windowHandle,
+		Guid virtualDesktopId)
+	{
+		// _virtDeskMan.MoveWindowToDesktop((HWND)windowHandle, in virtualDesktopId);
 	}
 
 	/// <inheritdoc/>
