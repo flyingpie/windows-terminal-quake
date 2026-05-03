@@ -15,8 +15,6 @@ public sealed class WtqService : WtqHostedService
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
-	private WtqWindow? _lastNonWtqWindow;
-
 	public WtqService(
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
@@ -89,22 +87,22 @@ public sealed class WtqService : WtqHostedService
 		// Move to current virtual desktop
 		if (app.IsOpen && !(await app.Window.IsOnCurrentVirtualDesktopAsync()))
 		{
+			// TODO: Event
 			_log.LogInformation("Moving app '{App}' to current virtual desktop", app);
-			//await app.Window.MoveToCurrentVirtualDesktopAsync();
 			app.Window.SetTaskbarIconVisibleAsync(false);
 			app.Window.SetTaskbarIconVisibleAsync(true);
-			//return;
 		}
 
 		// Re-focus
 		if (app.IsOpen && !(await app.Window.HasFocusAsync()))
 		{
+			// TODO: Event
 			_log.LogInformation("Re-focusing app '{App}'", app);
 			await app.Window.BringToForegroundAsync();
 			return;
 		}
 
-		// "Toggling app"
+		// Toggling app OFF
 		if (app.IsOpen)
 		{
 			// Toggle OFF
@@ -116,8 +114,10 @@ public sealed class WtqService : WtqHostedService
 			await app.CloseAsync().NoCtx();
 
 			// Bring focus back to last non-WTQ app.
-			await (_lastNonWtqWindow?.BringToForegroundAsync() ?? Task.CompletedTask).NoCtx();
+			await PopFocusAsync().NoCtx();
 		}
+
+		// Toggling app ON
 		else
 		{
 			// Toggle ON
@@ -127,6 +127,36 @@ public sealed class WtqService : WtqHostedService
 
 			// Open app.
 			await app.OpenAsync().NoCtx();
+		}
+	}
+
+	private readonly List<(WtqWindow Window, WtqApp? App)> _lastNonWtqWindow = new(10);
+
+	/// <summary>
+	/// After closing an app, we bring focus back to the last window that had focus before toggling on the WTQ-managed one.<br/>
+	/// This is so that user input gets sent to the last active window, instead of to the app we just toggled off, which is not off-screen.
+	/// </summary>
+	private async Task PopFocusAsync()
+	{
+		_log.LogDebug("Bringing back focus to the previously active window");
+
+		while (true)
+		{
+			// Pull most recently added window from the "stack".
+			var prev = _lastNonWtqWindow.LastOrDefault();
+			_lastNonWtqWindow.Remove(prev);
+
+			// Skip windows that are managed by WTQ and currently toggled off.
+			if (prev.App is { IsOpen: false })
+			{
+				_log.LogDebug("Skipping window '{Window}', as it is being handled by WTQ, and is toggled OFF", prev.Window);
+				continue;
+			}
+
+			// Bring focus to the window.
+			_log.LogInformation("Bringing back focus to previously-active window '{Window}'", prev.Window);
+			await prev.Window.BringToForegroundAsync().NoCtx();
+			return;
 		}
 	}
 
@@ -145,10 +175,11 @@ public sealed class WtqService : WtqHostedService
 		var appGotFocus = ev.GotFocusWindow != null ? _appRepo.GetByWindow(ev.GotFocusWindow) : null;
 		var appLostFocus = ev.LostFocusWindow != null ? _appRepo.GetByWindow(ev.LostFocusWindow) : null;
 
-		// If the window that just LOST focus is NOT managed by WTQ, store it for giving back focus to later.
-		if (ev.LostFocusWindow != null && appLostFocus == null)
+		// Store the app that lost focus in our stack.
+		if (ev.LostFocusWindow != null)
 		{
-			_lastNonWtqWindow = ev.LostFocusWindow;
+			_lastNonWtqWindow.RemoveAll(w => w.Window.Id.Equals(ev.LostFocusWindow.Id, StringComparison.OrdinalIgnoreCase)); // Remove any previous instance.
+			_lastNonWtqWindow.Add((ev.LostFocusWindow, appLostFocus));
 		}
 
 		// If the app that GOT focus is a WTQ app, toggling will be done in the "app toggled" event handler.
