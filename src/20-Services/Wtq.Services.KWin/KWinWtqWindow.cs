@@ -108,6 +108,11 @@ public class KWinWtqWindow(
 		return true;
 	}
 
+	public override Task MoveToCurrentVirtualDesktopAsync()
+	{
+		return Task.CompletedTask; // TODO
+	}
+
 	public override async Task SetLocationAsync(Point location)
 	{
 		await _kwinClient.MoveWindowAsync(_window, location, CancellationToken.None).NoCtx();

@@ -87,6 +87,14 @@ public sealed class WtqService : WtqHostedService
 		}
 
 		// Re-focus
+		if (app.IsOpen && !(await app.Window.IsOnCurrentVirtualDesktopAsync()))
+		{
+			_log.LogInformation("Moving app '{App}' to current virtual desktop", app);
+			await app.Window.MoveToCurrentVirtualDesktopAsync();
+			return;
+		}
+
+		// Re-focus
 		if (app.IsOpen && !(await app.Window.HasFocusAsync()))
 		{
 			_log.LogInformation("Re-focusing app '{App}'", app);

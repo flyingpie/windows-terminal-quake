@@ -87,6 +87,8 @@ public abstract class WtqWindow
 		return false;
 	}
 
+	public abstract Task MoveToCurrentVirtualDesktopAsync();
+
 	public abstract Task SetLocationAsync(Point location);
 
 	// TODO: Warn or disallow sizes below a certain threshold? Seems to happen occasionally.

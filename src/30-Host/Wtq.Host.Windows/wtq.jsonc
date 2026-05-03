@@ -9,6 +9,8 @@
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "1" }],
 			"FileName": "wt",
 			"ProcessName": "^WindowsTerminal$",
+			"AlwaysOnTop": false,
+			"TaskbarIconVisibility": "WhenAppVisible",
 			"HideOnFocusLost": "Never"
 		},
 
@@ -17,6 +19,7 @@
 			"Name": "Explorer",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "keepassxc",
+			"TaskbarIconVisibility": "WhenAppVisible",
 			"HideOnFocusLost": "Never"
 		}
 	],
