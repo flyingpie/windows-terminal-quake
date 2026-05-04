@@ -112,6 +112,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		return true;
 	}
 
+	/// <inheritdoc/>
 	public override Task BringToForegroundAsync()
 	{
 		_log.LogDebug("{MethodName}", nameof(BringToForegroundAsync));
@@ -135,6 +136,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.FromResult(rect);
 	}
 
+	/// <inheritdoc/>
 	public override Task<bool> HasFocusAsync()
 	{
 		var fg = _win32.GetForegroundWindowHandle();
@@ -142,6 +144,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.FromResult(_window.WindowHandle == fg);
 	}
 
+	/// <inheritdoc/>
 	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
 	{
 		var isOnCurrentDesktop = _win32.IsOnCurrentVirtualDesktop(_window.WindowHandle);
@@ -149,26 +152,11 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.FromResult(isOnCurrentDesktop);
 	}
 
-	public override Task MoveToCurrentVirtualDesktopAsync()
+	/// <inheritdoc/>
+	public override async Task MoveToCurrentVirtualDesktopAsync()
 	{
-		//// Simulate Alt key press and release.
-		//PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, 0, UIntPtr.Zero);
-		//PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP, UIntPtr.Zero);
-
-		//Thread.Sleep(20); // Give Windows a moment to process input events.
-
-
-		//Console.WriteLine("FETCHING CURRENT DESKTOP ID");
-		//var currDesktopId = _win32.GetCurrentVirtualDesktopId();
-		//if (currDesktopId == null)
-		//{
-		//	return Task.CompletedTask;
-		//}
-
-		//Console.WriteLine($"MOVING WINDOW TO CURRENT VIRTUAL DESKTOP");
-		//_win32.MoveWindowToVirtualDesktop(_window.MainWindowHandle, currDesktopId.Value);
-
-		return Task.CompletedTask;
+		await SetTaskbarIconVisibleAsync(false);
+		await SetTaskbarIconVisibleAsync(true);
 	}
 
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)

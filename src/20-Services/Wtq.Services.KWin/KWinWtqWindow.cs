@@ -55,11 +55,13 @@ public class KWinWtqWindow(
 	public override string? WindowTitle =>
 		_window?.Caption;
 
+	/// <inheritdoc/>
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
 	}
 
+	/// <inheritdoc/>
 	public override async Task<bool> HasFocusAsync()
 	{
 		var fg = await _kwinClient.GetForegroundWindowAsync(CancellationToken.None);
@@ -75,6 +77,7 @@ public class KWinWtqWindow(
 		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty;
 	}
 
+	/// <inheritdoc/>
 	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
 		=> Task.FromResult(true); // TODO: Implement
 

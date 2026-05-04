@@ -112,12 +112,6 @@ public class Win32 : IWin32
 	}
 
 	/// <inheritdoc/>
-	public unsafe Guid? GetCurrentVirtualDesktopId()
-	{
-		return null;
-	}
-
-	/// <inheritdoc/>
 	public unsafe bool IsOnCurrentVirtualDesktop(nint windowHandle)
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
@@ -152,14 +146,6 @@ public class Win32 : IWin32
 		{
 			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.", new Win32Exception());
 		}
-	}
-
-	/// <inheritdoc/>
-	public void MoveWindowToVirtualDesktop(
-		nint windowHandle,
-		Guid virtualDesktopId)
-	{
-		// _virtDeskMan.MoveWindowToDesktop((HWND)windowHandle, in virtualDesktopId);
 	}
 
 	/// <inheritdoc/>

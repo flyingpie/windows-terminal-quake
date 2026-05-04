@@ -39,6 +39,9 @@ public abstract class WtqWindow
 	[CanBeMatchedOn]
 	public abstract string? WindowTitle { get; }
 
+	/// <summary>
+	/// Pulls the window to the foreground, so that it receives input (from e.g. the mouse and keyboard).
+	/// </summary>
 	public abstract Task BringToForegroundAsync();
 
 	/// <summary>
@@ -46,6 +49,9 @@ public abstract class WtqWindow
 	/// </summary>
 	public abstract Task<bool> HasFocusAsync();
 
+	/// <summary>
+	/// Returns whether the app is visible on the currently active virtual desktop.
+	/// </summary>
 	public abstract Task<bool> IsOnCurrentVirtualDesktopAsync();
 
 	/// <summary>
