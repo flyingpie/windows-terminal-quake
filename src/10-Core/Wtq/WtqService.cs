@@ -9,7 +9,8 @@ namespace Wtq;
 // TODO: Class desperately needs unit tests.
 public sealed class WtqService : WtqHostedService
 {
-	private readonly ILogger _log;
+	private readonly ILogger _log = Log.For<WtqService>();
+
 	private readonly IWtqAppRepo _appRepo;
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
@@ -17,11 +18,9 @@ public sealed class WtqService : WtqHostedService
 	private WtqWindow? _lastNonWtqWindow;
 
 	public WtqService(
-		ILogger<WtqService> log,
 		IWtqAppRepo appRepo,
 		IWtqBus bus)
 	{
-		_log = Guard.Against.Null(log);
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
 
