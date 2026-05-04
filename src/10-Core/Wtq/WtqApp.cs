@@ -220,7 +220,7 @@ public sealed class WtqApp : IAsyncDisposable
 		await Window.SetSizeAsync(size).NoCtx();
 	}
 
-	public override string ToString() => $"[App:{Options}] {Window?.ToString() ?? "<no process>"}";
+	public override string ToString() => Name;
 
 	/// <summary>
 	/// Updates the state of the <see cref="WtqApp"/> object to reflect running processes on the system.
