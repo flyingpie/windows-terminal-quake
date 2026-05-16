@@ -39,10 +39,10 @@
 	"MonitorIndex": 0,
 
 	// Horizontal screen coverage, as a percentage (defaults to 95).
-	"HorizontalScreenCoverage": 60,
+	"HorizontalScreenCoverage": 45,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 60,
+	"VerticalScreenCoverage": 45,
 
 	"Api": {
 		"Enable": true
