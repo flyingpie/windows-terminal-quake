@@ -39,7 +39,20 @@ public abstract class WtqWindow
 	[CanBeMatchedOn]
 	public abstract string? WindowTitle { get; }
 
+	/// <summary>
+	/// Pulls the window to the foreground, so that it receives input (from e.g. the mouse and keyboard).
+	/// </summary>
 	public abstract Task BringToForegroundAsync();
+
+	/// <summary>
+	/// Returns whether this window currently has focus (i.e., receives input).
+	/// </summary>
+	public abstract Task<bool> HasFocusAsync();
+
+	/// <summary>
+	/// Returns whether the app is visible on the currently active virtual desktop.
+	/// </summary>
+	public abstract Task<bool> IsOnCurrentVirtualDesktopAsync();
 
 	/// <summary>
 	/// The rectangle of the window itself, includes both position and size.
@@ -79,6 +92,11 @@ public abstract class WtqWindow
 
 		return false;
 	}
+
+	/// <summary>
+	/// When an app is visible, but it's on a different virtual desktop, this method can be used to bring it over to the current one.
+	/// </summary>
+	public abstract Task MoveToCurrentVirtualDesktopAsync();
 
 	public abstract Task SetLocationAsync(Point location);
 
