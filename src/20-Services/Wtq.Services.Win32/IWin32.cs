@@ -43,6 +43,12 @@ public interface IWin32
 		nint windowHandle);
 
 	/// <summary>
+	/// Returns whether the app is visible on the currently active virtual desktop.
+	/// </summary>
+	bool IsOnCurrentVirtualDesktop(
+		nint windowHandle);
+
+	/// <summary>
 	/// Returns whether the specified window handle (still) points to a valid window.
 	/// </summary>
 	bool IsValidWindow(
