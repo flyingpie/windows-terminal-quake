@@ -139,26 +139,41 @@ public sealed class Win32WtqWindow : WtqWindow
 	/// <inheritdoc/>
 	public override Task<bool> HasFocusAsync()
 	{
+		// Fetch the foreground window.
 		var fg = _win32.GetForegroundWindowHandle();
 
+		// See if its window ID matches our window ID.
 		return Task.FromResult(_window.WindowHandle == fg);
 	}
 
 	/// <inheritdoc/>
 	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
 	{
-		var isOnCurrentDesktop = _win32.IsOnCurrentVirtualDesktop(_window.WindowHandle);
-
-		return Task.FromResult(isOnCurrentDesktop);
+		return Task.FromResult(_win32.IsOnCurrentVirtualDesktop(_window.WindowHandle));
 	}
 
 	/// <inheritdoc/>
 	public override async Task MoveToCurrentVirtualDesktopAsync()
 	{
+		// The API to actually move a window from one virtual desktop to another is internal and
+		// troublesome to talk to. It seemingly also doesn't appreciate random background apps
+		// messing with placement across virtual desktops).
+		//
+		// So as a simple workaround, we blink the taskbar icon visibility, which happens to pull
+		// the window over to whatever desktop we're on.
+		// Note that the actually desired setting will be restored by WtqApp.
+		//
+		// See this issue for some additional discussion:
+		// https://github.com/flyingpie/windows-terminal-quake/issues/380
+		//
+		// Here is a repo wrapping the internal APIs:
+		// https://github.com/MScholtes/VirtualDesktop
+		//
 		await SetTaskbarIconVisibleAsync(false);
 		await SetTaskbarIconVisibleAsync(true);
 	}
 
+	/// <inheritdoc/>
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
 		try
@@ -173,6 +188,7 @@ public sealed class Win32WtqWindow : WtqWindow
 		return Task.CompletedTask;
 	}
 
+	/// <inheritdoc/>
 	public override async Task SetLocationAsync(Point location)
 	{
 		// Get current window rect.

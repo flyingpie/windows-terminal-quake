@@ -93,6 +93,9 @@ public abstract class WtqWindow
 		return false;
 	}
 
+	/// <summary>
+	/// When an app is visible, but it's on a different virtual desktop, this method can be used to bring it over to the current one.
+	/// </summary>
 	public abstract Task MoveToCurrentVirtualDesktopAsync();
 
 	public abstract Task SetLocationAsync(Point location);
