@@ -147,6 +147,11 @@ public sealed class WtqService : WtqHostedService
 		{
 			// Pull most recently added window from the "stack".
 			var prev = _previouslyFocussedApps.LastOrDefault();
+			if (prev.Window is null && prev.App is null)
+			{
+				break;
+			}
+
 			_previouslyFocussedApps.Remove(prev);
 
 			// Skip windows that are managed by WTQ and currently toggled off.
