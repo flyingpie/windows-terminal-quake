@@ -785,6 +785,30 @@ Whether the app should always be on top of other windows, regardless of whether 
 }
 ```
 
+##### Exclusive
+
+When an app should be the only one on-screen, of all configured apps. Changing this allows multiple apps active at the same time.
+
+Defaults to `Always`
+
+- **Always**<br/>Toggle off app when another is toggled on.
+
+- **Never**<br/>Do not toggle off the app when another one is toggled on. Note that the other app also needs to be set to "Exclusive" = "Never".
+
+```json
+{
+	// Globally:
+	"Exclusive": "Always | Never",
+
+	// For one app only:
+	"Apps": [
+		{
+			"Exclusive": "Always | Always"
+		}
+	]
+}
+```
+
 ##### Hide on focus lost
 
 Whether the app should be toggled off when another app gets focus.
