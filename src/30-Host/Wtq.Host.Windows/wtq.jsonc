@@ -11,7 +11,9 @@
 			"ProcessName": "^WindowsTerminal$",
 			"AlwaysOnTop": false,
 			"TaskbarIconVisibility": "WhenAppVisible",
-			"HideOnFocusLost": "Never"
+			"HideOnFocusLost": "Never",
+			"Exclusive": "Never",
+			"HorizontalAlign": "Left"
 		},
 
 		// Explorer
@@ -20,7 +22,9 @@
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "keepassxc",
 			"TaskbarIconVisibility": "WhenAppVisible",
-			"HideOnFocusLost": "Never"
+			"HideOnFocusLost": "Never",
+			"Exclusive": "Never",
+			"HorizontalAlign": "Right"
 		}
 	],
 
