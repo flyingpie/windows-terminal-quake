@@ -15,6 +15,11 @@ public sealed class WtqService : WtqHostedService
 	private readonly IWtqBus _bus;
 	private readonly WtqSemaphoreSlim _lock = new(1, 1);
 
+	/// <summary>
+	/// A "stack" that stores apps that previously had focus (= received input).<br/>
+	/// We're using a list instead of an actual stack, as we need to pull out items not at
+	/// the top of the stack (when pulling up an app to the top of the stack).
+	/// </summary>
 	private readonly List<(WtqWindow Window, WtqApp? App)> _previouslyFocussedApps = new(10);
 
 	public WtqService(
