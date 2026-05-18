@@ -7,6 +7,8 @@
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ.
 - Feature: Non-exclusive apps. Multiple apps can be on-screen at the same time.
+- Feature: When an app is open, but does not have focus, pressing the toggle key will re-focus, instead of toggling off.
+- Feature: When an app is open, but on a different virtual desktop, pressing the toggle key will bring it over to the current virtual desktop.
 - Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#280).
 
 ## [v2.1.0] / 2026-04-08
