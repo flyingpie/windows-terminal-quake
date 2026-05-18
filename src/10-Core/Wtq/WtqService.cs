@@ -86,19 +86,17 @@ public sealed class WtqService : WtqHostedService
 			return;
 		}
 
-		// Move to current virtual desktop
+		// Make sure the app is on the current virtual desktop
 		if (app.IsOpen && !(await app.Window.IsOnCurrentVirtualDesktopAsync()))
 		{
-			// TODO: Event
+			// Note that we're not returning from this scope, as we may still need to re-focus.
 			_log.LogInformation("Moving app '{App}' to current virtual desktop", app);
-			app.Window.SetTaskbarIconVisibleAsync(false);
-			app.Window.SetTaskbarIconVisibleAsync(true);
+			await app.Window.MoveToCurrentVirtualDesktopAsync();
 		}
 
-		// Re-focus
+		// App is already open, but does not have focus. Re-focus now.
 		if (app.IsOpen && !(await app.Window.HasFocusAsync()))
 		{
-			// TODO: Event
 			_log.LogInformation("Re-focusing app '{App}'", app);
 			await app.Window.BringToForegroundAsync();
 			return;
