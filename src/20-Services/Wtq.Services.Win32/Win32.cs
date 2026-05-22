@@ -284,7 +284,10 @@ public class Win32 : IWin32
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
-		PI.SetWindowText((HWND)windowHandle, title);
+		if (!PI.SetWindowText((HWND)windowHandle, title))
+		{
+			throw new InvalidOperationException($"Could not set window title to '{title}' of window with handle '{windowHandle}'.");
+		}
 	}
 
 	/// <inheritdoc/>
@@ -351,7 +354,7 @@ public class Win32 : IWin32
 		// Fetch the window class.
 		var windowClass = GetWindowClass(windowHandle);
 
-		// Fetch the window class.
+		// Fetch the window title.
 		var windowTitle = GetWindowTitle(windowHandle);
 
 		// Get information about the owning process.
@@ -378,7 +381,7 @@ public class Win32 : IWin32
 		var isMainWindow = ownerProcess.MainWindowHandle.Equals(windowHandle);
 
 		// Construct return object.
-		var window = new Win32Window(() => ownerProcess.HasExited)
+		return new Win32Window(() => ownerProcess.HasExited)
 		{
 			IsMainWindow = isMainWindow,
 			MainWindowHandle = ownerProcess.MainWindowHandle,
@@ -391,7 +394,5 @@ public class Win32 : IWin32
 			WindowClass = windowClass,
 			WindowHandle = windowHandle,
 		};
-
-		return window;
 	}
 }
