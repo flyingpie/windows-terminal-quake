@@ -17,6 +17,9 @@ public class WtqPhotinoBlazorApp
 		MainWindow = Services.GetService<PhotinoWindow>();
 		WindowManager = Services.GetService<PhotinoWebViewManager>();
 		MainWindow
+
+			// Disable notifications, as we don't use them, and this implicitly creates a start menu shortcut, which we don't want.
+			.SetNotificationsEnabled(false)
 			.SetTitle("Photino.Blazor App")
 			.SetUseOsDefaultSize(false)
 			.SetUseOsDefaultLocation(false)
