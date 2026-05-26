@@ -208,7 +208,8 @@ public sealed class Win32WtqWindow : WtqWindow
 	{
 		if (size.Width < 200 || size.Height < 200)
 		{
-			throw new InvalidOperationException($"Attempted to set window size to something under 200x200, which can mess up windows.");
+			_log.LogWarning("Attempted to set window size to something under 200x200, which can mess up windows.");
+			return;
 		}
 
 		// Get current window rect.
