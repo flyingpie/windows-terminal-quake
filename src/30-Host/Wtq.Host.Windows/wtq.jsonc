@@ -18,14 +18,13 @@
 
 		// Explorer
 		{
-			"Name": "KeePassXC",
+			"Name": "Explorer",
 			"Hotkeys": [{ "Modifiers": "Control", "KeyChar": "2" }, { "Modifiers": "Control,Alt", "KeyChar": "ArrowUp" }],
 			"FileName": "keepassxc",
 			"TaskbarIconVisibility": "WhenAppVisible",
 			"HideOnFocusLost": "Never",
 			"Exclusive": "Never",
-			"HorizontalAlign": "Right",
-			"MainWindow": "MainWindowOnly"
+			"HorizontalAlign": "Right"
 		}
 	],
 
