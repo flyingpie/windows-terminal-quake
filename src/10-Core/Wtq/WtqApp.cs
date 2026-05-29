@@ -324,6 +324,9 @@ public sealed class WtqApp : IAsyncDisposable
 
 		Window = window;
 
+		// Ask window to update its state.
+		await window.UpdateAsync().NoCtx();
+
 		// Move the window off the screen ASAP (e.g. without animating).
 		await CloseAsync(ToggleModifiers.Instant).NoCtx();
 	}
