@@ -23,6 +23,7 @@ Section "Install"
 
 	# Register app with "Add/Remove Programs" (or "ARP")
 	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayName" "WTQ"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayIcon" "$INSTDIR\wtq.exe"
 	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayVersion" "2.2.0"
 	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "Publisher" "WTQ Contributors"
 	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "InstallLocation" "$INSTDIR"
