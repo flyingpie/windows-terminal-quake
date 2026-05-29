@@ -87,11 +87,23 @@ public sealed partial class Build
 	private Target CreateNsisManifest => _ => _
 		.Executes(async () =>
 		{
-			var nsis = PkgDirectory / "nsis";
-			Console.WriteLine($"DIR:{nsis}");
+			var templateRoot = PkgDirectory / "nsis" / "_template";
+			var manifestRoot = PkgDirectory / "nsis" / "latest";
+
+			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
+
+			Directory.CreateDirectory(manifestRoot);
+
+			var tpl = await File.ReadAllTextAsync(templateRoot / "installer.nsis");
+			var target = manifestRoot / "installer.nsis";
+
+			var manifest = tpl
+				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase);
+
+			await File.WriteAllTextAsync(target, manifest);
 
 			DockerBuild(d => d
-				.SetPath(nsis)
+				.SetPath(PkgDirectory / "nsis")
 				.SetTag("nsis")
 			);
 
@@ -99,7 +111,7 @@ public sealed partial class Build
 				.SetImage("nsis")
 				.SetArgs("installer.nsis")
 				.SetVolume(
-					$"{nsis}/installer.nsis:/app/installer.nsis",
+					$"{manifestRoot}/installer.nsis:/app/installer.nsis",
 					$"{PathToWin64SelfContained}:/app/bin",
 					$"{ArtifactsDirectory}:/app/out"
 				)
@@ -107,35 +119,6 @@ public sealed partial class Build
 			);
 
 			PathToWin64InstallerExeSha256.WriteAllText(PathToWin64InstallerExe.GetFileHashSha256());
-
-			// var templateRoot = PkgDirectory / "winget" / "_template";
-			// var manifestRoot = PkgDirectory / "winget" / SemVerVersion;
-			// var prefix = "flyingpie.windows-terminal-quake";
-			// var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
-			//
-			// if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
-			//
-			// Directory.CreateDirectory(manifestRoot);
-			//
-			// var installerFn = $"{prefix}.installer.yaml";
-			// var localeFn = $"{prefix}.locale.en-US.yaml";
-			// var mainFn = $"{prefix}.yaml";
-			//
-			// var fns = new string[] { installerFn, localeFn, mainFn };
-			//
-			// foreach (var fn in fns)
-			// {
-			// 	var tpl = await File.ReadAllTextAsync(templateRoot / fn);
-			// 	var target = manifestRoot / fn;
-			//
-			// 	var manifest = tpl
-			// 		.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
-			// 		.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
-			// 		.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
-			// 		.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
-			//
-			// 	await File.WriteAllTextAsync(target, manifest);
-			// }
 		});
 
 	/// <summary>
@@ -166,12 +149,13 @@ public sealed partial class Build
 	/// WinGet manifest.
 	/// </summary>
 	private Target CreateWinGetManifest => _ => _
+		.DependsOn(CreateNsisManifest)
 		.Executes(async () =>
 		{
 			var templateRoot = PkgDirectory / "winget" / "_template";
 			var manifestRoot = PkgDirectory / "winget" / SemVerVersion;
 			var prefix = "flyingpie.windows-terminal-quake";
-			var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
+			var sha256 = PathToWin64InstallerExe.GetFileHashSha256();
 
 			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
 
@@ -190,9 +174,9 @@ public sealed partial class Build
 
 				var manifest = tpl
 					.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
+					.Replace("$INSTALLER_SHA256$", sha256, StringComparison.OrdinalIgnoreCase)
 					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
-					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
-					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
+					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase);
 
 				await File.WriteAllTextAsync(target, manifest);
 			}

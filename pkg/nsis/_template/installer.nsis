@@ -1,0 +1,52 @@
+# Where to put the installer
+OutFile "out\win-x64_installer.exe"
+ 
+# Per-user install, no admin required
+InstallDir "$LOCALAPPDATA\wtq"
+RequestExecutionLevel user
+
+# Compress more aggresively, takes some time but saves about 30% file size
+SetCompressor /SOLID lzma
+
+#
+# Install
+#
+Section "Install"
+
+	SetOutPath "$INSTDIR"
+
+	# Copy binaries to ~/AppData/Local/wtq
+	File /r "bin\*.*"
+
+	# Start menu shortcut
+	CreateShortcut "$SMPROGRAMS\WTQ.lnk" "$INSTDIR\wtq.exe" "" "$INSTDIR\wtq.exe" 0
+
+	# Register app with "Add/Remove Programs" (or "ARP")
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayName" "WTQ"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayIcon" "$INSTDIR\wtq.exe"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "DisplayVersion" "$PACKAGE_VERSION$"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "Publisher" "WTQ Contributors"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "InstallLocation" "$INSTDIR"
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "UninstallString" "$\"$INSTDIR\wtq-uninstaller.exe$\""
+	WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ" "QuietUninstallString" "$\"$INSTDIR\wtq-uninstaller.exe$\" /S"
+
+	# Uninstaller
+	WriteUninstaller "$INSTDIR\wtq-uninstaller.exe"
+
+SectionEnd
+
+#
+# Uninstall
+#
+Section "Uninstall"
+
+	# Remove start menu shortcut
+	Delete "$SMPROGRAMS\WTQ.lnk"
+
+	# Remove installed files
+	RMDir /r "$INSTDIR"
+
+	# Delete registry entries, used for the "Add/Remove Programs" functionality
+	DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\WTQ"
+
+SectionEnd

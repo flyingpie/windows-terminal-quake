@@ -7,6 +7,12 @@ InstallerSwitches:
   Silent: /S
   SilentWithProgress: /S
 ReleaseDate: $RELEASE_DATE$
+Scope: user
+UpgradeBehavior: install
+AppsAndFeaturesEntries:
+- DisplayName: WTQ
+  DisplayVersion: $PACKAGE_VERSION$
+  Publisher: WTQ Contributors
 Installers:
 - Architecture: x64
   InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/$GH_RELEASE_VERSION$/win-x64_installer.exe
