@@ -1,34 +1,34 @@
-# Installer file
-OutFile "wtq-install.exe"
+# Where to put the installer
+OutFile "out\win-x64_installer.exe"
  
 # Per-user install, no admin required
 InstallDir "$LOCALAPPDATA\wtq"
-
 RequestExecutionLevel user
 
+# Compress more aggresively, takes some time but saves about 30% file size
 SetCompressor /SOLID lzma
 
-# Optional:
-# - "normal" means UI appears unless /S is passed
-# - "silent" means always silent
-SilentInstall normal
-SilentUnInstall normal
-
+#
+# Install
+#
 Section "Install"
 
 	SetOutPath "$INSTDIR"
 
-	# Copy app folder contents into AppData install directory
-	File /r "app\*.*"
+	# Copy binaries to ~/AppData/Local/wtq
+	File /r "bin\*.*"
 
 	# Start menu shortcut
 	CreateShortcut "$SMPROGRAMS\WTQ.lnk" "$INSTDIR\wtq.exe" "" "$INSTDIR\wtq.exe" 0
 
 	# Uninstaller
-	WriteUninstaller "$INSTDIR\wtq-uninstall.exe"
+	WriteUninstaller "$INSTDIR\wtq-uninstaller.exe"
 
 SectionEnd
 
+#
+# Uninstall
+#
 Section "Uninstall"
 
 	# Remove start menu shortcut

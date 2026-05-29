@@ -3,11 +3,13 @@
 
 using Nuke.Common;
 using Nuke.Common.IO;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
+using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 /// <summary>
@@ -77,6 +79,63 @@ public sealed partial class Build
 			var nugetSourcesJson = manifestRoot / "nuget-sources.json";
 
 			await File.WriteAllTextAsync(nugetSourcesJson, JsonSerializer.Serialize(nugetSources, Nupkg.JsonSerializerOptions));
+		});
+
+	/// <summary>
+	/// NSIS manifest.
+	/// </summary>
+	private Target CreateNsisManifest => _ => _
+		.Executes(async () =>
+		{
+			var nsis = PkgDirectory / "nsis";
+			Console.WriteLine($"DIR:{nsis}");
+
+			DockerBuild(d => d
+				.SetPath(nsis)
+				.SetTag("nsis")
+			);
+
+			DockerRun(d => d
+				.SetImage("nsis")
+				.SetArgs("installer.nsis")
+				.SetVolume(
+					$"{nsis}/installer.nsis:/app/installer.nsis",
+					$"{PathToWin64SelfContained}:/app/bin",
+					$"{ArtifactsDirectory}:/app/out"
+				)
+				.SetWorkdir("/app")
+			);
+
+			PathToWin64InstallerExeSha256.WriteAllText(PathToWin64InstallerExe.GetFileHashSha256());
+
+			// var templateRoot = PkgDirectory / "winget" / "_template";
+			// var manifestRoot = PkgDirectory / "winget" / SemVerVersion;
+			// var prefix = "flyingpie.windows-terminal-quake";
+			// var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
+			//
+			// if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
+			//
+			// Directory.CreateDirectory(manifestRoot);
+			//
+			// var installerFn = $"{prefix}.installer.yaml";
+			// var localeFn = $"{prefix}.locale.en-US.yaml";
+			// var mainFn = $"{prefix}.yaml";
+			//
+			// var fns = new string[] { installerFn, localeFn, mainFn };
+			//
+			// foreach (var fn in fns)
+			// {
+			// 	var tpl = await File.ReadAllTextAsync(templateRoot / fn);
+			// 	var target = manifestRoot / fn;
+			//
+			// 	var manifest = tpl
+			// 		.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
+			// 		.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
+			// 		.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
+			// 		.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
+			//
+			// 	await File.WriteAllTextAsync(target, manifest);
+			// }
 		});
 
 	/// <summary>

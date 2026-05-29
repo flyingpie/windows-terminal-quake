@@ -9,7 +9,7 @@ InstallerSwitches:
 ReleaseDate: $RELEASE_DATE$
 Installers:
 - Architecture: x64
-  InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/$GH_RELEASE_VERSION$/wtq-x64-installer.exe
+  InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/$GH_RELEASE_VERSION$/win-x64_installer.exe
   InstallerSha256: $INSTALLER_SHA256$
 ManifestType: installer
 ManifestVersion: 1.10.0
