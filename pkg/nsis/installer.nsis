@@ -1,63 +1,40 @@
-# name the installer
-OutFile "Installer.exe"
+# Installer file
+OutFile "wtq-install.exe"
  
-# default section start; every NSIS script has at least one section.
-Section
+# Per-user install, no admin required
+InstallDir "$LOCALAPPDATA\wtq"
 
-# create a popup box, with an OK button and the text "Hello world!"
-MessageBox MB_OK "Hello world!"
+RequestExecutionLevel user
 
-# default section end
+SetCompressor /SOLID lzma
+
+# Optional:
+# - "normal" means UI appears unless /S is passed
+# - "silent" means always silent
+SilentInstall normal
+SilentUnInstall normal
+
+Section "Install"
+
+	SetOutPath "$INSTDIR"
+
+	# Copy app folder contents into AppData install directory
+	File /r "app\*.*"
+
+	# Start menu shortcut
+	CreateShortcut "$SMPROGRAMS\WTQ.lnk" "$INSTDIR\wtq.exe" "" "$INSTDIR\wtq.exe" 0
+
+	# Uninstaller
+	WriteUninstaller "$INSTDIR\wtq-uninstall.exe"
+
 SectionEnd
 
+Section "Uninstall"
 
-# !define APP_NAME "My App"
-# !define APP_EXE "MyApp.exe"
-# !define COMPANY_NAME "My Company"
-#
-# Name "${APP_NAME}"
-# OutFile "MyAppSetup.exe"
-#
-# ; Per-user install, no admin required
-# InstallDir "$LOCALAPPDATA\${COMPANY_NAME}\${APP_NAME}"
-# RequestExecutionLevel user
-#
-# SetCompressor /SOLID lzma
-#
-# ; Optional:
-# ; - "normal" means UI appears unless /S is passed
-# ; - "silent" means always silent
-# SilentInstall normal
-# SilentUnInstall normal
-#
-# Section "Install"
-#
-#     SetOutPath "$INSTDIR"
-#
-#     ; Copy app folder contents into AppData install directory
-#     File /r "app\*.*"
-#
-#     ; Current-user Start Menu shortcut
-#     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
-#
-#     CreateShortcut \
-#         "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" \
-#         "$INSTDIR\${APP_EXE}" \
-#         "" \
-#         "$INSTDIR\${APP_EXE}" \
-#         0
-#
-#     ; Optional uninstaller file, no registry involved
-#     WriteUninstaller "$INSTDIR\Uninstall.exe"
-#
-# SectionEnd
-#
-# Section "Uninstall"
-#
-#     ; Remove Start Menu shortcut/folder
-#     RMDir /r "$SMPROGRAMS\${APP_NAME}"
-#
-#     ; Remove installed files
-#     RMDir /r "$INSTDIR"
-#
-# SectionEnd
+	# Remove start menu shortcut
+	Delete "$SMPROGRAMS\WTQ.lnk"
+
+	# Remove installed files
+	RMDir /r "$INSTDIR"
+
+SectionEnd
