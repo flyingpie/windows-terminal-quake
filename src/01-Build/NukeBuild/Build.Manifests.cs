@@ -87,37 +87,39 @@ public sealed partial class Build
 	private Target CreateNsisManifest => _ => _
 		.Executes(async () =>
 		{
-			var templateRoot = PkgDirectory / "nsis" / "_template";
-			var manifestRoot = PkgDirectory / "nsis" / "latest";
+			var nsisRoot = PkgDirectory / "nsis";
+			var tplPath = nsisRoot / "_template" / "installer.nsis"; // Path to template version of the NSIS script.
+			var targetPath = nsisRoot / "latest" / "installer.nsis"; // Path to the generated NSIS script.
 
-			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
+			// Read template.
+			var scriptContent = await File.ReadAllTextAsync(tplPath);
 
-			Directory.CreateDirectory(manifestRoot);
-
-			var tpl = await File.ReadAllTextAsync(templateRoot / "installer.nsis");
-			var target = manifestRoot / "installer.nsis";
-
-			var manifest = tpl
+			// Expand variables.
+			scriptContent = scriptContent
 				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase);
 
-			await File.WriteAllTextAsync(target, manifest);
+			// Write NSIS script to actually executed.
+			await File.WriteAllTextAsync(targetPath, scriptContent);
 
+			// Build container containing the NSIS compiler.
 			DockerBuild(d => d
-				.SetPath(PkgDirectory / "nsis")
+				.SetPath(nsisRoot)
 				.SetTag("nsis")
 			);
 
+			// Compile the NSIS script.
 			DockerRun(d => d
 				.SetImage("nsis")
 				.SetArgs("installer.nsis")
 				.SetVolume(
-					$"{manifestRoot}/installer.nsis:/app/installer.nsis",
+					$"{targetPath}:/app/installer.nsis",
 					$"{PathToWin64SelfContained}:/app/bin",
 					$"{ArtifactsDirectory}:/app/out"
 				)
 				.SetWorkdir("/app")
 			);
 
+			// Write SHA256 hash for use by the WinGet installer.
 			PathToWin64InstallerExeSha256.WriteAllText(PathToWin64InstallerExe.GetFileHashSha256());
 		});
 

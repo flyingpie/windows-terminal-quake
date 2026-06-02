@@ -1,6 +1,6 @@
 # Where to put the installer
 OutFile "out\win-x64_installer.exe"
- 
+
 # Per-user install, no admin required
 InstallDir "$LOCALAPPDATA\wtq"
 RequestExecutionLevel user
