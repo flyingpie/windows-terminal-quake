@@ -96,6 +96,12 @@ public sealed partial class Build : NukeBuild
 		ArtifactsDirectory / "win-x64_self-contained.zip.sha256";
 
 
+	private AbsolutePath PathToWin64InstallerExe =>
+		ArtifactsDirectory / "win-x64_installer.exe";
+
+	private AbsolutePath PathToWin64InstallerExeSha256 =>
+		ArtifactsDirectory / "win-x64_installer.exe.sha256";
+
 	private GitHubActions GitHubActions =>
 		GitHubActions.Instance;
 
@@ -170,6 +176,7 @@ public sealed partial class Build : NukeBuild
 		.DependsOn(BuildWindows)
 		.Triggers(CreateAurManifest)
 		.Triggers(CreateFlatpakManifest)
+		.Triggers(CreateNsisManifest)
 		.Triggers(CreateScoopManifest)
 		.Triggers(CreateWinGetManifest)
 		.Executes();

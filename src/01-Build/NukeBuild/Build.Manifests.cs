@@ -3,11 +3,13 @@
 
 using Nuke.Common;
 using Nuke.Common.IO;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
+using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 /// <summary>
@@ -80,6 +82,48 @@ public sealed partial class Build
 		});
 
 	/// <summary>
+	/// NSIS manifest.
+	/// </summary>
+	private Target CreateNsisManifest => _ => _
+		.Executes(async () =>
+		{
+			var nsisRoot = PkgDirectory / "nsis";
+			var tplPath = nsisRoot / "_template" / "installer.nsis"; // Path to template version of the NSIS script.
+			var targetPath = nsisRoot / "latest" / "installer.nsis"; // Path to the generated NSIS script.
+
+			// Read template.
+			var scriptContent = await File.ReadAllTextAsync(tplPath);
+
+			// Expand variables.
+			scriptContent = scriptContent
+				.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase);
+
+			// Write NSIS script to actually executed.
+			await File.WriteAllTextAsync(targetPath, scriptContent);
+
+			// Build container containing the NSIS compiler.
+			DockerBuild(d => d
+				.SetPath(nsisRoot)
+				.SetTag("nsis")
+			);
+
+			// Compile the NSIS script.
+			DockerRun(d => d
+				.SetImage("nsis")
+				.SetArgs("installer.nsis")
+				.SetVolume(
+					$"{targetPath}:/app/installer.nsis",
+					$"{PathToWin64SelfContained}:/app/bin",
+					$"{ArtifactsDirectory}:/app/out"
+				)
+				.SetWorkdir("/app")
+			);
+
+			// Write SHA256 hash for use by the WinGet installer.
+			PathToWin64InstallerExeSha256.WriteAllText(PathToWin64InstallerExe.GetFileHashSha256());
+		});
+
+	/// <summary>
 	/// Scoop manifest.
 	/// </summary>
 	private Target CreateScoopManifest => _ => _
@@ -107,12 +151,13 @@ public sealed partial class Build
 	/// WinGet manifest.
 	/// </summary>
 	private Target CreateWinGetManifest => _ => _
+		.DependsOn(CreateNsisManifest)
 		.Executes(async () =>
 		{
 			var templateRoot = PkgDirectory / "winget" / "_template";
 			var manifestRoot = PkgDirectory / "winget" / SemVerVersion;
 			var prefix = "flyingpie.windows-terminal-quake";
-			var sha256 = PathToWin64SelfContainedZip.GetFileHashSha256();
+			var sha256 = PathToWin64InstallerExe.GetFileHashSha256();
 
 			if (Directory.Exists(manifestRoot)) { Directory.Delete(manifestRoot, true); }
 
@@ -131,9 +176,9 @@ public sealed partial class Build
 
 				var manifest = tpl
 					.Replace("$GH_RELEASE_VERSION$", GitHubRelease, StringComparison.OrdinalIgnoreCase)
+					.Replace("$INSTALLER_SHA256$", sha256, StringComparison.OrdinalIgnoreCase)
 					.Replace("$PACKAGE_VERSION$", SemVerVersion, StringComparison.OrdinalIgnoreCase)
-					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase)
-					.Replace("$SELF_CONTAINED_SHA256$", sha256, StringComparison.OrdinalIgnoreCase);
+					.Replace("$RELEASE_DATE$", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase);
 
 				await File.WriteAllTextAsync(target, manifest);
 			}

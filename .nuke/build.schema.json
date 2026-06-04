@@ -35,6 +35,7 @@
         "CreateAurManifest",
         "CreateFlatpakManifest",
         "CreateGitHubRelease",
+        "CreateNsisManifest",
         "CreateScoopManifest",
         "CreateWinGetManifest",
         "Info",
