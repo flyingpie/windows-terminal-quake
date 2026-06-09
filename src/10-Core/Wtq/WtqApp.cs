@@ -52,7 +52,12 @@ public sealed class WtqApp : IAsyncDisposable
 	/// Whether the app is currently toggled onto the screen.<br/>
 	/// Starts in the "true" state, as we presume the window is on-screen when we attach to it.
 	/// </summary>
-	public bool IsOpen { get; private set; } = true;
+	public bool IsOpen
+	{
+		// The "IsOpen" property only makes sense if we're currently not attached to a window.
+		get => IsAttached ? field : false;
+		private set;
+	} = true;
 
 	/// <summary>
 	/// The name of the app, as configured in the settings file.<br/>
