@@ -110,9 +110,8 @@ public sealed partial class Build
 			// Compile the NSIS script.
 			DockerRun(d => d
 				.SetImage("nsis")
-				.SetEntrypoint("ls")
-				.SetArgs("out", "-alh")
-				// .SetArgs("installer.nsis")
+				.SetArgs("installer.nsis")
+				.SetUser($"{Unix.getuid()}")
 				.SetVolume(
 					$"{targetPath}:/app/installer.nsis",
 					$"{PathToWin64SelfContained}:/app/bin",
