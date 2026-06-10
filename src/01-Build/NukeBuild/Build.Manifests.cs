@@ -111,6 +111,7 @@ public sealed partial class Build
 			DockerRun(d => d
 				.SetImage("nsis")
 				.SetArgs("installer.nsis")
+				.SetUser($"{Unix.getuid()}")
 				.SetVolume(
 					$"{targetPath}:/app/installer.nsis",
 					$"{PathToWin64SelfContained}:/app/bin",

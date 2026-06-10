@@ -5,8 +5,6 @@ RUN apt-get update -y \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
-USER 1000
-
 WORKDIR /build
 
 ENTRYPOINT [ "makensis", "-V4" ]
