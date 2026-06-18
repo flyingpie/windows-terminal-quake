@@ -14,7 +14,8 @@ public interface IWtqWindowRectProvider
 	Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqAppOptions opts,
+		bool isPrimaryScreen = true
 	);
 
 	/// <summary>
@@ -48,17 +49,23 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 	public async Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqAppOptions opts,
+		bool isPrimaryScreen = true
 	)
 	{
 		Guard.Against.Null(opts);
+
+		// Choose vertical coverage based on whether this is the primary monitor.
+		var verticalCoverageIndex = isPrimaryScreen
+			? opts.GetVerticalScreenCoverageIndex()
+			: opts.GetVerticalScreenCoverageIndexForSecondScreen();
 
 		// Calculate app window size.
 		var wnd = opts.GetResize() == Resizing.Always
 			? new Rectangle()
 			{
 				Width = (int)(screenRectDst.Width * opts.GetHorizontalScreenCoverageIndex()),
-				Height = (int)(screenRectDst.Height * opts.GetVerticalScreenCoverageIndex()),
+				Height = (int)(screenRectDst.Height * verticalCoverageIndex),
 			}
 			: new Rectangle()
 			{

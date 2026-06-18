@@ -171,4 +171,38 @@ public static class WtqAppOptionsExtensions
 
 		return app.GetVerticalScreenCoverage() / 100f;
 	}
+
+	/// <inheritdoc cref="WtqSharedOptions.VerticalScreenCoverageSecondScreen"/>
+	/// <remarks>
+	/// Cascades through app-level, then global-level values.
+	/// When neither is set, falls back to <see cref="GetVerticalScreenCoverage"/>,
+	/// so apps that don't specify a secondary coverage inherit the primary coverage.
+	/// </remarks>
+	public static float GetVerticalScreenCoverageForSecondScreen(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		if (app.VerticalScreenCoverageSecondScreen is float appVal)
+		{
+			return appVal;
+		}
+
+		if (app.Global?.VerticalScreenCoverageSecondScreen is float globalVal)
+		{
+			return globalVal;
+		}
+
+		// Fall back to primary VerticalScreenCoverage when no secondary-specific value is set.
+		return app.GetVerticalScreenCoverage();
+	}
+
+	/// <summary>
+	/// <see cref="WtqSharedOptions.VerticalScreenCoverageSecondScreen"/> as an index (0 - 1).
+	/// </summary>
+	public static float GetVerticalScreenCoverageIndexForSecondScreen(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return app.GetVerticalScreenCoverageForSecondScreen() / 100f;
+	}
 }
