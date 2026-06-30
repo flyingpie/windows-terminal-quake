@@ -538,10 +538,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#app-examples" class="md-nav__link">
+  <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        App examples
+        Examples
       
     </span>
   </a>
@@ -1002,6 +1002,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#exclusive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exclusive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hide-on-focus-lost" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1262,7 +1273,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#examples_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Examples
@@ -1565,10 +1576,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#app-examples" class="md-nav__link">
+  <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        App examples
+        Examples
       
     </span>
   </a>
@@ -2029,6 +2040,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#exclusive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exclusive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hide-on-focus-lost" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2289,7 +2311,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#examples_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Examples
@@ -2516,7 +2538,7 @@ cd windows-terminal-quake
 <pre class="highlight"><code class="language-bash">./build.sh Uninstall</code></pre>
 <p>You can also take a look at the build options, do see more options for building, including without actually installing:</p>
 <pre class="highlight"><code class="language-bash">./build.sh --help</code></pre>
-<h2 id="app-examples"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg></span> App examples<a class="headerlink" href="#app-examples" title="Permanent link">&para;</a></h2>
+<h2 id="examples"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg></span> Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">TODO</p>
 </div>
@@ -2670,6 +2692,7 @@ cd windows-terminal-quake
 </div>
 <h3 id="global-options"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.9 17.39c-.26-.8-1.01-1.39-1.9-1.39h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.984 7.984 0 0 1 2.9 12.8M11 19.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1a2 2 0 0 0 2 2m1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> Global options<a class="headerlink" href="#global-options" title="Permanent link">&para;</a></h3>
 <p>Defines WTQ-wide options, including the list of configured apps.</p>
+<p>Note that you can also use <a href="#shared-options">shared options</a> here.</p>
 <h4 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h4>
 <h5 id="apps">Apps<a class="headerlink" href="#apps" title="Permanent link">&para;</a></h5>
 <p>Applications to enable Quake-style dropdown for.</p>
@@ -2755,6 +2778,7 @@ but still have a way back should things go awry, without necessarily reverting t
 }</code></pre>
 <h3 id="app-options"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m0 18H3V6h18z"/></svg></span> App options<a class="headerlink" href="#app-options" title="Permanent link">&para;</a></h3>
 <p>Defines the options for a single toggleable app (eg. Windows Terminal, some other terminal, a file browser, etc.).</p>
+<p>Note that you can also use <a href="#shared-options">shared options</a> here.</p>
 <h4 id="app">App<a class="headerlink" href="#app" title="Permanent link">&para;</a></h4>
 <h5 id="name">Name<a class="headerlink" href="#name" title="Permanent link">&para;</a></h5>
 <p>A logical name for the app, used to identify it across config reloads, and it appears in logs.</p>
@@ -2840,7 +2864,7 @@ which handles complex arguments and escaping better.</p>
 This field can be used to look for the process name in such cases. Windows Terminal is an
 example, with filename **wt**, and process name **WindowsTerminal**.</p>
 <p>Supports regular expressions.</p>
-<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+<p>Also see <a href="#examples">Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 <pre class="highlight"><code class="language-json">{
     // Using with Windows Terminal requires both "Filename" and "ProcessName".
@@ -2883,7 +2907,7 @@ the window class or -title), the "is-main-window"-property can be very useful to
 <h5 id="window-class">Window class<a class="headerlink" href="#window-class" title="Permanent link">&para;</a></h5>
 <p>(Windows only) Matches windows based on their Win32 Window Class.</p>
 <p>Supports regular expressions.</p>
-<p>Also see <a href="#app-examples">App Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
+<p>Also see <a href="#examples">Examples</a> for more cases where this is relevant, and the <a href="#gui">GUI section</a> on how to find values.</p>
 
 <pre class="highlight"><code class="language-json">{
     "Apps": [
@@ -2962,6 +2986,28 @@ opt-out in the other program.</p>
     "Apps": [
         {
             "AlwaysOnTop": "False"
+        }
+    ]
+}</code></pre>
+<h5 id="exclusive">Exclusive<a class="headerlink" href="#exclusive" title="Permanent link">&para;</a></h5>
+<p>When an app should be the only one on-screen, of all configured apps. Changing this allows multiple apps active at the same time.</p>
+<p>Defaults to <code>Always</code></p>
+<ul>
+<li>
+<p><strong>Always</strong><br/>Toggle off app when another is toggled on.</p>
+</li>
+<li>
+<p><strong>Never</strong><br/>Do not toggle off the app when another one is toggled on. Note that the other app also needs to be set to "Exclusive" = "Never".</p>
+</li>
+</ul>
+<pre class="highlight"><code class="language-json">{
+    // Globally:
+    "Exclusive": "Always | Never",
+
+    // For one app only:
+    "Apps": [
+        {
+            "Exclusive": "Always | Always"
         }
     ]
 }</code></pre>
@@ -3326,7 +3372,7 @@ without any animation.</p>
 <li><strong>WTQ_APP_NAME</strong>: The app that relates to the event, if any;</li>
 <li><strong>WTQ_IS_SWITCHING</strong>: "True" if currently switching from one app to another;</li>
 </ul>
-<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<h3 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h3>
 <p>Running a PowerShell script when toggling, to play a sound:</p>
 <pre class="highlight"><code class="language-ps1">if ($env:WTQ_EVENT_NAME -eq "AppToggledOn")
 {

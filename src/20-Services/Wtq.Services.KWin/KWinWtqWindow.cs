@@ -8,6 +8,8 @@ public class KWinWtqWindow(
 	KWinWindow window)
 	: WtqWindow
 {
+	private readonly ILogger _log = Log.For<KWinWindow>();
+
 	private readonly IKWinClient _kwinClient = Guard.Against.Null(kwinClient);
 	private readonly KWinWindow _window = Guard.Against.Null(window);
 
@@ -55,15 +57,19 @@ public class KWinWtqWindow(
 	public override string? WindowTitle =>
 		_window?.Caption;
 
+	/// <inheritdoc/>
 	public override async Task BringToForegroundAsync()
 	{
 		await _kwinClient.BringToForegroundAsync(_window, CancellationToken.None).NoCtx();
 	}
 
+	/// <inheritdoc/>
 	public override async Task<bool> HasFocusAsync()
 	{
+		// Fetch the foreground window.
 		var fg = await _kwinClient.GetForegroundWindowAsync(CancellationToken.None);
 
+		// See if its window ID matches our window ID.
 		return fg.InternalId?.Equals(_window.InternalId, StringComparison.OrdinalIgnoreCase) ?? false;
 	}
 
@@ -75,8 +81,13 @@ public class KWinWtqWindow(
 		return w.FrameGeometry?.ToRect() ?? Rectangle.Empty;
 	}
 
+	/// <inheritdoc/>
 	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
-		=> Task.FromResult(true); // TODO: Implement
+	{
+		// TODO: Implement
+		_log.LogWarning("Method '{Method}' is not implemented", nameof(IsOnCurrentVirtualDesktopAsync));
+		return Task.FromResult(true);
+	}
 
 	public override bool Matches(WtqAppOptions opts)
 	{
@@ -108,9 +119,12 @@ public class KWinWtqWindow(
 		return true;
 	}
 
+	/// <inheritdoc/>
 	public override Task MoveToCurrentVirtualDesktopAsync()
 	{
-		return Task.CompletedTask; // TODO
+		// TODO: Implement
+		_log.LogWarning("Method '{Method}' is not implemented", nameof(MoveToCurrentVirtualDesktopAsync));
+		return Task.CompletedTask;
 	}
 
 	public override async Task SetLocationAsync(Point location)

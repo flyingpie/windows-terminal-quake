@@ -70,5 +70,8 @@ public sealed partial class Build
 
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZip);
 			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64SelfContainedZipSha256);
+
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64InstallerExe);
+			await GitHubTasks.GitHubClient.UploadReleaseAssetToGithub(ghRelease, PathToWin64InstallerExeSha256);
 		});
 }
