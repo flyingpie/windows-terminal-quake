@@ -68,7 +68,6 @@
 	</PropertyGroup>
 
 	<Target Name="AddGitMetadaAssemblyAttributes" BeforeTargets="GetAssemblyAttributes">
-
 		<!-- Git branch -->
 		<Exec
 			Command="git rev-parse --abbrev-ref HEAD"
@@ -77,7 +76,7 @@
 			IgnoreExitCode="true"
 			StandardOutputImportance="low"
 		>
-			<Output TaskParameter="ConsoleOutput" PropertyName="GitBranch"/>
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitBranch" />
 		</Exec>
 
 		<!-- Git commit -->
@@ -88,14 +87,25 @@
 			IgnoreExitCode="true"
 			StandardOutputImportance="low"
 		>
-			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommit"/>
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommit" />
 		</Exec>
 
 		<ItemGroup>
-			<AssemblyMetadata Include="BuildConfiguration" Value="$(Configuration)"/>
-			<AssemblyMetadata Include="BuildTimestamp" Value="$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssK))"/>
-			<AssemblyMetadata Condition=" $(GitCommit) != '' " Include="GitCommit" Value="$(GitCommit)"/>
-			<AssemblyMetadata Condition=" $(GitBranch) != '' " Include="GitBranch" Value="$(GitBranch)"/>
+			<AssemblyMetadata Include="BuildConfiguration" Value="$(Configuration)" />
+			<AssemblyMetadata
+				Include="BuildTimestamp"
+				Value="$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssK))"
+			/>
+			<AssemblyMetadata
+				Condition=" $(GitCommit) != '' "
+				Include="GitCommit"
+				Value="$(GitCommit)"
+			/>
+			<AssemblyMetadata
+				Condition=" $(GitBranch) != '' "
+				Include="GitBranch"
+				Value="$(GitBranch)"
+			/>
 		</ItemGroup>
 	</Target>
 
@@ -117,20 +127,36 @@
 			https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-integration-dotnet-test
 		-->
 		<TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+		<!--
+			Required for some tools to pick up tests.
+		-->
+		<IsTestingPlatformApplication>true</IsTestingPlatformApplication>
 	</PropertyGroup>
 
 	<ItemGroup Condition=" $(MSBuildProjectName.EndsWith('Test')) ">
-		<PackageReference Include="Microsoft.NET.Test.Sdk"/>
-		<PackageReference Include="Moq"/>
-		<PackageReference Include="MSTest"/>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="MSTest" />
 	</ItemGroup>
 
 	<!--
 		Analyzers
 	-->
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
-		<PackageReference Include="SonarAnalyzer.CSharp" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
-		<PackageReference Include="StyleCop.Analyzers.Unstable" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
+		<PackageReference
+			Include="Microsoft.VisualStudio.Threading.Analyzers"
+			PrivateAssets="all"
+			IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+		/>
+		<PackageReference
+			Include="SonarAnalyzer.CSharp"
+			PrivateAssets="all"
+			IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+		/>
+		<PackageReference
+			Include="StyleCop.Analyzers.Unstable"
+			PrivateAssets="all"
+			IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+		/>
 	</ItemGroup>
 </Project>
