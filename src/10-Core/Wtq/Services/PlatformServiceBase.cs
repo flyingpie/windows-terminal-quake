@@ -240,17 +240,55 @@ public abstract class PlatformServiceBase : IPlatformService
 	{
 		// Get a reference to this process, so we can filter it out when looking for other processes.
 		var self = Process.GetCurrentProcess();
+		var selfPath = Environment.ProcessPath;
 
 		// Look for other WTQ processes.
-		var otherWtq = Process.GetProcessesByName(self.ProcessName).FirstOrDefault(p => p.Id != self.Id);
-
-		if (otherWtq != null)
+		foreach (var other in Process.GetProcessesByName(self.ProcessName).Where(p => p.Id != self.Id))
 		{
-			Log.LogWarning("Found other WTQ process (PID:{Pid})", otherWtq.Id);
+			// Launchers such as Scoop's shims are named after the app they start (i.e. also "wtq.exe"), and stay
+			// around as our parent process for as long as we run. Those are not WTQ instances, so skip processes
+			// that run a different executable than we do.
+			// If we can't determine the other process' executable (e.g. because it runs elevated), assume it's WTQ.
+			var otherPath = GetProcessPath(other);
+			if (selfPath != null && otherPath != null && !IsSamePath(selfPath, otherPath))
+			{
+				Log.LogDebug("Ignoring process with PID {Pid}: same name as us, but a different executable ('{Path}')", other.Id, otherPath);
+				continue;
+			}
+
+			Log.LogWarning("Found other WTQ process (PID:{Pid})", other.Id);
 			return true;
 		}
 
 		return false;
+	}
+
+	/// <summary>
+	/// Returns the path to the executable of the specified <paramref name="process"/>, or null if it cannot be determined
+	/// (e.g. because the process runs with higher privileges than we do).
+	/// </summary>
+	private static string? GetProcessPath(Process process)
+	{
+		try
+		{
+			return process.MainModule?.FileName;
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Compares 2 paths, case-insensitively on Windows.
+	/// </summary>
+	private static bool IsSamePath(string path1, string path2)
+	{
+		var comparison = OperatingSystem.IsWindows()
+			? StringComparison.OrdinalIgnoreCase
+			: StringComparison.Ordinal;
+
+		return string.Equals(Path.GetFullPath(path1), Path.GetFullPath(path2), comparison);
 	}
 
 	/// <inheritdoc/>
