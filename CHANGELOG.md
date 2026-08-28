@@ -3,6 +3,7 @@
 ## [vFuture]
 
 ## [vNext]
+- Feature: "StartOnly" attach mode. Only attaches to windows that WTQ started itself, so pre-existing (or later opened) windows of the same app are left alone.
 
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ (#333).
