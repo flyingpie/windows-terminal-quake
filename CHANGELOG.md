@@ -3,6 +3,8 @@
 ## [vFuture]
 
 ## [vNext]
+- Bugfix: "FeatureFlags.SharpHook" set to "false" was lost when saving settings (e.g. from the GUI), as "false" was treated as the default and omitted, and the resulting empty object is not loaded. The flag is now nullable, defaulting to "true".
+- Feature: GUI - "SharpHook hotkeys" feature flag can be toggled from the global settings page.
 
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ (#333).

@@ -36,6 +36,9 @@
 	private void Reload()
 	{
 		GlobalOpts = WtqOpts.CurrentValue.JsonDeepClone();
+
+		// Make sure nested option objects exist, so their settings can be bound to (an all-default object is dropped again on save).
+		GlobalOpts.FeatureFlags ??= new();
 	}
 
 }
@@ -163,6 +166,15 @@
 
 				<!-- Show UI on start -->
 				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.ShowUiOnStart"				Set="v => GlobalOpts.ShowUiOnStart = v"					Default="() => GlobalOpts.ShowUiOnStart" />
+
+			</RadzenStack>
+		</RadzenFieldset>
+
+		<RadzenFieldset Text="Feature flags">
+			<RadzenStack Gap="1rem">
+
+				<!-- SharpHook hotkeys -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.FeatureFlags!.SharpHook"		Set="v => GlobalOpts.FeatureFlags!.SharpHook = v"		Default="() => GlobalOpts.FeatureFlags!.SharpHook" />
 
 			</RadzenStack>
 		</RadzenFieldset>
