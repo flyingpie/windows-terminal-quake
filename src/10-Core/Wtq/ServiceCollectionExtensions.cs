@@ -104,6 +104,7 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
 			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
 			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
+			.AddSingleton<IWtqStartedWindowsStore, WtqStartedWindowsStore>()
 			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
 			.AddSingleton<TrayIconUtil>()
 

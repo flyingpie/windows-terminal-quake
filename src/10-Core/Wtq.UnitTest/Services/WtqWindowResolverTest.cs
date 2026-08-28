@@ -8,6 +8,7 @@ namespace Wtq.Core.UnitTest.Services;
 public class WtqWindowResolverTest
 {
 	private readonly Mock<IWtqWindowService> _windowService = new(MockBehavior.Strict);
+	private readonly Mock<IWtqStartedWindowsStore> _startedWindows = new(MockBehavior.Loose);
 
 	private readonly WtqWindow _preExisting = CreateWindow("pre-existing");
 	private readonly WtqWindow _started = CreateWindow("started");
@@ -17,7 +18,7 @@ public class WtqWindowResolverTest
 	[TestInitialize]
 	public void Setup()
 	{
-		_resolver = new WtqWindowResolver(_windowService.Object);
+		_resolver = new WtqWindowResolver(_windowService.Object, _startedWindows.Object);
 	}
 
 	[TestMethod]
@@ -63,6 +64,54 @@ public class WtqWindowResolverTest
 		Assert.AreSame(_started, window, "Should attach to the window that appeared after starting, not the pre-existing one.");
 
 		_windowService.Verify(s => s.CreateAsync(opts, It.IsAny<CancellationToken>()), Times.Once);
+		_startedWindows.Verify(s => s.SetWindowId(opts.Name!, _started.Id), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task StartOnly_RememberedWindowStillAround_ReattachesWithoutStarting()
+	{
+		// Arrange (e.g. WTQ was restarted, while the window it started earlier is still open)
+		var opts = CreateOpts(AttachMode.StartOnly);
+
+		_startedWindows
+			.Setup(s => s.GetWindowId(opts.Name!))
+			.Returns(_started.Id);
+
+		_windowService
+			.Setup(s => s.FindWindowsAsync(opts, It.IsAny<CancellationToken>()))
+			.ReturnsAsync([_preExisting, _started]);
+
+		// Act
+		var window = await _resolver.GetWindowHandleAsync(opts, allowStartNew: true);
+
+		// Assert
+		Assert.AreSame(_started, window, "Should re-attach to the window that was started earlier.");
+
+		_windowService.Verify(s => s.CreateAsync(It.IsAny<WtqAppOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task StartOnly_RememberedWindowGone_ForgetsItAndDoesNotAttachToOthers()
+	{
+		// Arrange
+		var opts = CreateOpts(AttachMode.StartOnly);
+
+		_startedWindows
+			.Setup(s => s.GetWindowId(opts.Name!))
+			.Returns("gone");
+
+		_windowService
+			.Setup(s => s.FindWindowsAsync(opts, It.IsAny<CancellationToken>()))
+			.ReturnsAsync([_preExisting]);
+
+		// Act
+		var window = await _resolver.GetWindowHandleAsync(opts, allowStartNew: false);
+
+		// Assert
+		Assert.IsNull(window);
+
+		_startedWindows.Verify(s => s.RemoveWindowId(opts.Name!), Times.Once);
+		_windowService.Verify(s => s.CreateAsync(It.IsAny<WtqAppOptions>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]

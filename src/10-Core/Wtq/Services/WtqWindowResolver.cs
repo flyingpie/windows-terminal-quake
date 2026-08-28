@@ -2,7 +2,8 @@ namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqWindowResolver"/>
 public sealed class WtqWindowResolver(
-	IWtqWindowService procService)
+	IWtqWindowService procService,
+	IWtqStartedWindowsStore startedWindows)
 	: IWtqWindowResolver
 {
 	/// <summary>
@@ -14,6 +15,7 @@ public sealed class WtqWindowResolver(
 	private readonly ILogger _log = Log.For<WtqWindowResolver>();
 
 	private readonly IWtqWindowService _windowService = Guard.Against.Null(procService);
+	private readonly IWtqStartedWindowsStore _startedWindows = Guard.Against.Null(startedWindows);
 
 	/// <summary>
 	/// Per app name, keeps track of a process we started, but of which we haven't seen a window yet (see <see cref="AttachMode.StartOnly"/>).
@@ -49,7 +51,10 @@ public sealed class WtqWindowResolver(
 	/// Only attaches to windows that appeared as a result of WTQ starting the app, never to pre-existing ones.<br/>
 	/// <br/>
 	/// Works by taking a snapshot of matching windows right before starting the process, and afterwards only
-	/// considering matching windows that were not in that snapshot.
+	/// considering matching windows that were not in that snapshot.<br/>
+	/// <br/>
+	/// The window that was eventually attached to is remembered (see <see cref="IWtqStartedWindowsStore"/>),
+	/// so it can be re-attached to after WTQ restarts.
 	/// </summary>
 	private async Task<WtqWindow?> StartOnlyAsync(WtqAppOptions opts, bool allowStartNew)
 	{
@@ -62,7 +67,12 @@ public sealed class WtqWindowResolver(
 
 			if (elapsed > PendingStartTimeout)
 			{
-				_log.LogWarning("App '{App}' was started {Elapsed} ago, but no new window appeared since, giving up on that start", opts, elapsed);
+				_log.LogWarning(
+					"App '{App}' was started {Elapsed} ago, but no new window appeared since, giving up on that start. " +
+					"Note that some apps re-use an existing window instead of creating a new one (like Windows Terminal with its '_quake' window), " +
+					"in which case that window needs to be closed first, or a different attach mode should be used",
+					opts,
+					elapsed);
 				_pendingStarts.TryRemove(appName, out _);
 			}
 			else
@@ -72,6 +82,7 @@ public sealed class WtqWindowResolver(
 				{
 					_log.LogInformation("Got window {Window} for options {Options}, which appeared after we started the app", window, opts);
 					_pendingStarts.TryRemove(appName, out _);
+					_startedWindows.SetWindowId(appName, window.Id);
 					return window;
 				}
 
@@ -79,6 +90,22 @@ public sealed class WtqWindowResolver(
 				_log.LogDebug("App '{App}' was started {Elapsed} ago, still waiting for a window to appear", opts, elapsed);
 				return null;
 			}
+		}
+
+		// See if we started a window for this app earlier (possibly before WTQ was restarted), that is still around.
+		var rememberedWindowId = _startedWindows.GetWindowId(appName);
+		if (rememberedWindowId != null)
+		{
+			var remembered = await FindWindowByIdAsync(opts, rememberedWindowId, CancellationToken.None).NoCtx();
+			if (remembered != null)
+			{
+				_log.LogInformation("Got window {Window} for options {Options}, which we started earlier", remembered, opts);
+				return remembered;
+			}
+
+			// The window we started earlier is gone, forget about it (so its id can't be picked up by some future window).
+			_log.LogDebug("Window with id '{WindowId}', started earlier for app '{App}', is no longer around", rememberedWindowId, opts);
+			_startedWindows.RemoveWindowId(appName);
 		}
 
 		if (!allowStartNew)
@@ -121,6 +148,7 @@ public sealed class WtqWindowResolver(
 			// If we got one, great, return it.
 			_log.LogInformation("Got window {Window} for options {Options}", window, opts);
 			_pendingStarts.TryRemove(appName, out _);
+			_startedWindows.SetWindowId(appName, window.Id);
 			return window;
 		}
 
@@ -221,6 +249,16 @@ public sealed class WtqWindowResolver(
 		var matchingWindows = await _windowService.FindWindowsAsync(opts, ct).NoCtx();
 
 		return matchingWindows.FirstOrDefault(w => !ignoreWindowIds.Contains(w.Id));
+	}
+
+	/// <summary>
+	/// Returns the window with the specified <paramref name="windowId"/>, if it exists, and (still) matches the specified <paramref name="opts"/>.
+	/// </summary>
+	private async Task<WtqWindow?> FindWindowByIdAsync(WtqAppOptions opts, string windowId, CancellationToken ct)
+	{
+		var matchingWindows = await _windowService.FindWindowsAsync(opts, ct).NoCtx();
+
+		return matchingWindows.FirstOrDefault(w => w.Id.Equals(windowId, StringComparison.OrdinalIgnoreCase));
 	}
 
 	/// <summary>
