@@ -21,7 +21,7 @@
 			"Exclusive": "Never",
 			"HideOnFocusLost": "Never",
 			"HorizontalScreenCoverage": 45,
-			"HorizontalAlign": "Right"
+			"HorizontalAlign": "None"
 		},
 
 		{

@@ -7,6 +7,7 @@
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ (#333).
 - Bugfix: Sometimes app attach failed at WTQ start, causing WTQ to crash entirely (#385, #386).
+- Feature: Horizontal align "None" - keep a window where it is horizontally, including where you left it.
 - Feature: Non-exclusive apps. Multiple apps can be on-screen at the same time (#380, #381).
 - Feature: When an app is open, but does not have focus, pressing the toggle key will re-focus, instead of toggling off (#380, #383).
 - Feature: When an app is open, but on a different virtual desktop, pressing the toggle key will bring it over to the current virtual desktop (#380, #383).

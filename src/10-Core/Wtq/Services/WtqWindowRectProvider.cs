@@ -75,6 +75,9 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 			// Right
 			HorizontalAlign.Right => screenRectDst.X + (screenRectDst.Width - wnd.Width),
 
+			// None (keep current horizontal position)
+			HorizontalAlign.None => windowRectSrc.X,
+
 			// Center
 			_ => screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 		};
