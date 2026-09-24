@@ -16,6 +16,7 @@
 		<PackageReference Include="Microsoft.Build" />
 		<PackageReference Include="Microsoft.Build.Tasks.Core" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" />
+		<PackageReference Include="NuGet.Packaging" />
 		<PackageReference Include="Nuke.Common" />
 	</ItemGroup>
 </Project>
