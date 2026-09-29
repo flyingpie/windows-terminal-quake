@@ -3,6 +3,7 @@
 ## [vFuture]
 
 ## [vNext]
+- Bugfix: Windows - When WTQ was started through a launcher that is also named "wtq.exe" (such as the Scoop shim), the single-instance check mistook the launcher for another WTQ instance, and WTQ exited immediately. Processes running a different executable are now ignored.
 
 ## [v2.2.0] / 2026-xx-xx
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ (#333).
