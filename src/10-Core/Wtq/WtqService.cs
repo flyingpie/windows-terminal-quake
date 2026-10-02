@@ -135,6 +135,36 @@ public sealed class WtqService : WtqHostedService
 		}
 	}
 
+	private readonly List<(WtqWindow Window, WtqApp? App)> _lastNonWtqWindow = new(10);
+
+	/// <summary>
+	/// After closing an app, we bring focus back to the last window that had focus before toggling on the WTQ-managed one.<br/>
+	/// This is so that user input gets sent to the last active window, instead of to the app we just toggled off, which is not off-screen.
+	/// </summary>
+	private async Task PopFocusAsync()
+	{
+		_log.LogDebug("Bringing back focus to the previously active window");
+
+		while (true)
+		{
+			// Pull most recently added window from the "stack".
+			var prev = _lastNonWtqWindow.LastOrDefault();
+			_lastNonWtqWindow.Remove(prev);
+
+			// Skip windows that are managed by WTQ and currently toggled off.
+			if (prev.App is { IsOpen: false })
+			{
+				_log.LogDebug("Skipping window '{Window}', as it is being handled by WTQ, and is toggled OFF", prev.Window);
+				continue;
+			}
+
+			// Bring focus to the window.
+			_log.LogInformation("Bringing back focus to previously-active window '{Window}'", prev.Window);
+			await prev.Window.BringToForegroundAsync().NoCtx();
+			return;
+		}
+	}
+
 	/// <summary>
 	/// After closing an app, we bring focus back to the last window that had focus before toggling on the WTQ-managed one.<br/>
 	/// This is so that user input gets sent to the last active window, instead of to the app we just toggled off, which is not off-screen.

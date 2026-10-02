@@ -132,7 +132,7 @@ kwin.setActiveWindow = (window) => {
 ////////////////////////////////////////////////////////////
 
 // WTQ /////////////////////////////////////////////////////
-wtq.DBUS_SERVICE	= "nl.flyingpie.wtq.svc";
+wtq.DBUS_SERVICE	= "{{WTQ_DBUS_SERVICE}}";
 wtq.DBUS_PATH		= "/wtq/kwin";
 wtq.DBUS_INTERFACE	= "wtq.kwin";
 

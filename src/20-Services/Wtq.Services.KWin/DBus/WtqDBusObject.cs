@@ -11,7 +11,7 @@ namespace Wtq.Services.KWin.DBus;
 internal sealed class WtqDBusObject
 	: WtqHostedService, IWtqDBusObject
 {
-	private const string ServiceName = "nl.flyingpie.wtq.svc";
+	private readonly string _serviceName;
 
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -57,12 +57,22 @@ internal sealed class WtqDBusObject
 		_pathToWtqKwinJsSrc = Path.Combine(_platformService.PathToAppDir, "wtq.kwin.js");
 		_pathToWtqKwinJsCache = Path.Combine(_platformService.PathToTempDir, "wtq.kwin.js");
 
+		_serviceName = $"nl.flyingpie.wtq.{ProcessUniqueAlphabeticString()}.svc";
+
 		// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
 		// and the connection is dropped.
 		_noopLoop = new(
 			$"{nameof(WtqDBusObject)}.NoOpLoop",
 			TimeSpan.FromSeconds(10), // Timeout is after a minute or so.
 			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx());
+	}
+
+	public static string ProcessUniqueAlphabeticString()
+	{
+		var processId = Process.GetCurrentProcess().Id;
+		var chars = processId.ToString().Select(c => (char)((char)'A' + c)).ToArray();
+
+		return new string(chars);
 	}
 
 	public ObjectPath ObjectPath => _path;
@@ -72,14 +82,18 @@ internal sealed class WtqDBusObject
 		_log.LogInformation("Setting up WTQ DBus service");
 
 		// Register this object as a DBus service.
-		await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
+		await _dbus.RegisterServiceAsync(_serviceName, this).NoCtx();
 
 		// Load KWin script.
 		// Note that we're copying the KWin script to the cache dir, as that will be available to both the host and the sandbox, in the case we're running as a Flatpak.
 		// For non-Flatpak, we could use the path to the KWin script directly, but that cannot be seen by KWin since KWin can't see in our sandbox.
 		_log.LogDebug("Copying KWin script from '{Src}' to '{Dst}'", _pathToWtqKwinJsSrc, _pathToWtqKwinJsCache);
 
-		File.Copy(_pathToWtqKwinJsSrc, _pathToWtqKwinJsCache, overwrite: true);
+		var kwinJs = await File.ReadAllTextAsync(_pathToWtqKwinJsSrc).NoCtx();
+		kwinJs = kwinJs.Replace("{{WTQ_DBUS_SERVICE}}", _serviceName);
+
+		// File.Copy(_pathToWtqKwinJsSrc, _pathToWtqKwinJsCache, overwrite: true);
+		await File.WriteAllTextAsync(_pathToWtqKwinJsCache, kwinJs).NoCtx();
 
 		_script = await _scriptService.LoadScriptAsync(_pathToWtqKwinJsCache).NoCtx();
 	}
