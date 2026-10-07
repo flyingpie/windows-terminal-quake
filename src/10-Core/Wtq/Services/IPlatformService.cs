@@ -33,6 +33,11 @@ public interface IPlatformService
 	string PathToAppExe { get; }
 
 	/// <summary>
+	/// Path to the WTQ executable (GUI version).
+	/// </summary>
+	string PathToGuiExe { get; }
+
+	/// <summary>
 	/// Path to the "assets" dir, contains icons and such.
 	/// </summary>
 	string PathToAssetsDir { get; }

@@ -53,6 +53,9 @@ public class WindowsPlatformService : PlatformServiceBase
 	public override string PathToAppExe => Path.Combine(PathToAppDir, "wtq.exe");
 
 	/// <inheritdoc/>
+	public override string PathToGuiExe => Path.Combine(PathToAppDir, "wtqu.exe");
+
+	/// <inheritdoc/>
 	public override string PathToLogsDir =>
 		PathToTempDir;
 

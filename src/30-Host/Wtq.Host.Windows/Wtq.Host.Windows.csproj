@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<AssemblyName>wtq</AssemblyName>
 		<RootNamespace>Wtq.Host.Windows</RootNamespace>
@@ -50,6 +50,16 @@
 			DestinationFolder="$(PublishDir)wwwroot/%(RecursiveDir)"
 			SkipUnchangedFiles="true"/>
 		<RemoveDir Directories="$(PublishDir)wwwroot/_content/Wtq.Services.UI"/>
+	</Target>
+
+	<!--
+		Copy executable to "wtqu", which we use to run the GUI, so we can differentiate
+		it from the main executable in "are we already running"-checks
+	-->
+	<Target Name="CreateWtquExe" AfterTargets="Publish">
+		<Copy
+			SourceFiles="$(PublishDir)$(AssemblyName).exe"
+			DestinationFiles="$(PublishDir)wtqu.exe" />
 	</Target>
 
 </Project>

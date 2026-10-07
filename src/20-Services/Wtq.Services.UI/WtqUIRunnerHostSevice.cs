@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace Wtq.Services.UI;
@@ -16,11 +16,11 @@ public class WtqUIRunnerHostSevice(IPlatformService platformService, IWtqBus bus
 	{
 		_bus.OnEvent<WtqUIRequestedEvent>(_ =>
 		{
-			_log.LogInformation("Opening GUI, using command '{Command} gui'", _platformService.PathToAppExe);
+			_log.LogInformation("Opening GUI, using command '{Command} gui'", _platformService.PathToGuiExe);
 
 			Process.Start(new ProcessStartInfo()
 			{
-				FileName = _platformService.PathToAppExe,
+				FileName = _platformService.PathToGuiExe,
 				ArgumentList = { "gui" },
 			});
 
