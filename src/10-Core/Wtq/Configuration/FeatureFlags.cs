@@ -10,10 +10,14 @@ namespace Wtq.Configuration;
 public class FeatureFlags
 {
 	/// <summary>
-	/// (Windows only) Switches the hotkey subsystem to using SharpHook, instead of registering through an invisible WinForm's window message loop.<br/>
-	/// Enables more keys (such as the "Windows", or "Meta", or "Super" modifier).<br/>
+	/// (Windows only) Use SharpHook (a low-level keyboard hook) for hotkeys, instead of registering them through an invisible WinForms window (<b>RegisterHotKey</b>).<br/>
 	/// <br/>
-	/// While implementing this, some subtle issues were encountered. Although all the known ones have been fixed, it's enough of a change that we're feature-flagging it for a while.
+	/// <b>On</b> (default): supports more keys (such as the "Windows", or "Meta", or "Super" modifier), and hotkeys can be specified as a <b>key character</b>.<br/>
+	/// <b>Off</b>: hotkeys also work while an elevated (administrator) window has focus, and don't depend on the keyboard hook. Hotkeys must be specified as a <b>key code</b> (e.g. "Oem3"), not as a key character.<br/>
+	/// <br/>
+	/// Requires a restart of WTQ to take effect.
 	/// </summary>
-	public bool SharpHook { get; set; }
+	[DefaultValue(true)]
+	[Display(Name = "SharpHook hotkeys", Prompt = "Requires restart")]
+	public bool? SharpHook { get; set; }
 }
