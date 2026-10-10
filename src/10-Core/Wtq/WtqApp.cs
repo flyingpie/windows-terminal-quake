@@ -291,6 +291,8 @@ public sealed class WtqApp : IAsyncDisposable
 			return;
 		}
 
+		return;
+
 		// Fetch current window location.
 		var rect = await window.GetWindowRectAsync().NoCtx();
 
