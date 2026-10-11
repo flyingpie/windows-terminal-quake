@@ -49,7 +49,7 @@
 	"HorizontalScreenCoverage": 95,
 
 	// Vertical screen coverage, as a percentage (defaults to 95).
-	"VerticalScreenCoverage": 95,
+	"VerticalScreenCoverage": 75,
 
 	"Api": {
 		"Enable": true
