@@ -23,6 +23,12 @@ public class Win32 : IWin32
 	private const uint WM_NULL = 0x0000;
 	private const int WS_EX_LAYERED = 0x80000;
 
+	/// <summary>
+	/// A virtual key code that is not assigned to any key (see "Virtual-Key Codes" on MSDN).<br/>
+	/// Used when we need to send a synthetic input event, without triggering anything in the app that receives it.
+	/// </summary>
+	private const byte VK_UNASSIGNED = 0xE8;
+
 #pragma warning restore SA1310
 #pragma warning restore CA1707 // Identifiers should not contain underscores
 
@@ -217,9 +223,21 @@ public class Win32 : IWin32
 		// But in some other cases, like sending a command to WTQ without pressing a hotkey, none of these criteria might be hit,
 		// and calling <see cref="SetForegroundWindow"/> doesn't do anything.
 		//
-		// A trick that apparently is also used by the Chromium team, is to send a synthetic input event, which would
-		// make our process the one with "the last input event".
-		// https://stackoverflow.com/a/13881647.
+		// Note that this is the common case when hotkeys come in through a low-level keyboard hook (SharpHook): the hook
+		// swallows the key press before it is delivered to any window, so no process "received" it, including ours.
+		//
+		// Two workarounds are attempted, in order:
+		//
+		// 1. Attach our thread's input queue to that of the current foreground window (AttachThreadInput). While attached,
+		//    we share the foreground thread's input state, and are allowed to change the foreground window.
+		//    This doesn't touch the keyboard state at all.
+		//
+		// 2. Send a synthetic input event, which makes our process the one with "the last input event" (a trick also used
+		//    by the Chromium team, https://stackoverflow.com/a/13881647).
+		//    Note that we deliberately do NOT use a modifier key like "Alt" for this (as was done previously), as the synthetic
+		//    key-up releases a modifier that the user may still be physically holding (breaking hotkeys like "Alt+;" until
+		//    the user releases and re-presses Alt), and a lone Alt press activates the menu bar in a lot of apps (#388).
+		//    Instead, we use a virtual key code that is unassigned, so no app does anything with it.
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
 		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetForegroundWindow), windowHandle);
@@ -227,6 +245,45 @@ public class Win32 : IWin32
 		var hwnd = (HWND)windowHandle;
 
 		// Attempt the regular method first, simpler and faster.
+		if (TrySetForegroundWindow(hwnd))
+		{
+			return;
+		}
+
+		// Workaround 1: attach to the foreground thread's input queue.
+		_log.LogDebug("{MethodName} failed, attempting thread input attach workaround", nameof(SetForegroundWindow));
+
+		if (TrySetForegroundWindowWithThreadInputAttached(hwnd))
+		{
+			_log.LogDebug("Thread input attach workaround successful");
+			return;
+		}
+
+		// Workaround 2: synthetic input event.
+		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
+
+		// Simulate a press and release of an unassigned key (see remarks above on why not "Alt").
+		PI.keybd_event(VK_UNASSIGNED, 0, 0, UIntPtr.Zero);
+		PI.keybd_event(VK_UNASSIGNED, 0, KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP, UIntPtr.Zero);
+
+		Thread.Sleep(20); // Give Windows a moment to process input events.
+
+		// We should now be the app with the most recent input event, so we should be allowed to set the foreground window.
+		if (TrySetForegroundWindow(hwnd))
+		{
+			_log.LogDebug("Synthetic input event workaround successful");
+		}
+		else
+		{
+			_log.LogWarning("Synthetic input event workaround failed, window may not have focus");
+		}
+	}
+
+	/// <summary>
+	/// Calls <see cref="PI.SetForegroundWindow"/>, waits for the target window to process it, and returns whether it worked.
+	/// </summary>
+	private static bool TrySetForegroundWindow(HWND hwnd)
+	{
 		PI.SetForegroundWindow(hwnd);
 		PI.SendMessage(hwnd, PI.WM_PAINT, 0, 0);
 
@@ -235,34 +292,48 @@ public class Win32 : IWin32
 		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
 		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
 
-		// If the requested window has become the foreground window, we're done.
-		if (PI.GetForegroundWindow() == hwnd)
+		// See whether the requested window has become the foreground window.
+		return PI.GetForegroundWindow() == hwnd;
+	}
+
+	/// <summary>
+	/// Temporarily attaches the calling thread's input queue to the one of the current foreground window,
+	/// and attempts to set the foreground window while attached.
+	/// </summary>
+	private unsafe bool TrySetForegroundWindowWithThreadInputAttached(HWND hwnd)
+	{
+		var fgHwnd = PI.GetForegroundWindow();
+
+		// Nothing to attach to (e.g. the desktop is locked, or a screen saver is active).
+		if (fgHwnd == HWND.Null || fgHwnd == hwnd)
 		{
-			return;
+			return false;
 		}
 
-		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
+		var fgThreadId = PI.GetWindowThreadProcessId(fgHwnd, null);
+		var ownThreadId = PI.GetCurrentThreadId();
 
-		// Simulate Alt key press and release.
-		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, 0, UIntPtr.Zero);
-		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP, UIntPtr.Zero);
-
-		Thread.Sleep(20); // Give Windows a moment to process input events.
-
-		// We should now be the app with the most recent input event, so we should be allowed to set the foreground window.
-		PI.SetForegroundWindow(hwnd);
-		PI.SendMessage(hwnd, PI.WM_PAINT, 0, 0);
-
-		// Wait for the above event to be processed again.
-		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
-
-		if (PI.GetForegroundWindow() == hwnd)
+		if (fgThreadId == 0 || fgThreadId == ownThreadId)
 		{
-			_log.LogDebug("Synthetic input event workaround successful");
+			return false;
 		}
-		else
+
+		if (!PI.AttachThreadInput(ownThreadId, fgThreadId, true))
 		{
-			_log.LogWarning("Synthetic input event workaround failed, window may not have focus");
+			_log.LogDebug("Could not attach thread input to thread '{ThreadId}': {Message}", fgThreadId, new Win32Exception().Message);
+			return false;
+		}
+
+		try
+		{
+			PI.BringWindowToTop(hwnd);
+
+			return TrySetForegroundWindow(hwnd);
+		}
+		finally
+		{
+			// Always detach again, we don't want to stay entangled with some other app's input queue.
+			PI.AttachThreadInput(ownThreadId, fgThreadId, false);
 		}
 	}
 

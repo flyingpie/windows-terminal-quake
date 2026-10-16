@@ -1,6 +1,9 @@
 AttachConsole
 ATTACH_PARENT_PROCESS
+AttachThreadInput
+BringWindowToTop
 CreateFile
+GetCurrentThreadId
 EnumWindows
 GetClassName
 GetForegroundWindow
