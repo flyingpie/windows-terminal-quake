@@ -1,0 +1,72 @@
+[project]
+site_name = "WTQ - Quake Mode For (Almost) Any App"
+site_author = "flyingpie"
+
+docs_dir = "pages"
+site_dir = "build"
+
+copyright = 'WTQ by <a href="https://www.flyingpie.nl" target="_blank" rel="noopener">Flyingpie</a>'
+
+nav = [
+  { "WTQ v2" = "index.md" },
+  { "WTQ v1" = "v1.md" },
+  { "Reporting Issues" = "reporting-issues.md" },
+  { "FAQ" = "faq.md" },
+]
+
+repo_name = "windows-terminal-quake"
+repo_url = "http://github.com/flyingpie/windows-terminal-quake"
+
+extra_css = [
+  "assets/syntax.css",
+  "assets/styles.css",
+]
+
+[project.theme]
+variant = "classic"
+favicon = "assets/favicon.ico"
+logo = "assets/favicon.png"
+font = false
+features = [
+  "content.code.copy",
+  "navigation.expand",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.tracking",
+]
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+# Palette toggle for light mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "black"
+toggle.icon = "material/weather-night"
+toggle.name = "Switch to dark mode"
+
+# Palette toggle for dark mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "black"
+toggle.icon = "material/weather-sunny"
+toggle.name = "Switch to light mode"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+pymdownx.blocks.caption = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+sane_lists = {}
+toc.permalink = true
+toc.toc_depth = 5
