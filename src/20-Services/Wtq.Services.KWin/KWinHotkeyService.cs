@@ -139,6 +139,11 @@ internal sealed class KWinHotkeyService : WtqHostedService
 
 	private async Task RegisterGlobalHotkeysAsync(CancellationToken cancellationToken)
 	{
+		{
+			var id = $"{WtqShortcutPrefix}_global_{_shortcutId++}";
+			await _kwinClient.RegisterHotkeyAsync(id, "WTQ hotkey - Fullscreen", new KeySequence(KeyModifiers.Control, "_", KeyCode.None), cancellationToken).NoCtx();
+		}
+
 		foreach (var hk in _opts.CurrentValue.Hotkeys)
 		{
 			// Unique identifier.
