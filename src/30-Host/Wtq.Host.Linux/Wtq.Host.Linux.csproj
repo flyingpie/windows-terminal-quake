@@ -48,4 +48,14 @@
 		<RemoveDir Directories="$(PublishDir)wwwroot/_content/Wtq.Services.UI"/>
 	</Target>
 
+	<!--
+		Copy executable to "wtqu", which we use to run the GUI, so we can differentiate
+		it from the main executable in "are we already running"-checks
+	-->
+	<Target Name="CreateWtquExe" AfterTargets="Publish">
+		<Copy
+			SourceFiles="$(PublishDir)$(AssemblyName)"
+			DestinationFiles="$(PublishDir)wtqu" />
+	</Target>
+
 </Project>
