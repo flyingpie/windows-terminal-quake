@@ -15,6 +15,37 @@ public class MathUtilsTest
 		Assert.AreEqual(new Point(400, 250), new Size(800, 600).CenterInRectangle(new Rectangle(200, 100, 1200, 900)));
 	}
 
+	/// csharpier-ignore-start
+	/// <summary>
+	///   <----50---->
+	///   ------------  ------------  ------------
+	///   |  src - x |  |  src - v |  |  src - x |
+	///   ------------  ------------  ------------
+	///             <--------100------->
+	///             --------------------
+	///             |        dst       |
+	///             --------------------
+	///             | x=100            | x=200
+	/// </summary>
+	[TestMethod]
+	//       srcX	srxWidth	dstX	dstWidth	isWithin
+	[DataRow(0,		50,			100,		200,		false)]		// Left, no overlap.
+	[DataRow(10,	50,			100,		200,		false)]		// Left, no overlap.
+	[DataRow(0,		100,		100,		200,		false)]		// Left, brushing against.
+	[DataRow(10,	100,		100,		200,		false)]		// Left side, partial overlap.
+	//
+	[DataRow(100,	100,		100,		200,		true)]		// Exact overlap
+	[DataRow(125,	50,			100,		200,		true)]		// Within
+	//
+	[DataRow(310,	50,			100,		200,		false)]		// Right, no overlap.
+	[DataRow(300,	50,			100,		200,		false)]		// Right, brushing against.
+	[DataRow(90,	50,			100,		200,		false)]		// Right side, partial overlap.
+	/// csharpier-ignore-end
+	public void IsWithinHorizontal(int srcX, int srcWidth, int dstX, int dstWidth, bool expected)
+	{
+		Assert.AreEqual(expected, new Rectangle(srcX, 0, srcWidth, 0).IsWithinHorizontal(new Rectangle(dstX, 0, dstWidth, 0)));
+	}
+
 	[TestMethod]
 	public void Lerp()
 	{

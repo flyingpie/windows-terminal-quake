@@ -25,6 +25,13 @@ public static class MathUtils
 		=> MathF.Sqrt(MathF.Pow(dst.X - src.X, 2) + MathF.Pow(dst.Y - src.Y, 2));
 
 	/// <summary>
+	/// Returns whether the <paramref name="small"/> is within <paramref name="large"/>, on the X-axis.
+	/// </summary>
+	public static bool IsWithinHorizontal(this Rectangle small, Rectangle large) =>
+		small.X >= large.X &&
+		small.X + small.Width <= large.X + large.Width;
+
+	/// <summary>
 	/// Linear interpolate, returns a <see cref="Point"/> that is between <paramref name="src"/> and <paramref name="dst"/>,
 	/// at <paramref name="by"/> (value of 0.0f, to 1.0f).
 	/// </summary>

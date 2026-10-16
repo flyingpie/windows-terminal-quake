@@ -98,7 +98,7 @@
   // "Opacity": 0-100,
 
   // Some positioning settings:
-  // "HorizontalAlign": "Left | Center | Right",
+  // "HorizontalAlign": "Left | Center | Right | None",
   // "HorizontalScreenCoverage": 0-100, // Defaults to 95
   // "VerticalScreenCoverage": 0-100, // Defaults to 95
 

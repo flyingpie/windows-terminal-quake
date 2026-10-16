@@ -946,6 +946,8 @@ Defaults to `Center`
 
 - **Right**<br/>Right of the screen.
 
+- **None**<br/>Maintain the horizontal position as-is.
+
 ```json
 {
 	// Globally:
