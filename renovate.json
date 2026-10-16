@@ -1,23 +1,35 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
+	"extends": [
+		"config:recommended"
+	],
 	"enabledManagers": [
 		"github-actions",
 		"nuget",
 		"pep621",
 		"pyenv"
 	],
-
 	"packageRules": [
 		{
-			"groupName": "NuGet",
-			"matchDatasources": "nuget"
+			"groupName": "DotNet",
+			"matchDatasources": [
+				"nuget",
+				"dotnet-version"
+			]
+		},
+		{
+			"groupName": "GitHub Actions",
+			"matchManagers": [
+				"github-actions"
+			]
 		},
 		{
 			"groupName": "Python",
-			"matchDatasources": ["pypi", "python-version"]
+			"matchDatasources": [
+				"pypi",
+				"python-version"
+			]
 		}
 	],
-
 	"prConcurrentLimit": 10
 }
