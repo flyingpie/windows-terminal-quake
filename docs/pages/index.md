@@ -464,7 +464,10 @@ but still have a way back should things go awry, without necessarily reverting t
 ```json
 {
 	"FeatureFlags": {
-		// (Currently no feature flags available)
+		// (Windows only) Use SharpHook (keyboard hook) for hotkeys. Defaults to true.
+		// Set to false to register hotkeys through RegisterHotKey instead, which also works while an elevated
+		// (administrator) window has focus, but requires hotkeys to be specified as "Key" codes instead of "KeyChar".
+		"SharpHook": true
 	}
 	// ...
 }

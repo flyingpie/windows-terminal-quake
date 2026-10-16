@@ -111,6 +111,13 @@ public sealed class WtqOptions : WtqSharedOptions
 			app.PrepareForSave();
 		}
 
+		// Don't write an empty "FeatureFlags" object, when no flag is set explicitly.
+		// (An empty object is not bound to anything when loading the settings anyway.)
+		if (FeatureFlags is { SharpHook: null })
+		{
+			FeatureFlags = null;
+		}
+
 		// Explicit ToList() since we're modifying it from within the loop.
 		foreach (var hk in Hotkeys.Where(hk => hk.Sequence.IsEmpty).ToList())
 		{
