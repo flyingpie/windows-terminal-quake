@@ -1,39 +1,35 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
 	"extends": [
 		"config:recommended"
 	],
-
 	"enabledManagers": [
 		"github-actions",
 		"nuget",
 		"pep621",
 		"pyenv"
 	],
-
 	"packageRules": [
 		{
-			"description": "Group GitHub Actions updates (.github/workflows/*.yml) in 1 PR",
+			"groupName": "DotNet",
+			"matchDatasources": [
+				"nuget",
+				"dotnet-version"
+			]
+		},
+		{
 			"groupName": "GitHub Actions",
-			"matchManagers": ["github-actions"]
+			"matchManagers": [
+				"github-actions"
+			]
 		},
 		{
-			"description": "Group .NET package updates (Directory.Packages.props, *.csproj) in 1 PR",
-			"groupName": "NuGet",
-			"matchDatasources": "nuget"
-		},
-		{
-			"description": "Group .NET SDK updates (global.json) in 1 PR",
-			"groupName": "dotnet-sdk",
-			"matchDatasources": "dotnet-version"
-		},
-		{
-			"description": "Group Python documentation package updates (docs/pyproject.toml, docs/uv.lock) in 1 PR",
 			"groupName": "Python",
-			"matchDatasources": ["pypi", "python-version"]
+			"matchDatasources": [
+				"pypi",
+				"python-version"
+			]
 		}
 	],
-
 	"prConcurrentLimit": 10
 }
