@@ -1,0 +1,41 @@
+/*
+ * Tokyo Night inspired syntax highlighting.
+ *
+ * Zensical (like Material for MkDocs) uses Pygments for syntax highlighting at
+ * build time, and exposes the token colors through CSS variables. This theme is
+ * a port of the previous highlight.js based Tokyo Night theme to those
+ * variables, so code blocks keep their look.
+ */
+[data-md-color-scheme="default"] {
+	--md-code-fg-color: #565a6e;
+
+	--md-code-hl-comment-color: #9699a3;
+	--md-code-hl-generic-color: #9699a3;
+	--md-code-hl-number-color: #965027;
+	--md-code-hl-special-color: #8c4351;
+	--md-code-hl-function-color: #34548a;
+	--md-code-hl-constant-color: #8f5e15;
+	--md-code-hl-keyword-color: #5a4a78;
+	--md-code-hl-name-color: #565a6e;
+	--md-code-hl-operator-color: #5a4a78;
+	--md-code-hl-punctuation-color: #343b58;
+	--md-code-hl-variable-color: #965027;
+	--md-code-hl-string-color: #485e30;
+}
+
+[data-md-color-scheme="slate"] {
+	--md-code-fg-color: #9aa5ce;
+
+	--md-code-hl-comment-color: #565f89;
+	--md-code-hl-generic-color: #565f89;
+	--md-code-hl-number-color: #ff9e64;
+	--md-code-hl-special-color: #f7768e;
+	--md-code-hl-function-color: #7aa2f7;
+	--md-code-hl-constant-color: #e0af68;
+	--md-code-hl-keyword-color: #bb9af7;
+	--md-code-hl-name-color: #9aa5ce;
+	--md-code-hl-operator-color: #bb9af7;
+	--md-code-hl-punctuation-color: #c0caf5;
+	--md-code-hl-variable-color: #ff9e64;
+	--md-code-hl-string-color: #9ece6a;
+}
