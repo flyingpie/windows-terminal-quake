@@ -135,6 +135,15 @@ public abstract class WtqSharedOptions : IValidatableObject
 	[JsonPropertyOrder(4005)]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
+	/// <summary>
+	/// Whether app windows should be put back where WTQ last put them, if they're moved by external factors,
+	/// such as monitor (dis)connects or resolution changes.
+	/// </summary>
+	[DefaultValue(false)]
+	[Display(GroupName = Gn.Position, Name = "Maintain position and size")]
+	[JsonPropertyOrder(4006)]
+	public bool? MaintainPositionAndSize { get; set; }
+
 	#endregion
 
 	#region 5000 - Monitor
