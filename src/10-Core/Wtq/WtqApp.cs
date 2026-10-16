@@ -75,6 +75,8 @@ public sealed class WtqApp : IAsyncDisposable
 	/// </summary>
 	public WtqWindow? Window { get; private set; }
 
+	public bool IsFullScreen { get; set; }
+
 	/// <summary>
 	/// Toggle the app off the screen.
 	/// </summary>
@@ -223,6 +225,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
+		await Window.UnpinAsync().NoCtx();
 		await Window.SetSizeAsync(size).NoCtx();
 	}
 

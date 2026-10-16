@@ -26,7 +26,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 		_bus.OnEvent<WtqHotkeyPressedEvent>(e => HandleHotkeyPressedEventAsync(e.Sequence));
 	}
 
-	public Task HandleHotkeyPressedEventAsync(KeySequence sequence)
+	public async Task HandleHotkeyPressedEventAsync(KeySequence sequence)
 	{
 		// Look for app that has the specified hotkey configured.
 		var app = _opts.CurrentValue.Apps.FirstOrDefault(app => app.Hotkeys.Any(hk => hk.Sequence == sequence));
@@ -35,7 +35,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			_bus.Publish(new WtqAppToggledEvent(app.Name));
 			_prevAppName = app.Name;
 
-			return Task.CompletedTask;
+			return;
 		}
 
 		// Look for a global (non-app-specific) hotkey.
@@ -47,16 +47,40 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			if (globalApp == null)
 			{
 				_log.LogWarning("Could not find a candidate app for global hotkey '{Sequence}', maybe no apps were configured?", sequence);
-				return Task.CompletedTask;
+				return;
 			}
 
 			_bus.Publish(new WtqAppToggledEvent(globalApp));
 			_prevAppName = globalApp;
 
-			return Task.CompletedTask;
+			return;
+		}
+
+		{
+			foreach (var a in _appRepo.GetAll())
+			{
+				if (await a.Window.HasFocusAsync())
+				{
+
+					a.IsFullScreen = !a.IsFullScreen;
+
+					if (a.IsFullScreen)
+					{
+						var scr = await a.GetScreenRectAsync();
+						await a.ResizeWindowAsync(scr.Size).NoCtx();
+						await a.Window.SetAlwaysOnTopAsync(true);
+					}
+					else
+					{
+						await a.CloseAsync(ToggleModifiers.Instant);
+						await a.OpenAsync(ToggleModifiers.Instant);
+						await a.Window.SetAlwaysOnTopAsync(false);
+					}
+					return;
+				}
+			}
 		}
 
 		_log.LogWarning("Got unmapped hotkey '{Sequence}'. This could mean something went wrong during hotkey registration", sequence);
-		return Task.CompletedTask;
 	}
 }
