@@ -33,7 +33,8 @@ public class WtqWindowRectProviderTest
 	[DataRow(08,	HA.Center,		50,		50,		0,			Always,			0,		0,		1920,		1080,			0,		0,		0,		0,			480,	0,		960,	540)]	// True
 	[DataRow(09,	HA.Center,		50,		50,		0,			Never,			0,		0,		1920,		1080,			0,		0,		800,	600,		560,	0,		800,	600)]	// False
 	// HorizontalAlign=None																																									//
-	[DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			123,	0,		800,	600,		123,	0,		800,	600)]	// Top-Left
+	[DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			123,	0,		800,	600,		123,	0,		800,	600)]	// Same screen
+	[DataRow(11,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			2100,	0,		800,	600,		123,	0,		800,	600)]	// Different screen
 	// csharpier-ignore-end
 	public async Task GetOnScreenRectAsyncTest(
 		int id,																		// Id, to make it easier to identify in the test runner
