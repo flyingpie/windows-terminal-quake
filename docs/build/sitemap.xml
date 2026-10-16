@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <url>
+        <loc>https://wtq.flyingpie.nl/</loc>
+      </url>
+      <url>
+        <loc>https://wtq.flyingpie.nl/faq/</loc>
+      </url>
+      <url>
+        <loc>https://wtq.flyingpie.nl/reporting-issues/</loc>
+      </url>
+      <url>
+        <loc>https://wtq.flyingpie.nl/v1/</loc>
+      </url>
 </urlset>
