@@ -318,21 +318,6 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 	}
 
-	// /// <summary>
-	// /// Asks the window manager to keep the (toggled-off) window where we last moved it to.<br/>
-	// /// Some window managers (e.g. KWin 6.8+) move off-screen windows back into view, causing the window to visibly jump onto the screen.<br/>
-	// /// The pin is cleared as soon as we move the window again (e.g. when toggling on).
-	// /// </summary>
-	// private async Task PinWindowAtLastLocationAsync()
-	// {
-	// 	if (!IsAttached || _lastLoc == null)
-	// 	{
-	// 		return;
-	// 	}
-	//
-	// 	await Window.SetPinnedLocationAsync(_lastLoc.Value).NoCtx();
-	// }
-
 	/// <summary>
 	/// Stores the specified <paramref name="window"/>'s handle, and toggles it off the screen.
 	/// </summary>

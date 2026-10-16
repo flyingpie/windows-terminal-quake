@@ -1,3 +1,4 @@
+using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;

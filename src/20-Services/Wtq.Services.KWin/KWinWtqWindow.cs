@@ -137,11 +137,6 @@ public class KWinWtqWindow(
 		await _kwinClient.PinWindowAsync(_window, rect, CancellationToken.None).NoCtx();
 	}
 
-	public override async Task UnpinAsync()
-	{
-		await _kwinClient.UnpinWindowAsync(_window, CancellationToken.None).NoCtx();
-	}
-
 	public override async Task SetSizeAsync(Size size)
 	{
 		await _kwinClient.ResizeWindowAsync(_window, size, CancellationToken.None).NoCtx();
@@ -166,6 +161,11 @@ public class KWinWtqWindow(
 	{
 		// TODO
 		return Task.CompletedTask;
+	}
+
+	public override async Task UnpinAsync()
+	{
+		await _kwinClient.UnpinWindowAsync(_window, CancellationToken.None).NoCtx();
 	}
 
 	public override async Task UpdateAsync()

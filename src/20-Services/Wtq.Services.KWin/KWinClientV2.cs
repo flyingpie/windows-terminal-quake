@@ -127,21 +127,6 @@ internal sealed class KWinClientV2(
 			.NoCtx();
 	}
 
-	public async Task UnpinWindowAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken)
-	{
-		_ = await _wtqBusObj
-			.SendCommandAsync(
-				"UNPIN_WINDOW",
-				new
-				{
-					internalId = window.InternalId,
-				},
-				cancellationToken)
-			.NoCtx();
-	}
-
 	public async Task RegisterHotkeyAsync(
 		string name,
 		string description,
@@ -230,6 +215,21 @@ internal sealed class KWinClientV2(
 				{
 					internalId = window.InternalId,
 					opacity = opacity,
+				},
+				cancellationToken)
+			.NoCtx();
+	}
+
+	public async Task UnpinWindowAsync(
+		KWinWindow window,
+		CancellationToken cancellationToken)
+	{
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"UNPIN_WINDOW",
+				new
+				{
+					internalId = window.InternalId,
 				},
 				cancellationToken)
 			.NoCtx();
