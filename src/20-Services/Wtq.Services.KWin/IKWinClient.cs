@@ -33,6 +33,19 @@ public interface IKWinClient
 		Point location,
 		CancellationToken cancellationToken);
 
+	/// <summary>
+	/// Keeps the window at the specified <paramref name="location"/>, moving it back immediately if KWin moves it elsewhere.<br/>
+	/// Cleared by <see cref="UnpinWindowLocationAsync"/>, or by any subsequent <see cref="MoveWindowAsync"/>.
+	/// </summary>
+	Task PinWindowLocationAsync(
+		KWinWindow window,
+		Point location,
+		CancellationToken cancellationToken);
+
+	Task UnpinWindowLocationAsync(
+		KWinWindow window,
+		CancellationToken cancellationToken);
+
 	Task RegisterHotkeyAsync(
 		string name,
 		string description,

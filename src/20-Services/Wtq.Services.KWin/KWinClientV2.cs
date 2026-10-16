@@ -107,6 +107,39 @@ internal sealed class KWinClientV2(
 			.NoCtx();
 	}
 
+	public async Task PinWindowLocationAsync(
+		KWinWindow window,
+		Point location,
+		CancellationToken cancellationToken)
+	{
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"PIN_WINDOW_LOCATION",
+				new
+				{
+					internalId = window.InternalId,
+					x = location.X,
+					y = location.Y,
+				},
+				cancellationToken)
+			.NoCtx();
+	}
+
+	public async Task UnpinWindowLocationAsync(
+		KWinWindow window,
+		CancellationToken cancellationToken)
+	{
+		_ = await _wtqBusObj
+			.SendCommandAsync(
+				"UNPIN_WINDOW_LOCATION",
+				new
+				{
+					internalId = window.InternalId,
+				},
+				cancellationToken)
+			.NoCtx();
+	}
+
 	public async Task RegisterHotkeyAsync(
 		string name,
 		string description,

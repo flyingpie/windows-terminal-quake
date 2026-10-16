@@ -111,6 +111,18 @@ kwin.getActiveWindow = () => {
 	throw "Could not find property for active client/window, unsupported version of KWin perhaps?";
 };
 
+kwin.setWindowLocation = (w, x, y) => {
+	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
+	// allowing us to eg. only set the width, and not the height, or vice versa.
+	// Not sure if this is a bug, but it took a bunch of time to figure out.
+	let q = Object.assign({}, w.frameGeometry);
+
+	q.x			= x;
+	q.y			= y;
+
+	w.frameGeometry = q;
+};
+
 kwin.setActiveWindow = (window) => {
 	// KWin5
 	if (typeof workspace.activeClient === "object") {
@@ -135,6 +147,49 @@ kwin.setActiveWindow = (window) => {
 wtq.DBUS_SERVICE	= "nl.flyingpie.wtq.svc";
 wtq.DBUS_PATH		= "/wtq/kwin";
 wtq.DBUS_INTERFACE	= "wtq.kwin";
+
+// Windows that should stay at a specific location (e.g. off-screen), keyed by internal id.
+// Since KWin 6.8, KWin sometimes moves off-screen windows back into the visible area (e.g. on focus change).
+// We correct that as soon as it happens, so the window doesn't visibly jump onto the screen.
+wtq.pinned = {};
+
+// Internal ids of windows we've connected a "frameGeometryChanged" handler to.
+wtq.watched = {};
+
+wtq.watchWindow = (w) => {
+	const id = w.internalId.toString();
+
+	if (wtq.watched[id]) {
+		return;
+	}
+
+	wtq.watched[id] = true;
+
+	let isCorrecting = false;
+
+	w.frameGeometryChanged.connect(() => {
+		const pin = wtq.pinned[id];
+
+		if (!pin || isCorrecting) {
+			return;
+		}
+
+		const g = w.frameGeometry;
+
+		if (Math.round(g.x) === pin.x && Math.round(g.y) === pin.y) {
+			return;
+		}
+
+		log.warning(`Pinned window with id '${id}' was moved externally to x:${Math.round(g.x)}, y:${Math.round(g.y)} (active window: '${workspace.activeWindow?.caption}'), moving it back to x:${pin.x}, y:${pin.y}`);
+
+		isCorrecting = true;
+		try {
+			kwin.setWindowLocation(w, pin.x, pin.y);
+		} finally {
+			isCorrecting = false;
+		}
+	});
+};
 
 // Send log to WTQ so we can see what's going on in the KWin script.
 wtq.log = (level, msg) => {
@@ -249,15 +304,10 @@ cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
 
 	log.info(`Moving window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
 
-	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
-	// allowing us to eg. only set the width, and not the height, or vice versa.
-	// Not sure if this is a bug, but it took a bunch of time to figure out.
-	let q = Object.assign({}, w.frameGeometry);
+	// Explicit moves by WTQ take precedence over a pinned location.
+	delete wtq.pinned[p.internalId];
 
-	q.x			= p.x;
-	q.y			= p.y;
-
-	w.frameGeometry = q;
+	kwin.setWindowLocation(w, p.x, p.y);
 };
 
 cmds["RESIZE_WINDOW"] = (cmdInfo) => {
@@ -279,6 +329,21 @@ cmds["RESIZE_WINDOW"] = (cmdInfo) => {
 };
 
 cmds["NOOP"] = (cmdInfo) => { };
+
+cmds["PIN_WINDOW_LOCATION"] = (cmdInfo, p) => {
+	const w = kwin.getWindowByInternalIdRequired(p.internalId);
+
+	log.info(`Pinning window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
+
+	wtq.pinned[p.internalId] = { x: p.x, y: p.y };
+	wtq.watchWindow(w);
+};
+
+cmds["UNPIN_WINDOW_LOCATION"] = (cmdInfo, p) => {
+	log.info(`Unpinning window with id '${p.internalId}'`);
+
+	delete wtq.pinned[p.internalId];
+};
 
 cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 	const descr = `sequence:'${p.sequence}', key char:'${p.keyChar}', key code:'${p.keyCode}', modifier:'${p.mod}'`;
