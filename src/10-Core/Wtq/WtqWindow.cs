@@ -100,13 +100,7 @@ public abstract class WtqWindow
 
 	public abstract Task SetLocationAsync(Point location);
 
-	/// <summary>
-	/// Asks the window manager to keep the window at the specified <paramref name="location"/>, or stop doing so when <see langword="null"/>.<br/>
-	/// Used to keep toggled-off windows off-screen, in case the window manager moves them back (e.g. KWin 6.8+).<br/>
-	/// Any subsequent call to <see cref="SetLocationAsync"/> clears the pinned location.<br/>
-	/// No-op by default, for platforms that don't need it.
-	/// </summary>
-	public virtual Task SetPinnedLocationAsync(Point? location) => Task.CompletedTask;
+	public abstract Task SetPinnedAsync(Rectangle rect);
 
 	// TODO: Warn or disallow sizes below a certain threshold? Seems to happen occasionally.
 	public abstract Task SetSizeAsync(Size size);
@@ -118,6 +112,8 @@ public abstract class WtqWindow
 	public abstract Task SetTransparencyAsync(int transparency);
 
 	public abstract Task SetWindowTitleAsync(string title);
+
+	public abstract Task UnpinAsync();
 
 	public abstract Task UpdateAsync();
 

@@ -107,31 +107,33 @@ internal sealed class KWinClientV2(
 			.NoCtx();
 	}
 
-	public async Task PinWindowLocationAsync(
+	public async Task PinWindowAsync(
 		KWinWindow window,
-		Point location,
+		Rectangle rect,
 		CancellationToken cancellationToken)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
-				"PIN_WINDOW_LOCATION",
+				"PIN_WINDOW",
 				new
 				{
 					internalId = window.InternalId,
-					x = location.X,
-					y = location.Y,
+					x = rect.X,
+					y = rect.Y,
+					width = rect.Width,
+					height = rect.Height,
 				},
 				cancellationToken)
 			.NoCtx();
 	}
 
-	public async Task UnpinWindowLocationAsync(
+	public async Task UnpinWindowAsync(
 		KWinWindow window,
 		CancellationToken cancellationToken)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
-				"UNPIN_WINDOW_LOCATION",
+				"UNPIN_WINDOW",
 				new
 				{
 					internalId = window.InternalId,

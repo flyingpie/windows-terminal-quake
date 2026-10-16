@@ -59,6 +59,8 @@ public class WtqAppToggleService(
 
 		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		await app.Window.UnpinAsync().NoCtx();
+
 		// If no off-screen location could be found, just blink it into existence instantly.
 		if (windowRectSrc == null)
 		{
@@ -129,6 +131,9 @@ public class WtqAppToggleService(
 				animType: app.Options.GetAnimationTypeToggleOff(),
 				move: app.MoveWindowAsync)
 			.NoCtx();
+
+		// Pin window so it doesn't move until we touch it again.
+		await app.Window.SetPinnedAsync(windowRectDst.Value).NoCtx();
 	}
 
 	/// <summary>

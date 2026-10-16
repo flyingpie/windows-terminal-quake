@@ -132,16 +132,14 @@ public class KWinWtqWindow(
 		await _kwinClient.MoveWindowAsync(_window, location, CancellationToken.None).NoCtx();
 	}
 
-	public override async Task SetPinnedLocationAsync(Point? location)
+	public override async Task SetPinnedAsync(Rectangle rect)
 	{
-		if (location.HasValue)
-		{
-			await _kwinClient.PinWindowLocationAsync(_window, location.Value, CancellationToken.None).NoCtx();
-		}
-		else
-		{
-			await _kwinClient.UnpinWindowLocationAsync(_window, CancellationToken.None).NoCtx();
-		}
+		await _kwinClient.PinWindowAsync(_window, rect, CancellationToken.None).NoCtx();
+	}
+
+	public override async Task UnpinAsync()
+	{
+		await _kwinClient.UnpinWindowAsync(_window, CancellationToken.None).NoCtx();
 	}
 
 	public override async Task SetSizeAsync(Size size)

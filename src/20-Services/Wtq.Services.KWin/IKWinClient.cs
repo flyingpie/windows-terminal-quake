@@ -1,4 +1,3 @@
-using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
@@ -33,17 +32,9 @@ public interface IKWinClient
 		Point location,
 		CancellationToken cancellationToken);
 
-	/// <summary>
-	/// Keeps the window at the specified <paramref name="location"/>, moving it back immediately if KWin moves it elsewhere.<br/>
-	/// Cleared by <see cref="UnpinWindowLocationAsync"/>, or by any subsequent <see cref="MoveWindowAsync"/>.
-	/// </summary>
-	Task PinWindowLocationAsync(
+	Task PinWindowAsync(
 		KWinWindow window,
-		Point location,
-		CancellationToken cancellationToken);
-
-	Task UnpinWindowLocationAsync(
-		KWinWindow window,
+		Rectangle rect,
 		CancellationToken cancellationToken);
 
 	Task RegisterHotkeyAsync(
@@ -70,5 +61,9 @@ public interface IKWinClient
 	Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
+		CancellationToken cancellationToken);
+
+	Task UnpinWindowAsync(
+		KWinWindow window,
 		CancellationToken cancellationToken);
 }

@@ -111,16 +111,22 @@ kwin.getActiveWindow = () => {
 	throw "Could not find property for active client/window, unsupported version of KWin perhaps?";
 };
 
-kwin.setWindowLocation = (w, x, y) => {
+kwin.setWindowLocation = (window, x, y) => {
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
-	// allowing us to eg. only set the width, and not the height, or vice versa.
+	// allowing us to e.g. only set the width, and not the height, or vice versa.
 	// Not sure if this is a bug, but it took a bunch of time to figure out.
-	let q = Object.assign({}, w.frameGeometry);
 
-	q.x			= x;
-	q.y			= y;
+	// Deep-copy the entire object so we can change things.
+	// let q = Object.assign({}, window.frameGeometry);
 
-	w.frameGeometry = q;
+	// Change things.
+	// q.x			= x;
+	// q.y			= y;
+
+	// Overwrite the original version.
+	// window.frameGeometry = q;
+
+	window.frameGeometry = Object.assign({}, window.frameGeometry, { x: x, y: y });
 };
 
 kwin.setActiveWindow = (window) => {
@@ -154,42 +160,47 @@ wtq.DBUS_INTERFACE	= "wtq.kwin";
 wtq.pinned = {};
 
 // Internal ids of windows we've connected a "frameGeometryChanged" handler to.
-wtq.watched = {};
+// wtq.watched = {};
 
-wtq.watchWindow = (w) => {
-	const id = w.internalId.toString();
-
-	if (wtq.watched[id]) {
-		return;
-	}
-
-	wtq.watched[id] = true;
-
-	let isCorrecting = false;
-
-	w.frameGeometryChanged.connect(() => {
-		const pin = wtq.pinned[id];
-
-		if (!pin || isCorrecting) {
-			return;
-		}
-
-		const g = w.frameGeometry;
-
-		if (Math.round(g.x) === pin.x && Math.round(g.y) === pin.y) {
-			return;
-		}
-
-		log.warning(`Pinned window with id '${id}' was moved externally to x:${Math.round(g.x)}, y:${Math.round(g.y)} (active window: '${workspace.activeWindow?.caption}'), moving it back to x:${pin.x}, y:${pin.y}`);
-
-		isCorrecting = true;
-		try {
-			kwin.setWindowLocation(w, pin.x, pin.y);
-		} finally {
-			isCorrecting = false;
-		}
-	});
-};
+// wtq.pinWindow = (window) => {
+// 	const id = window.internalId.toString();
+//
+// 	if (wtq.watched[id]) {
+// 		return;
+// 	}
+//
+// 	wtq.watched[id] = true;
+//
+// 	let isCorrecting = false;
+//
+// 	let func = () => {
+// 		log.warning(`CHANGED: ${id}`);
+//
+// 		const pin = wtq.pinned[id];
+//
+// 		if (!pin || isCorrecting) {
+// 			return;
+// 		}
+//
+// 		const g = window.frameGeometry;
+//
+// 		if (Math.round(g.x) === pin.x && Math.round(g.y) === pin.y) {
+// 			return;
+// 		}
+//
+// 		log.warning(`Pinned window with id '${id}' was moved externally to x:${Math.round(g.x)}, y:${Math.round(g.y)} (active window: '${workspace.activeWindow?.caption}'), moving it back to x:${pin.x}, y:${pin.y}`);
+//
+// 		isCorrecting = true;
+// 		try {
+// 			kwin.setWindowLocation(window, pin.x, pin.y);
+// 		} finally {
+// 			isCorrecting = false;
+// 		}
+// 	};
+//
+// 	window.frameGeometryChanged.connect(func);
+// 	window.frameGeometryChanged.disconnect(func);
+// };
 
 // Send log to WTQ so we can see what's going on in the KWin script.
 wtq.log = (level, msg) => {
@@ -330,19 +341,60 @@ cmds["RESIZE_WINDOW"] = (cmdInfo) => {
 
 cmds["NOOP"] = (cmdInfo) => { };
 
-cmds["PIN_WINDOW_LOCATION"] = (cmdInfo, p) => {
-	const w = kwin.getWindowByInternalIdRequired(p.internalId);
+// Locks the window location and -size to where they currently are.
+cmds["PIN_WINDOW"] = (cmdInfo, params) => {
+	// Check if the window is not already pinned.
+	const currPin = wtq.pinned[params.internalId];
+	if (currPin) {
+		log.warning(`Window with id '${params.internalId}' is already pinned`);
+		return;
+	}
 
-	log.info(`Pinning window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
+	log.info(`Pinning window with id '${params.internalId}' to x:${params.x}, y:${params.y}, width:${params.width}, height: ${params.height}`);
 
-	wtq.pinned[p.internalId] = { x: p.x, y: p.y };
-	wtq.watchWindow(w);
+	const window = kwin.getWindowByInternalIdRequired(params.internalId);
+
+	let isCorrecting = false; // Keep track of whether we're currently correcting, as the correcting itself will trigger this callback.
+
+	const newPin = wtq.pinned[params.internalId] = {
+		internalId: params.internalId,
+		x: params.x,
+		y: params.y,
+		signalHandler: () => {
+			if (isCorrecting) {
+				return;
+			}
+
+			isCorrecting = true;
+
+			// log.warning(`Pinned window with id '${id}' was moved externally to x:${Math.round(g.x)}, y:${Math.round(g.y)} (active window: '${workspace.activeWindow?.caption}'), moving it back to x:${currPin.x}, y:${currPin.y}`);
+
+			try {
+				kwin.setWindowLocation(window, params.x, params.y);
+				// TODO: Size
+			} finally {
+				isCorrecting = false;
+			}
+		},
+	};
+
+	window.frameGeometryChanged.connect(newPin.signalHandler);
 };
 
-cmds["UNPIN_WINDOW_LOCATION"] = (cmdInfo, p) => {
-	log.info(`Unpinning window with id '${p.internalId}'`);
+// Stops locking a window position and -size.
+cmds["UNPIN_WINDOW"] = (cmdInfo, params) => {
+	const pin = wtq.pinned[params.internalId];
+	if (!pin) {
+		log.warning(`Window with id '${params.internalId}' is not pinned`);
+		return;
+	}
 
-	delete wtq.pinned[p.internalId];
+	log.info(`Unpinning window with id '${params.internalId}'`);
+
+	const window = kwin.getWindowByInternalIdRequired(params.internalId);
+
+	window.frameGeometryChanged.disconnect(pin.signalHandler);
+	delete wtq.pinned[pin.internalId];
 };
 
 cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
