@@ -249,7 +249,7 @@ public sealed class WtqApp : IAsyncDisposable
 		{
 			await UpdateWindowPropsAsync().NoCtx();
 
-			if (_lastLoc != null)
+			if (Options.GetMaintainPositionAndSize() && _lastLoc != null)
 			{
 				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
 			}

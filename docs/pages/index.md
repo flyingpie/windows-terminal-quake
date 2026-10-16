@@ -1020,6 +1020,24 @@ without any animation.</p>
 }
 ```
 
+##### Maintain position and size
+
+Whether app windows should be put back where WTQ last put them, if they're moved by external factors, such as monitor (dis)connects or resolution changes.
+
+```json
+{
+	// Globally:
+	"MaintainPositionAndSize": false,
+
+	// For one app only:
+	"Apps": [
+		{
+			"MaintainPositionAndSize": false
+		}
+	]
+}
+```
+
 #### Monitor
 
 ##### Prefer monitor
