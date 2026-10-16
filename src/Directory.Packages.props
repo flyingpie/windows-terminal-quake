@@ -1,5 +1,6 @@
 <Project>
 	<PropertyGroup>
+		<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
@@ -24,8 +25,6 @@
 		<PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.11.0"/>
 		<PackageVersion Include="NuGet.Packaging" Version="7.9.0"/>
 		<PackageVersion Include="Nuke.Common" Version="10.1.0"/>
-		<!-- Docs -->
-		<PackageVersion Include="YamlDotNet" Version="18.1.0"/>
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8"/>
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13"/>
@@ -47,5 +46,7 @@
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0"/>
 		<PackageVersion Include="Moq" Version="4.21.0"/>
 		<PackageVersion Include="MSTest" Version="4.5.1"/>
+		<!-- Explicit transitives due to vulnerabilities -->
+		<PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13"/>
 	</ItemGroup>
 </Project>
