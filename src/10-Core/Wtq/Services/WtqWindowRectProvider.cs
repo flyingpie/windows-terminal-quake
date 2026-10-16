@@ -76,6 +76,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 			HorizontalAlign.Right => screenRectDst.X + (screenRectDst.Width - wnd.Width),
 
 			// None (keep current horizontal position)
+			// Note that we only do this if the window is coming back on the same screen. Otherwise, we're centering.
 			HorizontalAlign.None => windowRectSrc.IsWithinHorizontal(screenRectDst)
 				? windowRectSrc.X
 				: screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
@@ -99,7 +100,6 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 			Height = wnd.Height,
 		};
 	}
-
 
 	/// <inheritdoc/>
 	public async Task<Rectangle?> GetOffScreenRectAsync(
