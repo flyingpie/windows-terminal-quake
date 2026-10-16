@@ -114,6 +114,9 @@ public class WtqAppToggleService(
 			// Note that on KWin, it seems we're only allowed to resize windows when they're on-screen.
 			// So move first, then resize.
 			await app.MoveWindowAsync(BehindScreenLocation).NoCtx();
+
+			// Pin window so it doesn't move until we touch it again.
+			await app.Window.SetPinnedAsync(windowRectDst.Value).NoCtx();
 			return;
 		}
 
@@ -129,6 +132,9 @@ public class WtqAppToggleService(
 				animType: app.Options.GetAnimationTypeToggleOff(),
 				move: app.MoveWindowAsync)
 			.NoCtx();
+
+		// Pin window so it doesn't move until we touch it again.
+		await app.Window.SetPinnedAsync(windowRectDst.Value).NoCtx();
 	}
 
 	/// <summary>

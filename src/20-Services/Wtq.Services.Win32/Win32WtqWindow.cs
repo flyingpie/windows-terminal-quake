@@ -173,6 +173,13 @@ public sealed class Win32WtqWindow : WtqWindow
 		await SetTaskbarIconVisibleAsync(true);
 	}
 
+	public override Task SetPinnedAsync(Rectangle rect)
+	{
+		_log.LogWarning("Window pinning is not yet supported on Windows");
+
+		return Task.CompletedTask;
+	}
+
 	/// <inheritdoc/>
 	public override Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
@@ -268,6 +275,13 @@ public sealed class Win32WtqWindow : WtqWindow
 	}
 
 	public override string ToString() => $"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
+
+	public override Task UnpinAsync()
+	{
+		_log.LogWarning("Window pinning is not yet supported on Windows");
+
+		return Task.CompletedTask;
+	}
 
 	public override Task UpdateAsync()
 	{
