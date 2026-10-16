@@ -174,6 +174,7 @@ public sealed class WtqApp : IAsyncDisposable
 			throw new InvalidOperationException($"App '{this}' does not have a process attached.");
 		}
 
+		await Window.UnpinAsync().NoCtx();
 		await Window.SetLocationAsync(location).NoCtx();
 
 		_lastLoc = location;
