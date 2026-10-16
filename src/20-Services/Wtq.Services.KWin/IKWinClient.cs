@@ -33,6 +33,11 @@ public interface IKWinClient
 		Point location,
 		CancellationToken cancellationToken);
 
+	Task PinWindowAsync(
+		KWinWindow window,
+		Rectangle rect,
+		CancellationToken cancellationToken);
+
 	Task RegisterHotkeyAsync(
 		string name,
 		string description,
@@ -57,5 +62,9 @@ public interface IKWinClient
 	Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
+		CancellationToken cancellationToken);
+
+	Task UnpinWindowAsync(
+		KWinWindow window,
 		CancellationToken cancellationToken);
 }

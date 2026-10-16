@@ -100,6 +100,8 @@ public abstract class WtqWindow
 
 	public abstract Task SetLocationAsync(Point location);
 
+	public abstract Task SetPinnedAsync(Rectangle rect);
+
 	// TODO: Warn or disallow sizes below a certain threshold? Seems to happen occasionally.
 	public abstract Task SetSizeAsync(Size size);
 
@@ -110,6 +112,8 @@ public abstract class WtqWindow
 	public abstract Task SetTransparencyAsync(int transparency);
 
 	public abstract Task SetWindowTitleAsync(string title);
+
+	public abstract Task UnpinAsync();
 
 	public abstract Task UpdateAsync();
 

@@ -10,8 +10,11 @@
         <meta name="author" content="flyingpie">
       
       
+        <link rel="canonical" href="https://wtq.flyingpie.nl/v1/">
       
-        <link rel="prev" href="..">
+      
+      
+        <link rel="prev" href="./..">
       
       
         <link rel="next" href="../reporting-issues/">
@@ -21,7 +24,7 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.5">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -29,10 +32,15 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -45,11 +53,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/highlight/styles/wtq.css">
+      <link rel="stylesheet" href="../assets/syntax.css">
     
       <link rel="stylesheet" href="../assets/styles.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
     
       
 
@@ -70,14 +78,11 @@
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#about" class="md-skip">
-          Skip to content
-        </a>
-      
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
     </div>
     <div data-md-component="announce">
       
@@ -88,14 +93,14 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="WTQ - Quake Mode For (Almost) Any App" class="md-header__button md-logo" aria-label="WTQ - Quake Mode For (Almost) Any App" data-md-component="logo">
+    <a href="./.." title="WTQ - Quake Mode For (Almost) Any App" class="md-header__button md-logo" aria-label="WTQ - Quake Mode For (Almost) Any App" data-md-component="logo">
       
-  <img src="../assets/favicon.png" alt="logo">
+  <img src="../assets/favicon.png" alt="WTQ - Quake Mode For (Almost) Any App">
 
     </a>
-    <label class="md-header__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -147,57 +152,30 @@
     
       
       
-        <label class="md-header__button md-icon" for="__search">
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
         </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
 </div>
       
     
-    
-      <div class="md-header__source">
+    <div class="md-header__source">
+      
         <a href="http://github.com/flyingpie/windows-terminal-quake" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
   </div>
   <div class="md-source__repository">
     windows-terminal-quake
   </div>
 </a>
-      </div>
-    
+      
+    </div>
   </nav>
   
 </header>
@@ -218,11 +196,8 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="./.." class="md-tabs__link">
         
-  
-  
-    
   
   WTQ v2
 
@@ -239,11 +214,8 @@
   
   
     <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+      <a href="././" class="md-tabs__link">
         
-  
-  
-    
   
   WTQ v1
 
@@ -261,9 +233,6 @@
       <a href="../reporting-issues/" class="md-tabs__link">
         
   
-  
-    
-  
   Reporting Issues
 
       </a>
@@ -279,9 +248,6 @@
     <li class="md-tabs__item">
       <a href="../faq/" class="md-tabs__link">
         
-  
-  
-    
   
   FAQ
 
@@ -312,9 +278,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="WTQ - Quake Mode For (Almost) Any App" class="md-nav__button md-logo" aria-label="WTQ - Quake Mode For (Almost) Any App" data-md-component="logo">
+    <a href="./.." title="WTQ - Quake Mode For (Almost) Any App" class="md-nav__button md-logo" aria-label="WTQ - Quake Mode For (Almost) Any App" data-md-component="logo">
       
-  <img src="../assets/favicon.png" alt="logo">
+  <img src="../assets/favicon.png" alt="WTQ - Quake Mode For (Almost) Any App">
 
     </a>
     WTQ - Quake Mode For (Almost) Any App
@@ -324,7 +290,7 @@
       <a href="http://github.com/flyingpie/windows-terminal-quake" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
   </div>
   <div class="md-source__repository">
     windows-terminal-quake
@@ -341,15 +307,14 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="./.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    WTQ v2
-  
+  WTQ v2
 
     
   </span>
@@ -371,7 +336,7 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
       
         
@@ -384,8 +349,7 @@
   <span class="md-ellipsis">
     
   
-    WTQ v1
-  
+  WTQ v1
 
     
   </span>
@@ -395,15 +359,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    WTQ v1
-  
+  WTQ v1
 
     
   </span>
@@ -414,7 +377,8 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -423,16 +387,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Features
-      
+      </span>
     </span>
   </a>
   
@@ -441,9 +405,9 @@
         <li class="md-nav__item">
   <a href="#getting-started" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Getting Started
-      
+      </span>
     </span>
   </a>
   
@@ -453,9 +417,9 @@
           <li class="md-nav__item">
   <a href="#direct-download" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Direct Download
-      
+      </span>
     </span>
   </a>
   
@@ -464,9 +428,9 @@
           <li class="md-nav__item">
   <a href="#get-from-scoop" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Get From Scoop
-      
+      </span>
     </span>
   </a>
   
@@ -475,9 +439,9 @@
           <li class="md-nav__item">
   <a href="#get-from-winget" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Get From WinGet
-      
+      </span>
     </span>
   </a>
   
@@ -486,9 +450,9 @@
           <li class="md-nav__item">
   <a href="#build-cake" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Build (Cake)
-      
+      </span>
     </span>
   </a>
   
@@ -497,9 +461,9 @@
           <li class="md-nav__item">
   <a href="#build-visual-studio" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Build (Visual Studio)
-      
+      </span>
     </span>
   </a>
   
@@ -513,9 +477,9 @@
         <li class="md-nav__item">
   <a href="#settings" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Settings
-      
+      </span>
     </span>
   </a>
   
@@ -525,9 +489,9 @@
           <li class="md-nav__item">
   <a href="#always-on-top" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Always On Top
-      
+      </span>
     </span>
   </a>
   
@@ -536,9 +500,9 @@
           <li class="md-nav__item">
   <a href="#command-line-parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Command Line Parameters
-      
+      </span>
     </span>
   </a>
   
@@ -547,9 +511,9 @@
           <li class="md-nav__item">
   <a href="#disable-when-active-app-is-in-fullscreen" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Disable When Active App Is In Fullscreen
-      
+      </span>
     </span>
   </a>
   
@@ -558,9 +522,9 @@
           <li class="md-nav__item">
   <a href="#hide-on-focus-lost" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Hide On Focus Lost
-      
+      </span>
     </span>
   </a>
   
@@ -569,9 +533,9 @@
           <li class="md-nav__item">
   <a href="#hotkeys" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Hotkeys
-      
+      </span>
     </span>
   </a>
   
@@ -581,9 +545,9 @@
           <li class="md-nav__item">
   <a href="#f12-as-a-hotkey" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         F12 As a Hotkey
-      
+      </span>
     </span>
   </a>
   
@@ -597,9 +561,9 @@
           <li class="md-nav__item">
   <a href="#notifications" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Notifications
-      
+      </span>
     </span>
   </a>
   
@@ -608,9 +572,9 @@
           <li class="md-nav__item">
   <a href="#opacity" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Opacity
-      
+      </span>
     </span>
   </a>
   
@@ -619,9 +583,9 @@
           <li class="md-nav__item">
   <a href="#prefer-monitor" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Prefer Monitor
-      
+      </span>
     </span>
   </a>
   
@@ -630,9 +594,9 @@
           <li class="md-nav__item">
   <a href="#size-align" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Size &amp; Align
-      
+      </span>
     </span>
   </a>
   
@@ -642,9 +606,9 @@
           <li class="md-nav__item">
   <a href="#horizontal-align" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Horizontal Align
-      
+      </span>
     </span>
   </a>
   
@@ -653,9 +617,9 @@
           <li class="md-nav__item">
   <a href="#horizontal-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Horizontal Screen Coverage
-      
+      </span>
     </span>
   </a>
   
@@ -664,9 +628,9 @@
           <li class="md-nav__item">
   <a href="#vertical-offset" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Vertical Offset
-      
+      </span>
     </span>
   </a>
   
@@ -675,9 +639,9 @@
           <li class="md-nav__item">
   <a href="#vertical-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Vertical Screen Coverage
-      
+      </span>
     </span>
   </a>
   
@@ -686,9 +650,9 @@
           <li class="md-nav__item">
   <a href="#maximize-after-toggle" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Maximize After Toggle
-      
+      </span>
     </span>
   </a>
   
@@ -702,9 +666,9 @@
           <li class="md-nav__item">
   <a href="#start-hidden" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Start Hidden
-      
+      </span>
     </span>
   </a>
   
@@ -713,9 +677,9 @@
           <li class="md-nav__item">
   <a href="#suppress-hotkey-for-processes" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Suppress Hotkey for Processes
-      
+      </span>
     </span>
   </a>
   
@@ -724,9 +688,9 @@
           <li class="md-nav__item">
   <a href="#taskbar-icon-visibility" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Taskbar Icon Visibility
-      
+      </span>
     </span>
   </a>
   
@@ -735,9 +699,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation
-      
+      </span>
     </span>
   </a>
   
@@ -747,9 +711,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation-type" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation Type
-      
+      </span>
     </span>
   </a>
   
@@ -758,9 +722,9 @@
           <li class="md-nav__item">
   <a href="#toggle-duration" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Duration
-      
+      </span>
     </span>
   </a>
   
@@ -769,9 +733,9 @@
           <li class="md-nav__item">
   <a href="#toggle-mode" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Mode
-      
+      </span>
     </span>
   </a>
   
@@ -780,9 +744,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation-frame-time" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation Frame Time
-      
+      </span>
     </span>
   </a>
   
@@ -796,9 +760,9 @@
           <li class="md-nav__item">
   <a href="#windows-terminal-command" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Windows Terminal Command
-      
+      </span>
     </span>
   </a>
   
@@ -831,8 +795,7 @@
   <span class="md-ellipsis">
     
   
-    Reporting Issues
-  
+  Reporting Issues
 
     
   </span>
@@ -858,8 +821,7 @@
   <span class="md-ellipsis">
     
   
-    FAQ
-  
+  FAQ
 
     
   </span>
@@ -881,10 +843,24 @@
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -893,16 +869,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Features
-      
+      </span>
     </span>
   </a>
   
@@ -911,9 +887,9 @@
         <li class="md-nav__item">
   <a href="#getting-started" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Getting Started
-      
+      </span>
     </span>
   </a>
   
@@ -923,9 +899,9 @@
           <li class="md-nav__item">
   <a href="#direct-download" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Direct Download
-      
+      </span>
     </span>
   </a>
   
@@ -934,9 +910,9 @@
           <li class="md-nav__item">
   <a href="#get-from-scoop" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Get From Scoop
-      
+      </span>
     </span>
   </a>
   
@@ -945,9 +921,9 @@
           <li class="md-nav__item">
   <a href="#get-from-winget" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Get From WinGet
-      
+      </span>
     </span>
   </a>
   
@@ -956,9 +932,9 @@
           <li class="md-nav__item">
   <a href="#build-cake" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Build (Cake)
-      
+      </span>
     </span>
   </a>
   
@@ -967,9 +943,9 @@
           <li class="md-nav__item">
   <a href="#build-visual-studio" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Build (Visual Studio)
-      
+      </span>
     </span>
   </a>
   
@@ -983,9 +959,9 @@
         <li class="md-nav__item">
   <a href="#settings" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Settings
-      
+      </span>
     </span>
   </a>
   
@@ -995,9 +971,9 @@
           <li class="md-nav__item">
   <a href="#always-on-top" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Always On Top
-      
+      </span>
     </span>
   </a>
   
@@ -1006,9 +982,9 @@
           <li class="md-nav__item">
   <a href="#command-line-parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Command Line Parameters
-      
+      </span>
     </span>
   </a>
   
@@ -1017,9 +993,9 @@
           <li class="md-nav__item">
   <a href="#disable-when-active-app-is-in-fullscreen" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Disable When Active App Is In Fullscreen
-      
+      </span>
     </span>
   </a>
   
@@ -1028,9 +1004,9 @@
           <li class="md-nav__item">
   <a href="#hide-on-focus-lost" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Hide On Focus Lost
-      
+      </span>
     </span>
   </a>
   
@@ -1039,9 +1015,9 @@
           <li class="md-nav__item">
   <a href="#hotkeys" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Hotkeys
-      
+      </span>
     </span>
   </a>
   
@@ -1051,9 +1027,9 @@
           <li class="md-nav__item">
   <a href="#f12-as-a-hotkey" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         F12 As a Hotkey
-      
+      </span>
     </span>
   </a>
   
@@ -1067,9 +1043,9 @@
           <li class="md-nav__item">
   <a href="#notifications" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Notifications
-      
+      </span>
     </span>
   </a>
   
@@ -1078,9 +1054,9 @@
           <li class="md-nav__item">
   <a href="#opacity" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Opacity
-      
+      </span>
     </span>
   </a>
   
@@ -1089,9 +1065,9 @@
           <li class="md-nav__item">
   <a href="#prefer-monitor" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Prefer Monitor
-      
+      </span>
     </span>
   </a>
   
@@ -1100,9 +1076,9 @@
           <li class="md-nav__item">
   <a href="#size-align" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Size &amp; Align
-      
+      </span>
     </span>
   </a>
   
@@ -1112,9 +1088,9 @@
           <li class="md-nav__item">
   <a href="#horizontal-align" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Horizontal Align
-      
+      </span>
     </span>
   </a>
   
@@ -1123,9 +1099,9 @@
           <li class="md-nav__item">
   <a href="#horizontal-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Horizontal Screen Coverage
-      
+      </span>
     </span>
   </a>
   
@@ -1134,9 +1110,9 @@
           <li class="md-nav__item">
   <a href="#vertical-offset" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Vertical Offset
-      
+      </span>
     </span>
   </a>
   
@@ -1145,9 +1121,9 @@
           <li class="md-nav__item">
   <a href="#vertical-screen-coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Vertical Screen Coverage
-      
+      </span>
     </span>
   </a>
   
@@ -1156,9 +1132,9 @@
           <li class="md-nav__item">
   <a href="#maximize-after-toggle" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Maximize After Toggle
-      
+      </span>
     </span>
   </a>
   
@@ -1172,9 +1148,9 @@
           <li class="md-nav__item">
   <a href="#start-hidden" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Start Hidden
-      
+      </span>
     </span>
   </a>
   
@@ -1183,9 +1159,9 @@
           <li class="md-nav__item">
   <a href="#suppress-hotkey-for-processes" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Suppress Hotkey for Processes
-      
+      </span>
     </span>
   </a>
   
@@ -1194,9 +1170,9 @@
           <li class="md-nav__item">
   <a href="#taskbar-icon-visibility" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Taskbar Icon Visibility
-      
+      </span>
     </span>
   </a>
   
@@ -1205,9 +1181,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation
-      
+      </span>
     </span>
   </a>
   
@@ -1217,9 +1193,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation-type" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation Type
-      
+      </span>
     </span>
   </a>
   
@@ -1228,9 +1204,9 @@
           <li class="md-nav__item">
   <a href="#toggle-duration" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Duration
-      
+      </span>
     </span>
   </a>
   
@@ -1239,9 +1215,9 @@
           <li class="md-nav__item">
   <a href="#toggle-mode" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Mode
-      
+      </span>
     </span>
   </a>
   
@@ -1250,9 +1226,9 @@
           <li class="md-nav__item">
   <a href="#toggle-animation-frame-time" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Toggle Animation Frame Time
-      
+      </span>
     </span>
   </a>
   
@@ -1266,9 +1242,9 @@
           <li class="md-nav__item">
   <a href="#windows-terminal-command" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Windows Terminal Command
-      
+      </span>
     </span>
   </a>
   
@@ -1291,9 +1267,9 @@
             <div class="md-content" data-md-component="content">
               
               <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
                 
                   
-
 
   
   
@@ -1322,32 +1298,38 @@
 <p>See all available binaries, also from <a href="https://github.com/flyingpie/windows-terminal-quake/releases">GitHub releases</a>.</p>
 <h3 id="get-from-scoop">Get From Scoop<a class="headerlink" href="#get-from-scoop" title="Permanent link">&para;</a></h3>
 <p>Download from <a href="https://scoop.sh/">scoop</a>:</p>
-<pre class="highlight"><code class="language-powershell">scoop install https://raw.githubusercontent.com/flyingpie/windows-terminal-quake/master/scoop/windows-terminal-quake.json</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">scoop</span> <span class="n">install</span> <span class="n">https</span><span class="p">://</span><span class="n">raw</span><span class="p">.</span><span class="n">githubusercontent</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">flyingpie</span><span class="p">/</span><span class="n">windows-terminal-quake</span><span class="p">/</span><span class="n">master</span><span class="p">/</span><span class="n">scoop</span><span class="p">/</span><span class="n">windows-terminal-quake</span><span class="p">.</span><span class="n">json</span>
+</span></code></pre></div>
 <h3 id="get-from-winget">Get From WinGet<a class="headerlink" href="#get-from-winget" title="Permanent link">&para;</a></h3>
 <p>Install <a href="https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget">WinGet</a>:</p>
-<pre class="highlight"><code class="language-powershell">winget install windows-terminal-quake --version 1.6</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">winget</span> <span class="n">install</span> <span class="n">windows-terminal-quake</span> <span class="p">-</span><span class="n">-version</span> <span class="n">1</span><span class="p">.</span><span class="n">6</span>
+</span></code></pre></div>
 <h3 id="build-cake">Build (Cake)<a class="headerlink" href="#build-cake" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Clone the repository.</li>
 </ol>
-<pre class="highlight"><code class="language-powershell">git clone https://github.com/flyingpie/windows-terminal-quake.git</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">flyingpie</span><span class="p">/</span><span class="n">windows-terminal-quake</span><span class="p">.</span><span class="n">git</span>
+</span></code></pre></div>
 <ol start="2">
 <li>Run build.ps1.</li>
 </ol>
-<pre class="highlight"><code class="language-powershell">cd windows-terminal-quake
-
-./build.ps1</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd </span><span class="n">windows-terminal-quake</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">./</span><span class="n">build</span><span class="p">.</span><span class="n">ps1</span>
+</span></code></pre></div>
 <ol start="3">
 <li>Open one of the executables in <code>artifacts</code>.</li>
 </ol>
-<pre class="highlight"><code class="language-powershell">cd .\artifacts\Artifact.SingleExe
-
-.\windows-terminal-quake.exe</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd </span><span class="p">.\</span><span class="n">artifacts</span><span class="p">\</span><span class="n">Artifact</span><span class="p">.</span><span class="n">SingleExe</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">.\</span><span class="n">windows-terminal-quake</span><span class="p">.</span><span class="n">exe</span>
+</span></code></pre></div>
 <h3 id="build-visual-studio">Build (Visual Studio)<a class="headerlink" href="#build-visual-studio" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Clone the repository.</li>
 </ol>
-<pre class="highlight"><code class="language-powershell">git clone https://github.com/flyingpie/windows-terminal-quake.git</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">flyingpie</span><span class="p">/</span><span class="n">windows-terminal-quake</span><span class="p">.</span><span class="n">git</span>
+</span></code></pre></div>
 <ol start="2">
 <li>
 <p>Open windows-terminal-quake.sln.</p>
@@ -1369,59 +1351,65 @@ The file can be placed at either (in order):</p>
 <h3 id="always-on-top">Always On Top<a class="headerlink" href="#always-on-top" title="Permanent link">&para;</a></h3>
 <p>Whether to keep the terminal window always on top (requires restart).</p>
 <p>Defaults to <code>false</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "AlwaysOnTop": true
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;AlwaysOnTop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/avere001">Adam</a></span></p>
 <h3 id="command-line-parameters">Command Line Parameters<a class="headerlink" href="#command-line-parameters" title="Permanent link">&para;</a></h3>
 <p>Windows Terminal supports a <a href="https://docs.microsoft.com/en-us/windows/terminal/command-line-arguments?tabs=windows">set of command line parameters</a>, for example to start with multiple tabs or panes.</p>
 <p>Any arguments passed to windows-terminal-quake are passed to Windows Terminal, eg:</p>
-<pre class="highlight"><code class="language-powershell">windows-terminal-quake.exe split-pane</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">windows-terminal-quake</span><span class="p">.</span><span class="n">exe</span> <span class="nb">split-pane</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/NikhilSaini38">NikhilSaini38</a>.</span></p>
 <h3 id="disable-when-active-app-is-in-fullscreen">Disable When Active App Is In Fullscreen<a class="headerlink" href="#disable-when-active-app-is-in-fullscreen" title="Permanent link">&para;</a></h3>
 <p>Disable toggle hotkeys when the currently focused application is on the primary monitor and is in fullscreen.</p>
 <p>Useful for eg. when playing a game, to prevent being thrown back to the desktop when touching a hotkey.</p>
 <p>Defaults to <code>false</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "DisableWhenActiveAppIsInFullscreen": false
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">&quot;DisableWhenActiveAppIsInFullscreen&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested and implemented by <a href="https://github.com/einwickler">einwickler</a></span></p>
 <h3 id="hide-on-focus-lost">Hide On Focus Lost<a class="headerlink" href="#hide-on-focus-lost" title="Permanent link">&para;</a></h3>
 <p>When clicking or alt-tabbing away to another app, the terminal will automatically (and instantly) hide.</p>
 <p>Defaults to <code>true</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "HideOnFocusLost": true
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">&quot;HideOnFocusLost&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/douglara">Douglas Lara</a></span></p>
 <h3 id="hotkeys">Hotkeys<a class="headerlink" href="#hotkeys" title="Permanent link">&para;</a></h3>
 <p>Multiple hot keys are supported, with an optional modifier.</p>
-<pre class="highlight"><code class="language-json">{
-    // The keys that can be used to toggle the terminal
-    "Hotkeys": [
-
-        // Tilde, without modifiers
-        {
-            "Key": "OemTilde"
-        },
-
-        // Ctrl + Q
-        {
-            "Modifiers": "Control",
-            "Key": "Q"
-        },
-
-        // Multiple modifiers
-        {
-            "Modifiers": "Control,Shift",
-            "Key": "W"
-        }
-    ]
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="c1">// The keys that can be used to toggle the terminal</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">&quot;Hotkeys&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="c1">// Tilde, without modifiers</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">            </span><span class="nt">&quot;Key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OemTilde&quot;</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">        </span><span class="c1">// Ctrl + Q</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">            </span><span class="nt">&quot;Modifiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Control&quot;</span><span class="p">,</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">            </span><span class="nt">&quot;Key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Q&quot;</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="c1">// Multiple modifiers</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">            </span><span class="nt">&quot;Modifiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Control,Shift&quot;</span><span class="p">,</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">            </span><span class="nt">&quot;Key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;W&quot;</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="p">}</span>
+</span></code></pre></div>
 <h4 id="f12-as-a-hotkey">F12 As a Hotkey<a class="headerlink" href="#f12-as-a-hotkey" title="Permanent link">&para;</a></h4>
 <p>When using "F12" as a hotkey, it may be necessary to disable the key as a shortcut for the system-wide debugger first.</p>
 <p>Since F12 is the default for the debugger, it won't respond when used in another app, such as Windows Terminal Quake, or ConEmu.</p>
 <p>This can be done by changing the registry key at:</p>
-<pre class="highlight"><code>Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug\UserDebuggerHotKey</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug\UserDebuggerHotKey
+</span></code></pre></div>
 <p>This key defaults to <code>0</code>, which means <code>F12</code>.</p>
 <p>As pointed out by the ConEmu docs, it can for example be changed to the "Pause"-key (value <code>13</code>).</p>
 <p>A reboot may also be required, after which F12 can be used as a hotkey for toggling.</p>
@@ -1438,16 +1426,18 @@ The file can be placed at either (in order):</p>
 <h3 id="notifications">Notifications<a class="headerlink" href="#notifications" title="Permanent link">&para;</a></h3>
 <p>Whether to show notifications when the app starts and when the settings are reloaded.</p>
 <p>Defaults to <code>true</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "Notifications": true
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">&quot;Notifications&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <h3 id="opacity">Opacity<a class="headerlink" href="#opacity" title="Permanent link">&para;</a></h3>
 <p>The terminal window can be made transparent through the <code>Opacity</code>-setting.
 Note that this controls the transparency of the entire window, including the title bar.</p>
 <p>From <code>0</code> (invisible) to <code>100</code> (opaque).</p>
-<pre class="highlight"><code class="language-json">{
-    "Opacity": 80
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="nt">&quot;Opacity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><img alt="Transparency" src="../assets/img/transparency.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/ukWaqas">ukWaqas</a></span></p>
 <h3 id="prefer-monitor">Prefer Monitor<a class="headerlink" href="#prefer-monitor" title="Permanent link">&para;</a></h3>
@@ -1461,10 +1451,11 @@ Note that this controls the transparency of the entire window, including the tit
 <p>If <code>PreferMonitor</code> is set to <code>AtIndex</code>, the <code>MonitorIndex</code>-setting determines what monitor to choose.
 Zero based, eg. 0, 1, etc.</p>
 <p>Defaults to <code>WithCursor</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "PreferMonitor": "AtIndex",
-    "MonitorIndex": 1
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">&quot;PreferMonitor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AtIndex&quot;</span><span class="p">,</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nt">&quot;MonitorIndex&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/dfyx">Christian Käser</a></span></p>
 <h3 id="size-align">Size &amp; Align<a class="headerlink" href="#size-align" title="Permanent link">&para;</a></h3>
 <h4 id="horizontal-align">Horizontal Align<a class="headerlink" href="#horizontal-align" title="Permanent link">&para;</a></h4>
@@ -1475,9 +1466,10 @@ Zero based, eg. 0, 1, etc.</p>
 <li>Center (default)</li>
 <li>Right</li>
 </ul>
-<pre class="highlight"><code class="language-json">{
-    "HorizontalAlign": "Center"
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nt">&quot;HorizontalAlign&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Center&quot;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><strong>Left</strong>
 <img alt="Left" src="https://user-images.githubusercontent.com/1295673/95656847-467ed980-0b11-11eb-87a4-2bff809c30d0.png" /></p>
 <p><strong>Center</strong>
@@ -1488,23 +1480,26 @@ Zero based, eg. 0, 1, etc.</p>
 <h4 id="horizontal-screen-coverage">Horizontal Screen Coverage<a class="headerlink" href="#horizontal-screen-coverage" title="Permanent link">&para;</a></h4>
 <p>How much horizontal space the terminal should use. When this is below 100, the terminal is centered (can be changed using the <a href="#horizontal-align">Horizontal Align</a>) setting.</p>
 <p>This can also be above 100, which can be useful to compensate for the window not always taking a 100% of the screen width, due to the terminal being bound to column widths (eg. try 100.5 or 101).</p>
-<pre class="highlight"><code class="language-json">{
-    "HorizontalScreenCoverage": 80
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="nt">&quot;HorizontalScreenCoverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><img alt="Horizontal Coverage" src="https://files.flyingpie.nl/windows-terminal-quake/horizontal-coverage.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/baslas">baslas</a></span></p>
 <h4 id="vertical-offset">Vertical Offset<a class="headerlink" href="#vertical-offset" title="Permanent link">&para;</a></h4>
 <p>How much room to leave between the top of the terminal and the top of the screen.</p>
-<pre class="highlight"><code class="language-json">{
-  // How much room to leave between the top of the terminal and the top of the screen
-  "VerticalOffset": 50
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="c1">// How much room to leave between the top of the terminal and the top of the screen</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">&quot;VerticalOffset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">}</span>
+</span></code></pre></div>
 <h4 id="vertical-screen-coverage">Vertical Screen Coverage<a class="headerlink" href="#vertical-screen-coverage" title="Permanent link">&para;</a></h4>
 <p>The vertical space that is taken up by the terminal window can be configured through "VerticalScreenCoverage".</p>
-<pre class="highlight"><code class="language-json">{
-  // How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)
-  "VerticalScreenCoverage": 60
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="c1">// How far the terminal should come down, in percentage (eg. 50 = half way, 100 = full screen)</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">&quot;VerticalScreenCoverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><img alt="Vertical Screen Coverage" src="https://files.flyingpie.nl/windows-terminal-quake/vertical-coverage.png" /></p>
 <p><span class="by">Suggested by <a href="https://github.com/ukWaqas">ukWaqas</a></span></p>
 <p><img alt="Vertical Offset" src="https://user-images.githubusercontent.com/1295673/95657244-b9894f80-0b13-11eb-97d5-3f984f4de912.png" /></p>
@@ -1515,31 +1510,35 @@ Note that this only applies when both <code>HorizontalScreenCoverage</code> and 
 <p>This is to fix the issue where the terminal columns don't line up with the width and height of the screen.</p>
 <p>Since the terminal sizes in incremental values of 1 column, 100% horizontal coverage can actually mean slightly under the full width of the screen.</p>
 <p>Defaults to <code>true</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "MaximizeAfterToggle": true
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="nt">&quot;MaximizeAfterToggle&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <h3 id="start-hidden">Start Hidden<a class="headerlink" href="#start-hidden" title="Permanent link">&para;</a></h3>
 <p>Whether to hide the terminal window immediately after app start.</p>
 <p>Defaults to <code>false</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "StartHidden": true
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="nt">&quot;StartHidden&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/dfyx">Christian Käser</a></span></p>
 <h3 id="suppress-hotkey-for-processes">Suppress Hotkey for Processes<a class="headerlink" href="#suppress-hotkey-for-processes" title="Permanent link">&para;</a></h3>
 <p>The processes that suppress the hotkey bind.</p>
 <p>Useful for cases where, when a specific program has focus, toggling of the terminal should be suspended.</p>
 <p>Defaults to no processes.</p>
-<pre class="highlight"><code class="language-json">{
-    "SuppressHotkeyForProcesses": [ "code.exe" ]
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">{</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="nt">&quot;SuppressHotkeyForProcesses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;code.exe&quot;</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested and implemented by <a href="https://github.com/aleybe">Alex</a></span></p>
 <h3 id="taskbar-icon-visibility">Taskbar Icon Visibility<a class="headerlink" href="#taskbar-icon-visibility" title="Permanent link">&para;</a></h3>
 <p>When to show the terminal window icon on the taskbar.</p>
 <p>"AlwaysHidden", "AlwaysVisible" or "WhenTerminalVisible".</p>
 <p>Defaults to no "AlwaysHidden".</p>
-<pre class="highlight"><code class="language-json">{
-    "TaskbarIconVisibility": "AlwaysHidden"
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">{</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="nt">&quot;TaskbarIconVisibility&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AlwaysHidden&quot;</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/metya">metya</a></span></p>
 <h3 id="toggle-animation">Toggle Animation<a class="headerlink" href="#toggle-animation" title="Permanent link">&para;</a></h3>
 <h4 id="toggle-animation-type">Toggle Animation Type<a class="headerlink" href="#toggle-animation-type" title="Permanent link">&para;</a></h4>
@@ -1557,17 +1556,19 @@ Note that this only applies when both <code>HorizontalScreenCoverage</code> and 
 </ul>
 <p>See <a href="https://easings.net/">easings.net</a> for examples of the easings.</p>
 <p>Defaults to <code>EaseOutQuart</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleAnimationType": "EaseOutQuart"
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">{</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="nt">&quot;ToggleAnimationType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EaseOutQuart&quot;</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested and implemented by <a href="https://github.com/timmolderez">Tim Molderez</a></span></p>
 <h4 id="toggle-duration">Toggle Duration<a class="headerlink" href="#toggle-duration" title="Permanent link">&para;</a></h4>
 <p>How long it should take for the terminal to come down or go back up.
 This is an estimate, since because of the way the toggling works, some slow downs can happen.</p>
 <p>Setting this to <code>0</code> makes the toggle instant.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleDurationMs": 150
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="nt">&quot;ToggleDurationMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/mikef-nl">Mike F</a></span></p>
 <h4 id="toggle-mode">Toggle Mode<a class="headerlink" href="#toggle-mode" title="Permanent link">&para;</a></h4>
 <p>How the terminal actually gets toggled on- and off the screen.</p>
@@ -1579,26 +1580,31 @@ This should work on any setup, but can cause some jumping of the terminal charac
 <p>Moves the entire window off-screen to the top, which prevents jumping of the terminal characters, since the size of the terminal is kept constant.</p>
 <p>This doesn't work too great with vertically-stacked monitor setups, since the terminal might be pushed off to the monitor north of the active one.</p>
 <p>Defaults to <code>Resize</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleMode": "Resize"
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">{</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nt">&quot;ToggleMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Resize&quot;</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/marxjohnson">Mark Johnson</a> and <a href="https://github.com/shanselman">Scott Hanselman</a></span></p>
 <h4 id="toggle-animation-frame-time">Toggle Animation Frame Time<a class="headerlink" href="#toggle-animation-frame-time" title="Permanent link">&para;</a></h4>
 <p>How long each frame in the toggle animation takes in milliseconds.
 The lower this value, the smoother the animation, though values lower than 15 are not supported and will result in a toggle taking more than the configured.</p>
 <p>Defaults to <code>25</code>.</p>
-<pre class="highlight"><code class="language-json">{
-    "ToggleAnimationFrameTimeMs": 25
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="p">{</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="nt">&quot;ToggleAnimationFrameTimeMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">}</span>
+</span></code></pre></div>
 <p><span class="by">Suggested by <a href="https://github.com/rmobis">Raphael Mobis Tacla</a></span></p>
 <h3 id="windows-terminal-command">Windows Terminal Command<a class="headerlink" href="#windows-terminal-command" title="Permanent link">&para;</a></h3>
 <p>The command/file path to execute when the app starts and Windows Terminal is not yet running.</p>
 <p>Useful for when the Windows Terminal is not in the PATH variable.
 In such cases, the full path to the wt.exe executable can be used instead.</p>
 <p>Defaults to "wt.exe".</p>
-<pre class="highlight"><code class="language-json">{
-    "WindowsTerminalCommand": "wt.exe"
-}</code></pre>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="p">{</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="nt">&quot;WindowsTerminalCommand&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;wt.exe&quot;</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="p">}</span>
+</span></code></pre></div>
+
+
 
 
 
@@ -1622,20 +1628,29 @@ In such cases, the full path to the wt.exe executable can be used instead.</p>
       </main>
       
         <footer class="md-footer">
-	<div class="md-footer-meta md-typeset">
-		<div class="md-footer-meta__inner md-grid">
-			<div class="md-footer-copyright">
-				WTQ by <a href="https://www.flyingpie.nl" target="_blank" rel="noopener">Flyingpie</a>
-			</div>
-			<div class="md-footer-copyright">
-				Made with <a href="https://www.mkdocs.org/" target="_blank" rel="noopener">MkDocs</a> and <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">Material for MkDocs</a>
-			</div>
-		</div>
-	</div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      WTQ by <a href="https://www.flyingpie.nl" target="_blank" rel="noopener">Flyingpie</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
 </footer>
       
     </div>
-    <div class="md-dialog" data-md-component="dialog">
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
@@ -1643,14 +1658,14 @@ In such cases, the full path to the wt.exe executable can be used instead.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.expand", "navigation.sections", "navigation.tabs", "navigation.tracking"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.code.copy","navigation.expand","navigation.sections","navigation.tabs","navigation.tracking"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
-      
-        <script src="../assets/highlight/highlight.pack.js"></script>
-      
-        <script src="../assets/config.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>

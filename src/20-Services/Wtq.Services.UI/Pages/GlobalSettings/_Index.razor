@@ -125,6 +125,9 @@
 				<!-- Off-screen locations -->
 				<OffScreenLocationsSetting												Get="() => GlobalOpts.OffScreenLocations"			Set="v => GlobalOpts.OffScreenLocations = v"			Default="() => GlobalOpts.OffScreenLocations" />
 
+				<!-- Maintain position and size -->
+				<WtqSettingCheckBox					TProperty="bool?"					Get="() => GlobalOpts.MaintainPositionAndSize"		Set="v => GlobalOpts.MaintainPositionAndSize = v"		Default="() => GlobalOpts.MaintainPositionAndSize" />
+
 			</RadzenStack>
 		</RadzenFieldset>
 

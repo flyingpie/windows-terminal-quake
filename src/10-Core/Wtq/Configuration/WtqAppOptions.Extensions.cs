@@ -94,6 +94,14 @@ public static class WtqAppOptionsExtensions
 		return app.GetHorizontalScreenCoverage() / 100f;
 	}
 
+	/// <inheritdoc cref="WtqSharedOptions.MaintainPositionAndSize"/>
+	public static bool GetMaintainPositionAndSize(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<bool>(o => o.MaintainPositionAndSize, app, app.Global);
+	}
+
 	/// <inheritdoc cref="WtqAppOptions.MainWindow"/>
 	public static MainWindowState GetMainWindow(this WtqAppOptions app) =>
 		Guard.Against.Null(app).MainWindow ?? AttrUtils.GetDefaultValueFor<MainWindowState>(() => app.MainWindow);
