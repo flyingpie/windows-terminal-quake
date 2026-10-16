@@ -1,0 +1,59 @@
+name: Renovate
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # Every day at 03:00.
+
+  # Allows running Renovate manually from the "Actions" tab.
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Renovate log level."
+        type: choice
+        default: info
+        options:
+          - debug
+          - info
+          - warn
+          - error
+      dryRun:
+        description: "Look for updates without creating branches or pull requests."
+        type: boolean
+        default: false
+
+# Required for Renovate to push branches, open pull requests and maintain the
+# dependency dashboard issue.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+# Never run two Renovate jobs at the same time.
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    name: Renovate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Enable dry run
+        if: inputs.dryRun
+        run: echo "RENOVATE_DRY_RUN=lookup" >> "$GITHUB_ENV"
+
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v46.3.8
+        with:
+          # Prefer a dedicated token when one is configured. A token with the
+          # `workflow` scope (a PAT or a GitHub App) is required for Renovate to
+          # update the workflow files themselves, because the built-in
+          # GITHUB_TOKEN is not allowed to push to .github/workflows.
+          token: ${{ secrets.RENOVATE_TOKEN || github.token }}
+        env:
+          # Only manage this repository.
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
