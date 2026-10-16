@@ -136,8 +136,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <summary>
-	/// Whether app windows should be put back where WTQ last put them, if they're moved by external factors,
-	/// such as monitor (dis)connects or resolution changes.
+	/// Whether app windows should be put back where WTQ last put them, if they're moved by external factors, such as monitor (dis)connects or resolution changes.
 	/// </summary>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.Position, Name = "Maintain position and size")]
