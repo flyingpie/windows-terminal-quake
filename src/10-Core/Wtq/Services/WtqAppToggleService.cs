@@ -108,6 +108,8 @@ public class WtqAppToggleService(
 
 		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
 
+		await app.Window.UnpinAsync().NoCtx();
+
 		// If no off-screen location could be found, just blink it out of existence instantly.
 		if (windowRectDst == null)
 		{
@@ -116,6 +118,9 @@ public class WtqAppToggleService(
 			// Note that on KWin, it seems we're only allowed to resize windows when they're on-screen.
 			// So move first, then resize.
 			await app.MoveWindowAsync(BehindScreenLocation).NoCtx();
+
+			// Pin window so it doesn't move until we touch it again.
+			await app.Window.SetPinnedAsync(windowRectDst.Value).NoCtx();
 			return;
 		}
 

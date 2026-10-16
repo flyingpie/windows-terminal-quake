@@ -315,9 +315,6 @@ cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
 
 	log.info(`Moving window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
 
-	// Explicit moves by WTQ take precedence over a pinned location.
-	delete wtq.pinned[p.internalId];
-
 	kwin.setWindowLocation(w, p.x, p.y);
 };
 
