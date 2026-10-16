@@ -77,7 +77,7 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 
 			// None (keep current horizontal position)
 			// Note that we only do this if the window is coming back on the same screen. Otherwise, we're centering.
-			HorizontalAlign.None => windowRectSrc.IsWithinHorizontal(screenRectDst)
+			HorizontalAlign.None => windowRectSrc.X >= screenRectDst.X && windowRectSrc.X <= screenRectDst.X + screenRectDst.Width
 				? windowRectSrc.X
 				: screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 

@@ -20,6 +20,7 @@
 			"FileName": "dolphin",
 			"Exclusive": "Never",
 			"HideOnFocusLost": "Never",
+			"Resize": "Never",
 			"HorizontalScreenCoverage": 45,
 			"HorizontalAlign": "None"
 		},
