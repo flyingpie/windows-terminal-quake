@@ -79,8 +79,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// <br/>
 	/// By setting this to <b>Never</b>, the app window size will be maintained.<br/>
 	/// <br/>
-	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a
-	/// window clears its contents (seems to be most common with Electron apps).
+	/// This is useful for cases when resizing an app's window heavily impacts its contents, such as when resizing a window clears its contents (seems to be most common with Electron apps).
 	/// </summary>
 	[DefaultValue(Resizing.Always)]
 	[Display(GroupName = Gn.Position, Name = "Resize app window")]
@@ -104,12 +103,26 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
-	/// Vertical screen coverage as a percentage (0-100).
+	/// Vertical screen coverage as a percentage (0-100), applied when the app
+	/// is toggled onto the <b>primary</b> monitor.
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical screen coverage", Prompt = "Percentage")]
 	[JsonPropertyOrder(4004)]
 	public float? VerticalScreenCoverage { get; set; }
+
+	/// <summary>
+	/// Vertical screen coverage as a percentage (0-100), applied when the app
+	/// is toggled onto a <b>secondary</b> monitor (any monitor that is not the primary).<br/>
+	/// <br/>
+	/// When not set, falls back to <see cref="VerticalScreenCoverage"/>.
+	/// Useful for setups where the primary monitor has a taskbar (requiring coverage &lt; 100%)
+	/// but secondary monitors occupy the full screen height.
+	/// </summary>
+	[Display(GroupName = Gn.Position, Name = "Vertical coverage (secondary screen)", Prompt = "Percentage")]
+	[Range(0, 100)]
+	[JsonPropertyOrder(4006)]
+	public float? VerticalScreenCoverageSecondScreen { get; set; }
 
 	/// <summary>
 	/// How much room to leave between the top of the app window and the top of the screen, in pixels.
