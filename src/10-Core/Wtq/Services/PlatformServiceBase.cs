@@ -142,14 +142,14 @@ public abstract class PlatformServiceBase : IPlatformService
 	public abstract string PreferredPathWtqConfig { get; }
 
 	/// <summary>
-	/// Possible names for the settings file. Used for building potential paths.
-	/// </summary>
-	protected virtual ICollection<string> WtqConfNames => ["wtq", ".wtq"];
-
-	/// <summary>
 	/// Possible extensions for the settings file. Used for building potential paths.
 	/// </summary>
 	public virtual ICollection<string> WtqConfExtensions => ["json", "jsonc", "json5"];
+
+	/// <summary>
+	/// Possible names for the settings file. Used for building potential paths.
+	/// </summary>
+	protected virtual ICollection<string> WtqConfNames => ["wtq", ".wtq"];
 
 	/// <inheritdoc/>
 	public virtual Process CreateProcess(WtqAppOptions opts)

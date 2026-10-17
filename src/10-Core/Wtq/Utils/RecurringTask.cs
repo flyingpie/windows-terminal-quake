@@ -16,7 +16,7 @@ public sealed class RecurringTask(
 
 	private readonly Func<CancellationToken, Task> _action = Guard.Against.Null(action);
 
-	private string Name { get; } = Guard.Against.NullOrWhiteSpace(name);
+	public string Name { get; } = Guard.Against.NullOrWhiteSpace(name);
 
 	public TimeSpan Interval { get; } =
 		Guard.Against.OutOfRange(

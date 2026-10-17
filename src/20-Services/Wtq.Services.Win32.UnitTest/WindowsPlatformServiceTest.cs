@@ -148,7 +148,6 @@ public class WindowsPlatformServiceTest
 			"C:/users/username/.wtq.json5",
 		};
 		// @formatter:on
-
 		Assert.AreEqual(expected.Length, paths.Count);
 
 		for (var i = 0; i < paths.Count; i++)
