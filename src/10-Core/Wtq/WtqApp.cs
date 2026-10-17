@@ -30,7 +30,8 @@ public sealed class WtqApp : IAsyncDisposable
 		IWtqScreenInfoProvider screenInfoProvider,
 		IWtqWindowResolver windowResolver,
 		Func<WtqAppOptions> optionsAccessor,
-		string name)
+		string name
+	)
 	{
 		_log = Log.For($"{GetType()}|{name}");
 
@@ -154,7 +155,11 @@ public sealed class WtqApp : IAsyncDisposable
 			_log.LogDebug("Screen {Screen} does NOT contain app {App}", screenRect, this);
 		}
 
-		_log.LogWarning("Could not find screen for app {App} ({Rectangle}), returning primary screen", this, windowRect);
+		_log.LogWarning(
+			"Could not find screen for app {App} ({Rectangle}), returning primary screen",
+			this,
+			windowRect
+		);
 
 		return await _screenInfoProvider.GetPrimaryScreenRectAsync().NoCtx();
 	}
@@ -242,7 +247,9 @@ public sealed class WtqApp : IAsyncDisposable
 		}
 
 		// Make sure this method always runs non-concurrently.
-		using var l = await _updateLock.WaitAsync(Cancel.After(TimeSpan.FromSeconds(15))).ConfigureAwait(false);
+		using var l = await _updateLock
+			.WaitAsync(Cancel.After(TimeSpan.FromSeconds(15)))
+			.ConfigureAwait(false);
 
 		// Ask window to update its state first.
 		await (Window?.UpdateAsync() ?? Task.CompletedTask).NoCtx();
@@ -257,7 +264,11 @@ public sealed class WtqApp : IAsyncDisposable
 				await CheckAndRestoreWindowRectAsync(Window, _lastLoc.Value).NoCtx();
 			}
 
-			_log.LogDebug("Window handle '{Window}' for app '{App}' is still active, skipping update", Window, this);
+			_log.LogDebug(
+				"Window handle '{Window}' for app '{App}' is still active, skipping update",
+				Window,
+				this
+			);
 			return;
 		}
 
@@ -308,7 +319,8 @@ public sealed class WtqApp : IAsyncDisposable
 				"Window seems to have moved externally, restoring position (moved from {LastLoc} to {CurrentLoc}, distance of {Distance})",
 				lastLoc,
 				rect,
-				dist);
+				dist
+			);
 
 			// Have the toggle re-do the toggling, with the current (possibly changed) screen setup.
 			if (IsOpen)
@@ -413,7 +425,11 @@ public sealed class WtqApp : IAsyncDisposable
 		var dstSize = scr.Size.MultiplyF(.9f);
 		var dstLoc = dstSize.CenterInRectangle(scr);
 
-		_log.LogInformation("Resetting window location to {Location} and size to {Size}", dstLoc, dstSize);
+		_log.LogInformation(
+			"Resetting window location to {Location} and size to {Size}",
+			dstLoc,
+			dstSize
+		);
 
 		// Move first.
 		await MoveWindowAsync(dstLoc).NoCtx();
@@ -429,7 +445,10 @@ public sealed class WtqApp : IAsyncDisposable
 			return true;
 		}
 
-		_log.LogWarning("Options for app {App} not valid. Please check settings, and/or the GUI for suggestions", this);
+		_log.LogWarning(
+			"Options for app {App} not valid. Please check settings, and/or the GUI for suggestions",
+			this
+		);
 		return false;
 	}
 }

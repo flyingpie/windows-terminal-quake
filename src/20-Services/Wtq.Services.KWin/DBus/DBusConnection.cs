@@ -26,9 +26,7 @@ internal sealed class DBusConnection : IDBusConnection, IDisposable
 	private DBus.Generated.Scripting? _scripting;
 
 	public DBusConnection()
-		: this(Address.Session)
-	{
-	}
+		: this(Address.Session) { }
 
 	public DBusConnection(string? address)
 	{
@@ -81,7 +79,11 @@ internal sealed class DBusConnection : IDBusConnection, IDisposable
 		Guard.Against.NullOrWhiteSpace(serviceName);
 		Guard.Against.Null(serviceObject);
 
-		_log.LogInformation("Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'", serviceName, serviceObject);
+		_log.LogInformation(
+			"Registering DBus service with name '{ServiceName}', and object '{ServiceObject}'",
+			serviceName,
+			serviceObject
+		);
 
 		await _serverConnection.RegisterServiceAsync(serviceName).NoCtx();
 		await _serverConnection.RegisterObjectAsync(serviceObject).NoCtx();

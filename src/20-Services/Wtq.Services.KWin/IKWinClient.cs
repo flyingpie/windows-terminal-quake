@@ -8,63 +8,48 @@ namespace Wtq.Services.KWin;
 /// </summary>
 public interface IKWinClient
 {
-	Task BringToForegroundAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken);
+	Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken);
 
-	Task<Point> GetCursorPosAsync(
-		CancellationToken cancellationToken);
+	Task<Point> GetCursorPosAsync(CancellationToken cancellationToken);
 
-	Task<KWinSupportInformation> GetSupportInformationAsync(
-		CancellationToken cancellationToken);
+	Task<KWinSupportInformation> GetSupportInformationAsync(CancellationToken cancellationToken);
 
-	Task<KWinWindow?> GetForegroundWindowAsync(
-		CancellationToken cancellationToken);
+	Task<KWinWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken);
 
-	Task<KWinWindow?> GetWindowAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken);
+	Task<KWinWindow?> GetWindowAsync(KWinWindow window, CancellationToken cancellationToken);
 
-	Task<ICollection<KWinWindow>> GetWindowListAsync(
-		CancellationToken cancellationToken);
+	Task<ICollection<KWinWindow>> GetWindowListAsync(CancellationToken cancellationToken);
 
-	Task MoveWindowAsync(
-		KWinWindow window,
-		Point location,
-		CancellationToken cancellationToken);
+	Task MoveWindowAsync(KWinWindow window, Point location, CancellationToken cancellationToken);
 
-	Task PinWindowAsync(
-		KWinWindow window,
-		Rectangle rect,
-		CancellationToken cancellationToken);
+	Task PinWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken);
 
 	Task RegisterHotkeyAsync(
 		string name,
 		string description,
 		KeySequence sequence,
-		CancellationToken cancellationToken);
+		CancellationToken cancellationToken
+	);
 
-	Task ResizeWindowAsync(
-		KWinWindow window,
-		Size size,
-		CancellationToken cancellationToken);
+	Task ResizeWindowAsync(KWinWindow window, Size size, CancellationToken cancellationToken);
 
 	Task SetTaskbarIconVisibleAsync(
 		KWinWindow window,
 		bool isVisible,
-		CancellationToken cancellationToken);
+		CancellationToken cancellationToken
+	);
 
 	Task SetWindowAlwaysOnTopAsync(
 		KWinWindow window,
 		bool isAlwaysOnTop,
-		CancellationToken cancellationToken);
+		CancellationToken cancellationToken
+	);
 
 	Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
-		CancellationToken cancellationToken);
+		CancellationToken cancellationToken
+	);
 
-	Task UnpinWindowAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken);
+	Task UnpinWindowAsync(KWinWindow window, CancellationToken cancellationToken);
 }

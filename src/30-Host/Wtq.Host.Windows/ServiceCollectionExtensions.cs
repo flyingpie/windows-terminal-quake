@@ -13,20 +13,25 @@ public static class ServiceCollectionExtensions
 
 	public static IServiceCollection AddHotkeyService(
 		this IServiceCollection services,
-		WtqOptions opts)
+		WtqOptions opts
+	)
 	{
 		Guard.Against.Null(services);
 		Guard.Against.Null(opts);
 
 		if (opts.FeatureFlags?.SharpHook ?? true)
 		{
-			_log.LogInformation("Using SharpHook hotkey service (new behavior, please report any issues and consider disabling this if you run into any)");
+			_log.LogInformation(
+				"Using SharpHook hotkey service (new behavior, please report any issues and consider disabling this if you run into any)"
+			);
 
 			services.AddSharpHookHotkeyService();
 		}
 		else
 		{
-			_log.LogInformation("Using WinForms hotkey service (a feature flag is available, which enables using the 'Windows' modifier)");
+			_log.LogInformation(
+				"Using WinForms hotkey service (a feature flag is available, which enables using the 'Windows' modifier)"
+			);
 
 			services.AddWinFormsHotkeyService();
 		}

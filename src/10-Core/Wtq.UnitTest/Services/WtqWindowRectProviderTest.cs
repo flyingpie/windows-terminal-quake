@@ -1,5 +1,5 @@
-using HA = Wtq.Configuration.HorizontalAlign;
 using static Wtq.Configuration.Resizing;
+using HA = Wtq.Configuration.HorizontalAlign;
 
 namespace Wtq.Core.UnitTest.Services;
 

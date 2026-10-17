@@ -14,8 +14,8 @@ public sealed class ApiService(
 	IOptions<WtqOptions> opts,
 	IPlatformService platformService,
 	IWtqAppRepo appRepo,
-	IWtqBus bus)
-	: WtqHostedService
+	IWtqBus bus
+) : WtqHostedService
 {
 	private readonly ILogger _log = Log.For<ApiService>();
 
@@ -54,23 +54,25 @@ public sealed class ApiService(
 			// If this is a Unix socket, see if the target file already exists.
 			// This could mean that WTQ is already running, or that it didn't shut down gracefully.
 			// In any case, we're removing the socket file if it already exists. Preventing multiple instances trampling each other should be handled differently.
-			if (u.StartsWith("http://unix:/", StringComparison.OrdinalIgnoreCase) && File.Exists(uri.AbsolutePath))
+			if (
+				u.StartsWith("http://unix:/", StringComparison.OrdinalIgnoreCase)
+				&& File.Exists(uri.AbsolutePath)
+			)
 			{
-				_log.LogWarning("Unix socket at path '{Path}' already exists, deleting", uri.AbsolutePath);
+				_log.LogWarning(
+					"Unix socket at path '{Path}' already exists, deleting",
+					uri.AbsolutePath
+				);
 				File.Delete(uri.AbsolutePath);
 			}
 		}
 
 		builder.WebHost.UseUrls([.. urls]);
 
-		builder.Services
-			.AddLogging(c => c
-				.ClearProviders()
-				.AddProvider(Log.Provider))
-
+		builder
+			.Services.AddLogging(c => c.ClearProviders().AddProvider(Log.Provider))
 			// Add MVC controllers.
 			.AddControllers()
-
 			// Explicitly add the current namespace, since it may not be picked up otherwise
 			// (due to the controllers being outside the entry assembly).
 			.AddApplicationPart(typeof(ApiService).Assembly);

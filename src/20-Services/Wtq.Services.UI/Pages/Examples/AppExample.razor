@@ -13,7 +13,7 @@
 	[Parameter]
 	public Func<WtqAppExample, WtqAppExampleFlavor, Task> OnSelectApp { get; set; } = null!;
 
-	private string GetAddButtonText(WtqAppExampleFlavor flavor)
+	private static string GetAddButtonText(WtqAppExampleFlavor flavor)
 	{
 		var sb = new StringBuilder();
 

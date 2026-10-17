@@ -6,9 +6,7 @@ namespace Wtq.Utils;
 /// Returns a path to a tray icon, based on both the <see cref="WtqOptions.TrayIconStyle"/>
 /// and <see cref="IPlatformService.OsColorMode"/>.
 /// </summary>
-public class TrayIconUtil(
-	IOptions<WtqOptions> opts,
-	IPlatformService platform)
+public class TrayIconUtil(IOptions<WtqOptions> opts, IPlatformService platform)
 {
 	private readonly IOptions<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IPlatformService _platform = Guard.Against.Null(platform);

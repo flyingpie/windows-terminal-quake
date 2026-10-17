@@ -14,9 +14,7 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 	private readonly IOptionsMonitor<WtqOptions> _opts;
 	private readonly IWtqBus _bus;
 
-	public WinFormsHotkeyService(
-		IOptionsMonitor<WtqOptions> opts,
-		IWtqBus bus)
+	public WinFormsHotkeyService(IOptionsMonitor<WtqOptions> opts, IWtqBus bus)
 	{
 		_opts = Guard.Against.Null(opts);
 		_bus = Guard.Against.Null(bus);
@@ -53,7 +51,11 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 		{
 			foreach (var hk in app.Hotkeys)
 			{
-				_log.LogInformation("Registering hotkey '{Hotkey}' for app '{App}'", hk.Sequence, app);
+				_log.LogInformation(
+					"Registering hotkey '{Hotkey}' for app '{App}'",
+					hk.Sequence,
+					app
+				);
 				Register(hk.Sequence);
 			}
 		}
@@ -70,7 +72,9 @@ public sealed class WinFormsHotkeyService : WtqHostedService
 	{
 		if (!sequence.HasKeyCode)
 		{
-			_log.LogWarning("Key chars are not supported in the WinForms hotkey registration, please switch to the SharpHook one.");
+			_log.LogWarning(
+				"Key chars are not supported in the WinForms hotkey registration, please switch to the SharpHook one."
+			);
 			return;
 		}
 

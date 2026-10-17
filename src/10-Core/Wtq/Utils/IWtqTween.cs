@@ -15,5 +15,6 @@ public interface IWtqTween
 		Point dst,
 		int durationMs,
 		AnimationType animType,
-		Func<Point, Task> move);
+		Func<Point, Task> move
+	);
 }

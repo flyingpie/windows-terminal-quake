@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Wtq.Services.API.Endpoints.Apps;
 
@@ -10,7 +10,8 @@ public class PostOpenAppEndpoint : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> ExecuteAsync(
 		[FromServices] IWtqAppRepo appRepo,
-		[FromQuery, Required] string appName)
+		[FromQuery, Required] string appName
+	)
 	{
 		// Look up the requested app.
 		var app = appRepo.GetByName(appName);

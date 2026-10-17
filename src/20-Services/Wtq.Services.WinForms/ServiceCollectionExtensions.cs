@@ -8,23 +8,20 @@ public static class ServiceCollectionExtensions
 	{
 		Guard.Against.Null(services);
 
-		return services
-			.AddHostedService<WinFormsHotkeyService>();
+		return services.AddHostedService<WinFormsHotkeyService>();
 	}
 
 	public static IServiceCollection AddWinFormsScreenInfoProvider(this IServiceCollection services)
 	{
 		Guard.Against.Null(services);
 
-		return services
-			.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>();
+		return services.AddSingleton<IWtqScreenInfoProvider, WinFormsScreenInfoProvider>();
 	}
 
 	public static IServiceCollection AddWinFormsTrayIcon(this IServiceCollection services)
 	{
 		Guard.Against.Null(services);
 
-		return services
-			.AddHostedService<WinFormsTrayIconService>();
+		return services.AddHostedService<WinFormsTrayIconService>();
 	}
 }

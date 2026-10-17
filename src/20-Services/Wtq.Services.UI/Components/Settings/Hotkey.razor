@@ -72,7 +72,7 @@
 
 	private void HandleKeyUp(KeyboardEventArgs e)
 	{
-		e.ToModifiersAndKey(out var mod, out _, out var keyCode);
+		e.ToModifiersAndKey(out _, out _, out var keyCode);
 
 		// For some reason, the KeyboardEventArgs.MetaKey bool isn't set to "TRUE" when the meta/super/windows key is pressed.
 		// So we're keeping track of that ourselves.

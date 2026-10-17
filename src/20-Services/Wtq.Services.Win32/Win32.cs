@@ -26,12 +26,12 @@ public class Win32 : IWin32
 #pragma warning restore SA1310
 #pragma warning restore CA1707 // Identifiers should not contain underscores
 
-	private readonly IVirtualDesktopManager _virtDeskMan = (IVirtualDesktopManager)new VirtualDesktopManager();
+	private readonly IVirtualDesktopManager _virtDeskMan = (IVirtualDesktopManager)
+		new VirtualDesktopManager();
 
 	private readonly ILogger _log = Log.For<Win32>();
 
-	public static bool AttachConsole() =>
-		PI.AttachConsole(PI.ATTACH_PARENT_PROCESS);
+	public static bool AttachConsole() => PI.AttachConsole(PI.ATTACH_PARENT_PROCESS);
 
 	/// <inheritdoc/>
 	public unsafe nint? GetForegroundWindowHandle()
@@ -40,17 +40,23 @@ public class Win32 : IWin32
 
 		if (windowHandle <= 0)
 		{
-			_log.LogWarning("{Method} Did not find a foreground window", nameof(GetForegroundWindowHandle));
+			_log.LogWarning(
+				"{Method} Did not find a foreground window",
+				nameof(GetForegroundWindowHandle)
+			);
 			return null;
 		}
 
-		_log.LogDebug("{Method} Got foreground window with handle '{Handle}'", nameof(GetForegroundWindowHandle), windowHandle);
+		_log.LogDebug(
+			"{Method} Got foreground window with handle '{Handle}'",
+			nameof(GetForegroundWindowHandle),
+			windowHandle
+		);
 		return (nint)windowHandle;
 	}
 
 	/// <inheritdoc/>
-	public Win32Window? GetWindow(nint windowHandle) =>
-		GetWin32Window((HWND)windowHandle);
+	public Win32Window? GetWindow(nint windowHandle) => GetWin32Window((HWND)windowHandle);
 
 	/// <inheritdoc/>
 	public string? GetWindowClass(nint windowHandle)
@@ -78,11 +84,7 @@ public class Win32 : IWin32
 		PI.EnumWindows(ReportWindow, listHandlePtr);
 
 		// Turn the list of handles into a list of objects that contain info about the windows.
-		return windowHandles
-			.Select(GetWin32Window)
-			.Where(w => w != null)
-			.Select(w => w!)
-			.ToList();
+		return windowHandles.Select(GetWin32Window).Where(w => w != null).Select(w => w!).ToList();
 	}
 
 	/// <inheritdoc/>
@@ -92,11 +94,19 @@ public class Win32 : IWin32
 
 		if (!PI.GetWindowRect((HWND)windowHandle, out var rect))
 		{
-			throw new InvalidOperationException($"Could not get window rect for window with handle '{windowHandle}'.", new Win32Exception());
+			throw new InvalidOperationException(
+				$"Could not get window rect for window with handle '{windowHandle}'.",
+				new Win32Exception()
+			);
 		}
 
 		var res = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
-		_log.LogDebug("{Method} Got window rect '{Rectangle}' for window with handle '{WindowHandle}'", nameof(GetWindowRect), res, windowHandle);
+		_log.LogDebug(
+			"{Method} Got window rect '{Rectangle}' for window with handle '{WindowHandle}'",
+			nameof(GetWindowRect),
+			res,
+			windowHandle
+		);
 
 		return res;
 	}
@@ -140,11 +150,28 @@ public class Win32 : IWin32
 	{
 		Guard.Against.OutOfRange(windowHandle, nameof(windowHandle), 1, nint.MaxValue);
 
-		_log.LogTrace("{MethodName}({WindowHandle}, {Rectangle})", nameof(MoveWindow), windowHandle, rectangle);
+		_log.LogTrace(
+			"{MethodName}({WindowHandle}, {Rectangle})",
+			nameof(MoveWindow),
+			windowHandle,
+			rectangle
+		);
 
-		if (!PI.MoveWindow((HWND)windowHandle, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, true))
+		if (
+			!PI.MoveWindow(
+				(HWND)windowHandle,
+				rectangle.X,
+				rectangle.Y,
+				rectangle.Width,
+				rectangle.Height,
+				true
+			)
+		)
 		{
-			throw new InvalidOperationException($"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.", new Win32Exception());
+			throw new InvalidOperationException(
+				$"Could not set size and position to '{rectangle}' of window with handle '{windowHandle}'.",
+				new Win32Exception()
+			);
 		}
 	}
 
@@ -159,7 +186,10 @@ public class Win32 : IWin32
 
 		if (!PI.GetWindowPlacement((HWND)windowHandle, ref placement))
 		{
-			throw new InvalidOperationException($"Could not get windows state for window with handle '{windowHandle}'.", new Win32Exception());
+			throw new InvalidOperationException(
+				$"Could not get windows state for window with handle '{windowHandle}'.",
+				new Win32Exception()
+			);
 		}
 
 		return (WindowShowStyle)placement.showCmd;
@@ -192,13 +222,27 @@ public class Win32 : IWin32
 
 		var insertBefore = isAlwaysOnTop ? HWND_TOPMOST : HWND_NOTOPMOST;
 		var flags =
-				SET_WINDOW_POS_FLAGS.SWP_NOMOVE | // Ignore the positional parameters.
-				SET_WINDOW_POS_FLAGS.SWP_NOSIZE // Ignore the size parameters.
-			;
+			SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+			| // Ignore the positional parameters.
+			SET_WINDOW_POS_FLAGS.SWP_NOSIZE // Ignore the size parameters.
+		;
 
-		if (!PI.SetWindowPos(hWnd: (HWND)windowHandle, hWndInsertAfter: (HWND)insertBefore, X: 0, Y: 0, cx: 0, cy: 0, uFlags: flags))
+		if (
+			!PI.SetWindowPos(
+				hWnd: (HWND)windowHandle,
+				hWndInsertAfter: (HWND)insertBefore,
+				X: 0,
+				Y: 0,
+				cx: 0,
+				cy: 0,
+				uFlags: flags
+			)
+		)
 		{
-			throw new InvalidOperationException($"Could not set 'Always On Top' to '{isAlwaysOnTop}' of window with handle '{windowHandle}'.", new Win32Exception());
+			throw new InvalidOperationException(
+				$"Could not set 'Always On Top' to '{isAlwaysOnTop}' of window with handle '{windowHandle}'.",
+				new Win32Exception()
+			);
 		}
 	}
 
@@ -233,7 +277,14 @@ public class Win32 : IWin32
 		// Wait for the target window to process a null event, which means the previously sent "become foreground"-event has also been processed.
 		// Do this with a timeout, so we don't hang if the target window hangs.
 		// https://devblogs.microsoft.com/oldnewthing/20161118-00/?p=94745
-		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
+		PI.SendMessageTimeout(
+			hwnd,
+			WM_NULL,
+			0,
+			0,
+			SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL,
+			uTimeout: 100
+		);
 
 		// If the requested window has become the foreground window, we're done.
 		if (PI.GetForegroundWindow() == hwnd)
@@ -241,11 +292,19 @@ public class Win32 : IWin32
 			return;
 		}
 
-		_log.LogWarning("{MethodName} failed, attempting synthetic input event workaround", nameof(SetForegroundWindow));
+		_log.LogWarning(
+			"{MethodName} failed, attempting synthetic input event workaround",
+			nameof(SetForegroundWindow)
+		);
 
 		// Simulate Alt key press and release.
 		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, 0, UIntPtr.Zero);
-		PI.keybd_event((byte)VIRTUAL_KEY.VK_MENU, 0, KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP, UIntPtr.Zero);
+		PI.keybd_event(
+			(byte)VIRTUAL_KEY.VK_MENU,
+			0,
+			KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP,
+			UIntPtr.Zero
+		);
 
 		Thread.Sleep(20); // Give Windows a moment to process input events.
 
@@ -254,7 +313,14 @@ public class Win32 : IWin32
 		PI.SendMessage(hwnd, PI.WM_PAINT, 0, 0);
 
 		// Wait for the above event to be processed again.
-		PI.SendMessageTimeout(hwnd, WM_NULL, 0, 0, SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL, uTimeout: 100);
+		PI.SendMessageTimeout(
+			hwnd,
+			WM_NULL,
+			0,
+			0,
+			SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_NORMAL,
+			uTimeout: 100
+		);
 
 		if (PI.GetForegroundWindow() == hwnd)
 		{
@@ -273,9 +339,16 @@ public class Win32 : IWin32
 
 		_log.LogTrace("{MethodName}({WindowHandle})", nameof(SetWindowState), windowHandle);
 
-		if (!PI.ShowWindow((HWND)windowHandle, (Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD)state))
+		if (
+			!PI.ShowWindow(
+				(HWND)windowHandle,
+				(Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD)state
+			)
+		)
 		{
-			throw new InvalidOperationException($"Could not set window state to '{state}' of window with handle '{windowHandle}'.");
+			throw new InvalidOperationException(
+				$"Could not set window state to '{state}' of window with handle '{windowHandle}'."
+			);
 		}
 	}
 
@@ -286,7 +359,9 @@ public class Win32 : IWin32
 
 		if (!PI.SetWindowText((HWND)windowHandle, title))
 		{
-			throw new InvalidOperationException($"Could not set window title to '{title}' of window with handle '{windowHandle}'.");
+			throw new InvalidOperationException(
+				$"Could not set window title to '{title}' of window with handle '{windowHandle}'."
+			);
 		}
 	}
 
@@ -302,12 +377,26 @@ public class Win32 : IWin32
 		var props = PI.GetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
 
 		// Add "WS_EX_LAYERED"-flag (required for transparency).
-		PI.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, props | WS_EX_LAYERED);
+		PI.SetWindowLong(
+			(HWND)windowHandle,
+			WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE,
+			props | WS_EX_LAYERED
+		);
 
 		// Set transparency
-		if (!PI.SetLayeredWindowAttributes((HWND)windowHandle, crKey: (COLORREF)0, bAlpha: alpha, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA))
+		if (
+			!PI.SetLayeredWindowAttributes(
+				(HWND)windowHandle,
+				crKey: (COLORREF)0,
+				bAlpha: alpha,
+				LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA
+			)
+		)
 		{
-			throw new InvalidOperationException($"Could not set transparency to '{transparency}' of window with handle '{windowHandle}'.", new Win32Exception());
+			throw new InvalidOperationException(
+				$"Could not set transparency to '{transparency}' of window with handle '{windowHandle}'.",
+				new Win32Exception()
+			);
 		}
 	}
 
@@ -321,7 +410,9 @@ public class Win32 : IWin32
 
 		if (listHandle.Target is not List<HWND> windowHandles)
 		{
-			throw new InvalidOperationException($"Expected list handle to be of type '{typeof(List<HWND>).FullName}', but was '{listHandle.Target?.GetType()?.FullName}'.");
+			throw new InvalidOperationException(
+				$"Expected list handle to be of type '{typeof(List<HWND>).FullName}', but was '{listHandle.Target?.GetType()?.FullName}'."
+			);
 		}
 
 		windowHandles.Add(windowHandle);
@@ -372,7 +463,8 @@ public class Win32 : IWin32
 				processId,
 				windowClass,
 				windowTitle,
-				ex.Message);
+				ex.Message
+			);
 
 			return null;
 		}

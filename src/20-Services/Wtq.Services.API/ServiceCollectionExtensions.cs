@@ -8,7 +8,6 @@ public static class ServiceCollectionExtensions
 	{
 		Guard.Against.Null(services);
 
-		return services
-			.AddHostedService<ApiService>();
+		return services.AddHostedService<ApiService>();
 	}
 }

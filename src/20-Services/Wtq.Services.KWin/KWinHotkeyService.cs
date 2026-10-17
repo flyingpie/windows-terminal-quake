@@ -48,7 +48,8 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		IWtqDBusObject dbusObj,
 		IOptionsMonitor<WtqOptions> opts,
 		IKWinClient kwinClient,
-		IWtqBus bus)
+		IWtqBus bus
+	)
 	{
 		_kwinClient = Guard.Against.Null(kwinClient);
 		_opts = Guard.Against.Null(opts);
@@ -57,10 +58,17 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		_bus = Guard.Against.Null(bus);
 
 		// Update registrations every time the settings file is reloaded.
-		opts.OnChange((opt, someString) => _ = Task.Run(async () => await RegisterAllAsync(CancellationToken.None)));
+		opts.OnChange(
+			(opt, someString) =>
+				_ = Task.Run(async () => await RegisterAllAsync(CancellationToken.None))
+		);
 
-		_bus.OnEvent<WtqSuspendHotkeysEvent>(async _ => await UnregisterAllAsync(CancellationToken.None));
-		_bus.OnEvent<WtqResumeHotkeysEvent>(async _ => await RegisterAllAsync(CancellationToken.None));
+		_bus.OnEvent<WtqSuspendHotkeysEvent>(async _ =>
+			await UnregisterAllAsync(CancellationToken.None)
+		);
+		_bus.OnEvent<WtqResumeHotkeysEvent>(async _ =>
+			await RegisterAllAsync(CancellationToken.None)
+		);
 	}
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
@@ -69,12 +77,14 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		_kGlobalAccel = kwinService.CreateKGlobalAccel("/kglobalaccel");
 		_kwinComponent = kwinService.CreateComponent("/component/kwin");
 
-		_dbusObj.OnPressShortcut((arg) =>
-		{
-			_bus.Publish(new WtqHotkeyPressedEvent(arg));
+		_dbusObj.OnPressShortcut(
+			(arg) =>
+			{
+				_bus.Publish(new WtqHotkeyPressedEvent(arg));
 
-			return Task.CompletedTask;
-		});
+				return Task.CompletedTask;
+			}
+		);
 
 		// Register hotkeys on WTQ start.
 		await RegisterAllAsync(cancellationToken);
@@ -119,7 +129,10 @@ internal sealed class KWinHotkeyService : WtqHostedService
 			.Where(n => n.StartsWith(WtqShortcutPrefix, StringComparison.OrdinalIgnoreCase))
 			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-		_log.LogInformation("Existing KWin shortcuts: {Shortcuts}", string.Join(", ", kwinShortcutNames));
+		_log.LogInformation(
+			"Existing KWin shortcuts: {Shortcuts}",
+			string.Join(", ", kwinShortcutNames)
+		);
 
 		foreach (var kwinShortcutName in kwinShortcutNames)
 		{
@@ -141,7 +154,14 @@ internal sealed class KWinHotkeyService : WtqHostedService
 	{
 		{
 			var id = $"{WtqShortcutPrefix}_global_{_shortcutId++}";
-			await _kwinClient.RegisterHotkeyAsync(id, "WTQ hotkey - Fullscreen", new KeySequence(KeyModifiers.Control, "_", KeyCode.None), cancellationToken).NoCtx();
+			await _kwinClient
+				.RegisterHotkeyAsync(
+					id,
+					"WTQ hotkey - Fullscreen",
+					new KeySequence(KeyModifiers.Control, "_", KeyCode.None),
+					cancellationToken
+				)
+				.NoCtx();
 		}
 
 		foreach (var hk in _opts.CurrentValue.Hotkeys)
@@ -172,9 +192,16 @@ internal sealed class KWinHotkeyService : WtqHostedService
 				// Descriptive name that shows up in the "Shortcuts" window.
 				var name = $"WTQ hotkey - App - {app.Name}";
 
-				_log.LogInformation("Registering app hotkey '{Key}' with id '{Id}', for app '{App}'", hk, id, app);
+				_log.LogInformation(
+					"Registering app hotkey '{Key}' with id '{Id}', for app '{App}'",
+					hk,
+					id,
+					app
+				);
 
-				await _kwinClient.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken).NoCtx();
+				await _kwinClient
+					.RegisterHotkeyAsync(id, name, hk.Sequence, cancellationToken)
+					.NoCtx();
 			}
 		}
 	}

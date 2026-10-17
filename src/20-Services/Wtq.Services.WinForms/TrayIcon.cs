@@ -7,12 +7,17 @@ public sealed class TrayIcon : IDisposable
 
 	private NotifyIcon? _notificationIcon;
 
-	[SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "MvdO: Replace with simple tray icon?")]
+	[SuppressMessage(
+		"Usage",
+		"VSTHRD002:Avoid problematic synchronous waits",
+		Justification = "MvdO: Replace with simple tray icon?"
+	)]
 	public TrayIcon(
 		IHostApplicationLifetime lifetime,
 		IWtqBus bus,
 		IPlatformService platform,
-		TrayIconUtil trayIconUtil)
+		TrayIconUtil trayIconUtil
+	)
 	{
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(lifetime);
@@ -25,44 +30,30 @@ public sealed class TrayIcon : IDisposable
 		{
 			var contextMenu = new ContextMenuStrip();
 
-			contextMenu.Items.AddRange(
-			[
-				CreateItem(
-					$"Version {WtqConstants.AppVersion}",
-					() => { },
-					enabled: false),
-
+			contextMenu.Items.AddRange([
+				CreateItem($"Version {WtqConstants.AppVersion}", () => { }, enabled: false),
 				new ToolStripSeparator(),
-
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
-
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
+				),
 				new ToolStripSeparator(),
-
-				CreateItem(
-					"Open Main Window",
-					() => bus.Publish(new WtqUIRequestedEvent())),
-
+				CreateItem("Open Main Window", () => bus.Publish(new WtqUIRequestedEvent())),
 				new ToolStripSeparator(),
-
 				CreateItem(
 					"Open Settings File",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)
+				),
 				CreateItem(
 					"Open Settings Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
+				),
 				CreateItem(
 					"Open Logs Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)
+				),
 				new ToolStripSeparator(),
-
-				CreateItem(
-					"Exit",
-					() => lifetime.StopApplication()),
+				CreateItem("Exit", () => lifetime.StopApplication()),
 			]);
 
 			// Tray Icon
@@ -102,15 +93,9 @@ public sealed class TrayIcon : IDisposable
 		return new Icon(str);
 	}
 
-	private static ToolStripMenuItem CreateItem(
-		string text,
-		Action action,
-		bool enabled = true)
+	private static ToolStripMenuItem CreateItem(string text, Action action, bool enabled = true)
 	{
-		var mnuOpenSettings = new ToolStripMenuItem(text)
-		{
-			Enabled = enabled,
-		};
+		var mnuOpenSettings = new ToolStripMenuItem(text) { Enabled = enabled };
 
 		mnuOpenSettings.Click += (s, a) => action();
 

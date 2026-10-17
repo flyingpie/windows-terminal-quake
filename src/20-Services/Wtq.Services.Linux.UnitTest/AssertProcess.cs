@@ -9,7 +9,8 @@ public static class AssertProcess
 		Process process,
 		string fileName,
 		string workingDir,
-		Collection<string> arguments)
+		Collection<string> arguments
+	)
 	{
 		// Filename
 		Assert.AreEqual(fileName, process.StartInfo.FileName);

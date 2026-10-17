@@ -19,49 +19,39 @@ public sealed class Win32WtqWindow : WtqWindow
 	}
 
 	[CanBeMatchedOn]
-	public override string Id =>
-		 _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
+	public override string Id => _window.WindowHandle.ToString(CultureInfo.InvariantCulture);
 
-	public bool IsMainWindow =>
-		_window.IsMainWindow;
+	public bool IsMainWindow => _window.IsMainWindow;
 
 	public override bool IsValid =>
-		!_window.HasExited && // Check whether the process that owns the window is still running.
+		!_window.HasExited
+		&& // Check whether the process that owns the window is still running.
 		_win32.IsValidWindow(_window.WindowHandle); // Check whether the window itself is still valid (could be closed while the owning process is still running).
 
 	[CanBeMatchedOn]
-	public override string? Name =>
-		_window.ProcessName;
+	public override string? Name => _window.ProcessName;
 
 	[CanBeMatchedOn]
-	public uint ProcessId =>
-		_window.ProcessId;
+	public uint ProcessId => _window.ProcessId;
 
 	[CanBeMatchedOn]
-	public string? ProcessName =>
-		_window.ProcessName;
+	public string? ProcessName => _window.ProcessName;
 
-	public Rectangle Rect =>
-		_window.Rect;
+	public Rectangle Rect => _window.Rect;
 
 	[CanBeMatchedOn]
-	public uint ThreadId =>
-		_window.ThreadId;
+	public uint ThreadId => _window.ThreadId;
 
 	[CanBeMatchedOn]
-	public string? WindowClass =>
-		_window.WindowClass;
+	public string? WindowClass => _window.WindowClass;
 
 	[CanBeMatchedOn]
-	public nint WindowHandle =>
-		_window.WindowHandle;
+	public nint WindowHandle => _window.WindowHandle;
 
 	[CanBeMatchedOn]
-	public override string? WindowTitle =>
-		_window.WindowCaption;
+	public override string? WindowTitle => _window.WindowCaption;
 
-	public string WindowState =>
-		_win32.GetWindowState(_window.WindowHandle).ToString();
+	public string WindowState => _win32.GetWindowState(_window.WindowHandle).ToString();
 
 	public override bool Matches(WtqAppOptions opts)
 	{
@@ -70,12 +60,17 @@ public sealed class Win32WtqWindow : WtqWindow
 		// Process name
 		if (!string.IsNullOrWhiteSpace(opts.ProcessName))
 		{
-			if (!Regex.IsMatch(_window.ProcessName ?? string.Empty, opts.ProcessName, RegexOptions.IgnoreCase))
+			if (
+				!Regex.IsMatch(
+					_window.ProcessName ?? string.Empty,
+					opts.ProcessName,
+					RegexOptions.IgnoreCase
+				)
+			)
 			{
 				return false;
 			}
 		}
-
 		// If no process name was specified, use the filename instead (but without .exe or such).
 		else if (!string.IsNullOrWhiteSpace(opts.FileName))
 		{
@@ -87,13 +82,27 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 
 		// Window class
-		if (!string.IsNullOrWhiteSpace(opts.WindowClass) && !Regex.IsMatch(_window.WindowClass ?? string.Empty, opts.WindowClass, RegexOptions.IgnoreCase))
+		if (
+			!string.IsNullOrWhiteSpace(opts.WindowClass)
+			&& !Regex.IsMatch(
+				_window.WindowClass ?? string.Empty,
+				opts.WindowClass,
+				RegexOptions.IgnoreCase
+			)
+		)
 		{
 			return false;
 		}
 
 		// Window title
-		if (!string.IsNullOrWhiteSpace(opts.WindowTitle) && !Regex.IsMatch(_window.WindowCaption ?? string.Empty, opts.WindowTitle, RegexOptions.IgnoreCase))
+		if (
+			!string.IsNullOrWhiteSpace(opts.WindowTitle)
+			&& !Regex.IsMatch(
+				_window.WindowCaption ?? string.Empty,
+				opts.WindowTitle,
+				RegexOptions.IgnoreCase
+			)
+		)
 		{
 			return false;
 		}
@@ -123,7 +132,12 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could set foreground window '{Window}': {Message}", this, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could set foreground window '{Window}': {Message}",
+				this,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;
@@ -189,7 +203,13 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could set 'always on top' window '{Window}' to '{IsAlwaysOnTop}': {Message}", this, isAlwaysOnTop, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could set 'always on top' window '{Window}' to '{IsAlwaysOnTop}': {Message}",
+				this,
+				isAlwaysOnTop,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;
@@ -215,7 +235,9 @@ public sealed class Win32WtqWindow : WtqWindow
 	{
 		if (size.Width < 200 || size.Height < 200)
 		{
-			_log.LogWarning("Attempted to set window size to something under 200x200, which can mess up windows.");
+			_log.LogWarning(
+				"Attempted to set window size to something under 200x200, which can mess up windows."
+			);
 			return;
 		}
 
@@ -240,7 +262,13 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not set visibility for window '{Window}' to '{IsVisible}': {Message}", this, isVisible, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could not set visibility for window '{Window}' to '{IsVisible}': {Message}",
+				this,
+				isVisible,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;
@@ -254,7 +282,13 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not set transparency for window '{Window}' to '{Transparency}': {Message}", this, transparency, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could not set transparency for window '{Window}' to '{Transparency}': {Message}",
+				this,
+				transparency,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;
@@ -268,13 +302,20 @@ public sealed class Win32WtqWindow : WtqWindow
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not set title for window '{Window}' to '{Title}': {Message}", this, title, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could not set title for window '{Window}' to '{Title}': {Message}",
+				this,
+				title,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;
 	}
 
-	public override string ToString() => $"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
+	public override string ToString() =>
+		$"ProcessName:{ProcessName} IsMainWindow:{IsMainWindow} WindowClass:{WindowClass} Title:'{WindowTitle}' ProcessId:{ProcessId} WindowHandle:{Id} Location:{Rect.Location.ToShortString()} Size:{Rect.Size.ToShortString()}";
 
 	public override Task UnpinAsync()
 	{
@@ -292,13 +333,22 @@ public sealed class Win32WtqWindow : WtqWindow
 
 			if (state != WindowShowStyle.ShowNormal)
 			{
-				_log.LogWarning("Window '{Window}' state was set to unexpected state '{State}'", this, state);
+				_log.LogWarning(
+					"Window '{Window}' state was set to unexpected state '{State}'",
+					this,
+					state
+				);
 				_win32.SetWindowState(_window.WindowHandle, WindowShowStyle.ShowNormal);
 			}
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Could not get window state for window '{Window}': {Message}", this, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Could not get window state for window '{Window}': {Message}",
+				this,
+				ex.Message
+			);
 		}
 
 		return Task.CompletedTask;

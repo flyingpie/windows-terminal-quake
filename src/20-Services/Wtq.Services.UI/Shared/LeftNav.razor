@@ -20,9 +20,9 @@
 	<RadzenPanelMenuItem	Text="Apps"					Icon="ad_group"					Path="/apps"						Expanded="true">
 
 		@{ var i = 1; }
-		@foreach (var app in WtqOptions.CurrentValue.Apps)
+		@foreach (var name in WtqOptions.CurrentValue.Apps.Select(a => a.Name))
 		{
-			<RadzenPanelMenuItem	Text="@app.Name"	Icon="circle"					Path="@($"/apps/{app.Name}")"	IconColor="@($"var(--rz-series-{i++})")"/>
+			<RadzenPanelMenuItem	Text="@name"		Icon="circle"					Path="@($"/apps/{name}")"	IconColor="@($"var(--rz-series-{i++})")"/>
 		}
 
 	</RadzenPanelMenuItem>

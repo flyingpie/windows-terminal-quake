@@ -2,7 +2,11 @@ using System.Runtime.CompilerServices;
 
 namespace Wtq.Utils;
 
-[SuppressMessage("Usage", "VSTHRD003:Avoid awaiting foreign Tasks", Justification = "MvdO: Whether or not to await is up to the caller.")]
+[SuppressMessage(
+	"Usage",
+	"VSTHRD003:Avoid awaiting foreign Tasks",
+	Justification = "MvdO: Whether or not to await is up to the caller."
+)]
 public static class AsyncExtensions
 {
 	public static ConfiguredTaskAwaitable NoCtx(this Task task)
@@ -35,7 +39,11 @@ public static class AsyncExtensions
 
 		using var timeoutCancellationTokenSource = new CancellationTokenSource();
 
-		var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token)).NoCtx();
+		var completedTask = await Task.WhenAny(
+				task,
+				Task.Delay(timeout, timeoutCancellationTokenSource.Token)
+			)
+			.NoCtx();
 
 		if (completedTask != task)
 		{
@@ -47,13 +55,20 @@ public static class AsyncExtensions
 		await task.NoCtx(); // Very important in order to propagate exceptions.
 	}
 
-	public static async Task<TResult> TimeoutAfterAsync<TResult>(this Task<TResult> task, TimeSpan timeout)
+	public static async Task<TResult> TimeoutAfterAsync<TResult>(
+		this Task<TResult> task,
+		TimeSpan timeout
+	)
 	{
 		_ = Guard.Against.Null(task);
 
 		using var timeoutCancellationTokenSource = new CancellationTokenSource();
 
-		var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token)).NoCtx();
+		var completedTask = await Task.WhenAny(
+				task,
+				Task.Delay(timeout, timeoutCancellationTokenSource.Token)
+			)
+			.NoCtx();
 
 		if (completedTask != task)
 		{

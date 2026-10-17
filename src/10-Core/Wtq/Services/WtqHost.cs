@@ -15,7 +15,9 @@ public class WtqHost
 	private static readonly TimeSpan DisposeTimeout = TimeSpan.FromSeconds(3);
 
 	private static readonly ILogger _log = Utils.Log.For<WtqHost>();
-	private readonly JoinableTaskFactory _taskFactory = new(JoinableTaskContext.CreateNoOpContext());
+	private readonly JoinableTaskFactory _taskFactory = new(
+		JoinableTaskContext.CreateNoOpContext()
+	);
 
 	private readonly IEnumerable<IHostedService> _hostedServices;
 	private readonly IPlatformService _platformService;
@@ -56,7 +58,9 @@ public class WtqHost
 	{
 		if (_platformService.IsWtqRunning())
 		{
-			_log.LogWarning("WTQ seems to already be running. Running multiple instances can cause some really weird behavior, so I'm stopping this instance. If you don't see another instance already running, try killing all WTQ processes and start again.");
+			_log.LogWarning(
+				"WTQ seems to already be running. Running multiple instances can cause some really weird behavior, so I'm stopping this instance. If you don't see another instance already running, try killing all WTQ processes and start again."
+			);
 			Environment.Exit(-1);
 		}
 
@@ -70,7 +74,9 @@ public class WtqHost
 			{
 				_log.LogDebug("Initializing service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.InitAsync(Cancel.After(InitTimeout)).TimeoutAfterAsync(InitTimeout).NoCtx();
+				await srv.InitAsync(Cancel.After(InitTimeout))
+					.TimeoutAfterAsync(InitTimeout)
+					.NoCtx();
 				_log.LogDebug("Initialized service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
@@ -96,7 +102,9 @@ public class WtqHost
 			{
 				_log.LogDebug("Starting service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.StartAsync(Cancel.After(StartTimeout)).TimeoutAfterAsync(StartTimeout).NoCtx();
+				await srv.StartAsync(Cancel.After(StartTimeout))
+					.TimeoutAfterAsync(StartTimeout)
+					.NoCtx();
 				_log.LogDebug("Started service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)
@@ -122,7 +130,9 @@ public class WtqHost
 			{
 				_log.LogDebug("Stopping service '{Service}'", srv);
 				var sw2 = Stopwatch.StartNew();
-				await srv.StopAsync(Cancel.After(StopTimeout)).TimeoutAfterAsync(StopTimeout).NoCtx();
+				await srv.StopAsync(Cancel.After(StopTimeout))
+					.TimeoutAfterAsync(StopTimeout)
+					.NoCtx();
 				_log.LogDebug("Stopped service '{Service}', took {Elapsed}", srv, sw2.Elapsed);
 			}
 			catch (Exception ex)

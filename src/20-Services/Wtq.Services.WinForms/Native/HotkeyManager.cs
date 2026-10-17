@@ -17,10 +17,12 @@ internal static class HotkeyManager
 
 	static HotkeyManager()
 	{
-		Thread messageLoop = new(delegate ()
-		{
-			Application.Run(new MessageWindow());
-		})
+		Thread messageLoop = new(
+			delegate()
+			{
+				Application.Run(new MessageWindow());
+			}
+		)
 		{
 			Name = $"{nameof(Wtq)}.{nameof(WinForms)}.{nameof(HotkeyManager)}",
 			IsBackground = true,
@@ -47,14 +49,26 @@ internal static class HotkeyManager
 	{
 		_windowReadyEvent.WaitOne();
 		int id = Interlocked.Increment(ref _id);
-		_wnd.Invoke(new RegisterHotkeyDelegate((hwnd, id, modifiers, key) => User32.RegisterHotKey(hwnd, id, modifiers, key)), _hwnd, id, (uint)modifiers, (uint)key);
+		_wnd.Invoke(
+			new RegisterHotkeyDelegate(
+				(hwnd, id, modifiers, key) => User32.RegisterHotKey(hwnd, id, modifiers, key)
+			),
+			_hwnd,
+			id,
+			(uint)modifiers,
+			(uint)key
+		);
 
 		return id;
 	}
 
 	public static void UnregisterHotkey(int id)
 	{
-		_wnd.Invoke(new UnregisterHotkeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)), _hwnd, id);
+		_wnd.Invoke(
+			new UnregisterHotkeyDelegate((hwnd, id) => User32.UnregisterHotKey(_hwnd, id)),
+			_hwnd,
+			id
+		);
 	}
 
 	/// <summary>

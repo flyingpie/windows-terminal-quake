@@ -15,16 +15,12 @@ public class WtqLinux : WtqHostBase
 		|| EnvUtils.HasEnvVarWithValue("container", "flatpak"); // Set by Flatpak.
 
 	protected override IPlatformService CreatePlatformService() =>
-		IsFlatpak
-			? new LinuxFlatpakPlatformService()
-			: new LinuxNativePlatformService();
+		IsFlatpak ? new LinuxFlatpakPlatformService() : new LinuxNativePlatformService();
 
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		Guard.Against.Null(services);
 
-		services
-			.AddKWin()
-			.AddTrayIcon();
+		services.AddKWin().AddTrayIcon();
 	}
 }

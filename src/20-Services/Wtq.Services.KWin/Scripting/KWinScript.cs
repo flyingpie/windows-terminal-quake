@@ -1,8 +1,6 @@
 namespace Wtq.Services.KWin.Scripting;
 
-public sealed class KWinScript(
-	Func<Task> onDispose)
-	: IAsyncDisposable
+public sealed class KWinScript(Func<Task> onDispose) : IAsyncDisposable
 {
 	private readonly Func<Task> _onDispose = Guard.Against.Null(onDispose);
 

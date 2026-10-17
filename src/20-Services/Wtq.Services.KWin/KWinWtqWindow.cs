@@ -3,10 +3,7 @@ using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
 
-public class KWinWtqWindow(
-	IKWinClient kwinClient,
-	KWinWindow window)
-	: WtqWindow
+public class KWinWtqWindow(IKWinClient kwinClient, KWinWindow window) : WtqWindow
 {
 	private readonly ILogger _log = Log.For<KWinWindow>();
 
@@ -20,17 +17,14 @@ public class KWinWtqWindow(
 	#region Generic Stuff
 
 	[CanBeMatchedOn]
-	public string? FileName =>
-		_window?.DesktopFileName;
+	public string? FileName => _window?.DesktopFileName;
 
 	#endregion
 
 	[CanBeMatchedOn]
-	public string? DesktopFileName =>
-		_window?.DesktopFileName;
+	public string? DesktopFileName => _window?.DesktopFileName;
 
-	public Rectangle? FrameGeometry =>
-		_window?.FrameGeometry?.ToRect();
+	public Rectangle? FrameGeometry => _window?.FrameGeometry?.ToRect();
 
 	/// <summary>
 	/// TODO: Add proper window activity checking.
@@ -38,24 +32,19 @@ public class KWinWtqWindow(
 	/// - Is the window still valid/movable/whatever?
 	/// - etc.
 	/// </summary>
-	public override bool IsValid =>
-		_isValid;
+	public override bool IsValid => _isValid;
 
 	[CanBeMatchedOn]
-	public override string? Name =>
-		_window?.ResourceName;
+	public override string? Name => _window?.ResourceName;
 
 	[CanBeMatchedOn]
-	public string? ResourceClass =>
-		_window?.ResourceClass;
+	public string? ResourceClass => _window?.ResourceClass;
 
 	[CanBeMatchedOn]
-	public string? ResourceName =>
-		_window?.ResourceName;
+	public string? ResourceName => _window?.ResourceName;
 
 	[CanBeMatchedOn]
-	public override string? WindowTitle =>
-		_window?.Caption;
+	public override string? WindowTitle => _window?.Caption;
 
 	/// <inheritdoc/>
 	public override async Task BringToForegroundAsync()
@@ -70,7 +59,8 @@ public class KWinWtqWindow(
 		var fg = await _kwinClient.GetForegroundWindowAsync(CancellationToken.None);
 
 		// See if its window ID matches our window ID.
-		return fg.InternalId?.Equals(_window.InternalId, StringComparison.OrdinalIgnoreCase) ?? false;
+		return fg.InternalId?.Equals(_window.InternalId, StringComparison.OrdinalIgnoreCase)
+			?? false;
 	}
 
 	public override async Task<Rectangle> GetWindowRectAsync()
@@ -85,7 +75,10 @@ public class KWinWtqWindow(
 	public override Task<bool> IsOnCurrentVirtualDesktopAsync()
 	{
 		// TODO: Implement
-		_log.LogWarning("Method '{Method}' is not implemented", nameof(IsOnCurrentVirtualDesktopAsync));
+		_log.LogWarning(
+			"Method '{Method}' is not implemented",
+			nameof(IsOnCurrentVirtualDesktopAsync)
+		);
 		return Task.FromResult(true);
 	}
 
@@ -94,8 +87,8 @@ public class KWinWtqWindow(
 		Guard.Against.Null(opts);
 
 		var hasMatchers =
-			!string.IsNullOrWhiteSpace(opts.WindowTitle) ||
-			!string.IsNullOrWhiteSpace(opts.ProcessName);
+			!string.IsNullOrWhiteSpace(opts.WindowTitle)
+			|| !string.IsNullOrWhiteSpace(opts.ProcessName);
 
 		// If no other criteria are set, match on the "FileName" setting.
 		if (!hasMatchers)
@@ -123,7 +116,10 @@ public class KWinWtqWindow(
 	public override Task MoveToCurrentVirtualDesktopAsync()
 	{
 		// TODO: Implement
-		_log.LogWarning("Method '{Method}' is not implemented", nameof(MoveToCurrentVirtualDesktopAsync));
+		_log.LogWarning(
+			"Method '{Method}' is not implemented",
+			nameof(MoveToCurrentVirtualDesktopAsync)
+		);
 		return Task.CompletedTask;
 	}
 
@@ -144,17 +140,23 @@ public class KWinWtqWindow(
 
 	public override async Task SetAlwaysOnTopAsync(bool isAlwaysOnTop)
 	{
-		await _kwinClient.SetWindowAlwaysOnTopAsync(_window, isAlwaysOnTop, CancellationToken.None).NoCtx();
+		await _kwinClient
+			.SetWindowAlwaysOnTopAsync(_window, isAlwaysOnTop, CancellationToken.None)
+			.NoCtx();
 	}
 
 	public override async Task SetTaskbarIconVisibleAsync(bool isVisible)
 	{
-		await _kwinClient.SetTaskbarIconVisibleAsync(_window, isVisible, CancellationToken.None).NoCtx();
+		await _kwinClient
+			.SetTaskbarIconVisibleAsync(_window, isVisible, CancellationToken.None)
+			.NoCtx();
 	}
 
 	public override async Task SetTransparencyAsync(int transparency)
 	{
-		await _kwinClient.SetWindowOpacityAsync(_window, transparency * .01f, CancellationToken.None).NoCtx();
+		await _kwinClient
+			.SetWindowOpacityAsync(_window, transparency * .01f, CancellationToken.None)
+			.NoCtx();
 	}
 
 	public override Task SetWindowTitleAsync(string title)
@@ -228,19 +230,37 @@ public class KWinWtqWindow(
 		}
 
 		// Match by file name that started the app.
-		if (Regex.IsMatch(_window.DesktopFileName ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		if (
+			Regex.IsMatch(
+				_window.DesktopFileName ?? string.Empty,
+				processName,
+				RegexOptions.IgnoreCase
+			)
+		)
 		{
 			return true;
 		}
 
 		// Match by resource class (often reverse DNS notation).
-		if (Regex.IsMatch(_window.ResourceClass ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		if (
+			Regex.IsMatch(
+				_window.ResourceClass ?? string.Empty,
+				processName,
+				RegexOptions.IgnoreCase
+			)
+		)
 		{
 			return true;
 		}
 
 		// Match by resource name (close to process name).
-		if (Regex.IsMatch(_window.ResourceName ?? string.Empty, processName, RegexOptions.IgnoreCase))
+		if (
+			Regex.IsMatch(
+				_window.ResourceName ?? string.Empty,
+				processName,
+				RegexOptions.IgnoreCase
+			)
+		)
 		{
 			return true;
 		}

@@ -1,6 +1,10 @@
 namespace Wtq.Services.KWin.Dto;
 
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "MvdO: Used by deserializer.")]
+[SuppressMessage(
+	"ReSharper",
+	"ClassNeverInstantiated.Global",
+	Justification = "MvdO: Used by deserializer."
+)]
 public sealed class KWinRectangle
 {
 	[JsonPropertyName("x")]
@@ -33,5 +37,6 @@ public sealed class KWinRectangle
 
 	public Rectangle ToRect() => new(X ?? -1, Y ?? -1, Width ?? -1, Height ?? -1);
 
-	public override string ToString() => $"(X:{X}, Y:{Y}, Width:{Width}, Height:{Height}) (Top:{Top} Bottom:{Bottom} Left:{Left} Right:{Right})";
+	public override string ToString() =>
+		$"(X:{X}, Y:{Y}, Width:{Width}, Height:{Height}) (Top:{Top} Bottom:{Bottom} Left:{Left} Right:{Right})";
 }

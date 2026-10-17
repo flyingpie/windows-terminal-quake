@@ -8,7 +8,8 @@ namespace Wtq;
 public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddHostedServiceSingleton<TImplementation>(
-		this IServiceCollection services)
+		this IServiceCollection services
+	)
 		where TImplementation : class, IHostedService
 	{
 		Guard.Against.Null(services);
@@ -19,7 +20,8 @@ public static class ServiceCollectionExtensions
 	}
 
 	public static IServiceCollection AddHostedServiceSingleton<TService, TImplementation>(
-		this IServiceCollection services)
+		this IServiceCollection services
+	)
 		where TImplementation : class, IHostedService, TService
 		where TService : class
 	{
@@ -30,7 +32,10 @@ public static class ServiceCollectionExtensions
 			.AddHostedService(p => (TImplementation)p.GetRequiredService<TService>());
 	}
 
-	public static IServiceCollection AddConfiguration(this IServiceCollection services, IPlatformService platform)
+	public static IServiceCollection AddConfiguration(
+		this IServiceCollection services,
+		IPlatformService platform
+	)
 	{
 		Guard.Against.Null(services);
 		Guard.Against.Null(platform);
@@ -43,6 +48,28 @@ public static class ServiceCollectionExtensions
 			.Bind(config);
 
 		return services;
+	}
+
+	public static IServiceCollection AddWtqCore(this IServiceCollection services)
+	{
+		Guard.Against.Null(services);
+
+		return services
+			// Utils
+			.AddSingleton<IWtqTween, WtqTween>()
+			// Core App Logic
+			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
+			.AddSingleton<IWtqBus, WtqBus>()
+			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
+			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
+			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
+			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
+			.AddSingleton<TrayIconUtil>()
+			.AddHostedService<WtqEventHookHandler>()
+			.AddHostedService<WtqFocusTracker>()
+			.AddHostedService<WtqHotkeyRoutingService>()
+			.AddHostedService<WtqService>()
+			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
 	}
 
 	private static IConfiguration CreateConfigurationRoot(IPlatformService platform)
@@ -68,7 +95,12 @@ public static class ServiceCollectionExtensions
 				f.Path = Path.GetFileName(pathToWtqConf);
 				f.OnLoadException = x =>
 				{
-					log.LogError(x.Exception, "Error loading configuration file '{File}': {Message}", pathToWtqConf, x.Exception.Message);
+					log.LogError(
+						x.Exception,
+						"Error loading configuration file '{File}': {Message}",
+						pathToWtqConf,
+						x.Exception.Message
+					);
 				};
 
 				if (!platform.ShouldUsePollingFileWatcherForPath(pathToWtqConf))
@@ -76,7 +108,10 @@ public static class ServiceCollectionExtensions
 					return;
 				}
 
-				log.LogInformation("Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected", pathToWtqConf);
+				log.LogInformation(
+					"Settings file '{Path}' appears to be a symlink, switching to polling file watcher, as otherwise changes may not be detected",
+					pathToWtqConf
+				);
 
 				f.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(pathToWtqConf)!)
 				{
@@ -87,30 +122,5 @@ public static class ServiceCollectionExtensions
 			.Build();
 
 		return config;
-	}
-
-	public static IServiceCollection AddWtqCore(this IServiceCollection services)
-	{
-		Guard.Against.Null(services);
-
-		return services
-
-			// Utils
-			.AddSingleton<IWtqTween, WtqTween>()
-
-			// Core App Logic
-			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
-			.AddSingleton<IWtqBus, WtqBus>()
-			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
-			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
-			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
-			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<TrayIconUtil>()
-
-			.AddHostedService<WtqEventHookHandler>()
-			.AddHostedService<WtqFocusTracker>()
-			.AddHostedService<WtqHotkeyRoutingService>()
-			.AddHostedService<WtqService>()
-			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
 	}
 }

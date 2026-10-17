@@ -4,7 +4,7 @@
 
 	[EditorRequired]
 	[Parameter]
-	public WtqAppOptions? AppOpts { get; set; } = null!;
+	public WtqAppOptions AppOpts { get; set; } = null!;
 }
 
 <RadzenAlert
@@ -13,7 +13,7 @@
 	Visible="@(AppOpts.FileName == WtFilename && AppOpts.ProcessName != WtProcName)"
 >
 
-	The filename suggests you're setting up <Emph>Windows Terminal</Emph>. Note that you need to set <Emph>Process name</Emph> to <Emph>@WtProcName</Emph>.
+	The filename suggests you're setting up <em>Windows Terminal</em>. Note that you need to set <em>Process name</em> to <em>@WtProcName</em>.
 
 	<RadzenButton
 		Variant="Variant.Text"
