@@ -1,3 +1,3 @@
 #!/bin/bash
 
-uv run properdocs build
+uv run zensical build

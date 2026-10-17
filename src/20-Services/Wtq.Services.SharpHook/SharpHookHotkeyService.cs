@@ -22,10 +22,7 @@ public class SharpHookHotkeyService : WtqHostedService
 	private Task? _hookTask;
 	private bool _isSuspended;
 
-	public SharpHookHotkeyService(
-		IOptionsMonitor<WtqOptions> opts,
-		IWtqBus bus,
-		IWin32 win32)
+	public SharpHookHotkeyService(IOptionsMonitor<WtqOptions> opts, IWtqBus bus, IWin32 win32)
 	{
 		_opts = Guard.Against.Null(opts);
 		_bus = Guard.Against.Null(bus);
@@ -50,7 +47,7 @@ public class SharpHookHotkeyService : WtqHostedService
 		});
 
 		// We need the blocking global hook to allow suppressions (i.e. preventing keys from doing other things after triggering WTQ events).
-		_hook = new SimpleGlobalHook(GlobalHookType.Keyboard);
+		_hook = new SimpleGlobalHook();
 	}
 
 	protected override async ValueTask OnDisposeAsync()
@@ -96,7 +93,7 @@ public class SharpHookHotkeyService : WtqHostedService
 			}
 		};
 
-		_hookTask = _hook.RunAsync();
+		_hookTask = _hook.RunAsync(GlobalHookType.Keyboard);
 
 		return Task.CompletedTask;
 	}
@@ -139,7 +136,11 @@ public class SharpHookHotkeyService : WtqHostedService
 		}
 		else
 		{
-			_log.LogDebug("Got app hotkey mapping for key sequence '{Sequence}' and app '{App}'", keySeq, hk.AppOpts);
+			_log.LogDebug(
+				"Got app hotkey mapping for key sequence '{Sequence}' and app '{App}'",
+				keySeq,
+				hk.AppOpts
+			);
 		}
 
 		// Send hotkey pressed event for routing.

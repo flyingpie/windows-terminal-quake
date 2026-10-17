@@ -19,4 +19,9 @@ public enum HorizontalAlign
 	/// Right of the screen.
 	/// </summary>
 	Right,
+
+	/// <summary>
+	/// Keep the horizontal position as-is, don't align it.
+	/// </summary>
+	None,
 }

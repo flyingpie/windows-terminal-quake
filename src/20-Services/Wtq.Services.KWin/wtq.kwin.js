@@ -129,12 +129,30 @@ kwin.setActiveWindow = (window) => {
 	throw "Could not find property for active client/window, unsupported version of KWin perhaps?";
 };
 
+kwin.setWindowLocation = (window, x, y) => {
+	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
+	// allowing us to e.g. only set the width, and not the height, or vice versa.
+	// Not sure if this is a bug, but it took a bunch of time to figure out.
+	window.frameGeometry = Object.assign({}, window.frameGeometry, { x: x, y: y });
+};
+
+kwin.setWindowSize = (window, width, height) => {
+	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
+	// allowing us to e.g. only set the width, and not the height, or vice versa.
+	// Not sure if this is a bug, but it took a bunch of time to figure out.
+	window.frameGeometry = Object.assign({}, window.frameGeometry, { width: width, height: height });
+};
+
 ////////////////////////////////////////////////////////////
 
 // WTQ /////////////////////////////////////////////////////
 wtq.DBUS_SERVICE	= "nl.flyingpie.wtq.svc";
 wtq.DBUS_PATH		= "/wtq/kwin";
 wtq.DBUS_INTERFACE	= "wtq.kwin";
+
+// Keep track of pinned windows, so we can tell when a window is already pinned (i.e., don't pin it twice) and
+// can unpin windows by disconnecting the signal.
+wtq.pinned = {};
 
 // Send log to WTQ so we can see what's going on in the KWin script.
 wtq.log = (level, msg) => {
@@ -241,44 +259,67 @@ cmds["GET_WINDOW_LIST"] = (cmdInfo) => {
 	};
 };
 
-cmds["MOVE_WINDOW"] = (cmdInfo, p) => {
+cmds["MOVE_WINDOW"] = (cmdInfo, params) => {
 	// We used to both move- and resize the window in here, but this caused some issues with multi-monitor setups.
 	// Not entirely sure why, apparently KWin doesn't like hammering so many widths and heights.
 	// So we split it off, and now do a single RESIZE_WINDOW before a bunch of MOVE_WINDOWs.
-	let w = kwin.getWindowByInternalIdRequired(p.internalId);
+	let w = kwin.getWindowByInternalIdRequired(params.internalId);
 
-	log.info(`Moving window with id '${p.internalId}' to x:${p.x}, y:${p.y}`);
+	log.info(`Moving window with id '${params.internalId}' to x:${params.x}, y:${params.y}`);
 
-	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
-	// allowing us to eg. only set the width, and not the height, or vice versa.
-	// Not sure if this is a bug, but it took a bunch of time to figure out.
-	let q = Object.assign({}, w.frameGeometry);
-
-	q.x			= p.x;
-	q.y			= p.y;
-
-	w.frameGeometry = q;
+	kwin.setWindowLocation(w, params.x, params.y);
 };
 
-cmds["RESIZE_WINDOW"] = (cmdInfo) => {
-	const p = cmdInfo.params;
-	let w = kwin.getWindowByInternalIdRequired(p.internalId);
-
-	log.info(`Resizing window with id '${p.internalId}' to width: ${p.width}, height:${p.height}`);
-
+cmds["RESIZE_WINDOW"] = (cmdInfo, params) => {
 	// Note that it's important to set the entire "frameGeometry" object in one go, otherwise separate properties may become readonly,
 	// allowing us to e.g. only set the width, and not the height, or vice versa.
 	// Not sure if this is a bug, but it took a bunch of time to figure out.
+	let w = kwin.getWindowByInternalIdRequired(params.internalId);
 
-	let q = Object.assign({}, w.frameGeometry);
+	log.info(`Resizing window with id '${params.internalId}' to width: ${params.width}, height:${params.height}`);
 
-	q.width		= p.width;
-	q.height	= p.height;
-
-	w.frameGeometry = q;
+	kwin.setWindowSize(w, params.width, params.height);
 };
 
 cmds["NOOP"] = (cmdInfo) => { };
+
+// Locks the window location and -size to where they currently are.
+cmds["PIN_WINDOW"] = (cmdInfo, params) => {
+	// Check if the window is not already pinned.
+	const currPin = wtq.pinned[params.internalId];
+	if (currPin) {
+		log.warning(`Window with id '${params.internalId}' is already pinned`);
+		return;
+	}
+
+	log.info(`Pinning window with id '${params.internalId}' to x:${params.x}, y:${params.y}, width:${params.width}, height: ${params.height}`);
+
+	const window = kwin.getWindowByInternalIdRequired(params.internalId);
+
+	let isCorrecting = false; // Keep track of whether we're currently correcting, as the correcting itself will trigger this callback.
+
+	const newPin = wtq.pinned[params.internalId] = {
+		internalId: params.internalId,
+		x: params.x,
+		y: params.y,
+		signalHandler: () => {
+			if (isCorrecting) {
+				return;
+			}
+
+			isCorrecting = true;
+
+			try {
+				kwin.setWindowLocation(window, params.x, params.y);
+				kwin.setWindowSize(window, params.width, params.height);
+			} finally {
+				isCorrecting = false;
+			}
+		},
+	};
+
+	window.frameGeometryChanged.connect(newPin.signalHandler);
+};
 
 cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
 	const descr = `sequence:'${p.sequence}', key char:'${p.keyChar}', key code:'${p.keyCode}', modifier:'${p.mod}'`;
@@ -337,5 +378,21 @@ cmds["SET_WINDOW_TASKBAR_ICON_VISIBLE"] = (cmdInfo) => {
 	w.skipPager = skip;
 	w.skipSwitcher = skip;
 	w.skipTaskbar = skip;
+};
+
+// Stops locking a window position and -size.
+cmds["UNPIN_WINDOW"] = (cmdInfo, params) => {
+	const pin = wtq.pinned[params.internalId];
+	if (!pin) {
+		log.warning(`Window with id '${params.internalId}' is not pinned`);
+		return;
+	}
+
+	log.info(`Unpinning window with id '${params.internalId}'`);
+
+	const window = kwin.getWindowByInternalIdRequired(params.internalId);
+
+	window.frameGeometryChanged.disconnect(pin.signalHandler);
+	delete wtq.pinned[pin.internalId];
 };
 ////////////////////////////////////////////////////////////

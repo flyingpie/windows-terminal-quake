@@ -946,6 +946,8 @@ Defaults to `Center`
 
 - **Right**<br/>Right of the screen.
 
+- **None**<br/>Maintain the horizontal position as-is.
+
 ```json
 {
 	// Globally:
@@ -1015,6 +1017,24 @@ without any animation.</p>
 	"Apps": [
 		{
 			"OffScreenLocations": ["Above", "Below", "Left", "Right"]
+		}
+	]
+}
+```
+
+##### Maintain position and size
+
+Whether app windows should be put back where WTQ last put them, if they're moved by external factors, such as monitor (dis)connects or resolution changes.
+
+```json
+{
+	// Globally:
+	"MaintainPositionAndSize": false,
+
+	// For one app only:
+	"Apps": [
+		{
+			"MaintainPositionAndSize": false
 		}
 	]
 }

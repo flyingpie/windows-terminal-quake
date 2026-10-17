@@ -1,3 +1,3 @@
 #!/bin/bash
 
-uv run properdocs serve
+uv run zensical serve
