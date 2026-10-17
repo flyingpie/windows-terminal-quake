@@ -26,5 +26,6 @@ public class Win32Window(Func<bool> hasExited)
 
 	public nint WindowHandle { get; set; }
 
-	public override string ToString() => $"ProcessId:{ProcessId} ProcessName:{ProcessName} MainWindow:{MainWindowHandle:X} WindowHandle:{WindowHandle:X}";
+	public override string ToString() =>
+		$"ProcessId:{ProcessId} ProcessName:{ProcessName} MainWindow:{MainWindowHandle:X} WindowHandle:{WindowHandle:X}";
 }

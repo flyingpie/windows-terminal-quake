@@ -3,10 +3,7 @@ namespace Wtq.Input;
 /// <summary>
 /// A combination of a <see cref="KeyModifiers"/>, a <see cref="KeyCode"/> (KeyCode) and a key character (KeyChar).
 /// </summary>
-public readonly struct KeySequence(
-	KeyModifiers modifiers,
-	string? keyChar,
-	KeyCode keyCode)
+public readonly struct KeySequence(KeyModifiers modifiers, string? keyChar, KeyCode keyCode)
 	: IEquatable<KeySequence>
 {
 	/// <summary>
@@ -49,11 +46,9 @@ public readonly struct KeySequence(
 	[JsonIgnore]
 	public bool IsEmpty => !HasModifiers && !HasKeyChar && !HasKeyCode;
 
-	public static bool operator ==(KeySequence left, KeySequence right) =>
-		left.Equals(right);
+	public static bool operator ==(KeySequence left, KeySequence right) => left.Equals(right);
 
-	public static bool operator !=(KeySequence left, KeySequence right) =>
-		!(left == right);
+	public static bool operator !=(KeySequence left, KeySequence right) => !(left == right);
 
 	public override bool Equals([NotNullWhen(true)] object? obj)
 	{
@@ -74,7 +69,11 @@ public readonly struct KeySequence(
 		}
 
 		// If a key character was present on both sides, and it matches, the key sequence can be considered the same.
-		if (HasKeyChar && other.HasKeyChar && KeyChar.Equals(other.KeyChar, StringComparison.OrdinalIgnoreCase))
+		if (
+			HasKeyChar
+			&& other.HasKeyChar
+			&& KeyChar.Equals(other.KeyChar, StringComparison.OrdinalIgnoreCase)
+		)
 		{
 			return true;
 		}
@@ -90,8 +89,7 @@ public readonly struct KeySequence(
 		return false;
 	}
 
-	public override int GetHashCode() =>
-		HashCode.Combine((int)Modifiers, KeyCode, KeyChar);
+	public override int GetHashCode() => HashCode.Combine((int)Modifiers, KeyCode, KeyChar);
 
 	public override string ToString() =>
 		$"Modifiers:'{Modifiers}' KeyChar:{(HasKeyChar ? $"'{KeyChar}'" : "<none>")} KeyCode:{(HasKeyCode ? $"'{KeyCode}'" : "<none>")}";
@@ -137,7 +135,16 @@ public readonly struct KeySequence(
 		var sb = new StringBuilder();
 
 		// Modifier
-		foreach (var m in new[] { KeyModifiers.Control, KeyModifiers.Alt, KeyModifiers.Shift, KeyModifiers.Super, KeyModifiers.Numpad, })
+		foreach (
+			var m in new[]
+			{
+				KeyModifiers.Control,
+				KeyModifiers.Alt,
+				KeyModifiers.Shift,
+				KeyModifiers.Super,
+				KeyModifiers.Numpad,
+			}
+		)
 		{
 			if (!Modifiers.HasFlag(m))
 			{
@@ -163,7 +170,6 @@ public readonly struct KeySequence(
 
 			sb.Append(KeyChar);
 		}
-
 		// Alternatively, if no key character is present, map the key code.
 		// This is not a perfect method, as the character depends on the keyboard layout, which I haven't found a way to access yet.
 		else if (HasKeyCode)

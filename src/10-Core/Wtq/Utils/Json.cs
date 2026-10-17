@@ -10,20 +10,14 @@ public static class Json
 
 	private static readonly JsonSerializerOptions _options = new()
 	{
-		Converters =
-		{
-			new JsonStringEnumConverter(),
-		},
+		Converters = { new JsonStringEnumConverter() },
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Causes UTF8 characters to be serialized as-is, instead of (less readable) escape codes.
 		WriteIndented = true,
 		IndentCharacter = '\t',
 		IndentSize = 1,
 		TypeInfoResolver = new DefaultJsonTypeInfoResolver()
 		{
-			Modifiers =
-			{
-				DefaultValuesModifier,
-			},
+			Modifiers = { DefaultValuesModifier },
 		},
 	};
 
@@ -58,7 +52,11 @@ public static class Json
 				}
 
 				// Lists.
-				if (val is not string && val is IEnumerable asEnum && xx4 is IEnumerable origAsEnumr)
+				if (
+					val is not string
+					&& val is IEnumerable asEnum
+					&& xx4 is IEnumerable origAsEnumr
+				)
 				{
 					var actual = ToList(asEnum).ToList();
 					var orig = ToList(origAsEnumr).ToList();

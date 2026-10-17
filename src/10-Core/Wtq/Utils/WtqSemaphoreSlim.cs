@@ -9,9 +9,7 @@ public sealed class WtqSemaphoreSlim : IDisposable
 	private readonly SemaphoreSlim _lock;
 
 	public WtqSemaphoreSlim()
-		: this(1, 1)
-	{
-	}
+		: this(1, 1) { }
 
 	public WtqSemaphoreSlim(int initialCount, int maxCount)
 	{

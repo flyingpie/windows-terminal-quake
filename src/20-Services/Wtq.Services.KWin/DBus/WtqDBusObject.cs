@@ -1,5 +1,5 @@
-using Microsoft.VisualStudio.Threading;
 using System.Text.Json;
+using Microsoft.VisualStudio.Threading;
 using Tmds.DBus;
 using Wtq.Events;
 using Wtq.Services.KWin.Dto;
@@ -8,8 +8,7 @@ using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject
-	: WtqHostedService, IWtqDBusObject
+internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 {
 	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
@@ -47,7 +46,8 @@ internal sealed class WtqDBusObject
 		IDBusConnection dbus,
 		IKWinScriptService scriptService,
 		IPlatformService platformService,
-		IWtqBus bus)
+		IWtqBus bus
+	)
 	{
 		_bus = Guard.Against.Null(bus);
 		_dbus = Guard.Against.Null(dbus);
@@ -62,7 +62,8 @@ internal sealed class WtqDBusObject
 		_noopLoop = new(
 			$"{nameof(WtqDBusObject)}.NoOpLoop",
 			TimeSpan.FromSeconds(10), // Timeout is after a minute or so.
-			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx());
+			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx()
+		);
 	}
 
 	public ObjectPath ObjectPath => _path;
@@ -77,7 +78,11 @@ internal sealed class WtqDBusObject
 		// Load KWin script.
 		// Note that we're copying the KWin script to the cache dir, as that will be available to both the host and the sandbox, in the case we're running as a Flatpak.
 		// For non-Flatpak, we could use the path to the KWin script directly, but that cannot be seen by KWin since KWin can't see in our sandbox.
-		_log.LogDebug("Copying KWin script from '{Src}' to '{Dst}'", _pathToWtqKwinJsSrc, _pathToWtqKwinJsCache);
+		_log.LogDebug(
+			"Copying KWin script from '{Src}' to '{Dst}'",
+			_pathToWtqKwinJsSrc,
+			_pathToWtqKwinJsCache
+		);
 
 		File.Copy(_pathToWtqKwinJsSrc, _pathToWtqKwinJsCache, overwrite: true);
 
@@ -106,17 +111,13 @@ internal sealed class WtqDBusObject
 	public Task<ResponseInfo> SendCommandAsync(
 		string commandType,
 		object? parameters,
-		CancellationToken cancellationToken)
-		=> SendCommandAsync(
-			new CommandInfo(commandType)
-			{
-				Params = parameters,
-			},
-			cancellationToken);
+		CancellationToken cancellationToken
+	) => SendCommandAsync(new CommandInfo(commandType) { Params = parameters }, cancellationToken);
 
 	public async Task<ResponseInfo> SendCommandAsync(
 		CommandInfo cmdInfo,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_log.LogTrace("{MethodName} command: {Command}", nameof(SendCommandAsync), cmdInfo);
 
@@ -136,18 +137,25 @@ internal sealed class WtqDBusObject
 		// Wait for response
 		try
 		{
-			return await waiter.Task
-				.WithCancellation(cancellationToken)
-				.WithTimeout(Debugger.IsAttached ? TimeSpan.FromMinutes(60) : TimeSpan.FromSeconds(1))
+			return await waiter
+				.Task.WithCancellation(cancellationToken)
+				.WithTimeout(
+					Debugger.IsAttached ? TimeSpan.FromMinutes(60) : TimeSpan.FromSeconds(1)
+				)
 				.NoCtx();
 		}
 		catch (TaskCanceledException)
 		{
-			throw new KWinException($"Task canceled while attempting to send KWin command '{cmdInfo}'");
+			throw new KWinException(
+				$"Task canceled while attempting to send KWin command '{cmdInfo}'"
+			);
 		}
 		catch (TimeoutException ex)
 		{
-			throw new KWinException($"Timeout while attempting to send KWin command '{cmdInfo}': {ex.Message}", ex);
+			throw new KWinException(
+				$"Timeout while attempting to send KWin command '{cmdInfo}': {ex.Message}",
+				ex
+			);
 		}
 	}
 
@@ -182,13 +190,19 @@ internal sealed class WtqDBusObject
 
 		if (!hasResponder)
 		{
-			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
+			_log.LogWarning(
+				"Could not find response waiter with id {ResponderId}",
+				respInfo.ResponderId
+			);
 			return Task.CompletedTask;
 		}
 
 		if (!_waiters.TryRemove(respInfo.ResponderId, out var waiter))
 		{
-			_log.LogWarning("Could not find response waiter with id {ResponderId}", respInfo.ResponderId);
+			_log.LogWarning(
+				"Could not find response waiter with id {ResponderId}",
+				respInfo.ResponderId
+			);
 			return Task.CompletedTask;
 		}
 
@@ -216,7 +230,8 @@ internal sealed class WtqDBusObject
 		string name,
 		string modStr,
 		string keyCharStr,
-		string keyCodeStr)
+		string keyCodeStr
+	)
 	{
 		_log.LogInformation(
 			"{MethodName}({Name}, {Modifier}, {KeyChar}, {KeyCode})",
@@ -224,7 +239,8 @@ internal sealed class WtqDBusObject
 			name,
 			modStr,
 			keyCharStr,
-			keyCodeStr);
+			keyCodeStr
+		);
 
 		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
 		Enum.TryParse<KeyCode>(keyCodeStr, ignoreCase: true, out var key);

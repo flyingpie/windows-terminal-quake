@@ -11,20 +11,17 @@ public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 	/// Flatpak, use XDG_STATE_HOME without an app-specific subdir (since the entire directory is already app-specific).
 	/// For example: "/home/user/.var/app/nl.flyingpie.wtq/.local/state".
 	/// </summary>
-	public override string PathToTempDir =>
-		XDG_STATE_HOME;
+	public override string PathToTempDir => XDG_STATE_HOME;
 
 	/// <summary>
 	/// Running in Flatpak, using icon name of tray icon (i.e., not the full path) - Dark.
 	/// </summary>
-	public override string PathToTrayIconDark =>
-		"nl.flyingpie.wtq-black";
+	public override string PathToTrayIconDark => "nl.flyingpie.wtq-black";
 
 	/// <summary>
 	/// Running in Flatpak, using icon name of tray icon (i.e., not the full path) - Light.
 	/// </summary>
-	public override string PathToTrayIconLight =>
-		"nl.flyingpie.wtq-white";
+	public override string PathToTrayIconLight => "nl.flyingpie.wtq-white";
 
 	/// <inheritdoc/>
 	public override Process CreateProcess(WtqAppOptions opts)
@@ -33,13 +30,12 @@ public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 
 		if (string.IsNullOrWhiteSpace(opts.FileName))
 		{
-			throw new InvalidOperationException($"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'.");
+			throw new InvalidOperationException(
+				$"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'."
+			);
 		}
 
-		var startInfo = new ProcessStartInfo()
-		{
-			FileName = "flatpak-spawn",
-		};
+		var startInfo = new ProcessStartInfo() { FileName = "flatpak-spawn" };
 
 		startInfo.ArgumentList.Add("--host");
 
@@ -63,15 +59,16 @@ public class LinuxFlatpakPlatformService : LinuxNativePlatformService
 
 			var exp = arg.Argument.ExpandEnvVars();
 
-			Log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg.Argument, exp);
+			Log.LogDebug(
+				"Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'",
+				arg.Argument,
+				exp
+			);
 
 			startInfo.ArgumentList.Add(exp);
 		}
 
-		return new Process()
-		{
-			StartInfo = startInfo,
-		};
+		return new Process() { StartInfo = startInfo };
 	}
 
 	/// <inheritdoc/>

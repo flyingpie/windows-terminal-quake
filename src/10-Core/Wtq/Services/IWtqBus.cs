@@ -8,16 +8,13 @@ public interface IWtqBus
 	/// <summary>
 	/// Register event handler for the specified event type.
 	/// </summary>
-	void OnEvent<TEvent>(
-		Func<TEvent, Task> onEvent)
+	void OnEvent<TEvent>(Func<TEvent, Task> onEvent)
 		where TEvent : WtqEvent;
 
 	/// <summary>
 	/// Register event handler for the specified event type, and predicate.
 	/// </summary>
-	void OnEvent<TEvent>(
-		Func<TEvent, bool> predicate,
-		Func<TEvent, Task> onEvent)
+	void OnEvent<TEvent>(Func<TEvent, bool> predicate, Func<TEvent, Task> onEvent)
 		where TEvent : WtqEvent;
 
 	/// <summary>
@@ -29,6 +26,5 @@ public interface IWtqBus
 	/// <summary>
 	/// Publish an event.
 	/// </summary>
-	void Publish(
-		WtqEvent eventType);
+	void Publish(WtqEvent eventType);
 }

@@ -8,9 +8,12 @@ public static class ServiceCollectionExtensions
 
 	public static IServiceCollection AddWin32Service(this IServiceCollection services)
 	{
-		Log.LogInformation("Using Win32 v2 window service (new behavior, please report any issues and consider disabling this if you run into any)");
+		Log.LogInformation(
+			"Using Win32 v2 window service (new behavior, please report any issues and consider disabling this if you run into any)"
+		);
 
-		return Guard.Against.Null(services)
+		return Guard
+			.Against.Null(services)
 			.AddSingleton<IWin32, Win32>()
 			.AddSingleton<IWtqWindowService, Win32WindowService>();
 	}

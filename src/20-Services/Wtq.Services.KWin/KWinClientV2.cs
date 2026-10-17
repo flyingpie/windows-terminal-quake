@@ -8,52 +8,45 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// Wraps functions in the wtq.kwin script.
 /// </summary>
-internal sealed class KWinClientV2(
-	IDBusConnection dbus,
-	IWtqDBusObject wtqBusObj)
-	: IKWinClient
+internal sealed class KWinClientV2(IDBusConnection dbus, IWtqDBusObject wtqBusObj) : IKWinClient
 {
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 
 	private readonly IDBusConnection _dbus = Guard.Against.Null(dbus);
 	private readonly WtqDBusObject _wtqBusObj = (WtqDBusObject)wtqBusObj; // TODO: Fix.
 
-	public async Task BringToForegroundAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken)
+	public async Task BringToForegroundAsync(KWinWindow window, CancellationToken cancellationToken)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"BRING_WINDOW_TO_FOREGROUND",
-				new
-				{
-					internalId = window.InternalId,
-				},
-				cancellationToken)
+				new { internalId = window.InternalId },
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
-	public async Task<Point> GetCursorPosAsync(
-		CancellationToken cancellationToken)
+	public async Task<Point> GetCursorPosAsync(CancellationToken cancellationToken)
 	{
-		return (await _wtqBusObj
-				.SendCommandAsync("GET_CURSOR_POS", null, cancellationToken)
-				.NoCtx())
+		return (
+			await _wtqBusObj.SendCommandAsync("GET_CURSOR_POS", null, cancellationToken).NoCtx()
+		)
 			.GetParamsAs<KWinPoint>()
 			.ToPoint();
 	}
 
-	public async Task<KWinWindow?> GetForegroundWindowAsync(
-		CancellationToken cancellationToken)
+	public async Task<KWinWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
 	{
-		return (await _wtqBusObj
+		return (
+			await _wtqBusObj
 				.SendCommandAsync("GET_FOREGROUND_WINDOW", null, cancellationToken)
-				.NoCtx())
-			.GetParamsAs<KWinWindow>();
+				.NoCtx()
+		).GetParamsAs<KWinWindow>();
 	}
 
 	public async Task<KWinSupportInformation> GetSupportInformationAsync(
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		var kwin = await _dbus.GetKWinAsync().NoCtx();
 
@@ -64,35 +57,36 @@ internal sealed class KWinClientV2(
 
 	public async Task<KWinWindow?> GetWindowAsync(
 		KWinWindow window,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		var resp = await _wtqBusObj
 			.SendCommandAsync(
 				"GET_WINDOW",
-				new
-				{
-					internalId = window.InternalId,
-				},
-				cancellationToken)
+				new { internalId = window.InternalId },
+				cancellationToken
+			)
 			.NoCtx();
 
 		return resp.GetParamsAs<KWinWindow>();
 	}
 
 	public async Task<ICollection<KWinWindow>> GetWindowListAsync(
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
-		var resp = await _wtqBusObj.SendCommandAsync("GET_WINDOW_LIST", null, cancellationToken).NoCtx();
+		var resp = await _wtqBusObj
+			.SendCommandAsync("GET_WINDOW_LIST", null, cancellationToken)
+			.NoCtx();
 
-		return resp
-			.GetParamsAs<KWinGetWindowListResponse>()
-			.Windows;
+		return resp.GetParamsAs<KWinGetWindowListResponse>().Windows;
 	}
 
 	public async Task MoveWindowAsync(
 		KWinWindow window,
 		Point location,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -103,14 +97,16 @@ internal sealed class KWinClientV2(
 					x = location.X,
 					y = location.Y,
 				},
-				cancellationToken)
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
 	public async Task PinWindowAsync(
 		KWinWindow window,
 		Rectangle rect,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -123,7 +119,8 @@ internal sealed class KWinClientV2(
 					width = rect.Width,
 					height = rect.Height,
 				},
-				cancellationToken)
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
@@ -131,7 +128,8 @@ internal sealed class KWinClientV2(
 		string name,
 		string description,
 		KeySequence sequence,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -147,14 +145,16 @@ internal sealed class KWinClientV2(
 						keyCode = sequence.KeyCode.ToString(),
 					},
 				},
-				cancellationToken)
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
 	public async Task ResizeWindowAsync(
 		KWinWindow window,
 		Size size,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -165,31 +165,31 @@ internal sealed class KWinClientV2(
 					width = size.Width,
 					height = size.Height,
 				},
-				cancellationToken)
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
 	public async Task SetTaskbarIconVisibleAsync(
 		KWinWindow window,
 		bool isVisible,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_TASKBAR_ICON_VISIBLE",
-				new
-				{
-					internalId = window.InternalId,
-					isVisible = JsUtils.ToJsBoolean(isVisible),
-				},
-				cancellationToken)
+				new { internalId = window.InternalId, isVisible = JsUtils.ToJsBoolean(isVisible) },
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
 	public async Task SetWindowAlwaysOnTopAsync(
 		KWinWindow window,
 		bool isAlwaysOnTop,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
@@ -199,39 +199,34 @@ internal sealed class KWinClientV2(
 					internalId = window.InternalId,
 					isAlwaysOnTop = JsUtils.ToJsBoolean(isAlwaysOnTop),
 				},
-				cancellationToken)
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
 	public async Task SetWindowOpacityAsync(
 		KWinWindow window,
 		float opacity,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"SET_WINDOW_OPACITY",
-				new
-				{
-					internalId = window.InternalId,
-					opacity = opacity,
-				},
-				cancellationToken)
+				new { internalId = window.InternalId, opacity = opacity },
+				cancellationToken
+			)
 			.NoCtx();
 	}
 
-	public async Task UnpinWindowAsync(
-		KWinWindow window,
-		CancellationToken cancellationToken)
+	public async Task UnpinWindowAsync(KWinWindow window, CancellationToken cancellationToken)
 	{
 		_ = await _wtqBusObj
 			.SendCommandAsync(
 				"UNPIN_WINDOW",
-				new
-				{
-					internalId = window.InternalId,
-				},
-				cancellationToken)
+				new { internalId = window.InternalId },
+				cancellationToken
+			)
 			.NoCtx();
 	}
 }

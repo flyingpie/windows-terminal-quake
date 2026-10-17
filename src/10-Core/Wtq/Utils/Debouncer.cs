@@ -33,6 +33,7 @@ public class Debouncer
 					// Ignore — debounce was reset
 				}
 			},
-			token);
+			token
+		);
 	}
 }

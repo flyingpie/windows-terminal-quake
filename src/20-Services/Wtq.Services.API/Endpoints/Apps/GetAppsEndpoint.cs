@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Wtq.Services.API.Endpoints.Apps;
 
@@ -9,8 +9,7 @@ public class GetAppsEndpoint : ControllerBase
 {
 	[HttpGet]
 	[Produces<ResponseVM>]
-	public Task<IActionResult> ExecuteAsync(
-		[FromServices] IWtqAppRepo appRepo)
+	public Task<IActionResult> ExecuteAsync([FromServices] IWtqAppRepo appRepo)
 	{
 		var apps = appRepo.GetAll();
 

@@ -21,12 +21,10 @@ public class KWinWtqWindowTest
 	/// Matching using the "FileName" option, against the "DesktopFileName" property.
 	/// </summary>
 	[TestMethod]
-
 	// Exact
 	[DataRow("FileName", "FileName", true)]
 	[DataRow("FileName", "FILENAME", true)]
 	[DataRow("FileName", "filename", true)]
-
 	// No match
 	[DataRow("FileName", null, false)]
 	[DataRow("FileName", "", false)]
@@ -46,12 +44,10 @@ public class KWinWtqWindowTest
 	/// Matching using the "FileName" option, against the "ResourceClass" property.
 	/// </summary>
 	[TestMethod]
-
 	// Exact
 	[DataRow("ResourceClass", "ResourceClass", true)]
 	[DataRow("resourceclass", "RESOURCECLASS", true)]
 	[DataRow("RESOURCECLASS", "resourceclass", true)]
-
 	// No match
 	[DataRow("ResourceClass", null, false)]
 	[DataRow("ResourceClass", "", false)]
@@ -71,12 +67,10 @@ public class KWinWtqWindowTest
 	/// Matching using the "FileName" option, against the "ResourceName" property.
 	/// </summary>
 	[TestMethod]
-
 	// Exact
 	[DataRow("ResourceName", "ResourceName", true)]
 	[DataRow("resourcename", "RESOURCENAME", true)]
 	[DataRow("RESOURCENAME", "resourcename", true)]
-
 	// No match
 	[DataRow("ResourceName", null, false)]
 	[DataRow("ResourceName", "", false)]
@@ -150,21 +144,17 @@ public class KWinWtqWindowTest
 	/// Matching using the "WindowTitle" option, against the "Caption" property.
 	/// </summary>
 	[TestMethod]
-
 	// Exact
 	[DataRow("TheWindowTitle", "TheWindowTitle", true)]
 	[DataRow("TheWindowTitle", "thewindowtitle", true)]
 	[DataRow("thewindowtitle", "TheWindowTitle", true)]
-
 	// No match
 	[DataRow("thewndtitle", "TheWindowTitle", false)]
-
 	// Regex - Match
 	[DataRow("TheWindowT", "TheWindowTitle", true)] // Without explicit regex symbols, acts as "contains".
 	[DataRow("TheWindowT.*", "TheWindowTitle", true)]
 	[DataRow(".*WindowT.*", "TheWindowTitle", true)]
 	[DataRow(".WindowTitle", "TheWindowTitle", true)]
-
 	// Regex - No match
 	[DataRow("TheWindowTitle", null, false)]
 	[DataRow("TheWindowTitle", "", false)]

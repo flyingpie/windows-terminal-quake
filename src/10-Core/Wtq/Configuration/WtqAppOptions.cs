@@ -85,7 +85,7 @@ public sealed class WtqAppOptions : WtqSharedOptions
 
 	/// <summary>
 	/// Command-line arguments that should be passed to the app when it's started.<br/>
-	/// <br/> 
+	/// <br/>
 	/// Note that this only applies when using an <b>AttachMode</b> that starts the app (i.e., when WTQ actually starts the app).<br/>
 	/// </summary>
 	[Display(GroupName = Gn.Process, Name = "Argument list")]
@@ -224,9 +224,16 @@ public sealed class WtqAppOptions : WtqSharedOptions
 		}
 
 		// Require a filename, process name or window title.
-		if (string.IsNullOrWhiteSpace(FileName) && string.IsNullOrWhiteSpace(ProcessName) && string.IsNullOrWhiteSpace(WindowTitle))
+		if (
+			string.IsNullOrWhiteSpace(FileName)
+			&& string.IsNullOrWhiteSpace(ProcessName)
+			&& string.IsNullOrWhiteSpace(WindowTitle)
+		)
 		{
-			yield return new("Either a <b>filename</b>, a <b>process name</b> or a <b>window title</b> needs to be set.", [nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]);
+			yield return new(
+				"Either a <b>filename</b>, a <b>process name</b> or a <b>window title</b> needs to be set.",
+				[nameof(FileName), nameof(ProcessName), nameof(WindowTitle)]
+			);
 		}
 
 		// Require at least 1 hotkey.

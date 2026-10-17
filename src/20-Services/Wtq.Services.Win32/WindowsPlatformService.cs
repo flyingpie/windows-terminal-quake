@@ -1,10 +1,14 @@
-using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Microsoft.Win32;
 
 namespace Wtq.Services.Win32;
 
-[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "This entire project (Win32) is Windows-only.")]
+[SuppressMessage(
+	"Interoperability",
+	"CA1416:Validate platform compatibility",
+	Justification = "This entire project (Win32) is Windows-only."
+)]
 public class WindowsPlatformService : PlatformServiceBase
 {
 	/// <summary>
@@ -21,12 +25,13 @@ public class WindowsPlatformService : PlatformServiceBase
 		string? pathToAppDataDir = null,
 		string? pathToAppDir = null,
 		string? pathToTempDir = null,
-		string? pathToUserHomeDir = null)
-		: base(
-			pathToAppDir: pathToAppDir,
-			pathToUserHomeDir: pathToUserHomeDir)
+		string? pathToUserHomeDir = null
+	)
+		: base(pathToAppDir: pathToAppDir, pathToUserHomeDir: pathToUserHomeDir)
 	{
-		_pathToAppDataDir = pathToAppDataDir ?? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		_pathToAppDataDir =
+			pathToAppDataDir
+			?? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 		_pathToTempDir = pathToTempDir ?? Path.GetTempPath();
 	}
 
@@ -34,14 +39,12 @@ public class WindowsPlatformService : PlatformServiceBase
 	public override string PlatformName => "Windows";
 
 	/// <inheritdoc/>
-	public override string[] ExecutableExtensions =>
-		[string.Empty, ".exe", ".bat", ".cmd"];
+	public override string[] ExecutableExtensions => [string.Empty, ".exe", ".bat", ".cmd"];
 
 	/// <summary>
 	/// On Windows, default to a named pipe.
 	/// </summary>
-	public override ICollection<string> DefaultApiUrls =>
-		["http://pipe:/wtq"];
+	public override ICollection<string> DefaultApiUrls => ["http://pipe:/wtq"];
 
 	/// <summary>
 	/// Try to detect the current color scheme, default to "Light".
@@ -53,15 +56,13 @@ public class WindowsPlatformService : PlatformServiceBase
 	public override string PathToAppExe => Path.Combine(PathToAppDir, "wtq.exe");
 
 	/// <inheritdoc/>
-	public override string PathToLogsDir =>
-		PathToTempDir;
+	public override string PathToLogsDir => PathToTempDir;
 
 	/// <summary>
 	/// Windows, use the standard temp dir with an app-specific subdir.
 	/// For example: "C:/Users/marco/AppData/Local/Temp/wtq".
 	/// </summary>
-	public override string PathToTempDir =>
-		Path.Combine(_pathToTempDir, "wtq").EnsureDirExists();
+	public override string PathToTempDir => Path.Combine(_pathToTempDir, "wtq").EnsureDirExists();
 
 	/// <summary>
 	/// It seems Windows wants its icons as ICO files - dark.
@@ -76,7 +77,11 @@ public class WindowsPlatformService : PlatformServiceBase
 		Path.Combine(PathToAssetsDir, "nl.flyingpie.wtq-white.ico");
 
 	/// <inheritdoc/>
-	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
+	[SuppressMessage(
+		"Critical Code Smell",
+		"S2365:Properties should not make collection or array copies",
+		Justification = "MvdO: It's fine, doesn't get called often."
+	)]
 	public override ICollection<string> PathsToWtqConfs
 	{
 		get
@@ -86,20 +91,19 @@ public class WindowsPlatformService : PlatformServiceBase
 			// Environment variable
 			res.Add(WtqEnv.WtqConfigFile);
 
-			foreach (var path in new[]
-			{
-				// Next to the app executable
-				PathToAppDir,
-
-				// App data (subfolder)
-				Path.Combine(_pathToAppDataDir, "wtq"),
-
-				// App data (bare)
-				_pathToAppDataDir,
-
-				// Explicitly user home
-				PathToUserHomeDir,
-			})
+			foreach (
+				var path in new[]
+				{
+					// Next to the app executable
+					PathToAppDir,
+					// App data (subfolder)
+					Path.Combine(_pathToAppDataDir, "wtq"),
+					// App data (bare)
+					_pathToAppDataDir,
+					// Explicitly user home
+					PathToUserHomeDir,
+				}
+			)
 			{
 				foreach (var name in WtqConfNames)
 				{
@@ -110,8 +114,7 @@ public class WindowsPlatformService : PlatformServiceBase
 				}
 			}
 
-			return res
-				.Where(e => !string.IsNullOrWhiteSpace(e))
+			return res.Where(e => !string.IsNullOrWhiteSpace(e))
 				.Select(e => e!)
 				.Distinct()
 				.ToList();
@@ -127,7 +130,12 @@ public class WindowsPlatformService : PlatformServiceBase
 		try
 		{
 			// Fetch "SystemUsesLightTheme" key from registry
-			var systemUsesLightTheme = (int?)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", -1);
+			var systemUsesLightTheme = (int?)
+				Registry.GetValue(
+					@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+					"SystemUsesLightTheme",
+					-1
+				);
 
 			// 1 = TRUE
 			if (systemUsesLightTheme == 1)

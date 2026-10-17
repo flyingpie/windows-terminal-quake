@@ -4,8 +4,8 @@ namespace Wtq.Services;
 public class WtqAppToggleService(
 	IWtqTargetScreenRectProvider targetScreenRectProvider,
 	IWtqWindowRectProvider windowRectProvider,
-	IWtqTween tween)
-	: IWtqAppToggleService
+	IWtqTween tween
+) : IWtqAppToggleService
 {
 	/// <summary>
 	/// When moving app windows onto- and off the screen, we may not find a free space (i.e., the would-be locations are occupied by other screens).<br/>
@@ -16,8 +16,12 @@ public class WtqAppToggleService(
 	private static readonly Point BehindScreenLocation = new(0, -30_000);
 
 	private readonly ILogger _log = Log.For<WtqAppToggleService>();
-	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider = Guard.Against.Null(targetScreenRectProvider);
-	private readonly IWtqWindowRectProvider _windowRectProvider = Guard.Against.Null(windowRectProvider);
+	private readonly IWtqTargetScreenRectProvider _targetScreenRectProvider = Guard.Against.Null(
+		targetScreenRectProvider
+	);
+	private readonly IWtqWindowRectProvider _windowRectProvider = Guard.Against.Null(
+		windowRectProvider
+	);
 	private readonly IWtqTween _tween = Guard.Against.Null(tween);
 
 	/// <inheritdoc/>
@@ -30,7 +34,9 @@ public class WtqAppToggleService(
 
 		// Get rect of the screen where the app needs to go to.
 		// Usually the screen with the cursor.
-		var screenRectDst = await _targetScreenRectProvider.GetTargetScreenRectAsync(app.Options).NoCtx();
+		var screenRectDst = await _targetScreenRectProvider
+			.GetTargetScreenRectAsync(app.Options)
+			.NoCtx();
 
 		// Get current window rect.
 		// Used to grab the current size, if we're not allowed to resize the window.
@@ -52,17 +58,28 @@ public class WtqAppToggleService(
 		// predictable animations.
 		//
 		// The "dest" rect, where we want the app to move to.
-		var windowRectDst = await _windowRectProvider.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options).NoCtx();
+		var windowRectDst = await _windowRectProvider
+			.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options)
+			.NoCtx();
 
 		// The "source" rect, where the window is coming from.
-		var windowRectSrc = await _windowRectProvider.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options).NoCtx();
+		var windowRectSrc = await _windowRectProvider
+			.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options)
+			.NoCtx();
 
-		_log.LogDebug("ToggleOn app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+		_log.LogDebug(
+			"ToggleOn app '{App}' from '{From}' to '{To}'",
+			app,
+			windowRectSrc,
+			windowRectDst
+		);
 
 		// If no off-screen location could be found, just blink it into existence instantly.
 		if (windowRectSrc == null)
 		{
-			_log.LogWarning("Could not find an off-screen location to tween from, fallback to instant-on");
+			_log.LogWarning(
+				"Could not find an off-screen location to tween from, fallback to instant-on"
+			);
 
 			// Note that on KWin, it seems we're only allowed to resize windows when they're on-screen.
 			// So move first, then resize.
@@ -81,7 +98,8 @@ public class WtqAppToggleService(
 				dst: windowRectDst.Location,
 				durationMs: durationMs,
 				animType: app.Options.GetAnimationTypeToggleOn(),
-				move: app.MoveWindowAsync)
+				move: app.MoveWindowAsync
+			)
 			.NoCtx();
 
 		// Resize window.
@@ -102,14 +120,27 @@ public class WtqAppToggleService(
 
 		// Source & target rects.
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
-		var windowRectDst = await _windowRectProvider.GetOffScreenRectAsync(screenRectSrc: screenRectSrc, windowRectSrc: windowRectSrc, app.Options).NoCtx();
+		var windowRectDst = await _windowRectProvider
+			.GetOffScreenRectAsync(
+				screenRectSrc: screenRectSrc,
+				windowRectSrc: windowRectSrc,
+				app.Options
+			)
+			.NoCtx();
 
-		_log.LogDebug("ToggleOff app '{App}' from '{From}' to '{To}'", app, windowRectSrc, windowRectDst);
+		_log.LogDebug(
+			"ToggleOff app '{App}' from '{From}' to '{To}'",
+			app,
+			windowRectSrc,
+			windowRectDst
+		);
 
 		// If no off-screen location could be found, just blink it out of existence instantly.
 		if (windowRectDst == null)
 		{
-			_log.LogWarning("Could not find an off-screen location to tween to, fallback to instant-off");
+			_log.LogWarning(
+				"Could not find an off-screen location to tween to, fallback to instant-off"
+			);
 
 			// Note that on KWin, it seems we're only allowed to resize windows when they're on-screen.
 			// So move first, then resize.
@@ -130,7 +161,8 @@ public class WtqAppToggleService(
 				dst: windowRectDst.Value.Location,
 				durationMs: durationMs,
 				animType: app.Options.GetAnimationTypeToggleOff(),
-				move: app.MoveWindowAsync)
+				move: app.MoveWindowAsync
+			)
 			.NoCtx();
 
 		// Pin window so it doesn't move until we touch it again.

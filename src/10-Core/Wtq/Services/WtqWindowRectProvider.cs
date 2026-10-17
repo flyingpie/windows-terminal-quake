@@ -32,17 +32,16 @@ public interface IWtqWindowRectProvider
 	/// The rectangles are returned in the order as specified by <see cref="WtqSharedOptions.OffScreenLocations"/>.<br/>
 	/// Note that this doesn't yet take into account other screens, these may overlap with.
 	/// </summary>
-	Rectangle[] GetOffScreenRects(
-		Rectangle screenRect,
-		Rectangle windowRect,
-		WtqAppOptions opts
-	);
+	Rectangle[] GetOffScreenRects(Rectangle screenRect, Rectangle windowRect, WtqAppOptions opts);
 }
 
 /// <inheritdoc cref="IWtqWindowRectProvider"/>
-public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : IWtqWindowRectProvider
+public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
+	: IWtqWindowRectProvider
 {
-	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(screenInfoProvider);
+	private readonly IWtqScreenInfoProvider _screenInfoProvider = Guard.Against.Null(
+		screenInfoProvider
+	);
 
 	/// <inheritdoc/>
 	public async Task<Rectangle> GetOnScreenRectAsync(
@@ -54,17 +53,14 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		Guard.Against.Null(opts);
 
 		// Calculate app window size.
-		var wnd = opts.GetResize() == Resizing.Always
-			? new Rectangle()
-			{
-				Width = (int)(screenRectDst.Width * opts.GetHorizontalScreenCoverageIndex()),
-				Height = (int)(screenRectDst.Height * opts.GetVerticalScreenCoverageIndex()),
-			}
-			: new Rectangle()
-			{
-				Width = windowRectSrc.Width,
-				Height = windowRectSrc.Height,
-			};
+		var wnd =
+			opts.GetResize() == Resizing.Always
+				? new Rectangle()
+				{
+					Width = (int)(screenRectDst.Width * opts.GetHorizontalScreenCoverageIndex()),
+					Height = (int)(screenRectDst.Height * opts.GetVerticalScreenCoverageIndex()),
+				}
+				: new Rectangle() { Width = windowRectSrc.Width, Height = windowRectSrc.Height };
 
 		// Calculate horizontal position.
 		var x = opts.GetHorizontalAlign() switch
@@ -77,9 +73,11 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 
 			// None (keep current horizontal position)
 			// Note that we only do this if the window is coming back on the same screen. Otherwise, we're centering.
-			HorizontalAlign.None => windowRectSrc.X >= screenRectDst.X && windowRectSrc.X <= screenRectDst.X + screenRectDst.Width
+			HorizontalAlign.None => windowRectSrc.X >= screenRectDst.X
+			&& windowRectSrc.X <= screenRectDst.X + screenRectDst.Width
 				? windowRectSrc.X
-				: screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
+				: screenRectDst.X
+					+ (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 
 			// Center
 			_ => screenRectDst.X + (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
@@ -117,7 +115,9 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		var targetRects = GetOffScreenRects(screenRectSrc, windowRectSrc, opts);
 
 		// Return first target rectangle that does not overlap with a screen.
-		var targetRect = targetRects.FirstOrDefault(r => !screenRects.Any(scr => scr.IntersectsWith(r)));
+		var targetRect = targetRects.FirstOrDefault(r =>
+			!screenRects.Any(scr => scr.IntersectsWith(r))
+		);
 
 		// Return either the rectangle that we found, or null in case no free screen space is available.
 		return !targetRect.IsEmpty ? targetRect : null;
@@ -137,36 +137,37 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider) : 
 		// Keep some margin, to prevent the window just peeking onto the screen if things don't line up exactly right.
 		var margin = 100;
 
-		return opts
-			.GetOffScreenLocations()
-			.Select(dir => dir switch
-			{
-				Above or None => windowRect with
+		return opts.GetOffScreenLocations()
+			.Select(dir =>
+				dir switch
 				{
-					// Top of the screen, minus height of the app window.
-					Y = screenRect.Y - windowRect.Height - margin,
-				},
+					Above or None => windowRect with
+					{
+						// Top of the screen, minus height of the app window.
+						Y = screenRect.Y - windowRect.Height - margin,
+					},
 
-				Below => windowRect with
-				{
-					// Bottom of the screen.
-					Y = screenRect.Y + screenRect.Height + margin,
-				},
+					Below => windowRect with
+					{
+						// Bottom of the screen.
+						Y = screenRect.Y + screenRect.Height + margin,
+					},
 
-				Left => windowRect with
-				{
-					// Left of the screen, minus width of the app window.
-					X = screenRect.X - windowRect.Width - margin,
-				},
+					Left => windowRect with
+					{
+						// Left of the screen, minus width of the app window.
+						X = screenRect.X - windowRect.Width - margin,
+					},
 
-				Right => windowRect with
-				{
-					// Right of the screen, plus width of the app window.
-					X = screenRect.X + screenRect.Width + windowRect.Width + margin,
-				},
+					Right => windowRect with
+					{
+						// Right of the screen, plus width of the app window.
+						X = screenRect.X + screenRect.Width + windowRect.Width + margin,
+					},
 
-				_ => throw new WtqException("Unknown toggle direction."),
-			})
+					_ => throw new WtqException("Unknown toggle direction."),
+				}
+			)
 			.ToArray();
 	}
 }

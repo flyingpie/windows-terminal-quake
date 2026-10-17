@@ -3,10 +3,26 @@ namespace Wtq.Input;
 /// <summary>
 /// Represents a virtual key code, i.e. a key that points to a physical button on a keyboard, without necessarily taking into account keyboard language/layout.
 /// </summary>
-[SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Some overlap for convenience.")]
-[SuppressMessage("Info Code Smell", "S1133:Deprecated code should be removed", Justification = "MvdO: For backward compat.")]
-[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "MvdO: Very useful for large enum.")]
-[SuppressMessage("ReSharper", "InconsistentNaming", Justification = "MvdO: Trying to stay consistent with naming on other platforms, libraries and frameworks.")]
+[SuppressMessage(
+	"Design",
+	"CA1069:Enums values should not be duplicated",
+	Justification = "MvdO: Some overlap for convenience."
+)]
+[SuppressMessage(
+	"Info Code Smell",
+	"S1133:Deprecated code should be removed",
+	Justification = "MvdO: For backward compat."
+)]
+[SuppressMessage(
+	"StyleCop.CSharp.ReadabilityRules",
+	"SA1124:Do not use regions",
+	Justification = "MvdO: Very useful for large enum."
+)]
+[SuppressMessage(
+	"ReSharper",
+	"InconsistentNaming",
+	Justification = "MvdO: Trying to stay consistent with naming on other platforms, libraries and frameworks."
+)]
 public enum KeyCode
 {
 	/// <summary>No key pressed.</summary>

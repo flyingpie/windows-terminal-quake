@@ -12,18 +12,18 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <summary>
 	/// Paramaters are used for mocking in tests, otherwise they're automatically set in the constructor.
 	/// </summary>
-	protected PlatformServiceBase(
-		string? pathToAppDir = null,
-		string? pathToUserHomeDir = null)
+	protected PlatformServiceBase(string? pathToAppDir = null, string? pathToUserHomeDir = null)
 	{
 		// Path to directory where wtq is installed (where wtq or wtq.exe lives).
-		PathToAppDir = pathToAppDir ?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull() ??
-			throw new WtqException("Could not get path to app directory.");
+		PathToAppDir =
+			pathToAppDir
+			?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull()
+			?? throw new WtqException("Could not get path to app directory.");
 
 		// Windows: C:/users/username
 		// Linux: /home/username
-		PathToUserHomeDir = pathToUserHomeDir ??
-			Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+		PathToUserHomeDir =
+			pathToUserHomeDir ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	}
 
 	/// <inheritdoc/>
@@ -47,8 +47,7 @@ public abstract class PlatformServiceBase : IPlatformService
 	public virtual string PathToAppExe => Path.Combine(PathToAppDir, "wtq");
 
 	/// <inheritdoc/>
-	public virtual string PathToAssetsDir =>
-		Path.Combine(PathToAppDir, "assets");
+	public virtual string PathToAssetsDir => Path.Combine(PathToAppDir, "assets");
 
 	/// <inheritdoc/>
 	public abstract string PathToLogsDir { get; }
@@ -93,7 +92,10 @@ public abstract class PlatformServiceBase : IPlatformService
 			// If no existing file was found, generate an example file at the preferred location, and use that.
 			// Note that the example config is set up to pop the UI, so the user gets a decent out-of-box experience.
 			_pathToWtqConf = PreferredPathWtqConfig;
-			Log.LogInformation("No settings file found, generating an example file at '{Path}'", _pathToWtqConf);
+			Log.LogInformation(
+				"No settings file found, generating an example file at '{Path}'",
+				_pathToWtqConf
+			);
 			Fs.Inst.WriteAllText(_pathToWtqConf, GetExampleWtqJsonc());
 			return _pathToWtqConf;
 		}
@@ -101,7 +103,8 @@ public abstract class PlatformServiceBase : IPlatformService
 
 	/// <inheritdoc/>
 	public virtual string PathToWtqConfDir =>
-		Path.GetDirectoryName(PathToWtqConf) ?? throw new WtqException($"Could not determine directory of path '{PathToWtqConf}'.");
+		Path.GetDirectoryName(PathToWtqConf)
+		?? throw new WtqException($"Could not determine directory of path '{PathToWtqConf}'.");
 
 	private string GetExampleWtqJsonc()
 	{
@@ -111,10 +114,12 @@ public abstract class PlatformServiceBase : IPlatformService
 			return Fs.Inst.ReadAllText(pathToExampleWtqJsonc);
 		}
 
-		Log.LogWarning("Example settings file was not found at expected path '{Path}', returning minimal example file", pathToExampleWtqJsonc);
+		Log.LogWarning(
+			"Example settings file was not found at expected path '{Path}', returning minimal example file",
+			pathToExampleWtqJsonc
+		);
 
-		return
-			"""
+		return """
 			{
 				// Something went wrong generating an example file, please see the docs and the autocompletion for this file instead.
 				// Also, I'd appreciate it a ton if you could report this issue.
@@ -139,21 +144,12 @@ public abstract class PlatformServiceBase : IPlatformService
 	/// <summary>
 	/// Possible names for the settings file. Used for building potential paths.
 	/// </summary>
-	protected virtual ICollection<string> WtqConfNames =>
-	[
-		"wtq",
-		".wtq",
-	];
+	protected virtual ICollection<string> WtqConfNames => ["wtq", ".wtq"];
 
 	/// <summary>
 	/// Possible extensions for the settings file. Used for building potential paths.
 	/// </summary>
-	public virtual ICollection<string> WtqConfExtensions =>
-	[
-		"json",
-		"jsonc",
-		"json5",
-	];
+	public virtual ICollection<string> WtqConfExtensions => ["json", "jsonc", "json5"];
 
 	/// <inheritdoc/>
 	public virtual Process CreateProcess(WtqAppOptions opts)
@@ -163,7 +159,9 @@ public abstract class PlatformServiceBase : IPlatformService
 		// Validate filename
 		if (string.IsNullOrWhiteSpace(opts.FileName))
 		{
-			throw new InvalidOperationException($"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'");
+			throw new InvalidOperationException(
+				$"Cannot start process for app '{opts.Name}': missing required property '{nameof(opts.FileName)}'"
+			);
 		}
 
 		// Build start info
@@ -187,15 +185,16 @@ public abstract class PlatformServiceBase : IPlatformService
 			var exp = arg.Argument.ExpandEnvVars();
 
 			// Log, very useful when using environment variables in arguments
-			Log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+			Log.LogDebug(
+				"Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'",
+				arg,
+				exp
+			);
 
 			startInfo.ArgumentList.Add(exp);
 		}
 
-		return new Process()
-		{
-			StartInfo = startInfo,
-		};
+		return new Process() { StartInfo = startInfo };
 	}
 
 	/// <inheritdoc/>
@@ -242,7 +241,9 @@ public abstract class PlatformServiceBase : IPlatformService
 		var self = Process.GetCurrentProcess();
 
 		// Look for other WTQ processes.
-		var otherWtq = Process.GetProcessesByName(self.ProcessName).FirstOrDefault(p => p.Id != self.Id);
+		var otherWtq = Process
+			.GetProcessesByName(self.ProcessName)
+			.FirstOrDefault(p => p.Id != self.Id);
 
 		if (otherWtq != null)
 		{
@@ -273,15 +274,16 @@ public abstract class PlatformServiceBase : IPlatformService
 
 		try
 		{
-			Process.Start(
-				new ProcessStartInfo()
-				{
-					FileName = path, UseShellExecute = true,
-				});
+			Process.Start(new ProcessStartInfo() { FileName = path, UseShellExecute = true });
 		}
 		catch (Exception ex)
 		{
-			Log.LogWarning(ex, "Could not open file or directory {Path}: {Message}", path, ex.Message);
+			Log.LogWarning(
+				ex,
+				"Could not open file or directory {Path}: {Message}",
+				path,
+				ex.Message
+			);
 		}
 	}
 
@@ -302,11 +304,7 @@ public abstract class PlatformServiceBase : IPlatformService
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				var urlstr = url.ToString().Replace("&", "^&", StringComparison.Ordinal);
-				Process.Start(
-					new ProcessStartInfo(urlstr)
-					{
-						UseShellExecute = true,
-					});
+				Process.Start(new ProcessStartInfo(urlstr) { UseShellExecute = true });
 			}
 		}
 	}

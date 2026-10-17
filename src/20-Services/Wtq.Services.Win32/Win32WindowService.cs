@@ -1,8 +1,6 @@
 namespace Wtq.Services.Win32;
 
-public sealed class Win32WindowService(IWin32 win32) :
-	IDisposable,
-	IWtqWindowService
+public sealed class Win32WindowService(IWin32 win32) : IDisposable, IWtqWindowService
 {
 	private readonly ILogger _log = Log.For<Win32WindowService>();
 	private readonly TimeSpan _lookupInterval = TimeSpan.FromSeconds(2);
@@ -14,9 +12,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 	private DateTimeOffset _nextLookup = DateTimeOffset.MinValue;
 	private ICollection<WtqWindow> _processes = [];
 
-	public async Task CreateAsync(
-		WtqAppOptions opts,
-		CancellationToken cancellationToken)
+	public async Task CreateAsync(WtqAppOptions opts, CancellationToken cancellationToken)
 	{
 		Guard.Against.Null(opts);
 
@@ -33,7 +29,8 @@ public sealed class Win32WindowService(IWin32 win32) :
 
 	public async Task<ICollection<WtqWindow>> FindWindowsAsync(
 		WtqAppOptions opts,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		Guard.Against.Null(opts);
 
@@ -51,8 +48,7 @@ public sealed class Win32WindowService(IWin32 win32) :
 			.ToList();
 	}
 
-	public async Task<WtqWindow?> GetForegroundWindowAsync(
-		CancellationToken cancellationToken)
+	public async Task<WtqWindow?> GetForegroundWindowAsync(CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -84,29 +80,28 @@ public sealed class Win32WindowService(IWin32 win32) :
 	}
 
 	public List<WtqWindowProperty> GetWindowProperties() =>
-	[
-
+		[
 #pragma warning disable SA1027 // Use tabs correctly
 
-		new("ProcessName",		w => ((Win32WtqWindow)w).ProcessName),
-		new("WindowTitle",		w => w.WindowTitle),
-		new("WindowClass",		w => ((Win32WtqWindow)w).WindowClass),
-
-		new("IsMainWindow",		w => ((Win32WtqWindow)w).IsMainWindow,												width: 120),
-		new("Location",			w => ((Win32WtqWindow)w).Rect.Location.ToShortString(),								width: 120),
-		new("Size",				w => ((Win32WtqWindow)w).Rect.Size.ToShortString(),									width: 120),
-		new("State",			w => ((Win32WtqWindow)w).WindowState,												width: 120),
-
-		new("ProcessId",		w => ((Win32WtqWindow)w).ProcessId,													width: 120),
-		new("ThreadId",			w => ((Win32WtqWindow)w).ThreadId,							isVisible: false,		width: 120),
-		new("WindowHandle",		w => ((Win32WtqWindow)w).WindowHandle,						isVisible: false,		width: 140),
-
+			new("ProcessName", w => ((Win32WtqWindow)w).ProcessName),
+			new("WindowTitle", w => w.WindowTitle),
+			new("WindowClass", w => ((Win32WtqWindow)w).WindowClass),
+			new("IsMainWindow", w => ((Win32WtqWindow)w).IsMainWindow, width: 120),
+			new("Location", w => ((Win32WtqWindow)w).Rect.Location.ToShortString(), width: 120),
+			new("Size", w => ((Win32WtqWindow)w).Rect.Size.ToShortString(), width: 120),
+			new("State", w => ((Win32WtqWindow)w).WindowState, width: 120),
+			new("ProcessId", w => ((Win32WtqWindow)w).ProcessId, width: 120),
+			new("ThreadId", w => ((Win32WtqWindow)w).ThreadId, isVisible: false, width: 120),
+			new(
+				"WindowHandle",
+				w => ((Win32WtqWindow)w).WindowHandle,
+				isVisible: false,
+				width: 140
+			),
 #pragma warning restore SA1027 // Use tabs correctly
+		];
 
-	];
-
-	public async Task<ICollection<WtqWindow>> GetWindowsAsync(
-		CancellationToken cancellationToken)
+	public async Task<ICollection<WtqWindow>> GetWindowsAsync(CancellationToken cancellationToken)
 	{
 		await InitAsync().NoCtx();
 
@@ -137,13 +132,19 @@ public sealed class Win32WindowService(IWin32 win32) :
 		};
 
 		// Arguments
-		foreach (var arg in opts.ArgumentList
-			.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
-			.Select(a => a.Argument!))
+		foreach (
+			var arg in opts
+				.ArgumentList.Where(a => !string.IsNullOrWhiteSpace(a.Argument))
+				.Select(a => a.Argument!)
+		)
 		{
 			var exp = arg.ExpandEnvVars();
 
-			_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+			_log.LogDebug(
+				"Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'",
+				arg,
+				exp
+			);
 
 			process.StartInfo.ArgumentList.Add(exp);
 		}
@@ -155,7 +156,9 @@ public sealed class Win32WindowService(IWin32 win32) :
 		}
 		catch (Win32Exception ex) when (ex.Message == "The system cannot find the file specified")
 		{
-			throw new WtqException($"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct");
+			throw new WtqException(
+				$"Could not start process using file name '{opts.FileName}'. Make sure it exists and the configuration is correct"
+			);
 		}
 		catch (Exception ex)
 		{

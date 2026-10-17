@@ -64,7 +64,8 @@ public class WtqAppEventHookOptions
 			foreach (var k in parameters)
 			{
 				// Prefix each environment variable to prevent overlap with existing ones.
-				p.StartInfo.Environment[$"WTQ_{k.Key.ToSnakeCase().ToUpperInvariant()}"] = k.Value?.ToString() ?? string.Empty;
+				p.StartInfo.Environment[$"WTQ_{k.Key.ToSnakeCase().ToUpperInvariant()}"] =
+					k.Value?.ToString() ?? string.Empty;
 			}
 
 			// Add filename and arguments, both support environment variables.
@@ -84,7 +85,11 @@ public class WtqAppEventHookOptions
 				var exp = arg.Argument.ExpandEnvVars();
 
 				// Log, very useful when using environment variables in arguments
-				_log.LogDebug("Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'", arg, exp);
+				_log.LogDebug(
+					"Adding process argument '{ArgumentOriginal}', expanded to '{ArgumentExpanded}'",
+					arg,
+					exp
+				);
 
 				p.StartInfo.ArgumentList.Add(exp);
 			}
@@ -122,11 +127,21 @@ public class WtqAppEventHookOptions
 			// Shouldn't run for too long.
 			await p.WaitForExitAsync();
 
-			_log.LogDebug("Finished event hook '{EventHook}', result: {Result}, took {Elapsed}", this, result, sw.Elapsed);
+			_log.LogDebug(
+				"Finished event hook '{EventHook}', result: {Result}, took {Elapsed}",
+				this,
+				result,
+				sw.Elapsed
+			);
 		}
 		catch (Exception ex)
 		{
-			_log.LogWarning(ex, "Error executing event hook '{EventHook}': {Message}", this, ex.Message);
+			_log.LogWarning(
+				ex,
+				"Error executing event hook '{EventHook}': {Message}",
+				this,
+				ex.Message
+			);
 		}
 	}
 
