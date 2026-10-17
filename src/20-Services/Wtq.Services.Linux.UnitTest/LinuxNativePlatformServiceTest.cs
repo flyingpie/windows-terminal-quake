@@ -17,10 +17,10 @@ public class LinuxNativePlatformServiceTest
 	[TestInitialize]
 	public void Setup()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
-		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "");
-		Environment.SetEnvironmentVariable("XDG_STATE_HOME", "");
-		Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "");
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", string.Empty);
+		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", string.Empty);
+		Environment.SetEnvironmentVariable("XDG_STATE_HOME", string.Empty);
+		Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", string.Empty);
 
 		Fs.Inst = _fs.Object;
 
@@ -214,7 +214,6 @@ public class LinuxNativePlatformServiceTest
 			"/home/username/.wtq.json5",
 		};
 		// @formatter:on
-
 		Assert.AreEqual(expected.Length, paths.Count);
 
 		for (var i = 0; i < paths.Count; i++)
@@ -262,7 +261,6 @@ public class LinuxNativePlatformServiceTest
 			"/home/username/.wtq.json5",
 		};
 		// @formatter:on
-
 		Assert.AreEqual(expected.Length, paths.Count);
 
 		for (var i = 0; i < paths.Count; i++)
@@ -283,7 +281,7 @@ public class LinuxNativePlatformServiceTest
 	[TestMethod]
 	public void PreferredPathWtqConfig_XdgSet()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", string.Empty);
 		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "/path/to/xdg/config/home");
 
 		Assert.AreEqual("/path/to/xdg/config/home/wtq.jsonc", _p.PreferredPathWtqConfig);
@@ -292,8 +290,8 @@ public class LinuxNativePlatformServiceTest
 	[TestMethod]
 	public void PreferredPathWtqConfig_XdgNotSet()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
-		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", "");
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", string.Empty);
+		Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", string.Empty);
 
 		Assert.AreEqual("/home/username/.config/wtq.jsonc", _p.PreferredPathWtqConfig);
 	}

@@ -71,6 +71,9 @@ public sealed class WtqTrayIconService : WtqHostedService
 		);
 	}
 
+	private static MenuItem CreateItem(string text, Action action, bool enabled = true) =>
+		new(text) { Click = (_, _) => action(), IsDisabled = !enabled };
+
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
 		new Thread(ShowStatusIcon).Start();
@@ -104,7 +107,4 @@ public sealed class WtqTrayIconService : WtqHostedService
 			_loop.Start();
 		}
 	}
-
-	private static MenuItem CreateItem(string text, Action action, bool enabled = true) =>
-		new(text) { Click = (_, _) => action(), IsDisabled = !enabled };
 }

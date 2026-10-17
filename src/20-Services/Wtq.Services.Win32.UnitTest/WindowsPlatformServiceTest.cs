@@ -16,7 +16,7 @@ public class WindowsPlatformServiceTest
 	[TestInitialize]
 	public void Setup()
 	{
-		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", "");
+		Environment.SetEnvironmentVariable("WTQ_CONFIG_FILE", string.Empty);
 
 		Fs.Inst = _fs.Object;
 

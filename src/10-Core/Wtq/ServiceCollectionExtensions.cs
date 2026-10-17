@@ -50,6 +50,28 @@ public static class ServiceCollectionExtensions
 		return services;
 	}
 
+	public static IServiceCollection AddWtqCore(this IServiceCollection services)
+	{
+		Guard.Against.Null(services);
+
+		return services
+			// Utils
+			.AddSingleton<IWtqTween, WtqTween>()
+			// Core App Logic
+			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
+			.AddSingleton<IWtqBus, WtqBus>()
+			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
+			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
+			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
+			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
+			.AddSingleton<TrayIconUtil>()
+			.AddHostedService<WtqEventHookHandler>()
+			.AddHostedService<WtqFocusTracker>()
+			.AddHostedService<WtqHotkeyRoutingService>()
+			.AddHostedService<WtqService>()
+			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
+	}
+
 	private static IConfiguration CreateConfigurationRoot(IPlatformService platform)
 	{
 		Guard.Against.Null(platform);
@@ -100,27 +122,5 @@ public static class ServiceCollectionExtensions
 			.Build();
 
 		return config;
-	}
-
-	public static IServiceCollection AddWtqCore(this IServiceCollection services)
-	{
-		Guard.Against.Null(services);
-
-		return services
-			// Utils
-			.AddSingleton<IWtqTween, WtqTween>()
-			// Core App Logic
-			.AddSingleton<IWtqAppToggleService, WtqAppToggleService>()
-			.AddSingleton<IWtqBus, WtqBus>()
-			.AddSingleton<IWtqOptionsSaveService, WtqOptionsSaveService>()
-			.AddSingleton<IWtqTargetScreenRectProvider, WtqTargetScreenRectProvider>()
-			.AddSingleton<IWtqWindowRectProvider, WtqWindowRectProvider>()
-			.AddSingleton<IWtqWindowResolver, WtqWindowResolver>()
-			.AddSingleton<TrayIconUtil>()
-			.AddHostedService<WtqEventHookHandler>()
-			.AddHostedService<WtqFocusTracker>()
-			.AddHostedService<WtqHotkeyRoutingService>()
-			.AddHostedService<WtqService>()
-			.AddHostedServiceSingleton<IWtqAppRepo, WtqAppRepo>();
 	}
 }

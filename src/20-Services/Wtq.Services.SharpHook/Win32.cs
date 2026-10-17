@@ -23,6 +23,9 @@ public class Win32 : IWin32
 		return new KeySequence(mod, keyChar, keyCode);
 	}
 
+	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
+		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
+
 	/// <summary>
 	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
 	/// Also includes the <see cref="KeyModifiers.Numpad"/> modifier, if the specified <paramref name="keyCode"/> contains a numpad key.
@@ -92,7 +95,4 @@ public class Win32 : IWin32
 
 		return keyChar.ToString();
 	}
-
-	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
-		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
 }

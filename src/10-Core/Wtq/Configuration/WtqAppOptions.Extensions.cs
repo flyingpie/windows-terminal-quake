@@ -1,5 +1,10 @@
 namespace Wtq.Configuration;
 
+[SuppressMessage(
+	"StyleCop.CSharp.DocumentationRules",
+	"SA1649:File name should match first type name",
+	Justification = "MvdO: Extension class"
+)]
 public static class WtqAppOptionsExtensions
 {
 	/// <inheritdoc cref="WtqSharedOptions.AlwaysOnTop"/>

@@ -7,7 +7,7 @@ public class EnvUtilsTest
 	public void Setup()
 	{
 		Environment.SetEnvironmentVariable("A_Regular_Value", "Value_1");
-		Environment.SetEnvironmentVariable("An_Empty_String", "");
+		Environment.SetEnvironmentVariable("An_Empty_String", string.Empty);
 		Environment.SetEnvironmentVariable("A_Space", " ");
 		Environment.SetEnvironmentVariable("A_Padded_String", " Padded_Value_1 ");
 	}

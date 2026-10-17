@@ -227,7 +227,6 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public IEnumerable<ValidationResult> Validate(ValidationContext context)
 	{
 		// TODO: Validate properties from this (WtqSharedOptions) class.
-
 		foreach (var v in OnValidate(context))
 		{
 			yield return v;
