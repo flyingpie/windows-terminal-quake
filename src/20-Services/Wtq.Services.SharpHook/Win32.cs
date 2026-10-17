@@ -13,13 +13,18 @@ public class Win32 : IWin32
 	public KeySequence GetKeySequence(WKC keyCode, ushort rawKeyCode)
 	{
 		// Attempt to translate the virtual key code to a key character (may return null).
-		var keyChar = KeyCodeToKeyChar(rawKeyCode)
-			?? keyCode.GetAttribute<DisplayAttribute>()?.Name ?? keyCode.ToString();
+		var keyChar =
+			KeyCodeToKeyChar(rawKeyCode)
+			?? keyCode.GetAttribute<DisplayAttribute>()?.Name
+			?? keyCode.ToString();
 
 		var mod = GetModifiers(keyCode);
 
 		return new KeySequence(mod, keyChar, keyCode);
 	}
+
+	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
+		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
 
 	/// <summary>
 	/// Returns the set of <see cref="KeyModifiers"/> that are currently active.<br/>
@@ -60,20 +65,17 @@ public class Win32 : IWin32
 	/// <summary>
 	/// Returns whether the ALT key is currently held down.
 	/// </summary>
-	private bool IsAltPressed() =>
-		IsKeyPressed(VIRTUAL_KEY.VK_MENU);
+	private bool IsAltPressed() => IsKeyPressed(VIRTUAL_KEY.VK_MENU);
 
 	/// <summary>
 	/// Returns whether the CONTROL key is currently held down.
 	/// </summary>
-	private bool IsControlPressed() =>
-		IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
+	private bool IsControlPressed() => IsKeyPressed(VIRTUAL_KEY.VK_CONTROL);
 
 	/// <summary>
 	/// Returns whether the SHIFT key is currently held down.
 	/// </summary>
-	private bool IsShiftPressed() =>
-		IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
+	private bool IsShiftPressed() => IsKeyPressed(VIRTUAL_KEY.VK_SHIFT);
 
 	/// <summary>
 	/// Returns whether the SUPER (or "Meta" or "Windows") key is currently held down.
@@ -93,7 +95,4 @@ public class Win32 : IWin32
 
 		return keyChar.ToString();
 	}
-
-	private static bool IsKeyPressed(VIRTUAL_KEY keyCode) =>
-		(PI.GetKeyState((int)keyCode) & 0x800) != 0;
 }

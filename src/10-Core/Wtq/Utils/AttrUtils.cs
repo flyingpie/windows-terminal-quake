@@ -46,7 +46,11 @@ public static class AttrUtils
 
 	public static object GetDefaultValueFor(this Expression expr)
 	{
-		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+		var val = Guard
+			.Against.Null(expr)
+			.GetMemberInfo()
+			?.GetCustomAttribute<DefaultValueAttribute>()
+			?.Value;
 		if (val != null)
 		{
 			return val;
@@ -57,7 +61,11 @@ public static class AttrUtils
 
 	public static TValue GetDefaultValueFor<TValue>(this Expression expr)
 	{
-		var val = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+		var val = Guard
+			.Against.Null(expr)
+			.GetMemberInfo()
+			?.GetCustomAttribute<DefaultValueAttribute>()
+			?.Value;
 		if (val != null)
 		{
 			return (TValue)val;
@@ -77,9 +85,7 @@ public static class AttrUtils
 
 	public static (int Min, int Max)? GetRange(this Expression expr)
 	{
-		var attr = Guard.Against.Null(expr)
-			.GetMemberInfo()
-			?.GetCustomAttribute<RangeAttribute>();
+		var attr = Guard.Against.Null(expr).GetMemberInfo()?.GetCustomAttribute<RangeAttribute>();
 
 		if (attr == null)
 		{

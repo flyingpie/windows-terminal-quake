@@ -5,14 +5,8 @@ namespace Wtq.Services.Linux;
 
 public class LinuxNativePlatformService : PlatformServiceBase
 {
-	public LinuxNativePlatformService(
-		string? pathToAppDir = null,
-		string? pathToUserHomeDir = null)
-		: base(
-			pathToAppDir: pathToAppDir,
-			pathToUserHomeDir: pathToUserHomeDir)
-	{
-	}
+	public LinuxNativePlatformService(string? pathToAppDir = null, string? pathToUserHomeDir = null)
+		: base(pathToAppDir: pathToAppDir, pathToUserHomeDir: pathToUserHomeDir) { }
 
 	/// <inheritdoc/>
 	public override string PlatformName => "Linux";
@@ -27,23 +21,20 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// On Linux, executable files generally don't have extensions.<br/>
 	/// Some exceptions exist, like ".sh", but these require the extension to be part of the filename when executing.
 	/// </summary>
-	public override string[] ExecutableExtensions =>
-		[string.Empty];
+	public override string[] ExecutableExtensions => [string.Empty];
 
 	/// <summary>
 	/// Not supported yet on Linux, always returning <see cref="OsColorMode.Unknown"/>.
 	/// </summary>
 	public override OsColorMode OsColorMode => OsColorMode.Unknown;
 
-	public override string PathToLogsDir =>
-		Path.Combine(PathToTempDir);
+	public override string PathToLogsDir => Path.Combine(PathToTempDir);
 
 	/// <summary>
 	/// Native Linux, use XDG_STATE_HOME with an app-specific subdirectory.
 	/// For example: "/home/user/.local/state/wtq".
 	/// </summary>
-	public override string PathToTempDir =>
-		Path.Combine(XDG_STATE_HOME, "wtq");
+	public override string PathToTempDir => Path.Combine(XDG_STATE_HOME, "wtq");
 
 	/// <summary>
 	/// On native Linux, use a physical path to the tray icon, as an SVG.
@@ -57,7 +48,11 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	public override string PathToTrayIconLight =>
 		Path.Combine(PathToAppDir, "assets", "nl.flyingpie.wtq-white.svg").AssertFileExists();
 
-	[SuppressMessage("Critical Code Smell", "S2365:Properties should not make collection or array copies", Justification = "MvdO: It's fine, doesn't get called often.")]
+	[SuppressMessage(
+		"Critical Code Smell",
+		"S2365:Properties should not make collection or array copies",
+		Justification = "MvdO: It's fine, doesn't get called often."
+	)]
 	public override ICollection<string> PathsToWtqConfs
 	{
 		get
@@ -67,20 +62,19 @@ public class LinuxNativePlatformService : PlatformServiceBase
 			// Environment variable
 			res.Add(WtqEnv.WtqConfigFile);
 
-			foreach (var path in new[]
-			{
-				// Next to the app executable
-				PathToAppDir,
-
-				// XDG home, defaults to user home (subfolder)
-				Path.Combine(XDG_CONFIG_HOME, "wtq"),
-
-				// XDG home, defaults to user home (bare)
-				XDG_CONFIG_HOME,
-
-				// Explicitly user home
-				PathToUserHomeDir,
-			})
+			foreach (
+				var path in new[]
+				{
+					// Next to the app executable
+					PathToAppDir,
+					// XDG home, defaults to user home (subfolder)
+					Path.Combine(XDG_CONFIG_HOME, "wtq"),
+					// XDG home, defaults to user home (bare)
+					XDG_CONFIG_HOME,
+					// Explicitly user home
+					PathToUserHomeDir,
+				}
+			)
 			{
 				foreach (var name in WtqConfNames)
 				{
@@ -91,8 +85,7 @@ public class LinuxNativePlatformService : PlatformServiceBase
 				}
 			}
 
-			return res
-				.Where(e => !string.IsNullOrWhiteSpace(e))
+			return res.Where(e => !string.IsNullOrWhiteSpace(e))
 				.Select(e => e!)
 				.Distinct()
 				.ToList();
@@ -100,7 +93,10 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	}
 
 	public override string PreferredPathWtqConfig =>
-		EnvUtils.GetEnvVarOrDefault(WtqEnv.Names.Config, Path.Combine(XDG_CONFIG_HOME, "wtq.jsonc"));
+		EnvUtils.GetEnvVarOrDefault(
+			WtqEnv.Names.Config,
+			Path.Combine(XDG_CONFIG_HOME, "wtq.jsonc")
+		);
 
 	/// <summary>
 	/// Linux version uses xdg-open for opening files and directories.
@@ -111,15 +107,16 @@ public class LinuxNativePlatformService : PlatformServiceBase
 
 		try
 		{
-			Process.Start(
-				new ProcessStartInfo()
-				{
-					FileName = path, UseShellExecute = true,
-				});
+			Process.Start(new ProcessStartInfo() { FileName = path, UseShellExecute = true });
 		}
 		catch (Exception ex)
 		{
-			Log.LogWarning(ex, "Could not open file, directory or url {Path}: {Message}", path, ex.Message);
+			Log.LogWarning(
+				ex,
+				"Could not open file, directory or url {Path}: {Message}",
+				path,
+				ex.Message
+			);
 		}
 	}
 
@@ -149,5 +146,8 @@ public class LinuxNativePlatformService : PlatformServiceBase
 	/// - current state of the application that can be reused on a restart (view, layout, open files, undo history, …).
 	/// </summary>
 	protected string XDG_STATE_HOME =>
-		EnvUtils.GetEnvVarOrDefault("XDG_STATE_HOME", Path.Combine(PathToUserHomeDir, ".local", "state"));
+		EnvUtils.GetEnvVarOrDefault(
+			"XDG_STATE_HOME",
+			Path.Combine(PathToUserHomeDir, ".local", "state")
+		);
 }

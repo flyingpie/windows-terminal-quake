@@ -7,7 +7,8 @@ public static class EnvUtils
 	/// Linux:    "/home/username".<br/>
 	/// Windows:  "C:/users/username".
 	/// </summary>
-	private static string UserHome => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+	private static string UserHome =>
+		Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
 	/// <summary>
 	/// Replace variables such as "%ENV_VAR%".<br/>
@@ -19,9 +20,8 @@ public static class EnvUtils
 	{
 		Guard.Against.Null(source);
 
-		return Environment
-			.ExpandEnvironmentVariables(source)
-			?.Replace("~", UserHome) ?? string.Empty;
+		return Environment.ExpandEnvironmentVariables(source)?.Replace("~", UserHome)
+			?? string.Empty;
 	}
 
 	/// <summary>
@@ -46,9 +46,10 @@ public static class EnvUtils
 		return Environment
 			.GetEnvironmentVariables()
 			.Cast<DictionaryEntry>()
-			.FirstOrDefault(d => d.Key?.ToString()?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false)
-			.Value
-			?.ToString()
+			.FirstOrDefault(d =>
+				d.Key?.ToString()?.Equals(name, StringComparison.OrdinalIgnoreCase) ?? false
+			)
+			.Value?.ToString()
 			?.Trim()
 			?.ExpandEnvVars()
 			?.EmptyOrWhiteSpaceToNull();

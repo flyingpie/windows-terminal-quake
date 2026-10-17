@@ -13,7 +13,10 @@ public class XmlDocUtilsTest
 		var summary = TestClass.PropertyInfo.GetSummary().ReplaceLineEndings();
 
 		// Assert
-		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary);
+		Assert.AreEqual(
+			"The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.",
+			summary
+		);
 	}
 
 	[TestMethod]
@@ -26,7 +29,10 @@ public class XmlDocUtilsTest
 		var summary = summaries[0];
 
 		// Assert
-		Assert.AreEqual("The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.", summary.Summary);
+		Assert.AreEqual(
+			"The Summary.<br/>Another line.<br/>With <strong>strong</strong> words.",
+			summary.Summary
+		);
 	}
 
 	private class TestClass

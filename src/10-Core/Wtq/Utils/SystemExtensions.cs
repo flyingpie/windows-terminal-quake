@@ -12,7 +12,8 @@ public static class SystemExtensions
 	/// "\n" => null<br/>
 	/// "not-null" => "not-null".<br/>
 	/// </summary>
-	public static string? EmptyOrWhiteSpaceToNull(this string? input) => string.IsNullOrWhiteSpace(input) ? null : input;
+	public static string? EmptyOrWhiteSpaceToNull(this string? input) =>
+		string.IsNullOrWhiteSpace(input) ? null : input;
 
 	public static string GetFileNameWithoutExtension(this string fileName)
 	{

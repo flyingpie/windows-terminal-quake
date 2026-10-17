@@ -1,6 +1,3 @@
-global using Ardalis.GuardClauses;
-global using Microsoft.Extensions.Hosting;
-global using Microsoft.Extensions.Logging;
 global using System;
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
@@ -10,5 +7,8 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using System.Windows.Forms;
+global using Ardalis.GuardClauses;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
 global using Wtq.Events;
 global using Wtq.Utils;

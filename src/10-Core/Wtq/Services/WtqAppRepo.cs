@@ -11,7 +11,9 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
 
-	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(StringComparer.OrdinalIgnoreCase);
+	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(
+		StringComparer.OrdinalIgnoreCase
+	);
 	private readonly RecurringTask _loop;
 
 	public WtqAppRepo(
@@ -19,7 +21,8 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 		IOptionsMonitor<WtqOptions> opts,
 		IWtqAppToggleService toggleService,
 		IWtqScreenInfoProvider screenInfoProvider,
-		IWtqWindowResolver procResolver)
+		IWtqWindowResolver procResolver
+	)
 	{
 		_ = Guard.Against.Null(lifetime);
 		_opts = Guard.Against.Null(opts);
@@ -34,7 +37,8 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 		_loop = new(
 			$"{nameof(WtqAppRepo)}.UpdateAppStates",
 			TimeSpan.FromSeconds(1),
-			_ => UpdateAppsAsync(allowStartNew: false));
+			_ => UpdateAppsAsync(allowStartNew: false)
+		);
 	}
 
 	protected override async Task OnStartAsync(CancellationToken cancellationToken)
@@ -68,7 +72,9 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	{
 		Guard.Against.NullOrWhiteSpace(name);
 
-		return _apps.Values.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+		return _apps.Values.FirstOrDefault(a =>
+			a.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+		);
 	}
 
 	/// <inheritdoc/>
@@ -110,8 +116,10 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 					_screenInfoProvider,
 					_windowResolver,
 					() => _opts.CurrentValue.GetAppOptionsByNameRequired(appName),
-					appName);
-			});
+					appName
+				);
+			}
+		);
 	}
 
 	/// <summary>
@@ -120,7 +128,9 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	private async Task UpdateAppsAsync(bool allowStartNew)
 	{
 		// Make sure this method always runs non-concurrently.
-		using var l = await _updateLock.WaitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token);
+		using var l = await _updateLock.WaitAsync(
+			new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token
+		);
 
 		_log.LogDebug("Updating apps (allow start new: {AllowStartNow})", allowStartNew);
 
@@ -149,7 +159,10 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 
 			if (!_apps.TryRemove(app.Key, out _))
 			{
-				_log.LogWarning("Could not remove app with name '{AppName}' from repo, maybe it was already removed and this is some race-condition sorta thing?", app.Key);
+				_log.LogWarning(
+					"Could not remove app with name '{AppName}' from repo, maybe it was already removed and this is some race-condition sorta thing?",
+					app.Key
+				);
 			}
 		}
 	}

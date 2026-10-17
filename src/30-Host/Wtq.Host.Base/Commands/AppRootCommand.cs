@@ -1,6 +1,6 @@
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
-using System.Runtime.InteropServices;
 using Wtq.Services;
 
 namespace Wtq.Host.Base.Commands;

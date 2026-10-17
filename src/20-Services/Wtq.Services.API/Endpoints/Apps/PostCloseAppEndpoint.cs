@@ -9,7 +9,8 @@ public class PostCloseAppEndpoint : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> ExecuteAsync(
 		[FromServices] IWtqAppRepo appRepo,
-		[FromQuery] string? appName)
+		[FromQuery] string? appName
+	)
 	{
 		// If a specific app name was specified, only close that.
 		if (!string.IsNullOrWhiteSpace(appName))
@@ -31,7 +32,6 @@ public class PostCloseAppEndpoint : ControllerBase
 			// Close the app.
 			await app.CloseAsync().NoCtx();
 		}
-
 		// If no specific app name was specified, just close whatever app is currently open.
 		else
 		{

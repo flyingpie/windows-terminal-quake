@@ -20,7 +20,6 @@ public class AttrUtilsTest
 
 		public HideOnFocusLost? EnumPropertyNullableWithoutAttr { get; set; }
 
-
 		[Display(Name = "The Reference Display Name", Prompt = "The Reference Prompt")]
 		[DefaultValue("The Default Reference Value")]
 		public string RefPropertyWithAttr { get; set; } = null!;
@@ -32,7 +31,6 @@ public class AttrUtilsTest
 		public string? RefPropertyNullableWithAttr { get; set; }
 
 		public string? RefPropertyNullableWithoutAttr { get; set; }
-
 
 		[Display(Name = "The Value Display Name", Prompt = "The Value Prompt")]
 		[DefaultValue(1234)]
@@ -53,25 +51,51 @@ public class AttrUtilsTest
 	public void GetDefaultValueFor()
 	{
 		// Reference type.
-		Assert.AreEqual("The Default Reference Value", AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyWithAttr));
+		Assert.AreEqual(
+			"The Default Reference Value",
+			AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyWithAttr)
+		);
 		Assert.IsNull(AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyWithoutAttr));
 
-		Assert.AreEqual("The Default Reference Value", AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyNullableWithAttr));
-		Assert.IsNull(AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyNullableWithoutAttr));
+		Assert.AreEqual(
+			"The Default Reference Value",
+			AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyNullableWithAttr)
+		);
+		Assert.IsNull(
+			AttrUtils.GetDefaultValueFor<string>(() => _tc.RefPropertyNullableWithoutAttr)
+		);
 
 		// Enum type (seem to behave a little differently sometimes compare to ints, so we're testing them separately, even though these are just value types).
-		Assert.AreEqual(HideOnFocusLost.True, AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyWithAttr));
-		Assert.AreEqual(HideOnFocusLost.None, AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyWithoutAttr));
+		Assert.AreEqual(
+			HideOnFocusLost.True,
+			AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyWithAttr)
+		);
+		Assert.AreEqual(
+			HideOnFocusLost.None,
+			AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyWithoutAttr)
+		);
 
-		Assert.AreEqual(HideOnFocusLost.True, AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyNullableWithAttr));
-		Assert.AreEqual(HideOnFocusLost.None, AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyNullableWithoutAttr));
+		Assert.AreEqual(
+			HideOnFocusLost.True,
+			AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyNullableWithAttr)
+		);
+		Assert.AreEqual(
+			HideOnFocusLost.None,
+			AttrUtils.GetDefaultValueFor<HideOnFocusLost>(() => _tc.EnumPropertyNullableWithoutAttr)
+		);
 
 		// Value type.
 		Assert.AreEqual(1234, AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyWithAttr));
 		Assert.AreEqual(0, AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyWithoutAttr));
 
-		Assert.AreEqual(1234, AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyNullableWithAttr));
-		Assert.AreEqual(0, AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyNullableWithoutAttr));
+		Assert.AreEqual(
+			1234,
+			AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyNullableWithAttr)
+		);
+		Assert.AreEqual(
+			0,
+			AttrUtils.GetDefaultValueFor<int>(() => _tc.ValPropertyNullableWithoutAttr)
+		);
 	}
 
 	[TestMethod]
@@ -88,8 +112,14 @@ public class AttrUtilsTest
 	[TestMethod]
 	public void GetDisplayName()
 	{
-		Assert.AreEqual("The Reference Display Name", AttrUtils.GetDisplayName(() => _tc.RefPropertyWithAttr));
-		Assert.AreEqual(nameof(_tc.RefPropertyWithoutAttr), AttrUtils.GetDisplayName(() => _tc.RefPropertyWithoutAttr));
+		Assert.AreEqual(
+			"The Reference Display Name",
+			AttrUtils.GetDisplayName(() => _tc.RefPropertyWithAttr)
+		);
+		Assert.AreEqual(
+			nameof(_tc.RefPropertyWithoutAttr),
+			AttrUtils.GetDisplayName(() => _tc.RefPropertyWithoutAttr)
+		);
 	}
 
 	[TestMethod]

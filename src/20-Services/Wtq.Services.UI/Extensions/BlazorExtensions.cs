@@ -12,7 +12,8 @@ public static class BlazorExtensions
 		this KeyboardEventArgs ev,
 		out KeyModifiers mod,
 		out string? keyChar,
-		out KeyCode keyCode)
+		out KeyCode keyCode
+	)
 	{
 		Guard.Against.Null(ev);
 
@@ -32,7 +33,11 @@ public static class BlazorExtensions
 		{
 			if (keyCode == KeyCode.None)
 			{
-				_log.LogWarning("Attempting to parse non-character key '{KeyChar}', but parsing failed. Keeping current value, but this may result in undesired behavior. Please file a bug at {Url}", keyChar, WtqConstants.GitHubUrl);
+				_log.LogWarning(
+					"Attempting to parse non-character key '{KeyChar}', but parsing failed. Keeping current value, but this may result in undesired behavior. Please file a bug at {Url}",
+					keyChar,
+					WtqConstants.GitHubUrl
+				);
 			}
 		}
 
@@ -53,12 +58,17 @@ public static class BlazorExtensions
 	{
 		switch ((int)e.Location)
 		{
-			case 0: return Html5DomKeyLocation.Standard;
-			case 1: return Html5DomKeyLocation.Left;
-			case 2: return Html5DomKeyLocation.Right;
-			case 3: return Html5DomKeyLocation.Numpad;
+			case 0:
+				return Html5DomKeyLocation.Standard;
+			case 1:
+				return Html5DomKeyLocation.Left;
+			case 2:
+				return Html5DomKeyLocation.Right;
+			case 3:
+				return Html5DomKeyLocation.Numpad;
 
-			default: return Html5DomKeyLocation.Unknown;
+			default:
+				return Html5DomKeyLocation.Unknown;
 		}
 	}
 
@@ -95,33 +105,38 @@ public static class BlazorExtensions
 	/// Formats a key character such, that it can be parsed into a <see cref="KeyCode"/>.<br/>
 	/// Useful for non-standard character stuff (like "Tab", "F1" and "PageUp"), so that we can correctly identify them when registering keys.
 	/// </summary>
-
 	/// <summary>
 	/// <a href="https://www.toptal.com/developers/keycode/table"/>.
 	/// </summary>
 	private static KeyCode ParseKeyCode(string code)
 	{
 		// @formatter:off
-		#pragma warning disable SA1025
-		#pragma warning disable SA1027
+#pragma warning disable SA1025
+#pragma warning disable SA1027
 
 		// Handle cases where the JS key code differs from the KeyCode enum.
 		switch (code.ToLowerInvariant())
 		{
 			// Modifiers
-			case "osleft":				return KeyCode.SuperLeft;
-			case "osright":				return KeyCode.SuperRight;
+			case "osleft":
+				return KeyCode.SuperLeft;
+			case "osright":
+				return KeyCode.SuperRight;
 
 			// Volume keys
-			case "audiovolumeup":		return KeyCode.VolumeUp;
-			case "audiovolumedown":		return KeyCode.VolumeDown;
-			case "audiovolumemute":		return KeyCode.VolumeMute;
+			case "audiovolumeup":
+				return KeyCode.VolumeUp;
+			case "audiovolumedown":
+				return KeyCode.VolumeDown;
+			case "audiovolumemute":
+				return KeyCode.VolumeMute;
 
-			case "backquote":			return KeyCode.OemTilde;
+			case "backquote":
+				return KeyCode.OemTilde;
 		}
 
-		#pragma warning restore SA1027
-		#pragma warning restore SA1025
+#pragma warning restore SA1027
+#pragma warning restore SA1025
 
 		// Try to parse the code directly.
 		if (Enum.TryParse<KeyCode>(code, ignoreCase: true, out var keyCode))

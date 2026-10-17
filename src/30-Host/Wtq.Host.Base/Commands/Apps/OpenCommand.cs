@@ -10,6 +10,8 @@ public class OpenCommand(HttpClient client) : IAsyncCommand
 	{
 		using var content = new StringContent(string.Empty);
 
-		_ = await client.PostAsync(new Uri($"/apps/open?appName={App}", UriKind.Relative), content, ct).NoCtx();
+		_ = await client
+			.PostAsync(new Uri($"/apps/open?appName={App}", UriKind.Relative), content, ct)
+			.NoCtx();
 	}
 }

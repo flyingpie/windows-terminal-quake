@@ -10,42 +10,59 @@ public static class WtqConstants
 		typeof(WtqApp).Assembly.GetName().Version?.ToString() ?? "<unknown>";
 
 	public static string AppFileVersion =>
-		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).FileVersion ?? "<unknown>";
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).FileVersion
+		?? "<unknown>";
 
 	public static string AppInformationalVersion =>
-		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).ProductVersion ?? "<unknown>";
+		FileVersionInfo.GetVersionInfo(typeof(WtqConstants).Assembly.Location).ProductVersion
+		?? "<unknown>";
 
-	public static string BuildConfiguration => Assembly.GetExecutingAssembly()
-		.GetCustomAttributes<AssemblyMetadataAttribute>()
-		.FirstOrDefault(attr => attr.Key == "BuildConfiguration")?.Value;
+	public static string BuildConfiguration =>
+		Assembly
+			.GetExecutingAssembly()
+			.GetCustomAttributes<AssemblyMetadataAttribute>()
+			.FirstOrDefault(attr => attr.Key == "BuildConfiguration")
+			?.Value;
 
 	public static DateTimeOffset BuildDate
 	{
 		get
 		{
-			var v = Assembly.GetExecutingAssembly()
+			var v = Assembly
+				.GetExecutingAssembly()
 				.GetCustomAttributes<AssemblyMetadataAttribute>()
-				.FirstOrDefault(attr => attr.Key == "BuildTimestamp")?.Value;
+				.FirstOrDefault(attr => attr.Key == "BuildTimestamp")
+				?.Value;
 
-			return DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var p)
+			return DateTime.TryParse(
+				v,
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.RoundtripKind,
+				out var p
+			)
 				? p
 				: DateTimeOffset.MinValue;
 		}
 	}
 
-	public static string? GitBranch => Assembly.GetExecutingAssembly()
-		.GetCustomAttributes<AssemblyMetadataAttribute>()
-		.FirstOrDefault(attr => attr.Key == "GitBranch")?.Value;
+	public static string? GitBranch =>
+		Assembly
+			.GetExecutingAssembly()
+			.GetCustomAttributes<AssemblyMetadataAttribute>()
+			.FirstOrDefault(attr => attr.Key == "GitBranch")
+			?.Value;
 
-	public static string? GitCommit => Assembly.GetExecutingAssembly()
-		.GetCustomAttributes<AssemblyMetadataAttribute>()
-		.FirstOrDefault(attr => attr.Key == "GitCommit")?.Value;
+	public static string? GitCommit =>
+		Assembly
+			.GetExecutingAssembly()
+			.GetCustomAttributes<AssemblyMetadataAttribute>()
+			.FirstOrDefault(attr => attr.Key == "GitCommit")
+			?.Value;
 
-	public static Uri DocumentationUrl { get; }
-		= new("https://wtq.flyingpie.nl");
+	public static Uri DocumentationUrl { get; } = new("https://wtq.flyingpie.nl");
 
-	public static Uri GitHubUrl { get; }
-		= new("https://www.github.com/flyingpie/windows-terminal-quake");
+	public static Uri GitHubUrl { get; } =
+		new("https://www.github.com/flyingpie/windows-terminal-quake");
 
 	public static class Settings
 	{
@@ -67,26 +84,27 @@ public static class WtqConstants
 	/// We could do that by tweaking the JSON serializer, but that's way more complex.
 	/// </summary>
 	public static ICollection<OffScreenLocation> DefaultOffScreenLocations { get; } =
-		[Above, Below, Left, Right];
+	[Above, Below, Left, Right];
 
 	/// <summary>
 	/// Returns a list of <see cref="AnimationTypes"/> that include a <see cref="DisplayAttribute"/>, and de-duplicated.
 	/// </summary>
-	public static ICollection<AnimationType> AnimationTypes { get; } = Enum
-		.GetValues<AnimationType>()
-		.Select(k => new
-		{
-			Description = k.GetAttribute<AnimationType, DisplayAttribute>(),
-			Key = k,
-		})
-		.Where(k => k.Description != null)
-		.Select(k => k.Key)
-		.Distinct()
-		.ToArray();
+	public static ICollection<AnimationType> AnimationTypes { get; } =
+		Enum.GetValues<AnimationType>()
+			.Select(k => new
+			{
+				Description = k.GetAttribute<AnimationType, DisplayAttribute>(),
+				Key = k,
+			})
+			.Where(k => k.Description != null)
+			.Select(k => k.Key)
+			.Distinct()
+			.ToArray();
 
 	private static readonly Random _r = new();
 
-	public static string GetRandomPlaceholderName() => _placeholderNames[_r.Next(0, _placeholderNames.Length)];
+	public static string GetRandomPlaceholderName() =>
+		_placeholderNames[_r.Next(0, _placeholderNames.Length)];
 
 	private static readonly string[] _placeholderNames =
 	[

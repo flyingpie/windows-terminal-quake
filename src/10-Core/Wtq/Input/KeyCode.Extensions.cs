@@ -1,6 +1,10 @@
 namespace Wtq.Input;
 
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "MvdO: Keeps the file next to the KeyModifiers one.")]
+[SuppressMessage(
+	"StyleCop.CSharp.DocumentationRules",
+	"SA1649:File name should match first type name",
+	Justification = "MvdO: Keeps the file next to the KeyModifiers one."
+)]
 public static class KeyCodeExtensions
 {
 	public static KeyModifiers AsModifier(this KeyCode key)

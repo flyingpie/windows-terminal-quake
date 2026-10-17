@@ -28,17 +28,14 @@ public sealed class WtqOptions : WtqSharedOptions
 	[Display(GroupName = Gn.General)]
 	[JsonPropertyOrder(101)]
 	[Required]
-	public ICollection<WtqAppOptions> Apps { get; set; }
-		= [];
+	public ICollection<WtqAppOptions> Apps { get; set; } = [];
 
 	/// <summary>
 	/// Global hotkeys, that toggle either the first, or the most recently toggled app.
 	/// </summary>
 	[Display(GroupName = Gn.General)]
 	[JsonPropertyOrder(102)]
-	public ICollection<HotkeyOptions> Hotkeys { get; set; }
-		= [];
-
+	public ICollection<HotkeyOptions> Hotkeys { get; set; } = [];
 
 	/// <summary>
 	/// How many frames per second the animation should be.<br/>

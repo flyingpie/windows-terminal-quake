@@ -3,7 +3,11 @@ namespace Wtq.Configuration;
 /// <summary>
 /// Whether to toggle off an app when focus moves to another app.
 /// </summary>
-[SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Backward compat.")]
+[SuppressMessage(
+	"Design",
+	"CA1069:Enums values should not be duplicated",
+	Justification = "MvdO: Backward compat."
+)]
 public enum HideOnFocusLost
 {
 	/// <summary>

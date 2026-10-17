@@ -5,7 +5,9 @@ public class WtqOptionsSaveServiceTest
 {
 	private WtqOptions _opts = new();
 
-	private WtqOptionsSaveService _svc = new(new Mock<IPlatformService>(MockBehavior.Strict).Object);
+	private WtqOptionsSaveService _svc = new(
+		new Mock<IPlatformService>(MockBehavior.Strict).Object
+	);
 
 	[TestMethod]
 	public void Empty()
@@ -14,8 +16,7 @@ public class WtqOptionsSaveServiceTest
 		var act = _svc.Write(new());
 
 		// Assert
-		var exp =
-			"""
+		var exp = """
 			{
 				"$schema": "wtq.schema.json"
 			}

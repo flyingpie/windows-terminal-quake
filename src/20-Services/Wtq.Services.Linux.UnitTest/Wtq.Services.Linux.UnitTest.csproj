@@ -5,6 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Wtq.Services.Linux\Wtq.Services.Linux.csproj"/>
+		<ProjectReference Include="..\Wtq.Services.Linux\Wtq.Services.Linux.csproj" />
 	</ItemGroup>
 </Project>

@@ -5,5 +5,6 @@ namespace Wtq.Utils;
 /// </summary>
 public static class Cancel
 {
-	public static CancellationToken After(TimeSpan timeSpan) => new CancellationTokenSource(timeSpan).Token;
+	public static CancellationToken After(TimeSpan timeSpan) =>
+		new CancellationTokenSource(timeSpan).Token;
 }

@@ -10,8 +10,7 @@ namespace Wtq.Host.Windows;
 
 public class WtqWin32 : WtqHostBase
 {
-	protected override IPlatformService CreatePlatformService() =>
-		new WindowsPlatformService();
+	protected override IPlatformService CreatePlatformService() => new WindowsPlatformService();
 
 	protected override void ConfigureServices(IServiceCollection services)
 	{
@@ -23,12 +22,10 @@ public class WtqWin32 : WtqHostBase
 			.AddHotkeyService(c)
 			.AddWin32Service()
 			.AddWinFormsScreenInfoProvider()
-
 			// New cross-platform tray icon.
 			//.AddTrayIcon()
 
 			// WinForms (Windows-only) tray icon, kept around should the cross-platform one causes issues.
-			.AddWinFormsTrayIcon()
-		;
+			.AddWinFormsTrayIcon();
 	}
 }

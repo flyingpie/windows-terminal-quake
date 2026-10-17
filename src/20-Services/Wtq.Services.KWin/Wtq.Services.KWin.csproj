@@ -5,13 +5,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Threading"/>
-		<PackageReference Include="Tmds.DBus"/>
-		<PackageReference Include="Tmds.DBus.Protocol"/>
+		<PackageReference Include="Microsoft.VisualStudio.Threading" />
+		<PackageReference Include="Tmds.DBus" />
+		<PackageReference Include="Tmds.DBus.Protocol" />
 	</ItemGroup>
 
 	<ItemGroup>

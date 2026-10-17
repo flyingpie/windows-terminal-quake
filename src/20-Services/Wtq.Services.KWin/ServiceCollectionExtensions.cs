@@ -13,16 +13,12 @@ public static class ServiceCollectionExtensions
 		Guard.Against.Null(services);
 
 		return services
-
 			// DBus.
 			.AddSingleton<IDBusConnection, DBusConnection>()
-
 			.AddSingleton<IKWinScriptService, KWinScriptService>()
 			.AddSingleton<IKWinClient, KWinClientV2>()
-
 			.AddSingleton<IWtqWindowService, KWinWindowService>()
 			.AddSingleton<IWtqScreenInfoProvider, KWinScreenInfoProvider>()
-
 			.AddHostedService<KWinHotkeyService>()
 			.AddHostedServiceSingleton<IWtqDBusObject, WtqDBusObject>();
 	}

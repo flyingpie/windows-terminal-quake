@@ -18,7 +18,8 @@ public sealed class WtqTrayIconService : WtqHostedService
 		IHostApplicationLifetime lifetime,
 		IPlatformService platform,
 		IWtqBus bus,
-		TrayIconUtil trayIconUtil)
+		TrayIconUtil trayIconUtil
+	)
 	{
 		_ = Guard.Against.Null(bus);
 		_ = Guard.Against.Null(lifetime);
@@ -31,40 +32,32 @@ public sealed class WtqTrayIconService : WtqHostedService
 				CreateItem(
 					$"Version {WtqConstants.AppVersion} ({_platform.PlatformName})",
 					() => { },
-					enabled: false),
-
+					enabled: false
+				),
 				new SeparatorItem(),
-
 				CreateItem(
 					"Open Project Website (GitHub)",
-					() => _platform.OpenUrl(WtqConstants.GitHubUrl)),
-
+					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
+				),
 				new SeparatorItem(),
-
-				CreateItem(
-					"Open Main Window",
-					() => bus.Publish(new WtqUIRequestedEvent())),
-
+				CreateItem("Open Main Window", () => bus.Publish(new WtqUIRequestedEvent())),
 				new SeparatorItem(),
-
 				CreateItem(
 					"Open Settings File",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)
+				),
 				CreateItem(
 					"Open Settings Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
+				),
 				CreateItem(
 					"Open Logs",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)),
-
+					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)
+				),
 				new SeparatorItem(),
-
-				CreateItem(
-					"Quit",
-					lifetime.StopApplication),
-			]);
+				CreateItem("Quit", lifetime.StopApplication),
+			]
+		);
 
 		_loop = new(
 			nameof(WtqTrayIconService),
@@ -74,8 +67,12 @@ public sealed class WtqTrayIconService : WtqHostedService
 				_icon.MessageLoopIteration(true);
 
 				return Task.CompletedTask;
-			});
+			}
+		);
 	}
+
+	private static MenuItem CreateItem(string text, Action action, bool enabled = true) =>
+		new(text) { Click = (_, _) => action(), IsDisabled = !enabled };
 
 	protected override Task OnStartAsync(CancellationToken cancellationToken)
 	{
@@ -110,14 +107,4 @@ public sealed class WtqTrayIconService : WtqHostedService
 			_loop.Start();
 		}
 	}
-
-	private static MenuItem CreateItem(
-		string text,
-		Action action,
-		bool enabled = true) =>
-		new(text)
-		{
-			Click = (_, _) => action(),
-			IsDisabled = !enabled,
-		};
 }

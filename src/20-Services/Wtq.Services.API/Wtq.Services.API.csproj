@@ -5,15 +5,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App"/>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
-		<PackageReference Include="Scalar.AspNetCore"/>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+		<PackageReference Include="Scalar.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj"/>
+		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 	</ItemGroup>
 </Project>
