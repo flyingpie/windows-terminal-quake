@@ -66,14 +66,15 @@ public class WtqHotkeyRoutingService : WtqHostedService
 		{
 			foreach (var a in _appRepo.GetAll())
 			{
-				if (await a.Window.HasFocusAsync())
+				if (a.Window != null && await a.Window.HasFocusAsync())
 				{
 					a.IsFullScreen = !a.IsFullScreen;
 
 					if (a.IsFullScreen)
 					{
 						var scr = await a.GetScreenRectAsync();
-						await a.ResizeWindowAsync(scr.Size).NoCtx();
+						await a.MoveWindowAsync(scr.Location);
+						await a.ResizeWindowAsync(scr.Size);
 						await a.Window.SetAlwaysOnTopAsync(true);
 					}
 					else
@@ -82,6 +83,7 @@ public class WtqHotkeyRoutingService : WtqHostedService
 						await a.OpenAsync(ToggleModifiers.Instant);
 						await a.Window.SetAlwaysOnTopAsync(false);
 					}
+
 					return;
 				}
 			}

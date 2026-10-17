@@ -158,7 +158,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 				.RegisterHotkeyAsync(
 					id,
 					"WTQ hotkey - Fullscreen",
-					new KeySequence(KeyModifiers.Control, "_", KeyCode.None),
+					new KeySequence(KeyModifiers.Control, "0", KeyCode.None),
 					cancellationToken
 				)
 				.NoCtx();
