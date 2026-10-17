@@ -1,5 +1,5 @@
-using Namotion.Reflection;
 using System.Reflection;
+using Namotion.Reflection;
 
 namespace Wtq.Utils;
 
@@ -14,7 +14,10 @@ public static class XmlDocUtils
 	{
 		Guard.Against.Null(memberInfo);
 
-		return Guard.Against.Null(memberInfo).GetXmlDocsTag("summary", _xmlDocsOptions)?.Replace("\n", "<br/>");
+		return Guard
+			.Against.Null(memberInfo)
+			.GetXmlDocsTag("summary", _xmlDocsOptions)
+			?.Replace("\n", "<br/>");
 	}
 
 	public static string? GetSummaryEnum(this object val, Type enumType)
@@ -23,6 +26,8 @@ public static class XmlDocUtils
 		Guard.Against.Null(enumType);
 
 		return enumType.GetMember(val.ToString()!).FirstOrDefault().GetSummary()
-			?? throw new InvalidOperationException($"Could not get member info for enum type '{enumType.FullName}'.");
+			?? throw new InvalidOperationException(
+				$"Could not get member info for enum type '{enumType.FullName}'."
+			);
 	}
 }

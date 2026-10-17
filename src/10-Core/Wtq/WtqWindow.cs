@@ -5,8 +5,7 @@ namespace Wtq;
 /// <summary>
 /// Represents a single application window, provides information about it such as position and size, and allows operations such as moving and setting opacity.
 /// </summary>
-public abstract class WtqWindow
-	: IEquatable<WtqWindow>, IEqualityComparer<WtqWindow>
+public abstract class WtqWindow : IEquatable<WtqWindow>, IEqualityComparer<WtqWindow>
 {
 	private readonly List<PropertyInfo> _canBeMatchedOnProps;
 

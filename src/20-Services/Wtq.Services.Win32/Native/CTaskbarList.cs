@@ -6,6 +6,4 @@ namespace Wtq.Services.Win32.Native;
 [ComImport]
 [Guid("56FDF344-FD6D-11d0-958A-006097C9A090")]
 [ClassInterface(ClassInterfaceType.None)]
-public class CTaskbarList
-{
-}
+public class CTaskbarList { }

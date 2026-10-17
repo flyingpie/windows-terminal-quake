@@ -1,9 +1,7 @@
 namespace Wtq.Utils;
 
 /// <inheritdoc/>
-public sealed class WtqTween(
-	IOptionsMonitor<WtqOptions> opts)
-	: IWtqTween
+public sealed class WtqTween(IOptionsMonitor<WtqOptions> opts) : IWtqTween
 {
 	private readonly ILogger _log = Log.For<WtqTween>();
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
@@ -14,7 +12,8 @@ public sealed class WtqTween(
 		Point dst,
 		int durationMs,
 		AnimationType animType,
-		Func<Point, Task> move)
+		Func<Point, Task> move
+	)
 	{
 		Guard.Against.Null(src);
 		Guard.Against.Null(dst);
@@ -25,7 +24,8 @@ public sealed class WtqTween(
 			src,
 			dst,
 			durationMs,
-			animType);
+			animType
+		);
 
 		var swTotal = Stopwatch.StartNew();
 		var swFrame = Stopwatch.StartNew();
@@ -70,7 +70,8 @@ public sealed class WtqTween(
 			"Tween complete, took {Actual}ms of target {Target}ms, across {FrameCount} frames",
 			swTotal.ElapsedMilliseconds,
 			durationMs,
-			frameCount);
+			frameCount
+		);
 	}
 
 	private Func<double, double> GetAnimationFunction(AnimationType type)
@@ -99,7 +100,8 @@ public sealed class WtqTween(
 				return x => (2.70158 * x * x * x) - (1.70158 * x * x);
 
 			case AnimationType.EaseOutBack:
-				return x => 1.0 + (2.70158 * Math.Pow(x - 1.0, 3)) + (1.70158 * Math.Pow(x - 1.0, 2));
+				return x =>
+					1.0 + (2.70158 * Math.Pow(x - 1.0, 3)) + (1.70158 * Math.Pow(x - 1.0, 2));
 
 			default:
 				_log.LogWarning("Invalid animation type '{Type}' falling back to linear", type);

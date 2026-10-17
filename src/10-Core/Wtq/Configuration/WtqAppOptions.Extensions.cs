@@ -104,7 +104,8 @@ public static class WtqAppOptionsExtensions
 
 	/// <inheritdoc cref="WtqAppOptions.MainWindow"/>
 	public static MainWindowState GetMainWindow(this WtqAppOptions app) =>
-		Guard.Against.Null(app).MainWindow ?? AttrUtils.GetDefaultValueFor<MainWindowState>(() => app.MainWindow);
+		Guard.Against.Null(app).MainWindow
+		?? AttrUtils.GetDefaultValueFor<MainWindowState>(() => app.MainWindow);
 
 	/// <inheritdoc cref="WtqSharedOptions.MonitorIndex"/>
 	public static int GetMonitorIndex(this WtqAppOptions app)
@@ -119,7 +120,11 @@ public static class WtqAppOptionsExtensions
 	{
 		Guard.Against.Null(app);
 
-		return OptionUtils.Cascade<ICollection<OffScreenLocation>>(o => o.OffScreenLocations, app, app.Global) ?? WtqConstants.DefaultOffScreenLocations;
+		return OptionUtils.Cascade<ICollection<OffScreenLocation>>(
+				o => o.OffScreenLocations,
+				app,
+				app.Global
+			) ?? WtqConstants.DefaultOffScreenLocations;
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.Opacity"/>
@@ -151,7 +156,11 @@ public static class WtqAppOptionsExtensions
 	{
 		Guard.Against.Null(app);
 
-		return OptionUtils.Cascade<TaskbarIconVisibility>(o => o.TaskbarIconVisibility, app, app.Global);
+		return OptionUtils.Cascade<TaskbarIconVisibility>(
+			o => o.TaskbarIconVisibility,
+			app,
+			app.Global
+		);
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.VerticalOffset"/>

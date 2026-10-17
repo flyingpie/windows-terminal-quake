@@ -1,9 +1,7 @@
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqWindowResolver"/>
-public sealed class WtqWindowResolver(
-	IWtqWindowService procService)
-	: IWtqWindowResolver
+public sealed class WtqWindowResolver(IWtqWindowService procService) : IWtqWindowResolver
 {
 	private readonly ILogger _log = Log.For<WtqWindowResolver>();
 
@@ -33,7 +31,12 @@ public sealed class WtqWindowResolver(
 
 	private async Task<WtqWindow?> FindOrStartAsync(WtqAppOptions opts, bool allowStartNew)
 	{
-		_log.Log(allowStartNew ? LogLevel.Information : LogLevel.Debug, "Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})", opts, allowStartNew);
+		_log.Log(
+			allowStartNew ? LogLevel.Information : LogLevel.Debug,
+			"Using find-or-start process attach mode for app with options {Options}, looking for process (allow start new: {AllowStartNew})",
+			opts,
+			allowStartNew
+		);
 
 		// Look for an existing window first.
 		var window1 = await FindWindowAsync(opts, CancellationToken.None).NoCtx();
@@ -60,7 +63,12 @@ public sealed class WtqWindowResolver(
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Could not create process for app '{App}': {Message}", opts, ex.Message);
+			_log.LogError(
+				ex,
+				"Could not create process for app '{App}': {Message}",
+				opts,
+				ex.Message
+			);
 			return null;
 		}
 
@@ -84,7 +92,10 @@ public sealed class WtqWindowResolver(
 
 	private async Task<WtqWindow?> ManualAsync(WtqAppOptions opts)
 	{
-		_log.LogInformation("Using manual process attach mode for app with options {Options}, skipping process lookup", opts);
+		_log.LogInformation(
+			"Using manual process attach mode for app with options {Options}, skipping process lookup",
+			opts
+		);
 
 		var window = await _windowService.GetForegroundWindowAsync(CancellationToken.None).NoCtx();
 
@@ -108,7 +119,11 @@ public sealed class WtqWindowResolver(
 		// Warn if we found more than 1.
 		if (matchingWindows.Count > 1)
 		{
-			_log.LogWarning("Multiple windows found for app options {AppOptions}, you may want to specify more matching criteria.\nThese windows were found (of which the first is chosen):{Windows}", opts, string.Join(", ", matchingWindows.Select(w => $"\n- {w}")));
+			_log.LogWarning(
+				"Multiple windows found for app options {AppOptions}, you may want to specify more matching criteria.\nThese windows were found (of which the first is chosen):{Windows}",
+				opts,
+				string.Join(", ", matchingWindows.Select(w => $"\n- {w}"))
+			);
 		}
 
 		// Return the first one.

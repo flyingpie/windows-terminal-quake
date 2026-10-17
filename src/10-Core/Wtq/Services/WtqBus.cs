@@ -7,8 +7,7 @@ public class WtqBus : IWtqBus
 	private readonly List<EventRegistration> _registrations = [];
 
 	/// <inheritdoc/>
-	public void OnEvent<TEvent>(
-		Func<TEvent, Task> onEvent)
+	public void OnEvent<TEvent>(Func<TEvent, Task> onEvent)
 		where TEvent : WtqEvent
 	{
 		Guard.Against.Null(onEvent);
@@ -17,9 +16,7 @@ public class WtqBus : IWtqBus
 	}
 
 	/// <inheritdoc/>
-	public void OnEvent<TEvent>(
-		Func<TEvent, bool> predicate,
-		Func<TEvent, Task> onEvent)
+	public void OnEvent<TEvent>(Func<TEvent, bool> predicate, Func<TEvent, Task> onEvent)
 		where TEvent : WtqEvent
 	{
 		Guard.Against.Null(predicate);
@@ -36,42 +33,43 @@ public class WtqBus : IWtqBus
 	}
 
 	/// <inheritdoc/>
-	public void Publish(
-		WtqEvent eventType)
+	public void Publish(WtqEvent eventType)
 	{
 		Guard.Against.Null(eventType);
 
-		_log.LogDebug("Publishing event '[{Type}] {Event}'", eventType.GetType().FullName, eventType);
+		_log.LogDebug(
+			"Publishing event '[{Type}] {Event}'",
+			eventType.GetType().FullName,
+			eventType
+		);
 
 		foreach (var reg in _registrations.Where(r => r.Predicate(eventType)))
 		{
-			_ = Task.Run(
-				async () =>
+			_ = Task.Run(async () =>
+			{
+				try
 				{
-					try
-					{
-						await reg.OnEvent(eventType).NoCtx();
-					}
-					catch (Exception ex)
-					{
-						_log.LogWarning(ex, "Error publishing event '{Event}': {Message}", eventType, ex.Message);
-					}
-				});
+					await reg.OnEvent(eventType).NoCtx();
+				}
+				catch (Exception ex)
+				{
+					_log.LogWarning(
+						ex,
+						"Error publishing event '{Event}': {Message}",
+						eventType,
+						ex.Message
+					);
+				}
+			});
 		}
 	}
 
-	private void OnInternal(
-		Func<WtqEvent, bool> predicate,
-		Func<WtqEvent, Task> onEvent)
+	private void OnInternal(Func<WtqEvent, bool> predicate, Func<WtqEvent, Task> onEvent)
 	{
 		Guard.Against.Null(predicate);
 		Guard.Against.Null(onEvent);
 
-		_registrations.Add(new()
-		{
-			OnEvent = onEvent,
-			Predicate = predicate,
-		});
+		_registrations.Add(new() { OnEvent = onEvent, Predicate = predicate });
 	}
 
 	private sealed class EventRegistration

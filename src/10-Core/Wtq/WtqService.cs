@@ -22,9 +22,7 @@ public sealed class WtqService : WtqHostedService
 	/// </summary>
 	private readonly List<(WtqWindow Window, WtqApp? App)> _previouslyFocussedApps = new(10);
 
-	public WtqService(
-		IWtqAppRepo appRepo,
-		IWtqBus bus)
+	public WtqService(IWtqAppRepo appRepo, IWtqBus bus)
 	{
 		_appRepo = Guard.Against.Null(appRepo);
 		_bus = Guard.Against.Null(bus);
@@ -69,12 +67,19 @@ public sealed class WtqService : WtqHostedService
 		foreach (var open in _appRepo.GetOpen().Where(o => o != app).ToList())
 		{
 			// If either this app, or the active one, wants to be the _only_ active one, close the open one.
-			if (app.Options.GetExclusive() != Exclusive.Always && open.Options.GetExclusive() != Exclusive.Always)
+			if (
+				app.Options.GetExclusive() != Exclusive.Always
+				&& open.Options.GetExclusive() != Exclusive.Always
+			)
 			{
 				continue;
 			}
 
-			_log.LogInformation("Closing app '{AppClosing}', opening app '{AppOpening}'", open, app);
+			_log.LogInformation(
+				"Closing app '{AppClosing}', opening app '{AppOpening}'",
+				open,
+				app
+			);
 
 			_bus.Publish(new WtqAppToggledOffEvent(open.Name, true));
 
@@ -92,7 +97,10 @@ public sealed class WtqService : WtqHostedService
 		}
 
 		// Make sure the app is on the current virtual desktop
-		if (app is { IsOpen: true, Window: not null } && !(await app.Window.IsOnCurrentVirtualDesktopAsync()))
+		if (
+			app is { IsOpen: true, Window: not null }
+			&& !(await app.Window.IsOnCurrentVirtualDesktopAsync())
+		)
 		{
 			// Note that we're not returning from this scope, as we may still need to re-focus.
 			_log.LogInformation("Moving app '{App}' to current virtual desktop", app);
@@ -121,7 +129,6 @@ public sealed class WtqService : WtqHostedService
 			// Bring focus back to last non-WTQ app.
 			await PopFocusAsync().NoCtx();
 		}
-
 		// Toggling app ON
 		else
 		{
@@ -157,12 +164,18 @@ public sealed class WtqService : WtqHostedService
 			// Skip windows that are managed by WTQ and currently toggled off.
 			if (prev.App is { IsOpen: false })
 			{
-				_log.LogDebug("Skipping window '{Window}', as it is being handled by WTQ, and is toggled OFF", prev.Window);
+				_log.LogDebug(
+					"Skipping window '{Window}', as it is being handled by WTQ, and is toggled OFF",
+					prev.Window
+				);
 				continue;
 			}
 
 			// Bring focus to the window.
-			_log.LogInformation("Bringing back focus to previously-active window '{Window}'", prev.Window);
+			_log.LogInformation(
+				"Bringing back focus to previously-active window '{Window}'",
+				prev.Window
+			);
 			await prev.Window.BringToForegroundAsync().NoCtx();
 			return;
 		}
@@ -180,13 +193,17 @@ public sealed class WtqService : WtqHostedService
 		using var l = await _lock.WaitOneSecondAsync().NoCtx();
 
 		// Look for apps that are attached to the windows that got- and lost focus, respectively.
-		var appGotFocus = ev.GotFocusWindow != null ? _appRepo.GetByWindow(ev.GotFocusWindow) : null;
-		var appLostFocus = ev.LostFocusWindow != null ? _appRepo.GetByWindow(ev.LostFocusWindow) : null;
+		var appGotFocus =
+			ev.GotFocusWindow != null ? _appRepo.GetByWindow(ev.GotFocusWindow) : null;
+		var appLostFocus =
+			ev.LostFocusWindow != null ? _appRepo.GetByWindow(ev.LostFocusWindow) : null;
 
 		// Store the app that lost focus in our stack.
 		if (ev.LostFocusWindow != null)
 		{
-			_previouslyFocussedApps.RemoveAll(w => w.Window.Id.Equals(ev.LostFocusWindow.Id, StringComparison.OrdinalIgnoreCase)); // Remove any previous instance.
+			_previouslyFocussedApps.RemoveAll(w =>
+				w.Window.Id.Equals(ev.LostFocusWindow.Id, StringComparison.OrdinalIgnoreCase)
+			); // Remove any previous instance.
 			_previouslyFocussedApps.Add((ev.LostFocusWindow, appLostFocus));
 		}
 

@@ -10,9 +10,18 @@ public class KWinSupportInformation
 
 		using var reader = new StringReader(supportInfoStr);
 
-		var headerRegex = new Regex("^screen (?<index>[0-9]+):$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		var nameRegex = new Regex("^name: (?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		var geometryRegex = new Regex("^geometry: (?<x>[0-9]+),(?<y>[0-9]+),(?<w>[0-9]+)x(?<h>[0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		var headerRegex = new Regex(
+			"^screen (?<index>[0-9]+):$",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase
+		);
+		var nameRegex = new Regex(
+			"^name: (?<name>.+)$",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase
+		);
+		var geometryRegex = new Regex(
+			"^geometry: (?<x>[0-9]+),(?<y>[0-9]+),(?<w>[0-9]+)x(?<h>[0-9]+)$",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase
+		);
 
 		KWinScreenInfo? scr = null;
 		List<KWinScreenInfo> scrs = [];
@@ -66,10 +75,7 @@ public class KWinSupportInformation
 			}
 		}
 
-		var res = new KWinSupportInformation()
-		{
-			Screens = scrs,
-		};
+		var res = new KWinSupportInformation() { Screens = scrs };
 
 		return res;
 	}

@@ -30,7 +30,10 @@ public static class FsExtensions
 		}
 		catch (Exception ex)
 		{
-			throw new FsException($"Could not create app data directory '{path}': {ex.Message}", ex);
+			throw new FsException(
+				$"Could not create app data directory '{path}': {ex.Message}",
+				ex
+			);
 		}
 
 		return path;
@@ -47,7 +50,9 @@ public static class FsExtensions
 
 		if (string.IsNullOrWhiteSpace(dir))
 		{
-			throw new FsException($"Getting directory from path '{path}' resulted in an empty string.");
+			throw new FsException(
+				$"Getting directory from path '{path}' resulted in an empty string."
+			);
 		}
 
 		if (Fs.Inst.DirExists(dir))
@@ -61,7 +66,10 @@ public static class FsExtensions
 		}
 		catch (Exception ex)
 		{
-			throw new FsException($"Could not create directory '{dir}' for file at path '{path}': {ex.Message}", ex);
+			throw new FsException(
+				$"Could not create directory '{dir}' for file at path '{path}': {ex.Message}",
+				ex
+			);
 		}
 
 		return path;

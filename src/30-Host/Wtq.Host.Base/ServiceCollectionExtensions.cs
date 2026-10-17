@@ -1,7 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.IO.Pipes;
 using System.Net.Sockets;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Wtq.Host.Base.Commands;
 using Wtq.Host.Base.Commands.Apps;
 using Wtq.Services;
@@ -40,14 +40,15 @@ public static class ServiceCollectionExtensions
 					handler.ConnectCallback = UnixSocket(url.AbsolutePath);
 				}
 
-				return new HttpClient(handler)
-				{
-					BaseAddress = new("http://localhost"),
-				};
+				return new HttpClient(handler) { BaseAddress = new("http://localhost") };
 			});
 	}
 
-	private static Func<SocketsHttpConnectionContext, CancellationToken, ValueTask<Stream>> UnixSocket(string socketPath) =>
+	private static Func<
+		SocketsHttpConnectionContext,
+		CancellationToken,
+		ValueTask<Stream>
+	> UnixSocket(string socketPath) =>
 		async (_, ct) =>
 		{
 			var log = Log.For(nameof(UnixSocket));
@@ -68,14 +69,19 @@ public static class ServiceCollectionExtensions
 			return new NetworkStream(socket, ownsSocket: true);
 		};
 
-	private static Func<SocketsHttpConnectionContext, CancellationToken, ValueTask<Stream>> WindowsNamedPipe() =>
+	private static Func<
+		SocketsHttpConnectionContext,
+		CancellationToken,
+		ValueTask<Stream>
+	> WindowsNamedPipe() =>
 		async (_, ct) =>
 		{
 			var stream = new NamedPipeClientStream(
 				serverName: ".",
 				pipeName: "wtq",
 				direction: PipeDirection.InOut,
-				options: PipeOptions.Asynchronous);
+				options: PipeOptions.Asynchronous
+			);
 
 			await stream.ConnectAsync(ct).NoCtx();
 

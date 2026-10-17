@@ -35,23 +35,24 @@ public static class WtqSchema
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Error writing settings schema to path '{Path}': {Message}", dst, ex.Message);
+			_log.LogError(
+				ex,
+				"Error writing settings schema to path '{Path}': {Message}",
+				dst,
+				ex.Message
+			);
 		}
 	}
 
 	public static string GenerateSchema() =>
-		JsonSchema.FromType<WtqOptions>(
+		JsonSchema
+			.FromType<WtqOptions>(
 				new SystemTextJsonSchemaGeneratorSettings()
 				{
 					FlattenInheritanceHierarchy = true,
-					SerializerOptions =
-					{
-						Converters =
-						{
-							new JsonStringEnumConverter(),
-						},
-					},
+					SerializerOptions = { Converters = { new JsonStringEnumConverter() } },
 					UseXmlDocumentation = true,
-				})
+				}
+			)
 			.ToJson(Formatting.Indented);
 }

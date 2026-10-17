@@ -13,14 +13,12 @@ public interface IWtqAppRepo
 	/// <summary>
 	/// Returns the <see cref="WtqApp"/> instance for the <paramref name="name"/>, as specified in the app config (if any).
 	/// </summary>
-	WtqApp? GetByName(
-		string name);
+	WtqApp? GetByName(string name);
 
 	/// <summary>
 	/// Returns the <see cref="WtqApp"/> instance for the specified <paramref name="window"/> (if any).
 	/// </summary>
-	WtqApp? GetByWindow(
-		WtqWindow window);
+	WtqApp? GetByWindow(WtqWindow window);
 
 	/// <summary>
 	/// Returns the app that is currently toggled onto the screen (if any).

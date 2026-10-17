@@ -10,10 +10,7 @@ public class WtqAppOptionsExtensionsTest
 	public void Setup()
 	{
 		_gbl = new WtqOptions();
-		_app = new WtqAppOptions
-		{
-			Global = _gbl,
-		};
+		_app = new WtqAppOptions { Global = _gbl };
 	}
 
 	#region HideOnFocusLost

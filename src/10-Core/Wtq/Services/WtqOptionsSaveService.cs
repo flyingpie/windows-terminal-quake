@@ -1,7 +1,6 @@
 namespace Wtq.Services;
 
-public class WtqOptionsSaveService(IPlatformService platform)
-	: IWtqOptionsSaveService
+public class WtqOptionsSaveService(IPlatformService platform) : IWtqOptionsSaveService
 {
 	private readonly IPlatformService _platform = Guard.Against.Null(platform);
 

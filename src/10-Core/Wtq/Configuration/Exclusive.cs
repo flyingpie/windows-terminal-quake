@@ -5,7 +5,11 @@ namespace Wtq.Configuration;
 /// E.g., when "Always", an app must be the only one of the configured apps to be on the screen.<br/>
 /// When "Never", other apps can remain on-screen.
 /// </summary>
-[SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "MvdO: Backward compat.")]
+[SuppressMessage(
+	"Design",
+	"CA1069:Enums values should not be duplicated",
+	Justification = "MvdO: Backward compat."
+)]
 public enum Exclusive
 {
 	/// <summary>

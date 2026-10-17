@@ -6,10 +6,7 @@ namespace Wtq.Services;
 /// <summary>
 /// Service that listens for events and sends them to any configured event hooks.
 /// </summary>
-public class WtqEventHookHandler(
-	IOptionsMonitor<WtqOptions> opts,
-	IWtqAppRepo appRepo,
-	IWtqBus bus)
+public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo appRepo, IWtqBus bus)
 	: WtqHostedService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
@@ -44,16 +41,17 @@ public class WtqEventHookHandler(
 	/// <summary>
 	/// Takes a set of event hooks, and fires the ones that match the specified event.
 	/// </summary>
-	private static async Task ExecuteEventHooksAsync(ICollection<WtqAppEventHookOptions> hooks, WtqEvent ev)
+	private static async Task ExecuteEventHooksAsync(
+		ICollection<WtqAppEventHookOptions> hooks,
+		WtqEvent ev
+	)
 	{
 		Guard.Against.Null(hooks);
 		Guard.Against.Null(ev);
 
 		// Event name
-		var eventName = ev
-				.GetType()
-				.GetCustomAttribute<DisplayNameAttribute>()
-				?.DisplayName
+		var eventName =
+			ev.GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName
 			?? ev.GetType().Name;
 
 		foreach (var hook in hooks)
@@ -66,8 +64,7 @@ public class WtqEventHookHandler(
 			}
 
 			// Setup informational properties to send to the executed program.
-			var envVars = ev
-				.GetType()
+			var envVars = ev.GetType()
 				.GetProperties()
 				.ToDictionary(p => p.Name, p => p.GetValue(ev));
 

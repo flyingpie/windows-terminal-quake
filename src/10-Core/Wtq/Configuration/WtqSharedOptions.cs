@@ -1,6 +1,6 @@
+using static Wtq.Configuration.OffScreenLocation;
 using Gn = Wtq.WtqConstants.Settings.GroupNames;
 using Wc = Wtq.Configuration;
-using static Wtq.Configuration.OffScreenLocation;
 
 namespace Wtq.Configuration;
 
@@ -204,8 +204,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[Display(GroupName = Gn.Events, Name = "Event hooks")]
 	[JsonPropertyOrder(7001)]
-	public ICollection<WtqAppEventHookOptions> EventHooks { get; set; }
-		= [];
+	public ICollection<WtqAppEventHookOptions> EventHooks { get; set; } = [];
 
 	#endregion
 
@@ -235,8 +234,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 		}
 	}
 
-	protected virtual IEnumerable<ValidationResult> OnValidate(ValidationContext context) =>
-		[];
+	protected virtual IEnumerable<ValidationResult> OnValidate(ValidationContext context) => [];
 
 	#endregion
 }

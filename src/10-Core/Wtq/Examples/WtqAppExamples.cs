@@ -8,10 +8,7 @@ public static class WtqAppExamples
 {
 	public static class Categories
 	{
-		public static readonly Category Popular = new("Popular")
-		{
-			Priority = 9,
-		};
+		public static readonly Category Popular = new("Popular") { Priority = 9 };
 
 		public static readonly Category Browsers = new("Browsers");
 		public static readonly Category DevTools = new("Dev Tools");
@@ -192,12 +189,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "bruno",
-				}
+				},
 			],
 		},
-
 		// Insomnia
 		// TODO
 		// new()
@@ -255,12 +251,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "dolphin",
-				}
+				},
 			],
 		},
-
 		// Double Commander
 		new()
 		{
@@ -274,18 +269,18 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "doublecmd",
 				},
 			],
 		},
-
 		// Q-Dir
 		new()
 		{
 			Categories = [Categories.FileManagers],
 			Title = "Q-Dir",
-			Description = "File manager with support for multiple panes, featuring lots of customization.",
+			Description =
+				"File manager with support for multiple panes, featuring lots of customization.",
 			Image = "/example-apps/q-dir.webp",
 			Link = new("http://q-dir.com/"),
 			Flavors =
@@ -293,17 +288,12 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "q-dir",
-					Factory = x => new()
-					{
-						FileName = "q-dir",
-						ProcessName = "Q-Dir_x64",
-					},
+					Factory = x => new() { FileName = "q-dir", ProcessName = "Q-Dir_x64" },
 				},
 			],
 		},
-
 		// Total Commander
 		new()
 		{
@@ -316,12 +306,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "totalcmd64",
 				},
 			],
 		},
-
 		// Windows Explorer
 		new()
 		{
@@ -334,18 +323,18 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "explorer",
-					Factory = x => new()
-					{
-						Name = x.Title,
-						FileName = "explorer",
-						WindowClass = "CabinetWClass",
-					},
+					Factory = x =>
+						new()
+						{
+							Name = x.Title,
+							FileName = "explorer",
+							WindowClass = "CabinetWClass",
+						},
 				},
 			],
 		},
-
 		#endregion
 
 		#region Keys & Passwords
@@ -383,12 +372,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux, OSPlatform.Windows,],
+					Os = [OSPlatform.Linux, OSPlatform.Windows],
 					FileName = "keepassxc",
 				},
 			],
 		},
-
 		// Proton Pass
 		// TODO
 		// new()
@@ -447,7 +435,7 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux, OSPlatform.Windows,],
+					Os = [OSPlatform.Linux, OSPlatform.Windows],
 					FileName = "spotify",
 				},
 				new()
@@ -458,7 +446,6 @@ public static class WtqAppExamples
 				},
 			],
 		},
-
 		#endregion
 
 		#region Misc
@@ -609,13 +596,12 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "procexp",
 					ProcessName = "procexp64",
 				},
 			],
 		},
-
 		// Resources
 		new()
 		{
@@ -629,18 +615,17 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "resources",
 				},
 				new()
 				{
 					Name = Flavors.Flatpak,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "net.nokyan.Resources",
 				},
 			],
 		},
-
 		// System Informer
 		new()
 		{
@@ -654,12 +639,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "systeminformer",
 				},
 			],
 		},
-
 		// System Monitor (KDE)
 		new()
 		{
@@ -673,12 +657,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "plasma-systemmonitor",
 				},
 			],
 		},
-
 		#endregion
 
 		#region Note Taking
@@ -800,12 +783,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "discord",
 				},
 			],
 		},
-
 		// Element (Matrix Client)
 		// TODO
 		// // https://flathub.org/apps/im.riot.Riot
@@ -964,12 +946,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux, OSPlatform.Windows,],
+					Os = [OSPlatform.Linux, OSPlatform.Windows],
 					FileName = "kitty",
 				},
 			],
 		},
-
 		// Konsole
 		new()
 		{
@@ -983,12 +964,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "konsole",
 				},
 			],
 		},
-
 		// PowerShell <=5 (Windows-only)
 		new()
 		{
@@ -996,43 +976,47 @@ public static class WtqAppExamples
 			Title = "PowerShell 5",
 			Description = "PowerShell",
 			Image = "/example-apps/powershell-5.webp",
-			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1"),
+			Link = new(
+				"https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1"
+			),
 			Flavors =
 			[
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "powershell",
 				},
 			],
 		},
-
 		// PowerShell >=6 (Cross-platform)
 		new()
 		{
 			Categories = [Categories.Terminals],
 			Title = "PowerShell Core",
-			Description = "The cross-platform PowerShell, (version 6 and up, a.k.a. 'PowerShell Core').",
+			Description =
+				"The cross-platform PowerShell, (version 6 and up, a.k.a. 'PowerShell Core').",
 			Image = "/example-apps/powershell-core.webp",
-			Link = new("https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"),
+			Link = new(
+				"https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4"
+			),
 			Flavors =
 			[
 				new()
 				{
 					Name = "PowerShell 7",
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "pwsh",
 				},
 			],
 		},
-
 		// Ptyxis
 		new()
 		{
 			Categories = [Categories.Terminals],
 			Title = "Ptyxis",
-			Description = "Ptyxis is a terminal for GNOME that focuses on ease-of-use in a world of containers.",
+			Description =
+				"Ptyxis is a terminal for GNOME that focuses on ease-of-use in a world of containers.",
 			Image = "/example-apps/ptyxis.webp",
 			Link = new("https://gitlab.gnome.org/chergert/ptyxis"),
 			Flavors =
@@ -1040,12 +1024,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux,],
+					Os = [OSPlatform.Linux],
 					FileName = "ptyxis",
 				},
 			],
 		},
-
 		// Wezterm
 		new()
 		{
@@ -1059,12 +1042,11 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Linux, OSPlatform.Windows,],
+					Os = [OSPlatform.Linux, OSPlatform.Windows],
 					FileName = "wezterm-gui",
 				},
 			],
 		},
-
 		// Windows Terminal
 		new()
 		{
@@ -1078,18 +1060,18 @@ public static class WtqAppExamples
 				new()
 				{
 					Name = Flavors.Native,
-					Os = [OSPlatform.Windows,],
+					Os = [OSPlatform.Windows],
 					FileName = "wt",
-					Factory = e => new()
-					{
-						Name = e.Title,
-						FileName = "wt",
-						ProcessName = "^WindowsTerminal$",
-					},
+					Factory = e =>
+						new()
+						{
+							Name = e.Title,
+							FileName = "wt",
+							ProcessName = "^WindowsTerminal$",
+						},
 				},
 			],
 		},
-
 		#endregion
 	];
 }

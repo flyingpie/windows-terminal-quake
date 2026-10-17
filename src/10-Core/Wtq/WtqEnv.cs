@@ -13,17 +13,20 @@ public static class WtqEnv
 	/// <summary>
 	/// Returns path to the WTQ config file, as specified by an environment variable.
 	/// </summary>
-	public static string? WtqConfigFile
-		=> EnvUtils.GetEnvVar(Names.Config);
+	public static string? WtqConfigFile => EnvUtils.GetEnvVar(Names.Config);
 
-	public static bool HasTermEnvVar
-		=> !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
+	public static bool HasTermEnvVar =>
+		!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TERM"));
 
 	/// <summary>
 	/// Returns the requested log level, as specified by an environment variable.
 	/// </summary>
-	public static LogEventLevel LogLevel
-		=> Enum.TryParse<LogEventLevel>(Environment.GetEnvironmentVariable(Names.LogLevel), ignoreCase: true, out var res)
+	public static LogEventLevel LogLevel =>
+		Enum.TryParse<LogEventLevel>(
+			Environment.GetEnvironmentVariable(Names.LogLevel),
+			ignoreCase: true,
+			out var res
+		)
 			? res
 			: LogEventLevel.Information;
 }

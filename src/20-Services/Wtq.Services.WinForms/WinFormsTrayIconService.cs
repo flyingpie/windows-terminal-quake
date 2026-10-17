@@ -4,8 +4,8 @@ internal sealed class WinFormsTrayIconService(
 	IHostApplicationLifetime lifetime,
 	IPlatformService platform,
 	IWtqBus bus,
-	TrayIconUtil trayIconUtil)
-	: WtqHostedService
+	TrayIconUtil trayIconUtil
+) : WtqHostedService
 {
 	private readonly IHostApplicationLifetime _lifetime = Guard.Against.Null(lifetime);
 	private readonly IPlatformService _platform = Guard.Against.Null(platform);

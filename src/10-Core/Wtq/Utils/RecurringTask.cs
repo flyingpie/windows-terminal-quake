@@ -6,8 +6,8 @@ namespace Wtq.Utils;
 public sealed class RecurringTask(
 	string name,
 	TimeSpan interval,
-	Func<CancellationToken, Task> action)
-	: IAsyncDisposable
+	Func<CancellationToken, Task> action
+) : IAsyncDisposable
 {
 	private readonly ILogger _log = Log.For<RecurringTask>();
 
@@ -16,11 +16,15 @@ public sealed class RecurringTask(
 
 	private readonly Func<CancellationToken, Task> _action = Guard.Against.Null(action);
 
-	private string Name { get; } =
-		Guard.Against.NullOrWhiteSpace(name);
+	private string Name { get; } = Guard.Against.NullOrWhiteSpace(name);
 
 	public TimeSpan Interval { get; } =
-		Guard.Against.OutOfRange(interval, nameof(interval), TimeSpan.FromMilliseconds(200), TimeSpan.FromMinutes(1));
+		Guard.Against.OutOfRange(
+			interval,
+			nameof(interval),
+			TimeSpan.FromMilliseconds(200),
+			TimeSpan.FromMinutes(1)
+		);
 
 	public bool IsRunning { get; private set; }
 
@@ -76,5 +80,6 @@ public sealed class RecurringTask(
 		_log.LogInformation("Stopped worker '{Worker}'", Name);
 	}
 
-	public override string ToString() => $"[{nameof(RecurringTask)}] {Name} ({Interval}) IsRunning:{IsRunning}";
+	public override string ToString() =>
+		$"[{nameof(RecurringTask)}] {Name} ({Interval}) IsRunning:{IsRunning}";
 }

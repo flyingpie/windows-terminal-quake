@@ -10,7 +10,8 @@ public class WindowsPlatformServiceTest
 		pathToAppDataDir: "C:/users/username/AppData/Roaming",
 		pathToAppDir: "C:/path/to/app",
 		pathToTempDir: "C:/path/to/tmp",
-		pathToUserHomeDir: "C:/users/username");
+		pathToUserHomeDir: "C:/users/username"
+	);
 
 	[TestInitialize]
 	public void Setup()
@@ -124,7 +125,6 @@ public class WindowsPlatformServiceTest
 			"C:/path/to/app/.wtq.json",
 			"C:/path/to/app/.wtq.jsonc",
 			"C:/path/to/app/.wtq.json5",
-
 			// In AppData/Roaming/wtq
 			"C:/users/username/AppData/Roaming/wtq/wtq.json",
 			"C:/users/username/AppData/Roaming/wtq/wtq.jsonc",
@@ -132,7 +132,6 @@ public class WindowsPlatformServiceTest
 			"C:/users/username/AppData/Roaming/wtq/.wtq.json",
 			"C:/users/username/AppData/Roaming/wtq/.wtq.jsonc",
 			"C:/users/username/AppData/Roaming/wtq/.wtq.json5",
-
 			// In AppData/Roaming
 			"C:/users/username/AppData/Roaming/wtq.json",
 			"C:/users/username/AppData/Roaming/wtq.jsonc",
@@ -140,7 +139,6 @@ public class WindowsPlatformServiceTest
 			"C:/users/username/AppData/Roaming/.wtq.json",
 			"C:/users/username/AppData/Roaming/.wtq.jsonc",
 			"C:/users/username/AppData/Roaming/.wtq.json5",
-
 			// In user home dir
 			"C:/users/username/wtq.json",
 			"C:/users/username/wtq.jsonc",
@@ -177,7 +175,10 @@ public class WindowsPlatformServiceTest
 	{
 		_fs.Setup(m => m.DirExists(It.IsAny<string>())).Returns(true);
 
-		Assert.AreEqual("C:/users/username/AppData/Roaming/wtq/wtq.jsonc", _p.PreferredPathWtqConfig);
+		Assert.AreEqual(
+			"C:/users/username/AppData/Roaming/wtq/wtq.jsonc",
+			_p.PreferredPathWtqConfig
+		);
 	}
 
 	#region CreateProcess
@@ -210,7 +211,7 @@ public class WindowsPlatformServiceTest
 	{
 		// Arrange
 		_opts.FileName = "the-filename";
-		_opts.ArgumentList = [new("arg-1"), new("arg-2"), new("arg-3"),];
+		_opts.ArgumentList = [new("arg-1"), new("arg-2"), new("arg-3")];
 
 		// Act
 		var proc = _p.CreateProcess(_opts);
@@ -238,14 +239,19 @@ public class WindowsPlatformServiceTest
 	{
 		// Arrange
 		_opts.FileName = "the-filename";
-		_opts.ArgumentList = [new("arg-1"), new("arg-2"), new("arg-3"),];
+		_opts.ArgumentList = [new("arg-1"), new("arg-2"), new("arg-3")];
 		_opts.WorkingDirectory = "/path/to/working/dir";
 
 		// Act
 		var proc = _p.CreateProcess(_opts);
 
 		// Assert
-		AssertProcess.Equals(proc, "the-filename", "/path/to/working/dir", ["arg-1", "arg-2", "arg-3"]);
+		AssertProcess.Equals(
+			proc,
+			"the-filename",
+			"/path/to/working/dir",
+			["arg-1", "arg-2", "arg-3"]
+		);
 	}
 
 	#endregion

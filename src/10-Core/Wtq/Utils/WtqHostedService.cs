@@ -9,8 +9,7 @@ namespace Wtq.Utils;
 /// <li>DisposeAsync</li>
 /// </ul>
 /// </summary>
-public abstract class WtqHostedService
-	: IAsyncDisposable, IHostedService
+public abstract class WtqHostedService : IAsyncDisposable, IHostedService
 {
 	private readonly ILogger _log;
 	private readonly string _name;
@@ -35,7 +34,12 @@ public abstract class WtqHostedService
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Error initializing hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			_log.LogError(
+				ex,
+				"Error initializing hosted service '{HostedService}': {Message}",
+				GetType().FullName,
+				ex.Message
+			);
 			throw;
 		}
 	}
@@ -54,7 +58,12 @@ public abstract class WtqHostedService
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Error starting hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			_log.LogError(
+				ex,
+				"Error starting hosted service '{HostedService}': {Message}",
+				GetType().FullName,
+				ex.Message
+			);
 			throw;
 		}
 	}
@@ -73,7 +82,12 @@ public abstract class WtqHostedService
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Error stopping hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			_log.LogError(
+				ex,
+				"Error stopping hosted service '{HostedService}': {Message}",
+				GetType().FullName,
+				ex.Message
+			);
 			throw;
 		}
 	}
@@ -92,7 +106,12 @@ public abstract class WtqHostedService
 		}
 		catch (Exception ex)
 		{
-			_log.LogError(ex, "Error disposing hosted service '{HostedService}': {Message}", GetType().FullName, ex.Message);
+			_log.LogError(
+				ex,
+				"Error disposing hosted service '{HostedService}': {Message}",
+				GetType().FullName,
+				ex.Message
+			);
 			throw;
 		}
 	}
