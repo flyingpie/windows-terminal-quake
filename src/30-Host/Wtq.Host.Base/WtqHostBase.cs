@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Wtq.Host.Base.Commands;
 using Wtq.Services;
-using Wtq.Services.API;
 using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
@@ -44,7 +43,6 @@ public abstract class WtqHostBase
 		};
 
 		var s = new ServiceCollection()
-			.AddApi()
 			.AddCli()
 			.AddConfiguration(platform)
 			.AddLogging()
