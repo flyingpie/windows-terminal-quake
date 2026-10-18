@@ -20,11 +20,5 @@ public interface IWtqDBusObject : IDBusObject
 	/// </summary>
 	Task<string> GetNextCommandAsync();
 
-	/// <summary>
-	/// Called when a shortcut has been pressed.<br/>
-	/// TODO: Would like to remove this, and do shortcuts through DBus (without KWin script). Didn't get that working just yet.
-	/// </summary>
-	Task OnPressShortcutAsync(string name, string modStr, string keyCharStr, string keyCodeStr);
-
 	Task ToggleAppAsync(string appName);
 }

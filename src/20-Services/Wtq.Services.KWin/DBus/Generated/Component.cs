@@ -39,4 +39,26 @@ partial class Component : KWinObject
 			return writer.CreateMessage();
 		}
 	}
+	public ValueTask<IDisposable> WatchGlobalShortcutPressed(Action<Exception?, (string ComponentUnique, string ShortcutUnique, long Timestamp)> handler)
+	{
+		return this.Connection.WatchSignalAsync(
+			sender: null,
+			path: Path,
+			@interface: __Interface,
+			signal: "globalShortcutPressed",
+			reader: ReadGlobalShortcutPressed,
+			handler: (exception, value) => handler(exception, value),
+			readerState: null,
+			emitOnCapturedContext: false,
+			flags: ObserverFlags.None);
+	}
+
+	private static (string ComponentUnique, string ShortcutUnique, long Timestamp) ReadGlobalShortcutPressed(Message message, object? state)
+	{
+		var reader = message.GetBodyReader();
+		var componentUnique = reader.ReadString();
+		var shortcutUnique = reader.ReadString();
+		var timestamp = reader.ReadInt64();
+		return (componentUnique, shortcutUnique, timestamp);
+	}
 }

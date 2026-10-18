@@ -321,30 +321,6 @@ cmds["PIN_WINDOW"] = (cmdInfo, params) => {
 	window.frameGeometryChanged.connect(newPin.signalHandler);
 };
 
-cmds["REGISTER_HOT_KEY"] = (cmdInfo, p) => {
-	const descr = `sequence:'${p.sequence}', key char:'${p.keyChar}', key code:'${p.keyCode}', modifier:'${p.mod}'`;
-
-	log.info(`Registering hotkey with name:'${p.name}', ${descr}`);
-
-	registerShortcut(
-		p.name,
-		p.title,
-		p.sequence,
-		() => {
-			log.info(`Firing hotkey with name:'${p.name}', ${descr}`);
-
-			callDBus(
-				wtq.DBUS_SERVICE,		// Service
-				wtq.DBUS_PATH,			// Path
-				wtq.DBUS_INTERFACE,		// Interface
-				"OnPressShortcut",
-				p.name,
-				p.mod,
-				p.keyChar,
-				p.keyCode);
-		});
-}
-
 cmds["SET_WINDOW_ALWAYS_ON_TOP"] = (cmdInfo) => {
 	const p = cmdInfo.params;
 	const w = kwin.getWindowByInternalIdRequired(p.internalId);

@@ -1,6 +1,5 @@
 using Wtq.Services.KWin.DBus;
 using Wtq.Services.KWin.Dto;
-using Wtq.Services.KWin.Input;
 using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin;
@@ -118,32 +117,6 @@ internal sealed class KWinClientV2(IDBusConnection dbus, IWtqDBusObject wtqBusOb
 					y = rect.Y,
 					width = rect.Width,
 					height = rect.Height,
-				},
-				cancellationToken
-			)
-			.NoCtx();
-	}
-
-	public async Task RegisterHotkeyAsync(
-		string name,
-		string description,
-		KeySequence sequence,
-		CancellationToken cancellationToken
-	)
-	{
-		_ = await _wtqBusObj
-			.SendCommandAsync(
-				new("REGISTER_HOT_KEY")
-				{
-					Params = new
-					{
-						name = name,
-						title = description,
-						sequence = sequence.ToKWinString(),
-						mod = sequence.Modifiers.ToString(),
-						keyChar = sequence.KeyChar ?? string.Empty,
-						keyCode = sequence.KeyCode.ToString(),
-					},
 				},
 				cancellationToken
 			)

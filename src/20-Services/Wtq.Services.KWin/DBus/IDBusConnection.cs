@@ -12,6 +12,12 @@ internal interface IDBusConnection
 
 	Task<DBus.Generated.KWinService> GetKWinServiceAsync();
 
+	/// <summary>
+	/// Returns a service wrapper that talks to the global accelerators service (<c>org.kde.kglobalaccel</c>),
+	/// which is used to register and unregister hotkeys.
+	/// </summary>
+	Task<DBus.Generated.KWinService> GetKGlobalAccelServiceAsync();
+
 	Task<DBus.Generated.Scripting> GetScriptingAsync();
 
 	/// <summary>

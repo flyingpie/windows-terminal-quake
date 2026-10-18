@@ -11,6 +11,58 @@ internal class KGlobalAccel : KWinObject
 	private const string __Interface = "org.kde.KGlobalAccel";
 	public KGlobalAccel(KWinService service, ObjectPath path) : base(service, path)
 	{ }
+	public Task DoRegisterAsync(string[] actionId)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage());
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "as",
+				member: "doRegister");
+			writer.WriteArray(actionId);
+			return writer.CreateMessage();
+		}
+	}
+	public Task SetShortcutKeysAsync(string[] actionId, int key, uint flags)
+	{
+		return this.Connection.CallMethodAsync(CreateMessage());
+		MessageBuffer CreateMessage()
+		{
+			var writer = this.Connection.GetMessageWriter();
+			writer.WriteMethodCallHeader(
+				destination: Service.Destination,
+				path: Path,
+				@interface: __Interface,
+				signature: "asa(ai)u",
+				member: "setShortcutKeys");
+
+			// actionId ("as")
+			writer.WriteArray(actionId);
+
+			// keys ("a(ai)"): a list of key sequences, each a list of up to 4 key combinations.
+			// Note that it's important to write the entire (single) sequence in one go; separate properties may otherwise be ignored.
+			var arrayStart = writer.WriteArrayStart(DBusType.Struct);
+			writer.WriteStructureStart();
+
+			var sequenceStart = writer.WriteArrayStart(DBusType.Int32);
+			writer.WriteInt32(key);
+			writer.WriteInt32(0);
+			writer.WriteInt32(0);
+			writer.WriteInt32(0);
+			writer.WriteArrayEnd(sequenceStart);
+
+			writer.WriteArrayEnd(arrayStart);
+
+			// flags ("u")
+			writer.WriteUInt32(flags);
+
+			return writer.CreateMessage();
+		}
+	}
 	public Task<bool> UnregisterAsync(string componentUnique, string shortcutUnique)
 	{
 		return this.Connection.CallMethodAsync(CreateMessage(), (Message m, object? s) => ReadMessage_b(m, (KWinObject)s!), this);

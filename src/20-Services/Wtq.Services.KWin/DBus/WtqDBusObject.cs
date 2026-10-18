@@ -36,8 +36,6 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 	private readonly IKWinScriptService _scriptService;
 	private readonly IPlatformService _platformService;
 
-	private readonly List<Func<KeySequence, Task>> _onPressShortcutHandlers = [];
-
 	private KWinScript? _script;
 
 	private readonly RecurringTask _noopLoop;
@@ -216,38 +214,6 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 		}
 
 		return Task.CompletedTask;
-	}
-
-	public void OnPressShortcut(Func<KeySequence, Task> handler)
-	{
-		Guard.Against.Null(handler);
-
-		_onPressShortcutHandlers.Add(handler);
-	}
-
-	/// <inheritdoc/>
-	public async Task OnPressShortcutAsync(
-		string name,
-		string modStr,
-		string keyCharStr,
-		string keyCodeStr
-	)
-	{
-		_log.LogInformation(
-			"{MethodName}({Name}, {Modifier}, {KeyChar}, {KeyCode})",
-			nameof(OnPressShortcutAsync),
-			name,
-			modStr,
-			keyCharStr,
-			keyCodeStr
-		);
-
-		Enum.TryParse<KeyModifiers>(modStr, ignoreCase: true, out var mod);
-		Enum.TryParse<KeyCode>(keyCodeStr, ignoreCase: true, out var key);
-
-		var keySeq = new KeySequence(mod, keyCharStr, key);
-
-		await Task.WhenAll(_onPressShortcutHandlers.Select(h => h(keySeq)));
 	}
 
 	public Task ToggleAppAsync(string appName)

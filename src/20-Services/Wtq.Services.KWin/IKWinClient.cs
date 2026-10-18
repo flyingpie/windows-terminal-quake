@@ -1,4 +1,3 @@
-using Wtq.Configuration;
 using Wtq.Services.KWin.Dto;
 
 namespace Wtq.Services.KWin;
@@ -23,13 +22,6 @@ public interface IKWinClient
 	Task MoveWindowAsync(KWinWindow window, Point location, CancellationToken cancellationToken);
 
 	Task PinWindowAsync(KWinWindow window, Rectangle rect, CancellationToken cancellationToken);
-
-	Task RegisterHotkeyAsync(
-		string name,
-		string description,
-		KeySequence sequence,
-		CancellationToken cancellationToken
-	);
 
 	Task ResizeWindowAsync(KWinWindow window, Size size, CancellationToken cancellationToken);
 

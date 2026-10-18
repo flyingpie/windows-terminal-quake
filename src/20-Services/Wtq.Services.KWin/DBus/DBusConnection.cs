@@ -22,6 +22,7 @@ internal sealed class DBusConnection : IDBusConnection, IDisposable
 	private readonly InitLock _lock = new();
 
 	private DBus.Generated.KWinService? _kwinService;
+	private DBus.Generated.KWinService? _kglobalAccelService;
 	private DBus.Generated.KWin? _kwin;
 	private DBus.Generated.Scripting? _scripting;
 
@@ -50,6 +51,17 @@ internal sealed class DBusConnection : IDBusConnection, IDisposable
 		await InitAsync().NoCtx();
 
 		return _kwin ??= (await GetKWinServiceAsync().NoCtx()).CreateKWin("/KWin");
+	}
+
+	public async Task<DBus.Generated.KWinService> GetKGlobalAccelServiceAsync()
+	{
+		await InitAsync().NoCtx();
+
+		// Note that KGlobalAccel lives in its own service, which may or may not be the same process as KWin.
+		return _kglobalAccelService ??= new DBus.Generated.KWinService(
+			_clientConnection,
+			"org.kde.kglobalaccel"
+		);
 	}
 
 	public async Task<DBus.Generated.Scripting> GetScriptingAsync()
