@@ -94,12 +94,9 @@ internal sealed class KWinHotkeyService : BackgroundService
 		{
 			await Task.Delay(1000, stoppingToken);
 		}
-	}
 
-	public override async Task StopAsync(CancellationToken cancellationToken)
-	{
 		// Cleanup shortcuts (unless hotkey reset has been disabled).
-		await UnregisterAllAsync(cancellationToken).NoCtx();
+		await UnregisterAllAsync(stoppingToken).NoCtx();
 	}
 
 	public async Task RegisterAllAsync(CancellationToken cancellationToken)
