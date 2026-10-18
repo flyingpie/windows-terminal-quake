@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SharpHook;
 using SharpHook.Data;
@@ -9,7 +10,7 @@ namespace Wtq.Services.SharpHook;
 /// <summary>
 /// Uses SharpHook (https://github.com/TolikPylypchuk/SharpHook) to register hotkeys.
 /// </summary>
-public class SharpHookHotkeyService : WtqHostedService
+public class SharpHookHotkeyService : BackgroundService
 {
 	private readonly ILogger _log = Log.For<SharpHookHotkeyService>();
 
@@ -50,17 +51,15 @@ public class SharpHookHotkeyService : WtqHostedService
 		_hook = new SimpleGlobalHook();
 	}
 
-	protected override async ValueTask OnDisposeAsync()
+	public override void Dispose()
 	{
 		_log.LogDebug("Disposing SharpHook");
 
 		_hook.Stop();
 		_hook.Dispose();
-
-		await _hookTask.NoCtx();
 	}
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	public override Task StartAsync(CancellationToken cancellationToken)
 	{
 		_hook.KeyReleased += (s, e) =>
 		{
@@ -96,6 +95,11 @@ public class SharpHookHotkeyService : WtqHostedService
 		_hookTask = _hook.RunAsync(GlobalHookType.Keyboard);
 
 		return Task.CompletedTask;
+	}
+
+	protected override Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		return _hookTask!;
 	}
 
 	/// <summary>

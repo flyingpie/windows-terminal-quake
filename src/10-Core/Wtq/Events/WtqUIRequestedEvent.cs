@@ -1,3 +1,3 @@
-namespace Wtq.Events;
-
-public class WtqUIRequestedEvent : WtqEvent { }
+// namespace Wtq.Events;
+//
+// public class WtqUIRequestedEvent : WtqEvent { }

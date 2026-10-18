@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Wtq.Configuration;
 using Wtq.Events;
@@ -10,7 +11,7 @@ namespace Wtq.Services.KWin;
 /// TODO: DBus-only shortcut registration (we did get listening to key press events working, actual registration proved more difficult).
 /// TODO: Fetch known WTQ shortcut names, instead of the fixed index-based names.
 /// </summary>
-internal sealed class KWinHotkeyService : WtqHostedService
+internal sealed class KWinHotkeyService : BackgroundService
 {
 	/// <summary>
 	/// Hotkeys are registered as "shortcuts" in KWin, and they need at least an id, by which they're uniquely identified.<br/>
@@ -71,7 +72,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		);
 	}
 
-	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		var kwinService = await _dbus.GetKWinServiceAsync().NoCtx();
 		_kGlobalAccel = kwinService.CreateKGlobalAccel("/kglobalaccel");
@@ -87,20 +88,18 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		);
 
 		// Register hotkeys on WTQ start.
-		await RegisterAllAsync(cancellationToken);
+		await RegisterAllAsync(stoppingToken);
+
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			await Task.Delay(1000, stoppingToken);
+		}
 	}
 
-	protected override async Task OnStopAsync(CancellationToken cancellationToken)
+	public override async Task StopAsync(CancellationToken cancellationToken)
 	{
 		// Cleanup shortcuts (unless hotkey reset has been disabled).
 		await UnregisterAllAsync(cancellationToken).NoCtx();
-	}
-
-	protected override ValueTask OnDisposeAsync()
-	{
-		_lock.Dispose();
-
-		return ValueTask.CompletedTask;
 	}
 
 	public async Task RegisterAllAsync(CancellationToken cancellationToken)

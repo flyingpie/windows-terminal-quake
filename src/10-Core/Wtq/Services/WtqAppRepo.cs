@@ -1,7 +1,7 @@
 namespace Wtq.Services;
 
 /// <inheritdoc cref="IWtqAppRepo"/>.
-public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
+public sealed class WtqAppRepo : BackgroundService, IWtqAppRepo
 {
 	private readonly ILogger _log = Log.For<WtqAppRepo>();
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
@@ -14,7 +14,6 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 	private readonly ConcurrentDictionary<string, WtqApp> _apps = new(
 		StringComparer.OrdinalIgnoreCase
 	);
-	private readonly RecurringTask _loop;
 
 	public WtqAppRepo(
 		IHostApplicationLifetime lifetime,
@@ -32,32 +31,30 @@ public sealed class WtqAppRepo : WtqHostedService, IWtqAppRepo
 
 		// Whenever the settings change, update the list of tracked apps.
 		opts.OnChange(o => _ = Task.Run(() => UpdateAppsAsync(allowStartNew: false)));
-
-		// Start loop that updates app state periodically.
-		_loop = new(
-			$"{nameof(WtqAppRepo)}.UpdateAppStates",
-			TimeSpan.FromSeconds(1),
-			_ => UpdateAppsAsync(allowStartNew: false)
-		);
 	}
 
-	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	public override async Task StopAsync(CancellationToken cancellationToken)
 	{
-		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-		// "StartApps": "OnWtqStart | OnHotkeyPress"
-		await UpdateAppsAsync(allowStartNew: true).NoCtx();
-
-		_loop.Start();
-	}
-
-	protected override async Task OnStopAsync(CancellationToken cancellationToken)
-	{
-		await _loop.DisposeAsync().NoCtx();
-
 		// When WTQ stops, reset all tracked apps.
 		foreach (var app in _apps)
 		{
 			await app.Value.DisposeAsync().NoCtx();
+		}
+	}
+
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		_log.LogInformation("Starting app repo, running initial scan of attachable apps");
+
+		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+		// "StartApps": "OnWtqStart | OnHotkeyPress"
+		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			await UpdateAppsAsync(allowStartNew: false);
+
+			await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
 		}
 	}
 
