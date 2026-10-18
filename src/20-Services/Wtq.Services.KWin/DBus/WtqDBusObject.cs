@@ -80,11 +80,6 @@ internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 		_script = await _scriptService.LoadScriptAsync(_pathToWtqKwinJsCache).NoCtx();
 	}
 
-	public override void Dispose()
-	{
-		_script!.DisposeAsync(); // TODO
-	}
-
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		while (!stoppingToken.IsCancellationRequested)
@@ -95,6 +90,8 @@ internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 
 			await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken); // Timeout is after a minute or so.
 		}
+
+		await _script!.DisposeAsync(); // TODO
 	}
 
 	public Task LogAsync(string level, string msg)
