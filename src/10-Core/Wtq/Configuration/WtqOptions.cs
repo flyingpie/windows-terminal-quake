@@ -60,18 +60,6 @@ public sealed class WtqOptions : WtqSharedOptions
 	public WtqApiOptions? Api { get; set; }
 
 	/// <summary>
-	/// Sometimes functionality is added or changed that carries more risk of introducing bugs.<br/>
-	/// <br/>
-	/// For these cases, such functionality can be put behind a "feature flag", which makes them opt-in or opt-out.<br/>
-	/// <br/>
-	/// That way, we can still merge to master, and make it part of the stable release version (reducing branches, dev builds, etc.),
-	/// but still have a way back should things go awry, without reverting to a previous version.
-	/// </summary>
-	[Display(GroupName = Gn.General, Name = "Feature flags")]
-	[JsonPropertyOrder(105)]
-	public FeatureFlags? FeatureFlags { get; set; }
-
-	/// <summary>
 	/// Whether to show the GUI when WTQ is started.
 	/// </summary>
 	[DefaultValue(false)]

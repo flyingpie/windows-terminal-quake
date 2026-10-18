@@ -14,6 +14,7 @@
 - Feature: When an app is open, but does not have focus, pressing the toggle key will re-focus, instead of toggling off (#380, #383).
 - Feature: When an app is open, but on a different virtual desktop, pressing the toggle key will bring it over to the current virtual desktop (#380, #383).
 - Feature: WinGet install now comes with an (silent) installer, so we get a proper start menu icon, and an entry in "Apps" (#376, #390).
+- Refactor: Removed WinForms hotkey path, only SharpHook remains.
 - Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#279, #280).
 
 ## [v2.1.0] / 2026-04-08
