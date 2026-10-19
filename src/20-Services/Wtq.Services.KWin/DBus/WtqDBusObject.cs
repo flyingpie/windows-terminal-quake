@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.Threading;
 using Tmds.DBus;
 using Wtq.Events;
@@ -8,7 +9,7 @@ using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
+internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 {
 	private const string ServiceName = "nl.flyingpie.wtq.svc";
 
@@ -40,8 +41,6 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 
 	private KWinScript? _script;
 
-	private readonly RecurringTask _noopLoop;
-
 	public WtqDBusObject(
 		IDBusConnection dbus,
 		IKWinScriptService scriptService,
@@ -56,19 +55,11 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 
 		_pathToWtqKwinJsSrc = Path.Combine(_platformService.PathToAppDir, "wtq.kwin.js");
 		_pathToWtqKwinJsCache = Path.Combine(_platformService.PathToTempDir, "wtq.kwin.js");
-
-		// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
-		// and the connection is dropped.
-		_noopLoop = new(
-			$"{nameof(WtqDBusObject)}.NoOpLoop",
-			TimeSpan.FromSeconds(10), // Timeout is after a minute or so.
-			async ct => await SendCommandAsync("NOOP", null, ct).NoCtx()
-		);
 	}
 
 	public ObjectPath ObjectPath => _path;
 
-	protected override async Task OnInitAsync(CancellationToken cancellationToken)
+	public override async Task StartAsync(CancellationToken cancellationToken)
 	{
 		_log.LogInformation("Setting up WTQ DBus service");
 
@@ -89,16 +80,18 @@ internal sealed class WtqDBusObject : WtqHostedService, IWtqDBusObject
 		_script = await _scriptService.LoadScriptAsync(_pathToWtqKwinJsCache).NoCtx();
 	}
 
-	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
-		// Start NOOP loop.
-		_noopLoop.Start();
-	}
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			// The DBus calls from wtq.kwin need to get occasional commands, otherwise the request times out,
+			// and the connection is dropped.
+			await SendCommandAsync("NOOP", null, stoppingToken);
 
-	protected override async ValueTask OnDisposeAsync()
-	{
-		await _script!.DisposeAsync();
-		await _cts.CancelAsync();
+			await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken); // Timeout is after a minute or so.
+		}
+
+		await _script!.DisposeAsync(); // TODO
 	}
 
 	public Task LogAsync(string level, string msg)

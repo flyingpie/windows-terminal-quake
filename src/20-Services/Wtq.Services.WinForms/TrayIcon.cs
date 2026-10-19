@@ -38,7 +38,11 @@ public sealed class TrayIcon : IDisposable
 					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
 				),
 				new ToolStripSeparator(),
-				CreateItem("Open Main Window", () => bus.Publish(new WtqUIRequestedEvent())),
+				CreateItem(
+					"Open Main Window",
+					() => { /* TODO */
+					}
+				),
 				new ToolStripSeparator(),
 				CreateItem(
 					"Open Settings File",

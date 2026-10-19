@@ -5,7 +5,7 @@ internal sealed class WinFormsTrayIconService(
 	IPlatformService platform,
 	IWtqBus bus,
 	TrayIconUtil trayIconUtil
-) : WtqHostedService
+) : BackgroundService
 {
 	private readonly IHostApplicationLifetime _lifetime = Guard.Against.Null(lifetime);
 	private readonly IPlatformService _platform = Guard.Against.Null(platform);
@@ -14,17 +14,23 @@ internal sealed class WinFormsTrayIconService(
 
 	private TrayIcon? _icon;
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	public override Task StartAsync(CancellationToken cancellationToken)
 	{
 		_icon = new TrayIcon(_lifetime, _bus, _platform, _trayIconUtil);
 
 		return Task.CompletedTask;
 	}
 
-	protected override ValueTask OnDisposeAsync()
+	public override void Dispose()
 	{
 		_icon?.Dispose();
+	}
 
-		return ValueTask.CompletedTask;
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			await Task.Delay(1000, stoppingToken);
+		}
 	}
 }
