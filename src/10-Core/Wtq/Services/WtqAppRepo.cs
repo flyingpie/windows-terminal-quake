@@ -42,22 +42,6 @@ public sealed class WtqAppRepo : BackgroundService, IWtqAppRepo
 		}
 	}
 
-	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-	{
-		_log.LogInformation("Starting app repo, running initial scan of attachable apps");
-
-		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
-		// "StartApps": "OnWtqStart | OnHotkeyPress"
-		await UpdateAppsAsync(allowStartNew: true).NoCtx();
-
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await UpdateAppsAsync(allowStartNew: false);
-
-			await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
-		}
-	}
-
 	/// <inheritdoc/>
 	public IEnumerable<WtqApp> GetAll()
 	{
@@ -93,6 +77,22 @@ public sealed class WtqAppRepo : BackgroundService, IWtqAppRepo
 	public WtqApp? GetPrimary()
 	{
 		return _apps.Values.FirstOrDefault();
+	}
+
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		_log.LogInformation("Starting app repo, running initial scan of attachable apps");
+
+		// TODO: Make setting for "allowStartNew"? As in, allow starting apps on WTQ first start?
+		// "StartApps": "OnWtqStart | OnHotkeyPress"
+		await UpdateAppsAsync(allowStartNew: true).NoCtx();
+
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			await UpdateAppsAsync(allowStartNew: false);
+
+			await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+		}
 	}
 
 	/// <summary>
