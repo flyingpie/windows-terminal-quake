@@ -32,7 +32,7 @@
 		<PackageVersion Include="Radzen.Blazor" Version="12.1.6" />
 		<!-- HTTP API -->
 		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.18.2" />
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.18.3" />
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.4.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
