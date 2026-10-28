@@ -59,12 +59,12 @@ public class WtqAppToggleService(
 		//
 		// The "dest" rect, where we want the app to move to.
 		var windowRectDst = await _windowRectProvider
-			.GetOnScreenRectAsync(screenRectDst, windowRectCur, app.Options)
+			.GetOnScreenRectAsync(screenRectDst, windowRectCur, app)
 			.NoCtx();
 
 		// The "source" rect, where the window is coming from.
 		var windowRectSrc = await _windowRectProvider
-			.GetOffScreenRectAsync(screenRectDst, windowRectDst, app.Options)
+			.GetOffScreenRectAsync(screenRectDst, windowRectDst, app)
 			.NoCtx();
 
 		_log.LogDebug(
@@ -121,12 +121,11 @@ public class WtqAppToggleService(
 		// Source & target rects.
 		var windowRectSrc = await app.GetWindowRectAsync().NoCtx();
 		var windowRectDst = await _windowRectProvider
-			.GetOffScreenRectAsync(
-				screenRectSrc: screenRectSrc,
-				windowRectSrc: windowRectSrc,
-				app.Options
-			)
+			.GetOffScreenRectAsync(screenRectSrc: screenRectSrc, windowRectSrc: windowRectSrc, app)
 			.NoCtx();
+
+		// Store the position the window was before toggling it off.
+		app.SetPrevPosition(screenRectSrc, windowRectSrc);
 
 		_log.LogDebug(
 			"ToggleOff app '{App}' from '{From}' to '{To}'",
