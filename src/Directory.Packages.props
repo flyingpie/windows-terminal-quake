@@ -7,14 +7,14 @@
 		<PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
 		<PackageVersion Include="DeclarativeCommandLine" Version="2.0.11" />
 		<PackageVersion Include="DeclarativeCommandLine.Generator" Version="2.0.11" />
-		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
 		<PackageVersion Include="Microsoft.VisualStudio.Threading" Version="18.12.1" />
 		<PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.367" />
 		<PackageVersion Include="Namotion.Reflection" Version="3.5.1" />
 		<PackageVersion Include="SharpHook" Version="8.0.1" />
 		<PackageVersion Include="System.Numerics.Vectors" Version="4.6.1" />
-		<PackageVersion Include="Tmds.DBus" Version="0.95.1" />
-		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.95.1" />
+		<PackageVersion Include="Tmds.DBus" Version="0.95.2" />
+		<PackageVersion Include="Tmds.DBus.Protocol" Version="0.95.2" />
 		<!-- Analyzers -->
 		<PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.12.1" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.35.0.4138" />
@@ -29,10 +29,10 @@
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13" />
-		<PackageVersion Include="Radzen.Blazor" Version="12.1.6" />
+		<PackageVersion Include="Radzen.Blazor" Version="12.1.8" />
 		<!-- HTTP API -->
-		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.18.2" />
+		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.18.3" />
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.4.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
@@ -46,8 +46,8 @@
 		<!-- Testing -->
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
 		<PackageVersion Include="Moq" Version="4.21.0" />
-		<PackageVersion Include="MSTest" Version="4.5.1" />
+		<PackageVersion Include="MSTest" Version="4.5.2" />
 		<!-- Explicit transitives due to vulnerabilities -->
-		<PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+		<PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
 	</ItemGroup>
 </Project>
