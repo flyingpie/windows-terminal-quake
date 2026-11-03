@@ -146,7 +146,16 @@ public class WtqAppToggleService(
 			await app.MoveWindowAsync(BehindScreenLocation).NoCtx();
 
 			// Pin window so it doesn't move until we touch it again.
-			await app.Window.SetPinnedAsync(windowRectDst.Value).NoCtx();
+			await app
+				.Window.SetPinnedAsync(
+					new Rectangle(
+						BehindScreenLocation.X,
+						BehindScreenLocation.Y,
+						windowRectSrc.Width,
+						windowRectSrc.Height
+					)
+				)
+				.NoCtx();
 			return;
 		}
 
