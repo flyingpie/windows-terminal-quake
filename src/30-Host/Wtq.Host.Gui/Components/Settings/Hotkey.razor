@@ -1,7 +1,6 @@
-@using Wtq.Services.UI.Extensions
+@using Wtq.Host.Gui.Extensions
 
 @inject IPlatformService Platform
-@inject IWtqBus Bus
 
 @code {
 
@@ -33,9 +32,13 @@
 		Options.KeyChar = null;
 	}
 
-	private void HandleFocusGained(FocusEventArgs e) => Bus.Publish<WtqSuspendHotkeysEvent>();
+	private void HandleFocusGained(FocusEventArgs e)
+	{
+	}
 
-	private void HandleFocusLost(FocusEventArgs e) => Bus.Publish<WtqResumeHotkeysEvent>();
+	private void HandleFocusLost(FocusEventArgs e)
+	{
+	}
 
 	private void HandleKeyDown(KeyboardEventArgs e)
 	{

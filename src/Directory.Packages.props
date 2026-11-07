@@ -26,7 +26,7 @@
 		<PackageVersion Include="Nuke.Common" Version="10.1.0" />
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
-		<PackageVersion Include="Photino.Blazor" Version="4.0.13" />
+		<PackageVersion Include="PhotinoX.Blazor" Version="5.4.1" />
 		<PackageVersion Include="Radzen.Blazor" Version="12.1.12" />
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.4.0" />

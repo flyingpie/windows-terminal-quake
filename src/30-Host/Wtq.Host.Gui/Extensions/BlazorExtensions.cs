@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
-using Wtq.Services.UI.Input;
+using Wtq.Host.Gui.Input;
 
-namespace Wtq.Services.UI.Extensions;
+namespace Wtq.Host.Gui.Extensions;
 
 public static class BlazorExtensions
 {

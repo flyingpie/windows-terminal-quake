@@ -1,16 +1,17 @@
 #pragma warning disable
 // ReSharper disable All
 
+using System.IO.Compression;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
-using System.IO.Compression;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using FileMode = System.IO.FileMode;
 
 /// <summary>
 /// Artifact-producing targets.
 /// </summary>
+// csharpier-ignore-start
 public sealed partial class Build
 {
 	private Target BuildLinux => _ => _
@@ -32,12 +33,15 @@ public sealed partial class Build
 		{
 			var st = PathToLinux64FrameworkDependent;
 
-			DotNetPublish(_ => _
-				.SetConfiguration(Configuration)
-				.SetProject(Solution.Q30_Host.Wtq_Host_Linux)
-				.SetOutput(st)
-				.SetRuntime("linux-x64")
-				.SetSelfContained(false));
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Linux, Solution.Q30_Host.Wtq_Host_Gui })
+			{
+				DotNetPublish(_ => _
+					.SetConfiguration(Configuration)
+					.SetProject(proj)
+					.SetOutput(st)
+					.SetRuntime("linux-x64")
+					.SetSelfContained(false));
+			}
 
 			st.TarGZipTo(PathToLinux64FrameworkDependentZip, fileMode: FileMode.CreateNew);
 
@@ -55,12 +59,15 @@ public sealed partial class Build
 		{
 			var st = PathToLinux64SelfContained;
 
-			DotNetPublish(_ => _
-				.SetConfiguration(Configuration)
-				.SetProject(Solution.Q30_Host.Wtq_Host_Linux)
-				.SetOutput(st)
-				.SetRuntime("linux-x64")
-				.SetSelfContained(true));
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Linux, Solution.Q30_Host.Wtq_Host_Gui })
+			{
+				DotNetPublish(_ => _
+					.SetConfiguration(Configuration)
+					.SetProject(proj)
+					.SetOutput(st)
+					.SetRuntime("linux-x64")
+					.SetSelfContained(true));
+			}
 
 			st.TarGZipTo(PathToLinux64SelfContainedZip, fileMode: FileMode.CreateNew);
 
@@ -78,13 +85,16 @@ public sealed partial class Build
 		{
 			var st = PathToWin64FrameworkDependent;
 
-			DotNetPublish(_ => _
-				.SetConfiguration(Configuration)
-				.SetFramework("net10.0-windows")
-				.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
-				.SetOutput(st)
-				.SetRuntime("win-x64")
-				.SetSelfContained(false));
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Windows, Solution.Q30_Host.Wtq_Host_Gui })
+			{
+				DotNetPublish(_ => _
+					.SetConfiguration(Configuration)
+					.SetFramework("net10.0-windows")
+					.SetProject(proj)
+					.SetOutput(st)
+					.SetRuntime("win-x64")
+					.SetSelfContained(false));
+			}
 
 			st.ZipTo(PathToWin64FrameworkDependentZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
 
@@ -102,16 +112,20 @@ public sealed partial class Build
 		{
 			var st = PathToWin64SelfContained;
 
-			DotNetPublish(_ => _
-				.SetConfiguration(Configuration)
-				.SetFramework("net10.0-windows")
-				.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
-				.SetOutput(st)
-				.SetRuntime("win-x64")
-				.SetSelfContained(true));
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Gui, Solution.Q30_Host.Wtq_Host_Windows })
+			{
+				DotNetPublish(_ => _
+					.SetConfiguration(Configuration)
+					.SetFramework("net10.0-windows")
+					.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
+					.SetOutput(st)
+					.SetRuntime("win-x64")
+					.SetSelfContained(true));
+			}
 
 			st.ZipTo(PathToWin64SelfContainedZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
 
 			PathToWin64SelfContainedZipSha256.WriteAllText(PathToWin64SelfContainedZip.GetFileHashSha256());
 		});
 }
+// csharpier-ignore-end
