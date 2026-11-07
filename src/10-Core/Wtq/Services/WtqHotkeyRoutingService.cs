@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.Threading;
-
 namespace Wtq.Services;
 
 /// <summary>
