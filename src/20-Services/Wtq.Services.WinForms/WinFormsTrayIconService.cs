@@ -30,7 +30,7 @@ internal sealed class WinFormsTrayIconService(
 	{
 		while (!stoppingToken.IsCancellationRequested)
 		{
-			await Task.Delay(1000, stoppingToken);
+			await Task.Delay(10_000, stoppingToken);
 		}
 	}
 }
