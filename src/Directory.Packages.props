@@ -30,9 +30,6 @@
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
 		<PackageVersion Include="Photino.Blazor" Version="4.0.13" />
 		<PackageVersion Include="Radzen.Blazor" Version="12.1.12" />
-		<!-- HTTP API -->
-		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
-		<PackageVersion Include="Scalar.AspNetCore" Version="2.19.0" />
 		<!-- Logging -->
 		<PackageVersion Include="Serilog" Version="4.4.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
