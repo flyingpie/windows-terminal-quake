@@ -439,21 +439,6 @@ Applications to enable Quake-style dropdown for.
 }
 ```
 
-##### API
-
-<p>WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.</p>
-<p>See the <a href="#http-api">HTTP API section</a> for more information and usage examples.</p>
-
-```json
-{
-	"Api": {
-		"Enable": true,
-		"Urls": ["http://127.0.0.1:7997"]
-	}
-	// ...
-}
-```
-
 ##### Feature flags
 
 <p>Sometimes functionality is added or changed that carries more risk of introducing bugs.</p>
@@ -1205,9 +1190,6 @@ Execute a program when some event occurs.
 
 When WTQ is running, various events occur, which can be hooked to trigger some action.
 
-!!! note "Event Hooks"
-	For going the other direction, where you tell WTQ to do something, see [HTTP API](#http-api).
-
 For example, to execute a script whenever an app is toggled **on**:
 
 ```json
@@ -1323,84 +1305,6 @@ And `wtq.jsonc`:
 		}
 	]
 ```
-
-## :material-api: HTTP API
-
-WTQ comes with an HTTP API (**disabled** by default), that can be used to control WTQ programmatically.
-
-!!! warning "Opt-In"
-	For clarity, the HTTP API is **disabled by default**. No socket is opened until **enabled manually**.
-
-!!! note "Event Hooks"
-	For going the other direction, where WTQ notifies someone else, see [Event Hooks](#event-hooks).
-
-!!! note "Requires Restart"
-	Making changes to this part of the settings requires a WTQ restart.
-
-It can be enabled by setting **Enable** to **true**:
-
-```json
-{
-	"Api": {
-		"Enable": true
-	}
-}
-```
-
-By default, the HTTP API is made available through a named pipe (**//pipe:/wtq** on Windows, **/run/user/USERNAME/wtq/wtq.sock** on Linux).
-This makes it such that no ports need to be allocated, and no ports are exposed externally.
-
-Though because it can be useful to have a proper socket (for example to be able to use a browser or various HTTP clients), this can be changed using the **Urls** setting, for example **localhost**, on port **7997**:
-
-```json
-{
-	"Api": {
-		"Enable": true,
-		"Urls": ["http://127.0.0.1:7997"]
-	}
-}
-```
-
-Once running, the API can be accessed with an HTTP client, or using the WTQ CLI.
-
-The root address of the API will return an [OpenAPI-driven](https://www.openapis.org/) documentation page, with all the available endpoints:
-
-![API](assets/img/api.png)
-
-For example, using Curl to fetch all configured apps:
-
-```bash
-curl http://localhost:7997/apps | jq
-{
-	"apps": [
-		{
-			"name": "KeePassXC",
-			"isAttached": true,
-			"isOpen": false
-		},
-		{
-			"name": "Dolphin",
-			"isAttached": true,
-			"isOpen": false
-		},
-		{
-			"name": "WezTerm",
-			"isAttached": true,
-			"isOpen": true
-		}
-	]
-}
-```
-
-Or to open a specific app:
-
-```bash
-curl -X POST "http://localhost:7997/apps/open?appName=Dolphin"
-```
-
-## :material-excavator: Building From Source
-
-!!! danger "TODO"
 
 ## :material-pencil-ruler: Architecture
 
