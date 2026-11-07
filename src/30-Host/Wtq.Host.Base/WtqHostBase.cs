@@ -12,26 +12,13 @@ public abstract class WtqHostBase
 	{
 		Guard.Against.Null(args);
 
+		var builder = Microsoft.Extensions.Hosting.Host.CreateApplicationBuilder(args);
+
 		var platform = CreatePlatformService();
 
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure(platform.PathToLogsDir);
 
-		await RunCliAsync(platform, args).NoCtx();
-	}
-
-	protected abstract IPlatformService CreatePlatformService();
-
-	protected virtual void ConfigureServices(IServiceCollection services)
-	{
-		// Implemented by OS-specific implementations.
-	}
-
-	/// <summary>
-	/// This is called whenever the app is being run in CLI mode (i.e. with command line arguments).
-	/// </summary>
-	private async Task<int> RunCliAsync(IPlatformService platform, string[] args)
-	{
 		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
 		{
 			var log = Log.For<WtqHostBase>();
@@ -41,19 +28,34 @@ public abstract class WtqHostBase
 			Log.CloseAndFlush();
 		};
 
-		var s = new ServiceCollection()
-			.AddConfiguration(platform)
+		builder
+			.Services.AddConfiguration(platform)
 			.AddLogging()
 			.AddSingleton(platform)
 			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
 			.AddUI()
 			.AddWtqCore();
 
-		ConfigureServices(s);
+		ConfigureServices(builder.Services);
 
-		var p = s.BuildServiceProvider();
+		Console.WriteLine("Notifying!");
 
-		// TODO: Fix in service worker refactor.
-		return -1;
+		// lifetime.NotifyStarted();
+
+		Console.WriteLine("Waiting!");
+
+		// await host.Done;
+
+		var host = builder.Build();
+		await host.RunAsync();
+
+		Console.WriteLine("DONE!");
+	}
+
+	protected abstract IPlatformService CreatePlatformService();
+
+	protected virtual void ConfigureServices(IServiceCollection services)
+	{
+		// Implemented by OS-specific implementations.
 	}
 }
