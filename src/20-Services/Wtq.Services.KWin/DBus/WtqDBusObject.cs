@@ -88,7 +88,7 @@ internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 			// and the connection is dropped.
 			await SendCommandAsync("NOOP", null, stoppingToken);
 
-			await Task.Delay(10_000, stoppingToken); // Timeout is after a minute or so.
+			await Task.Delay(10_000, stoppingToken).NoThrowAwaitable(); // Timeout is after a minute or so.
 		}
 
 		await _script!.DisposeAsync();

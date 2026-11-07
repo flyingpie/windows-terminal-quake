@@ -65,7 +65,12 @@ public sealed class WtqTrayIconService : BackgroundService
 
 	public override Task StartAsync(CancellationToken cancellationToken)
 	{
-		new Thread(ShowStatusIcon).Start();
+		var thread = new Thread(ShowStatusIcon)
+		{
+			IsBackground = true,
+			Name = nameof(WtqTrayIconService),
+		};
+		thread.Start();
 
 		return Task.CompletedTask;
 	}
@@ -75,13 +80,8 @@ public sealed class WtqTrayIconService : BackgroundService
 		_icon.Dispose();
 	}
 
-	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-	{
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await Task.Delay(10_000, stoppingToken);
-		}
-	}
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 
 	private void ShowStatusIcon()
 	{

@@ -12,6 +12,7 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using Ardalis.GuardClauses;
 global using Microsoft.Extensions.Logging;
+global using Microsoft.VisualStudio.Threading;
 global using Wtq.Exceptions;
 global using Wtq.Input;
 global using Wtq.Utils;
