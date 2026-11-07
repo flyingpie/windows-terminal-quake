@@ -78,7 +78,7 @@ public sealed class WtqWindowResolver(IWtqWindowService procService) : IWtqWindo
 			var window2 = await FindWindowAsync(opts, CancellationToken.None).NoCtx();
 			if (window2 == null)
 			{
-				await Task.Delay(TimeSpan.FromMilliseconds(250)).NoCtx();
+				await Task.Delay(250).NoCtx();
 				continue;
 			}
 

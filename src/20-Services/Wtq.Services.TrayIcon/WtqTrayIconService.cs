@@ -38,8 +38,7 @@ public sealed class WtqTrayIconService : BackgroundService
 				new SeparatorItem(),
 				CreateItem(
 					"Open Main Window",
-					() => {
-						/* TODO */
+					() => { /* TODO */
 					}
 				),
 				new SeparatorItem(),
@@ -80,7 +79,7 @@ public sealed class WtqTrayIconService : BackgroundService
 	{
 		while (!stoppingToken.IsCancellationRequested)
 		{
-			await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+			await Task.Delay(10_000, stoppingToken);
 		}
 	}
 

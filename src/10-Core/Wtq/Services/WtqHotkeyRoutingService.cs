@@ -70,11 +70,14 @@ public class WtqHotkeyRoutingService : BackgroundService
 		return Task.CompletedTask;
 	}
 
+	/// <summary>
+	/// Doesn't do anything after event subscription.
+	/// </summary>
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		while (!stoppingToken.IsCancellationRequested)
 		{
-			await Task.Delay(1000, stoppingToken);
+			await Task.Delay(10_000, stoppingToken);
 		}
 	}
 }

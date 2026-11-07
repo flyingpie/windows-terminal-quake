@@ -59,7 +59,7 @@ public sealed class WtqTween(IOptionsMonitor<WtqOptions> opts) : IWtqTween
 			var waitMs = frameTimeMs - swFrame.ElapsedMilliseconds;
 			if (waitMs > 0)
 			{
-				await Task.Delay(TimeSpan.FromMilliseconds(waitMs)).ConfigureAwait(false);
+				await Task.Delay((int)waitMs).ConfigureAwait(false);
 			}
 		}
 

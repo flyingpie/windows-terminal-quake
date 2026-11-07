@@ -39,6 +39,9 @@ public sealed class WtqService : BackgroundService
 		return Task.CompletedTask;
 	}
 
+	/// <summary>
+	/// Doesn't do anything after event subscription.
+	/// </summary>
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		while (!stoppingToken.IsCancellationRequested)

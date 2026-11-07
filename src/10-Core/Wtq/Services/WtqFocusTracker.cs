@@ -41,6 +41,8 @@ public sealed class WtqFocusTracker(IWtqBus bus, IWtqWindowService windowService
 
 			// Store for next cycle.
 			_prev = curr;
+
+			await Task.Delay(333, stoppingToken);
 		}
 	}
 }

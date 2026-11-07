@@ -26,6 +26,9 @@ internal sealed class WinFormsTrayIconService(
 		_icon?.Dispose();
 	}
 
+	/// <summary>
+	/// Doesn't do anything after setting up tray icon.
+	/// </summary>
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		while (!stoppingToken.IsCancellationRequested)

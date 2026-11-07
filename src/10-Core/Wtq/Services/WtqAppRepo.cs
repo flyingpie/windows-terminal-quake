@@ -91,7 +91,7 @@ public sealed class WtqAppRepo : BackgroundService, IWtqAppRepo
 		{
 			await UpdateAppsAsync(allowStartNew: false);
 
-			await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+			await Task.Delay(1_000, stoppingToken);
 		}
 	}
 
