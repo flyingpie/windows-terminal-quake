@@ -12,7 +12,6 @@ public static class ServiceCollectionExtensions
 
 		return services
 			.AddBlazorDesktop()
-			.AddHostedService<WtqUIRunnerHostSevice>()
 			.AddRadzenComponents()
 			.AddSingleton<WtqPhotinoBlazorApp>()
 			.AddTransient<Notifier>()

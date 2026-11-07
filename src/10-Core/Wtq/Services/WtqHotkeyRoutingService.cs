@@ -4,7 +4,7 @@ namespace Wtq.Services;
 /// Receives raw hotkey events from a platform-specific service, and converts them to more
 /// specific events, such as <see cref="WtqAppToggledEvent"/>.
 /// </summary>
-public class WtqHotkeyRoutingService : WtqHostedService
+public class WtqHotkeyRoutingService : BackgroundService
 {
 	private readonly ILogger _log = Log.For<WtqHotkeyRoutingService>();
 
@@ -68,5 +68,16 @@ public class WtqHotkeyRoutingService : WtqHostedService
 			sequence
 		);
 		return Task.CompletedTask;
+	}
+
+	/// <summary>
+	/// Doesn't do anything after event subscription.
+	/// </summary>
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		while (!stoppingToken.IsCancellationRequested)
+		{
+			await Task.Delay(10_000, stoppingToken);
+		}
 	}
 }

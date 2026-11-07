@@ -46,7 +46,6 @@ public abstract class WtqHostBase
 			.AddLogging()
 			.AddSingleton(platform)
 			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
-			.AddSingleton<WtqHost>()
 			.AddUI()
 			.AddWtqCore();
 
