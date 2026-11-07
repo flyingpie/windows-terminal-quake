@@ -25,6 +25,8 @@ public sealed class WtqApp : IAsyncDisposable
 
 	private Point? _lastLoc;
 
+	private readonly Dictionary<Rectangle, Rectangle> _prevPositions = [];
+
 	public WtqApp(
 		IWtqAppToggleService toggler,
 		IWtqScreenInfoProvider screenInfoProvider,
@@ -119,6 +121,19 @@ public sealed class WtqApp : IAsyncDisposable
 
 		_updateLock.Dispose();
 	}
+
+	/// <summary>
+	/// Returns the position of the app, last time it was sent to the screen identified by the specified screen.<br/>
+	/// Returns null if the app hasn't been on that screen yet (as far as WTQ knows at least).
+	/// </summary>
+	public Rectangle? GetPrevPosition(Rectangle screen) =>
+		_prevPositions.TryGetValue(screen, out var wnd) ? wnd : null;
+
+	/// <summary>
+	/// Updates the position the window has/should have on the specified screen.
+	/// </summary>
+	public void SetPrevPosition(Rectangle screen, Rectangle window) =>
+		_prevPositions[screen] = window;
 
 	/// <summary>
 	/// Returns the rectangle of the screen that the app is on.<br/>

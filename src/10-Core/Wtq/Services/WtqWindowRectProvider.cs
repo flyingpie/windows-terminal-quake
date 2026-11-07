@@ -14,10 +14,12 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 	public async Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	)
 	{
-		Guard.Against.Null(opts);
+		Guard.Against.Null(app);
+
+		var opts = app.Options;
 
 		// Calculate app window size.
 		var wnd =
@@ -39,11 +41,10 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 			HorizontalAlign.Right => screenRectDst.X + (screenRectDst.Width - wnd.Width),
 
 			// None (keep current horizontal position)
-			// Note that we only do this if the window is coming back on the same screen. Otherwise, we're centering.
-			HorizontalAlign.None => windowRectSrc.X >= screenRectDst.X
-			&& windowRectSrc.X <= screenRectDst.X + screenRectDst.Width
-				? windowRectSrc.X
-				: screenRectDst.X
+			// Use the exact X position from the previous toggle onto the target screen.
+			// Fallback to centering.
+			HorizontalAlign.None => app.GetPrevPosition(screenRectDst)?.X
+				?? screenRectDst.X
 					+ (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 
 			// Center
@@ -70,16 +71,16 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 	public async Task<Rectangle?> GetOffScreenRectAsync(
 		Rectangle screenRectSrc,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	)
 	{
-		Guard.Against.Null(opts);
+		Guard.Against.Null(app);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
 
 		// Get possible rectangles to move the app to.
-		var targetRects = GetOffScreenRects(screenRectSrc, windowRectSrc, opts);
+		var targetRects = GetOffScreenRects(screenRectSrc, windowRectSrc, app.Options);
 
 		// Return first target rectangle that does not overlap with a screen.
 		var targetRect = targetRects.FirstOrDefault(r =>
