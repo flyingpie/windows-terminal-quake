@@ -12,7 +12,7 @@ namespace Wtq;
 /// - It can start a process, if configured as such;
 /// - It has methods to do actions like open/close the window, set opacity, etc.
 /// </summary>
-public sealed class WtqApp : IAsyncDisposable
+public sealed class WtqApp : System.IAsyncDisposable
 {
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
 

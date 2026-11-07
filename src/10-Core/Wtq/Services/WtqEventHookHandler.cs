@@ -41,13 +41,8 @@ public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo a
 	/// <summary>
 	/// Doesn't do anything after event subscription.
 	/// </summary>
-	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-	{
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await Task.Delay(1000, stoppingToken);
-		}
-	}
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 
 	/// <summary>
 	/// Takes a set of event hooks, and fires the ones that match the specified event.

@@ -90,10 +90,7 @@ internal sealed class KWinHotkeyService : BackgroundService
 		// Register hotkeys on WTQ start.
 		await RegisterAllAsync(stoppingToken);
 
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await Task.Delay(1000, stoppingToken);
-		}
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 
 		// Cleanup shortcuts (unless hotkey reset has been disabled).
 		await UnregisterAllAsync(stoppingToken).NoCtx();

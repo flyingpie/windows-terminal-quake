@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Wtq.Services;
 using Wtq.Services.UI;
 
@@ -17,21 +16,8 @@ public abstract class WtqHostBase
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure(platform.PathToLogsDir);
 
-		await RunCliAsync(platform, args).NoCtx();
-	}
+		var builder = Microsoft.Extensions.Hosting.Host.CreateEmptyApplicationBuilder(new());
 
-	protected abstract IPlatformService CreatePlatformService();
-
-	protected virtual void ConfigureServices(IServiceCollection services)
-	{
-		// Implemented by OS-specific implementations.
-	}
-
-	/// <summary>
-	/// This is called whenever the app is being run in CLI mode (i.e. with command line arguments).
-	/// </summary>
-	private async Task<int> RunCliAsync(IPlatformService platform, string[] args)
-	{
 		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
 		{
 			var log = Log.For<WtqHostBase>();
@@ -40,20 +26,36 @@ public abstract class WtqHostBase
 			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
 			Log.CloseAndFlush();
 		};
-
-		var s = new ServiceCollection()
+		// csharpier-ignore
+		builder
+			.Services
 			.AddConfiguration(platform)
 			.AddLogging()
 			.AddSingleton(platform)
-			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
 			.AddUI()
 			.AddWtqCore();
 
-		ConfigureServices(s);
+		ConfigureServices(builder.Services);
 
-		var p = s.BuildServiceProvider();
+		var host = builder.Build();
 
-		// TODO: Fix in service worker refactor.
-		return -1;
+		try
+		{
+			await host.RunAsync();
+		}
+		catch (Exception ex)
+		{
+			Log.For<WtqHostBase>().LogError(ex, "Error running WTQ: {Message}", ex.Message);
+
+			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
+			Log.CloseAndFlush();
+		}
+	}
+
+	protected abstract IPlatformService CreatePlatformService();
+
+	protected virtual void ConfigureServices(IServiceCollection services)
+	{
+		// Implemented by OS-specific implementations.
 	}
 }

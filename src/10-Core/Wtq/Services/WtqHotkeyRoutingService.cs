@@ -73,11 +73,6 @@ public class WtqHotkeyRoutingService : BackgroundService
 	/// <summary>
 	/// Doesn't do anything after event subscription.
 	/// </summary>
-	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-	{
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await Task.Delay(10_000, stoppingToken);
-		}
-	}
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 }
