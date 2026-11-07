@@ -5,11 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DeclarativeCommandLine" />
-		<PackageReference Include="DeclarativeCommandLine.Generator" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\10-Core\Wtq\Wtq.csproj" />
 		<ProjectReference Include="..\..\20-Services\Wtq.Services.UI\Wtq.Services.UI.csproj" />
 	</ItemGroup>

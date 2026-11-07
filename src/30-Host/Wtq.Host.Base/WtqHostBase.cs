@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
-using Wtq.Host.Base.Commands;
 using Wtq.Services;
 using Wtq.Services.UI;
 
@@ -43,7 +42,6 @@ public abstract class WtqHostBase
 		};
 
 		var s = new ServiceCollection()
-			.AddCli()
 			.AddConfiguration(platform)
 			.AddLogging()
 			.AddSingleton(platform)
@@ -56,10 +54,7 @@ public abstract class WtqHostBase
 
 		var p = s.BuildServiceProvider();
 
-		return await new CommandBuilder()
-			.Build(t => p.GetRequiredService(t))
-			.Parse(args)
-			.InvokeAsync()
-			.NoCtx();
+		// TODO: Fix in service worker refactor.
+		return -1;
 	}
 }
