@@ -38,14 +38,6 @@ public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo a
 		return Task.CompletedTask;
 	}
 
-	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-	{
-		while (!stoppingToken.IsCancellationRequested)
-		{
-			await Task.Delay(1000, stoppingToken);
-		}
-	}
-
 	/// <summary>
 	/// Doesn't do anything after event subscription.
 	/// </summary>

@@ -27,9 +27,10 @@ public abstract class WtqHostBase
 			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
 			Log.CloseAndFlush();
 		};
-
+		// csharpier-ignore
 		builder
-			.Services.AddConfiguration(platform)
+			.Services
+			.AddConfiguration(platform)
 			.AddLogging()
 			.AddSingleton(platform)
 			.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>()
@@ -38,18 +39,8 @@ public abstract class WtqHostBase
 
 		ConfigureServices(builder.Services);
 
-		Console.WriteLine("Notifying!");
-
-		// lifetime.NotifyStarted();
-
-		Console.WriteLine("Waiting!");
-
-		// await host.Done;
-
 		var host = builder.Build();
 		await host.RunAsync();
-
-		Console.WriteLine("DONE!");
 	}
 
 	protected abstract IPlatformService CreatePlatformService();
