@@ -15,10 +15,24 @@ public sealed class WtqFocusTracker(IWtqBus bus, IWtqWindowService windowService
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
+		static bool IsWtqGui(WtqWindow? w) =>
+			w?.Name?.Equals("wtqgui", StringComparison.OrdinalIgnoreCase) ?? false;
+
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			// Get current foreground window (could be null).
-			var curr = await windowService.GetForegroundWindowAsync(stoppingToken).NoCtx();
+			var curr = await _windowService.GetForegroundWindowAsync(stoppingToken).NoCtx();
+
+			if (IsWtqGui(curr) && !IsWtqGui(_prev))
+			{
+				_log.LogInformation("Focus went to WTQ GUI, suspending hotkey handling");
+				_bus.Publish<WtqSuspendHotkeysEvent>();
+			}
+			else if (!IsWtqGui(curr) && IsWtqGui(_prev))
+			{
+				_log.LogInformation("Focus returned from WTQ GUI, resuming hotkey handling");
+				_bus.Publish<WtqResumeHotkeysEvent>();
+			}
 
 			// If the window that has focus now, is not the one that had focus last cycle, focus has changed.
 			// Note that both the past- and the future window can be null.
