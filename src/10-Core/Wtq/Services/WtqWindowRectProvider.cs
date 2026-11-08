@@ -14,10 +14,12 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 	public async Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	)
 	{
-		Guard.Against.Null(opts);
+		Guard.Against.Null(app);
+
+		var opts = app.Options;
 
 		// Calculate app window size.
 		var wnd =
@@ -70,16 +72,16 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 	public async Task<Rectangle?> GetOffScreenRectAsync(
 		Rectangle screenRectSrc,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	)
 	{
-		Guard.Against.Null(opts);
+		Guard.Against.Null(app);
 
 		// All available screen rects.
 		var screenRects = await _screenInfoProvider.GetScreenRectsAsync().NoCtx();
 
 		// Get possible rectangles to move the app to.
-		var targetRects = GetOffScreenRects(screenRectSrc, windowRectSrc, opts);
+		var targetRects = GetOffScreenRects(screenRectSrc, windowRectSrc, app.Options);
 
 		// Return first target rectangle that does not overlap with a screen.
 		var targetRect = targetRects.FirstOrDefault(r =>
