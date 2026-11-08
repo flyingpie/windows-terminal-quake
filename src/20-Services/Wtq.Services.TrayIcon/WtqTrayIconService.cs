@@ -65,11 +65,7 @@ public sealed class WtqTrayIconService(
 					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
 				),
 				new SeparatorItem(),
-				CreateItem(
-					"Open Main Window",
-					() => { /* TODO */
-					}
-				),
+				CreateItem("Open Main Window", _platform.OpenGui),
 				new SeparatorItem(),
 				CreateItem(
 					"Open Settings File",

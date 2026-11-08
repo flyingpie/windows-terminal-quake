@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<AssemblyName>wtqg</AssemblyName>
+		<AssemblyName>wtqgui</AssemblyName>
 		<RootNamespace>Wtq.Host.Gui</RootNamespace>
 
 		<OutputType>Exe</OutputType>

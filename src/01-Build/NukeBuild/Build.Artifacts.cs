@@ -33,8 +33,8 @@ public sealed partial class Build
 		{
 			var st = PathToLinux64FrameworkDependent;
 
-			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Linux, Solution.Q30_Host.Wtq_Host_Gui })
 			{
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Linux, Solution.Q30_Host.Wtq_Host_Gui })
 				DotNetPublish(_ => _
 					.SetConfiguration(Configuration)
 					.SetProject(proj)
@@ -112,7 +112,7 @@ public sealed partial class Build
 		{
 			var st = PathToWin64SelfContained;
 
-			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Gui, Solution.Q30_Host.Wtq_Host_Windows })
+			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Windows, Solution.Q30_Host.Wtq_Host_Gui })
 			{
 				DotNetPublish(_ => _
 					.SetConfiguration(Configuration)
