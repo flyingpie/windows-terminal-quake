@@ -104,21 +104,29 @@ public abstract class WtqSharedOptions : IValidatableObject
 	public HorizontalAlign? HorizontalAlign { get; set; }
 
 	/// <summary>
+	/// Where to position an app on the chosen monitor, vertically.
+	/// </summary>
+	[DefaultValue(Wc.VerticalAlign.Top)]
+	[Display(GroupName = Gn.Position, Name = "Vertical align")]
+	[JsonPropertyOrder(4004)]
+	public VerticalAlign? VerticalAlign { get; set; }
+
+	/// <summary>
 	/// Vertical screen coverage as a percentage (0-100).
 	/// </summary>
 	[DefaultValue(95f)]
 	[Display(GroupName = Gn.Position, Name = "Vertical screen coverage", Prompt = "Percentage")]
-	[JsonPropertyOrder(4004)]
+	[JsonPropertyOrder(4005)]
 	public float? VerticalScreenCoverage { get; set; }
 
 	/// <summary>
 	/// How much room to leave between the top of the app window and the top of the screen, in pixels.
 	/// </summary>
-	[DefaultValue(0f)]
+	[DefaultValue(0)]
 	[Display(GroupName = Gn.Position, Name = "Vertical offset", Prompt = "In pixels")]
 	[Range(0, 1000)]
-	[JsonPropertyOrder(4005)]
-	public float? VerticalOffset { get; set; }
+	[JsonPropertyOrder(4006)]
+	public int? VerticalOffset { get; set; }
 
 	/// <summary>
 	/// When moving an app off the screen, WTQ looks for an empty space to move the window to.<br/>
@@ -132,7 +140,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultCollectionValue([Above, Below, Left, Right])] // TODO: Doesn't work yet. We're using WtqConstants.DefaultOffScreenLocations for now.
 	[Display(GroupName = Gn.Position, Name = "Off-screen locations")]
-	[JsonPropertyOrder(4005)]
+	[JsonPropertyOrder(4007)]
 	public ICollection<OffScreenLocation>? OffScreenLocations { get; set; }
 
 	/// <summary>
@@ -140,7 +148,7 @@ public abstract class WtqSharedOptions : IValidatableObject
 	/// </summary>
 	[DefaultValue(false)]
 	[Display(GroupName = Gn.Position, Name = "Maintain position and size")]
-	[JsonPropertyOrder(4006)]
+	[JsonPropertyOrder(4008)]
 	public bool? MaintainPositionAndSize { get; set; }
 
 	#endregion

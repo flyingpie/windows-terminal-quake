@@ -9,11 +9,14 @@
 - Bugfix: On Linux, logout or shutdown was blocked by WTQ (#333).
 - Bugfix: Sometimes app attach failed at WTQ start, causing WTQ to crash entirely (#385, #386).
 - Docs: Migrated from Material for mkdocs to Zensical.
-- Feature: Horizontal align "None" - keep a window where it is horizontally, including where you left it.
+- Feature: Horizontal align "None" - keep a window where it is horizontally, including where you left it (#416).
 - Feature: Non-exclusive apps. Multiple apps can be on-screen at the same time (#380, #381).
+- Feature: Vertical align - includes the "None" mode from Horizontal align.
 - Feature: When an app is open, but does not have focus, pressing the toggle key will re-focus, instead of toggling off (#380, #383).
 - Feature: When an app is open, but on a different virtual desktop, pressing the toggle key will bring it over to the current virtual desktop (#380, #383).
 - Feature: WinGet install now comes with an (silent) installer, so we get a proper start menu icon, and an entry in "Apps" (#376, #390).
+- Refactor: Removed API for now, to reduce app complexity (#420).
+- Refactor: Removed CLI for now, to reduce app complexity.
 - Refactor: Removed WinForms hotkey path, only SharpHook remains.
 - Refactor: Split core and GUI, to lower memory usage when the GUI is not used (#279, #280).
 
