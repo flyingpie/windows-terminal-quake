@@ -33,15 +33,8 @@ public class WtqWindowRectProviderTest
 	// [DataRow(08,	HA.Center,		50,		50,		0,			Always,			0,		0,		1920,		1080,			0,		0,		0,		0,			480,	0,		960,	540)]	// True
 	// [DataRow(09,	HA.Center,		50,		50,		0,			Never,			0,		0,		1920,		1080,			0,		0,		800,	600,		560,	0,		800,	600)]	// False
 	// // HorizontalAlign=None																																									//
-	// [DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			10,		0,		800,	600,		10,		0,		800,	600)]	// Same screen (left-ish)
-	// [DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			500,	0,		800,	600,		500,	0,		800,	600)]	// Same screen (center-ish)
-	// [DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			1100,	0,		800,	600,		1100,	0,		800,	600)]	// Same screen (right-ish)
-	// //
-	// [DataRow(10,	HA.None,		0,		0,		0,			Never,			-1920,	0,		1920,		1080,			10,		0,		800,	600,		-1910,	0,		800,	600)]	// Screen to the left (left-ish)
-	// // [DataRow(10,	HA.None,		0,		0,		0,			Never,			-1920,	0,		1920,		1080,			500,	0,		800,	600,		500,	0,		800,	600)]	// Same screen (center-ish)
-	// // [DataRow(10,	HA.None,		0,		0,		0,			Never,			-1920,	0,		1920,		1080,			1100,	0,		800,	600,		1100,	0,		800,	600)]	// Same screen (right-ish)
-	// //
-	// // [DataRow(11,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			2100,	0,		800,	600,		560,	0,		800,	600)]	// Different screen
+	// [DataRow(10,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			123,	0,		800,	600,		123,	0,		800,	600)]	// Same screen
+	// [DataRow(11,	HA.None,		0,		0,		0,			Never,			0,		0,		1920,		1080,			2100,	0,		800,	600,		560,	0,		800,	600)]	// Different screen (should center)
 	// // csharpier-ignore-end
 	// public async Task GetOnScreenRectAsyncTest(
 	// 	int id,																		// Id, to make it easier to identify in the test runner
@@ -57,12 +50,10 @@ public class WtqWindowRectProviderTest
 	// 	_opts.VerticalOffset = vOffs;
 	// 	_opts.Resize = resize;
 	//
-	// 	var app
-	//
 	// 	var res = await _wndRectProvider.GetOnScreenRectAsync(
 	// 		screenRectDst: new(scrX, scrY, scrW, scrH),
 	// 		windowRectSrc: new(curWinX, curWinY, curWinW, curWinH),
-	// 		app: _opts
+	// 		opts: _opts
 	// 	);
 	//
 	// 	Assert.AreEqual(expWinX, res.X);
@@ -89,7 +80,7 @@ public class WtqWindowRectProviderTest
 	// 	var res = await _wndRectProvider.GetOffScreenRectAsync(
 	// 		screenRectSrc: new(sX, sY, sW, sH),
 	// 		currWindowRect,
-	// 		app: _opts
+	// 		opts: _opts
 	// 	);
 	//
 	// 	Assert.AreEqual(wX, res.Value.X);
