@@ -23,9 +23,9 @@ public sealed class WtqApp : System.IAsyncDisposable
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
 
-	private Point? _lastLoc;
-
 	private readonly Dictionary<Rectangle, Rectangle> _prevPositions = [];
+
+	private Point? _lastLoc;
 
 	public WtqApp(
 		IWtqAppToggleService toggler,
@@ -132,8 +132,20 @@ public sealed class WtqApp : System.IAsyncDisposable
 	/// <summary>
 	/// Updates the position the window has/should have on the specified screen.
 	/// </summary>
-	public void SetPrevPosition(Rectangle screen, Rectangle window) =>
+	public void SetPrevPosition(Rectangle screen, Rectangle window)
+	{
+		if (!screen.Contains(window))
+		{
+			_log.LogWarning(
+				"Attempted to store previous position for screen '{Screen}' and window '{Window}', while screen did not contain window",
+				screen,
+				window
+			);
+			return;
+		}
+
 		_prevPositions[screen] = window;
+	}
 
 	/// <summary>
 	/// Returns the rectangle of the screen that the app is on.<br/>
