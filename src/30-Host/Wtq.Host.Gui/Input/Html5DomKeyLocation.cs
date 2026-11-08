@@ -1,4 +1,4 @@
-namespace Wtq.Services.UI.Input;
+namespace Wtq.Host.Gui.Input;
 
 /// <summary>
 /// The following constants identify which part of the keyboard the key event originates from.

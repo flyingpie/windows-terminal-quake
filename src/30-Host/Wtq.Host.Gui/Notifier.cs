@@ -1,4 +1,4 @@
-namespace Wtq.Services.UI;
+namespace Wtq.Host.Gui;
 
 /// <summary>
 /// When state is spread across components, Blazor can lose track of what components should be

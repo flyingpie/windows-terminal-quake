@@ -1,17 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Wtq.Services;
-using Wtq.Services.UI;
 
 namespace Wtq.Host.Base;
 
-public abstract class WtqHostBase
+public class WtqHost
 {
-	public async Task RunAsync(string[] args)
+	public async Task RunAsync(Action<IServiceCollection> services, string[] args)
 	{
 		Guard.Against.Null(args);
 
-		var platform = CreatePlatformService();
+		var platform = PlatformServiceFactory.Create();
 
 		// Setup logging ASAP, so we can log stuff if initialization goes awry.
 		Log.Configure(platform.PathToLogsDir);
@@ -20,7 +18,7 @@ public abstract class WtqHostBase
 
 		AppDomain.CurrentDomain.ProcessExit += (s, a) =>
 		{
-			var log = Log.For<WtqHostBase>();
+			var log = Log.For<WtqHost>();
 			log.LogInformation("Process exit");
 
 			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
@@ -32,10 +30,9 @@ public abstract class WtqHostBase
 			.AddConfiguration(platform)
 			.AddLogging()
 			.AddSingleton(platform)
-			.AddUI()
 			.AddWtqCore();
 
-		ConfigureServices(builder.Services);
+		services(builder.Services);
 
 		var host = builder.Build();
 
@@ -45,17 +42,10 @@ public abstract class WtqHostBase
 		}
 		catch (Exception ex)
 		{
-			Log.For<WtqHostBase>().LogError(ex, "Error running WTQ: {Message}", ex.Message);
+			Log.For<WtqHost>().LogError(ex, "Error running WTQ: {Message}", ex.Message);
 
 			// Make sure all logs are written to disk (i.e., otherwise soem logs may still be buffered without being flushed before the app exits).
 			Log.CloseAndFlush();
 		}
-	}
-
-	protected abstract IPlatformService CreatePlatformService();
-
-	protected virtual void ConfigureServices(IServiceCollection services)
-	{
-		// Implemented by OS-specific implementations.
 	}
 }
