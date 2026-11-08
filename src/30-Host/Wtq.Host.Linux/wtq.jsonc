@@ -35,6 +35,8 @@
 	// Hotkeys that toggle the most recent app (or the first one if none has been active yet).
 	"Hotkeys": [ { "Modifiers": "Control", "Key": "Q" } ],
 
+	"ToggleFullScreenHotkey": { "Modifiers": "Control, Shift", "Key": "-" },
+
 	// What monitor to preferably drop the terminal.
 	// "WithCursor" (default), "Primary" or "AtIndex".
 	// Can be overridden per app.
