@@ -168,12 +168,20 @@ public static class WtqAppOptionsExtensions
 		);
 	}
 
-	/// <inheritdoc cref="WtqSharedOptions.VerticalOffset"/>
-	public static float GetVerticalOffset(this WtqAppOptions app)
+	/// <inheritdoc cref="WtqSharedOptions.VerticalAlign"/>
+	public static VerticalAlign GetVerticalAlign(this WtqAppOptions app)
 	{
 		Guard.Against.Null(app);
 
-		return OptionUtils.Cascade<float>(o => o.VerticalOffset, app, app.Global);
+		return OptionUtils.Cascade<VerticalAlign>(o => o.VerticalAlign, app, app.Global);
+	}
+
+	/// <inheritdoc cref="WtqSharedOptions.VerticalOffset"/>
+	public static int GetVerticalOffset(this WtqAppOptions app)
+	{
+		Guard.Against.Null(app);
+
+		return OptionUtils.Cascade<int>(o => o.VerticalOffset, app, app.Global);
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.VerticalScreenCoverage"/>

@@ -947,6 +947,34 @@ Defaults to `Center`
 }
 ```
 
+##### Vertical align
+
+Where to position an app on the chosen monitor, vertically.
+
+Defaults to `Top`
+
+- **Center**<br/>Center of the screen.
+
+- **Top**<br/>Top of the screen.
+
+- **Bottom**<br/>Bottom of the screen.
+
+- **None**<br/>Maintain the vertical position as-is.
+
+```json
+{
+	// Globally:
+	"VerticalAlign": "Top",
+
+	// For one app only:
+	"Apps": [
+		{
+			"VerticalAlign": "Top"
+		}
+	]
+}
+```
+
 ##### Vertical screen coverage
 
 Vertical screen coverage as a percentage (0-100).

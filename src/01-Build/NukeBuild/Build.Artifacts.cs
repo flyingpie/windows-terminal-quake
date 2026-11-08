@@ -85,16 +85,23 @@ public sealed partial class Build
 		{
 			var st = PathToWin64FrameworkDependent;
 
-			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Windows, Solution.Q30_Host.Wtq_Host_Gui })
-			{
-				DotNetPublish(_ => _
-					.SetConfiguration(Configuration)
-					.SetFramework("net10.0-windows")
-					.SetProject(proj)
-					.SetOutput(st)
-					.SetRuntime("win-x64")
-					.SetSelfContained(false));
-			}
+			// App
+			DotNetPublish(_ => _
+				.SetConfiguration(Configuration)
+				.SetFramework("net10.0-windows")
+				.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
+				.SetOutput(st)
+				.SetRuntime("win-x64")
+				.SetSelfContained(false));
+
+			// Gui
+			DotNetPublish(_ => _
+				.SetConfiguration(Configuration)
+				.SetFramework("net10.0")
+				.SetProject(Solution.Q30_Host.Wtq_Host_Gui)
+				.SetOutput(st)
+				.SetRuntime("win-x64")
+				.SetSelfContained(false));
 
 			st.ZipTo(PathToWin64FrameworkDependentZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
 
@@ -112,16 +119,23 @@ public sealed partial class Build
 		{
 			var st = PathToWin64SelfContained;
 
-			foreach (var proj in new string[] { Solution.Q30_Host.Wtq_Host_Windows, Solution.Q30_Host.Wtq_Host_Gui })
-			{
-				DotNetPublish(_ => _
-					.SetConfiguration(Configuration)
-					.SetFramework("net10.0-windows")
-					.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
-					.SetOutput(st)
-					.SetRuntime("win-x64")
-					.SetSelfContained(true));
-			}
+			// App
+			DotNetPublish(_ => _
+				.SetConfiguration(Configuration)
+				.SetFramework("net10.0-windows")
+				.SetProject(Solution.Q30_Host.Wtq_Host_Windows)
+				.SetOutput(st)
+				.SetRuntime("win-x64")
+				.SetSelfContained(true));
+
+			// Gui
+			DotNetPublish(_ => _
+				.SetConfiguration(Configuration)
+				.SetFramework("net10.0")
+				.SetProject(Solution.Q30_Host.Wtq_Host_Gui)
+				.SetOutput(st)
+				.SetRuntime("win-x64")
+				.SetSelfContained(true));
 
 			st.ZipTo(PathToWin64SelfContainedZip, compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
 
