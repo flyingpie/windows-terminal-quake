@@ -50,6 +50,9 @@ public abstract class PlatformServiceBase : IPlatformService
 	public virtual string PathToAssetsDir => Path.Combine(PathToAppDir, "assets");
 
 	/// <inheritdoc/>
+	public virtual string PathToGuiExe => Path.Combine(PathToAppDir, "wtqgui");
+
+	/// <inheritdoc/>
 	public abstract string PathToLogsDir { get; }
 
 	/// <inheritdoc/>
@@ -285,6 +288,14 @@ public abstract class PlatformServiceBase : IPlatformService
 				ex.Message
 			);
 		}
+	}
+
+	/// <inheritdoc/>
+	public void OpenGui()
+	{
+		Process.Start(
+			new ProcessStartInfo() { FileName = PathToGuiExe, WorkingDirectory = PathToAppDir }
+		);
 	}
 
 	/// <inheritdoc/>

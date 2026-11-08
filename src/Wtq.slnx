@@ -18,14 +18,12 @@
 		<Project Path="10-Core/Wtq/Wtq.csproj" />
 	</Folder>
 	<Folder Name="/Q20-Services/">
-		<Project Path="20-Services/Wtq.Services.API/Wtq.Services.API.csproj" />
 		<Project Path="20-Services/Wtq.Services.KWin.UnitTest/Wtq.Services.KWin.UnitTest.csproj" />
 		<Project Path="20-Services/Wtq.Services.KWin/Wtq.Services.KWin.csproj" />
 		<Project Path="20-Services/Wtq.Services.Linux.UnitTest/Wtq.Services.Linux.UnitTest.csproj" />
 		<Project Path="20-Services/Wtq.Services.Linux/Wtq.Services.Linux.csproj" />
 		<Project Path="20-Services/Wtq.Services.SharpHook/Wtq.Services.SharpHook.csproj" />
 		<Project Path="20-Services/Wtq.Services.TrayIcon/Wtq.Services.TrayIcon.csproj" />
-		<Project Path="20-Services/Wtq.Services.UI/Wtq.Services.UI.csproj" />
 		<Project Path="20-Services/Wtq.Services.Win32.UnitTest/Wtq.Services.Win32.UnitTest.csproj" />
 		<Project Path="20-Services/Wtq.Services.WinForms/Wtq.Services.WinForms.csproj" />
 		<Project Path="20-Services/Wtq.Services.Win32/Wtq.Services.Win32.csproj" />
@@ -34,5 +32,6 @@
 		<Project Path="30-Host/Wtq.Host.Base/Wtq.Host.Base.csproj" />
 		<Project Path="30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj" />
 		<Project Path="30-Host/Wtq.Host.Windows/Wtq.Host.Windows.csproj" />
+		<Project Path="30-Host\Wtq.Host.Gui\Wtq.Host.Gui.csproj" />
 	</Folder>
 </Solution>

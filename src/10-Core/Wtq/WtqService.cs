@@ -7,7 +7,7 @@ namespace Wtq;
 /// </summary>
 // TODO: Better name.
 // TODO: Class desperately needs unit tests.
-public sealed class WtqService : WtqHostedService
+public sealed class WtqService : BackgroundService
 {
 	private readonly ILogger _log = Log.For<WtqService>();
 
@@ -31,19 +31,19 @@ public sealed class WtqService : WtqHostedService
 		_bus.OnEvent<WtqWindowFocusChangedEvent>(OnWindowFocusChangedEventAsync);
 	}
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	public override Task StartAsync(CancellationToken cancellationToken)
 	{
+		// TODO: This class is only a background service so it's forced to be constructed by DI. Check if that's still the case.
 		// TODO: Currently necessary to make sure this service is constructed.
 		// Maybe remove IHostedService and manually resolve this type on app startup?
 		return Task.CompletedTask;
 	}
 
-	protected override ValueTask OnDisposeAsync()
-	{
-		_lock.Dispose();
-
-		return ValueTask.CompletedTask;
-	}
+	/// <summary>
+	/// Doesn't do anything after event subscription.
+	/// </summary>
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 
 	/// <summary>
 	/// Handles "toggle" events, e.g. where the user pressed a hotkey.

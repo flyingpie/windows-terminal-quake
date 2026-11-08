@@ -38,6 +38,11 @@ public interface IPlatformService
 	string PathToAssetsDir { get; }
 
 	/// <summary>
+	/// Path to the WTQ GUI executable.
+	/// </summary>
+	string PathToGuiExe { get; }
+
+	/// <summary>
 	/// Where the log files are stored.
 	/// </summary>
 	string PathToLogsDir { get; }
@@ -104,6 +109,11 @@ public interface IPlatformService
 	/// Opens the specified <paramref name="path"/> using the default application (e.g. usually Explorer on Windows).
 	/// </summary>
 	void OpenFileOrDirectory(string path);
+
+	/// <summary>
+	/// Opens the GUI window.
+	/// </summary>
+	void OpenGui();
 
 	/// <summary>
 	/// Opens the specified <paramref name="url"/> using the default application (usually a web browser).
