@@ -21,6 +21,8 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 
 		var opts = app.Options;
 
+		var prevPos = app.GetPrevPosition(screenRectDst);
+
 		// Calculate app window size.
 		var wnd =
 			opts.GetResize() == Resizing.Always
@@ -41,11 +43,10 @@ public class WtqWindowRectProvider(IWtqScreenInfoProvider screenInfoProvider)
 			HorizontalAlign.Right => screenRectDst.X + (screenRectDst.Width - wnd.Width),
 
 			// None (keep current horizontal position)
-			// Note that we only do this if the window is coming back on the same screen. Otherwise, we're centering.
-			HorizontalAlign.None => windowRectSrc.X >= screenRectDst.X
-			&& windowRectSrc.X <= screenRectDst.X + screenRectDst.Width
-				? windowRectSrc.X
-				: screenRectDst.X
+			// Use the exact X position from the previous toggle onto the target screen.
+			// Fallback to centering.
+			HorizontalAlign.None => prevPos?.X
+				?? screenRectDst.X
 					+ (int)Math.Ceiling((screenRectDst.Width / 2f) - (wnd.Width / 2f)),
 
 			// Center

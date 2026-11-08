@@ -124,6 +124,9 @@ public class WtqAppToggleService(
 			.GetOffScreenRectAsync(screenRectSrc: screenRectSrc, windowRectSrc: windowRectSrc, app)
 			.NoCtx();
 
+		// Store the position the window was before toggling it off.
+		app.SetPrevPosition(screenRectSrc, windowRectSrc);
+
 		_log.LogDebug(
 			"ToggleOff app '{App}' from '{From}' to '{To}'",
 			app,
