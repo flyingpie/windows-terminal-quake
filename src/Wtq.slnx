@@ -31,6 +31,7 @@
 	<Folder Name="/Q30-Host/">
 		<Project Path="30-Host/Wtq.Host.Base/Wtq.Host.Base.csproj" />
 		<Project Path="30-Host/Wtq.Host.Linux/Wtq.Host.Linux.csproj" />
+		<Project Path="30-Host/Wtq.Host.Linux.E2ETest/Wtq.Host.Linux.E2ETest.csproj" />
 		<Project Path="30-Host/Wtq.Host.Windows/Wtq.Host.Windows.csproj" />
 		<Project Path="30-Host\Wtq.Host.Gui\Wtq.Host.Gui.csproj" />
 	</Folder>
