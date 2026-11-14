@@ -12,7 +12,7 @@ namespace Wtq;
 /// - It can start a process, if configured as such;
 /// - It has methods to do actions like open/close the window, set opacity, etc.
 /// </summary>
-public sealed class WtqApp : IAsyncDisposable
+public sealed class WtqApp : System.IAsyncDisposable
 {
 	private readonly WtqSemaphoreSlim _updateLock = new(1, 1);
 
@@ -22,6 +22,8 @@ public sealed class WtqApp : IAsyncDisposable
 	private readonly IWtqAppToggleService _toggler;
 	private readonly IWtqScreenInfoProvider _screenInfoProvider;
 	private readonly IWtqWindowResolver _windowResolver;
+
+	private readonly Dictionary<Rectangle, Rectangle> _prevPositions = [];
 
 	private Point? _lastLoc;
 
@@ -118,6 +120,31 @@ public sealed class WtqApp : IAsyncDisposable
 		await ResetPropsAsync().NoCtx();
 
 		_updateLock.Dispose();
+	}
+
+	/// <summary>
+	/// Returns the position of the app, last time it was sent to the screen identified by the specified screen.<br/>
+	/// Returns null if the app hasn't been on that screen yet (as far as WTQ knows at least).
+	/// </summary>
+	public Rectangle? GetPrevPosition(Rectangle screen) =>
+		_prevPositions.TryGetValue(screen, out var wnd) ? wnd : null;
+
+	/// <summary>
+	/// Updates the position the window has/should have on the specified screen.
+	/// </summary>
+	public void SetPrevPosition(Rectangle screen, Rectangle window)
+	{
+		if (!screen.Contains(window))
+		{
+			_log.LogWarning(
+				"Attempted to store previous position for screen '{Screen}' and window '{Window}', while screen did not contain window",
+				screen,
+				window
+			);
+			return;
+		}
+
+		_prevPositions[screen] = window;
 	}
 
 	/// <summary>

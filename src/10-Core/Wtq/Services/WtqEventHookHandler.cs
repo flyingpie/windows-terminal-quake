@@ -7,13 +7,13 @@ namespace Wtq.Services;
 /// Service that listens for events and sends them to any configured event hooks.
 /// </summary>
 public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo appRepo, IWtqBus bus)
-	: WtqHostedService
+	: BackgroundService
 {
 	private readonly IOptionsMonitor<WtqOptions> _opts = Guard.Against.Null(opts);
 	private readonly IWtqAppRepo _appRepo = Guard.Against.Null(appRepo);
 	private readonly IWtqBus _bus = Guard.Against.Null(bus);
 
-	protected override Task OnStartAsync(CancellationToken cancellationToken)
+	public override Task StartAsync(CancellationToken cancellationToken)
 	{
 		// Listen to all event types.
 		_bus.OnEvent<WtqEvent>(async ev =>
@@ -37,6 +37,12 @@ public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo a
 
 		return Task.CompletedTask;
 	}
+
+	/// <summary>
+	/// Doesn't do anything after event subscription.
+	/// </summary>
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
 
 	/// <summary>
 	/// Takes a set of event hooks, and fires the ones that match the specified event.

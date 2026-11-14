@@ -12,7 +12,7 @@ public interface IWtqWindowRectProvider
 	Task<Rectangle> GetOnScreenRectAsync(
 		Rectangle screenRectDst,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	);
 
 	/// <summary>
@@ -22,7 +22,7 @@ public interface IWtqWindowRectProvider
 	Task<Rectangle?> GetOffScreenRectAsync(
 		Rectangle screenRectSrc,
 		Rectangle windowRectSrc,
-		WtqAppOptions opts
+		WtqApp app
 	);
 
 	/// <summary>

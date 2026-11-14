@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Tmds.DBus.Protocol;
 using Wtq.Configuration;
@@ -12,7 +13,7 @@ namespace Wtq.Services.KWin;
 /// Registers WTQ hotkeys directly with KGlobalAccel over D-Bus (no detour through the KWin script),
 /// and listens for the <c>globalShortcutPressed</c> signal to detect activation.
 /// </summary>
-internal sealed class KWinHotkeyService : WtqHostedService
+internal sealed class KWinHotkeyService : BackgroundService
 {
 	/// <summary>
 	/// All WTQ-generated shortcuts share this prefix, so we can find and clean them up
@@ -80,7 +81,7 @@ internal sealed class KWinHotkeyService : WtqHostedService
 		);
 	}
 
-	protected override async Task OnStartAsync(CancellationToken cancellationToken)
+	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		var kglobalAccel = await _dbus.GetKGlobalAccelServiceAsync().NoCtx();
 		_kGlobalAccel = kglobalAccel.CreateKGlobalAccel("/kglobalaccel");
@@ -99,11 +100,10 @@ internal sealed class KWinHotkeyService : WtqHostedService
 			.NoCtx();
 
 		// Register hotkeys on WTQ start.
-		await RegisterAllAsync(cancellationToken);
-	}
+		await RegisterAllAsync(stoppingToken);
 
-	protected override async Task OnStopAsync(CancellationToken cancellationToken)
-	{
+		await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken).NoThrowAwaitable();
+
 		// Cleanup shortcuts (unless hotkey reset has been disabled).
 		await UnregisterAllAsync(cancellationToken).NoCtx();
 	}
