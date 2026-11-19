@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.10.0.schema.json
+PackageIdentifier: flyingpie.windows-terminal-quake
+PackageVersion: 2.2.0
+InstallerType: nullsoft
+InstallerSwitches:
+  Silent: /S
+  SilentWithProgress: /S
+ReleaseDate: 2026-11-19
+Scope: user
+UpgradeBehavior: install
+AppsAndFeaturesEntries:
+- DisplayName: WTQ
+  DisplayVersion: 2.2.0
+  Publisher: WTQ Contributors
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/flyingpie/windows-terminal-quake/releases/download/vNext/win-x64_installer.exe
+  InstallerSha256: 563223bf566af505c55c55cf3d7b289b9b6ab76d7ae68b7fc938496c7af388b0
+ManifestType: installer
+ManifestVersion: 1.10.0
