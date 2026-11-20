@@ -1,4 +1,4 @@
-namespace Wtq.Host.Linux.E2ETest;
+namespace Wtq.E2ETest;
 
 /// <summary>
 /// Runs the actual "wtq" executable as a child process, with an isolated settings file and log directory.

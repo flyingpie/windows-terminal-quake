@@ -6,7 +6,7 @@ using Tmds.DBus.Protocol;
 
 namespace Wtq.Services.KWin.DBus.Generated;
 
-internal class KWinObject
+public class KWinObject
 {
 	public KWinService Service { get; }
 

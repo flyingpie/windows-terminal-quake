@@ -8,7 +8,7 @@ namespace Wtq.Services.KWin;
 /// <summary>
 /// Wraps functions in the wtq.kwin script.
 /// </summary>
-internal sealed class KWinClientV2(IDBusConnection dbus, IWtqDBusObject wtqBusObj) : IKWinClient
+public sealed class KWinClientV2(IDBusConnection dbus, IWtqDBusObject wtqBusObj) : IKWinClient
 {
 	private readonly ILogger _log = Log.For<KWinClientV2>();
 

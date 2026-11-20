@@ -6,7 +6,7 @@ using Tmds.DBus.Protocol;
 
 namespace Wtq.Services.KWin.DBus.Generated;
 
-partial class Scripting : KWinObject
+public partial class Scripting : KWinObject
 {
 	private const string __Interface = "org.kde.kwin.Scripting";
 	public Scripting(KWinService service, ObjectPath path) : base(service, path)

@@ -146,7 +146,7 @@ kwin.setWindowSize = (window, width, height) => {
 ////////////////////////////////////////////////////////////
 
 // WTQ /////////////////////////////////////////////////////
-wtq.DBUS_SERVICE	= "nl.flyingpie.wtq.svc";
+wtq.DBUS_SERVICE	= "__WTQ_SERVICE_NAME__";
 wtq.DBUS_PATH		= "/wtq/kwin";
 wtq.DBUS_INTERFACE	= "wtq.kwin";
 
