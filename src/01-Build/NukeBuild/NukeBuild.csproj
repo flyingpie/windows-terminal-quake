@@ -6,9 +6,8 @@
 
 		<NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
 
-		<NukeRootDirectory>..\..\..</NukeRootDirectory>
-		<NukeScriptDirectory>..\..</NukeScriptDirectory>
-		<NukeTelemetryVersion>1</NukeTelemetryVersion>
+		<FalloutRootDirectory>..\..\..</FalloutRootDirectory>
+		<FalloutScriptDirectory>..\..</FalloutScriptDirectory>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
@@ -17,6 +16,6 @@
 		<PackageReference Include="Microsoft.Build.Tasks.Core" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" />
 		<PackageReference Include="NuGet.Packaging" />
-		<PackageReference Include="Nuke.Common" />
+		<PackageReference Include="Fallout.Common" />
 	</ItemGroup>
 </Project>

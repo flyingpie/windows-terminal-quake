@@ -1,6 +1,9 @@
 <Project>
 	<PropertyGroup>
+		<!-- Allow pinning transitive packages without explicit references in consuming projects. -->
 		<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+
+		<!-- List packages versions here instead of in each project. -->
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
@@ -19,11 +22,11 @@
 		<PackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
 		<!-- Build -->
 		<PackageVersion Include="CSharpier.MsBuild" Version="1.4.1" />
+		<PackageVersion Include="Fallout.Common" Version="11.0.18" />
 		<PackageVersion Include="Microsoft.Build" Version="18.12.2" />
 		<PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.12.2" />
 		<PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.12.2" />
 		<PackageVersion Include="NuGet.Packaging" Version="8.0.0" />
-		<PackageVersion Include="Nuke.Common" Version="10.1.0" />
 		<!-- GUI -->
 		<PackageVersion Include="NotificationIcon.NET" Version="1.2.8" />
 		<PackageVersion Include="PhotinoX.Blazor" Version="5.5.0" />
