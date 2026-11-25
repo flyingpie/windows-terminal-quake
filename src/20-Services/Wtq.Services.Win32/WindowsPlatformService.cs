@@ -29,8 +29,7 @@ public class WindowsPlatformService : PlatformServiceBase
 	)
 		: base(pathToAppDir: pathToAppDir, pathToUserHomeDir: pathToUserHomeDir)
 	{
-		_pathToAppDataDir =
-			pathToAppDataDir
+		_pathToAppDataDir = pathToAppDataDir
 			?? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 		_pathToTempDir = pathToTempDir ?? Path.GetTempPath();
 	}

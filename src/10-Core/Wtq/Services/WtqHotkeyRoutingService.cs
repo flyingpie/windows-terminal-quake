@@ -44,8 +44,7 @@ public class WtqHotkeyRoutingService : BackgroundService
 		// Look for a global (non-app-specific) hotkey.
 		if (_opts.CurrentValue.Hotkeys.Any(hk => hk.Sequence == sequence))
 		{
-			var globalApp =
-				_prevAppName // Prefer most recently toggled app.
+			var globalApp = _prevAppName // Prefer most recently toggled app.
 				?? _appRepo.GetPrimary()?.Name; // Fall back to first configured app after that.
 
 			if (globalApp == null)

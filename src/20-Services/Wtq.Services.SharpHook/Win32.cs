@@ -13,8 +13,7 @@ public class Win32 : IWin32
 	public KeySequence GetKeySequence(WKC keyCode, ushort rawKeyCode)
 	{
 		// Attempt to translate the virtual key code to a key character (may return null).
-		var keyChar =
-			KeyCodeToKeyChar(rawKeyCode)
+		var keyChar = KeyCodeToKeyChar(rawKeyCode)
 			?? keyCode.GetAttribute<DisplayAttribute>()?.Name
 			?? keyCode.ToString();
 

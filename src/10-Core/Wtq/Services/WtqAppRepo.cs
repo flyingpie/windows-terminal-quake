@@ -102,21 +102,18 @@ public sealed class WtqAppRepo : BackgroundService, IWtqAppRepo
 	{
 		Guard.Against.Null(opts);
 
-		return _apps.GetOrAdd(
-			opts.Name,
-			appName =>
-			{
-				_log.LogDebug("Creating app handle for '{AppName}'", appName);
+		return _apps.GetOrAdd(opts.Name, appName =>
+		{
+			_log.LogDebug("Creating app handle for '{AppName}'", appName);
 
-				return new WtqApp(
-					_toggleService,
-					_screenInfoProvider,
-					_windowResolver,
-					() => _opts.CurrentValue.GetAppOptionsByNameRequired(appName),
-					appName
-				);
-			}
-		);
+			return new WtqApp(
+				_toggleService,
+				_screenInfoProvider,
+				_windowResolver,
+				() => _opts.CurrentValue.GetAppOptionsByNameRequired(appName),
+				appName
+			);
+		});
 	}
 
 	/// <summary>

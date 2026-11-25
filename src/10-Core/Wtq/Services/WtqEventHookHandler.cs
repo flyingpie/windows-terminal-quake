@@ -56,8 +56,7 @@ public class WtqEventHookHandler(IOptionsMonitor<WtqOptions> opts, IWtqAppRepo a
 		Guard.Against.Null(ev);
 
 		// Event name
-		var eventName =
-			ev.GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName
+		var eventName = ev.GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName
 			?? ev.GetType().Name;
 
 		foreach (var hook in hooks)
