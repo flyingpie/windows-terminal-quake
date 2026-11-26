@@ -1,16 +1,16 @@
 #pragma warning disable
 // ReSharper disable All
 
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.Tools.Docker;
-using Nuke.Common.Tools.DotNet;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.Docker;
+using Fallout.Common.Tools.DotNet;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
-using static Nuke.Common.Tools.Docker.DockerTasks;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.Docker.DockerTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 /// <summary>
 /// Manifests for upstream repositories.

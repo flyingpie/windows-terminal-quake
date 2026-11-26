@@ -1,19 +1,19 @@
 #pragma warning disable
 // ReSharper disable All
 
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.DotNet;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Solutions;
 using Serilog;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
 {

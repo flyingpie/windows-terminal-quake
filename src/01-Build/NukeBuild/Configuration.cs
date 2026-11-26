@@ -1,4 +1,4 @@
-using Nuke.Common.Tooling;
+using Fallout.Common.Tooling;
 using System.ComponentModel;
 
 [TypeConverter(typeof(TypeConverter<Configuration>))]

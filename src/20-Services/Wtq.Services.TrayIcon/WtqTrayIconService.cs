@@ -60,24 +60,20 @@ public sealed class WtqTrayIconService(
 					enabled: false
 				),
 				new SeparatorItem(),
-				CreateItem(
-					"Open Project Website (GitHub)",
-					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
+				CreateItem("Open Project Website (GitHub)", () =>
+					_platform.OpenUrl(WtqConstants.GitHubUrl)
 				),
 				new SeparatorItem(),
 				CreateItem("Open Main Window", _platform.OpenGui),
 				new SeparatorItem(),
-				CreateItem(
-					"Open Settings File",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)
+				CreateItem("Open Settings File", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToWtqConf)
 				),
-				CreateItem(
-					"Open Settings Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
+				CreateItem("Open Settings Directory", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
 				),
-				CreateItem(
-					"Open Logs",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)
+				CreateItem("Open Logs", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToLogsDir)
 				),
 				new SeparatorItem(),
 				CreateItem("Quit", _lifetime.StopApplication),

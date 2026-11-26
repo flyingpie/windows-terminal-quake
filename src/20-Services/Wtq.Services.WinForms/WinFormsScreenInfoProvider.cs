@@ -6,8 +6,7 @@ public sealed class WinFormsScreenInfoProvider : IWtqScreenInfoProvider
 {
 	public Task<Rectangle> GetPrimaryScreenRectAsync()
 	{
-		var scr =
-			Screen.PrimaryScreen
+		var scr = Screen.PrimaryScreen
 			?? Screen.AllScreens.FirstOrDefault()
 			?? throw new WtqException("No screens found!");
 

@@ -126,10 +126,10 @@ public static class WtqAppOptionsExtensions
 		Guard.Against.Null(app);
 
 		return OptionUtils.Cascade<ICollection<OffScreenLocation>>(
-				o => o.OffScreenLocations,
-				app,
-				app.Global
-			) ?? WtqConstants.DefaultOffScreenLocations;
+			o => o.OffScreenLocations,
+			app,
+			app.Global
+		) ?? WtqConstants.DefaultOffScreenLocations;
 	}
 
 	/// <inheritdoc cref="WtqSharedOptions.Opacity"/>

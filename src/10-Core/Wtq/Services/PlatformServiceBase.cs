@@ -15,15 +15,14 @@ public abstract class PlatformServiceBase : IPlatformService
 	protected PlatformServiceBase(string? pathToAppDir = null, string? pathToUserHomeDir = null)
 	{
 		// Path to directory where wtq is installed (where wtq or wtq.exe lives).
-		PathToAppDir =
-			pathToAppDir
+		PathToAppDir = pathToAppDir
 			?? Path.GetDirectoryName(GetType().Assembly.Location)?.EmptyOrWhiteSpaceToNull()
 			?? throw new WtqException("Could not get path to app directory.");
 
 		// Windows: C:/users/username
 		// Linux: /home/username
-		PathToUserHomeDir =
-			pathToUserHomeDir ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+		PathToUserHomeDir = pathToUserHomeDir
+			?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	}
 
 	/// <inheritdoc/>

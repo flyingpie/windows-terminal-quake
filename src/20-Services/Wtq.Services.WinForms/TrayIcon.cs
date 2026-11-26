@@ -33,24 +33,20 @@ public sealed class TrayIcon : IDisposable
 			contextMenu.Items.AddRange([
 				CreateItem($"Version {WtqConstants.AppVersion}", () => { }, enabled: false),
 				new ToolStripSeparator(),
-				CreateItem(
-					"Open Project Website (GitHub)",
-					() => _platform.OpenUrl(WtqConstants.GitHubUrl)
+				CreateItem("Open Project Website (GitHub)", () =>
+					_platform.OpenUrl(WtqConstants.GitHubUrl)
 				),
 				new ToolStripSeparator(),
 				CreateItem("Open Main Window", _platform.OpenGui),
 				new ToolStripSeparator(),
-				CreateItem(
-					"Open Settings File",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConf)
+				CreateItem("Open Settings File", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToWtqConf)
 				),
-				CreateItem(
-					"Open Settings Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
+				CreateItem("Open Settings Directory", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToWtqConfDir)
 				),
-				CreateItem(
-					"Open Logs Directory",
-					() => _platform.OpenFileOrDirectory(_platform.PathToLogsDir)
+				CreateItem("Open Logs Directory", () =>
+					_platform.OpenFileOrDirectory(_platform.PathToLogsDir)
 				),
 				new ToolStripSeparator(),
 				CreateItem("Exit", () => lifetime.StopApplication()),

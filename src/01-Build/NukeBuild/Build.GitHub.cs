@@ -1,8 +1,8 @@
 #pragma warning disable
 // ReSharper disable All
 
-using Nuke.Common;
-using Nuke.Common.Tools.GitHub;
+using Fallout.Common;
+using Fallout.Common.Tools.GitHub;
 using Octokit;
 using Octokit.Internal;
 using Serilog;
@@ -28,7 +28,7 @@ public sealed partial class Build
 			var credentials = new Credentials(token);
 
 			GitHubTasks.GitHubClient =
-				new GitHubClient(new ProductHeaderValue(nameof(NukeBuild)), new InMemoryCredentialStore(credentials));
+				new GitHubClient(new ProductHeaderValue(nameof(FalloutBuild)), new InMemoryCredentialStore(credentials));
 
 			var (owner, name) = (GitRepository.GetGitHubOwner(), GitRepository.GetGitHubName());
 
