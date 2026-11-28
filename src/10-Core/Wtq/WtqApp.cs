@@ -270,6 +270,7 @@ public sealed class WtqApp : System.IAsyncDisposable
 			return;
 		}
 
+		// TODO: Can be disposed
 		// Make sure this method always runs non-concurrently.
 		using var l = await _updateLock
 			.WaitAsync(Cancel.After(TimeSpan.FromSeconds(15)))

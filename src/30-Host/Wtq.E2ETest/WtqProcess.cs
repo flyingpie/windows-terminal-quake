@@ -59,8 +59,13 @@ public sealed class WtqProcess : IAsyncDisposable
 		startInfo.Environment["XDG_STATE_HOME"] = workDir;
 		startInfo.Environment["WTQ_LOG_LEVEL"] = "Debug";
 
+<<<<<<< Updated upstream
 		var process =
 			Process.Start(startInfo)
+||||||| Stash base
+=======
+		var process = Process.Start(startInfo)
+>>>>>>> Stashed changes
 			?? throw new InvalidOperationException($"Could not start '{PathToExe}'.");
 
 		return new WtqProcess(process, workDir);
