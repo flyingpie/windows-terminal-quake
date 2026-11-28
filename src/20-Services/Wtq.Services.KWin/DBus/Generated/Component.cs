@@ -6,7 +6,7 @@ using Tmds.DBus.Protocol;
 
 namespace Wtq.Services.KWin.DBus.Generated;
 
-partial class Component : KWinObject
+public partial class Component : KWinObject
 {
 	private const string __Interface = "org.kde.kglobalaccel.Component";
 	public Component(KWinService service, ObjectPath path) : base(service, path)

@@ -4,7 +4,7 @@
 
 namespace Wtq.Services.KWin.DBus.Generated;
 
-internal class KWinService
+public class KWinService
 {
 	public Tmds.DBus.Protocol.DBusConnection Connection { get; }
 	public string Destination { get; }

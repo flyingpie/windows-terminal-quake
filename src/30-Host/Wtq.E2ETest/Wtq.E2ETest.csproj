@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Wtq.E2ETest</AssemblyName>
+		<RootNamespace>Wtq.E2ETest</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\20-Services\Wtq.Services.KWin.UnitTest\Wtq.Services.KWin.UnitTest.csproj" />
+		<ProjectReference Include="..\Wtq.Host.Base\Wtq.Host.Base.csproj" />
+	</ItemGroup>
+</Project>

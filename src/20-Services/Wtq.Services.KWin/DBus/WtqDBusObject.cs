@@ -9,9 +9,10 @@ using Wtq.Services.KWin.Scripting;
 
 namespace Wtq.Services.KWin.DBus;
 
-internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
+public sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 {
-	private const string ServiceName = "nl.flyingpie.wtq.svc";
+	private readonly string ServiceName =
+		$"nl.flyingpie.wtq.{Guid.CreateVersion7().ToString().Replace("-", "")}.svc";
 
 	private static readonly ObjectPath _path = new("/wtq/kwin");
 
@@ -66,6 +67,11 @@ internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 		// Register this object as a DBus service.
 		await _dbus.RegisterServiceAsync(ServiceName, this).NoCtx();
 
+		// __WTQ_SERVICE_NAME__
+		var kwinJs = await File.ReadAllTextAsync(_pathToWtqKwinJsSrc, cancellationToken);
+
+		kwinJs = kwinJs.Replace("__WTQ_SERVICE_NAME__", ServiceName);
+
 		// Load KWin script.
 		// Note that we're copying the KWin script to the cache dir, as that will be available to both the host and the sandbox, in the case we're running as a Flatpak.
 		// For non-Flatpak, we could use the path to the KWin script directly, but that cannot be seen by KWin since KWin can't see in our sandbox.
@@ -75,7 +81,8 @@ internal sealed class WtqDBusObject : BackgroundService, IWtqDBusObject
 			_pathToWtqKwinJsCache
 		);
 
-		File.Copy(_pathToWtqKwinJsSrc, _pathToWtqKwinJsCache, overwrite: true);
+		// File.Copy(_pathToWtqKwinJsSrc, _pathToWtqKwinJsCache, overwrite: true);
+		await File.WriteAllTextAsync(_pathToWtqKwinJsCache, kwinJs, cancellationToken);
 
 		_script = await _scriptService.LoadScriptAsync(_pathToWtqKwinJsCache).NoCtx();
 	}

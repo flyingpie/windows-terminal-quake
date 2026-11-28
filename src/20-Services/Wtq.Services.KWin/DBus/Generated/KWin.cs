@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Wtq.Services.KWin.DBus.Generated;
 
-partial class KWin : KWinObject
+public partial class KWin : KWinObject
 {
 	private const string __Interface = "org.kde.KWin";
 	public KWin(KWinService service, ObjectPath path) : base(service, path)
