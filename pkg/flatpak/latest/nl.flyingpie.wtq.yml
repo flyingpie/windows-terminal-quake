@@ -38,7 +38,7 @@ modules:
       # Source repo
       - type: git
         url: https://github.com/flyingpie/windows-terminal-quake.git
-        commit: b6df7e0aa6196e653f5fafd090383d45adb89b6e
+        commit: 1ad36effa0726d0a38eeed92cb46829f1b84c0b7
 
       # NuGet sources
       - ./nuget-sources.json
